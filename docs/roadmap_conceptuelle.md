@@ -1,4 +1,4 @@
-# Feuille de route conceptuelle – Learn-it (v0.1)
+# Feuille de route conceptuelle – Learn-it (v0.2)
 
 Ce document décrit ce qu’il reste à faire sur le plan conceptuel pour le projet Learn-it, ainsi que la manière de reprendre le travail dans une nouvelle conversation sans dépendre de l’historique du chat.
 
@@ -6,8 +6,8 @@ Ce document décrit ce qu’il reste à faire sur le plan conceptuel pour le pro
 
 Les éléments déjà formalisés et versionnés dans le dépôt sont :
 
-- `docs/constitution_v0.md` :
-  - 9 principes fondamentaux du jeu d’apprentissage.
+- `docs/constitution_v0.md` (v0.2) :
+  - 9 principes fondamentaux du jeu d’apprentissage, déjà ajustés pour intégrer explicitement des contraintes de **charge cognitive** (Cognitive Load Theory, difficultés désirables, multimédia sobre).
   - Liste des grands cadres théoriques à confronter (cognition/charge, motivation, métacognition/SRL, stratégies fondées sur la preuve, adaptatif/IA, ingénierie pédagogique).
 
 Ce fichier constitue la "constitution conceptuelle" de base sur laquelle s’appuie toute la suite.
@@ -63,15 +63,38 @@ Pour chaque bloc théorique (1 à 6) :
 4. **Trace écrite** :
    - Ajouter une sous‑section dans `constitution_v0.md` ou un nouveau fichier `constitution_notes_<cadre>.md` récapitulant cette confrontation.
 
-## 5. Ordre de traitement proposé
+## 5. État d’avancement par cadre
 
-Pour garder une progression logique :
+- **Bloc 1 – Cognition et charge mentale** :
+  - Statut : PRINCIPES AJUSTÉS.  
+  - Travail réalisé : intégration explicite dans la constitution v0.2 de contraintes liées à la charge intrinsèque/extrinsèque, au scaffolding des tâches complexes, à la sobriété graphique et au contrôle de la complexité par session.  
+  - Prochaines étapes possibles : si besoin, créer un fichier de notes `docs/constitution_notes_cognition.md` pour documenter plus finement les choix.
+
+- **Bloc 2 – Motivation et engagement** :
+  - Statut : À TRAITER (prochaine étape).  
+  - Cadres clés : Self‑Determination Theory (SDT), ARCS, autres modèles de motivation.  
+  - Objectif : vérifier que les mécaniques de gamification et de planification soutiennent l’autonomie, la compétence perçue, le sens, sans nuire à la motivation intrinsèque.
+
+- **Bloc 3 – Métacognition et auto‑régulation** :  
+  - Statut : EN ATTENTE.  
+  - Sera traité après le bloc Motivation.
+
+- **Bloc 4 – Stratégies d’apprentissage fondées sur la preuve** :  
+  - Statut : EN ATTENTE.
+
+- **Bloc 5 – Personnalisation et systèmes adaptatifs** :  
+  - Statut : EN ATTENTE.
+
+- **Bloc 6 – Modèles d’ingénierie pédagogique** :  
+  - Statut : EN ATTENTE.
+
+## 6. Ordre de traitement proposé (mis à jour)
 
 1. **Cognition et charge mentale (CLT, Desirable Difficulties, multimédia)**  
-   → Valider que les mécaniques de difficulté progressive, de puzzles et d’UI ne surchargent pas la mémoire de travail.
+   → Passé une première fois, intégré dans v0.2. Peut être raffiné plus tard.
 
 2. **Motivation et engagement (SDT, ARCS)**  
-   → S’assurer que la gamification reste alignée avec l’autonomie, la compétence perçue et le sens.
+   → Prochaine analyse à mener, ajustements à intégrer ensuite dans la constitution.
 
 3. **Métacognition et auto‑régulation (SRL)**  
    → Consolider le principe 9 et les mécanismes de réflexion sur l’apprentissage.
@@ -85,37 +108,35 @@ Pour garder une progression logique :
 6. **Modèles d’ingénierie pédagogique**  
    → Relier la constitution à un processus de design réutilisable (comment un cours devient un univers jouable).
 
-Cet ordre peut être ajusté, mais il fournit un cadre clair pour avancer par "chapitres".
-
-## 6. Comment reprendre le travail dans une nouvelle conversation
+## 7. Comment reprendre le travail dans une nouvelle conversation
 
 Dans une nouvelle session sans contexte, pour continuer ce travail conceptuel :
 
 1. **Rappeler le projet et les fichiers clés**  
    - Indiquer que le projet s’appelle *Learn-it*.  
-   - Pointer vers le fichier `docs/constitution_v0.md` comme base.  
+   - Pointer vers `docs/constitution_v0.md` comme base (actuellement v0.2).  
    - Pointer vers ce document `docs/roadmap_conceptuelle.md` comme guide d’avancement.
 
 2. **Spécifier l’étape en cours**  
    Par exemple :
-   - « Nous en sommes à confronter les principes à la Cognitive Load Theory. »  
-   - ou « Nous passons au bloc Motivation / Self‑Determination Theory. »
+   - « Nous en sommes à confronter les principes au bloc 2 – Motivation et engagement (Self‑Determination Theory, ARCS). »
 
 3. **Demander un travail ciblé**  
    Exemple de prompt :
-   - « Lis `docs/constitution_v0.md` et `docs/roadmap_conceptuelle.md` dans mon repo `stefm78/learn-it`. Nous en sommes à l’étape 1 (Cognitive Load Theory). Analyse les 9 principes à la lumière de la CLT et propose les ajustements nécessaires. »
+   - « Lis `docs/constitution_v0.md` et `docs/roadmap_conceptuelle.md` dans mon repo `stefm78/learn-it`. Nous en sommes au bloc 2 (Motivation et engagement). Analyse les 9 principes à la lumière de la Self‑Determination Theory et du modèle ARCS, et propose les ajustements nécessaires. »
 
 4. **Mettre à jour les fichiers**  
-   - Intégrer les résultats dans `constitution_v0.md` ou dans un nouveau fichier de notes.  
-   - Incrémenter éventuellement la version (par ex. `constitution_v0.2.md`, puis `v1.0` quand le tour des cadres est terminé).
+   - Intégrer les résultats dans `constitution_v0.md` (v0.3, v0.4, etc.) ou dans un nouveau fichier de notes.  
+   - Mettre à jour cette roadmap (statut des blocs, prochaine étape).  
+   - Incrémenter la version (par ex. `constitution_v1.0` quand le tour des cadres est terminé).
 
-## 7. Prochaines actions concrètes
+## 8. Prochaines actions concrètes
 
 À court terme :
 
-1. Relire et, si besoin, ajuster `docs/constitution_v0.md` à la main.  
-2. Démarrer l’analyse du **bloc 1 – Cognition et charge mentale**, en créant :
-   - soit une sous‑section dans `constitution_v0.md`,  
-   - soit un fichier `docs/constitution_notes_cognition.md`.
-
-Ce document pourra évoluer (v0.2, v1.0, etc.) au fur et à mesure que la démarche se précise.
+1. Poursuivre l’analyse du **bloc 2 – Motivation et engagement (SDT, ARCS)**.
+2. Proposer des ajustements aux principes (notamment 1, 4, 5, 8, 9) pour :
+   - respecter les besoins d’autonomie, de compétence, de lien (SDT),
+   - renforcer Attention, Relevance, Confidence, Satisfaction (ARCS),
+   - éviter que les mécaniques de gamification et de planification n’érodent la motivation intrinsèque.
+3. Mettre à jour `docs/constitution_v0.md` en conséquence (version v0.3).
