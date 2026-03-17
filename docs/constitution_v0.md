@@ -1,4 +1,4 @@
-# Constitution conceptuelle – Learn-it (v0.6)
+# Constitution conceptuelle – Learn-it (v0.7)
 
 ## Principes fondamentaux
 
@@ -35,6 +35,25 @@
    - **Après la tâche** : synthèse des erreurs, comparaison entre confiance déclarée et performance réelle, invitation à identifier ce qui a le mieux aidé ou ce qui sera changé la prochaine fois (self‑reflection). Certains prompts de réflexion encouragent explicitement l’**élaboration** (faire des liens avec d’autres notions, trouver des exemples) et l’usage de **double codage** (verbal + visuel) lorsque c’est pertinent.
 
    Dans la mesure du possible, le système intègre une dimension de lien (classement coopératif, défis partagés, feedback d’enseignants ou de pairs) afin de soutenir le besoin de relatedness sans générer de comparaison sociale malsaine. Les enseignants ou tuteurs doivent pouvoir visualiser et, si nécessaire, surclasser certaines décisions adaptatives pour corriger des trajectoires perçues comme trop conservatrices ou inéquitables.
+
+## Cycle de design pédagogique
+
+Le design des univers d’apprentissage dans Learn-it suit un cycle explicite, inspiré des modèles d’ingénierie pédagogique (notamment ADDIE) et des First Principles of Instruction de Merrill :[web:25][web:28][web:33]
+
+1. **Analyse**  
+   Identifier les objectifs d’apprentissage et les compétences d’examen associées, extraire les concepts et relations clés à partir des supports (cours, exercices, annales) et construire le graphe de connaissances correspondant.
+
+2. **Design**  
+   Pour chaque objectif et partie du graphe, définir des problèmes authentiques et une trajectoire d’apprentissage de type activation → démonstration → application → intégration, en les traduisant en types de missions, puzzles, cartes et “boss” alignés avec les 9 principes.
+
+3. **Développement**  
+   Produire les contenus jouables (énoncés, interfaces, feedbacks, paramètres adaptatifs) en respectant les contraintes de charge cognitive, de motivation, de métacognition, de stratégies fondées sur la preuve et d’éthique de la personnalisation.
+
+4. **Implémentation**  
+   Déployer l’univers d’apprentissage auprès des étudiants, configurer les paramètres d’adaptation et les liens avec l’environnement réel (calendrier d’examen, modes d’usage, éventuelle intégration avec un LMS ou un contexte de classe).
+
+5. **Évaluation et révision**  
+   Recueillir des données sur la maîtrise réelle des objectifs (performances aux missions clés, simulations d’examen, résultats d’évaluation externe) et sur l’expérience des utilisateurs (élèves, enseignants), puis ajuster le graphe, les missions et les paramètres adaptatifs. Ce cycle est itératif : les univers peuvent être révisés régulièrement pour rester cohérents avec la "constitution" et les retours du terrain.
 
 ## Cadres théoriques à confronter (liste de travail)
 
