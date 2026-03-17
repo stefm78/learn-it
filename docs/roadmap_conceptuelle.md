@@ -1,4 +1,4 @@
-# Feuille de route conceptuelle – Learn-it (v0.3)
+# Feuille de route conceptuelle – Learn-it (v0.4)
 
 Ce document décrit ce qu’il reste à faire sur le plan conceptuel pour le projet Learn-it, ainsi que la manière de reprendre le travail dans une nouvelle conversation sans dépendre de l’historique du chat.
 
@@ -6,8 +6,11 @@ Ce document décrit ce qu’il reste à faire sur le plan conceptuel pour le pro
 
 Les éléments déjà formalisés et versionnés dans le dépôt sont :
 
-- `docs/constitution_v0.md` (v0.3) :
-  - 9 principes fondamentaux du jeu d’apprentissage, déjà ajustés pour intégrer explicitement des contraintes de **charge cognitive** (Cognitive Load Theory, difficultés désirables, multimédia sobre) et de **motivation de qualité** (Self‑Determination Theory, modèle ARCS : autonomie, compétence, lien, Attention/Relevance/Confidence/Satisfaction).
+- `docs/constitution_v0.md` (v0.4) :
+  - 9 principes fondamentaux du jeu d’apprentissage, déjà ajustés pour intégrer explicitement :
+    - des contraintes de **charge cognitive** (Cognitive Load Theory, difficultés désirables, multimédia sobre),
+    - des contraintes de **motivation de qualité** (Self‑Determination Theory, modèle ARCS : autonomie, compétence, lien, Attention/Relevance/Confidence/Satisfaction),
+    - des exigences de **métacognition et d’auto‑régulation** (structure avant/pendant/après, décisions actives de l’étudiant, prompts de planification, monitoring et réflexion).
   - Liste des grands cadres théoriques à confronter (cognition/charge, motivation, métacognition/SRL, stratégies fondées sur la preuve, adaptatif/IA, ingénierie pédagogique).
 
 Ce fichier constitue la "constitution conceptuelle" de base sur laquelle s’appuie toute la suite.
@@ -70,12 +73,12 @@ Pour chaque bloc théorique (1 à 6) :
   - Travail réalisé : contraintes liées à la charge intrinsèque/extrinsèque, scaffolding des tâches complexes, sobriété graphique, contrôle de la complexité par session.
 
 - **Bloc 2 – Motivation et engagement** :
-  - Statut : INTÉGRÉ DANS LA CONSTITUTION (v0.3).  
+  - Statut : INTÉGRÉ DANS LA CONSTITUTION (v0.3+).  
   - Travail réalisé : prise en compte explicite des besoins d’autonomie, de compétence et de lien (SDT), et des composantes Attention/Relevance/Confidence/Satisfaction (ARCS) dans les principes (chemin recommandé mais non rigide, succès significatifs réguliers, explication de la pertinence des missions, récompenses complémentaires à la motivation intrinsèque, dimension sociale prudente).
 
 - **Bloc 3 – Métacognition et auto‑régulation** :  
-  - Statut : À TRAITER (prochaine étape).  
-  - Objet : consolider le principe 9 et définir plus précisément comment le jeu favorise la planification, le monitoring et l’évaluation par l’étudiant lui‑même.
+  - Statut : INTÉGRÉ DANS LA CONSTITUTION (v0.4).  
+  - Travail réalisé : principe 9 enrichi pour inclure une structuration explicite des activités en trois phases (avant/pendant/après), avec des prompts de planification, de monitoring et de réflexion, et un rôle actif laissé à l’étudiant dans les décisions de parcours.
 
 - **Bloc 4 – Stratégies d’apprentissage fondées sur la preuve** :  
   - Statut : EN ATTENTE.
@@ -95,10 +98,10 @@ Pour chaque bloc théorique (1 à 6) :
    → Intégré dans v0.3, pourra être raffiné au besoin.
 
 3. **Métacognition et auto‑régulation (SRL)**  
-   → Prochaine analyse à mener, axée sur le principe 9 et les fonctions de journal, feedback et prise de décision par l’étudiant.
+   → Intégré dans v0.4, pourra être raffiné au besoin.
 
 4. **Stratégies d’apprentissage fondées sur la preuve**  
-   → Vérifier que les mécaniques centrales (temps, rappels, types de tâches) exploitent bien les stratégies les plus robustes.
+   → Prochaine analyse à mener, pour vérifier que les mécaniques centrales (temps, rappels, types de tâches) exploitent bien les stratégies les plus robustes.
 
 5. **Personnalisation et systèmes adaptatifs**  
    → Encadrer l’hyper‑personnalisation (équité, transparence, pas de plafonds implicites).
@@ -112,19 +115,19 @@ Dans une nouvelle session sans contexte, pour continuer ce travail conceptuel :
 
 1. **Rappeler le projet et les fichiers clés**  
    - Indiquer que le projet s’appelle *Learn-it*.  
-   - Pointer vers `docs/constitution_v0.md` comme base (actuellement v0.3).  
+   - Pointer vers `docs/constitution_v0.md` comme base (actuellement v0.4).  
    - Pointer vers ce document `docs/roadmap_conceptuelle.md` comme guide d’avancement.
 
 2. **Spécifier l’étape en cours**  
    Par exemple :
-   - « Nous en sommes à confronter les principes au bloc 3 – Métacognition et auto‑régulation (Self‑Regulated Learning). »
+   - « Nous en sommes à confronter les principes au bloc 4 – Stratégies d’apprentissage fondées sur la preuve (rappel actif, espacement, interleaving, etc.). »
 
 3. **Demander un travail ciblé**  
    Exemple de prompt :
-   - « Lis `docs/constitution_v0.md` et `docs/roadmap_conceptuelle.md` dans mon repo `stefm78/learn-it`. Nous en sommes au bloc 3 (Métacognition et auto‑régulation). Analyse les 9 principes à la lumière des modèles de SRL et des recommandations EEF, et propose les ajustements nécessaires. »
+   - « Lis `docs/constitution_v0.md` et `docs/roadmap_conceptuelle.md` dans mon repo `stefm78/learn-it`. Nous en sommes au bloc 4 (Stratégies d’apprentissage fondées sur la preuve). Analyse les 9 principes à la lumière de ces stratégies et propose les ajustements nécessaires. »
 
 4. **Mettre à jour les fichiers**  
-   - Intégrer les résultats dans `constitution_v0.md` (v0.4, v0.5, etc.) ou dans un nouveau fichier de notes.  
+   - Intégrer les résultats dans `constitution_v0.md` (v0.5, v0.6, etc.) ou dans un nouveau fichier de notes.  
    - Mettre à jour cette roadmap (statut des blocs, prochaine étape).  
    - Incrémenter la version (par ex. `constitution_v1.0` quand le tour des cadres est terminé).
 
@@ -132,9 +135,8 @@ Dans une nouvelle session sans contexte, pour continuer ce travail conceptuel :
 
 À court terme :
 
-1. Poursuivre l’analyse du **bloc 3 – Métacognition et auto‑régulation (SRL)**.
-2. Proposer des ajustements aux principes (notamment 9, mais aussi 4 et 5) pour :
-   - rendre explicite comment le jeu amène l’étudiant à planifier, surveiller et évaluer son apprentissage,
-   - éviter qu’il devienne totalement passif face aux recommandations de l’algorithme,
-   - outiller la prise de décision (journal, auto‑évaluation, choix réfléchis de missions).
-3. Mettre à jour `docs/constitution_v0.md` en conséquence (version v0.4).
+1. Poursuivre l’analyse du **bloc 4 – Stratégies d’apprentissage fondées sur la preuve**.
+2. Proposer des ajustements aux principes, en particulier 1, 3, 4, 5 et 9, pour :
+   - aligner clairement les mécaniques du jeu avec le rappel actif, l’espacement, l’interleaving, l’élaboration, le double codage et les exemples concrets,
+   - s’assurer que ces stratégies sont intégrées dans le gameplay (et pas juste “autour” du jeu).
+3. Mettre à jour `docs/constitution_v0.md` en conséquence (version v0.5).
