@@ -1,6 +1,8 @@
-# Référentiel de defaults pédagogiques – Learn-it (v0.3)
+# Référentiel de defaults pédagogiques – Learn-it (v0.4)
 
-> **Statut et gouvernance** : Complément opérationnel de la Constitution v1.4. Librement révisable à partir des données terrain sans modification de la constitution. Chaque entrée indique son ancrage constitutionnel, sa valeur de référence, sa fourchette de variation légitime, la justification de la valeur, et le signal terrain déclenchant une révision.
+> **Statut et gouvernance** : Complément opérationnel de la Constitution v1.5. Librement révisable à partir des données terrain sans modification de la constitution. Chaque entrée indique son ancrage constitutionnel, sa valeur de référence, sa fourchette de variation légitime, la justification de la valeur, et le signal terrain déclenchant une révision.
+
+> **Modifications v0.4 par rapport à v0.3** : **(1)** Ajout de la **section 15 — Paramètres des KU par type (MSC-KU)**, couvrant les opérandes MSC spécifiques par type de KU (procédurale, perceptuelle, formelle, créative), les multiplicateurs R, les seuils P adaptés, et les définitions d'autonomie A par type. **(2)** Ajout du **P0-4 — Format de calibrage par type de KU**. **(3)** Ajout du **P3-4 — Multiplicateurs de délai R par type de KU** et **P3-5 — Inertie minimale des adaptations à fort impact** (GF-10). **(4)** Extension de **P5-4** avec proxys comportementaux additionnels par type de KU et **P5-6 — Métriques d'équité additionnelles par type de KU**. **(5)** Extension de **DA-2** avec table de budget cognitif pour KU procédurales et perceptuelles. **(6)** Extension de **ADDIE-0** avec protocole de typage automatique des KU et critères de validation adaptés au type de KU. **(7)** Ajout des **DA-5 à DA-9** (typage KU, évaluation créative, automatisation procédurale, autonomie moteur procédural, human_checkpoint). **(8)** Extension de **PATCH-2** avec garde-fous GF-01, GF-02 (atomicité et vérification des fourchettes — implémentation référentiel).
 
 > **Modifications v0.3 par rapport à v0.2** : Ajout de la **section 12 — Paramètres de l'auto-rapport affectif (AR)**, couvrant les trois niveaux d'auto-rapport (micro-sondage événementiel, mini-sondage de fermeture, bilan de trajectoire), la hiérarchie de confiance auto-rapport/proxys, le protocole de discordance et de recalibration des proxys, et la détection du biais de désirabilité sociale. Ajout de la **section 13 — Paramètres de l'intégrité du modèle apprenant**, couvrant le calcul du SIS, les règles d'intégration selon SIS, le Niveau de Confiance MSC, les paramètres du mode Invité, du mode Évaluation Externe, de la vérification déclarative périodique, et du multi-profil. Mise à jour de P5-3, P5-4 et P5-5 pour intégrer la hiérarchie auto-rapport/proxys. Mise à jour de PATCH-1 pour ajouter les déclencheurs SIS.
 
@@ -8,7 +10,9 @@
 
 ## 1. Paramètres du Mastery Score Composite (MSC)
 
-*Ancrage constitutionnel : Glossaire MSC, P2, P3, P6, P13*
+*Ancrage constitutionnel : Glossaire MSC, P2, P3, P6, P13, P14*
+
+> **Note v0.4** : Les paramètres ci-dessous (MSC-P, MSC-R, MSC-A, MSC-deg) sont les paramètres de référence pour les **KU déclaratives**. Les variantes par type de KU sont définies dans la **section 15 — MSC-KU**.
 
 ### MSC-P — Seuil de précision (composante P)
 
@@ -79,6 +83,25 @@
 | **Fourchette** | Fenêtre de vérification ∈ [2, 5] premières sessions |
 | **Signal de révision** | Si > 50% des concepts en maîtrise provisoire héritée échouent la vérification, revoir le protocole de calibrage. |
 
+### P0-4 — Format de calibrage par type de KU *(nouveau v0.4)*
+
+*Ancrage constitutionnel : Principe 0, P14*
+
+| Type de KU | Format de calibrage | Durée unitaire estimée |
+|---|---|---|
+| **Déclarative** | Items de rappel ou reconnaissance (QCM, appariement, production courte) | 10–30 s / item |
+| **Formelle** | Items de raisonnement court (preuve à trous, validation d'inférence) | 30–90 s / item |
+| **Procédurale** | Tâches d'exécution courtes avec rubrique d'évaluation (simulation, séquençage) | 1–5 min / tâche |
+| **Perceptuelle** | Items de classification d'exemplaires (tri, détection, catégorisation sur série) | 10–20 s / item |
+| **Créative** | Production contrainte courte avec grille d'auto-évaluation fournie | 5–15 min / production |
+
+| Attribut | Valeur |
+|---|---|
+| **Nombre d'unités diagnostiques de référence** | ≤ 10 unités (invariant — la durée unitaire varie, pas le nombre) |
+| **Fourchette** | [5, 15] unités |
+| **Objectif invariant** | Initialiser le graphe de façon exploitable en une durée courte et une expérience engageante |
+| **Signal de révision** | Si taux d'abandon en calibrage > 20% pour un type de KU donné, réduire le nombre d'unités ou simplifier le format. |
+
 ---
 
 ## 3. Paramètres de la temporalité et de l'interleaving (P3)
@@ -108,6 +131,37 @@
 | **Valeur de référence** | 3 à 5 tâches de rappel sur les concepts récemment maîtrisés |
 | **Fourchette** | [2, 8] tâches |
 | **Signal de révision** | Si dégradations sous-estimées, augmenter le nombre de tâches. |
+
+### P3-4 — Multiplicateurs de délai R par type de KU *(nouveau v0.4)*
+
+*Ancrage constitutionnel : Principe 3, P14*
+
+| Type de KU | Multiplicateur sur le délai D de référence | Justification |
+|---|---|---|
+| **Déclarative** | ×1 (référence) | Courbe Ebbinghaus standard |
+| **Formelle** | ×1 | Même profil de rétention que déclaratif |
+| **Procédurale** | ×2 à ×3 | Mémoire motrice plus stable, déclin plus lent — la consolidation physique persiste davantage que la trace verbale |
+| **Perceptuelle** | ×0,5 | Fort oubli précoce des prototypes perceptuels sans réexposition — le délai court est un signal de robustesse plus exigeant |
+| **Créative** | Non applicable (mode Portfolio) | La robustesse créative est évaluée par cohérence de portfolio sur le temps, non par délai de réactivation — voir MSC-KU section 15 |
+
+| Attribut | Valeur |
+|---|---|
+| **Application** | Le multiplicateur est appliqué au délai D calculé par SM-2 (DA-4) avant chaque occurrence de consolidation procédurale ou perceptuelle |
+| **Fourchette procédurale** | ×1,5 à ×4 selon le niveau d'automatisation atteint (composante A) |
+| **Signal de révision** | Si oublis mesurés sur KU procédurales avec délai ×2, augmenter jusqu'à ×3. Si oublis sur KU perceptuelles avec délai ×0,5, remonter vers ×0,75. |
+
+### P3-5 — Inertie minimale des adaptations à fort impact *(nouveau v0.4 — GF-10)*
+
+*Ancrage constitutionnel : Principe 2, Principe 5, P12-GF-08*
+
+| Attribut | Valeur |
+|---|---|
+| **Définition "adaptation à fort impact"** | Changement de mode de guidage, bascule vers l'interleaving de contenus, fading complet des aides, reconfiguration de parcours |
+| **Délai minimal entre deux adaptations à fort impact sur le même nœud** | 48 heures |
+| **Exception** | Si un auto-rapport AR-N1 ou AR-N2 concordant est disponible entre les deux adaptations, le délai peut être réduit à 12 heures |
+| **Objectif** | Prévenir les oscillations rapides du modèle adaptatif ; garantir que la composante R a eu un minimum de temps pour être vérifiée |
+| **Portée** | Les adaptations conservatrices (messages, légère variation de guidage) ne sont pas concernées par ce délai |
+| **Signal de révision** | Si oscillations détectées malgré ce délai, augmenter à 72 heures pour le nœud concerné. |
 
 ---
 
@@ -169,6 +223,22 @@
 | **Fourchette** | Adaptations conservatrices : 1 signal suffit. Adaptations à fort impact : seuil non réductible sous 2 signaux concordants. |
 | **Signal de révision** | Si le moteur déclenche des adaptations à fort impact non confirmées par les sessions suivantes, augmenter le seuil de confiance. |
 
+### P5-6 — Métriques d'équité additionnelles par type de KU *(nouveau v0.4)*
+
+*Ancrage constitutionnel : Principe 5, P14*
+
+| Type de KU | Biais spécifique identifié | Métrique d'équité additionnelle |
+|---|---|---|
+| **Perceptuelle** | Biais matériel/sensoriel : performance dépendante de la colorimétrie de l'écran, daltonisme non déclaré, acuité visuelle | `Indice d'équité matérielle` : test de calibration visuelle optionnel en P0 ; alerte si d-prime d'un sous-groupe < 80% de la médiane cohorte |
+| **Procédurale** | Biais d'interface (friction) : différences mobile vs desktop génèrent de faux taux d'erreur | `Ratio de friction d'interface` : comparaison temps de complétion et taux de correction par type de dispositif ; alerte si écart > 20% |
+| **Créative** | Biais culturel d'évaluation : styles hors culture dominante pénalisés par les rubriques | `Écart-type d'évaluation par sous-groupe linguistique/culturel` : alerte si un sous-groupe obtient systématiquement < 80% du score médian sur les tâches créatives |
+| **Procédurale (P3–P4)** | Biais de baseline physique : variation légitime de vitesse d'exécution liée à la morphologie ou au niveau d'entraînement physique | `% autonomie atteint normalisé par baseline physique auto-calibrée` : l'apprenant calibre sa vitesse de référence en P0 procédural |
+
+| Attribut | Valeur |
+|---|---|
+| **Déclenchement** | Ces métriques s'ajoutent aux métriques P5-1 et P5-2 pour les univers avec KU non déclaratives |
+| **Signal de révision** | Si un biais identifié dans cette table dépasse son seuil d'alerte, déclencher une révision du modèle adaptatif (même règle que P5-2). |
+
 ---
 
 ## 5. Paramètres de l'adaptation à l'environnement d'usage (P7)
@@ -228,16 +298,34 @@
 
 ### ADDIE-0 — Protocole de validation du graphe produit par la chaîne IA de conception
 
+**Protocole de typage automatique des KU (nouveau v0.4) :**
+
+La chaîne IA de conception assigne le type de KU à chaque nœud lors de la phase Analyse, selon les règles heuristiques suivantes (précision estimée ≥ 90% ; nœuds sous le seuil de confiance flaggés pour validation humaine) :
+
+| Motifs dans l'objectif pédagogique | Type assigné | Exemples |
+|---|---|---|
+| Verbes : identifier, repérer, distinguer, classifier *visuellement/auditivement*, reconnaître un pattern | **Perceptuel** | "Reconnaître une fracture sur radiographie" |
+| Verbes : assembler, suturer, jouer, calibrer, exécuter, coordonner + objet physique ou gestuel | **Procédural** | "Suturer une plaie en 7 étapes" |
+| Verbes : démontrer, prouver, déduire, calculer, compiler + structure formelle (équation, règle logique) | **Formel** | "Démontrer le théorème de Pythagore" |
+| Verbes : concevoir, composer, écrire, designer, argumenter + absence de solution unique | **Créatif** | "Rédiger un texte argumentatif original" |
+| Verbes : définir, lister, expliquer, comparer, décrire, mémoriser + contenu propositionnel | **Déclaratif** (défaut) | "Définir la mitose" |
+
+Score de confiance par nœud : 0–1 basé sur la correspondance des motifs. Si score < 0,7 → flag humain. Le type dominant de l'univers est le type le plus fréquent après typage de l'ensemble des nœuds.
+
+**Critères de validation du graphe (étendus v0.4) :**
+
 | Critère | Condition minimale |
 |---|---|
-| **Couverture Bloom** | Chaque objectif déclaré = ≥ 1 nœud au niveau cognitif cible |
+| **Couverture axe de progression** | Chaque objectif déclaré = ≥ 1 nœud sur l'axe disciplinairement approprié (Bloom pour déclaratif/formel, automatisation pour procédural, discrimination pour perceptuel, conventions pour créatif) |
+| **Typage KU** | ≥ 80% des nœuds typés avec score de confiance ≥ 0,7 ; nœuds non typés flaggés |
 | **Cohérence des prérequis** | Absence de cycles ; chaque arête justifiée dans la documentation |
 | **Flags misconception** | Tous les concepts à misconception documentée sont flaggés |
-| **Couverture des missions** | Chaque nœud : ≥ 1 mission conflit cognitif (si flaggé), ≥ 1 mission générative, ≥ 3 templates de feedback par type d'erreur principal |
-| **Formats de récupération** | ≥ 2 formats distincts (reconnaissance, rappel indicé, rappel libre, production longue) par nœud au niveau Bloom cible |
+| **Couverture des missions** | Chaque nœud : ≥ 1 mission conflit cognitif (si flaggé), ≥ 1 mission générative, ≥ 3 templates de feedback par type d'erreur principal **dans la modalité adaptée au type de KU** (P10) |
+| **Formats de récupération / consolidation** | ≥ 2 formats d'occurrence de consolidation adaptés au type de KU dominant (reconnaissance/rappel pour déclaratif ; exécution/simulation pour procédural ; discrimination/contraste pour perceptuel ; production/critique pour créatif) |
+| **Human_checkpoints** | Présents et correctement configurés pour tout univers de niveau Hybride bloquant ou Assisté (P15). Absents = déploiement suspendu pour ces univers. |
 | **Contenus AR-Niveau 1** | Libellés et options de réponse des micro-sondages événementiels définis pour les principaux types d'événements de l'univers |
 
-**Statuts de déploiement** : tous critères satisfaits → déploiement standard. Critères Bloom + prérequis OK, reste incomplet → pilote restreint (N ≤ 30). Critères Bloom ou cycles non satisfaits → déploiement suspendu.
+**Statuts de déploiement** : tous critères satisfaits → déploiement standard. Critères axe de progression + prérequis OK, reste incomplet → pilote restreint (N ≤ 30). Critères axe de progression ou cycles non satisfaits → déploiement suspendu.
 
 ### ADDIE-1 — Seuil de biais systématique déclenchant révision du modèle d'inférence
 
@@ -288,15 +376,18 @@
 
 ---
 
-## 9. Paramètre de P1 — Niveau cognitif minimum des concepts fondamentaux
+## 9. Paramètre de P1 — Niveau de progression minimum des KU fondamentales
 
-### P1-1 — Niveau Bloom minimum pour concepts fondamentaux hors annales
+### P1-1 — Niveau minimum sur l'axe de progression pour KU fondamentales hors annales
 
 | Attribut | Valeur |
 |---|---|
-| **Valeur de référence** | Niveau *comprendre* |
-| **Fourchette** | *mémoriser* à *appliquer* |
-| **Signal de révision** | Si concepts maintenus à *comprendre* jamais mobilisés dans les missions d'intégration, baisser à *mémoriser*. |
+| **KU Déclaratives** | Niveau *comprendre* (fourchette : *mémoriser* à *appliquer*) |
+| **KU Formelles** | Niveau *appliquer* (fourchette : *comprendre* à *analyser*) |
+| **KU Procédurales** | Phase *exécution supervisée* (fourchette : *exécution guidée* à *exécution autonome*) |
+| **KU Perceptuelles** | Niveau *exemplaires canoniques* (fourchette : *labels et catégories* à *contrastes critiques*) |
+| **KU Créatives** | Phase *imitation contrainte* (fourchette : *analyse de modèles* à *variation contrainte*) |
+| **Signal de révision** | Si KU maintenues au niveau minimum ne sont jamais mobilisées dans les missions d'intégration, baisser d'un palier. |
 
 ---
 
@@ -361,6 +452,8 @@
 | **Réversible** | Condition de rollback définie avec délai d'observation |
 | **Transparent** | Description lisible par l'apprenant : ce qui change, pourquoi |
 | **Conforme** | Vérification de non-contradiction avec P5, P8, P13 avant déploiement |
+| **Atomique (GF-01)** | Le patch déclare la liste complète des paramètres à modifier. L'application est tout-ou-rien via double-buffer : snapshot de l'état apprenant avant application, swap atomique après validation complète. Durée de conservation du snapshot avant/après : 30 jours (fourchette ∈ [7, 90] jours). |
+| **Vérifié localement (GF-02)** | Avant application, le moteur local vérifie que chaque paramètre modifié est dans la liste blanche PATCH-2 et dans sa fourchette constitutionnelle. Rejet total si un seul paramètre sort des bornes. Le rejet est logué et l'apprenant informé. |
 
 ### PATCH-4 — Fréquence maximale et propagation des patchs
 
@@ -710,9 +803,11 @@ SIS-t = score_trajectoire
 
 **Statut** : Décision ouverte. Option B (typage minimal 2 types) recommandée pour le MVP.
 
-### DA-2 — Budget cognitif de session *(décision fermée — Option B retenue)*
+### DA-2 — Budget cognitif de session *(décision fermée — Option B retenue, étendue v0.4)*
 
 **Décision** : Budget cognitif = somme pondérée des tâches complétées par type.
+
+**Table de référence (KU déclaratives et formelles) :**
 
 | Type de tâche | Poids de charge |
 |---|---|
@@ -724,9 +819,29 @@ SIS-t = score_trajectoire
 | Mission générative | 4 |
 | Boss / simulation d'examen | 6 |
 
+**Extension v0.4 — KU procédurales :**
+
+| Type de tâche procédurale | Poids de charge — phase cognitive | Poids de charge — phase autonome |
+|---|---|---|
+| Exécution guidée (imitation) | 4 | 2 |
+| Exécution supervisée | 5 | 3 |
+| Exécution autonome | 4 | 2 |
+| Simulation avec contrainte modifiée | 6 | 4 |
+
+*Note : le poids décroît avec la montée de la composante A du MSC. Le moteur lit la phase courante du nœud (attribut `trajectory_phase`) pour sélectionner le bon poids.*
+
+**Extension v0.4 — KU perceptuelles :**
+
+| Type de tâche perceptuelle | Poids de charge |
+|---|---|
+| Classification d'exemplaires canoniques | 2 |
+| Discrimination contrastive (juxtaposition) | 3 |
+| Identification d'exemplaires atypiques | 4 |
+| Identification en conditions dégradées | 5 |
+
 Budget de référence : 20 unités (fourchette ∈ [12, 30]). Proxy temporel de 25 min = garde-fou de dernier ressort.
 
-**Annotations obligatoires** : tout type de mission annoté de son poids dans le graphe de design.
+**Annotations obligatoires** : tout type de mission annoté de son poids dans le graphe de design. Pour les KU procédurales, le poids doit être annoté à deux niveaux (phase cognitive / phase autonome).
 
 ### DA-3 — Composante G (Généralisation) dans le MSC
 
@@ -749,4 +864,152 @@ Budget de référence : 20 unités (fourchette ∈ [12, 30]). Proxy temporel de 
 
 ---
 
-*Référentiel de defaults pédagogiques v0.3 — complément opérationnel de la Constitution v1.4. À réviser librement à partir des données terrain. Toute révision contrevenant à un principe de la Constitution v1.4 doit être traitée comme modification constitutionnelle.*
+### DA-5 — Typage des KU et déclaration du type dominant *(nouveau v0.4 — décision fermée, Option C+D retenue)*
+
+*Ancrage constitutionnel : Principe 14*
+
+**Décision** : Option C (type dominant par univers + annotations d'exception par nœud) produite par Option D (typage automatique par la chaîne IA, validé par humain sur les nœuds flaggés).
+
+| Attribut | Valeur |
+|---|---|
+| **Type dominant** | Déclaré par univers — type le plus fréquent après typage automatique de l'ensemble des nœuds |
+| **Annotations d'exception** | Nœuds dont le type diffère du dominant reçoivent une annotation locale `ku_type_override` |
+| **Seuil de confiance pour validation humaine** | Score de confiance < 0,7 → nœud flaggé `ku_type_uncertain` → validation obligatoire avant déploiement |
+| **Propagation du type** | Les nœuds prérequis d'un nœud procédural héritent du type procédural si leur propre type est déclaratif et leur score de confiance < 0,8 |
+| **Couverture minimale** | ≥ 80% des nœuds typés avec score ≥ 0,7 pour déploiement standard |
+| **Signal de révision** | Si > 20% des annotations d'exception sont révisées par des concepteurs humains, réévaluer le protocole de typage automatique. |
+
+---
+
+### DA-6 — Évaluation des KU créatives dans la composante P du MSC *(nouveau v0.4 — décision fermée, Option D retenue)*
+
+*Ancrage constitutionnel : Principe 14, Glossaire MSC*
+
+**Décision** : évaluation en trois couches selon la phase MSC de l'apprenant.
+
+| Phase MSC de l'apprenant (composante A) | Couche évaluée | Mécanisme |
+|---|---|---|
+| **Phase d'acquisition** (A < seuil) | Couche 1 — Contraintes formelles | Vérification automatique : structure, longueur, présence des parties attendues, respect des règles déclarées. Score binaire ou pourcentage de critères formels satisfaits. |
+| **Phase intermédiaire** (A en progression) | Couches 1 + 2 — Contraintes formelles + cohérence interne | Couche 1 automatique + auto-évaluation guidée sur rubrique multi-dimensionnelle (3–5 axes déclarés en phase Analyse), pondérée par l'ICAR (AR-6). |
+| **Phase avancée** (A ≥ seuil, composante T en cours) | Couches 1 + 2 + human_checkpoint pour couche 3 | Couche 1+2 automatiques + jalon human_checkpoint bloquant pour validation de la qualité expressive (couche 3) par tuteur ou pair. |
+
+| Attribut | Valeur |
+|---|---|
+| **Seuil P couche 1** | ≥ 80% des critères formels déclarés satisfaits sur N ≥ 3 productions |
+| **Seuil P couche 2** | Score auto-évalué ≥ seuil défini par univers sur la rubrique (fourchette ∈ [60%, 80%] du score maximum) |
+| **Nombre d'axes rubrique** | 3 à 5 axes par univers déclarés en phase Analyse |
+| **Signal de révision** | Si > 30% d'écart entre auto-évaluation et évaluation externe sur même rubrique, recalibrer la rubrique ou renforcer la formation à l'auto-évaluation. |
+
+---
+
+### DA-7 — Mesure de l'automatisation procédurale dans la composante A *(nouveau v0.4 — décision fermée, Option B retenue pour MVP)*
+
+*Ancrage constitutionnel : Principe 14, Glossaire MSC*
+
+**Décision** : pour MVP, A procédural = indicateurs comportementaux indirects d'automatisation (Option B). Option C (double-tâche) réservée aux univers avec infrastructure dédiée.
+
+| Indicateur | Définition | Seuil de référence |
+|---|---|---|
+| **Variabilité inter-essais** | Coefficient de variation du temps d'exécution sur les N dernières performances | CV < 15% sur N ≥ 5 performances dans la fourchette d'acceptabilité de la rubrique |
+| **Absence de correction auto-demandée** | Nombre de fois où l'apprenant demande une correction ou répète volontairement | ≤ 1 demande sur M exécutions consécutives |
+| **Exécution dans la fourchette** | % d'exécutions dont le score rubrique ≥ seuil P, sans scaffolding physique ou visuel | ≥ M exécutions consécutives dans la fourchette |
+
+| Attribut | Valeur |
+|---|---|
+| **Seuil A procédural MVP** | M ≥ 3 exécutions consécutives dans la fourchette d'acceptabilité, avec CV temps < 20%, sans scaffolding actif |
+| **Fourchette M** | ∈ [2, 5] selon le niveau de risque (P1 → 2 ; P4 → 5) |
+| **Signal de révision** | Si fading déclenché par A procédural génère demandes de réactivation > 30%, augmenter M ou abaisser le seuil de CV. |
+
+---
+
+### DA-8 — Niveau d'autonomie du moteur pour les KU procédurales *(nouveau v0.4 — décision fermée, Option C retenue)*
+
+*Ancrage constitutionnel : Principe 15*
+
+**Décision** : déclaration obligatoire du niveau de risque procédural (P1–P4) en phase Analyse, avec contraintes de déploiement par niveau.
+
+| Niveau de risque | Régime moteur | Human_checkpoints | Condition de déploiement |
+|---|---|---|---|
+| **P1 — Numérique** | Autonome complet | Aucun obligatoire | Standard |
+| **P2 — Physique bas risque** | Autonome + recommandation | Non-bloquants, suggérés à chaque transition de phase MSC | Standard |
+| **P3 — Physique risque modéré** | Hybride bloquant | Bloquants à chaque transition de phase MSC (imitation guidée → supervisée → autonome) | Requiert infrastructure de suivi (tuteur joignable) |
+| **P4 — Physique haut risque** | Assisté (préparation et diagnostic uniquement) | Intégraux — tout feedback délégué | Requiert partenariat institutionnel avec tuteur certifié |
+
+| Attribut | Valeur |
+|---|---|
+| **Déclaration obligatoire** | Le niveau P1–P4 est un attribut de l'univers déclaré en phase Analyse — absence = déploiement suspendu pour tout univers à KU procédurale identifiée |
+| **Non-révisable en déploiement** | Le niveau de risque ne peut pas être modifié sans retour en phase Analyse |
+| **Signal de révision** | Si des incidents (blessures, dommages) sont signalés sur un univers P2, reclasser en P3. |
+
+---
+
+### DA-9 — Paramètres des nœuds human_checkpoint *(nouveau v0.4)*
+
+*Ancrage constitutionnel : Principe 15, Principe 2 (Glossaire)*
+
+| Attribut | Description | Valeur de référence |
+|---|---|---|
+| **`blocking`** | Si vrai, le parcours ne reprend pas sans validation externe enregistrée | `true` pour univers P3/P4 et KU créatives en phase avancée |
+| **`ku_type`** | Type de KU concerné par le jalon | Hérité du nœud KU précédent |
+| **`validation_criteria`** | Description précise de ce que le tuteur doit vérifier (liste de critères) | Définie en phase Design par le concepteur |
+| **`phase_msc`** | Moment du parcours MSC où le jalon doit survenir | Transition de phase de la trajectoire pédagogique (ex : fin de "imitation guidée") |
+| **`timeout_days`** | Délai maximum d'attente de la validation avant alerte | 14 jours (fourchette ∈ [7, 30] jours) |
+| **`fallback`** | Action si validation non reçue après `timeout_days` | Notification de relance à l'apprenant et au tuteur ; parcours maintenu en attente |
+
+**Signal de révision** : si > 30% des human_checkpoints restent en attente > 14 jours sur un univers, revoir la disponibilité du tuteur ou convertir en non-bloquant avec avertissement.
+
+---
+
+## 15. Paramètres MSC par type de KU (MSC-KU) *(nouveau v0.4)*
+
+*Ancrage constitutionnel : Principe 14, Glossaire MSC*
+
+---
+
+### MSC-KU-1 — Seuils MSC pour les KU formelles
+
+| Composante | Valeur de référence | Fourchette | Justification |
+|---|---|---|---|
+| **P** | 100% sur la chaîne complète de raisonnement | Non réductible sous 95% | Une preuve avec une inférence invalide est une preuve fausse — la rigueur formelle est constitutive du domaine |
+| **R** | Délai D × multiplicateur ×1 (identique au déclaratif) | ×1 (non modifiable) | Le profil de rétention formel est comparable au déclaratif |
+| **A** | M ≥ 3 réussites sans scaffolding formel ni indice d'étape | M ∈ [2, 5] | L'autonomie formelle = planification de la preuve sans aide |
+| **T** | Réussite sur problème isomorphe (même structure logique, habillage différent) | ≥ 1 problème isomorphe par nœud formel | Le transfert structurel est la preuve de la maîtrise formelle |
+
+---
+
+### MSC-KU-2 — Seuils MSC pour les KU procédurales
+
+| Composante | Valeur de référence | Fourchette | Justification |
+|---|---|---|---|
+| **P** | Score de qualité moyen ≥ 80% sur rubrique multi-dimensionnelle, sur N ≥ 5 performances | N ∈ [3, 8] ; seuil ∈ [70%, 90%] | La performance procédurale est un continuum — le score rubrique remplace le verdict binaire |
+| **R** | Délai D × multiplicateur P3-4 (×2 à ×3) — performance stable dans la fourchette d'acceptabilité après ce délai | Multiplicateur ∈ [1,5, 4] | Mémoire motrice plus stable ; la validation après délai long confirme l'automatisation réelle |
+| **A** | M exécutions avec CV temps < 20%, sans scaffolding physique ni visuel — voir DA-7 | M ∈ [2, 5] selon niveau P1–P4 | L'automatisation = réduction de variabilité, pas seulement absence d'aide |
+| **T** | Exécution dans la fourchette d'acceptabilité avec contrainte modifiée : vitesse, outil analogue, contexte différent | ≥ 1 variation de contrainte par nœud procédural | Adaptabilité sous perturbation = preuve de maîtrise procédurale réelle |
+
+---
+
+### MSC-KU-3 — Seuils MSC pour les KU perceptuelles
+
+| Composante | Valeur de référence | Fourchette | Justification |
+|---|---|---|---|
+| **P** | d-prime (SDT) ≥ 1,0 sur N ≥ 10 exemplaires (hit rate élevé ET false alarm rate bas) | d-prime ∈ [0,8, 2,0] ; N ∈ [8, 20] | Le taux de réussite brut est trompeur — d-prime capte la discrimination réelle indépendamment du biais de réponse |
+| **R** | Délai D × multiplicateur P3-4 (×0,5) — d-prime stable après délai court | Multiplicateur ∈ [0,4, 0,7] | Fort oubli précoce des prototypes perceptuels |
+| **A** | M classifications correctes sans étiquette de référence ni contraste juxtaposé | M ∈ [5, 15] items consécutifs | L'autonomie perceptuelle = discrimination sans béquille visuelle |
+| **T** | d-prime ≥ seuil sur exemplaires en conditions dégradées ou atypiques | ≥ 1 série d'exemplaires dégradés par nœud perceptuel | La robustesse aux cas-limites = generalisation du prototype interne |
+
+**Calcul du d-prime local** : `d' = Z(hit_rate) - Z(false_alarm_rate)` où Z est la fonction quantile de la loi normale. Implémentable localement avec une table de correspondance Z pré-calculée ou une approximation polynomiale.
+
+---
+
+### MSC-KU-4 — Seuils MSC pour les KU créatives
+
+| Composante | Valeur de référence | Fourchette | Justification |
+|---|---|---|---|
+| **P** | Phase acquisition : ≥ 80% des critères formels (DA-6 couche 1). Phase intermédiaire : score auto-évalué ≥ seuil rubrique (DA-6 couche 2). | Seuil formel ∈ [70%, 90%] ; seuil rubrique défini par univers | L'évaluation s'approfondit avec la progression — voir DA-6 |
+| **R** | Mode Portfolio : cohérence du niveau de qualité sur ≥ 3 productions sur une période ≥ 2 semaines | Période ∈ [1, 4 semaines] ; N productions ∈ [2, 5] | La mémoire créative ne se teste pas par délai de réactivation — elle se manifeste par la stabilité de la qualité dans le temps |
+| **A** | M productions "page blanche" satisfaisant les critères, sans prompt ni template déclencheur | M ∈ [2, 4] | L'autonomie créative = initiation sans déclencheur externe |
+| **T** | Production satisfaisant les critères dans un registre, genre ou contrainte radicalement différent du contexte principal d'entraînement | ≥ 1 brief de transfert par nœud créatif | Mobilisation intentionnelle dans un nouveau contexte = preuve de maîtrise des conventions |
+
+---
+
+*Référentiel de defaults pédagogiques v0.4 — complément opérationnel de la Constitution v1.5. À réviser librement à partir des données terrain. Toute révision contrevenant à un principe de la Constitution v1.5 doit être traitée comme modification constitutionnelle.*
