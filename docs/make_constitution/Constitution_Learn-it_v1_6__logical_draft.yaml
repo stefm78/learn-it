@@ -1,0 +1,902 @@
+LOGICAL_DRAFT:
+  source_scope:
+    description: 'Constitution conceptuelle Learn-it v1.6 : règles de niveau constitutionnel, invariants d’architecture, principes
+      pédagogiques et contraintes de gouvernance pour un moteur adaptatif local.'
+    source_anchor: '[S1–S20]'
+  candidate_entities:
+  - label: Learn-it
+    source_anchor: '[S1]'
+    probable_type: system
+    probable_authority: primary
+    probable_patchable: false
+    probable_parameterizable: false
+    notes: Système d’apprentissage adaptatif gouverné par Constitution puis Référentiel.
+  - label: Knowledge Unit (KU)
+    source_anchor: '[S4][S16]'
+    probable_type: knowledge_node
+    probable_authority: primary
+    probable_patchable: false
+    probable_parameterizable: true
+    notes: Nœud atomique du graphe ; typage épistémologique obligatoire.
+  - label: Graphe de KU
+    source_anchor: '[S4][S18]'
+    probable_type: graph
+    probable_authority: primary
+    probable_patchable: false
+    probable_parameterizable: true
+    notes: Graphe orienté construit en phase Analyse ; relations explicites requises.
+  - label: Nœud human_checkpoint
+    source_anchor: '[S4][S17]'
+    probable_type: control_node
+    probable_authority: primary
+    probable_patchable: false
+    probable_parameterizable: true
+    notes: Jalon humain bloquant ou non-bloquant selon niveau d’autonomie.
+  - label: Mastery Score Composite (MSC)
+    source_anchor: '[S17b][S20]'
+    probable_type: mastery_model
+    probable_authority: primary
+    probable_patchable: false
+    probable_parameterizable: true
+    notes: Vecteur P/R/A/T ; logique d’agrégation AND constitutionnelle.
+  - label: Composante P
+    source_anchor: '[S20]'
+    probable_type: mastery_component
+    probable_authority: primary
+    probable_patchable: false
+    probable_parameterizable: true
+    notes: Précision ; seuils délégués au Référentiel.
+  - label: Composante R
+    source_anchor: '[S5][S20]'
+    probable_type: mastery_component
+    probable_authority: primary
+    probable_patchable: false
+    probable_parameterizable: true
+    notes: Robustesse temporelle ; multiplicateurs par type KU.
+  - label: Composante A
+    source_anchor: '[S8][S20]'
+    probable_type: mastery_component
+    probable_authority: primary
+    probable_patchable: false
+    probable_parameterizable: true
+    notes: Autonomie ; liée au fading et aux transitions sans aide.
+  - label: Composante T
+    source_anchor: '[S17b][S20]'
+    probable_type: mastery_component
+    probable_authority: primary
+    probable_patchable: false
+    probable_parameterizable: true
+    notes: Transférabilité ; niveau supérieur, séparé de la maîtrise de base.
+  - label: Modèle d’état apprenant composite
+    source_anchor: '[S7]'
+    probable_type: learner_state_model
+    probable_authority: primary
+    probable_patchable: false
+    probable_parameterizable: true
+    notes: '3 axes : Calibration, Régime d’activation, Valeur-Coût.'
+  - label: Axe Calibration
+    source_anchor: '[S7]'
+    probable_type: state_axis
+    probable_authority: primary
+    probable_patchable: false
+    probable_parameterizable: true
+    notes: Bien calibré / surestimateur / sous-estimateur.
+  - label: Axe Régime d’activation
+    source_anchor: '[S7][S11]'
+    probable_type: state_axis
+    probable_authority: primary
+    probable_patchable: false
+    probable_parameterizable: true
+    notes: Productif / détresse / sous-défi ; autorité AR-N1.
+  - label: Axe Valeur-Coût perçue (VC)
+    source_anchor: '[S7][S17d]'
+    probable_type: state_axis
+    probable_authority: primary
+    probable_patchable: false
+    probable_parameterizable: true
+    notes: Axe optionnel ; inféré uniquement par item AR-N2 dédié.
+  - label: AR-N1
+    source_anchor: '[S11]'
+    probable_type: self_report_channel
+    probable_authority: primary
+    probable_patchable: false
+    probable_parameterizable: true
+    notes: Micro-sondage événementiel ; seule base temps réel pour distinguer confusion/frustration/anxiété.
+  - label: AR-N2
+    source_anchor: '[S11]'
+    probable_type: self_report_channel
+    probable_authority: primary
+    probable_patchable: false
+    probable_parameterizable: true
+    notes: Mini-sondage de fermeture de session ; supporte VC et forethought/réalisation.
+  - label: AR-N3
+    source_anchor: '[S11]'
+    probable_type: self_report_channel
+    probable_authority: primary
+    probable_patchable: false
+    probable_parameterizable: true
+    notes: Bilan périodique AEQ-dérivé ; indice calibration auto-rapport.
+  - label: Feedback coverage matrix
+    source_anchor: '[S4][S18]'
+    probable_type: design_artifact
+    probable_authority: primary
+    probable_patchable: true
+    probable_parameterizable: true
+    notes: Matrice patterns d’erreurs × templates ; obligatoire pour KU formelles et procédurales.
+  - label: Patch paramétrique
+    source_anchor: '[S14]'
+    probable_type: update_artifact
+    probable_authority: primary
+    probable_patchable: true
+    probable_parameterizable: true
+    notes: Mécanisme serveur occasionnel et borné.
+  - label: impact_scope
+    source_anchor: '[S14]'
+    probable_type: patch_attribute
+    probable_authority: primary
+    probable_patchable: false
+    probable_parameterizable: false
+    notes: Attribut obligatoire de tout patch ; non calculable => rejet intégral.
+  - label: Liste de contrôle qualité pédagogique patch
+    source_anchor: '[S14]'
+    probable_type: quality_gate
+    probable_authority: primary
+    probable_patchable: false
+    probable_parameterizable: false
+    notes: Respect P10, P14, Biggs, P19 ; explicitement non patchable.
+  - label: Session Integrity Score (SIS)
+    source_anchor: '[S15][S20]'
+    probable_type: integrity_metric
+    probable_authority: primary
+    probable_patchable: false
+    probable_parameterizable: true
+    notes: Score continu d’intégrité de session.
+  - label: NC-MSC
+    source_anchor: '[S15][S20]'
+    probable_type: confidence_metric
+    probable_authority: primary
+    probable_patchable: false
+    probable_parameterizable: true
+    notes: Niveau de confiance du MSC dérivé du SIS.
+  - label: ICC
+    source_anchor: '[S3][S20]'
+    probable_type: corpus_confidence_metric
+    probable_authority: primary
+    probable_patchable: false
+    probable_parameterizable: true
+    notes: Indice de confiance du corpus pour la construction du graphe.
+  - label: Contexte authentique
+    source_anchor: '[S17e][S18]'
+    probable_type: analysis_artifact
+    probable_authority: primary
+    probable_patchable: true
+    probable_parameterizable: true
+    notes: Situation-problème réelle de référence ; obligatoire pour Bloom ≥ 4.
+  - label: Modes Multi-profil / Invité / Évaluation Externe
+    source_anchor: '[S15]'
+    probable_type: integrity_mechanisms
+    probable_authority: primary
+    probable_patchable: false
+    probable_parameterizable: true
+    notes: Architecture de protection de l’intégrité du modèle apprenant.
+  - label: Niveaux d’autonomie moteur
+    source_anchor: '[S17]'
+    probable_type: autonomy_model
+    probable_authority: primary
+    probable_patchable: false
+    probable_parameterizable: false
+    notes: Autonome / Hybride recommandé / Hybride bloquant / Assisté.
+  candidate_dependencies:
+  - label: Déclaration de maîtrise de base
+    source_anchor: '[S17b]'
+    probable_type: logical_dependency
+    probable_authority: primary
+    probable_patchable: false
+    probable_parameterizable: false
+    notes: Dépend de la satisfaction simultanée de P, R et A.
+  - label: Déclaration de maîtrise de niveau supérieur
+    source_anchor: '[S17b]'
+    probable_type: logical_dependency
+    probable_authority: primary
+    probable_patchable: false
+    probable_parameterizable: false
+    notes: T dépend de la maîtrise de base mais n’en est pas le prérequis.
+  - label: Typage d’une KU
+    source_anchor: '[S16]'
+    probable_type: structural_dependency
+    probable_authority: primary
+    probable_patchable: false
+    probable_parameterizable: false
+    notes: Conditionne MSC, feedback, trajectoire pédagogique, proxys, budget cognitif et multiplicateur R.
+  - label: Propagation d’incertitude
+    source_anchor: '[S17c]'
+    probable_type: graph_dependency
+    probable_authority: primary
+    probable_patchable: false
+    probable_parameterizable: false
+    notes: Dépend de la présence explicite d’arêtes de dépendance dans le graphe.
+  - label: Axe VC
+    source_anchor: '[S7][S17d]'
+    probable_type: data_dependency
+    probable_authority: primary
+    probable_patchable: false
+    probable_parameterizable: true
+    notes: Dépend exclusivement de l’item AR-N2 VC ; sans réponse => axe inconnu.
+  - label: Régime d’activation en temps réel
+    source_anchor: '[S7][S11]'
+    probable_type: data_dependency
+    probable_authority: primary
+    probable_patchable: false
+    probable_parameterizable: true
+    notes: Dépend d’AR-N1 comme source d’autorité ; proxys servent de fond.
+  - label: Patch valide
+    source_anchor: '[S14]'
+    probable_type: validation_dependency
+    probable_authority: primary
+    probable_patchable: false
+    probable_parameterizable: false
+    notes: Dépend de fourchettes Référentiel, impact_scope calculable, QA pédagogique satisfaite, atomicité et validation
+      locale.
+  - label: Missions Bloom ≥ 4
+    source_anchor: '[S17e][S18]'
+    probable_type: pedagogical_dependency
+    probable_authority: primary
+    probable_patchable: false
+    probable_parameterizable: false
+    notes: Dépendent de la déclaration d’un contexte authentique.
+  - label: Déploiement Assisté
+    source_anchor: '[S17]'
+    probable_type: operational_dependency
+    probable_authority: primary
+    probable_patchable: false
+    probable_parameterizable: false
+    notes: Dépend d’une infrastructure de suivi tutoral.
+  - label: Feedback spécialisé formel/procédural
+    source_anchor: '[S4][S12]'
+    probable_type: artifact_dependency
+    probable_authority: primary
+    probable_patchable: false
+    probable_parameterizable: true
+    notes: Dépend de livrables Design non générés à la volée par le moteur.
+  - label: Maîtrise provisoire héritée
+    source_anchor: '[S2][S20]'
+    probable_type: temporal_dependency
+    probable_authority: primary
+    probable_patchable: false
+    probable_parameterizable: true
+    notes: Dépend d’une confirmation R et A dans les 3 premières sessions.
+  - label: Conflit non couvert GF-08
+    source_anchor: '[S14][S20]'
+    probable_type: decision_dependency
+    probable_authority: primary
+    probable_patchable: false
+    probable_parameterizable: false
+    notes: Dépend d’une hiérarchie de principes explicitée ; sinon réponse conservatrice obligatoire.
+  candidate_relations:
+  - label: Constitution gouverne Référentiel
+    source_anchor: '[S1]'
+    probable_type: governance_relation
+    probable_authority: primary
+    probable_patchable: false
+    probable_parameterizable: false
+    notes: Quoi/pourquoi vs combien/comment.
+  - label: Référentiel borne les paramètres du moteur
+    source_anchor: '[S14][S20]'
+    probable_type: constraint_relation
+    probable_authority: reference
+    probable_patchable: true
+    probable_parameterizable: true
+    notes: Les fourchettes et seuils viennent du Référentiel.
+  - label: Graphe instancie le domaine d’apprentissage
+    source_anchor: '[S4][S18]'
+    probable_type: instantiation_relation
+    probable_authority: primary
+    probable_patchable: false
+    probable_parameterizable: true
+    notes: Le graphe relie KU, dépendances et checkpoints.
+  - label: Human_checkpoint bloque ou non le parcours
+    source_anchor: '[S17]'
+    probable_type: control_relation
+    probable_authority: primary
+    probable_patchable: false
+    probable_parameterizable: true
+    notes: Selon blocking et niveau d’autonomie.
+  - label: AR-N1 met à jour immédiatement le régime
+    source_anchor: '[S11]'
+    probable_type: update_relation
+    probable_authority: primary
+    probable_patchable: false
+    probable_parameterizable: true
+    notes: Concurrent à l’événement ; autorité supérieure au proxy.
+  - label: AR-N2 alimente la réflexion de session
+    source_anchor: '[S11]'
+    probable_type: feedback_relation
+    probable_authority: primary
+    probable_patchable: false
+    probable_parameterizable: true
+    notes: Difficulté perçue, progrès perçu, intention retour, VC.
+  - label: SIS pondère l’intégration des performances
+    source_anchor: '[S15][S20]'
+    probable_type: integrity_relation
+    probable_authority: primary
+    probable_patchable: false
+    probable_parameterizable: true
+    notes: SIS bas => intégration pondérée ou mise en attente.
+  - label: NC-MSC qualifie la confiance du modèle
+    source_anchor: '[S15]'
+    probable_type: confidence_relation
+    probable_authority: primary
+    probable_patchable: false
+    probable_parameterizable: true
+    notes: Peut imposer vérifications supplémentaires.
+  - label: Patch enrichit la matrice feedback
+    source_anchor: '[S14][S18]'
+    probable_type: maintenance_relation
+    probable_authority: primary
+    probable_patchable: true
+    probable_parameterizable: true
+    notes: Déclenché notamment par erreurs hors-taxonomie.
+  - label: Rétrogradation MSC déclenche marquage des dépendantes
+    source_anchor: '[S17c]'
+    probable_type: trigger_relation
+    probable_authority: primary
+    probable_patchable: false
+    probable_parameterizable: false
+    notes: Propagation limitée à un saut.
+  - label: Contexte authentique autorise le haut Bloom
+    source_anchor: '[S17e]'
+    probable_type: authorization_relation
+    probable_authority: primary
+    probable_patchable: false
+    probable_parameterizable: false
+    notes: Absence => plafond Bloom 2.
+  - label: Séparation des couches contraint le runtime
+    source_anchor: '[S13]'
+    probable_type: architecture_relation
+    probable_authority: primary
+    probable_patchable: false
+    probable_parameterizable: false
+    notes: Conception / Moteur / Patch.
+  candidate_invariants:
+  - label: Agrégation MSC = AND strict sur P, R, A
+    source_anchor: '[S17b]'
+    probable_type: invariant
+    probable_authority: primary
+    probable_patchable: false
+    probable_parameterizable: false
+    notes: Toute autre logique => révision constitutionnelle.
+  - label: T séparé de la maîtrise de base
+    source_anchor: '[S17b]'
+    probable_type: invariant
+    probable_authority: primary
+    probable_patchable: false
+    probable_parameterizable: false
+    notes: Jamais prérequis à la maîtrise de base.
+  - label: Moteur en usage 100% local
+    source_anchor: '[S4][S13]'
+    probable_type: invariant
+    probable_authority: primary
+    probable_patchable: false
+    probable_parameterizable: false
+    notes: Zéro appel réseau temps réel.
+  - label: Aucune génération de contenu en usage
+    source_anchor: '[S13]'
+    probable_type: invariant
+    probable_authority: primary
+    probable_patchable: false
+    probable_parameterizable: false
+    notes: Le runtime sélectionne des artefacts existants.
+  - label: Canal textuel seul interdit pour KU procédurales et perceptuelles
+    source_anchor: '[S12]'
+    probable_type: invariant
+    probable_authority: primary
+    probable_patchable: false
+    probable_parameterizable: false
+    notes: Livrables multimodaux obligatoires.
+  - label: Patch partiellement appliqué = état interdit
+    source_anchor: '[S14]'
+    probable_type: invariant
+    probable_authority: primary
+    probable_patchable: false
+    probable_parameterizable: false
+    notes: GF-01.
+  - label: Paramètre hors fourchette ou impact_scope non calculable => rejet intégral
+    source_anchor: '[S14][S20]'
+    probable_type: invariant
+    probable_authority: primary
+    probable_patchable: false
+    probable_parameterizable: false
+    notes: GF-02 étendu.
+  - label: Propagation graphe limitée à 1 saut
+    source_anchor: '[S17c]'
+    probable_type: invariant
+    probable_authority: primary
+    probable_patchable: false
+    probable_parameterizable: false
+    notes: Pas de cascade illimitée.
+  - label: Règle conservatrice en absence d’AR-N1
+    source_anchor: '[S7]'
+    probable_type: invariant
+    probable_authority: primary
+    probable_patchable: false
+    probable_parameterizable: false
+    notes: Scaffolding léger réversible.
+  - label: VC ne sert ni de proxy motivation générale ni de pénalité
+    source_anchor: '[S17d]'
+    probable_type: invariant
+    probable_authority: primary
+    probable_patchable: false
+    probable_parameterizable: false
+    notes: Réponse distincte de la détresse.
+  - label: Contexte authentique obligatoire pour Bloom ≥ 4
+    source_anchor: '[S17e]'
+    probable_type: invariant
+    probable_authority: primary
+    probable_patchable: false
+    probable_parameterizable: false
+    notes: Sans contexte, plafonnement compréhension.
+  - label: Séparation Constitution / Référentiel inviolable
+    source_anchor: '[S1]'
+    probable_type: governance_invariant
+    probable_authority: primary
+    probable_patchable: false
+    probable_parameterizable: false
+    notes: La logique AND ne peut pas être déléguée.
+  - label: Typage KU obligatoire
+    source_anchor: '[S16]'
+    probable_type: analysis_invariant
+    probable_authority: primary
+    probable_patchable: false
+    probable_parameterizable: false
+    notes: Sans typage, inadéquation silencieuse.
+  - label: Assisté interdit sans infrastructure tutoral
+    source_anchor: '[S17]'
+    probable_type: deployment_invariant
+    probable_authority: primary
+    probable_patchable: false
+    probable_parameterizable: false
+    notes: Protection procédurale haut risque.
+  candidate_rules:
+  - label: Absence de calibrage => hypothèse conservatrice + déblocage manuel
+    source_anchor: '[S2]'
+    probable_type: rule
+    probable_authority: primary
+    probable_patchable: false
+    probable_parameterizable: false
+    notes: Position initiale basse.
+  - label: Concept absent annales mais présent corpus => maintenu dans le graphe
+    source_anchor: '[S3]'
+    probable_type: rule
+    probable_authority: primary
+    probable_patchable: false
+    probable_parameterizable: true
+    notes: Jamais supprimé ; Bloom min, pondération réduite.
+  - label: Misconception => mission de conflit cognitif obligatoire
+    source_anchor: '[S3][S18]'
+    probable_type: rule
+    probable_authority: primary
+    probable_patchable: false
+    probable_parameterizable: false
+    notes: Rappel actif seul insuffisant.
+  - label: Interruption > seuil_R => session diagnostique de reprise
+    source_anchor: '[S5]'
+    probable_type: rule
+    probable_authority: primary
+    probable_patchable: false
+    probable_parameterizable: true
+    notes: Condition de reprise.
+  - label: AR-N1 discordant avec proxy => AR prime + discordance loguée
+    source_anchor: '[S11]'
+    probable_type: rule
+    probable_authority: primary
+    probable_patchable: false
+    probable_parameterizable: true
+    notes: Révision du poids proxy si discordances accumulées.
+  - label: Erreur non couverte => feedback générique processus + flag erreur-hors-taxonomie
+    source_anchor: '[S4]'
+    probable_type: rule
+    probable_authority: primary
+    probable_patchable: false
+    probable_parameterizable: true
+    notes: Candidate patch prioritaire.
+  - label: VC basse persistante => patch relevance, pas baisse de difficulté
+    source_anchor: '[S17d]'
+    probable_type: rule
+    probable_authority: primary
+    probable_patchable: false
+    probable_parameterizable: true
+    notes: Révision contextualisation / enjeux.
+  - label: Profil AR-réfractaire => adaptation du mode de sollicitation via patch
+    source_anchor: '[S7]'
+    probable_type: rule
+    probable_authority: primary
+    probable_patchable: false
+    probable_parameterizable: true
+    notes: Pas de pénalisation.
+  - label: Rétrogradation MSC => marquage prioritaire des KU dépendantes
+    source_anchor: '[S17c]'
+    probable_type: rule
+    probable_authority: primary
+    probable_patchable: false
+    probable_parameterizable: true
+    notes: Avec tâche diagnostique courte.
+  - label: Conflit GF-08 non couvert => réponse conservatrice + log
+    source_anchor: '[S14][S20]'
+    probable_type: rule
+    probable_authority: primary
+    probable_patchable: false
+    probable_parameterizable: false
+    notes: Ouverture pour prochain patch.
+  - label: AR-N2 intention de session non bloquante et non pénalisée
+    source_anchor: '[S11]'
+    probable_type: rule
+    probable_authority: primary
+    probable_patchable: false
+    probable_parameterizable: true
+    notes: Support forethought SRL seulement.
+  - label: Gamification non vérifiée => période probatoire
+    source_anchor: '[S10][S18]'
+    probable_type: rule
+    probable_authority: primary
+    probable_patchable: false
+    probable_parameterizable: true
+    notes: Test de non-nuisance requis.
+  - label: SIS bas seul ne pénalise jamais automatiquement
+    source_anchor: '[S15][S20]'
+    probable_type: rule
+    probable_authority: primary
+    probable_patchable: false
+    probable_parameterizable: true
+    notes: Apprenant garde la maîtrise de la comptabilisation.
+  candidate_parameters:
+  - label: P déclarative
+    source_anchor: '[S20]'
+    probable_type: threshold
+    probable_authority: reference
+    probable_patchable: true
+    probable_parameterizable: true
+    notes: ≥ 80% sur N ≥ 5 occurrences ; valeurs référentielles.
+  - label: P formelle
+    source_anchor: '[S20]'
+    probable_type: threshold
+    probable_authority: reference
+    probable_patchable: true
+    probable_parameterizable: true
+    notes: 100% chaîne complète.
+  - label: Multiplicateur R procédurale
+    source_anchor: '[S5][S20]'
+    probable_type: multiplier
+    probable_authority: primary
+    probable_patchable: true
+    probable_parameterizable: true
+    notes: ×2–3 vs déclarative.
+  - label: Multiplicateur R perceptuelle
+    source_anchor: '[S5][S20]'
+    probable_type: multiplier
+    probable_authority: primary
+    probable_patchable: true
+    probable_parameterizable: true
+    notes: ×0,5 vs déclarative.
+  - label: Multiplicateur R créative
+    source_anchor: '[S5][S20]'
+    probable_type: multiplier
+    probable_authority: primary
+    probable_patchable: true
+    probable_parameterizable: true
+    notes: ×1 fallback jusqu’à calibration terrain.
+  - label: AR-N1
+    source_anchor: '[S20]'
+    probable_type: interaction_limit
+    probable_authority: primary
+    probable_patchable: false
+    probable_parameterizable: true
+    notes: ≤ 1 question, < 10 s, binaire/ternaire.
+  - label: AR-N2
+    source_anchor: '[S20]'
+    probable_type: interaction_limit
+    probable_authority: primary
+    probable_patchable: false
+    probable_parameterizable: true
+    notes: ≤ 3 items visuels.
+  - label: AR-N3
+    source_anchor: '[S20]'
+    probable_type: interaction_limit
+    probable_authority: primary
+    probable_patchable: false
+    probable_parameterizable: true
+    notes: 5–7 items.
+  - label: Fenêtre de vérification maîtrise provisoire
+    source_anchor: '[S2][S20]'
+    probable_type: time_window
+    probable_authority: primary
+    probable_patchable: true
+    probable_parameterizable: true
+    notes: 3 premières sessions.
+  - label: Propagation graphe
+    source_anchor: '[S17c][S20]'
+    probable_type: structural_limit
+    probable_authority: primary
+    probable_patchable: false
+    probable_parameterizable: false
+    notes: 1 saut max.
+  candidate_constraints:
+  - label: Pas d’inférence psychologique autonome non probatoire
+    source_anchor: '[S14]'
+    probable_type: constraint
+    probable_authority: primary
+    probable_patchable: false
+    probable_parameterizable: false
+    notes: Interdit dans le périmètre patch.
+  - label: Pas de modification philosophie adaptative
+    source_anchor: '[S14]'
+    probable_type: constraint
+    probable_authority: primary
+    probable_patchable: false
+    probable_parameterizable: false
+    notes: P5, P8, P13 protégés.
+  - label: Pas de modification de la logique AND
+    source_anchor: '[S14][S17b]'
+    probable_type: constraint
+    probable_authority: primary
+    probable_patchable: false
+    probable_parameterizable: false
+    notes: Révision constitutionnelle requise.
+  - label: Pas de modification de la règle de propagation graphe
+    source_anchor: '[S14][S17c]'
+    probable_type: constraint
+    probable_authority: primary
+    probable_patchable: false
+    probable_parameterizable: false
+    notes: P17 protégé.
+  - label: Pas de génération de feedback à la volée
+    source_anchor: '[S4][S13]'
+    probable_type: constraint
+    probable_authority: primary
+    probable_patchable: false
+    probable_parameterizable: false
+    notes: Templates préindexés uniquement.
+  - label: Pas de Bloom ≥ 4 sans contexte authentique
+    source_anchor: '[S17e]'
+    probable_type: constraint
+    probable_authority: primary
+    probable_patchable: false
+    probable_parameterizable: false
+    notes: Plafonnement d’usage.
+  - label: Pas de biométrie ni surveillance hors session
+    source_anchor: '[S15]'
+    probable_type: constraint
+    probable_authority: primary
+    probable_patchable: false
+    probable_parameterizable: false
+    notes: P13 explicite ce qu’il n’impose pas.
+  - label: Pas de déploiement Assisté sans tutorat
+    source_anchor: '[S17]'
+    probable_type: constraint
+    probable_authority: primary
+    probable_patchable: false
+    probable_parameterizable: false
+    notes: Infrastructure requise.
+  candidate_events:
+  - label: Rétrogradation MSC
+    source_anchor: '[S17b][S17c]'
+    probable_type: event
+    probable_authority: primary
+    probable_patchable: false
+    probable_parameterizable: true
+    notes: Défaillance d’une des composantes P, R ou A.
+  - label: Erreur hors-taxonomie
+    source_anchor: '[S4][S18]'
+    probable_type: event
+    probable_authority: primary
+    probable_patchable: false
+    probable_parameterizable: true
+    notes: Erreur sans template couvert.
+  - label: VC basse persistante
+    source_anchor: '[S7][S17d]'
+    probable_type: event
+    probable_authority: primary
+    probable_patchable: false
+    probable_parameterizable: true
+    notes: Déclencheur patch relevance.
+  - label: Profil AR-réfractaire détecté
+    source_anchor: '[S7]'
+    probable_type: event
+    probable_authority: primary
+    probable_patchable: false
+    probable_parameterizable: true
+    notes: Non-réponse systématique AR-N1.
+  - label: Interruption longue
+    source_anchor: '[S5]'
+    probable_type: event
+    probable_authority: primary
+    probable_patchable: false
+    probable_parameterizable: true
+    notes: Au-delà du seuil R.
+  - label: Conflit GF-08 non couvert
+    source_anchor: '[S14][S20]'
+    probable_type: event
+    probable_authority: primary
+    probable_patchable: false
+    probable_parameterizable: false
+    notes: Conflit entre principes sans règle spécifique.
+  - label: SIS bas ou sous seuil
+    source_anchor: '[S15][S20]'
+    probable_type: event
+    probable_authority: primary
+    probable_patchable: false
+    probable_parameterizable: true
+    notes: Déclenche pondération ou mise en attente.
+  - label: Patch invalide
+    source_anchor: '[S14]'
+    probable_type: event
+    probable_authority: primary
+    probable_patchable: false
+    probable_parameterizable: false
+    notes: Paramètre hors bornes ou impact_scope indéterminé.
+  candidate_actions:
+  - label: Planifier tâche diagnostique courte
+    source_anchor: '[S17c]'
+    probable_type: action
+    probable_authority: primary
+    probable_patchable: false
+    probable_parameterizable: true
+    notes: Pour KU dépendantes marquées.
+  - label: Appliquer scaffolding léger réversible
+    source_anchor: '[S7]'
+    probable_type: action
+    probable_authority: primary
+    probable_patchable: false
+    probable_parameterizable: true
+    notes: Réponse conservatrice en absence d’AR-N1.
+  - label: Déclencher patch relevance
+    source_anchor: '[S17d]'
+    probable_type: action
+    probable_authority: primary
+    probable_patchable: true
+    probable_parameterizable: true
+    notes: Réviser enjeux/contextualisation.
+  - label: Déclencher patch mode sollicitation AR
+    source_anchor: '[S7][S14]'
+    probable_type: action
+    probable_authority: primary
+    probable_patchable: true
+    probable_parameterizable: true
+    notes: Pour profil AR-réfractaire.
+  - label: Rollback automatique
+    source_anchor: '[S14]'
+    probable_type: action
+    probable_authority: primary
+    probable_patchable: false
+    probable_parameterizable: false
+    notes: En cas d’échec de patch.
+  - label: Logger la discordance AR/proxy
+    source_anchor: '[S11]'
+    probable_type: action
+    probable_authority: primary
+    probable_patchable: false
+    probable_parameterizable: false
+    notes: Permet révision du poids proxy.
+  - label: Informer l’apprenant
+    source_anchor: '[S14]'
+    probable_type: action
+    probable_authority: primary
+    probable_patchable: false
+    probable_parameterizable: false
+    notes: Transparence des patchs et rejets.
+  candidate_external_references:
+  - label: Référentiel Learn-it v0.5
+    source_anchor: '[S1][S14][S20]'
+    probable_type: external_core_reference
+    probable_authority: reference
+    probable_patchable: true
+    probable_parameterizable: true
+    notes: Source des seuils, fourchettes, fréquences et durées.
+  - label: DA-2 / DA-4 / DA-9
+    source_anchor: '[S20]'
+    probable_type: external_operational_reference
+    probable_authority: reference
+    probable_patchable: true
+    probable_parameterizable: true
+    notes: Algorithmes opérationnels détaillés hors Constitution.
+  - label: Cadres théoriques externes (Merrill, Biggs, Sweller, etc.)
+    source_anchor: '[S19]'
+    probable_type: theoretical_reference
+    probable_authority: reference
+    probable_patchable: false
+    probable_parameterizable: false
+    notes: Fondent la justification mais ne décrivent pas le runtime.
+  - label: Phase Analyse / Design détaillée
+    source_anchor: '[S18]'
+    probable_type: process_reference
+    probable_authority: reference
+    probable_patchable: true
+    probable_parameterizable: true
+    notes: Livrables précis probablement décrits ailleurs.
+  split_signals:
+  - label: Autorité distincte Constitution vs Référentiel
+    source_anchor: '[S1]'
+    probable_type: authority_split_signal
+    probable_authority: primary
+    probable_patchable: false
+    probable_parameterizable: false
+    notes: Séparation explicite et inviolable.
+  - label: Cycle de vie distinct design / runtime / patch
+    source_anchor: '[S13][S18]'
+    probable_type: lifecycle_split_signal
+    probable_authority: primary
+    probable_patchable: false
+    probable_parameterizable: false
+    notes: Conception hors usage, moteur local, patch serveur.
+  - label: Sous-système intégrité modèle apprenant fortement cohérent
+    source_anchor: '[S15]'
+    probable_type: cohesion_split_signal
+    probable_authority: primary
+    probable_patchable: false
+    probable_parameterizable: true
+    notes: Multi-profil, invité, évaluation externe, SIS, NC-MSC.
+  - label: Sous-système auto-rapport / affect / SRL fortement cohérent
+    source_anchor: '[S7][S11]'
+    probable_type: cohesion_split_signal
+    probable_authority: primary
+    probable_patchable: false
+    probable_parameterizable: true
+    notes: AR-N1/N2/N3, activation, VC, intention session.
+  - label: Sous-système patch / garde-fous fortement cohérent
+    source_anchor: '[S14]'
+    probable_type: cohesion_split_signal
+    probable_authority: primary
+    probable_patchable: false
+    probable_parameterizable: true
+    notes: Atomicité, fourchettes, impact_scope, QA.
+  ambiguities:
+  - label: Statut exact des tables [INFÉRÉ]
+    source_anchor: '[Tables récap]'
+    probable_type: authority_ambiguity
+    probable_authority: uncertain
+    probable_patchable: null
+    probable_parameterizable: null
+    notes: Peuvent être dérivées de principes précédents plutôt que normatives autonomes.
+  - label: Nature exacte de certains seuils listés en S20
+    source_anchor: '[S20]'
+    probable_type: delegation_ambiguity
+    probable_authority: mixed
+    probable_patchable: true
+    probable_parameterizable: true
+    notes: Certains seuils semblent constitutionnels par rappel, mais leurs valeurs sont référentielles.
+  - label: Granularité exacte de l’impact_scope
+    source_anchor: '[S14]'
+    probable_type: schema_ambiguity
+    probable_authority: primary
+    probable_patchable: false
+    probable_parameterizable: true
+    notes: Liste minimale explicitée, schéma complet non détaillé.
+  - label: Statut opératoire du critère de validation empirique des proxys
+    source_anchor: '[S7][S18]'
+    probable_type: validation_ambiguity
+    probable_authority: primary
+    probable_patchable: true
+    probable_parameterizable: true
+    notes: Principe clair mais protocole exact hors périmètre.
+  - label: Définition précise des niveaux procéduraux P1–P4
+    source_anchor: '[S17]'
+    probable_type: taxonomy_ambiguity
+    probable_authority: primary
+    probable_patchable: false
+    probable_parameterizable: true
+    notes: La taxonomie est énoncée mais pourrait dépendre d’un autre document opérationnel.
+  - label: Statut exact du calcul Bloom par type KU
+    source_anchor: '[S3][S17e]'
+    probable_type: model_ambiguity
+    probable_authority: primary
+    probable_patchable: true
+    probable_parameterizable: true
+    notes: Principe présent ; mécanisation détaillée absente.
+  extraction_notes:
+  - Le document n’est pas un Core compact ; il contient encore justification, théorie et synthèses inférées.
+  - La séparation autoritaire avec le Référentiel est explicite et structurante ; elle constitue un signal fort pour un pipeline
+    multi-Core.
+  - Les zones les plus denses logiquement sont P12–P19 ; elles portent les invariants les plus discriminants pour la suite.
+  - 'Plusieurs éléments sont explicitement délégués au Référentiel : seuils, fourchettes, fréquences, durées, déclencheurs
+    quantifiés.'
+  - Le document contient des éléments de gouvernance, d’architecture, de pédagogie et d’intégrité ; ces couches pourront être
+    scindées ultérieurement mais ne doivent pas l’être à ce stade.

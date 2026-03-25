@@ -1,0 +1,229 @@
+CORE:
+
+  id: LINK_CORE
+
+  core_type: LINK
+
+  authority: derived
+
+  version: 1.0
+
+  description: Dependency orchestration layer linking constitution and referentiel cores
+
+TYPES:
+
+  - id: CORE_LINK_TYPE
+    authority: derived
+    core_type: LINK
+    source_anchor: [MAKE0CORE_LINK]
+    depends_on: []
+    relations:
+      - type: instantiates
+        target: CONSTITUTION_TO_REFERENTIEL_LINK
+    patchable: false
+    parameterizable: false
+    human_readable: Canonical inter-core linkage type
+    logic:
+      trigger: core_federation
+      condition: multiple_cores_exist
+      effect: declare_link_structure
+      scope: system
+
+INVARIANTS:
+
+  - id: LINK_NO_BUSINESS_LOGIC
+    authority: derived
+    core_type: LINK
+    source_anchor: [MAKE0CORE_LINK]
+    depends_on: []
+    relations:
+      - type: constrains
+        target: CONSTITUTION_TO_REFERENTIEL_LINK
+      - type: constrains
+        target: MSC_THRESHOLD_BINDING
+      - type: constrains
+        target: PATCH_GOVERNANCE_BINDING
+    patchable: false
+    parameterizable: false
+    human_readable: A LINK core must not define business logic or business values
+    logic:
+      trigger: link_validation
+      condition: link_core_present
+      effect: reject_business_logic_inside_link
+      scope: system
+
+RULES:
+
+  - id: CONSTITUTION_TO_REFERENTIEL_LINK
+    authority: derived
+    core_type: LINK
+    source_anchor: [P12, P16, P17, P18, P19, S2, S16, S17, S18, S19]
+    depends_on:
+      - MSC_THRESHOLD_BINDING
+      - PATCH_GOVERNANCE_BINDING
+      - GRAPH_PROPAGATION_BINDING
+      - VC_TRIGGER_BINDING
+      - AUTHENTIC_CONTEXT_BINDING
+    relations:
+      - type: requires
+        target: MSC_THRESHOLD_BINDING
+      - type: requires
+        target: PATCH_GOVERNANCE_BINDING
+      - type: requires
+        target: GRAPH_PROPAGATION_BINDING
+      - type: requires
+        target: VC_TRIGGER_BINDING
+      - type: requires
+        target: AUTHENTIC_CONTEXT_BINDING
+    patchable: false
+    parameterizable: false
+    human_readable: Global orchestration rule linking constitutional invariants to operational parameters
+    logic:
+      trigger: system_runtime
+      condition: constitution_core_and_referentiel_core_loaded
+      effect: activate_cross_core_dependencies
+      scope: system
+
+PARAMETERS: []
+
+CONSTRAINTS:
+
+  - id: MSC_THRESHOLD_BINDING
+    authority: derived
+    core_type: LINK
+    source_anchor: [P16, S2]
+    depends_on: []
+    relations:
+      - type: derives_from
+        target: CONSTITUTION_CORE
+      - type: derives_from
+        target: REFERENTIEL_CORE
+    patchable: false
+    parameterizable: false
+    human_readable: The referentiel provides thresholds, while the constitution defines the AND aggregation rule
+    logic:
+      trigger: mastery_evaluation
+      condition: both_cores_loaded
+      effect: bind_thresholds_to_constitutional_aggregation
+      scope: system
+
+  - id: PATCH_GOVERNANCE_BINDING
+    authority: derived
+    core_type: LINK
+    source_anchor: [P12, S6]
+    depends_on: []
+    relations:
+      - type: derives_from
+        target: CONSTITUTION_CORE
+      - type: derives_from
+        target: REFERENTIEL_CORE
+    patchable: false
+    parameterizable: false
+    human_readable: Patch execution is constitutionally constrained and operationally bounded by referentiel ranges
+    logic:
+      trigger: patch_request
+      condition: both_cores_loaded
+      effect: enforce_joint_patch_governance
+      scope: system
+
+  - id: GRAPH_PROPAGATION_BINDING
+    authority: derived
+    core_type: LINK
+    source_anchor: [P17, S19]
+    depends_on: []
+    relations:
+      - type: derives_from
+        target: CONSTITUTION_CORE
+      - type: derives_from
+        target: REFERENTIEL_CORE
+    patchable: false
+    parameterizable: false
+    human_readable: Constitutional propagation rule is operationalized by referentiel diagnostic timing and format
+    logic:
+      trigger: mastery_revocation
+      condition: dependency_edges_declared
+      effect: connect_propagation_rule_to_operational_execution
+      scope: graph
+
+  - id: VC_TRIGGER_BINDING
+    authority: derived
+    core_type: LINK
+    source_anchor: [P18, S16]
+    depends_on: []
+    relations:
+      - type: derives_from
+        target: CONSTITUTION_CORE
+      - type: derives_from
+        target: REFERENTIEL_CORE
+    patchable: false
+    parameterizable: false
+    human_readable: Constitutional VC axis is bound to referentiel persistence thresholds for relevance patch triggering
+    logic:
+      trigger: session_sequence_evaluation
+      condition: vc_axis_enabled
+      effect: connect_vc_state_to_patch_trigger
+      scope: learner
+
+  - id: AUTHENTIC_CONTEXT_BINDING
+    authority: derived
+    core_type: LINK
+    source_anchor: [P19, S18]
+    depends_on: []
+    relations:
+      - type: derives_from
+        target: CONSTITUTION_CORE
+      - type: derives_from
+        target: REFERENTIEL_CORE
+    patchable: false
+    parameterizable: false
+    human_readable: Constitutional authentic-context requirement is bound to ADDIE analysis and deployment conditions
+    logic:
+      trigger: design_or_task_generation
+      condition: bloom_level_above_basic
+      effect: enforce_context_declaration_dependency
+      scope: system
+
+EVENTS:
+
+  - id: CROSS_CORE_LOAD_EVENT
+    authority: derived
+    core_type: LINK
+    source_anchor: [MAKE0CORE_LINK]
+    depends_on:
+      - CONSTITUTION_TO_REFERENTIEL_LINK
+    relations:
+      - type: triggers
+        target: CONSTITUTION_TO_REFERENTIEL_LINK
+    patchable: false
+    parameterizable: false
+    human_readable: Event emitted when the linked cores are loaded together
+    logic:
+      trigger: core_loading
+      condition: constitution_and_referentiel_available
+      effect: activate_linked_bindings
+      scope: system
+
+ACTIONS:
+
+  - id: RESOLVE_CROSS_CORE_DEPENDENCIES
+    authority: derived
+    core_type: LINK
+    source_anchor: [MAKE0CORE_LINK]
+    depends_on:
+      - CONSTITUTION_TO_REFERENTIEL_LINK
+      - MSC_THRESHOLD_BINDING
+      - PATCH_GOVERNANCE_BINDING
+      - GRAPH_PROPAGATION_BINDING
+      - VC_TRIGGER_BINDING
+      - AUTHENTIC_CONTEXT_BINDING
+    relations:
+      - type: validates
+        target: CONSTITUTION_TO_REFERENTIEL_LINK
+    patchable: false
+    parameterizable: false
+    human_readable: Resolve and validate all declared cross-core bindings before execution
+    logic:
+      trigger: pre_execution_validation
+      condition: all_link_nodes_present
+      effect: validate_cross_core_federation
+      scope: system

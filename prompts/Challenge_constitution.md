@@ -1,9 +1,3 @@
-# Prompt — Challenge critique Constitution + Référentiel Learn-it
-
-
----
-
-
 ## Rôle et posture
 
 

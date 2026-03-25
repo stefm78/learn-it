@@ -1,0 +1,1476 @@
+CORE:
+  id: learnit_constitution_core_candidate_v1_6
+  core_type: CONSTITUTION
+  authority: primary
+  version: v1.6-core-candidate
+  description: >
+    Core candidat constitutionnel de Learn-it construit à partir du logical draft v1.6.
+    Il capture la logique stable, les invariants, les règles normatives, les contraintes
+    et les événements/actions constitutionnels du moteur adaptatif local. Les valeurs
+    détaillées de seuils, durées, fréquences et fourchettes restent explicitement déléguées
+    au Référentiel.
+
+  TYPES:
+    - id: system.learnit
+      authority: primary
+      core_type: CONSTITUTION
+      source_anchor: "[S1]"
+      depends_on: []
+      relations: []
+      patchable: false
+      parameterizable: false
+      human_readable: "Système Learn-it gouverné par une Constitution puis un Référentiel."
+      logic:
+        trigger: null
+        condition: null
+        effect: "Cadre constitutionnel du moteur adaptatif."
+        scope: "system"
+
+    - id: type.knowledge_unit
+      authority: primary
+      core_type: CONSTITUTION
+      source_anchor: "[S4][S16]"
+      depends_on: []
+      relations:
+        - type: instantiates
+          target:
+            id: type.knowledge_graph
+        - type: constrains
+          target:
+            id: invariant.ku_typing_required
+      patchable: false
+      parameterizable: true
+      human_readable: "Knowledge Unit atomique du graphe, à typage épistémologique obligatoire."
+      logic:
+        trigger: null
+        condition: "Toute KU doit être typée."
+        effect: "Le type KU conditionne feedback, trajectoire, proxys et lecture du MSC."
+        scope: "knowledge_model"
+
+    - id: type.knowledge_graph
+      authority: primary
+      core_type: CONSTITUTION
+      source_anchor: "[S4][S18]"
+      depends_on:
+        - type.knowledge_unit
+      relations:
+        - type: instantiates
+          target:
+            id: type.human_checkpoint
+        - type: requires
+          target:
+            id: invariant.explicit_dependency_edges_required
+      patchable: false
+      parameterizable: true
+      human_readable: "Graphe orienté de KU et de dépendances explicites."
+      logic:
+        trigger: "Analyse"
+        condition: "KU et arêtes de dépendance explicitement déclarées."
+        effect: "Le domaine d’apprentissage est instancié localement."
+        scope: "analysis_design"
+
+    - id: type.human_checkpoint
+      authority: primary
+      core_type: CONSTITUTION
+      source_anchor: "[S4][S17]"
+      depends_on: []
+      relations:
+        - type: constrains
+          target:
+            id: type.autonomy_regime
+      patchable: false
+      parameterizable: true
+      human_readable: "Jalon humain bloquant ou non selon le niveau d’autonomie."
+      logic:
+        trigger: "Parcours nécessitant validation humaine"
+        condition: "Niveau d’autonomie et risques pédagogiques déclarés."
+        effect: "Blocage ou validation du parcours."
+        scope: "runtime_governance"
+
+    - id: type.mastery_model
+      authority: primary
+      core_type: CONSTITUTION
+      source_anchor: "[S17b][S20]"
+      depends_on:
+        - type.mastery_component_p
+        - type.mastery_component_r
+        - type.mastery_component_a
+        - type.mastery_component_t
+      relations:
+        - type: governs
+          target:
+            id: invariant.msc_and_strict
+      patchable: false
+      parameterizable: true
+      human_readable: "Modèle MSC composé des axes P, R, A et T."
+      logic:
+        trigger: "Évaluation de la maîtrise"
+        condition: "Composantes calculées localement."
+        effect: "Déclaration de maîtrise de base et, séparément, de transférabilité."
+        scope: "runtime_evaluation"
+
+    - id: type.mastery_component_p
+      authority: primary
+      core_type: CONSTITUTION
+      source_anchor: "[S20]"
+      depends_on:
+        - ref.referentiel_defaults_v0_5
+      relations: []
+      patchable: false
+      parameterizable: true
+      human_readable: "Composante P de précision."
+      logic:
+        trigger: null
+        condition: "Seuils fournis par le Référentiel."
+        effect: "Contribution à la maîtrise de base."
+        scope: "runtime_evaluation"
+
+    - id: type.mastery_component_r
+      authority: primary
+      core_type: CONSTITUTION
+      source_anchor: "[S5][S20]"
+      depends_on:
+        - ref.referentiel_defaults_v0_5
+      relations: []
+      patchable: false
+      parameterizable: true
+      human_readable: "Composante R de robustesse temporelle."
+      logic:
+        trigger: null
+        condition: "Seuils et multiplicateurs fournis ou bornés par le Référentiel."
+        effect: "Contribution à la maîtrise de base et à la reprise diagnostique."
+        scope: "runtime_evaluation"
+
+    - id: type.mastery_component_a
+      authority: primary
+      core_type: CONSTITUTION
+      source_anchor: "[S8][S20]"
+      depends_on:
+        - ref.referentiel_defaults_v0_5
+      relations: []
+      patchable: false
+      parameterizable: true
+      human_readable: "Composante A d’autonomie."
+      logic:
+        trigger: null
+        condition: "Transitions sans aide observées."
+        effect: "Contribution à la maîtrise de base."
+        scope: "runtime_evaluation"
+
+    - id: type.mastery_component_t
+      authority: primary
+      core_type: CONSTITUTION
+      source_anchor: "[S17b][S20]"
+      depends_on: []
+      relations:
+        - type: derives_from
+          target:
+            id: type.mastery_model
+      patchable: false
+      parameterizable: true
+      human_readable: "Composante T de transférabilité, séparée de la maîtrise de base."
+      logic:
+        trigger: "Évaluation de transfert"
+        condition: "Maîtrise de base déjà établie."
+        effect: "Qualification de niveau supérieur, sans prérequis inverse."
+        scope: "runtime_evaluation"
+
+    - id: type.learner_state_model
+      authority: primary
+      core_type: CONSTITUTION
+      source_anchor: "[S7]"
+      depends_on:
+        - type.state_axis_calibration
+        - type.state_axis_activation
+        - type.state_axis_value_cost
+      relations: []
+      patchable: false
+      parameterizable: true
+      human_readable: "Modèle d’état apprenant composite à trois axes."
+      logic:
+        trigger: "Observation et auto-rapport"
+        condition: "Sources autorisées disponibles."
+        effect: "Mise à jour de l’état apprenant."
+        scope: "runtime_state"
+
+    - id: type.state_axis_calibration
+      authority: primary
+      core_type: CONSTITUTION
+      source_anchor: "[S7]"
+      depends_on: []
+      relations: []
+      patchable: false
+      parameterizable: true
+      human_readable: "Axe de calibration de l’apprenant."
+      logic:
+        trigger: "Bilan et comparaisons auto-rapport/performance"
+        condition: "Indices de calibration disponibles."
+        effect: "Positionnement calibration."
+        scope: "runtime_state"
+
+    - id: type.state_axis_activation
+      authority: primary
+      core_type: CONSTITUTION
+      source_anchor: "[S7][S11]"
+      depends_on:
+        - type.self_report_ar_n1
+      relations:
+        - type: requires
+          target:
+            id: type.self_report_ar_n1
+      patchable: false
+      parameterizable: true
+      human_readable: "Axe de régime d’activation : productif, détresse, sous-défi."
+      logic:
+        trigger: "Événement de session ou micro-sondage"
+        condition: "AR-N1 disponible ou absent."
+        effect: "Régime d’activation mis à jour sous autorité AR-N1."
+        scope: "runtime_state"
+
+    - id: type.state_axis_value_cost
+      authority: primary
+      core_type: CONSTITUTION
+      source_anchor: "[S7][S17d]"
+      depends_on:
+        - type.self_report_ar_n2
+      relations:
+        - type: requires
+          target:
+            id: type.self_report_ar_n2
+      patchable: false
+      parameterizable: true
+      human_readable: "Axe optionnel Valeur-Coût perçue."
+      logic:
+        trigger: "Clôture de session"
+        condition: "Item VC de AR-N2 renseigné."
+        effect: "État VC mis à jour ; sinon axe inconnu."
+        scope: "runtime_state"
+
+    - id: type.self_report_ar_n1
+      authority: primary
+      core_type: CONSTITUTION
+      source_anchor: "[S11]"
+      depends_on: []
+      relations:
+        - type: validates
+          target:
+            id: type.state_axis_activation
+      patchable: false
+      parameterizable: true
+      human_readable: "Micro-sondage événementiel AR-N1."
+      logic:
+        trigger: "Événement runtime"
+        condition: "Question concise et locale."
+        effect: "Distinction temps réel confusion/frustration/anxiété."
+        scope: "runtime_feedback"
+
+    - id: type.self_report_ar_n2
+      authority: primary
+      core_type: CONSTITUTION
+      source_anchor: "[S11]"
+      depends_on: []
+      relations:
+        - type: validates
+          target:
+            id: type.state_axis_value_cost
+      patchable: false
+      parameterizable: true
+      human_readable: "Mini-sondage de fin de session AR-N2."
+      logic:
+        trigger: "Fin de session"
+        condition: "Questionnaire visuel court."
+        effect: "Alimente VC, difficulté perçue, progrès perçu et intention de retour."
+        scope: "runtime_feedback"
+
+    - id: type.self_report_ar_n3
+      authority: primary
+      core_type: CONSTITUTION
+      source_anchor: "[S11]"
+      depends_on: []
+      relations: []
+      patchable: false
+      parameterizable: true
+      human_readable: "Bilan périodique AR-N3 dérivé d’AEQ."
+      logic:
+        trigger: "Fenêtre périodique"
+        condition: "Bilan autorisé."
+        effect: "Indice de calibration auto-rapport."
+        scope: "runtime_feedback"
+
+    - id: type.feedback_coverage_matrix
+      authority: primary
+      core_type: CONSTITUTION
+      source_anchor: "[S4][S18]"
+      depends_on:
+        - type.knowledge_unit
+      relations:
+        - type: validates
+          target:
+            id: rule.uncovered_error_generic_feedback
+      patchable: true
+      parameterizable: true
+      human_readable: "Matrice d’erreurs et de templates de feedback."
+      logic:
+        trigger: "Phase Design"
+        condition: "KU formelles ou procédurales présentes."
+        effect: "Livrable obligatoire de couverture feedback."
+        scope: "design"
+
+    - id: type.patch_artifact
+      authority: primary
+      core_type: CONSTITUTION
+      source_anchor: "[S14]"
+      depends_on:
+        - type.patch_impact_scope
+        - type.patch_quality_gate
+        - ref.referentiel_defaults_v0_5
+      relations:
+        - type: requires
+          target:
+            id: invariant.no_partial_patch_state
+        - type: requires
+          target:
+            id: invariant.invalid_patch_rejected
+      patchable: true
+      parameterizable: true
+      human_readable: "Patch paramétrique occasionnel et borné."
+      logic:
+        trigger: "Événement de révision autorisé"
+        condition: "Bornes respectées, impact_scope calculable, QA satisfaite, atomicité garantie."
+        effect: "Patch applicable ou rejeté/rollbacké."
+        scope: "patch_layer"
+
+    - id: type.patch_impact_scope
+      authority: primary
+      core_type: CONSTITUTION
+      source_anchor: "[S14]"
+      depends_on: []
+      relations: []
+      patchable: false
+      parameterizable: false
+      human_readable: "Attribut obligatoire de tout patch."
+      logic:
+        trigger: "Validation d’un patch"
+        condition: "Impact_scope calculable."
+        effect: "Autorisation de poursuivre la validation locale."
+        scope: "patch_validation"
+
+    - id: type.patch_quality_gate
+      authority: primary
+      core_type: CONSTITUTION
+      source_anchor: "[S14]"
+      depends_on: []
+      relations:
+        - type: validates
+          target:
+            id: type.patch_artifact
+      patchable: false
+      parameterizable: false
+      human_readable: "Liste de contrôle qualité pédagogique de patch."
+      logic:
+        trigger: "Validation d’un patch"
+        condition: "Respect des principes pédagogiques protégés."
+        effect: "Validation ou rejet du patch."
+        scope: "patch_validation"
+
+    - id: type.session_integrity_score
+      authority: primary
+      core_type: CONSTITUTION
+      source_anchor: "[S15][S20]"
+      depends_on: []
+      relations:
+        - type: validates
+          target:
+            id: type.nc_msc
+      patchable: false
+      parameterizable: true
+      human_readable: "Score d’intégrité de session."
+      logic:
+        trigger: "Évaluation d’intégrité"
+        condition: "Indices d’intégrité disponibles."
+        effect: "Pondération ou mise en attente de l’intégration des performances."
+        scope: "runtime_integrity"
+
+    - id: type.nc_msc
+      authority: primary
+      core_type: CONSTITUTION
+      source_anchor: "[S15][S20]"
+      depends_on:
+        - type.session_integrity_score
+      relations: []
+      patchable: false
+      parameterizable: true
+      human_readable: "Niveau de confiance du MSC dérivé de l’intégrité."
+      logic:
+        trigger: "Calcul du modèle apprenant"
+        condition: "SIS disponible."
+        effect: "Qualification de confiance du MSC."
+        scope: "runtime_integrity"
+
+    - id: type.corpus_confidence_icc
+      authority: primary
+      core_type: CONSTITUTION
+      source_anchor: "[S3][S20]"
+      depends_on: []
+      relations: []
+      patchable: false
+      parameterizable: true
+      human_readable: "Indice de confiance du corpus."
+      logic:
+        trigger: "Construction du graphe"
+        condition: "Corpus d’entrée évalué."
+        effect: "Qualifie la confiance d’analyse."
+        scope: "analysis"
+
+    - id: type.authentic_context
+      authority: primary
+      core_type: CONSTITUTION
+      source_anchor: "[S17e][S18]"
+      depends_on: []
+      relations:
+        - type: validates
+          target:
+            id: invariant.authentic_context_required_for_bloom4
+      patchable: true
+      parameterizable: true
+      human_readable: "Contexte authentique de référence déclaré en Analyse."
+      logic:
+        trigger: "Phase Analyse"
+        condition: "Situation-problème réelle explicitée."
+        effect: "Autorise les missions de Bloom supérieur."
+        scope: "analysis_design"
+
+    - id: type.integrity_modes
+      authority: primary
+      core_type: CONSTITUTION
+      source_anchor: "[S15]"
+      depends_on:
+        - type.session_integrity_score
+      relations: []
+      patchable: false
+      parameterizable: true
+      human_readable: "Modes Multi-profil, Invité et Évaluation Externe."
+      logic:
+        trigger: "Configuration du déploiement"
+        condition: "Modes activés selon usage."
+        effect: "Protection de l’intégrité du modèle apprenant."
+        scope: "deployment"
+
+    - id: type.autonomy_regime
+      authority: primary
+      core_type: CONSTITUTION
+      source_anchor: "[S17]"
+      depends_on: []
+      relations: []
+      patchable: false
+      parameterizable: false
+      human_readable: "Niveaux d’autonomie moteur : autonome, hybride recommandé, hybride bloquant, assisté."
+      logic:
+        trigger: "Conception du déploiement"
+        condition: "Cadre d’accompagnement déclaré."
+        effect: "Régime d’autonomie applicable."
+        scope: "deployment"
+
+  INVARIANTS:
+    - id: invariant.msc_and_strict
+      authority: primary
+      core_type: CONSTITUTION
+      source_anchor: "[S17b]"
+      depends_on:
+        - type.mastery_component_p
+        - type.mastery_component_r
+        - type.mastery_component_a
+      relations:
+        - type: governs
+          target:
+            id: type.mastery_model
+      patchable: false
+      parameterizable: false
+      human_readable: "Agrégation MSC par AND strict sur P, R et A."
+      logic:
+        trigger: "Déclaration de maîtrise de base"
+        condition: "P, R et A satisfaits simultanément."
+        effect: "Maîtrise de base déclarée."
+        scope: "runtime_evaluation"
+
+    - id: invariant.transfer_separate_from_base_mastery
+      authority: primary
+      core_type: CONSTITUTION
+      source_anchor: "[S17b]"
+      depends_on:
+        - type.mastery_component_t
+      relations:
+        - type: constrains
+          target:
+            id: type.mastery_model
+      patchable: false
+      parameterizable: false
+      human_readable: "T est séparé de la maîtrise de base."
+      logic:
+        trigger: "Déclaration de transférabilité"
+        condition: "Maîtrise de base déjà établie."
+        effect: "T qualifie un niveau supérieur et n’est jamais un prérequis de base."
+        scope: "runtime_evaluation"
+
+    - id: invariant.runtime_fully_local
+      authority: primary
+      core_type: CONSTITUTION
+      source_anchor: "[S4][S13]"
+      depends_on: []
+      relations: []
+      patchable: false
+      parameterizable: false
+      human_readable: "Le moteur en usage est 100% local."
+      logic:
+        trigger: "Exécution runtime"
+        condition: "Usage apprenant actif."
+        effect: "Aucun appel réseau temps réel n’est autorisé."
+        scope: "runtime_architecture"
+
+    - id: invariant.no_runtime_content_generation
+      authority: primary
+      core_type: CONSTITUTION
+      source_anchor: "[S13]"
+      depends_on: []
+      relations:
+        - type: constrains
+          target:
+            id: type.feedback_coverage_matrix
+      patchable: false
+      parameterizable: false
+      human_readable: "Aucune génération de contenu en usage."
+      logic:
+        trigger: "Sélection de contenu runtime"
+        condition: "Besoin pédagogique détecté."
+        effect: "Le moteur sélectionne uniquement des artefacts préexistants."
+        scope: "runtime_architecture"
+
+    - id: invariant.no_text_only_for_procedural_or_perceptual
+      authority: primary
+      core_type: CONSTITUTION
+      source_anchor: "[S12]"
+      depends_on:
+        - type.knowledge_unit
+      relations: []
+      patchable: false
+      parameterizable: false
+      human_readable: "Le canal textuel seul est interdit pour les KU procédurales et perceptuelles."
+      logic:
+        trigger: "Conception des livrables"
+        condition: "KU procédurale ou perceptuelle détectée."
+        effect: "Livrables multimodaux obligatoires."
+        scope: "design"
+
+    - id: invariant.no_partial_patch_state
+      authority: primary
+      core_type: CONSTITUTION
+      source_anchor: "[S14]"
+      depends_on:
+        - type.patch_artifact
+      relations:
+        - type: blocks
+          target:
+            id: event.patch_invalid
+      patchable: false
+      parameterizable: false
+      human_readable: "Un patch partiellement appliqué constitue un état interdit."
+      logic:
+        trigger: "Application d’un patch"
+        condition: "Atomicité non garantie ou échec intermédiaire."
+        effect: "Patch annulé ou rollback obligatoire."
+        scope: "patch_layer"
+
+    - id: invariant.invalid_patch_rejected
+      authority: primary
+      core_type: CONSTITUTION
+      source_anchor: "[S14][S20]"
+      depends_on:
+        - type.patch_impact_scope
+        - ref.referentiel_defaults_v0_5
+      relations: []
+      patchable: false
+      parameterizable: false
+      human_readable: "Tout patch hors bornes ou sans impact_scope calculable est rejeté intégralement."
+      logic:
+        trigger: "Validation locale de patch"
+        condition: "Paramètre hors fourchette ou impact_scope indéterminé."
+        effect: "Rejet total."
+        scope: "patch_validation"
+
+    - id: invariant.graph_propagation_one_hop
+      authority: primary
+      core_type: CONSTITUTION
+      source_anchor: "[S17c]"
+      depends_on:
+        - type.knowledge_graph
+      relations: []
+      patchable: false
+      parameterizable: false
+      human_readable: "La propagation graphe est limitée à un saut."
+      logic:
+        trigger: "Rétrogradation MSC"
+        condition: "KU dépendantes explicites présentes."
+        effect: "Marquage prioritaire des dépendantes directes uniquement."
+        scope: "runtime_graph"
+
+    - id: invariant.conservative_rule_without_ar_n1
+      authority: primary
+      core_type: CONSTITUTION
+      source_anchor: "[S7]"
+      depends_on:
+        - type.self_report_ar_n1
+      relations:
+        - type: constrains
+          target:
+            id: type.state_axis_activation
+      patchable: false
+      parameterizable: false
+      human_readable: "En absence d’AR-N1, la réponse est conservatrice."
+      logic:
+        trigger: "Signal runtime sans AR-N1"
+        condition: "AR-N1 absent."
+        effect: "Scaffolding léger réversible sans dégradation punitive."
+        scope: "runtime_state"
+
+    - id: invariant.vc_not_general_motivation_proxy
+      authority: primary
+      core_type: CONSTITUTION
+      source_anchor: "[S17d]"
+      depends_on:
+        - type.state_axis_value_cost
+      relations: []
+      patchable: false
+      parameterizable: false
+      human_readable: "VC n’est ni un proxy général de motivation ni un levier de pénalité."
+      logic:
+        trigger: "Interprétation de VC"
+        condition: "VC basse ou inconnue."
+        effect: "Réponse distincte de la détresse ; aucune pénalisation."
+        scope: "runtime_state"
+
+    - id: invariant.authentic_context_required_for_bloom4
+      authority: primary
+      core_type: CONSTITUTION
+      source_anchor: "[S17e]"
+      depends_on:
+        - type.authentic_context
+      relations:
+        - type: blocks
+          target:
+            id: event.high_bloom_without_authentic_context
+      patchable: false
+      parameterizable: false
+      human_readable: "Le contexte authentique est obligatoire pour Bloom ≥ 4."
+      logic:
+        trigger: "Conception ou lancement d’une mission Bloom ≥ 4"
+        condition: "Contexte authentique absent."
+        effect: "Mission interdite et plafonnement à Bloom 2."
+        scope: "analysis_design"
+
+    - id: invariant.constitution_referential_separation
+      authority: primary
+      core_type: CONSTITUTION
+      source_anchor: "[S1]"
+      depends_on:
+        - ref.referentiel_defaults_v0_5
+      relations:
+        - type: governs
+          target:
+            id: ref.referentiel_defaults_v0_5
+      patchable: false
+      parameterizable: false
+      human_readable: "Séparation inviolable Constitution/Référentiel."
+      logic:
+        trigger: "Gouvernance du système"
+        condition: "Révision ou patch demandé."
+        effect: "La Constitution fixe le quoi/pourquoi ; le Référentiel borne le combien/comment."
+        scope: "governance"
+
+    - id: invariant.ku_typing_required
+      authority: primary
+      core_type: CONSTITUTION
+      source_anchor: "[S16]"
+      depends_on:
+        - type.knowledge_unit
+      relations: []
+      patchable: false
+      parameterizable: false
+      human_readable: "Toute KU doit être typée."
+      logic:
+        trigger: "Construction de graphe ou design"
+        condition: "KU non typée."
+        effect: "Le système est incomplet et doit être corrigé avant usage fiable."
+        scope: "analysis_design"
+
+    - id: invariant.assisted_mode_requires_tutoring
+      authority: primary
+      core_type: CONSTITUTION
+      source_anchor: "[S17]"
+      depends_on:
+        - type.autonomy_regime
+      relations: []
+      patchable: false
+      parameterizable: false
+      human_readable: "Le mode Assisté exige une infrastructure tutorale."
+      logic:
+        trigger: "Choix du mode Assisté"
+        condition: "Infrastructure de suivi tutoral absente."
+        effect: "Déploiement Assisté interdit."
+        scope: "deployment"
+
+    - id: invariant.explicit_dependency_edges_required
+      authority: primary
+      core_type: CONSTITUTION
+      source_anchor: "[S17c][S18]"
+      depends_on:
+        - type.knowledge_graph
+      relations: []
+      patchable: false
+      parameterizable: false
+      human_readable: "Les arêtes de dépendance doivent être explicites pour autoriser la propagation."
+      logic:
+        trigger: "Analyse ou propagation d’incertitude"
+        condition: "Arêtes non explicites."
+        effect: "Aucune propagation autorisée."
+        scope: "analysis_runtime_graph"
+
+  RULES:
+    - id: rule.no_calibration_conservative_start
+      authority: primary
+      core_type: CONSTITUTION
+      source_anchor: "[S2]"
+      depends_on: []
+      relations: []
+      patchable: false
+      parameterizable: false
+      human_readable: "En absence de calibrage, le système part d’une hypothèse conservatrice."
+      logic:
+        trigger: "Initialisation sans calibrage"
+        condition: "Calibrage absent."
+        effect: "Position initiale basse + déblocage manuel apprenant."
+        scope: "initialization"
+
+    - id: rule.non_exam_concept_kept_in_graph
+      authority: primary
+      core_type: CONSTITUTION
+      source_anchor: "[S3]"
+      depends_on:
+        - type.knowledge_graph
+      relations: []
+      patchable: false
+      parameterizable: true
+      human_readable: "Un concept utile du corpus n’est pas supprimé du graphe même s’il est absent des annales."
+      logic:
+        trigger: "Construction ou révision du graphe"
+        condition: "Concept présent dans le corpus mais absent des annales."
+        effect: "Le concept est maintenu avec Bloom minimal et pondération réduite."
+        scope: "analysis_design"
+
+    - id: rule.misconception_requires_cognitive_conflict
+      authority: primary
+      core_type: CONSTITUTION
+      source_anchor: "[S3][S18]"
+      depends_on:
+        - type.knowledge_unit
+      relations:
+        - type: triggers
+          target:
+            id: action.plan_cognitive_conflict_mission
+      patchable: false
+      parameterizable: false
+      human_readable: "Une misconception impose une mission de conflit cognitif."
+      logic:
+        trigger: "KU flaggée misconception"
+        condition: "Misconception détectée."
+        effect: "Mission de conflit cognitif obligatoire."
+        scope: "design_runtime"
+
+    - id: rule.long_interruption_requires_diagnostic_resume
+      authority: primary
+      core_type: CONSTITUTION
+      source_anchor: "[S5]"
+      depends_on:
+        - ref.referentiel_defaults_v0_5
+      relations:
+        - type: triggers
+          target:
+            id: action.plan_short_diagnostic_task
+      patchable: false
+      parameterizable: true
+      human_readable: "Une interruption longue impose une reprise diagnostique."
+      logic:
+        trigger: "Reprise après interruption"
+        condition: "Durée d’interruption > seuil_R."
+        effect: "Session diagnostique de reprise."
+        scope: "runtime_resume"
+
+    - id: rule.ar_n1_overrides_proxy
+      authority: primary
+      core_type: CONSTITUTION
+      source_anchor: "[S11]"
+      depends_on:
+        - type.self_report_ar_n1
+      relations:
+        - type: validates
+          target:
+            id: type.state_axis_activation
+        - type: triggers
+          target:
+            id: action.log_ar_proxy_discordance
+      patchable: false
+      parameterizable: true
+      human_readable: "AR-N1 prime sur les proxys."
+      logic:
+        trigger: "Discordance AR-N1 / proxy"
+        condition: "AR-N1 disponible et contradictoire au proxy."
+        effect: "AR-N1 prévaut ; discordance journalisée."
+        scope: "runtime_state"
+
+    - id: rule.uncovered_error_generic_feedback
+      authority: primary
+      core_type: CONSTITUTION
+      source_anchor: "[S4]"
+      depends_on:
+        - type.feedback_coverage_matrix
+      relations:
+        - type: triggers
+          target:
+            id: event.uncovered_error
+      patchable: false
+      parameterizable: true
+      human_readable: "Erreur non couverte : feedback générique de processus et flag hors-taxonomie."
+      logic:
+        trigger: "Erreur sans template couvert"
+        condition: "Aucune entrée matrice applicable."
+        effect: "Feedback générique + flag erreur-hors-taxonomie."
+        scope: "runtime_feedback"
+
+    - id: rule.persistent_low_vc_triggers_relevance_patch
+      authority: primary
+      core_type: CONSTITUTION
+      source_anchor: "[S17d]"
+      depends_on:
+        - type.state_axis_value_cost
+        - ref.referentiel_defaults_v0_5
+      relations:
+        - type: triggers
+          target:
+            id: action.trigger_relevance_patch
+      patchable: false
+      parameterizable: true
+      human_readable: "VC basse persistante déclenche un patch de relevance, pas une baisse de difficulté."
+      logic:
+        trigger: "Persistance de VC basse"
+        condition: "Seuil de persistance atteint."
+        effect: "Révision contextualisation/enjeux/contexte authentique ; difficulté inchangée."
+        scope: "patch_governance"
+
+    - id: rule.ar_refractory_profile_triggers_sollicitation_patch
+      authority: primary
+      core_type: CONSTITUTION
+      source_anchor: "[S7]"
+      depends_on:
+        - type.self_report_ar_n1
+        - ref.referentiel_defaults_v0_5
+      relations:
+        - type: triggers
+          target:
+            id: action.trigger_ar_sollicitation_patch
+      patchable: false
+      parameterizable: true
+      human_readable: "Le profil AR-réfractaire déclenche une adaptation du mode de sollicitation."
+      logic:
+        trigger: "Détection d’un profil AR-réfractaire"
+        condition: "Fenêtre de non-réponse atteinte."
+        effect: "Patch de mode de sollicitation, sans pénalisation."
+        scope: "patch_governance"
+
+    - id: rule.msc_downgrade_marks_dependents
+      authority: primary
+      core_type: CONSTITUTION
+      source_anchor: "[S17c]"
+      depends_on:
+        - invariant.graph_propagation_one_hop
+        - invariant.explicit_dependency_edges_required
+      relations:
+        - type: triggers
+          target:
+            id: action.plan_short_diagnostic_task
+      patchable: false
+      parameterizable: true
+      human_readable: "Une rétrogradation MSC marque en priorité les dépendantes directes."
+      logic:
+        trigger: "Rétrogradation MSC"
+        condition: "Arêtes explicites disponibles."
+        effect: "Marquage des dépendantes directes + tâche diagnostique courte."
+        scope: "runtime_graph"
+
+    - id: rule.gf08_uncovered_conflict_conservative_response
+      authority: primary
+      core_type: CONSTITUTION
+      source_anchor: "[S14][S20]"
+      depends_on: []
+      relations:
+        - type: triggers
+          target:
+            id: action.log_uncovered_conflict
+      patchable: false
+      parameterizable: false
+      human_readable: "Un conflit GF-08 non couvert reçoit une réponse conservatrice."
+      logic:
+        trigger: "Conflit inter-principes non couvert"
+        condition: "Aucune hiérarchie explicite ne tranche."
+        effect: "Réponse conservatrice + log pour futur patch."
+        scope: "runtime_governance"
+
+    - id: rule.session_intention_non_blocking
+      authority: primary
+      core_type: CONSTITUTION
+      source_anchor: "[S11]"
+      depends_on:
+        - type.self_report_ar_n2
+      relations: []
+      patchable: false
+      parameterizable: true
+      human_readable: "L’intention de session est informative, non bloquante et non pénalisée."
+      logic:
+        trigger: "Fin de session"
+        condition: "Intention de session recueillie ou absente."
+        effect: "Support de forethought SRL, sans contrainte adaptative."
+        scope: "runtime_feedback"
+
+    - id: rule.unverified_gamification_probation
+      authority: primary
+      core_type: CONSTITUTION
+      source_anchor: "[S10][S18]"
+      depends_on: []
+      relations: []
+      patchable: false
+      parameterizable: true
+      human_readable: "Une gamification non vérifiée place le système en mode probatoire."
+      logic:
+        trigger: "Déploiement d’une gamification non validée"
+        condition: "Test de non-nuisance absent."
+        effect: "Mode probatoire."
+        scope: "deployment"
+
+    - id: rule.low_sis_never_auto_penalizes
+      authority: primary
+      core_type: CONSTITUTION
+      source_anchor: "[S15][S20]"
+      depends_on:
+        - type.session_integrity_score
+      relations: []
+      patchable: false
+      parameterizable: true
+      human_readable: "Un SIS bas ne pénalise jamais automatiquement l’apprenant."
+      logic:
+        trigger: "Détection SIS bas"
+        condition: "SIS sous seuil."
+        effect: "Pondération ou mise en attente possible, sans pénalisation automatique."
+        scope: "runtime_integrity"
+
+  PARAMETERS:
+    - id: param.provisional_mastery_verification_window
+      authority: primary
+      core_type: CONSTITUTION
+      source_anchor: "[S2][S20]"
+      depends_on: []
+      relations: []
+      patchable: true
+      parameterizable: true
+      human_readable: "Fenêtre constitutionnellement déclarée pour vérifier une maîtrise provisoire."
+      logic:
+        trigger: "Maîtrise provisoire héritée"
+        condition: "Fenêtre initiale ouverte."
+        effect: "Confirmation attendue dans les premières sessions."
+        scope: "runtime_evaluation"
+
+    - id: param.ar_n1_interaction_budget
+      authority: primary
+      core_type: CONSTITUTION
+      source_anchor: "[S20]"
+      depends_on: []
+      relations:
+        - type: constrains
+          target:
+            id: type.self_report_ar_n1
+      patchable: false
+      parameterizable: true
+      human_readable: "Budget d’interaction AR-N1."
+      logic:
+        trigger: "Affichage AR-N1"
+        condition: "Interaction événementielle."
+        effect: "Question concise, locale et légère."
+        scope: "runtime_feedback"
+
+    - id: param.ar_n2_interaction_budget
+      authority: primary
+      core_type: CONSTITUTION
+      source_anchor: "[S20]"
+      depends_on: []
+      relations:
+        - type: constrains
+          target:
+            id: type.self_report_ar_n2
+      patchable: false
+      parameterizable: true
+      human_readable: "Budget d’interaction AR-N2."
+      logic:
+        trigger: "Affichage AR-N2"
+        condition: "Fin de session."
+        effect: "Questionnaire visuel très court."
+        scope: "runtime_feedback"
+
+    - id: param.ar_n3_interaction_budget
+      authority: primary
+      core_type: CONSTITUTION
+      source_anchor: "[S20]"
+      depends_on: []
+      relations:
+        - type: constrains
+          target:
+            id: type.self_report_ar_n3
+      patchable: false
+      parameterizable: true
+      human_readable: "Budget d’interaction AR-N3."
+      logic:
+        trigger: "Affichage AR-N3"
+        condition: "Bilan périodique."
+        effect: "Fenêtre d’items bornée."
+        scope: "runtime_feedback"
+
+  CONSTRAINTS:
+    - id: constraint.no_autonomous_psychological_inference
+      authority: primary
+      core_type: CONSTITUTION
+      source_anchor: "[S14]"
+      depends_on: []
+      relations: []
+      patchable: false
+      parameterizable: false
+      human_readable: "Aucune inférence psychologique autonome non probatoire."
+      logic:
+        trigger: "Conception d’un patch ou d’un mécanisme"
+        condition: "Inférence psychologique autonome envisagée."
+        effect: "Interdiction."
+        scope: "patch_governance"
+
+    - id: constraint.no_adaptive_philosophy_change
+      authority: primary
+      core_type: CONSTITUTION
+      source_anchor: "[S14]"
+      depends_on: []
+      relations: []
+      patchable: false
+      parameterizable: false
+      human_readable: "La philosophie adaptative ne peut pas être modifiée par patch."
+      logic:
+        trigger: "Révision de patch"
+        condition: "Modification de philosophie adaptative demandée."
+        effect: "Interdiction."
+        scope: "patch_governance"
+
+    - id: constraint.no_change_to_and_logic
+      authority: primary
+      core_type: CONSTITUTION
+      source_anchor: "[S14][S17b]"
+      depends_on:
+        - invariant.msc_and_strict
+      relations: []
+      patchable: false
+      parameterizable: false
+      human_readable: "La logique AND du MSC n’est pas patchable."
+      logic:
+        trigger: "Révision de MSC"
+        condition: "Modification de logique d’agrégation demandée."
+        effect: "Interdiction."
+        scope: "governance"
+
+    - id: constraint.no_change_to_graph_propagation_rule
+      authority: primary
+      core_type: CONSTITUTION
+      source_anchor: "[S14][S17c]"
+      depends_on:
+        - invariant.graph_propagation_one_hop
+      relations: []
+      patchable: false
+      parameterizable: false
+      human_readable: "La règle de propagation graphe n’est pas patchable."
+      logic:
+        trigger: "Révision de propagation graphe"
+        condition: "Modification de profondeur ou de logique demandée."
+        effect: "Interdiction."
+        scope: "governance"
+
+    - id: constraint.no_runtime_feedback_generation
+      authority: primary
+      core_type: CONSTITUTION
+      source_anchor: "[S4][S13]"
+      depends_on:
+        - invariant.no_runtime_content_generation
+      relations: []
+      patchable: false
+      parameterizable: false
+      human_readable: "Pas de génération de feedback à la volée."
+      logic:
+        trigger: "Production d’un feedback runtime"
+        condition: "Aucun template préindexé disponible."
+        effect: "Interdiction de génération ; appliquer feedback générique autorisé seulement."
+        scope: "runtime_feedback"
+
+    - id: constraint.no_high_bloom_without_authentic_context
+      authority: primary
+      core_type: CONSTITUTION
+      source_anchor: "[S17e]"
+      depends_on:
+        - invariant.authentic_context_required_for_bloom4
+      relations: []
+      patchable: false
+      parameterizable: false
+      human_readable: "Pas de Bloom ≥ 4 sans contexte authentique."
+      logic:
+        trigger: "Conception ou exécution d’une mission haute Bloom"
+        condition: "Contexte authentique absent."
+        effect: "Interdiction."
+        scope: "analysis_design"
+
+    - id: constraint.no_biometrics_or_offsession_surveillance
+      authority: primary
+      core_type: CONSTITUTION
+      source_anchor: "[S15]"
+      depends_on: []
+      relations: []
+      patchable: false
+      parameterizable: false
+      human_readable: "Pas de biométrie ni de surveillance hors session."
+      logic:
+        trigger: "Extension de capture de données"
+        condition: "Biométrie ou surveillance hors session envisagée."
+        effect: "Interdiction."
+        scope: "runtime_integrity"
+
+    - id: constraint.no_assisted_deployment_without_tutoring
+      authority: primary
+      core_type: CONSTITUTION
+      source_anchor: "[S17]"
+      depends_on:
+        - invariant.assisted_mode_requires_tutoring
+      relations: []
+      patchable: false
+      parameterizable: false
+      human_readable: "Pas de déploiement Assisté sans tutorat."
+      logic:
+        trigger: "Déploiement Assisté"
+        condition: "Infrastructure tutorale absente."
+        effect: "Interdiction."
+        scope: "deployment"
+
+  EVENTS:
+    - id: event.msc_downgrade
+      authority: primary
+      core_type: CONSTITUTION
+      source_anchor: "[S17b][S17c]"
+      depends_on:
+        - type.mastery_model
+      relations:
+        - type: triggers
+          target:
+            id: rule.msc_downgrade_marks_dependents
+      patchable: false
+      parameterizable: true
+      human_readable: "Rétrogradation MSC."
+      logic:
+        trigger: "Échec d’une composante P, R ou A"
+        condition: "Maîtrise de base auparavant satisfaite."
+        effect: "Déclassement et examen des dépendantes directes."
+        scope: "runtime_evaluation"
+
+    - id: event.uncovered_error
+      authority: primary
+      core_type: CONSTITUTION
+      source_anchor: "[S4][S18]"
+      depends_on:
+        - type.feedback_coverage_matrix
+      relations:
+        - type: triggers
+          target:
+            id: rule.uncovered_error_generic_feedback
+      patchable: false
+      parameterizable: true
+      human_readable: "Erreur hors-taxonomie."
+      logic:
+        trigger: "Réponse apprenant invalide"
+        condition: "Aucun pattern d’erreur couvert."
+        effect: "Feedback générique + signal de patch."
+        scope: "runtime_feedback"
+
+    - id: event.persistent_low_vc
+      authority: primary
+      core_type: CONSTITUTION
+      source_anchor: "[S7][S17d]"
+      depends_on:
+        - type.state_axis_value_cost
+        - ref.referentiel_defaults_v0_5
+      relations:
+        - type: triggers
+          target:
+            id: rule.persistent_low_vc_triggers_relevance_patch
+      patchable: false
+      parameterizable: true
+      human_readable: "VC basse persistante."
+      logic:
+        trigger: "Accumulation de sessions VC basse"
+        condition: "Seuil référentiel atteint."
+        effect: "Déclencheur de patch relevance."
+        scope: "patch_governance"
+
+    - id: event.ar_refractory_profile_detected
+      authority: primary
+      core_type: CONSTITUTION
+      source_anchor: "[S7]"
+      depends_on:
+        - type.self_report_ar_n1
+        - ref.referentiel_defaults_v0_5
+      relations:
+        - type: triggers
+          target:
+            id: rule.ar_refractory_profile_triggers_sollicitation_patch
+      patchable: false
+      parameterizable: true
+      human_readable: "Profil AR-réfractaire détecté."
+      logic:
+        trigger: "Fenêtre de non-réponse AR-N1"
+        condition: "Seuil référentiel atteint."
+        effect: "Déclencheur de patch de sollicitation."
+        scope: "patch_governance"
+
+    - id: event.long_interruption
+      authority: primary
+      core_type: CONSTITUTION
+      source_anchor: "[S5]"
+      depends_on:
+        - ref.referentiel_defaults_v0_5
+      relations:
+        - type: triggers
+          target:
+            id: rule.long_interruption_requires_diagnostic_resume
+      patchable: false
+      parameterizable: true
+      human_readable: "Interruption longue."
+      logic:
+        trigger: "Reprise après inactivité"
+        condition: "Seuil_R dépassé."
+        effect: "Reprise diagnostique."
+        scope: "runtime_resume"
+
+    - id: event.gf08_uncovered_conflict
+      authority: primary
+      core_type: CONSTITUTION
+      source_anchor: "[S14][S20]"
+      depends_on: []
+      relations:
+        - type: triggers
+          target:
+            id: rule.gf08_uncovered_conflict_conservative_response
+      patchable: false
+      parameterizable: false
+      human_readable: "Conflit GF-08 non couvert."
+      logic:
+        trigger: "Collision de principes"
+        condition: "Aucune règle spécifique disponible."
+        effect: "Réponse conservatrice + journalisation."
+        scope: "runtime_governance"
+
+    - id: event.low_sis
+      authority: primary
+      core_type: CONSTITUTION
+      source_anchor: "[S15][S20]"
+      depends_on:
+        - type.session_integrity_score
+      relations:
+        - type: triggers
+          target:
+            id: rule.low_sis_never_auto_penalizes
+      patchable: false
+      parameterizable: true
+      human_readable: "SIS bas ou sous seuil."
+      logic:
+        trigger: "Calcul SIS"
+        condition: "SIS sous seuil."
+        effect: "Pondération ou mise en attente, sans pénalisation automatique."
+        scope: "runtime_integrity"
+
+    - id: event.patch_invalid
+      authority: primary
+      core_type: CONSTITUTION
+      source_anchor: "[S14]"
+      depends_on:
+        - type.patch_artifact
+      relations:
+        - type: triggers
+          target:
+            id: action.rollback_patch
+      patchable: false
+      parameterizable: false
+      human_readable: "Patch invalide."
+      logic:
+        trigger: "Validation locale de patch"
+        condition: "Bornes invalides ou impact_scope absent."
+        effect: "Rejet total ou rollback."
+        scope: "patch_validation"
+
+    - id: event.high_bloom_without_authentic_context
+      authority: primary
+      core_type: CONSTITUTION
+      source_anchor: "[S17e]"
+      depends_on:
+        - type.authentic_context
+      relations: []
+      patchable: false
+      parameterizable: false
+      human_readable: "Tentative de Bloom ≥ 4 sans contexte authentique."
+      logic:
+        trigger: "Conception ou exécution haute Bloom"
+        condition: "Contexte authentique absent."
+        effect: "Blocage et plafonnement Bloom 2."
+        scope: "analysis_design"
+
+  ACTIONS:
+    - id: action.plan_short_diagnostic_task
+      authority: primary
+      core_type: CONSTITUTION
+      source_anchor: "[S17c]"
+      depends_on: []
+      relations: []
+      patchable: false
+      parameterizable: true
+      human_readable: "Planifier une tâche diagnostique courte."
+      logic:
+        trigger: "Rétrogradation MSC ou reprise après interruption"
+        condition: "Événement autorisé."
+        effect: "Planification d’une vérification ciblée."
+        scope: "runtime"
+
+    - id: action.apply_light_reversible_scaffolding
+      authority: primary
+      core_type: CONSTITUTION
+      source_anchor: "[S7]"
+      depends_on: []
+      relations: []
+      patchable: false
+      parameterizable: true
+      human_readable: "Appliquer un scaffolding léger réversible."
+      logic:
+        trigger: "Absence d’AR-N1"
+        condition: "Réponse conservatrice requise."
+        effect: "Soutien léger sans sanction."
+        scope: "runtime"
+
+    - id: action.trigger_relevance_patch
+      authority: primary
+      core_type: CONSTITUTION
+      source_anchor: "[S17d]"
+      depends_on:
+        - type.patch_artifact
+      relations: []
+      patchable: true
+      parameterizable: true
+      human_readable: "Déclencher un patch de relevance."
+      logic:
+        trigger: "VC basse persistante"
+        condition: "Seuil atteint."
+        effect: "Révision des enjeux, missions de contextualisation et lien au contexte authentique."
+        scope: "patch_layer"
+
+    - id: action.trigger_ar_sollicitation_patch
+      authority: primary
+      core_type: CONSTITUTION
+      source_anchor: "[S7][S14]"
+      depends_on:
+        - type.patch_artifact
+      relations: []
+      patchable: true
+      parameterizable: true
+      human_readable: "Déclencher un patch du mode de sollicitation AR."
+      logic:
+        trigger: "Profil AR-réfractaire"
+        condition: "Détection validée."
+        effect: "Révision du format ou de la cadence de sollicitation."
+        scope: "patch_layer"
+
+    - id: action.rollback_patch
+      authority: primary
+      core_type: CONSTITUTION
+      source_anchor: "[S14]"
+      depends_on:
+        - type.patch_artifact
+      relations: []
+      patchable: false
+      parameterizable: false
+      human_readable: "Rollback automatique."
+      logic:
+        trigger: "Échec ou invalidité d’un patch"
+        condition: "Application incomplète ou validation échouée."
+        effect: "Retour à l’état antérieur."
+        scope: "patch_layer"
+
+    - id: action.log_ar_proxy_discordance
+      authority: primary
+      core_type: CONSTITUTION
+      source_anchor: "[S11]"
+      depends_on: []
+      relations: []
+      patchable: false
+      parameterizable: false
+      human_readable: "Journaliser la discordance AR/proxy."
+      logic:
+        trigger: "Discordance AR-N1 / proxy"
+        condition: "Discordance détectée."
+        effect: "Trace pour révision des poids proxy."
+        scope: "runtime_observability"
+
+    - id: action.inform_learner
+      authority: primary
+      core_type: CONSTITUTION
+      source_anchor: "[S14]"
+      depends_on: []
+      relations: []
+      patchable: false
+      parameterizable: false
+      human_readable: "Informer l’apprenant."
+      logic:
+        trigger: "Patch, rejet ou changement visible"
+        condition: "Transparence requise."
+        effect: "Notification explicite à l’apprenant."
+        scope: "runtime_transparency"
+
+    - id: action.plan_cognitive_conflict_mission
+      authority: primary
+      core_type: CONSTITUTION
+      source_anchor: "[S3][S18]"
+      depends_on: []
+      relations: []
+      patchable: false
+      parameterizable: true
+      human_readable: "Planifier une mission de conflit cognitif."
+      logic:
+        trigger: "Misconception détectée"
+        condition: "Nœud flaggé."
+        effect: "Mission corrective dédiée."
+        scope: "design_runtime"
+
+    - id: action.log_uncovered_conflict
+      authority: primary
+      core_type: CONSTITUTION
+      source_anchor: "[S14][S20]"
+      depends_on: []
+      relations: []
+      patchable: false
+      parameterizable: false
+      human_readable: "Journaliser un conflit GF-08 non couvert."
+      logic:
+        trigger: "Conflit non couvert"
+        condition: "Réponse conservatrice appliquée."
+        effect: "Trace pour finalisation ultérieure."
+        scope: "runtime_governance"

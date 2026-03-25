@@ -1,0 +1,1409 @@
+CORE:
+  id: learnit_referentiel_core_candidate_v0_5
+  core_type: REFERENTIEL
+  authority: primary
+  version: v0.5-core-candidate
+  description: >
+    Core candidat référentiel de Learn-it construit à partir du logical draft v0.5.
+    Il centralise les paramètres opérationnels, seuils, bornes, tables et garde-fous
+    ajustables dans les limites fixées par la Constitution v1.6. Il n'introduit pas
+    de logique métier autonome au-delà des règles paramétriques nécessaires à
+    l'opérationnalisation locale du moteur.
+
+  TYPES:
+    - id: type.referential_parameter_layer
+      authority: primary
+      core_type: REFERENTIEL
+      source_anchor: '[S1]'
+      depends_on:
+        - ref.constitution_v1_6
+      relations:
+        - type: governs
+          target:
+            id: param.msc_precision_threshold
+        - type: governs
+          target:
+            id: param.msc_robustness_delay_short
+        - type: governs
+          target:
+            id: param.msc_autonomy_success_count
+      patchable: true
+      parameterizable: true
+      human_readable: Couche paramétrique référentielle alignée sur la Constitution.
+      logic:
+        trigger: Gouvernance du système
+        condition: Paramètres opérationnels requis
+        effect: Fournit seuils, bornes et tables sans modifier la logique constitutionnelle
+        scope: governance
+
+    - id: type.ku_calibration_format_table
+      authority: primary
+      core_type: REFERENTIEL
+      source_anchor: '[S3]'
+      depends_on:
+        - ref.constitution_v1_6
+      relations:
+        - type: instantiates
+          target:
+            id: param.calibration_units_max
+      patchable: true
+      parameterizable: true
+      human_readable: Table des formats et durées de calibrage par type de KU.
+      logic:
+        trigger: Calibrage initial
+        condition: Type de KU connu
+        effect: Sélectionne le format diagnostique et la durée cible
+        scope: runtime_calibration
+
+    - id: type.temporal_multiplier_table
+      authority: primary
+      core_type: REFERENTIEL
+      source_anchor: '[S3]'
+      depends_on:
+        - ref.constitution_v1_6
+      relations:
+        - type: governs
+          target:
+            id: param.r_multiplier_declarative
+        - type: governs
+          target:
+            id: param.r_multiplier_creative_fallback
+      patchable: true
+      parameterizable: true
+      human_readable: Table des multiplicateurs temporels R par type de KU.
+      logic:
+        trigger: Calcul de robustesse temporelle
+        condition: Type de KU identifié
+        effect: Ajuste les délais de robustesse de référence
+        scope: runtime_evaluation
+
+    - id: type.adaptive_regime_matrix
+      authority: primary
+      core_type: REFERENTIEL
+      source_anchor: '[S3]'
+      depends_on:
+        - ref.constitution_v1_6
+      relations:
+        - type: governs
+          target:
+            id: param.adaptive_regime_target_states
+      patchable: true
+      parameterizable: true
+      human_readable: Matrice des régimes adaptatifs 3×3 avec activation progressive.
+      logic:
+        trigger: Configuration du moteur
+        condition: Profil adaptatif activé
+        effect: Définit l'espace d'états et sa montée en complexité
+        scope: runtime_state
+
+    - id: type.signal_confidence_hierarchy
+      authority: primary
+      core_type: REFERENTIEL
+      source_anchor: '[S3]'
+      depends_on:
+        - ref.constitution_v1_6
+      relations:
+        - type: validates
+          target:
+            id: rule.signal_precedence_order
+      patchable: true
+      parameterizable: true
+      human_readable: Hiérarchie de confiance des signaux apprentissage.
+      logic:
+        trigger: Résolution de signaux contradictoires
+        condition: Plusieurs sources disponibles
+        effect: Priorise AR-N1, puis AR-N2, puis proxys, puis tendances
+        scope: runtime_state
+
+    - id: type.ar_n2_configuration
+      authority: primary
+      core_type: REFERENTIEL
+      source_anchor: '[S3][S16]'
+      depends_on:
+        - ref.constitution_v1_6
+      relations:
+        - type: governs
+          target:
+            id: param.ar_n2_frequency_reference
+        - type: governs
+          target:
+            id: param.ar_n2_max_items
+      patchable: true
+      parameterizable: true
+      human_readable: Configuration du mini-sondage AR-N2 et de l'item VC optionnel.
+      logic:
+        trigger: Fin de session
+        condition: AR-N2 activé
+        effect: Cadre fréquence, contenu et simplification éventuelle
+        scope: runtime_feedback
+
+    - id: type.session_intention_configuration
+      authority: primary
+      core_type: REFERENTIEL
+      source_anchor: '[S3]'
+      depends_on:
+        - ref.constitution_v1_6
+      relations:
+        - type: governs
+          target:
+            id: param.session_intention_frequency_reference
+      patchable: true
+      parameterizable: true
+      human_readable: Paramètres de collecte de l'intention de session.
+      logic:
+        trigger: Préparation inter-session
+        condition: Fonction activée
+        effect: Propose un item léger et non bloquant
+        scope: runtime_feedback
+
+    - id: type.feedback_coverage_metric
+      authority: primary
+      core_type: REFERENTIEL
+      source_anchor: '[S4][S18]'
+      depends_on:
+        - ref.constitution_v1_6
+      relations:
+        - type: validates
+          target:
+            id: event.feedback_coverage_low
+      patchable: true
+      parameterizable: true
+      human_readable: Métrique de couverture de la matrice de feedback.
+      logic:
+        trigger: Audit de design ou retour terrain
+        condition: Couverture calculable
+        effect: Qualifie le niveau de couverture et les signaux de révision
+        scope: design_quality
+
+    - id: type.patch_trigger_table
+      authority: primary
+      core_type: REFERENTIEL
+      source_anchor: '[tables]'
+      depends_on:
+        - ref.constitution_v1_6
+      relations:
+        - type: governs
+          target:
+            id: event.patch_trigger_threshold_crossed
+      patchable: true
+      parameterizable: true
+      human_readable: Table des déclencheurs paramétriques de patch.
+      logic:
+        trigger: Supervision du système
+        condition: Un indicateur franchit son seuil
+        effect: Rend le patch éligible selon le type de dérive
+        scope: patch_governance
+
+    - id: type.patch_scope_table
+      authority: primary
+      core_type: REFERENTIEL
+      source_anchor: '[tables][S6]'
+      depends_on:
+        - ref.constitution_v1_6
+      relations:
+        - type: constrains
+          target:
+            id: constraint.patch_scope_must_remain_constitutionally_bounded
+      patchable: true
+      parameterizable: false
+      human_readable: Table du périmètre autorisé et interdit des patchs.
+      logic:
+        trigger: Validation d'un patch
+        condition: Type d'objet modifié identifié
+        effect: Autorise ou interdit l'opération selon la zone impactée
+        scope: patch_validation
+
+    - id: type.vc_parameter_block
+      authority: primary
+      core_type: REFERENTIEL
+      source_anchor: '[S16]'
+      depends_on:
+        - ref.constitution_v1_6
+      relations:
+        - type: governs
+          target:
+            id: param.vc_low_persistence_sessions_reference
+      patchable: true
+      parameterizable: true
+      human_readable: Bloc paramétrique Valeur-Coût perçue.
+      logic:
+        trigger: Axe VC activé
+        condition: Item VC disponible
+        effect: Détermine persistance, signalisation et escalade
+        scope: runtime_state
+
+    - id: type.ar_refractory_parameter_block
+      authority: primary
+      core_type: REFERENTIEL
+      source_anchor: '[S17]'
+      depends_on:
+        - ref.constitution_v1_6
+      relations:
+        - type: governs
+          target:
+            id: param.ar_refractory_sessions_reference
+      patchable: true
+      parameterizable: true
+      human_readable: Bloc paramétrique du profil AR-réfractaire.
+      logic:
+        trigger: Non-réponse répétée AR-N1
+        condition: Fenêtre de sessions disponible
+        effect: Détecte le profil et borne la réaction système
+        scope: runtime_feedback
+
+    - id: type.graph_propagation_operational_note
+      authority: derived
+      core_type: REFERENTIEL
+      source_anchor: '[S19]'
+      depends_on:
+        - ref.constitution_v1_6
+      relations:
+        - type: derives_from
+          target:
+            id: ref.constitution_v1_6
+      patchable: false
+      parameterizable: false
+      human_readable: Note opérationnelle rappelant que la profondeur 1 saut est constitutionnelle.
+      logic:
+        trigger: Lecture du référentiel
+        condition: Besoin d'opérationnalisation
+        effect: Documente sans rendre modifiable le 1 saut de propagation
+        scope: governance_note
+
+  INVARIANTS:
+    - id: invariant.constitutional_and_logic_not_modifiable_here
+      authority: primary
+      core_type: REFERENTIEL
+      source_anchor: '[S2]'
+      depends_on:
+        - ref.constitution_v1_6
+      relations:
+        - type: constrains
+          target:
+            id: param.msc_precision_threshold
+      patchable: false
+      parameterizable: false
+      human_readable: La logique AND du MSC n'est pas modifiable par le Référentiel.
+      logic:
+        trigger: Révision du modèle MSC
+        condition: Changement de logique d'agrégation demandé
+        effect: Rejet, seuls les seuils sont ajustables
+        scope: governance
+
+    - id: invariant.graph_one_hop_not_modifiable_here
+      authority: primary
+      core_type: REFERENTIEL
+      source_anchor: '[S19]'
+      depends_on:
+        - ref.constitution_v1_6
+      relations:
+        - type: constrains
+          target:
+            id: type.graph_propagation_operational_note
+      patchable: false
+      parameterizable: false
+      human_readable: La propagation graphe à 1 saut reste un invariant constitutionnel.
+      logic:
+        trigger: Révision de la propagation
+        condition: Profondeur différente demandée
+        effect: Interdiction côté Référentiel
+        scope: governance
+
+    - id: invariant.patch_quality_checklist_not_modifiable_here
+      authority: primary
+      core_type: REFERENTIEL
+      source_anchor: '[tables][S6]'
+      depends_on:
+        - ref.constitution_v1_6
+      relations: []
+      patchable: false
+      parameterizable: false
+      human_readable: La checklist qualité pédagogique des patchs n'est pas modifiable ici.
+      logic:
+        trigger: Révision du contrôle qualité patch
+        condition: Modification de la checklist demandée
+        effect: Interdiction côté Référentiel
+        scope: patch_governance
+
+    - id: invariant.creative_r_fallback_is_x1
+      authority: primary
+      core_type: REFERENTIEL
+      source_anchor: '[S3]'
+      depends_on: []
+      relations:
+        - type: governs
+          target:
+            id: param.r_multiplier_creative_fallback
+      patchable: false
+      parameterizable: false
+      human_readable: Le fallback de robustesse pour KU créative est ×1.
+      logic:
+        trigger: Calcul de R pour KU créative
+        condition: Fallback requis
+        effect: Multiplicateur fixé à ×1
+        scope: runtime_evaluation
+
+    - id: invariant.vc_unknown_means_no_inference
+      authority: primary
+      core_type: REFERENTIEL
+      source_anchor: '[S16]'
+      depends_on:
+        - type.vc_parameter_block
+      relations: []
+      patchable: false
+      parameterizable: false
+      human_readable: VC inconnue implique absence totale d'inférence.
+      logic:
+        trigger: Item VC non renseigné
+        condition: Axe VC actif mais donnée absente
+        effect: Axe traité comme absent
+        scope: runtime_state
+
+    - id: invariant_isolated_low_vc_means_no_action
+      authority: primary
+      core_type: REFERENTIEL
+      source_anchor: '[S16]'
+      depends_on:
+        - type.vc_parameter_block
+      relations: []
+      patchable: false
+      parameterizable: false
+      human_readable: Une VC basse isolée ne produit aucune action moteur.
+      logic:
+        trigger: Détection d'une session VC-Basse
+        condition: Seuil de persistance non atteint
+        effect: Aucune action moteur
+        scope: runtime_state
+
+    - id: invariant.session_intention_non_penalized
+      authority: primary
+      core_type: REFERENTIEL
+      source_anchor: '[S3]'
+      depends_on:
+        - type.session_intention_configuration
+      relations: []
+      patchable: false
+      parameterizable: false
+      human_readable: L'intention de session n'est ni pénalisée ni bloquante.
+      logic:
+        trigger: Collecte ou absence d'intention de session
+        condition: Item proposé
+        effect: Usage informatif seulement
+        scope: runtime_feedback
+
+  RULES:
+    - id: rule.signal_precedence_order
+      authority: primary
+      core_type: REFERENTIEL
+      source_anchor: '[S3]'
+      depends_on:
+        - type.signal_confidence_hierarchy
+      relations: []
+      patchable: true
+      parameterizable: true
+      human_readable: Ordre de résolution des signaux AR et proxys.
+      logic:
+        trigger: Signaux contradictoires
+        condition: Plusieurs signaux simultanés
+        effect: Priorité AR-N1 > AR-N2 > proxys > tendances
+        scope: runtime_state
+
+    - id: rule_interleaving_activation
+      authority: primary
+      core_type: REFERENTIEL
+      source_anchor: '[S3]'
+      depends_on:
+        - param.interleaving_success_streak
+        - param.interleaving_distinct_tasks_min
+      relations: []
+      patchable: true
+      parameterizable: true
+      human_readable: Condition d'activation de l'interleaving.
+      logic:
+        trigger: Vérification de progression
+        condition: Réussites consécutives et diversité de tâches suffisantes
+        effect: Activation de l'interleaving
+        scope: runtime_planning
+
+    - id: rule_coverage_rebalancing_activation
+      authority: primary
+      core_type: REFERENTIEL
+      source_anchor: '[S3]'
+      depends_on:
+        - param.coverage_rebalancing_delay_multiplier
+      relations: []
+      patchable: true
+      parameterizable: true
+      human_readable: Rééquilibration de couverture après délai suffisant.
+      logic:
+        trigger: Planification de contenu
+        condition: Temps depuis présentation ≥ multiplicateur × délai courant
+        effect: Rééquilibrage de couverture
+        scope: runtime_planning
+
+    - id: rule_adaptive_regime_detection_min_proxies
+      authority: primary
+      core_type: REFERENTIEL
+      source_anchor: '[S3]'
+      depends_on:
+        - param.adaptive_regime_proxy_min
+      relations: []
+      patchable: true
+      parameterizable: true
+      human_readable: Le régime adaptatif requiert au moins 2 proxys franchissant leur seuil.
+      logic:
+        trigger: Détection de régime
+        condition: Nombre de proxys franchissant leur seuil
+        effect: Régime détecté sinon réponse conservatrice
+        scope: runtime_state
+
+    - id: rule_reduce_ar_n2_frequency_on_low_completion
+      authority: primary
+      core_type: REFERENTIEL
+      source_anchor: '[S3]'
+      depends_on:
+        - param.ar_n2_completion_threshold
+        - param.ar_n2_completion_window_sessions
+      relations: []
+      patchable: true
+      parameterizable: true
+      human_readable: Réduction de fréquence AR-N2 en cas de faible complétion.
+      logic:
+        trigger: Audit de complétion AR-N2
+        condition: Taux de complétion sous seuil sur fenêtre donnée
+        effect: Réduire la fréquence AR-N2
+        scope: runtime_feedback
+
+    - id: rule_reduce_session_intention_frequency_on_low_completion
+      authority: primary
+      core_type: REFERENTIEL
+      source_anchor: '[S3]'
+      depends_on:
+        - param.session_intention_completion_threshold
+        - param.session_intention_completion_window
+      relations: []
+      patchable: true
+      parameterizable: true
+      human_readable: Réduction de fréquence ou simplification du format de l'intention de session.
+      logic:
+        trigger: Audit de complétion intention
+        condition: Taux de complétion sous seuil sur fenêtre donnée
+        effect: Réduire fréquence ou simplifier format
+        scope: runtime_feedback
+
+    - id: rule_vc_persistence_triggers_relevance_patch
+      authority: primary
+      core_type: REFERENTIEL
+      source_anchor: '[S16]'
+      depends_on:
+        - param.vc_low_persistence_sessions_reference
+      relations:
+        - type: triggers
+          target:
+            id: event.vc_persistent_low_detected
+      patchable: true
+      parameterizable: true
+      human_readable: Le seuil de persistance VC basse déclenche le patch relevance.
+      logic:
+        trigger: Agrégation de sessions VC-Basse
+        condition: Seuil de persistance atteint
+        effect: Flag vc-bas-persistant
+        scope: runtime_state
+
+    - id: rule_vc_patch_escalation_after_two_cycles
+      authority: primary
+      core_type: REFERENTIEL
+      source_anchor: '[S16]'
+      depends_on:
+        - param.vc_patch_cycles_before_analysis_escalation
+      relations: []
+      patchable: true
+      parameterizable: true
+      human_readable: Escalade Analyse si le patch relevance n'améliore pas VC après 2 cycles.
+      logic:
+        trigger: Évaluation post-patch relevance
+        condition: Amélioration absente après le nombre de cycles défini
+        effect: Escalade vers révision de la phase Analyse
+        scope: patch_governance
+
+    - id: rule_ar_refractory_detection
+      authority: primary
+      core_type: REFERENTIEL
+      source_anchor: '[S17]'
+      depends_on:
+        - param.ar_refractory_sessions_reference
+      relations:
+        - type: triggers
+          target:
+            id: event.ar_refractory_profile_detected
+      patchable: true
+      parameterizable: true
+      human_readable: Détection du profil AR-réfractaire sur fenêtre de sessions.
+      logic:
+        trigger: Audit de réponses AR-N1
+        condition: Non-réponse sur fenêtre de sessions consécutives
+        effect: Flag profil-ar-refractaire
+        scope: runtime_feedback
+
+    - id: rule_low_feedback_coverage_signals_revision
+      authority: primary
+      core_type: REFERENTIEL
+      source_anchor: '[S4][S18]'
+      depends_on:
+        - param.feedback_coverage_reference_threshold
+      relations:
+        - type: triggers
+          target:
+            id: event.feedback_coverage_low
+      patchable: true
+      parameterizable: true
+      human_readable: Une couverture feedback basse signale une révision prioritaire.
+      logic:
+        trigger: Mesure de couverture feedback
+        condition: Couverture sous seuil de référence
+        effect: Signal de révision du design ou enrichissement matrice
+        scope: design_quality
+
+    - id: rule_unvalidated_gamification_probation
+      authority: primary
+      core_type: REFERENTIEL
+      source_anchor: '[S4]'
+      depends_on: []
+      relations: []
+      patchable: true
+      parameterizable: true
+      human_readable: Une gamification non validée reste en période probatoire.
+      logic:
+        trigger: Déploiement d'une mécanique gamifiée
+        condition: Validation de non-nuisance absente
+        effect: Statut probatoire
+        scope: deployment
+
+  PARAMETERS:
+    - id: param.msc_precision_threshold
+      authority: primary
+      core_type: REFERENTIEL
+      source_anchor: '[S2]'
+      depends_on: []
+      relations: []
+      patchable: true
+      parameterizable: true
+      human_readable: Seuil de précision P de référence.
+      logic:
+        trigger: Évaluation P
+        condition: Occurrences suffisantes
+        effect: Valeur de référence 80%, fourchette 70–90%
+        scope: runtime_evaluation
+
+    - id: param.msc_precision_occurrences_min
+      authority: primary
+      core_type: REFERENTIEL
+      source_anchor: '[S2]'
+      depends_on: []
+      relations: []
+      patchable: true
+      parameterizable: true
+      human_readable: Nombre minimal d'occurrences pour P.
+      logic:
+        trigger: Évaluation P
+        condition: Comptage des occurrences
+        effect: Référence 5, fourchette 3–10
+        scope: runtime_evaluation
+
+    - id: param.msc_robustness_delay_short
+      authority: primary
+      core_type: REFERENTIEL
+      source_anchor: '[S2]'
+      depends_on: []
+      relations: []
+      patchable: true
+      parameterizable: true
+      human_readable: Délai court terme de robustesse R.
+      logic:
+        trigger: Évaluation R
+        condition: Type KU compatible
+        effect: Référence 3 jours, borne 1–14 jours
+        scope: runtime_evaluation
+
+    - id: param.msc_robustness_delay_medium
+      authority: primary
+      core_type: REFERENTIEL
+      source_anchor: '[S2]'
+      depends_on: []
+      relations: []
+      patchable: true
+      parameterizable: true
+      human_readable: Délai moyen terme de robustesse R.
+      logic:
+        trigger: Évaluation R
+        condition: Type KU compatible
+        effect: Référence 7 jours, borne 1–14 jours
+        scope: runtime_evaluation
+
+    - id: param.msc_autonomy_success_count
+      authority: primary
+      core_type: REFERENTIEL
+      source_anchor: '[S2]'
+      depends_on: []
+      relations: []
+      patchable: true
+      parameterizable: true
+      human_readable: Nombre de réussites consécutives sans aide pour A.
+      logic:
+        trigger: Évaluation A
+        condition: Comptage de réussites sans aide
+        effect: Référence 3, fourchette 2–5
+        scope: runtime_evaluation
+
+    - id: param.degradation_failure_count
+      authority: primary
+      core_type: REFERENTIEL
+      source_anchor: '[S2]'
+      depends_on:
+        - param.msc_robustness_delay_short
+      relations: []
+      patchable: true
+      parameterizable: true
+      human_readable: Nombre d'échecs consécutifs pour révocation post-maîtrise.
+      logic:
+        trigger: Vérification de dégradation
+        condition: Délai R atteint
+        effect: Référence 2 échecs consécutifs
+        scope: runtime_evaluation
+
+    - id: param.calibration_units_max
+      authority: primary
+      core_type: REFERENTIEL
+      source_anchor: '[S3]'
+      depends_on: []
+      relations: []
+      patchable: true
+      parameterizable: true
+      human_readable: Longueur maximale du calibrage initial.
+      logic:
+        trigger: Initialisation
+        condition: Séquence diagnostique planifiée
+        effect: Référence ≤10 unités, fourchette 5–15
+        scope: runtime_calibration
+
+    - id: param.ku_calibration_declarative_duration
+      authority: primary
+      core_type: REFERENTIEL
+      source_anchor: '[S3]'
+      depends_on: []
+      relations: []
+      patchable: true
+      parameterizable: true
+      human_readable: Durée diagnostique déclarative.
+      logic:
+        trigger: Calibrage type déclaratif
+        condition: KU déclarative
+        effect: 10–30 s
+        scope: runtime_calibration
+
+    - id: param.ku_calibration_formal_duration
+      authority: primary
+      core_type: REFERENTIEL
+      source_anchor: '[S3]'
+      depends_on: []
+      relations: []
+      patchable: true
+      parameterizable: true
+      human_readable: Durée diagnostique formelle.
+      logic:
+        trigger: Calibrage type formel
+        condition: KU formelle
+        effect: 30–90 s
+        scope: runtime_calibration
+
+    - id: param.ku_calibration_procedural_duration
+      authority: primary
+      core_type: REFERENTIEL
+      source_anchor: '[S3]'
+      depends_on: []
+      relations: []
+      patchable: true
+      parameterizable: true
+      human_readable: Durée diagnostique procédurale.
+      logic:
+        trigger: Calibrage type procédural
+        condition: KU procédurale
+        effect: 1–5 min
+        scope: runtime_calibration
+
+    - id: param.ku_calibration_perceptual_duration
+      authority: primary
+      core_type: REFERENTIEL
+      source_anchor: '[S3]'
+      depends_on: []
+      relations: []
+      patchable: true
+      parameterizable: true
+      human_readable: Durée diagnostique perceptuelle.
+      logic:
+        trigger: Calibrage type perceptuel
+        condition: KU perceptuelle
+        effect: 10–20 s
+        scope: runtime_calibration
+
+    - id: param.ku_calibration_creative_duration
+      authority: primary
+      core_type: REFERENTIEL
+      source_anchor: '[S3]'
+      depends_on: []
+      relations: []
+      patchable: true
+      parameterizable: true
+      human_readable: Durée diagnostique créative.
+      logic:
+        trigger: Calibrage type créatif
+        condition: KU créative
+        effect: 5–15 min
+        scope: runtime_calibration
+
+    - id: param.interleaving_success_streak
+      authority: primary
+      core_type: REFERENTIEL
+      source_anchor: '[S3]'
+      depends_on: []
+      relations: []
+      patchable: true
+      parameterizable: true
+      human_readable: Réussites consécutives nécessaires à l'interleaving.
+      logic:
+        trigger: Vérification interleaving
+        condition: Succès consécutifs comptés
+        effect: Référence 2
+        scope: runtime_planning
+
+    - id: param.interleaving_distinct_tasks_min
+      authority: primary
+      core_type: REFERENTIEL
+      source_anchor: '[S3]'
+      depends_on: []
+      relations: []
+      patchable: true
+      parameterizable: true
+      human_readable: Nombre minimal de tâches distinctes pour interleaving.
+      logic:
+        trigger: Vérification interleaving
+        condition: Diversité de tâches comptée
+        effect: Référence 3
+        scope: runtime_planning
+
+    - id: param.coverage_rebalancing_delay_multiplier
+      authority: primary
+      core_type: REFERENTIEL
+      source_anchor: '[S3]'
+      depends_on: []
+      relations: []
+      patchable: true
+      parameterizable: true
+      human_readable: Multiplicateur de délai pour rééquilibration de couverture.
+      logic:
+        trigger: Rééquilibration
+        condition: Temps écoulé mesuré
+        effect: Référence ×2 du délai courant
+        scope: runtime_planning
+
+    - id: param.r_multiplier_declarative
+      authority: primary
+      core_type: REFERENTIEL
+      source_anchor: '[S3][S20]'
+      depends_on: []
+      relations: []
+      patchable: true
+      parameterizable: true
+      human_readable: Multiplicateur R pour KU déclarative.
+      logic:
+        trigger: Calcul R
+        condition: KU déclarative
+        effect: Multiplicateur spécifique issu de la table
+        scope: runtime_evaluation
+
+    - id: param.r_multiplier_formal
+      authority: primary
+      core_type: REFERENTIEL
+      source_anchor: '[S3][S20]'
+      depends_on: []
+      relations: []
+      patchable: true
+      parameterizable: true
+      human_readable: Multiplicateur R pour KU formelle.
+      logic:
+        trigger: Calcul R
+        condition: KU formelle
+        effect: Multiplicateur spécifique issu de la table
+        scope: runtime_evaluation
+
+    - id: param.r_multiplier_procedural
+      authority: primary
+      core_type: REFERENTIEL
+      source_anchor: '[S3][S20]'
+      depends_on: []
+      relations: []
+      patchable: true
+      parameterizable: true
+      human_readable: Multiplicateur R pour KU procédurale.
+      logic:
+        trigger: Calcul R
+        condition: KU procédurale
+        effect: Référence ×2–3
+        scope: runtime_evaluation
+
+    - id: param.r_multiplier_perceptual
+      authority: primary
+      core_type: REFERENTIEL
+      source_anchor: '[S3][S20]'
+      depends_on: []
+      relations: []
+      patchable: true
+      parameterizable: true
+      human_readable: Multiplicateur R pour KU perceptuelle.
+      logic:
+        trigger: Calcul R
+        condition: KU perceptuelle
+        effect: Référence ×0,5
+        scope: runtime_evaluation
+
+    - id: param.r_multiplier_creative_fallback
+      authority: primary
+      core_type: REFERENTIEL
+      source_anchor: '[S3][S20]'
+      depends_on: []
+      relations: []
+      patchable: false
+      parameterizable: false
+      human_readable: Fallback R pour KU créative.
+      logic:
+        trigger: Calcul R
+        condition: KU créative
+        effect: ×1
+        scope: runtime_evaluation
+
+    - id: param.critical_adaptation_inertia_hours
+      authority: primary
+      core_type: REFERENTIEL
+      source_anchor: '[S3]'
+      depends_on: []
+      relations: []
+      patchable: true
+      parameterizable: true
+      human_readable: Inertie minimale des adaptations critiques.
+      logic:
+        trigger: Révision d'adaptation critique
+        condition: Adaptation critique demandée
+        effect: Référence 48 h
+        scope: patch_governance
+
+    - id: param.critical_adaptation_inertia_exception_hours
+      authority: primary
+      core_type: REFERENTIEL
+      source_anchor: '[S3]'
+      depends_on: []
+      relations: []
+      patchable: true
+      parameterizable: true
+      human_readable: Exception d'inertie minimale.
+      logic:
+        trigger: Révision urgente d'adaptation critique
+        condition: Exception autorisée
+        effect: Référence 12 h
+        scope: patch_governance
+
+    - id: param.adaptive_regime_target_states
+      authority: primary
+      core_type: REFERENTIEL
+      source_anchor: '[S3]'
+      depends_on: []
+      relations: []
+      patchable: true
+      parameterizable: true
+      human_readable: Nombre cible d'états du régime adaptatif.
+      logic:
+        trigger: Configuration de régime
+        condition: Version cible définie
+        effect: Référence 9 états, activation 3→5→9
+        scope: runtime_state
+
+    - id: param.adaptive_regime_proxy_min
+      authority: primary
+      core_type: REFERENTIEL
+      source_anchor: '[S3]'
+      depends_on: []
+      relations: []
+      patchable: true
+      parameterizable: true
+      human_readable: Nombre minimal de proxys pour détecter un régime.
+      logic:
+        trigger: Détection de régime
+        condition: Proxys évalués
+        effect: Référence 2 proxys
+        scope: runtime_state
+
+    - id: param.ar_n2_frequency_reference
+      authority: primary
+      core_type: REFERENTIEL
+      source_anchor: '[S3]'
+      depends_on: []
+      relations: []
+      patchable: true
+      parameterizable: true
+      human_readable: Fréquence de référence AR-N2.
+      logic:
+        trigger: Planification AR-N2
+        condition: Fonction active
+        effect: Référence 1 sondage/session, borne 1 à 3 sessions
+        scope: runtime_feedback
+
+    - id: param.ar_n2_max_items
+      authority: primary
+      core_type: REFERENTIEL
+      source_anchor: '[S3]'
+      depends_on: []
+      relations: []
+      patchable: true
+      parameterizable: true
+      human_readable: Nombre maximal d'items AR-N2.
+      logic:
+        trigger: Composition AR-N2
+        condition: Items sélectionnés
+        effect: Maximum 3 items au total
+        scope: runtime_feedback
+
+    - id: param.ar_n2_completion_threshold
+      authority: primary
+      core_type: REFERENTIEL
+      source_anchor: '[S3]'
+      depends_on: []
+      relations: []
+      patchable: true
+      parameterizable: true
+      human_readable: Seuil de complétion bas pour réduire AR-N2.
+      logic:
+        trigger: Audit de complétion
+        condition: Taux calculé
+        effect: Référence 60%
+        scope: runtime_feedback
+
+    - id: param.ar_n2_completion_window_sessions
+      authority: primary
+      core_type: REFERENTIEL
+      source_anchor: '[S3]'
+      depends_on: []
+      relations: []
+      patchable: true
+      parameterizable: true
+      human_readable: Fenêtre de sessions pour audit AR-N2.
+      logic:
+        trigger: Audit de complétion
+        condition: Historique disponible
+        effect: Référence 5 sessions
+        scope: runtime_feedback
+
+    - id: param.session_intention_frequency_reference
+      authority: primary
+      core_type: REFERENTIEL
+      source_anchor: '[S3]'
+      depends_on: []
+      relations: []
+      patchable: true
+      parameterizable: true
+      human_readable: Fréquence de référence de l'intention de session.
+      logic:
+        trigger: Planification inter-session
+        condition: Fonction active
+        effect: Référence 1 proposition / 3 sessions, borne 1 à 7 sessions
+        scope: runtime_feedback
+
+    - id: param.session_intention_completion_threshold
+      authority: primary
+      core_type: REFERENTIEL
+      source_anchor: '[S3]'
+      depends_on: []
+      relations: []
+      patchable: true
+      parameterizable: true
+      human_readable: Seuil de complétion bas pour intention de session.
+      logic:
+        trigger: Audit de complétion intention
+        condition: Taux calculé
+        effect: Référence 40%
+        scope: runtime_feedback
+
+    - id: param.session_intention_completion_window
+      authority: primary
+      core_type: REFERENTIEL
+      source_anchor: '[S3]'
+      depends_on: []
+      relations: []
+      patchable: true
+      parameterizable: true
+      human_readable: Fenêtre d'audit de l'intention de session.
+      logic:
+        trigger: Audit de complétion intention
+        condition: Historique disponible
+        effect: Référence 10 sessions
+        scope: runtime_feedback
+
+    - id: param.cognitive_fatigue_minutes_guardrail
+      authority: primary
+      core_type: REFERENTIEL
+      source_anchor: '[S4]'
+      depends_on: []
+      relations: []
+      patchable: true
+      parameterizable: true
+      human_readable: Garde-fou de fatigue cognitive.
+      logic:
+        trigger: Supervision de session
+        condition: Session prolongée
+        effect: Référence 25 minutes comme garde-fou de dernier recours
+        scope: runtime_safety
+
+    - id: param.feedback_coverage_reference_threshold
+      authority: primary
+      core_type: REFERENTIEL
+      source_anchor: '[S4][S18]'
+      depends_on: []
+      relations: []
+      patchable: true
+      parameterizable: true
+      human_readable: Seuil de couverture de la matrice feedback.
+      logic:
+        trigger: Audit de couverture
+        condition: Couverture calculée
+        effect: Référence 70%
+        scope: design_quality
+
+    - id: param.vc_low_persistence_sessions_reference
+      authority: primary
+      core_type: REFERENTIEL
+      source_anchor: '[S16]'
+      depends_on: []
+      relations: []
+      patchable: true
+      parameterizable: true
+      human_readable: Seuil de persistance VC basse.
+      logic:
+        trigger: Agrégation VC
+        condition: Sessions consécutives VC-Basse
+        effect: Référence 4, fourchette 3–7
+        scope: runtime_state
+
+    - id: param.vc_patch_cycles_before_analysis_escalation
+      authority: primary
+      core_type: REFERENTIEL
+      source_anchor: '[S16]'
+      depends_on: []
+      relations: []
+      patchable: true
+      parameterizable: true
+      human_readable: Nombre de cycles de patch relevance avant escalade Analyse.
+      logic:
+        trigger: Évaluation post-patch VC
+        condition: Absence d'amélioration
+        effect: Référence 2 cycles
+        scope: patch_governance
+
+    - id: param.ar_refractory_sessions_reference
+      authority: primary
+      core_type: REFERENTIEL
+      source_anchor: '[S17]'
+      depends_on: []
+      relations: []
+      patchable: true
+      parameterizable: true
+      human_readable: Seuil de détection du profil AR-réfractaire.
+      logic:
+        trigger: Audit AR-N1
+        condition: Sessions consécutives sans réponse
+        effect: Référence 5, fourchette 3–8
+        scope: runtime_feedback
+
+    - id: param.patch_retention_days
+      authority: primary
+      core_type: REFERENTIEL
+      source_anchor: '[S6]'
+      depends_on: []
+      relations: []
+      patchable: true
+      parameterizable: true
+      human_readable: Durée de conservation des snapshots patch.
+      logic:
+        trigger: Gestion des snapshots patch
+        condition: Patch appliqué
+        effect: Référence 30 jours
+        scope: patch_layer
+
+  CONSTRAINTS:
+    - id: constraint.patch_scope_must_remain_constitutionally_bounded
+      authority: primary
+      core_type: REFERENTIEL
+      source_anchor: '[tables][S6]'
+      depends_on:
+        - type.patch_scope_table
+      relations: []
+      patchable: false
+      parameterizable: false
+      human_readable: Le périmètre patch référentiel doit rester dans les bornes constitutionnelles.
+      logic:
+        trigger: Validation d'un patch
+        condition: Portée du patch calculée
+        effect: Rejet si composantes MSC, philosophie adaptative, graphe principal, logique AND, propagation 1-saut ou checklist qualité sont visés
+        scope: patch_validation
+
+    - id: constraint.double_buffer_required_for_patch
+      authority: primary
+      core_type: REFERENTIEL
+      source_anchor: '[S6]'
+      depends_on: []
+      relations: []
+      patchable: false
+      parameterizable: false
+      human_readable: L'atomicité patch requiert double-buffer et swap atomique.
+      logic:
+        trigger: Application d'un patch
+        condition: Patch approuvé
+        effect: Précondition technique obligatoire
+        scope: patch_layer
+
+    - id: constraint.local_verification_required_before_patch_apply
+      authority: primary
+      core_type: REFERENTIEL
+      source_anchor: '[S6]'
+      depends_on: []
+      relations: []
+      patchable: false
+      parameterizable: false
+      human_readable: Vérification locale obligatoire avant application patch.
+      logic:
+        trigger: Application d'un patch
+        condition: Patch prêt à être appliqué
+        effect: Vérification impact_scope + QA pédagogique requise
+        scope: patch_validation
+
+    - id: constraint.no_difficulty_adjustment_from_vc_patch
+      authority: primary
+      core_type: REFERENTIEL
+      source_anchor: '[S16]'
+      depends_on:
+        - type.vc_parameter_block
+      relations: []
+      patchable: false
+      parameterizable: false
+      human_readable: Le patch VC ne peut pas ajuster la difficulté.
+      logic:
+        trigger: Patch relevance VC
+        condition: VC basse persistante
+        effect: Révision du contexte et des enjeux uniquement
+        scope: patch_governance
+
+    - id: constraint_no_behavioral_proxy_for_vc
+      authority: primary
+      core_type: REFERENTIEL
+      source_anchor: '[S16]'
+      depends_on:
+        - type.vc_parameter_block
+      relations: []
+      patchable: false
+      parameterizable: false
+      human_readable: Aucun proxy comportemental n'est autorisé pour VC.
+      logic:
+        trigger: Définition des sources VC
+        condition: Source candidate évaluée
+        effect: Seul l'item AR-N2 VC est autorisé
+        scope: runtime_state
+
+    - id: constraint_ar_refractory_not_penalized
+      authority: primary
+      core_type: REFERENTIEL
+      source_anchor: '[S17]'
+      depends_on:
+        - type.ar_refractory_parameter_block
+      relations: []
+      patchable: false
+      parameterizable: false
+      human_readable: Le profil AR-réfractaire ne doit pas entraîner de pénalisation.
+      logic:
+        trigger: Détection AR-réfractaire
+        condition: Profil détecté
+        effect: Révision du mode de sollicitation uniquement
+        scope: runtime_feedback
+
+  EVENTS:
+    - id: event.vc_persistent_low_detected
+      authority: primary
+      core_type: REFERENTIEL
+      source_anchor: '[S16]'
+      depends_on:
+        - param.vc_low_persistence_sessions_reference
+      relations: []
+      patchable: true
+      parameterizable: true
+      human_readable: Détection de VC basse persistante.
+      logic:
+        trigger: Comptage des sessions VC-Basse
+        condition: Référence ou borne atteinte
+        effect: Flag vc-bas-persistant et éligibilité patch relevance
+        scope: runtime_state
+
+    - id: event.ar_refractory_profile_detected
+      authority: primary
+      core_type: REFERENTIEL
+      source_anchor: '[S17]'
+      depends_on:
+        - param.ar_refractory_sessions_reference
+      relations: []
+      patchable: true
+      parameterizable: true
+      human_readable: Détection du profil AR-réfractaire.
+      logic:
+        trigger: Comptage des non-réponses AR-N1
+        condition: Référence ou borne atteinte
+        effect: Flag profil-ar-refractaire et éligibilité patch sollicitation
+        scope: runtime_feedback
+
+    - id: event.feedback_coverage_low
+      authority: primary
+      core_type: REFERENTIEL
+      source_anchor: '[S4][S18]'
+      depends_on:
+        - param.feedback_coverage_reference_threshold
+      relations: []
+      patchable: true
+      parameterizable: true
+      human_readable: Couverture feedback sous seuil de référence.
+      logic:
+        trigger: Audit de design
+        condition: Couverture < seuil
+        effect: Révision prioritaire signalée
+        scope: design_quality
+
+    - id: event.patch_trigger_threshold_crossed
+      authority: primary
+      core_type: REFERENTIEL
+      source_anchor: '[tables]'
+      depends_on:
+        - type.patch_trigger_table
+      relations: []
+      patchable: true
+      parameterizable: true
+      human_readable: Franchissement d'un seuil déclencheur de patch.
+      logic:
+        trigger: Monitoring système
+        condition: Un indicateur franchit son seuil paramétrique
+        effect: Le patch correspondant devient éligible
+        scope: patch_governance
+
+    - id: event.low_ar_n2_completion
+      authority: primary
+      core_type: REFERENTIEL
+      source_anchor: '[S3]'
+      depends_on:
+        - param.ar_n2_completion_threshold
+      relations: []
+      patchable: true
+      parameterizable: true
+      human_readable: Taux de complétion AR-N2 bas.
+      logic:
+        trigger: Audit de complétion
+        condition: Taux < seuil
+        effect: Fréquence AR-N2 à réduire
+        scope: runtime_feedback
+
+    - id: event.low_session_intention_completion
+      authority: primary
+      core_type: REFERENTIEL
+      source_anchor: '[S3]'
+      depends_on:
+        - param.session_intention_completion_threshold
+      relations: []
+      patchable: true
+      parameterizable: true
+      human_readable: Taux de complétion intention de session bas.
+      logic:
+        trigger: Audit de complétion intention
+        condition: Taux < seuil
+        effect: Réduction fréquence ou simplification format
+        scope: runtime_feedback
+
+  ACTIONS:
+    - id: action.reduce_ar_n2_frequency
+      authority: primary
+      core_type: REFERENTIEL
+      source_anchor: '[S3]'
+      depends_on:
+        - param.ar_n2_frequency_reference
+      relations: []
+      patchable: true
+      parameterizable: true
+      human_readable: Réduire la fréquence AR-N2.
+      logic:
+        trigger: Complétion AR-N2 insuffisante
+        condition: Seuil franchi
+        effect: Fréquence réduite dans la borne référentielle
+        scope: runtime_feedback
+
+    - id: action.reduce_session_intention_frequency
+      authority: primary
+      core_type: REFERENTIEL
+      source_anchor: '[S3]'
+      depends_on:
+        - param.session_intention_frequency_reference
+      relations: []
+      patchable: true
+      parameterizable: true
+      human_readable: Réduire la fréquence de l'intention de session.
+      logic:
+        trigger: Complétion intention insuffisante
+        condition: Seuil franchi
+        effect: Réduction de fréquence ou simplification du format
+        scope: runtime_feedback
+
+    - id: action.trigger_relevance_patch
+      authority: primary
+      core_type: REFERENTIEL
+      source_anchor: '[S16]'
+      depends_on:
+        - event.vc_persistent_low_detected
+      relations: []
+      patchable: true
+      parameterizable: true
+      human_readable: Déclencher un patch relevance.
+      logic:
+        trigger: VC basse persistante
+        condition: Seuil atteint
+        effect: Révision enjeux, contextualisation et lien au contexte authentique
+        scope: patch_governance
+
+    - id: action.trigger_ar_sollicitation_patch
+      authority: primary
+      core_type: REFERENTIEL
+      source_anchor: '[S17]'
+      depends_on:
+        - event.ar_refractory_profile_detected
+      relations: []
+      patchable: true
+      parameterizable: true
+      human_readable: Déclencher une révision du mode de sollicitation AR-N1.
+      logic:
+        trigger: Profil AR-réfractaire détecté
+        condition: Seuil atteint
+        effect: Révision du format, timing ou canal de sollicitation
+        scope: patch_governance
+
+    - id: action.signal_analysis_revision
+      authority: primary
+      core_type: REFERENTIEL
+      source_anchor: '[S16][S18]'
+      depends_on: []
+      relations: []
+      patchable: true
+      parameterizable: true
+      human_readable: Signaler une révision de la phase Analyse.
+      logic:
+        trigger: Persistance d'un problème malgré patchs autorisés
+        condition: Nombre de cycles dépassé
+        effect: Escalade vers révision Analyse
+        scope: governance

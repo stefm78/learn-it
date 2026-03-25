@@ -1,0 +1,888 @@
+LOGICAL_DRAFT:
+  source_scope:
+    description: 'Référentiel Learn-it v0.5 : paramètres opérationnels, seuils, fourchettes, métriques et règles ajustables
+      bornées, alignés sur la Constitution v1.6.'
+    source_anchor: '[S1–S6][S16–S19]'
+  candidate_entities:
+  - label: Référentiel Learn-it v0.5
+    source_anchor: '[S1]'
+    probable_type: parameter_core
+    probable_authority: primary
+    probable_patchable: true
+    probable_parameterizable: true
+    notes: Complément opérationnel de la Constitution ; révisable par données terrain.
+  - label: MSC (version référentielle)
+    source_anchor: '[S2]'
+    probable_type: mastery_formula_binding
+    probable_authority: derived
+    probable_patchable: false
+    probable_parameterizable: true
+    notes: Formalise l’AND constitutionnel via des seuils paramétriques.
+  - label: Seuil P
+    source_anchor: '[S2]'
+    probable_type: threshold
+    probable_authority: primary
+    probable_patchable: true
+    probable_parameterizable: true
+    notes: Précision.
+  - label: Seuil R
+    source_anchor: '[S2]'
+    probable_type: threshold
+    probable_authority: primary
+    probable_patchable: true
+    probable_parameterizable: true
+    notes: Robustesse temporelle.
+  - label: Seuil A
+    source_anchor: '[S2]'
+    probable_type: threshold
+    probable_authority: primary
+    probable_patchable: true
+    probable_parameterizable: true
+    notes: Autonomie.
+  - label: Règle deg
+    source_anchor: '[S2]'
+    probable_type: revocation_rule
+    probable_authority: primary
+    probable_patchable: true
+    probable_parameterizable: true
+    notes: Condition de rétrogradation post-maîtrise.
+  - label: Calibrage initial
+    source_anchor: '[S3]'
+    probable_type: parameter_block
+    probable_authority: primary
+    probable_patchable: true
+    probable_parameterizable: true
+    notes: Longueur maximale et fourchette.
+  - label: Format de calibrage par type KU
+    source_anchor: '[S3]'
+    probable_type: lookup_table
+    probable_authority: primary
+    probable_patchable: true
+    probable_parameterizable: true
+    notes: Durées et formats par taxonomie KU.
+  - label: Interleaving
+    source_anchor: '[S3]'
+    probable_type: activation_rule
+    probable_authority: primary
+    probable_patchable: true
+    probable_parameterizable: true
+    notes: Condition d’activation et rééquilibration.
+  - label: Multiplicateurs temporels par type KU
+    source_anchor: '[S3]'
+    probable_type: multiplier_table
+    probable_authority: primary
+    probable_patchable: true
+    probable_parameterizable: true
+    notes: Dont fallback créatif ×1.
+  - label: Inertie minimale des adaptations critiques
+    source_anchor: '[S3]'
+    probable_type: timing_guardrail
+    probable_authority: primary
+    probable_patchable: true
+    probable_parameterizable: true
+    notes: 48 h / exception 12 h.
+  - label: Régimes adaptatifs
+    source_anchor: '[S3]'
+    probable_type: state_matrix
+    probable_authority: primary
+    probable_patchable: true
+    probable_parameterizable: true
+    notes: 3 régimes × 3 calibrations ; activation progressive.
+  - label: Hiérarchie de confiance des signaux
+    source_anchor: '[S3]'
+    probable_type: authority_order
+    probable_authority: primary
+    probable_patchable: true
+    probable_parameterizable: true
+    notes: AR-N1 > AR-N2 > proxys > tendances.
+  - label: AR-N2 configuration
+    source_anchor: '[S3]'
+    probable_type: survey_configuration
+    probable_authority: primary
+    probable_patchable: true
+    probable_parameterizable: true
+    notes: Fréquence, items obligatoires, item VC optionnel.
+  - label: Intention de session
+    source_anchor: '[S3]'
+    probable_type: survey_configuration
+    probable_authority: primary
+    probable_patchable: true
+    probable_parameterizable: true
+    notes: Fréquence, format et règles de non-pénalisation.
+  - label: Fatigue cognitive
+    source_anchor: '[S4]'
+    probable_type: guardrail_parameter
+    probable_authority: primary
+    probable_patchable: true
+    probable_parameterizable: true
+    notes: Garde-fou de dernier recours.
+  - label: Non-nuisance gamification
+    source_anchor: '[S4]'
+    probable_type: guardrail_rule
+    probable_authority: primary
+    probable_patchable: true
+    probable_parameterizable: true
+    notes: Période probatoire si non validé.
+  - label: Évitement métacognitif
+    source_anchor: '[S4]'
+    probable_type: detection_rule
+    probable_authority: primary
+    probable_patchable: true
+    probable_parameterizable: true
+    notes: Détection et retour guidage.
+  - label: Couverture matrice feedback
+    source_anchor: '[S4][S18]'
+    probable_type: quality_metric
+    probable_authority: primary
+    probable_patchable: true
+    probable_parameterizable: true
+    notes: Taux de couverture et seuil patch hors-taxonomie.
+  - label: Déclencheurs de patch IA
+    source_anchor: '[tables]'
+    probable_type: trigger_table
+    probable_authority: primary
+    probable_patchable: true
+    probable_parameterizable: true
+    notes: Performance, biais, révocation, oscillation, équité, SIS, hors-taxonomie, VC, AR-réfractaire.
+  - label: Périmètre autorisé / interdit des patchs
+    source_anchor: '[tables]'
+    probable_type: patch_scope
+    probable_authority: primary
+    probable_patchable: true
+    probable_parameterizable: false
+    notes: Bornes opératoires alignées sur la Constitution.
+  - label: Section VC
+    source_anchor: '[S16]'
+    probable_type: parameter_block
+    probable_authority: primary
+    probable_patchable: true
+    probable_parameterizable: true
+    notes: États, seuil persistance, action cible.
+  - label: Section AR-réfractaire
+    source_anchor: '[S17]'
+    probable_type: parameter_block
+    probable_authority: primary
+    probable_patchable: true
+    probable_parameterizable: true
+    notes: Seuil de détection, patch cible, règle conservatrice associée.
+  - label: Section propagation graphe
+    source_anchor: '[S19]'
+    probable_type: parameter_block
+    probable_authority: derived
+    probable_patchable: false
+    probable_parameterizable: true
+    notes: Implémente P17 Constitution.
+  - label: Atomicité des patchs
+    source_anchor: '[S6]'
+    probable_type: deployment_guardrail
+    probable_authority: primary
+    probable_patchable: true
+    probable_parameterizable: true
+    notes: Double-buffer / snapshot / swap.
+  - label: Vérification locale obligatoire
+    source_anchor: '[S6]'
+    probable_type: deployment_guardrail
+    probable_authority: primary
+    probable_patchable: false
+    probable_parameterizable: false
+    notes: Bornes, impact_scope, QA pédagogique.
+  candidate_dependencies:
+  - label: Formule MSC référentielle
+    source_anchor: '[S2]'
+    probable_type: authority_dependency
+    probable_authority: derived
+    probable_patchable: false
+    probable_parameterizable: false
+    notes: Dépend de P16 Constitution pour la logique AND.
+  - label: deg
+    source_anchor: '[S2]'
+    probable_type: logical_dependency
+    probable_authority: primary
+    probable_patchable: true
+    probable_parameterizable: true
+    notes: Dépend d’au moins 2 échecs consécutifs ET d’un délai ≥ seuil_R.
+  - label: Item VC AR-N2
+    source_anchor: '[S3][S16]'
+    probable_type: activation_dependency
+    probable_authority: primary
+    probable_patchable: true
+    probable_parameterizable: true
+    notes: Dépend de l’activation de l’axe VC en phase Analyse.
+  - label: Intention de session format libre
+    source_anchor: '[S3]'
+    probable_type: capability_dependency
+    probable_authority: primary
+    probable_patchable: true
+    probable_parameterizable: true
+    notes: Dépend d’un niveau autonomie moteur ≥ Hybride recommandé.
+  - label: Patch enrichissement matrice feedback
+    source_anchor: '[S4][S18][tables]'
+    probable_type: trigger_dependency
+    probable_authority: primary
+    probable_patchable: true
+    probable_parameterizable: true
+    notes: Dépend du taux erreur-hors-taxonomie > seuil.
+  - label: Patch relevance VC
+    source_anchor: '[S16][tables]'
+    probable_type: trigger_dependency
+    probable_authority: primary
+    probable_patchable: true
+    probable_parameterizable: true
+    notes: Dépend de VC-Basse persistante sur N sessions.
+  - label: Patch sollicitation AR
+    source_anchor: '[S17][tables]'
+    probable_type: trigger_dependency
+    probable_authority: primary
+    probable_patchable: true
+    probable_parameterizable: true
+    notes: Dépend du profil AR-réfractaire.
+  - label: Propagation graphe
+    source_anchor: '[S19]'
+    probable_type: authority_dependency
+    probable_authority: derived
+    probable_patchable: false
+    probable_parameterizable: false
+    notes: Dépend de P17 Constitution ; non modifiable par patch.
+  - label: Vérification locale obligatoire
+    source_anchor: '[S6]'
+    probable_type: validation_dependency
+    probable_authority: derived
+    probable_patchable: false
+    probable_parameterizable: false
+    notes: Dépend de l’impact_scope calculable et de la checklist P12 Constitution.
+  - label: Mode conservateur AR-réfractaire
+    source_anchor: '[S17]'
+    probable_type: authority_dependency
+    probable_authority: derived
+    probable_patchable: false
+    probable_parameterizable: false
+    notes: Présenté comme invariant constitutionnel P5.
+  candidate_relations:
+  - label: Référentiel paramètre la Constitution
+    source_anchor: '[S1][S2]'
+    probable_type: governance_relation
+    probable_authority: primary
+    probable_patchable: true
+    probable_parameterizable: true
+    notes: Valeurs et bornes, pas logique de combinaison.
+  - label: Seuils P/R/A gouvernent la maîtrise
+    source_anchor: '[S2][S5]'
+    probable_type: control_relation
+    probable_authority: primary
+    probable_patchable: true
+    probable_parameterizable: true
+    notes: Contribuent à la déclaration MSC.
+  - label: Seuils patch gouvernent la génération de correctifs
+    source_anchor: '[tables][S16][S17][S18]'
+    probable_type: trigger_relation
+    probable_authority: primary
+    probable_patchable: true
+    probable_parameterizable: true
+    notes: Relient métriques dérive aux cibles patch.
+  - label: Fourchettes bornent les révisions
+    source_anchor: '[S1][S5][S6]'
+    probable_type: constraint_relation
+    probable_authority: primary
+    probable_patchable: true
+    probable_parameterizable: true
+    notes: Toute révision doit rester dans les bornes.
+  - label: Hiérarchie de signaux gouverne les inférences d’état
+    source_anchor: '[S3]'
+    probable_type: authority_relation
+    probable_authority: primary
+    probable_patchable: true
+    probable_parameterizable: true
+    notes: AR-N1 a la plus haute priorité.
+  - label: Couverture feedback gouverne la qualité conception
+    source_anchor: '[S4][S18]'
+    probable_type: quality_relation
+    probable_authority: primary
+    probable_patchable: true
+    probable_parameterizable: true
+    notes: Métrique par univers.
+  - label: Propagation graphe gouverne vérification prioritaire
+    source_anchor: '[S19]'
+    probable_type: graph_relation
+    probable_authority: derived
+    probable_patchable: false
+    probable_parameterizable: true
+    notes: Planification ≤ prochaine session.
+  candidate_invariants:
+  - label: Constitution = invariants ; Référentiel = paramètres ajustables
+    source_anchor: '[S1]'
+    probable_type: governance_invariant
+    probable_authority: primary
+    probable_patchable: false
+    probable_parameterizable: false
+    notes: Principe structurel explicite.
+  - label: Logique MSC = AND strict
+    source_anchor: '[S2][S5]'
+    probable_type: invariant
+    probable_authority: derived
+    probable_patchable: false
+    probable_parameterizable: false
+    notes: Rappel de P16 Constitution.
+  - label: Propagation graphe = 1 saut max
+    source_anchor: '[S19][S5]'
+    probable_type: invariant
+    probable_authority: derived
+    probable_patchable: false
+    probable_parameterizable: false
+    notes: Non modifiable par patch.
+  - label: Atomicité des patchs
+    source_anchor: '[S6]'
+    probable_type: invariant_candidate
+    probable_authority: primary
+    probable_patchable: false
+    probable_parameterizable: true
+    notes: Tout-ou-rien ; mécanisme double-buffer.
+  - label: Vérification locale obligatoire avant patch
+    source_anchor: '[S6]'
+    probable_type: invariant_candidate
+    probable_authority: derived
+    probable_patchable: false
+    probable_parameterizable: false
+    notes: Rejet total sinon.
+  - label: VC sans proxy comportemental
+    source_anchor: '[S16]'
+    probable_type: invariant_candidate
+    probable_authority: derived
+    probable_patchable: false
+    probable_parameterizable: false
+    notes: Item AR-N2 VC unique source.
+  - label: AR-réfractaire ne doit jamais conduire à AR-N1 bloquant ni fréquence augmentée
+    source_anchor: '[S17]'
+    probable_type: invariant_candidate
+    probable_authority: primary
+    probable_patchable: false
+    probable_parameterizable: false
+    notes: Contrainte forte sur la remédiation.
+  - label: Périmètre interdit patchs sur AND / propagation / checklist QA
+    source_anchor: '[tables]'
+    probable_type: invariant_candidate
+    probable_authority: derived
+    probable_patchable: false
+    probable_parameterizable: false
+    notes: Rappel d’invariants constitutionnels.
+  candidate_rules:
+  - label: P ≥ 80% et N ≥ 5
+    source_anchor: '[S2]'
+    probable_type: rule
+    probable_authority: primary
+    probable_patchable: true
+    probable_parameterizable: true
+    notes: Seuil de référence P.
+  - label: R court terme ≥ 3 jours ; moyen terme ≥ 7 jours
+    source_anchor: '[S2]'
+    probable_type: rule
+    probable_authority: primary
+    probable_patchable: true
+    probable_parameterizable: true
+    notes: Seuil de référence R.
+  - label: A ≥ 3 réussites consécutives sans aide
+    source_anchor: '[S2]'
+    probable_type: rule
+    probable_authority: primary
+    probable_patchable: true
+    probable_parameterizable: true
+    notes: Seuil de référence A.
+  - label: Révocation si ≥ 2 échecs consécutifs ET délai ≥ seuil_R
+    source_anchor: '[S2]'
+    probable_type: rule
+    probable_authority: primary
+    probable_patchable: true
+    probable_parameterizable: true
+    notes: deg.
+  - label: Interleaving activé si ≥ 2 réussites consécutives ET ≥ 3 tâches distinctes
+    source_anchor: '[S3]'
+    probable_type: rule
+    probable_authority: primary
+    probable_patchable: true
+    probable_parameterizable: true
+    notes: Condition d’activation.
+  - label: Rééquilibrage couverture si temps depuis présentation ≥ 2 × délai moyen
+    source_anchor: '[S3]'
+    probable_type: rule
+    probable_authority: primary
+    probable_patchable: true
+    probable_parameterizable: true
+    notes: Évite sous-couverture.
+  - label: Réduire fréquence AR-N2 si complétion < 60% sur 5 sessions
+    source_anchor: '[S3]'
+    probable_type: rule
+    probable_authority: primary
+    probable_patchable: true
+    probable_parameterizable: true
+    notes: Adaptation fréquence.
+  - label: Intention de session non bloquante, non pénalisée, non métrique
+    source_anchor: '[S3]'
+    probable_type: rule
+    probable_authority: primary
+    probable_patchable: true
+    probable_parameterizable: true
+    notes: Forethought SRL uniquement.
+  - label: VC basse persistante => flag vc-bas-persistant => patch relevance uniquement
+    source_anchor: '[S16]'
+    probable_type: rule
+    probable_authority: primary
+    probable_patchable: true
+    probable_parameterizable: true
+    notes: Aucune action moteur hors seuil.
+  - label: Profil AR-réfractaire => flag profil-ar-refractaire => patch sollicitation
+    source_anchor: '[S17]'
+    probable_type: rule
+    probable_authority: primary
+    probable_patchable: true
+    probable_parameterizable: true
+    notes: Tant que patch absent, scaffolding léger sur Axe 2.
+  - label: Taux hors-taxonomie > seuil patch => enrichissement matrice feedback
+    source_anchor: '[S4][S18]'
+    probable_type: rule
+    probable_authority: primary
+    probable_patchable: true
+    probable_parameterizable: true
+    notes: Candidat prioritaire patch.
+  - label: Tâche diagnostique réussie lève le marquage propagation
+    source_anchor: '[S19]'
+    probable_type: rule
+    probable_authority: derived
+    probable_patchable: false
+    probable_parameterizable: true
+    notes: 1 occurrence suffit ; échec rétrograde la dépendante.
+  - label: Patch rejeté si paramètre hors bornes ou impact_scope non calculable ou QA non satisfaite
+    source_anchor: '[S6]'
+    probable_type: rule
+    probable_authority: derived
+    probable_patchable: false
+    probable_parameterizable: false
+    notes: Rejet total.
+  candidate_parameters:
+  - label: P
+    source_anchor: '[S2][S5]'
+    probable_type: threshold
+    probable_authority: primary
+    probable_patchable: true
+    probable_parameterizable: true
+    notes: Réf 80%, fourchette 70–90% ; N 5, fourchette 3–10.
+  - label: R
+    source_anchor: '[S2][S5]'
+    probable_type: threshold
+    probable_authority: primary
+    probable_patchable: true
+    probable_parameterizable: true
+    notes: D 3 jours / 7 jours ; fourchette 1–14 jours.
+  - label: A
+    source_anchor: '[S2][S5]'
+    probable_type: threshold
+    probable_authority: primary
+    probable_patchable: true
+    probable_parameterizable: true
+    notes: M 3 ; fourchette 2–5.
+  - label: Calibrage initial
+    source_anchor: '[S3]'
+    probable_type: range
+    probable_authority: primary
+    probable_patchable: true
+    probable_parameterizable: true
+    notes: ≤10 unités ; fourchette 5–15.
+  - label: Multiplicateurs R par KU
+    source_anchor: '[S3][S5]'
+    probable_type: multiplier_table
+    probable_authority: primary
+    probable_patchable: true
+    probable_parameterizable: true
+    notes: Décl ×1 ; form ×1 ; proc ×2–3 ; perc ×0.5 ; créa ×1 fallback.
+  - label: Adaptation critique
+    source_anchor: '[S3][S5]'
+    probable_type: delay
+    probable_authority: primary
+    probable_patchable: true
+    probable_parameterizable: true
+    notes: 48 h ; exception 12 h.
+  - label: Régimes adaptatifs
+    source_anchor: '[S3]'
+    probable_type: cardinality
+    probable_authority: primary
+    probable_patchable: true
+    probable_parameterizable: true
+    notes: Version cible 9 états ; activation progressive 3→5→9.
+  - label: AR-N2 fréquence
+    source_anchor: '[S3]'
+    probable_type: frequency
+    probable_authority: primary
+    probable_patchable: true
+    probable_parameterizable: true
+    notes: Réf 1/session ; fourchette 1/1 à 1/3.
+  - label: Intention session fréquence
+    source_anchor: '[S3]'
+    probable_type: frequency
+    probable_authority: primary
+    probable_patchable: true
+    probable_parameterizable: true
+    notes: Réf 1/3 sessions ; fourchette 1/1 à 1/7.
+  - label: Fatigue cognitive
+    source_anchor: '[S4][S5]'
+    probable_type: duration
+    probable_authority: primary
+    probable_patchable: true
+    probable_parameterizable: true
+    notes: Réf 25 min ; fourchette 15–40.
+  - label: Couverture feedback prod
+    source_anchor: '[S4][S5][S18]'
+    probable_type: coverage_threshold
+    probable_authority: primary
+    probable_patchable: true
+    probable_parameterizable: true
+    notes: Réf ≥70%, fourchette 60–90%.
+  - label: Hors-taxonomie patch
+    source_anchor: '[S4][S5][S18]'
+    probable_type: trigger_threshold
+    probable_authority: primary
+    probable_patchable: true
+    probable_parameterizable: true
+    notes: Réf >15% erreurs / 10 sessions ; fourchette 10–25%.
+  - label: VC Bas persistant
+    source_anchor: '[S16][S5]'
+    probable_type: trigger_threshold
+    probable_authority: primary
+    probable_patchable: true
+    probable_parameterizable: true
+    notes: Réf 4 sessions ; fourchette 3–7.
+  - label: AR-réfractaire
+    source_anchor: '[S17][S5]'
+    probable_type: trigger_threshold
+    probable_authority: primary
+    probable_patchable: true
+    probable_parameterizable: true
+    notes: Réf 5 sessions ; fourchette 3–8.
+  - label: Propagation vérification prioritaire
+    source_anchor: '[S19]'
+    probable_type: delay_range
+    probable_authority: derived
+    probable_patchable: false
+    probable_parameterizable: true
+    notes: 0–3 sessions ; cible ≤ prochaine session.
+  - label: Conservation snapshot patch
+    source_anchor: '[S6]'
+    probable_type: retention_range
+    probable_authority: primary
+    probable_patchable: true
+    probable_parameterizable: true
+    notes: Réf 30 jours ; fourchette 7–90.
+  candidate_constraints:
+  - label: Ne pas modifier composantes MSC
+    source_anchor: '[tables]'
+    probable_type: constraint
+    probable_authority: derived
+    probable_patchable: false
+    probable_parameterizable: false
+    notes: Interdit patch.
+  - label: Ne pas changer philosophie adaptative
+    source_anchor: '[tables]'
+    probable_type: constraint
+    probable_authority: derived
+    probable_patchable: false
+    probable_parameterizable: false
+    notes: Interdit patch.
+  - label: Ne pas restructurer le graphe principal
+    source_anchor: '[tables]'
+    probable_type: constraint
+    probable_authority: primary
+    probable_patchable: false
+    probable_parameterizable: false
+    notes: Interdit patch.
+  - label: Ne pas modifier logique AND
+    source_anchor: '[tables][S5]'
+    probable_type: constraint
+    probable_authority: derived
+    probable_patchable: false
+    probable_parameterizable: false
+    notes: Invariant constitutionnel.
+  - label: Ne pas modifier propagation 1 saut
+    source_anchor: '[tables][S19]'
+    probable_type: constraint
+    probable_authority: derived
+    probable_patchable: false
+    probable_parameterizable: false
+    notes: Invariant constitutionnel.
+  - label: Ne pas modifier checklist QA patch
+    source_anchor: '[tables][S6]'
+    probable_type: constraint
+    probable_authority: derived
+    probable_patchable: false
+    probable_parameterizable: false
+    notes: Invariant constitutionnel.
+  - label: AR-N2 max 3 items
+    source_anchor: '[S3]'
+    probable_type: constraint
+    probable_authority: primary
+    probable_patchable: true
+    probable_parameterizable: true
+    notes: L’ajout VC impose retrait éventuel d’un autre item.
+  - label: VC inconnue => aucune inférence autorisée
+    source_anchor: '[S16]'
+    probable_type: constraint
+    probable_authority: derived
+    probable_patchable: false
+    probable_parameterizable: false
+    notes: Axe traité comme absent.
+  - label: 'AR-réfractaire : jamais augmenter fréquence ni rendre AR-N1 bloquant'
+    source_anchor: '[S17]'
+    probable_type: constraint
+    probable_authority: primary
+    probable_patchable: false
+    probable_parameterizable: false
+    notes: Patch limité au format/déclencheur.
+  candidate_events:
+  - label: Écart performance > seuil
+    source_anchor: '[tables]'
+    probable_type: event
+    probable_authority: primary
+    probable_patchable: true
+    probable_parameterizable: true
+    notes: Candidat patch paramètres / sous-parcours.
+  - label: Biais cohorte > seuil
+    source_anchor: '[tables]'
+    probable_type: event
+    probable_authority: primary
+    probable_patchable: true
+    probable_parameterizable: true
+    notes: Candidat révision modèle inférence.
+  - label: Révocation MSC > seuil
+    source_anchor: '[tables]'
+    probable_type: event
+    probable_authority: primary
+    probable_patchable: true
+    probable_parameterizable: true
+    notes: Candidat recalibration seuils / missions.
+  - label: Oscillation concept ≥ 3 cycles
+    source_anchor: '[tables]'
+    probable_type: event
+    probable_authority: primary
+    probable_patchable: true
+    probable_parameterizable: true
+    notes: Candidat missions conflit cognitif / graphe.
+  - label: Écart équité
+    source_anchor: '[tables]'
+    probable_type: event
+    probable_authority: primary
+    probable_patchable: true
+    probable_parameterizable: true
+    notes: Révision modèle.
+  - label: Sessions SIS faibles > seuil
+    source_anchor: '[tables]'
+    probable_type: event
+    probable_authority: primary
+    probable_patchable: true
+    probable_parameterizable: true
+    notes: Vérification intégrité.
+  - label: Erreurs hors-taxonomie > seuil
+    source_anchor: '[S4][tables][S18]'
+    probable_type: event
+    probable_authority: primary
+    probable_patchable: true
+    probable_parameterizable: true
+    notes: Enrichissement matrice feedback.
+  - label: VC basse persistante
+    source_anchor: '[S16][tables]'
+    probable_type: event
+    probable_authority: primary
+    probable_patchable: true
+    probable_parameterizable: true
+    notes: Révision relevance.
+  - label: Profil AR-réfractaire
+    source_anchor: '[S17][tables]'
+    probable_type: event
+    probable_authority: primary
+    probable_patchable: true
+    probable_parameterizable: true
+    notes: Révision sollicitation AR.
+  - label: Intégrité modèle dégradée (>15% sessions SIS<0.4)
+    source_anchor: '[S4]'
+    probable_type: event
+    probable_authority: primary
+    probable_patchable: true
+    probable_parameterizable: true
+    notes: Investigation systémique.
+  - label: '>20% KU marquées vérification prioritaire'
+    source_anchor: '[S19]'
+    probable_type: event
+    probable_authority: derived
+    probable_patchable: false
+    probable_parameterizable: true
+    notes: Alerte cascade systémique.
+  candidate_actions:
+  - label: Ajuster paramètres dans fourchettes
+    source_anchor: '[tables]'
+    probable_type: action
+    probable_authority: primary
+    probable_patchable: true
+    probable_parameterizable: true
+    notes: Patch autorisé.
+  - label: Ajouter missions
+    source_anchor: '[tables]'
+    probable_type: action
+    probable_authority: primary
+    probable_patchable: true
+    probable_parameterizable: true
+    notes: Patch autorisé.
+  - label: Recalibrer seuils
+    source_anchor: '[tables]'
+    probable_type: action
+    probable_authority: primary
+    probable_patchable: true
+    probable_parameterizable: true
+    notes: Patch autorisé dans bornes.
+  - label: Enrichir matrice feedback
+    source_anchor: '[tables][S18]'
+    probable_type: action
+    probable_authority: primary
+    probable_patchable: true
+    probable_parameterizable: true
+    notes: Suite erreurs hors-taxonomie.
+  - label: Réviser sollicitation AR-N1
+    source_anchor: '[tables][S17]'
+    probable_type: action
+    probable_authority: primary
+    probable_patchable: true
+    probable_parameterizable: true
+    notes: Pour profil AR-réfractaire.
+  - label: Réviser présentation contexte authentique / relevance
+    source_anchor: '[tables][S16]'
+    probable_type: action
+    probable_authority: primary
+    probable_patchable: true
+    probable_parameterizable: true
+    notes: Pour VC basse persistante.
+  - label: Rejet total du patch
+    source_anchor: '[S6]'
+    probable_type: action
+    probable_authority: derived
+    probable_patchable: false
+    probable_parameterizable: false
+    notes: En cas de non-conformité locale.
+  - label: Retour guidage
+    source_anchor: '[S4]'
+    probable_type: action
+    probable_authority: primary
+    probable_patchable: true
+    probable_parameterizable: true
+    notes: Suite évitement métacognitif.
+  - label: Pilote restreint
+    source_anchor: '[S18]'
+    probable_type: action
+    probable_authority: primary
+    probable_patchable: true
+    probable_parameterizable: true
+    notes: Si couverture feedback < 60%.
+  - label: Investigation systémique
+    source_anchor: '[S4][S19]'
+    probable_type: action
+    probable_authority: primary
+    probable_patchable: true
+    probable_parameterizable: true
+    notes: Pour intégrité modèle ou cascade graphe.
+  candidate_external_references:
+  - label: Constitution Learn-it v1.6
+    source_anchor: '[S1][S2][S16][S17][S19][S6]'
+    probable_type: external_core_reference
+    probable_authority: reference
+    probable_patchable: false
+    probable_parameterizable: false
+    notes: P12, P16, P17, P18, P19 servent d’autorité externe.
+  - label: Données terrain / cohorte
+    source_anchor: '[S1][S3][S16][S17]'
+    probable_type: empirical_reference
+    probable_authority: reference
+    probable_patchable: true
+    probable_parameterizable: true
+    notes: Nécessaires pour révision future des paramètres.
+  - label: Taxonomie d’erreurs Design
+    source_anchor: '[S4][S18]'
+    probable_type: design_reference
+    probable_authority: reference
+    probable_patchable: true
+    probable_parameterizable: true
+    notes: Nécessaire à la mesure hors-taxonomie.
+  - label: Phase Analyse
+    source_anchor: '[S3][S16][S17]'
+    probable_type: process_reference
+    probable_authority: reference
+    probable_patchable: true
+    probable_parameterizable: true
+    notes: Active axe VC et porte le niveau autonomie.
+  split_signals:
+  - label: Autorité distincte avec la Constitution
+    source_anchor: '[S1]'
+    probable_type: authority_split_signal
+    probable_authority: primary
+    probable_patchable: false
+    probable_parameterizable: false
+    notes: Référentiel assume uniquement le combien/comment.
+  - label: Bloc patch/opérations fortement cohérent
+    source_anchor: '[tables][S6][S18][S19]'
+    probable_type: cohesion_split_signal
+    probable_authority: primary
+    probable_patchable: true
+    probable_parameterizable: true
+    notes: Déclencheurs, périmètre, atomicité, vérification locale.
+  - label: Bloc instrumentation AR / VC / intention fortement cohérent
+    source_anchor: '[S3][S16][S17]'
+    probable_type: cohesion_split_signal
+    probable_authority: primary
+    probable_patchable: true
+    probable_parameterizable: true
+    notes: Fréquences, items, seuils, profils.
+  - label: Bloc métriques feedback / taxonomie fortement cohérent
+    source_anchor: '[S4][S18]'
+    probable_type: cohesion_split_signal
+    probable_authority: primary
+    probable_patchable: true
+    probable_parameterizable: true
+    notes: Qualité de conception distincte du reste.
+  ambiguities:
+  - label: Statut exact de certains rappels constitutionnels dans le Référentiel
+    source_anchor: '[S2][S5][tables]'
+    probable_type: authority_ambiguity
+    probable_authority: mixed
+    probable_patchable: false
+    probable_parameterizable: false
+    notes: Le document rappelle des invariants qui ne lui appartiennent pas en propre.
+  - label: Granularité de la notion impact_scope
+    source_anchor: '[S6]'
+    probable_type: schema_ambiguity
+    probable_authority: derived
+    probable_patchable: false
+    probable_parameterizable: true
+    notes: Référence à P12, schéma complet non détaillé ici.
+  - label: Sémantique précise de certains déclencheurs historiques
+    source_anchor: '[tables]'
+    probable_type: metric_ambiguity
+    probable_authority: primary
+    probable_patchable: true
+    probable_parameterizable: true
+    notes: Seuils listés mais protocole calcul exact absent du fichier.
+  - label: Nature du format libre intention session
+    source_anchor: '[S3]'
+    probable_type: ui_ambiguity
+    probable_authority: primary
+    probable_patchable: true
+    probable_parameterizable: true
+    notes: Champ libre admis mais règles d’exploitation minimales seulement.
+  - label: Seuils empiriques sans cohorte établie
+    source_anchor: '[⚠️ Éléments BALISÉS]'
+    probable_type: calibration_ambiguity
+    probable_authority: primary
+    probable_patchable: true
+    probable_parameterizable: true
+    notes: VC, AR-réfractaire, couverture feedback restent à consolider par données terrain.
+  extraction_notes:
+  - Le document est nettement plus paramétrique que la Constitution ; la plupart des items sont des seuils, bornes, fréquences,
+    durées ou tables de mapping.
+  - Une part de son contenu est dérivée de la Constitution v1.6 et ne doit pas être re-promue en invariant autonome lors des
+    étapes suivantes.
+  - Les zones les plus structurantes pour un futur Core paramétrique sont S2, S3, S4, S16–S19 et S6.
+  - Le document contient déjà plusieurs signaux explicites de dépendance externe vers la Constitution, ce qui facilitera un
+    LINK ultérieur.
+  - Les éléments BALISÉS signalent précisément les paramètres à faible maturité empirique ; ils ne doivent pas être normalisés
+    comme vérités stables sans marqueur d’incertitude.

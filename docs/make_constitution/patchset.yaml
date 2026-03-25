@@ -1,0 +1,501 @@
+PATCH_SET:
+  id: LEARNIT_CORE_PATCHSET_V1_7__V0_6
+  description: >
+    Diff YAML prêt à appliquer sur les cores validés Constitution v1.6,
+    Référentiel v0.5 et LINK. Objectif : intégrer les corrections
+    adversariales prioritaires et les robustesses de gouvernance.
+  files:
+
+    - file: Constitution_Learn-it_v1_6__core_final__validated.yaml
+      expected_core_id: CORE_LEARNIT_CONSTITUTION_V1_6
+      operations:
+
+        - op: replace
+          target:
+            section: TYPES
+            id: TYPE_PATCH_ARTIFACT
+          value:
+            id: TYPE_PATCH_ARTIFACT
+            authority: primary
+            core_type: CONSTITUTION
+            source_anchor: "[S14][PATCH_V1_7]"
+            depends_on:
+              - TYPE_PATCH_IMPACT_SCOPE
+              - TYPE_PATCH_QUALITY_GATE
+              - REF_CORE_LEARNIT_REFERENTIEL_V0_5_IN_CONSTITUTION
+            relations:
+              - type: requires
+                target:
+                  id: INV_NO_PARTIAL_PATCH_STATE
+              - type: requires
+                target:
+                  id: INV_INVALID_PATCH_REJECTED
+              - type: requires
+                target:
+                  id: INV_PATCH_LOCAL_VALIDATION_MUST_BE_DETERMINISTIC
+            patchable: true
+            parameterizable: true
+            human_readable: Patch paramétrique occasionnel et borné.
+            logic:
+              trigger: Événement de révision autorisé
+              condition: >
+                Bornes respectées, impact_scope calculable, attributs obligatoires présents,
+                atomicité garantie ; la QA pédagogique est validée hors session avant soumission.
+              effect: Patch applicable localement ou rejeté/rollbacké.
+              scope: patch_layer
+
+        - op: append
+          target:
+            section: INVARIANTS
+          values:
+
+            - id: INV_KNOWLEDGE_GRAPH_MUST_BE_ACYCLIC
+              authority: primary
+              core_type: CONSTITUTION
+              source_anchor: "[S4][S18][PATCH_V1_7]"
+              depends_on:
+                - TYPE_KNOWLEDGE_GRAPH
+                - TYPE_KNOWLEDGE_UNIT
+              relations:
+                - type: constrains
+                  target:
+                    id: TYPE_KNOWLEDGE_GRAPH
+              patchable: false
+              parameterizable: false
+              human_readable: Le graphe des KU doit être acyclique.
+              logic:
+                trigger: Validation design ou chargement du graphe
+                condition: Un cycle de dépendance est détecté.
+                effect: État interdit ; déploiement bloqué ou chargement refusé.
+                scope: knowledge_model
+
+            - id: INV_SECONDARY_RETROGRADATION_IS_NEW_EVENT
+              authority: primary
+              core_type: CONSTITUTION
+              source_anchor: "[S17c][PATCH_V1_7]"
+              depends_on:
+                - INV_GRAPH_PROPAGATION_ONE_HOP
+                - TYPE_KNOWLEDGE_GRAPH
+              relations:
+                - type: constrains
+                  target:
+                    id: INV_GRAPH_PROPAGATION_ONE_HOP
+              patchable: false
+              parameterizable: false
+              human_readable: >
+                Toute rétrogradation secondaire issue d’un échec diagnostique
+                constitue un nouvel événement indépendant.
+              logic:
+                trigger: Échec à une tâche diagnostique de propagation
+                condition: Une KU dépendante directe échoue à la vérification prioritaire.
+                effect: >
+                  Création d’un nouvel événement autonome de rétrogradation,
+                  soumis à la même limite de propagation à un saut ; aucune extension
+                  implicite de la propagation courante.
+                scope: runtime_graph
+
+            - id: INV_PATCH_LOCAL_VALIDATION_MUST_BE_DETERMINISTIC
+              authority: primary
+              core_type: CONSTITUTION
+              source_anchor: "[S14][PATCH_V1_7]"
+              depends_on:
+                - TYPE_PATCH_ARTIFACT
+                - TYPE_PATCH_IMPACT_SCOPE
+                - TYPE_PATCH_QUALITY_GATE
+              relations:
+                - type: constrains
+                  target:
+                    id: TYPE_PATCH_ARTIFACT
+              patchable: false
+              parameterizable: false
+              human_readable: >
+                La validation locale d’un patch ne peut reposer que sur des critères déterministes.
+              logic:
+                trigger: Validation locale de patch
+                condition: >
+                  Un critère sémantique, pédagogique ou interprétatif est requis localement pour décider.
+                effect: >
+                  État interdit ; ce critère doit être déplacé dans la chaîne hors session
+                  de QA pédagogique.
+                scope: patch_validation
+
+            - id: INV_MISSING_KU_TYPE_FORCES_SAFE_FALLBACK
+              authority: primary
+              core_type: CONSTITUTION
+              source_anchor: "[S12][S14][PATCH_V1_7]"
+              depends_on:
+                - TYPE_KNOWLEDGE_UNIT
+                - INV_KU_TYPING_REQUIRED
+              relations:
+                - type: constrains
+                  target:
+                    id: TYPE_KNOWLEDGE_UNIT
+              patchable: false
+              parameterizable: false
+              human_readable: >
+                Une KU sans type déclaré déclenche un mode de sécurité et interdit
+                toute adaptation fine.
+              logic:
+                trigger: Chargement ou sélection runtime d’une KU
+                condition: Type KU absent, indéterminé ou invalide.
+                effect: >
+                  KU gelée pour l’adaptation fine ; feedback générique uniquement ;
+                  exclusion des règles dépendantes du type ; signal de correction obligatoire.
+                scope: runtime_safety
+
+            - id: INV_AR_N2_SHORT_FORM_REQUIRES_EXPLICIT_PRIORITY
+              authority: primary
+              core_type: CONSTITUTION
+              source_anchor: "[S11][PATCH_V1_7]"
+              depends_on:
+                - TYPE_SELF_REPORT_AR_N2
+                - TYPE_STATE_AXIS_VALUE_COST
+              relations:
+                - type: constrains
+                  target:
+                    id: TYPE_SELF_REPORT_AR_N2
+              patchable: false
+              parameterizable: false
+              human_readable: >
+                Toute version courte d’AR-N2 doit expliciter la priorité entre mesure VC
+                et intention de retour.
+              logic:
+                trigger: Conception d’un AR-N2 simplifié
+                condition: >
+                  Le nombre d’items ne permet pas de mesurer complètement VC et intention.
+                effect: >
+                  Une priorité déclarée et stable est obligatoire ; aucune inférence implicite
+                  d’un axe à partir de l’autre.
+                scope: runtime_feedback
+
+            - id: INV_PERSISTENT_DRIFT_REQUIRES_ESCALATION_IF_PATCH_BLOCKED
+              authority: primary
+              core_type: CONSTITUTION
+              source_anchor: "[S14][PATCH_V1_7]"
+              depends_on:
+                - TYPE_PATCH_ARTIFACT
+                - INV_INVALID_PATCH_REJECTED
+              relations: []
+              patchable: false
+              parameterizable: false
+              human_readable: >
+                Une dérive persistante non corrigeable par patch localement valide doit être escaladée.
+              logic:
+                trigger: Répétition d’un besoin de correction sur plusieurs cycles
+                condition: >
+                  Le signal de dérive persiste alors que le patch requis reste rejeté ou impossible.
+                effect: Escalade obligatoire hors session vers la chaîne d’analyse/correction.
+                scope: patch_governance
+
+            - id: INV_PATCH_ARTIFACTS_MUST_BE_PRECOMPUTED_OFF_SESSION
+              authority: primary
+              core_type: CONSTITUTION
+              source_anchor: "[S13][S14][PATCH_V1_7]"
+              depends_on:
+                - TYPE_PATCH_ARTIFACT
+                - INV_NO_RUNTIME_NETWORK_CALL
+                - INV_NO_RUNTIME_CONTENT_GENERATION
+              relations:
+                - type: constrains
+                  target:
+                    id: TYPE_PATCH_ARTIFACT
+              patchable: false
+              parameterizable: false
+              human_readable: >
+                Les artefacts de patch doivent être générés, validés et empaquetés hors session
+                avant leur application locale.
+              logic:
+                trigger: Préparation d’un patch
+                condition: Le patch nécessite calcul, QA ou génération d’artefact.
+                effect: >
+                  Préparation exclusivement hors session ; aucune génération ou validation distante
+                  pendant l’usage apprenant.
+                scope: patch_architecture
+
+            - id: INV_CREATIVE_KU_AUTONOMY_REQUIRES_DETERMINISTIC_FEEDBACK_PATH
+              authority: primary
+              core_type: CONSTITUTION
+              source_anchor: "[S12][S17][PATCH_V1_7]"
+              depends_on:
+                - TYPE_KNOWLEDGE_UNIT
+                - TYPE_FEEDBACK_COVERAGE_MATRIX
+              relations: []
+              patchable: false
+              parameterizable: false
+              human_readable: >
+                Une KU créative ne peut être déployée en régime autonome que si son feedback local
+                déterministe est explicitement formalisé.
+              logic:
+                trigger: Validation de déploiement d’une KU créative
+                condition: Aucun chemin de feedback local déterministe n’est disponible.
+                effect: Régime autonome interdit pour cette KU ; checkpoint humain ou redesign requis.
+                scope: design_governance
+
+    - file: referentiel_defaults_v0_5__core_final__validated.yaml
+      expected_core_id: CORE_LEARNIT_REFERENTIEL_V0_5
+      operations:
+
+        - op: replace
+          target:
+            section: CONSTRAINTS
+            id: CONSTRAINT_REFERENTIEL_LOCAL_VERIFICATION_REQUIRED_BEFORE_PATCH_APPLY
+          value:
+            id: CONSTRAINT_REFERENTIEL_LOCAL_VERIFICATION_REQUIRED_BEFORE_PATCH_APPLY
+            authority: primary
+            core_type: REFERENTIEL
+            source_anchor: "[S6][PATCH_V0_6]"
+            depends_on:
+              - TYPE_REFERENTIEL_PATCH_SCOPE_TABLE
+            relations:
+              - type: constrains
+                target:
+                  id: EVENT_REFERENTIEL_PATCH_TRIGGER_THRESHOLD_CROSSED
+            patchable: false
+            parameterizable: false
+            human_readable: Vérification locale obligatoire avant application patch.
+            logic:
+              trigger: Application d'un patch
+              condition: Patch prêt à être appliqué
+              effect: >
+                Vérification locale déterministe requise : bornes, impact_scope calculable,
+                attributs obligatoires présents, compatibilité technique et atomicité.
+              scope: patch_validation
+
+        - op: append
+          target:
+            section: TYPES
+          values:
+
+            - id: TYPE_REFERENTIEL_MINIMAL_BEHAVIORAL_PROXY_SET
+              authority: primary
+              core_type: REFERENTIEL
+              source_anchor: "[S3][PATCH_V0_6]"
+              depends_on:
+                - TYPE_REFERENTIEL_SIGNAL_CONFIDENCE_HIERARCHY
+              relations:
+                - type: governs
+                  target:
+                    id: PARAM_REFERENTIEL_PROXY_MIN_WEIGHT
+              patchable: true
+              parameterizable: true
+              human_readable: >
+                Ensemble minimal de proxys comportementaux utilisables en absence d’AR-N1.
+              logic:
+                trigger: Résolution d’état sans auto-rapport événementiel
+                condition: AR-N1 absent et proxys disponibles.
+                effect: >
+                  Activation d’un socle minimal de signaux mesurables, chacun avec seuil déclaré
+                  et statut empirique explicite.
+                scope: runtime_state
+
+            - id: TYPE_REFERENTIEL_AR_N3_CONFIGURATION
+              authority: primary
+              core_type: REFERENTIEL
+              source_anchor: "[S3][PATCH_V0_6]"
+              depends_on:
+                - REF_CORE_LEARNIT_CONSTITUTION_V1_6_IN_REFERENTIEL
+              relations:
+                - type: governs
+                  target:
+                    id: PARAM_REFERENTIEL_AR_N3_FREQUENCY_REFERENCE
+              patchable: true
+              parameterizable: true
+              human_readable: Configuration du bilan périodique AR-N3 et de son effet moteur.
+              logic:
+                trigger: Fenêtre périodique atteinte
+                condition: AR-N3 activé.
+                effect: Produit un indice de calibration auto-rapport exploitable par le moteur.
+                scope: runtime_feedback
+
+        - op: append
+          target:
+            section: RULES
+          values:
+
+            - id: RULE_REFERENTIEL_CURRENT_RETROGRADATION_VS_POSTMASTERY_REVOCATION
+              authority: primary
+              core_type: REFERENTIEL
+              source_anchor: "[S2][PATCH_V0_6]"
+              depends_on:
+                - REF_CORE_LEARNIT_CONSTITUTION_V1_6_IN_REFERENTIEL
+              relations: []
+              patchable: true
+              parameterizable: true
+              human_readable: >
+                Distingue la rétrogradation courante pendant apprentissage de la révocation post-maîtrise.
+              logic:
+                trigger: Baisse MSC détectée
+                condition: >
+                  Le système doit décider entre correction immédiate et révocation d’un acquis stabilisé.
+                effect: >
+                  La rétrogradation courante suit la défaillance instantanée ; la révocation post-maîtrise
+                  exige une fenêtre temporelle et des répétitions configurées.
+                scope: runtime_evaluation
+
+            - id: RULE_REFERENTIEL_INTERLEAVING_CONTENT_REQUIRES_A
+              authority: primary
+              core_type: REFERENTIEL
+              source_anchor: "[S3][PATCH_V0_6]"
+              depends_on:
+                - REF_CORE_LEARNIT_CONSTITUTION_V1_6_IN_REFERENTIEL
+              relations: []
+              patchable: true
+              parameterizable: true
+              human_readable: >
+                L’interleaving de contenus exige atteinte simultanée de P et A, plus stabilité minimale.
+              logic:
+                trigger: Évaluation de passage vers interleaving de contenus
+                condition: >
+                  Au moins 2 réussites consécutives, au moins 3 tâches distinctes,
+                  et composante A au seuil sur les KU concernées.
+                effect: Interleaving contenus autorisé ; sinon maintien en séquencement simple.
+                scope: runtime_progression
+
+            - id: RULE_REFERENTIEL_SECONDARY_RETROGRADATION_DEFERRED_REENTRY
+              authority: primary
+              core_type: REFERENTIEL
+              source_anchor: "[S19][PATCH_V0_6]"
+              depends_on:
+                - TYPE_REFERENTIEL_GRAPH_PROPAGATION_OPERATIONAL_NOTE
+              relations: []
+              patchable: true
+              parameterizable: true
+              human_readable: >
+                Une rétrogradation secondaire est marquée puis rejouée comme un nouvel événement autonome.
+              logic:
+                trigger: Échec à une tâche diagnostique de propagation
+                condition: KU dépendante directe échoue à la vérification prioritaire.
+                effect: >
+                  Flag de rétrogradation secondaire ; réentrée au prochain cycle autorisé
+                  comme nouvel événement autonome.
+                scope: runtime_graph
+
+            - id: RULE_REFERENTIEL_LOW_AR_CALIBRATION_TEMPORARILY_REWEIGHTS_SIGNALS
+              authority: primary
+              core_type: REFERENTIEL
+              source_anchor: "[S3][PATCH_V0_6]"
+              depends_on:
+                - TYPE_REFERENTIEL_AR_N3_CONFIGURATION
+                - TYPE_REFERENTIEL_SIGNAL_CONFIDENCE_HIERARCHY
+                - PARAM_REFERENTIEL_PROXY_MIN_WEIGHT
+              relations: []
+              patchable: false
+              parameterizable: true
+              human_readable: >
+                Une calibration AR basse réduit temporairement le poids d’AR-N1 et restaure les proxys.
+              logic:
+                trigger: Résultat AR-N3
+                condition: Indice calibration AR bas détecté.
+                effect: >
+                  Réduction temporaire du poids AR-N1 et relèvement borné du poids des proxys
+                  pour un cycle AR-N3.
+                scope: runtime_feedback
+
+            - id: RULE_REFERENTIEL_SYSTEMIC_INVESTIGATION_RUNTIME_BEHAVIOR
+              authority: primary
+              core_type: REFERENTIEL
+              source_anchor: "[PATCH_V0_6]"
+              depends_on:
+                - REF_CORE_LEARNIT_CONSTITUTION_V1_6_IN_REFERENTIEL
+              relations: []
+              patchable: true
+              parameterizable: true
+              human_readable: >
+                Pendant une investigation systémique active, le moteur adopte un régime minimal et réversible.
+              logic:
+                trigger: Investigation systémique ouverte
+                condition: Cause locale non résolue ou dérive transversale suspectée.
+                effect: >
+                  Gel des ajustements agressifs, maintien d’un mode minimal, journalisation renforcée,
+                  puis escalade hors session si persistance sur la fenêtre configurée.
+                scope: runtime_safety
+
+            - id: RULE_REFERENTIEL_VC_UNOBSERVABLE_DISABLING
+              authority: primary
+              core_type: REFERENTIEL
+              source_anchor: "[S16][PATCH_V0_6]"
+              depends_on:
+                - TYPE_REFERENTIEL_VC_PARAMETER_BLOCK
+                - CONSTRAINT_REFERENTIEL_NO_BEHAVIORAL_PROXY_FOR_VC
+              relations: []
+              patchable: true
+              parameterizable: true
+              human_readable: >
+                Si VC reste non observable sur une fenêtre suffisante, l’axe VC est désactivé
+                plutôt qu’inféré indirectement.
+              logic:
+                trigger: Agrégation VC
+                condition: >
+                  Absence répétée de donnée VC exploitable sur la fenêtre configurée.
+                effect: >
+                  État VC=non-observable ; désactivation de l’axe pour l’adaptation concernée ;
+                  aucune inférence de substitution.
+                scope: runtime_state
+
+        - op: append
+          target:
+            section: PARAMETERS
+          values:
+
+            - id: PARAM_REFERENTIEL_PROXY_MIN_WEIGHT
+              authority: primary
+              core_type: REFERENTIEL
+              source_anchor: "[S3][PATCH_V0_6]"
+              depends_on: []
+              relations: []
+              patchable: false
+              parameterizable: true
+              human_readable: Poids minimal garanti pour un proxy comportemental valide.
+              logic:
+                trigger: Agrégation de signaux comportementaux
+                condition: Proxy statut=valide et retenu par le moteur.
+                effect: Référence 0.2 ; fourchette non applicable localement.
+                scope: runtime_state
+
+            - id: PARAM_REFERENTIEL_AR_N3_FREQUENCY_REFERENCE
+              authority: primary
+              core_type: REFERENTIEL
+              source_anchor: "[S3][PATCH_V0_6]"
+              depends_on: []
+              relations: []
+              patchable: true
+              parameterizable: true
+              human_readable: Fréquence de référence du bilan AR-N3.
+              logic:
+                trigger: Planification AR-N3
+                condition: Fonction AR-N3 active.
+                effect: Référence 1 bilan / 10 sessions ; fourchette 1/5 à 1/20.
+                scope: runtime_feedback
+
+            - id: PARAM_REFERENTIEL_PROPAGATION_CHECK_MAX_DELAY_SESSIONS
+              authority: primary
+              core_type: REFERENTIEL
+              source_anchor: "[S19][PATCH_V0_6]"
+              depends_on: []
+              relations: []
+              patchable: false
+              parameterizable: true
+              human_readable: >
+                Fenêtre maximale autorisée avant vérification prioritaire d’une KU dépendante marquée.
+              logic:
+                trigger: Planification de vérification de propagation
+                condition: KU dépendante directe marquée.
+                effect: Référence 1 session ; délai non contournable par patch local.
+                scope: runtime_graph
+
+        - op: note
+          target:
+            section: RULES
+          value:
+            id: RULE_REFERENTIEL_INTERLEAVING_CONTENT_REQUIRES_A
+            integration_note: >
+              Si une règle d’interleaving existe déjà sous un autre id, remplacer sa logique au lieu
+              d’ajouter une règle concurrente.
+
+    - file: learnit__link_core__validated.yaml
+      expected_core_id: CORE_LINK_LEARNIT_CONSTITUTION_V1_6__REFERENTIEL_V0_5
+      operations:
+        - op: no_change
+          reason: >
+            Le LINK remplit déjà sa fonction de fédération inter-core sans logique métier autonome.
+            Aucun binding supplémentaire n’est strictement nécessaire pour cette itération.

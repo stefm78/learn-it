@@ -1,0 +1,144 @@
+CORE:
+
+  id: CONSTITUTION_CORE
+
+  core_type: CONSTITUTION
+
+  authority: primary
+
+  version: 1.0
+
+  description: Canonical governance layer defining invariant learning system rules
+
+TYPES:
+
+  - id: KU_TYPE
+    authority: primary
+    core_type: CONSTITUTION
+    source_anchor: [P14]
+    depends_on: []
+    relations:
+      - type: governs
+        target: MSC_MODEL
+    patchable: false
+    parameterizable: false
+    human_readable: Typage épistémologique des unités de connaissance
+    logic:
+      trigger: analyse_phase
+      condition: ku_detected
+      effect: assign_type
+      scope: system
+
+INVARIANTS:
+
+  - id: MSC_AND_RULE
+    authority: primary
+    core_type: CONSTITUTION
+    source_anchor: [P16]
+    depends_on: [MSC_MODEL]
+    relations:
+      - type: governs
+        target: MASTERY_STATE
+    patchable: false
+    parameterizable: false
+    human_readable: Mastery requires simultaneous satisfaction of P, R, A
+    logic:
+      trigger: evaluation
+      condition: P_and_R_and_A_above_threshold
+      effect: declare_mastery
+      scope: learner
+
+  - id: GRAPH_PROPAGATION_RULE
+    authority: primary
+    core_type: CONSTITUTION
+    source_anchor: [P17]
+    depends_on: [DEPENDENCY_EDGE]
+    relations:
+      - type: triggers
+        target: PRIORITY_VERIFICATION
+    patchable: false
+    parameterizable: false
+    human_readable: Retrogradation propagates verification to direct dependents
+    logic:
+      trigger: mastery_revocation
+      condition: dependency_exists
+      effect: mark_dependents
+      scope: graph
+
+RULES:
+
+  - id: PATCH_ATOMICITY_RULE
+    authority: primary
+    core_type: CONSTITUTION
+    source_anchor: [GF-01]
+    depends_on: []
+    relations:
+      - type: constrains
+        target: PATCH_OPERATION
+    patchable: false
+    parameterizable: false
+    human_readable: Patch must be applied atomically
+    logic:
+      trigger: patch_execution
+      condition: patch_started
+      effect: atomic_swap_required
+      scope: system
+
+PARAMETERS: []
+
+CONSTRAINTS:
+
+  - id: AUTHENTIC_CONTEXT_REQUIRED
+    authority: primary
+    core_type: CONSTITUTION
+    source_anchor: [P19]
+    depends_on: []
+    relations:
+      - type: blocks
+        target: HIGH_LEVEL_TASK
+    patchable: false
+    parameterizable: false
+    human_readable: High Bloom tasks forbidden without declared authentic context
+    logic:
+      trigger: task_generation
+      condition: context_missing
+      effect: block_task
+      scope: learner
+
+EVENTS:
+
+  - id: MASTERY_REVOCATION_EVENT
+    authority: primary
+    core_type: CONSTITUTION
+    source_anchor: [P16]
+    depends_on: [MSC_AND_RULE]
+    relations:
+      - type: triggers
+        target: GRAPH_PROPAGATION_RULE
+    patchable: false
+    parameterizable: false
+    human_readable: Revocation triggers graph verification propagation
+    logic:
+      trigger: component_failure
+      condition: below_threshold
+      effect: downgrade_state
+      scope: learner
+
+ACTIONS:
+
+  - id: APPLY_PATCH_ACTION
+    authority: primary
+    core_type: CONSTITUTION
+    source_anchor: [P12]
+    depends_on: [PATCH_ATOMICITY_RULE]
+    relations:
+      - type: requires
+        target: PATCH_OPERATION
+    patchable: false
+    parameterizable: false
+    human_readable: Execute patch with rollback capability
+    logic:
+      trigger: patch_requested
+      condition: validation_passed
+      effect: apply_patch
+      scope: system

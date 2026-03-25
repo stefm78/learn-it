@@ -1,0 +1,144 @@
+CORE:
+
+  id: REFERENTIEL_CORE
+
+  core_type: REFERENTIEL
+
+  authority: primary
+
+  version: 1.0
+
+  description: Operational parameter layer defining adjustable thresholds and ranges
+
+TYPES: []
+
+INVARIANTS: []
+
+RULES: []
+
+PARAMETERS:
+
+  - id: PRECISION_THRESHOLD
+    authority: primary
+    core_type: REFERENTIEL
+    source_anchor: [S2]
+    depends_on: []
+    relations:
+      - type: validates
+        target: MSC_AND_RULE
+    patchable: true
+    parameterizable: true
+    human_readable: Minimum precision threshold
+    logic:
+      trigger: evaluation
+      condition: score_calculated
+      effect: compare_to_threshold
+      scope: learner
+
+  - id: ROBUSTNESS_DELAY
+    authority: primary
+    core_type: REFERENTIEL
+    source_anchor: [S2]
+    depends_on: []
+    relations:
+      - type: validates
+        target: MSC_AND_RULE
+    patchable: true
+    parameterizable: true
+    human_readable: Minimum retention delay
+    logic:
+      trigger: evaluation
+      condition: time_elapsed
+      effect: compare_to_threshold
+      scope: learner
+
+  - id: AUTONOMY_COUNT
+    authority: primary
+    core_type: REFERENTIEL
+    source_anchor: [S2]
+    depends_on: []
+    relations:
+      - type: validates
+        target: MSC_AND_RULE
+    patchable: true
+    parameterizable: true
+    human_readable: Required consecutive autonomous successes
+    logic:
+      trigger: evaluation
+      condition: success_sequence
+      effect: compare_to_threshold
+      scope: learner
+
+  - id: VC_PERSISTENCE_THRESHOLD
+    authority: primary
+    core_type: REFERENTIEL
+    source_anchor: [S16]
+    depends_on: []
+    relations:
+      - type: triggers
+        target: PATCH_OPERATION
+    patchable: true
+    parameterizable: true
+    human_readable: Number of sessions with low perceived value-cost
+    logic:
+      trigger: session_end
+      condition: vc_low_repeated
+      effect: trigger_patch
+      scope: learner
+
+CONSTRAINTS:
+
+  - id: PARAMETER_RANGE_CONSTRAINT
+    authority: primary
+    core_type: REFERENTIEL
+    source_anchor: [S6]
+    depends_on: []
+    relations:
+      - type: constrains
+        target: PATCH_OPERATION
+    patchable: true
+    parameterizable: true
+    human_readable: Parameter must remain within defined range
+    logic:
+      trigger: patch_validation
+      condition: value_out_of_range
+      effect: reject_patch
+      scope: system
+
+EVENTS:
+
+  - id: VC_LOW_EVENT
+    authority: primary
+    core_type: REFERENTIEL
+    source_anchor: [S16]
+    depends_on: [VC_PERSISTENCE_THRESHOLD]
+    relations:
+      - type: triggers
+        target: PATCH_OPERATION
+    patchable: true
+    parameterizable: true
+    human_readable: Low perceived value-cost detected
+    logic:
+      trigger: session_end
+      condition: threshold_reached
+      effect: trigger_patch
+      scope: learner
+
+ACTIONS:
+
+  - id: UPDATE_PARAMETER_ACTION
+    authority: primary
+    core_type: REFERENTIEL
+    source_anchor: [S6]
+    depends_on: [PARAMETER_RANGE_CONSTRAINT]
+    relations:
+      - type: requires
+        target: PATCH_OPERATION
+    patchable: true
+    parameterizable: true
+    human_readable: Update parameter within allowed bounds
+    logic:
+      trigger: patch_execution
+      condition: validation_passed
+      effect: update_parameter
+      scope: system

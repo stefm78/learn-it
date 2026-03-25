@@ -1,0 +1,342 @@
+constitution_learnit_core.yaml
+
+CORE:
+
+  TYPES:
+
+    - id: TYPE_KU
+      authority: primary
+      core_type: CONSTITUTION
+      source_anchor:
+        - P14
+        - S16
+      depends_on: []
+      relations:
+        - type: governs
+          target: RULE_FEEDBACK_MODALITY
+        - type: governs
+          target: RULE_MSC_AGGREGATION
+      patchable: false
+      parameterizable: false
+      human_readable: Taxonomie des unités de connaissance (KU) en 5 types fondamentaux.
+      logic:
+        trigger: phase_analyse
+        condition: type_KU_non_declare
+        effect: blocage_conception
+        scope: system
+
+    - id: TYPE_AUTONOMY_LEVEL
+      authority: primary
+      core_type: CONSTITUTION
+      source_anchor:
+        - P15
+        - S17
+      depends_on:
+        - TYPE_KU
+      relations:
+        - type: constrains
+          target: ACTION_DEPLOYMENT
+      patchable: false
+      parameterizable: false
+      human_readable: Niveau d'autonomie du moteur (autonome, hybride, assisté).
+      logic:
+        trigger: phase_analyse
+        condition: niveau_assiste_sans_infrastructure
+        effect: deployment_interdit
+        scope: deployment
+
+
+  INVARIANTS:
+
+    - id: INV_MSC_AND_LOGIC
+      authority: primary
+      core_type: CONSTITUTION
+      source_anchor:
+        - P16
+        - S17b
+      depends_on:
+        - RULE_MSC_COMPONENTS_DEFINED
+      relations:
+        - type: governs
+          target: RULE_MSC_STATUS_UPDATE
+        - type: blocks
+          target: ACTION_DECLARE_MASTERY
+      patchable: false
+      parameterizable: false
+      human_readable: La maîtrise d'une KU requiert simultanément P, R et A.
+      logic:
+        trigger: evaluation_msc
+        condition: any_component_below_threshold
+        effect: mastery_revoked
+        scope: ku
+
+    - id: INV_LAYER_SEPARATION
+      authority: primary
+      core_type: CONSTITUTION
+      source_anchor:
+        - P11
+        - S13
+      depends_on: []
+      relations:
+        - type: blocks
+          target: ACTION_GENERATE_CONTENT_IN_USAGE
+      patchable: false
+      parameterizable: false
+      human_readable: Séparation stricte des couches conception, moteur et patch.
+      logic:
+        trigger: runtime_execution
+        condition: content_generation_detected
+        effect: operation_rejected
+        scope: system
+
+    - id: INV_CONTEXT_AUTHENTIC_REQUIRED
+      authority: primary
+      core_type: CONSTITUTION
+      source_anchor:
+        - P19
+        - S17e
+      depends_on: []
+      relations:
+        - type: constrains
+          target: ACTION_ENABLE_HIGH_BLOOM_TASK
+      patchable: false
+      parameterizable: false
+      human_readable: Absence de contexte authentique interdit les tâches Bloom ≥ 4.
+      logic:
+        trigger: task_generation
+        condition: context_authentic_missing
+        effect: task_level_limited
+        scope: ku
+
+
+  RULES:
+
+    - id: RULE_INITIAL_CALIBRATION
+      authority: primary
+      core_type: CONSTITUTION
+      source_anchor:
+        - P0
+        - S2
+      depends_on:
+        - TYPE_KU
+      relations:
+        - type: triggers
+          target: ACTION_INITIALIZE_LEARNER_STATE
+      patchable: false
+      parameterizable: true
+      human_readable: Calibrage initial épistémique et métacognitif obligatoire.
+      logic:
+        trigger: first_session
+        condition: no_prior_state
+        effect: initialize_graph_state
+        scope: learner
+
+    - id: RULE_PROPAGATION_DEPENDENCY
+      authority: primary
+      core_type: CONSTITUTION
+      source_anchor:
+        - P17
+        - S17c
+      depends_on:
+        - INV_MSC_AND_LOGIC
+      relations:
+        - type: triggers
+          target: ACTION_PRIORITY_VERIFICATION
+      patchable: false
+      parameterizable: false
+      human_readable: Rétrogradation d'une KU déclenche vérification des dépendances directes.
+      logic:
+        trigger: mastery_revoked
+        condition: dependency_exists
+        effect: mark_dependent_nodes_priority
+        scope: graph
+
+    - id: RULE_PATCH_VALIDATION
+      authority: primary
+      core_type: CONSTITUTION
+      source_anchor:
+        - P12
+        - S14
+      depends_on:
+        - INV_LAYER_SEPARATION
+      relations:
+        - type: validates
+          target: ACTION_APPLY_PATCH
+        - type: blocks
+          target: ACTION_APPLY_PATCH
+      patchable: false
+      parameterizable: false
+      human_readable: Tout patch doit être traçable, borné, réversible et avec impact_scope calculable.
+      logic:
+        trigger: patch_request
+        condition: impact_scope_unknown
+        effect: patch_rejected
+        scope: system
+
+    - id: RULE_FEEDBACK_MODALITY
+      authority: primary
+      core_type: CONSTITUTION
+      source_anchor:
+        - P10
+        - S12
+      depends_on:
+        - TYPE_KU
+      relations:
+        - type: governs
+          target: ACTION_DELIVER_FEEDBACK
+      patchable: false
+      parameterizable: false
+      human_readable: Modalité de feedback dépend du type de KU.
+      logic:
+        trigger: feedback_request
+        condition: ku_type_procedural_or_perceptual
+        effect: enforce_non_textual_feedback
+        scope: session
+
+
+  PARAMETERS: []
+
+
+  CONSTRAINTS:
+
+    - id: CONSTRAINT_NO_NETWORK_RUNTIME
+      authority: primary
+      core_type: CONSTITUTION
+      source_anchor:
+        - P2
+        - S4
+      depends_on: []
+      relations:
+        - type: blocks
+          target: ACTION_RUNTIME_NETWORK_CALL
+      patchable: false
+      parameterizable: false
+      human_readable: Aucun appel réseau autorisé en usage.
+      logic:
+        trigger: runtime_operation
+        condition: network_call_detected
+        effect: operation_rejected
+        scope: system
+
+    - id: CONSTRAINT_ATOMIC_PATCH
+      authority: primary
+      core_type: CONSTITUTION
+      source_anchor:
+        - GF-01
+        - S14
+      depends_on:
+        - RULE_PATCH_VALIDATION
+      relations:
+        - type: validates
+          target: ACTION_APPLY_PATCH
+      patchable: false
+      parameterizable: false
+      human_readable: Application de patch doit être atomique avec rollback.
+      logic:
+        trigger: patch_execution
+        condition: partial_state_detected
+        effect: rollback_patch
+        scope: system
+
+
+  EVENTS:
+
+    - id: EVENT_SESSION_START
+      authority: primary
+      core_type: CONSTITUTION
+      source_anchor:
+        - P0
+        - P9
+      depends_on: []
+      relations:
+        - type: triggers
+          target: ACTION_INITIALIZE_LEARNER_STATE
+      patchable: false
+      parameterizable: false
+      human_readable: Démarrage d'une session d'apprentissage.
+      logic:
+        trigger: user_login
+        condition: session_new
+        effect: start_session_cycle
+        scope: learner
+
+    - id: EVENT_MSC_DEGRADATION
+      authority: primary
+      core_type: CONSTITUTION
+      source_anchor:
+        - P16
+        - P17
+      depends_on:
+        - INV_MSC_AND_LOGIC
+      relations:
+        - type: triggers
+          target: ACTION_PRIORITY_VERIFICATION
+      patchable: false
+      parameterizable: false
+      human_readable: Dégradation d'une composante MSC.
+      logic:
+        trigger: evaluation
+        condition: component_below_threshold
+        effect: propagate_uncertainty
+        scope: graph
+
+
+  ACTIONS:
+
+    - id: ACTION_INITIALIZE_LEARNER_STATE
+      authority: derived
+      core_type: CONSTITUTION
+      source_anchor:
+        - P0
+      depends_on:
+        - RULE_INITIAL_CALIBRATION
+      relations:
+        - type: instantiates
+          target: TYPE_KU
+      patchable: false
+      parameterizable: true
+      human_readable: Initialisation de l'état du graphe apprenant.
+      logic:
+        trigger: EVENT_SESSION_START
+        condition: state_missing
+        effect: create_initial_state
+        scope: learner
+
+    - id: ACTION_PRIORITY_VERIFICATION
+      authority: derived
+      core_type: CONSTITUTION
+      source_anchor:
+        - P17
+      depends_on:
+        - RULE_PROPAGATION_DEPENDENCY
+      relations:
+        - type: validates
+          target: INV_MSC_AND_LOGIC
+      patchable: false
+      parameterizable: false
+      human_readable: Planification prioritaire d'une vérification diagnostique.
+      logic:
+        trigger: EVENT_MSC_DEGRADATION
+        condition: dependency_exists
+        effect: schedule_diagnostic
+        scope: graph
+
+    - id: ACTION_APPLY_PATCH
+      authority: derived
+      core_type: CONSTITUTION
+      source_anchor:
+        - P12
+      depends_on:
+        - RULE_PATCH_VALIDATION
+        - CONSTRAINT_ATOMIC_PATCH
+      relations:
+        - type: requires
+          target: CONSTRAINT_ATOMIC_PATCH
+      patchable: false
+      parameterizable: false
+      human_readable: Application contrôlée d'un patch paramétrique.
+      logic:
+        trigger: patch_validated
+        condition: all_constraints_satisfied
+        effect: apply_patch_atomically
+        scope: system
