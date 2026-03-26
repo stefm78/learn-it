@@ -1,0 +1,1600 @@
+CORE:
+  id: CORE_LEARNIT_CONSTITUTION_V1_6
+  core_type: CONSTITUTION
+  authority: primary
+  version: V1_6_FINAL
+  description: Core canonique final de la Constitution Learn-it v1.6. Naming normalisé, fermeture locale assurée, références inter-Core explicites matérialisées pour fédération avec le Référentiel.
+  TYPES:
+  - id: REF_CORE_LEARNIT_REFERENTIEL_V0_5_IN_CONSTITUTION
+    authority: reference
+    core_type: CONSTITUTION
+    source_anchor: '[INTERCORE]'
+    depends_on: []
+    relations: []
+    patchable: false
+    parameterizable: false
+    human_readable: Référence explicite vers le Core Référentiel Learn-it v0.5.
+    logic:
+      trigger: null
+      condition: null
+      effect: Référence externe explicite matérialisant une dépendance inter-Core.
+      scope: intercore_reference
+  - id: SYSTEM_LEARNIT
+    authority: primary
+    core_type: CONSTITUTION
+    source_anchor: '[S1]'
+    depends_on: []
+    relations: []
+    patchable: false
+    parameterizable: false
+    human_readable: Système Learn-it gouverné par une Constitution puis un Référentiel.
+    logic:
+      trigger: null
+      condition: null
+      effect: Cadre constitutionnel du moteur adaptatif.
+      scope: system
+  - id: TYPE_KNOWLEDGE_UNIT
+    authority: primary
+    core_type: CONSTITUTION
+    source_anchor: '[S4][S16]'
+    depends_on: []
+    relations:
+    - type: instantiates
+      target:
+        id: TYPE_KNOWLEDGE_GRAPH
+    - type: constrains
+      target:
+        id: INV_KU_TYPING_REQUIRED
+    patchable: false
+    parameterizable: true
+    human_readable: Knowledge Unit atomique du graphe, à typage épistémologique obligatoire.
+    logic:
+      trigger: null
+      condition: Toute KU doit être typée.
+      effect: Le type KU conditionne feedback, trajectoire, proxys et lecture du MSC.
+      scope: knowledge_model
+  - id: TYPE_KNOWLEDGE_GRAPH
+    authority: primary
+    core_type: CONSTITUTION
+    source_anchor: '[S4][S18]'
+    depends_on:
+    - TYPE_KNOWLEDGE_UNIT
+    relations:
+    - type: instantiates
+      target:
+        id: TYPE_HUMAN_CHECKPOINT
+    - type: requires
+      target:
+        id: INV_EXPLICIT_DEPENDENCY_EDGES_REQUIRED
+    patchable: false
+    parameterizable: true
+    human_readable: Graphe orienté de KU et de dépendances explicites.
+    logic:
+      trigger: Analyse
+      condition: KU et arêtes de dépendance explicitement déclarées.
+      effect: Le domaine d’apprentissage est instancié localement.
+      scope: analysis_design
+  - id: TYPE_HUMAN_CHECKPOINT
+    authority: primary
+    core_type: CONSTITUTION
+    source_anchor: '[S4][S17]'
+    depends_on: []
+    relations:
+    - type: constrains
+      target:
+        id: TYPE_AUTONOMY_REGIME
+    patchable: false
+    parameterizable: true
+    human_readable: Jalon humain bloquant ou non selon le niveau d’autonomie.
+    logic:
+      trigger: Parcours nécessitant validation humaine
+      condition: Niveau d’autonomie et risques pédagogiques déclarés.
+      effect: Blocage ou validation du parcours.
+      scope: runtime_governance
+  - id: TYPE_MASTERY_MODEL
+    authority: primary
+    core_type: CONSTITUTION
+    source_anchor: '[S17b][S20]'
+    depends_on:
+    - TYPE_MASTERY_COMPONENT_P
+    - TYPE_MASTERY_COMPONENT_R
+    - TYPE_MASTERY_COMPONENT_A
+    - TYPE_MASTERY_COMPONENT_T
+    relations:
+    - type: governs
+      target:
+        id: INV_MSC_AND_STRICT
+    patchable: false
+    parameterizable: true
+    human_readable: Modèle MSC composé des axes P, R, A et T.
+    logic:
+      trigger: Évaluation de la maîtrise
+      condition: Composantes calculées localement.
+      effect: Déclaration de maîtrise de base et, séparément, de transférabilité.
+      scope: runtime_evaluation
+  - id: TYPE_MASTERY_COMPONENT_P
+    authority: primary
+    core_type: CONSTITUTION
+    source_anchor: '[S20]'
+    depends_on:
+    - REF_CORE_LEARNIT_REFERENTIEL_V0_5_IN_CONSTITUTION
+    relations: []
+    patchable: false
+    parameterizable: true
+    human_readable: Composante P de précision.
+    logic:
+      trigger: null
+      condition: Seuils fournis par le Référentiel.
+      effect: Contribution à la maîtrise de base.
+      scope: runtime_evaluation
+  - id: TYPE_MASTERY_COMPONENT_R
+    authority: primary
+    core_type: CONSTITUTION
+    source_anchor: '[S5][S20]'
+    depends_on:
+    - REF_CORE_LEARNIT_REFERENTIEL_V0_5_IN_CONSTITUTION
+    relations: []
+    patchable: false
+    parameterizable: true
+    human_readable: Composante R de robustesse temporelle.
+    logic:
+      trigger: null
+      condition: Seuils et multiplicateurs fournis ou bornés par le Référentiel.
+      effect: Contribution à la maîtrise de base et à la reprise diagnostique.
+      scope: runtime_evaluation
+  - id: TYPE_MASTERY_COMPONENT_A
+    authority: primary
+    core_type: CONSTITUTION
+    source_anchor: '[S8][S20]'
+    depends_on:
+    - REF_CORE_LEARNIT_REFERENTIEL_V0_5_IN_CONSTITUTION
+    relations: []
+    patchable: false
+    parameterizable: true
+    human_readable: Composante A d’autonomie.
+    logic:
+      trigger: null
+      condition: Transitions sans aide observées.
+      effect: Contribution à la maîtrise de base.
+      scope: runtime_evaluation
+  - id: TYPE_MASTERY_COMPONENT_T
+    authority: primary
+    core_type: CONSTITUTION
+    source_anchor: '[S17b][S20]'
+    depends_on: []
+    relations:
+    - type: derives_from
+      target:
+        id: TYPE_MASTERY_MODEL
+    patchable: false
+    parameterizable: true
+    human_readable: Composante T de transférabilité, séparée de la maîtrise de base.
+    logic:
+      trigger: Évaluation de transfert
+      condition: Maîtrise de base déjà établie.
+      effect: Qualification de niveau supérieur, sans prérequis inverse.
+      scope: runtime_evaluation
+  - id: TYPE_LEARNER_STATE_MODEL
+    authority: primary
+    core_type: CONSTITUTION
+    source_anchor: '[S7]'
+    depends_on:
+    - TYPE_STATE_AXIS_CALIBRATION
+    - TYPE_STATE_AXIS_ACTIVATION
+    - TYPE_STATE_AXIS_VALUE_COST
+    relations: []
+    patchable: false
+    parameterizable: true
+    human_readable: Modèle d’état apprenant composite à trois axes.
+    logic:
+      trigger: Observation et auto-rapport
+      condition: Sources autorisées disponibles.
+      effect: Mise à jour de l’état apprenant.
+      scope: runtime_state
+  - id: TYPE_STATE_AXIS_CALIBRATION
+    authority: primary
+    core_type: CONSTITUTION
+    source_anchor: '[S7]'
+    depends_on: []
+    relations: []
+    patchable: false
+    parameterizable: true
+    human_readable: Axe de calibration de l’apprenant.
+    logic:
+      trigger: Bilan et comparaisons auto-rapport/performance
+      condition: Indices de calibration disponibles.
+      effect: Positionnement calibration.
+      scope: runtime_state
+  - id: TYPE_STATE_AXIS_ACTIVATION
+    authority: primary
+    core_type: CONSTITUTION
+    source_anchor: '[S7][S11]'
+    depends_on:
+    - TYPE_SELF_REPORT_AR_N1
+    relations:
+    - type: requires
+      target:
+        id: TYPE_SELF_REPORT_AR_N1
+    patchable: false
+    parameterizable: true
+    human_readable: 'Axe de régime d’activation : productif, détresse, sous-défi.'
+    logic:
+      trigger: Événement de session ou micro-sondage
+      condition: AR-N1 disponible ou absent.
+      effect: Régime d’activation mis à jour sous autorité AR-N1.
+      scope: runtime_state
+  - id: TYPE_STATE_AXIS_VALUE_COST
+    authority: primary
+    core_type: CONSTITUTION
+    source_anchor: '[S7][S17d]'
+    depends_on:
+    - TYPE_SELF_REPORT_AR_N2
+    relations:
+    - type: requires
+      target:
+        id: TYPE_SELF_REPORT_AR_N2
+    patchable: false
+    parameterizable: true
+    human_readable: Axe optionnel Valeur-Coût perçue.
+    logic:
+      trigger: Clôture de session
+      condition: Item VC de AR-N2 renseigné.
+      effect: État VC mis à jour ; sinon axe inconnu.
+      scope: runtime_state
+  - id: TYPE_SELF_REPORT_AR_N1
+    authority: primary
+    core_type: CONSTITUTION
+    source_anchor: '[S11]'
+    depends_on: []
+    relations:
+    - type: validates
+      target:
+        id: TYPE_STATE_AXIS_ACTIVATION
+    patchable: false
+    parameterizable: true
+    human_readable: Micro-sondage événementiel AR-N1.
+    logic:
+      trigger: Événement runtime
+      condition: Question concise et locale.
+      effect: Distinction temps réel confusion/frustration/anxiété.
+      scope: runtime_feedback
+  - id: TYPE_SELF_REPORT_AR_N2
+    authority: primary
+    core_type: CONSTITUTION
+    source_anchor: '[S11]'
+    depends_on: []
+    relations:
+    - type: validates
+      target:
+        id: TYPE_STATE_AXIS_VALUE_COST
+    patchable: false
+    parameterizable: true
+    human_readable: Mini-sondage de fin de session AR-N2.
+    logic:
+      trigger: Fin de session
+      condition: Questionnaire visuel court.
+      effect: Alimente VC, difficulté perçue, progrès perçu et intention de retour.
+      scope: runtime_feedback
+  - id: TYPE_SELF_REPORT_AR_N3
+    authority: primary
+    core_type: CONSTITUTION
+    source_anchor: '[S11]'
+    depends_on: []
+    relations: []
+    patchable: false
+    parameterizable: true
+    human_readable: Bilan périodique AR-N3 dérivé d’AEQ.
+    logic:
+      trigger: Fenêtre périodique
+      condition: Bilan autorisé.
+      effect: Indice de calibration auto-rapport.
+      scope: runtime_feedback
+  - id: TYPE_FEEDBACK_COVERAGE_MATRIX
+    authority: primary
+    core_type: CONSTITUTION
+    source_anchor: '[S4][S18]'
+    depends_on:
+    - TYPE_KNOWLEDGE_UNIT
+    relations:
+    - type: validates
+      target:
+        id: RULE_UNCOVERED_ERROR_GENERIC_FEEDBACK
+    patchable: true
+    parameterizable: true
+    human_readable: Matrice d’erreurs et de templates de feedback.
+    logic:
+      trigger: Phase Design
+      condition: KU formelles ou procédurales présentes.
+      effect: Livrable obligatoire de couverture feedback.
+      scope: design
+  - id: TYPE_PATCH_ARTIFACT
+    authority: primary
+    core_type: CONSTITUTION
+    source_anchor: '[S14][PATCH_V1_7]'
+    depends_on:
+    - TYPE_PATCH_IMPACT_SCOPE
+    - TYPE_PATCH_QUALITY_GATE
+    - REF_CORE_LEARNIT_REFERENTIEL_V0_5_IN_CONSTITUTION
+    relations:
+    - type: requires
+      target:
+        id: INV_NO_PARTIAL_PATCH_STATE
+    - type: requires
+      target:
+        id: INV_INVALID_PATCH_REJECTED
+    - type: requires
+      target:
+        id: INV_PATCH_LOCAL_VALIDATION_MUST_BE_DETERMINISTIC
+    patchable: true
+    parameterizable: true
+    human_readable: Patch paramétrique occasionnel et borné.
+    logic:
+      trigger: Événement de révision autorisé
+      condition: 'Bornes respectées, impact_scope calculable, attributs obligatoires présents, atomicité garantie ; la QA pédagogique est validée hors session avant soumission.
+
+        '
+      effect: Patch applicable localement ou rejeté/rollbacké.
+      scope: patch_layer
+  - id: TYPE_PATCH_IMPACT_SCOPE
+    authority: primary
+    core_type: CONSTITUTION
+    source_anchor: '[S14]'
+    depends_on: []
+    relations: []
+    patchable: false
+    parameterizable: false
+    human_readable: Attribut obligatoire de tout patch.
+    logic:
+      trigger: Validation d’un patch
+      condition: Impact_scope calculable.
+      effect: Autorisation de poursuivre la validation locale.
+      scope: patch_validation
+  - id: TYPE_PATCH_QUALITY_GATE
+    authority: primary
+    core_type: CONSTITUTION
+    source_anchor: '[S14]'
+    depends_on: []
+    relations:
+    - type: validates
+      target:
+        id: TYPE_PATCH_ARTIFACT
+    patchable: false
+    parameterizable: false
+    human_readable: Liste de contrôle qualité pédagogique de patch.
+    logic:
+      trigger: Validation d’un patch
+      condition: Respect des principes pédagogiques protégés.
+      effect: Validation ou rejet du patch.
+      scope: patch_validation
+  - id: TYPE_SESSION_INTEGRITY_SCORE
+    authority: primary
+    core_type: CONSTITUTION
+    source_anchor: '[S15][S20]'
+    depends_on: []
+    relations:
+    - type: validates
+      target:
+        id: TYPE_NC_MSC
+    patchable: false
+    parameterizable: true
+    human_readable: Score d’intégrité de session.
+    logic:
+      trigger: Évaluation d’intégrité
+      condition: Indices d’intégrité disponibles.
+      effect: Pondération ou mise en attente de l’intégration des performances.
+      scope: runtime_integrity
+  - id: TYPE_NC_MSC
+    authority: primary
+    core_type: CONSTITUTION
+    source_anchor: '[S15][S20]'
+    depends_on:
+    - TYPE_SESSION_INTEGRITY_SCORE
+    relations: []
+    patchable: false
+    parameterizable: true
+    human_readable: Niveau de confiance du MSC dérivé de l’intégrité.
+    logic:
+      trigger: Calcul du modèle apprenant
+      condition: SIS disponible.
+      effect: Qualification de confiance du MSC.
+      scope: runtime_integrity
+  - id: TYPE_CORPUS_CONFIDENCE_ICC
+    authority: primary
+    core_type: CONSTITUTION
+    source_anchor: '[S3][S20]'
+    depends_on: []
+    relations: []
+    patchable: false
+    parameterizable: true
+    human_readable: Indice de confiance du corpus.
+    logic:
+      trigger: Construction du graphe
+      condition: Corpus d’entrée évalué.
+      effect: Qualifie la confiance d’analyse.
+      scope: analysis
+  - id: TYPE_AUTHENTIC_CONTEXT
+    authority: primary
+    core_type: CONSTITUTION
+    source_anchor: '[S17e][S18]'
+    depends_on: []
+    relations:
+    - type: validates
+      target:
+        id: INV_AUTHENTIC_CONTEXT_REQUIRED_FOR_BLOOM4
+    patchable: true
+    parameterizable: true
+    human_readable: Contexte authentique de référence déclaré en Analyse.
+    logic:
+      trigger: Phase Analyse
+      condition: Situation-problème réelle explicitée.
+      effect: Autorise les missions de Bloom supérieur.
+      scope: analysis_design
+  - id: TYPE_INTEGRITY_MODES
+    authority: primary
+    core_type: CONSTITUTION
+    source_anchor: '[S15]'
+    depends_on:
+    - TYPE_SESSION_INTEGRITY_SCORE
+    relations: []
+    patchable: false
+    parameterizable: true
+    human_readable: Modes Multi-profil, Invité et Évaluation Externe.
+    logic:
+      trigger: Configuration du déploiement
+      condition: Modes activés selon usage.
+      effect: Protection de l’intégrité du modèle apprenant.
+      scope: deployment
+  - id: TYPE_AUTONOMY_REGIME
+    authority: primary
+    core_type: CONSTITUTION
+    source_anchor: '[S17]'
+    depends_on: []
+    relations: []
+    patchable: false
+    parameterizable: false
+    human_readable: 'Niveaux d’autonomie moteur : autonome, hybride recommandé, hybride bloquant, assisté.'
+    logic:
+      trigger: Conception du déploiement
+      condition: Cadre d’accompagnement déclaré.
+      effect: Régime d’autonomie applicable.
+      scope: deployment
+  INVARIANTS:
+  - id: INV_MSC_AND_STRICT
+    authority: primary
+    core_type: CONSTITUTION
+    source_anchor: '[S17b]'
+    depends_on:
+    - TYPE_MASTERY_COMPONENT_P
+    - TYPE_MASTERY_COMPONENT_R
+    - TYPE_MASTERY_COMPONENT_A
+    relations:
+    - type: governs
+      target:
+        id: TYPE_MASTERY_MODEL
+    patchable: false
+    parameterizable: false
+    human_readable: Agrégation MSC par AND strict sur P, R et A.
+    logic:
+      trigger: Déclaration de maîtrise de base
+      condition: P, R et A satisfaits simultanément.
+      effect: Maîtrise de base déclarée.
+      scope: runtime_evaluation
+  - id: INV_TRANSFER_SEPARATE_FROM_BASE_MASTERY
+    authority: primary
+    core_type: CONSTITUTION
+    source_anchor: '[S17b]'
+    depends_on:
+    - TYPE_MASTERY_COMPONENT_T
+    relations:
+    - type: constrains
+      target:
+        id: TYPE_MASTERY_MODEL
+    patchable: false
+    parameterizable: false
+    human_readable: T est séparé de la maîtrise de base.
+    logic:
+      trigger: Déclaration de transférabilité
+      condition: Maîtrise de base déjà établie.
+      effect: T qualifie un niveau supérieur et n’est jamais un prérequis de base.
+      scope: runtime_evaluation
+  - id: INV_RUNTIME_FULLY_LOCAL
+    authority: primary
+    core_type: CONSTITUTION
+    source_anchor: '[S4][S13]'
+    depends_on:
+    - TYPE_AUTONOMY_REGIME
+    relations:
+    - type: constrains
+      target:
+        id: TYPE_AUTONOMY_REGIME
+    patchable: false
+    parameterizable: false
+    human_readable: Le moteur en usage est 100% local.
+    logic:
+      trigger: Exécution runtime
+      condition: Usage apprenant actif.
+      effect: Aucun appel réseau temps réel n’est autorisé.
+      scope: runtime_architecture
+  - id: INV_NO_RUNTIME_CONTENT_GENERATION
+    authority: primary
+    core_type: CONSTITUTION
+    source_anchor: '[S13]'
+    depends_on: []
+    relations:
+    - type: constrains
+      target:
+        id: TYPE_FEEDBACK_COVERAGE_MATRIX
+    patchable: false
+    parameterizable: false
+    human_readable: Aucune génération de contenu en usage.
+    logic:
+      trigger: Sélection de contenu runtime
+      condition: Besoin pédagogique détecté.
+      effect: Le moteur sélectionne uniquement des artefacts préexistants.
+      scope: runtime_architecture
+  - id: INV_NO_TEXT_ONLY_FOR_PROCEDURAL_OR_PERCEPTUAL
+    authority: primary
+    core_type: CONSTITUTION
+    source_anchor: '[S12]'
+    depends_on:
+    - TYPE_KNOWLEDGE_UNIT
+    relations: []
+    patchable: false
+    parameterizable: false
+    human_readable: Le canal textuel seul est interdit pour les KU procédurales et perceptuelles.
+    logic:
+      trigger: Conception des livrables
+      condition: KU procédurale ou perceptuelle détectée.
+      effect: Livrables multimodaux obligatoires.
+      scope: design
+  - id: INV_NO_PARTIAL_PATCH_STATE
+    authority: primary
+    core_type: CONSTITUTION
+    source_anchor: '[S14]'
+    depends_on:
+    - TYPE_PATCH_ARTIFACT
+    relations:
+    - type: blocks
+      target:
+        id: EVENT_PATCH_INVALID
+    patchable: false
+    parameterizable: false
+    human_readable: Un patch partiellement appliqué constitue un état interdit.
+    logic:
+      trigger: Application d’un patch
+      condition: Atomicité non garantie ou échec intermédiaire.
+      effect: Patch annulé ou rollback obligatoire.
+      scope: patch_layer
+  - id: INV_INVALID_PATCH_REJECTED
+    authority: primary
+    core_type: CONSTITUTION
+    source_anchor: '[S14][S20]'
+    depends_on:
+    - TYPE_PATCH_IMPACT_SCOPE
+    - REF_CORE_LEARNIT_REFERENTIEL_V0_5_IN_CONSTITUTION
+    relations: []
+    patchable: false
+    parameterizable: false
+    human_readable: Tout patch hors bornes ou sans impact_scope calculable est rejeté intégralement.
+    logic:
+      trigger: Validation locale de patch
+      condition: Paramètre hors fourchette ou impact_scope indéterminé.
+      effect: Rejet total.
+      scope: patch_validation
+  - id: INV_GRAPH_PROPAGATION_ONE_HOP
+    authority: primary
+    core_type: CONSTITUTION
+    source_anchor: '[S17c]'
+    depends_on:
+    - TYPE_KNOWLEDGE_GRAPH
+    relations: []
+    patchable: false
+    parameterizable: false
+    human_readable: La propagation graphe est limitée à un saut.
+    logic:
+      trigger: Rétrogradation MSC
+      condition: KU dépendantes explicites présentes.
+      effect: Marquage prioritaire des dépendantes directes uniquement.
+      scope: runtime_graph
+  - id: INV_CONSERVATIVE_RULE_WITHOUT_AR_N1
+    authority: primary
+    core_type: CONSTITUTION
+    source_anchor: '[S7]'
+    depends_on:
+    - TYPE_SELF_REPORT_AR_N1
+    relations:
+    - type: constrains
+      target:
+        id: TYPE_STATE_AXIS_ACTIVATION
+    patchable: false
+    parameterizable: false
+    human_readable: En absence d’AR-N1, la réponse est conservatrice.
+    logic:
+      trigger: Signal runtime sans AR-N1
+      condition: AR-N1 absent.
+      effect: Scaffolding léger réversible sans dégradation punitive.
+      scope: runtime_state
+  - id: INV_VC_NOT_GENERAL_MOTIVATION_PROXY
+    authority: primary
+    core_type: CONSTITUTION
+    source_anchor: '[S17d]'
+    depends_on:
+    - TYPE_STATE_AXIS_VALUE_COST
+    relations: []
+    patchable: false
+    parameterizable: false
+    human_readable: VC n’est ni un proxy général de motivation ni un levier de pénalité.
+    logic:
+      trigger: Interprétation de VC
+      condition: VC basse ou inconnue.
+      effect: Réponse distincte de la détresse ; aucune pénalisation.
+      scope: runtime_state
+  - id: INV_AUTHENTIC_CONTEXT_REQUIRED_FOR_BLOOM4
+    authority: primary
+    core_type: CONSTITUTION
+    source_anchor: '[S17e]'
+    depends_on:
+    - TYPE_AUTHENTIC_CONTEXT
+    relations:
+    - type: blocks
+      target:
+        id: EVENT_HIGH_BLOOM_WITHOUT_AUTHENTIC_CONTEXT
+    patchable: false
+    parameterizable: false
+    human_readable: Le contexte authentique est obligatoire pour Bloom ≥ 4.
+    logic:
+      trigger: Conception ou lancement d’une mission Bloom ≥ 4
+      condition: Contexte authentique absent.
+      effect: Mission interdite et plafonnement à Bloom 2.
+      scope: analysis_design
+  - id: INV_CONSTITUTION_REFERENTIAL_SEPARATION
+    authority: primary
+    core_type: CONSTITUTION
+    source_anchor: '[S1]'
+    depends_on:
+    - REF_CORE_LEARNIT_REFERENTIEL_V0_5_IN_CONSTITUTION
+    relations:
+    - type: governs
+      target:
+        id: REF_CORE_LEARNIT_REFERENTIEL_V0_5_IN_CONSTITUTION
+    patchable: false
+    parameterizable: false
+    human_readable: Séparation inviolable Constitution/Référentiel.
+    logic:
+      trigger: Gouvernance du système
+      condition: Révision ou patch demandé.
+      effect: La Constitution fixe le quoi/pourquoi ; le Référentiel borne le combien/comment.
+      scope: governance
+  - id: INV_KU_TYPING_REQUIRED
+    authority: primary
+    core_type: CONSTITUTION
+    source_anchor: '[S16]'
+    depends_on:
+    - TYPE_KNOWLEDGE_UNIT
+    relations: []
+    patchable: false
+    parameterizable: false
+    human_readable: Toute KU doit être typée.
+    logic:
+      trigger: Construction de graphe ou design
+      condition: KU non typée.
+      effect: Le système est incomplet et doit être corrigé avant usage fiable.
+      scope: analysis_design
+  - id: INV_ASSISTED_MODE_REQUIRES_TUTORING
+    authority: primary
+    core_type: CONSTITUTION
+    source_anchor: '[S17]'
+    depends_on:
+    - TYPE_AUTONOMY_REGIME
+    relations: []
+    patchable: false
+    parameterizable: false
+    human_readable: Le mode Assisté exige une infrastructure tutorale.
+    logic:
+      trigger: Choix du mode Assisté
+      condition: Infrastructure de suivi tutoral absente.
+      effect: Déploiement Assisté interdit.
+      scope: deployment
+  - id: INV_EXPLICIT_DEPENDENCY_EDGES_REQUIRED
+    authority: primary
+    core_type: CONSTITUTION
+    source_anchor: '[S17c][S18]'
+    depends_on:
+    - TYPE_KNOWLEDGE_GRAPH
+    relations: []
+    patchable: false
+    parameterizable: false
+    human_readable: Les arêtes de dépendance doivent être explicites pour autoriser la propagation.
+    logic:
+      trigger: Analyse ou propagation d’incertitude
+      condition: Arêtes non explicites.
+      effect: Aucune propagation autorisée.
+      scope: analysis_runtime_graph
+  - id: INV_KNOWLEDGE_GRAPH_MUST_BE_ACYCLIC
+    authority: primary
+    core_type: CONSTITUTION
+    source_anchor: '[S4][S18][PATCH_V1_7]'
+    depends_on:
+    - TYPE_KNOWLEDGE_GRAPH
+    - TYPE_KNOWLEDGE_UNIT
+    relations:
+    - type: constrains
+      target:
+        id: TYPE_KNOWLEDGE_GRAPH
+    patchable: false
+    parameterizable: false
+    human_readable: Le graphe des KU doit être acyclique.
+    logic:
+      trigger: Validation design ou chargement du graphe
+      condition: Un cycle de dépendance est détecté.
+      effect: État interdit ; déploiement bloqué ou chargement refusé.
+      scope: knowledge_model
+  - id: INV_SECONDARY_RETROGRADATION_IS_NEW_EVENT
+    authority: primary
+    core_type: CONSTITUTION
+    source_anchor: '[S17c][PATCH_V1_7]'
+    depends_on:
+    - INV_GRAPH_PROPAGATION_ONE_HOP
+    - TYPE_KNOWLEDGE_GRAPH
+    relations:
+    - type: constrains
+      target:
+        id: INV_GRAPH_PROPAGATION_ONE_HOP
+    patchable: false
+    parameterizable: false
+    human_readable: 'Toute rétrogradation secondaire issue d’un échec diagnostique constitue un nouvel événement indépendant.
+
+      '
+    logic:
+      trigger: Échec à une tâche diagnostique de propagation
+      condition: Une KU dépendante directe échoue à la vérification prioritaire.
+      effect: 'Création d’un nouvel événement autonome de rétrogradation, soumis à la même limite de propagation à un saut ; aucune extension implicite de la propagation courante.
+
+        '
+      scope: runtime_graph
+  - id: INV_PATCH_LOCAL_VALIDATION_MUST_BE_DETERMINISTIC
+    authority: primary
+    core_type: CONSTITUTION
+    source_anchor: '[S14][PATCH_V1_7]'
+    depends_on:
+    - TYPE_PATCH_ARTIFACT
+    - TYPE_PATCH_IMPACT_SCOPE
+    - TYPE_PATCH_QUALITY_GATE
+    relations:
+    - type: constrains
+      target:
+        id: TYPE_PATCH_ARTIFACT
+    patchable: false
+    parameterizable: false
+    human_readable: 'La validation locale d’un patch ne peut reposer que sur des critères déterministes.
+
+      '
+    logic:
+      trigger: Validation locale de patch
+      condition: 'Un critère sémantique, pédagogique ou interprétatif est requis localement pour décider.
+
+        '
+      effect: 'État interdit ; ce critère doit être déplacé dans la chaîne hors session de QA pédagogique.
+
+        '
+      scope: patch_validation
+  - id: INV_MISSING_KU_TYPE_FORCES_SAFE_FALLBACK
+    authority: primary
+    core_type: CONSTITUTION
+    source_anchor: '[S12][S14][PATCH_V1_7]'
+    depends_on:
+    - TYPE_KNOWLEDGE_UNIT
+    - INV_KU_TYPING_REQUIRED
+    relations:
+    - type: constrains
+      target:
+        id: TYPE_KNOWLEDGE_UNIT
+    patchable: false
+    parameterizable: false
+    human_readable: 'Une KU sans type déclaré déclenche un mode de sécurité et interdit toute adaptation fine.
+
+      '
+    logic:
+      trigger: Chargement ou sélection runtime d’une KU
+      condition: Type KU absent, indéterminé ou invalide.
+      effect: 'KU gelée pour l’adaptation fine ; feedback générique uniquement ; exclusion des règles dépendantes du type ; signal de correction obligatoire.
+
+        '
+      scope: runtime_safety
+  - id: INV_AR_N2_SHORT_FORM_REQUIRES_EXPLICIT_PRIORITY
+    authority: primary
+    core_type: CONSTITUTION
+    source_anchor: '[S11][PATCH_V1_7]'
+    depends_on:
+    - TYPE_SELF_REPORT_AR_N2
+    - TYPE_STATE_AXIS_VALUE_COST
+    relations:
+    - type: constrains
+      target:
+        id: TYPE_SELF_REPORT_AR_N2
+    patchable: false
+    parameterizable: false
+    human_readable: 'Toute version courte d’AR-N2 doit expliciter la priorité entre mesure VC et intention de retour.
+
+      '
+    logic:
+      trigger: Conception d’un AR-N2 simplifié
+      condition: 'Le nombre d’items ne permet pas de mesurer complètement VC et intention.
+
+        '
+      effect: 'Une priorité déclarée et stable est obligatoire ; aucune inférence implicite d’un axe à partir de l’autre.
+
+        '
+      scope: runtime_feedback
+  - id: INV_PERSISTENT_DRIFT_REQUIRES_ESCALATION_IF_PATCH_BLOCKED
+    authority: primary
+    core_type: CONSTITUTION
+    source_anchor: '[S14][PATCH_V1_7]'
+    depends_on:
+    - TYPE_PATCH_ARTIFACT
+    - INV_INVALID_PATCH_REJECTED
+    relations: []
+    patchable: false
+    parameterizable: false
+    human_readable: 'Une dérive persistante non corrigeable par patch localement valide doit être escaladée.
+
+      '
+    logic:
+      trigger: Répétition d’un besoin de correction sur plusieurs cycles
+      condition: 'Le signal de dérive persiste alors que le patch requis reste rejeté ou impossible.
+
+        '
+      effect: Escalade obligatoire hors session vers la chaîne d’analyse/correction.
+      scope: patch_governance
+  - id: INV_PATCH_ARTIFACTS_MUST_BE_PRECOMPUTED_OFF_SESSION
+    authority: primary
+    core_type: CONSTITUTION
+    source_anchor: '[S13][S14][PATCH_V1_7]'
+    depends_on:
+    - TYPE_PATCH_ARTIFACT
+    - INV_NO_RUNTIME_NETWORK_CALL
+    - INV_NO_RUNTIME_CONTENT_GENERATION
+    relations:
+    - type: constrains
+      target:
+        id: TYPE_PATCH_ARTIFACT
+    patchable: false
+    parameterizable: false
+    human_readable: 'Les artefacts de patch doivent être générés, validés et empaquetés hors session avant leur application locale.
+
+      '
+    logic:
+      trigger: Préparation d’un patch
+      condition: Le patch nécessite calcul, QA ou génération d’artefact.
+      effect: 'Préparation exclusivement hors session ; aucune génération ou validation distante pendant l’usage apprenant.
+
+        '
+      scope: patch_architecture
+  - id: INV_CREATIVE_KU_AUTONOMY_REQUIRES_DETERMINISTIC_FEEDBACK_PATH
+    authority: primary
+    core_type: CONSTITUTION
+    source_anchor: '[S12][S17][PATCH_V1_7]'
+    depends_on:
+    - TYPE_KNOWLEDGE_UNIT
+    - TYPE_FEEDBACK_COVERAGE_MATRIX
+    relations: []
+    patchable: false
+    parameterizable: false
+    human_readable: 'Une KU créative ne peut être déployée en régime autonome que si son feedback local déterministe est explicitement formalisé.
+
+      '
+    logic:
+      trigger: Validation de déploiement d’une KU créative
+      condition: Aucun chemin de feedback local déterministe n’est disponible.
+      effect: Régime autonome interdit pour cette KU ; checkpoint humain ou redesign requis.
+      scope: design_governance
+  RULES:
+  - id: RULE_NO_CALIBRATION_CONSERVATIVE_START
+    authority: primary
+    core_type: CONSTITUTION
+    source_anchor: '[S2]'
+    depends_on: []
+    relations: []
+    patchable: false
+    parameterizable: false
+    human_readable: En absence de calibrage, le système part d’une hypothèse conservatrice.
+    logic:
+      trigger: Initialisation sans calibrage
+      condition: Calibrage absent.
+      effect: Position initiale basse + déblocage manuel apprenant.
+      scope: initialization
+  - id: RULE_NON_EXAM_CONCEPT_KEPT_IN_GRAPH
+    authority: primary
+    core_type: CONSTITUTION
+    source_anchor: '[S3]'
+    depends_on:
+    - TYPE_KNOWLEDGE_GRAPH
+    relations: []
+    patchable: false
+    parameterizable: true
+    human_readable: Un concept utile du corpus n’est pas supprimé du graphe même s’il est absent des annales.
+    logic:
+      trigger: Construction ou révision du graphe
+      condition: Concept présent dans le corpus mais absent des annales.
+      effect: Le concept est maintenu avec Bloom minimal et pondération réduite.
+      scope: analysis_design
+  - id: RULE_MISCONCEPTION_REQUIRES_COGNITIVE_CONFLICT
+    authority: primary
+    core_type: CONSTITUTION
+    source_anchor: '[S3][S18]'
+    depends_on:
+    - TYPE_KNOWLEDGE_UNIT
+    relations:
+    - type: triggers
+      target:
+        id: ACTION_PLAN_COGNITIVE_CONFLICT_MISSION
+    patchable: false
+    parameterizable: false
+    human_readable: Une misconception impose une mission de conflit cognitif.
+    logic:
+      trigger: KU flaggée misconception
+      condition: Misconception détectée.
+      effect: Mission de conflit cognitif obligatoire.
+      scope: design_runtime
+  - id: RULE_LONG_INTERRUPTION_REQUIRES_DIAGNOSTIC_RESUME
+    authority: primary
+    core_type: CONSTITUTION
+    source_anchor: '[S5]'
+    depends_on:
+    - REF_CORE_LEARNIT_REFERENTIEL_V0_5_IN_CONSTITUTION
+    relations:
+    - type: triggers
+      target:
+        id: ACTION_PLAN_SHORT_DIAGNOSTIC_TASK
+    patchable: false
+    parameterizable: true
+    human_readable: Une interruption longue impose une reprise diagnostique.
+    logic:
+      trigger: Reprise après interruption
+      condition: Durée d’interruption > seuil_R.
+      effect: Session diagnostique de reprise.
+      scope: runtime_resume
+  - id: RULE_AR_N1_OVERRIDES_PROXY
+    authority: primary
+    core_type: CONSTITUTION
+    source_anchor: '[S11]'
+    depends_on:
+    - TYPE_SELF_REPORT_AR_N1
+    relations:
+    - type: validates
+      target:
+        id: TYPE_STATE_AXIS_ACTIVATION
+    - type: triggers
+      target:
+        id: ACTION_LOG_AR_PROXY_DISCORDANCE
+    patchable: false
+    parameterizable: true
+    human_readable: AR-N1 prime sur les proxys.
+    logic:
+      trigger: Discordance AR-N1 / proxy
+      condition: AR-N1 disponible et contradictoire au proxy.
+      effect: AR-N1 prévaut ; discordance journalisée.
+      scope: runtime_state
+  - id: RULE_UNCOVERED_ERROR_GENERIC_FEEDBACK
+    authority: primary
+    core_type: CONSTITUTION
+    source_anchor: '[S4]'
+    depends_on:
+    - TYPE_FEEDBACK_COVERAGE_MATRIX
+    relations:
+    - type: triggers
+      target:
+        id: EVENT_UNCOVERED_ERROR
+    patchable: false
+    parameterizable: true
+    human_readable: 'Erreur non couverte : feedback générique de processus et flag hors-taxonomie.'
+    logic:
+      trigger: Erreur sans template couvert
+      condition: Aucune entrée matrice applicable.
+      effect: Feedback générique + flag erreur-hors-taxonomie.
+      scope: runtime_feedback
+  - id: RULE_PERSISTENT_LOW_VC_TRIGGERS_RELEVANCE_PATCH
+    authority: primary
+    core_type: CONSTITUTION
+    source_anchor: '[S17d]'
+    depends_on:
+    - TYPE_STATE_AXIS_VALUE_COST
+    - REF_CORE_LEARNIT_REFERENTIEL_V0_5_IN_CONSTITUTION
+    relations:
+    - type: triggers
+      target:
+        id: ACTION_TRIGGER_RELEVANCE_PATCH
+    patchable: false
+    parameterizable: true
+    human_readable: VC basse persistante déclenche un patch de relevance, pas une baisse de difficulté.
+    logic:
+      trigger: Persistance de VC basse
+      condition: Seuil de persistance atteint.
+      effect: Révision contextualisation/enjeux/contexte authentique ; difficulté inchangée.
+      scope: patch_governance
+  - id: RULE_AR_REFRACTORY_PROFILE_TRIGGERS_SOLLICITATION_PATCH
+    authority: primary
+    core_type: CONSTITUTION
+    source_anchor: '[S7]'
+    depends_on:
+    - TYPE_SELF_REPORT_AR_N1
+    - REF_CORE_LEARNIT_REFERENTIEL_V0_5_IN_CONSTITUTION
+    relations:
+    - type: triggers
+      target:
+        id: ACTION_TRIGGER_AR_SOLLICITATION_PATCH
+    patchable: false
+    parameterizable: true
+    human_readable: Le profil AR-réfractaire déclenche une adaptation du mode de sollicitation.
+    logic:
+      trigger: Détection d’un profil AR-réfractaire
+      condition: Fenêtre de non-réponse atteinte.
+      effect: Patch de mode de sollicitation, sans pénalisation.
+      scope: patch_governance
+  - id: RULE_MSC_DOWNGRADE_MARKS_DEPENDENTS
+    authority: primary
+    core_type: CONSTITUTION
+    source_anchor: '[S17c]'
+    depends_on:
+    - INV_GRAPH_PROPAGATION_ONE_HOP
+    - INV_EXPLICIT_DEPENDENCY_EDGES_REQUIRED
+    relations:
+    - type: triggers
+      target:
+        id: ACTION_PLAN_SHORT_DIAGNOSTIC_TASK
+    patchable: false
+    parameterizable: true
+    human_readable: Une rétrogradation MSC marque en priorité les dépendantes directes.
+    logic:
+      trigger: Rétrogradation MSC
+      condition: Arêtes explicites disponibles.
+      effect: Marquage des dépendantes directes + tâche diagnostique courte.
+      scope: runtime_graph
+  - id: RULE_GF08_UNCOVERED_CONFLICT_CONSERVATIVE_RESPONSE
+    authority: primary
+    core_type: CONSTITUTION
+    source_anchor: '[S14][S20]'
+    depends_on: []
+    relations:
+    - type: triggers
+      target:
+        id: ACTION_LOG_UNCOVERED_CONFLICT
+    patchable: false
+    parameterizable: false
+    human_readable: Un conflit GF-08 non couvert reçoit une réponse conservatrice.
+    logic:
+      trigger: Conflit inter-principes non couvert
+      condition: Aucune hiérarchie explicite ne tranche.
+      effect: Réponse conservatrice + log pour futur patch.
+      scope: runtime_governance
+  - id: RULE_SESSION_INTENTION_NON_BLOCKING
+    authority: primary
+    core_type: CONSTITUTION
+    source_anchor: '[S11]'
+    depends_on:
+    - TYPE_SELF_REPORT_AR_N2
+    relations: []
+    patchable: false
+    parameterizable: true
+    human_readable: L’intention de session est informative, non bloquante et non pénalisée.
+    logic:
+      trigger: Fin de session
+      condition: Intention de session recueillie ou absente.
+      effect: Support de forethought SRL, sans contrainte adaptative.
+      scope: runtime_feedback
+  - id: RULE_UNVERIFIED_GAMIFICATION_PROBATION
+    authority: primary
+    core_type: CONSTITUTION
+    source_anchor: '[S10][S18]'
+    depends_on: []
+    relations: []
+    patchable: false
+    parameterizable: true
+    human_readable: Une gamification non vérifiée place le système en mode probatoire.
+    logic:
+      trigger: Déploiement d’une gamification non validée
+      condition: Test de non-nuisance absent.
+      effect: Mode probatoire.
+      scope: deployment
+  - id: RULE_LOW_SIS_NEVER_AUTO_PENALIZES
+    authority: primary
+    core_type: CONSTITUTION
+    source_anchor: '[S15][S20]'
+    depends_on:
+    - TYPE_SESSION_INTEGRITY_SCORE
+    relations: []
+    patchable: false
+    parameterizable: true
+    human_readable: Un SIS bas ne pénalise jamais automatiquement l’apprenant.
+    logic:
+      trigger: Détection SIS bas
+      condition: SIS sous seuil.
+      effect: Pondération ou mise en attente possible, sans pénalisation automatique.
+      scope: runtime_integrity
+  PARAMETERS:
+  - id: PARAM_PROVISIONAL_MASTERY_VERIFICATION_WINDOW
+    authority: primary
+    core_type: CONSTITUTION
+    source_anchor: '[S2][S20]'
+    depends_on: []
+    relations: []
+    patchable: true
+    parameterizable: true
+    human_readable: Fenêtre constitutionnellement déclarée pour vérifier une maîtrise provisoire.
+    logic:
+      trigger: Maîtrise provisoire héritée
+      condition: Fenêtre initiale ouverte.
+      effect: Confirmation attendue dans les premières sessions.
+      scope: runtime_evaluation
+  - id: PARAM_AR_N1_INTERACTION_BUDGET
+    authority: primary
+    core_type: CONSTITUTION
+    source_anchor: '[S20]'
+    depends_on: []
+    relations:
+    - type: constrains
+      target:
+        id: TYPE_SELF_REPORT_AR_N1
+    patchable: false
+    parameterizable: true
+    human_readable: Budget d’interaction AR-N1.
+    logic:
+      trigger: Affichage AR-N1
+      condition: Interaction événementielle.
+      effect: Question concise, locale et légère.
+      scope: runtime_feedback
+  - id: PARAM_AR_N2_INTERACTION_BUDGET
+    authority: primary
+    core_type: CONSTITUTION
+    source_anchor: '[S20]'
+    depends_on: []
+    relations:
+    - type: constrains
+      target:
+        id: TYPE_SELF_REPORT_AR_N2
+    patchable: false
+    parameterizable: true
+    human_readable: Budget d’interaction AR-N2.
+    logic:
+      trigger: Affichage AR-N2
+      condition: Fin de session.
+      effect: Questionnaire visuel très court.
+      scope: runtime_feedback
+  - id: PARAM_AR_N3_INTERACTION_BUDGET
+    authority: primary
+    core_type: CONSTITUTION
+    source_anchor: '[S20]'
+    depends_on: []
+    relations:
+    - type: constrains
+      target:
+        id: TYPE_SELF_REPORT_AR_N3
+    patchable: false
+    parameterizable: true
+    human_readable: Budget d’interaction AR-N3.
+    logic:
+      trigger: Affichage AR-N3
+      condition: Bilan périodique.
+      effect: Fenêtre d’items bornée.
+      scope: runtime_feedback
+  CONSTRAINTS:
+  - id: CONSTRAINT_NO_AUTONOMOUS_PSYCHOLOGICAL_INFERENCE
+    authority: primary
+    core_type: CONSTITUTION
+    source_anchor: '[S14]'
+    depends_on:
+    - TYPE_PATCH_ARTIFACT
+    relations:
+    - type: constrains
+      target:
+        id: TYPE_PATCH_QUALITY_GATE
+    patchable: false
+    parameterizable: false
+    human_readable: Aucune inférence psychologique autonome non probatoire.
+    logic:
+      trigger: Conception d’un patch ou d’un mécanisme
+      condition: Inférence psychologique autonome envisagée.
+      effect: Interdiction.
+      scope: patch_governance
+  - id: CONSTRAINT_NO_ADAPTIVE_PHILOSOPHY_CHANGE
+    authority: primary
+    core_type: CONSTITUTION
+    source_anchor: '[S14]'
+    depends_on:
+    - TYPE_PATCH_ARTIFACT
+    relations:
+    - type: constrains
+      target:
+        id: TYPE_PATCH_IMPACT_SCOPE
+    patchable: false
+    parameterizable: false
+    human_readable: La philosophie adaptative ne peut pas être modifiée par patch.
+    logic:
+      trigger: Révision de patch
+      condition: Modification de philosophie adaptative demandée.
+      effect: Interdiction.
+      scope: patch_governance
+  - id: CONSTRAINT_NO_CHANGE_TO_AND_LOGIC
+    authority: primary
+    core_type: CONSTITUTION
+    source_anchor: '[S14][S17b]'
+    depends_on:
+    - INV_MSC_AND_STRICT
+    relations: []
+    patchable: false
+    parameterizable: false
+    human_readable: La logique AND du MSC n’est pas patchable.
+    logic:
+      trigger: Révision de MSC
+      condition: Modification de logique d’agrégation demandée.
+      effect: Interdiction.
+      scope: governance
+  - id: CONSTRAINT_NO_CHANGE_TO_GRAPH_PROPAGATION_RULE
+    authority: primary
+    core_type: CONSTITUTION
+    source_anchor: '[S14][S17c]'
+    depends_on:
+    - INV_GRAPH_PROPAGATION_ONE_HOP
+    relations: []
+    patchable: false
+    parameterizable: false
+    human_readable: La règle de propagation graphe n’est pas patchable.
+    logic:
+      trigger: Révision de propagation graphe
+      condition: Modification de profondeur ou de logique demandée.
+      effect: Interdiction.
+      scope: governance
+  - id: CONSTRAINT_NO_RUNTIME_FEEDBACK_GENERATION
+    authority: primary
+    core_type: CONSTITUTION
+    source_anchor: '[S4][S13]'
+    depends_on:
+    - INV_NO_RUNTIME_CONTENT_GENERATION
+    relations: []
+    patchable: false
+    parameterizable: false
+    human_readable: Pas de génération de feedback à la volée.
+    logic:
+      trigger: Production d’un feedback runtime
+      condition: Aucun template préindexé disponible.
+      effect: Interdiction de génération ; appliquer feedback générique autorisé seulement.
+      scope: runtime_feedback
+  - id: CONSTRAINT_NO_HIGH_BLOOM_WITHOUT_AUTHENTIC_CONTEXT
+    authority: primary
+    core_type: CONSTITUTION
+    source_anchor: '[S17e]'
+    depends_on:
+    - INV_AUTHENTIC_CONTEXT_REQUIRED_FOR_BLOOM4
+    relations: []
+    patchable: false
+    parameterizable: false
+    human_readable: Pas de Bloom ≥ 4 sans contexte authentique.
+    logic:
+      trigger: Conception ou exécution d’une mission haute Bloom
+      condition: Contexte authentique absent.
+      effect: Interdiction.
+      scope: analysis_design
+  - id: CONSTRAINT_NO_BIOMETRICS_OR_OFFSESSION_SURVEILLANCE
+    authority: primary
+    core_type: CONSTITUTION
+    source_anchor: '[S15]'
+    depends_on:
+    - TYPE_INTEGRITY_MODES
+    relations:
+    - type: constrains
+      target:
+        id: TYPE_SESSION_INTEGRITY_SCORE
+    patchable: false
+    parameterizable: false
+    human_readable: Pas de biométrie ni de surveillance hors session.
+    logic:
+      trigger: Extension de capture de données
+      condition: Biométrie ou surveillance hors session envisagée.
+      effect: Interdiction.
+      scope: runtime_integrity
+  - id: CONSTRAINT_NO_ASSISTED_DEPLOYMENT_WITHOUT_TUTORING
+    authority: primary
+    core_type: CONSTITUTION
+    source_anchor: '[S17]'
+    depends_on:
+    - INV_ASSISTED_MODE_REQUIRES_TUTORING
+    relations: []
+    patchable: false
+    parameterizable: false
+    human_readable: Pas de déploiement Assisté sans tutorat.
+    logic:
+      trigger: Déploiement Assisté
+      condition: Infrastructure tutorale absente.
+      effect: Interdiction.
+      scope: deployment
+  EVENTS:
+  - id: EVENT_MSC_DOWNGRADE
+    authority: primary
+    core_type: CONSTITUTION
+    source_anchor: '[S17b][S17c]'
+    depends_on:
+    - TYPE_MASTERY_MODEL
+    relations:
+    - type: triggers
+      target:
+        id: RULE_MSC_DOWNGRADE_MARKS_DEPENDENTS
+    patchable: false
+    parameterizable: true
+    human_readable: Rétrogradation MSC.
+    logic:
+      trigger: Échec d’une composante P, R ou A
+      condition: Maîtrise de base auparavant satisfaite.
+      effect: Déclassement et examen des dépendantes directes.
+      scope: runtime_evaluation
+  - id: EVENT_UNCOVERED_ERROR
+    authority: primary
+    core_type: CONSTITUTION
+    source_anchor: '[S4][S18]'
+    depends_on:
+    - TYPE_FEEDBACK_COVERAGE_MATRIX
+    relations:
+    - type: triggers
+      target:
+        id: RULE_UNCOVERED_ERROR_GENERIC_FEEDBACK
+    patchable: false
+    parameterizable: true
+    human_readable: Erreur hors-taxonomie.
+    logic:
+      trigger: Réponse apprenant invalide
+      condition: Aucun pattern d’erreur couvert.
+      effect: Feedback générique + signal de patch.
+      scope: runtime_feedback
+  - id: EVENT_PERSISTENT_LOW_VC
+    authority: primary
+    core_type: CONSTITUTION
+    source_anchor: '[S7][S17d]'
+    depends_on:
+    - TYPE_STATE_AXIS_VALUE_COST
+    - REF_CORE_LEARNIT_REFERENTIEL_V0_5_IN_CONSTITUTION
+    relations:
+    - type: triggers
+      target:
+        id: RULE_PERSISTENT_LOW_VC_TRIGGERS_RELEVANCE_PATCH
+    patchable: false
+    parameterizable: true
+    human_readable: VC basse persistante.
+    logic:
+      trigger: Accumulation de sessions VC basse
+      condition: Seuil référentiel atteint.
+      effect: Déclencheur de patch relevance.
+      scope: patch_governance
+  - id: EVENT_AR_REFRACTORY_PROFILE_DETECTED
+    authority: primary
+    core_type: CONSTITUTION
+    source_anchor: '[S7]'
+    depends_on:
+    - TYPE_SELF_REPORT_AR_N1
+    - REF_CORE_LEARNIT_REFERENTIEL_V0_5_IN_CONSTITUTION
+    relations:
+    - type: triggers
+      target:
+        id: RULE_AR_REFRACTORY_PROFILE_TRIGGERS_SOLLICITATION_PATCH
+    patchable: false
+    parameterizable: true
+    human_readable: Profil AR-réfractaire détecté.
+    logic:
+      trigger: Fenêtre de non-réponse AR-N1
+      condition: Seuil référentiel atteint.
+      effect: Déclencheur de patch de sollicitation.
+      scope: patch_governance
+  - id: EVENT_LONG_INTERRUPTION
+    authority: primary
+    core_type: CONSTITUTION
+    source_anchor: '[S5]'
+    depends_on:
+    - REF_CORE_LEARNIT_REFERENTIEL_V0_5_IN_CONSTITUTION
+    relations:
+    - type: triggers
+      target:
+        id: RULE_LONG_INTERRUPTION_REQUIRES_DIAGNOSTIC_RESUME
+    patchable: false
+    parameterizable: true
+    human_readable: Interruption longue.
+    logic:
+      trigger: Reprise après inactivité
+      condition: Seuil_R dépassé.
+      effect: Reprise diagnostique.
+      scope: runtime_resume
+  - id: EVENT_GF08_UNCOVERED_CONFLICT
+    authority: primary
+    core_type: CONSTITUTION
+    source_anchor: '[S14][S20]'
+    depends_on: []
+    relations:
+    - type: triggers
+      target:
+        id: RULE_GF08_UNCOVERED_CONFLICT_CONSERVATIVE_RESPONSE
+    patchable: false
+    parameterizable: false
+    human_readable: Conflit GF-08 non couvert.
+    logic:
+      trigger: Collision de principes
+      condition: Aucune règle spécifique disponible.
+      effect: Réponse conservatrice + journalisation.
+      scope: runtime_governance
+  - id: EVENT_LOW_SIS
+    authority: primary
+    core_type: CONSTITUTION
+    source_anchor: '[S15][S20]'
+    depends_on:
+    - TYPE_SESSION_INTEGRITY_SCORE
+    relations:
+    - type: triggers
+      target:
+        id: RULE_LOW_SIS_NEVER_AUTO_PENALIZES
+    patchable: false
+    parameterizable: true
+    human_readable: SIS bas ou sous seuil.
+    logic:
+      trigger: Calcul SIS
+      condition: SIS sous seuil.
+      effect: Pondération ou mise en attente, sans pénalisation automatique.
+      scope: runtime_integrity
+  - id: EVENT_PATCH_INVALID
+    authority: primary
+    core_type: CONSTITUTION
+    source_anchor: '[S14]'
+    depends_on:
+    - TYPE_PATCH_ARTIFACT
+    relations:
+    - type: triggers
+      target:
+        id: ACTION_ROLLBACK_PATCH
+    patchable: false
+    parameterizable: false
+    human_readable: Patch invalide.
+    logic:
+      trigger: Validation locale de patch
+      condition: Bornes invalides ou impact_scope absent.
+      effect: Rejet total ou rollback.
+      scope: patch_validation
+  - id: EVENT_HIGH_BLOOM_WITHOUT_AUTHENTIC_CONTEXT
+    authority: primary
+    core_type: CONSTITUTION
+    source_anchor: '[S17e]'
+    depends_on:
+    - TYPE_AUTHENTIC_CONTEXT
+    relations: []
+    patchable: false
+    parameterizable: false
+    human_readable: Tentative de Bloom ≥ 4 sans contexte authentique.
+    logic:
+      trigger: Conception ou exécution haute Bloom
+      condition: Contexte authentique absent.
+      effect: Blocage et plafonnement Bloom 2.
+      scope: analysis_design
+  ACTIONS:
+  - id: ACTION_PLAN_SHORT_DIAGNOSTIC_TASK
+    authority: primary
+    core_type: CONSTITUTION
+    source_anchor: '[S17c]'
+    depends_on: []
+    relations: []
+    patchable: false
+    parameterizable: true
+    human_readable: Planifier une tâche diagnostique courte.
+    logic:
+      trigger: Rétrogradation MSC ou reprise après interruption
+      condition: Événement autorisé.
+      effect: Planification d’une vérification ciblée.
+      scope: runtime
+  - id: ACTION_APPLY_LIGHT_REVERSIBLE_SCAFFOLDING
+    authority: primary
+    core_type: CONSTITUTION
+    source_anchor: '[S7]'
+    depends_on: []
+    relations: []
+    patchable: false
+    parameterizable: true
+    human_readable: Appliquer un scaffolding léger réversible.
+    logic:
+      trigger: Absence d’AR-N1
+      condition: Réponse conservatrice requise.
+      effect: Soutien léger sans sanction.
+      scope: runtime
+  - id: ACTION_TRIGGER_RELEVANCE_PATCH
+    authority: primary
+    core_type: CONSTITUTION
+    source_anchor: '[S17d]'
+    depends_on:
+    - TYPE_PATCH_ARTIFACT
+    relations: []
+    patchable: true
+    parameterizable: true
+    human_readable: Déclencher un patch de relevance.
+    logic:
+      trigger: VC basse persistante
+      condition: Seuil atteint.
+      effect: Révision des enjeux, missions de contextualisation et lien au contexte authentique.
+      scope: patch_layer
+  - id: ACTION_TRIGGER_AR_SOLLICITATION_PATCH
+    authority: primary
+    core_type: CONSTITUTION
+    source_anchor: '[S7][S14]'
+    depends_on:
+    - TYPE_PATCH_ARTIFACT
+    relations: []
+    patchable: true
+    parameterizable: true
+    human_readable: Déclencher un patch du mode de sollicitation AR.
+    logic:
+      trigger: Profil AR-réfractaire
+      condition: Détection validée.
+      effect: Révision du format ou de la cadence de sollicitation.
+      scope: patch_layer
+  - id: ACTION_ROLLBACK_PATCH
+    authority: primary
+    core_type: CONSTITUTION
+    source_anchor: '[S14]'
+    depends_on:
+    - TYPE_PATCH_ARTIFACT
+    relations: []
+    patchable: false
+    parameterizable: false
+    human_readable: Rollback automatique.
+    logic:
+      trigger: Échec ou invalidité d’un patch
+      condition: Application incomplète ou validation échouée.
+      effect: Retour à l’état antérieur.
+      scope: patch_layer
+  - id: ACTION_LOG_AR_PROXY_DISCORDANCE
+    authority: primary
+    core_type: CONSTITUTION
+    source_anchor: '[S11]'
+    depends_on: []
+    relations: []
+    patchable: false
+    parameterizable: false
+    human_readable: Journaliser la discordance AR/proxy.
+    logic:
+      trigger: Discordance AR-N1 / proxy
+      condition: Discordance détectée.
+      effect: Trace pour révision des poids proxy.
+      scope: runtime_observability
+  - id: ACTION_INFORM_LEARNER
+    authority: primary
+    core_type: CONSTITUTION
+    source_anchor: '[S14]'
+    depends_on: []
+    relations: []
+    patchable: false
+    parameterizable: false
+    human_readable: Informer l’apprenant.
+    logic:
+      trigger: Patch, rejet ou changement visible
+      condition: Transparence requise.
+      effect: Notification explicite à l’apprenant.
+      scope: runtime_transparency
+  - id: ACTION_PLAN_COGNITIVE_CONFLICT_MISSION
+    authority: primary
+    core_type: CONSTITUTION
+    source_anchor: '[S3][S18]'
+    depends_on: []
+    relations: []
+    patchable: false
+    parameterizable: true
+    human_readable: Planifier une mission de conflit cognitif.
+    logic:
+      trigger: Misconception détectée
+      condition: Nœud flaggé.
+      effect: Mission corrective dédiée.
+      scope: design_runtime
+  - id: ACTION_LOG_UNCOVERED_CONFLICT
+    authority: primary
+    core_type: CONSTITUTION
+    source_anchor: '[S14][S20]'
+    depends_on: []
+    relations: []
+    patchable: false
+    parameterizable: false
+    human_readable: Journaliser un conflit GF-08 non couvert.
+    logic:
+      trigger: Conflit non couvert
+      condition: Réponse conservatrice appliquée.
+      effect: Trace pour finalisation ultérieure.
+      scope: runtime_governance

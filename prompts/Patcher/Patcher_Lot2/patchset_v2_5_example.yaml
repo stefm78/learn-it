@@ -1,0 +1,31 @@
+PATCH_SET:
+  id: PATCH_LOT2_EXAMPLE
+  patch_dsl_version: "2.5"
+  atomic: true
+  description: Exemple minimal couvrant les nouvelles opérations Lot 2.
+  files:
+    - file: referentiel_defaults_v0_5__core_final__validated.yaml
+      expected_core_id: CORE_LEARNIT_REFERENTIEL_V0_5
+      operations:
+        - op: assert
+          target:
+            section: RULES
+            id: RULE_REFERENTIEL_INTERLEAVING_ACTIVATION
+        - op: append_field_list
+          target:
+            section: RULES
+            id: RULE_REFERENTIEL_INTERLEAVING_ACTIVATION
+            field: depends_on
+          value: PARAM_REFERENTIEL_PROPAGATION_CHECK_MAX_DELAY_SESSIONS
+        - op: remove_field_list_item
+          target:
+            section: RULES
+            id: RULE_REFERENTIEL_INTERLEAVING_ACTIVATION
+            field: depends_on
+          value: PARAM_REFERENTIEL_PROPAGATION_CHECK_MAX_DELAY_SESSIONS
+        - op: ensure_absent
+          target:
+            section: PARAMETERS
+            id: PARAM_DOES_NOT_EXIST
+        - op: no_change
+          reason: Exemple de dry-run réversible.

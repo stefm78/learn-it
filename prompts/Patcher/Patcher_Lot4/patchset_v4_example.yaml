@@ -1,0 +1,50 @@
+PATCH_SET:
+  id: PATCH_LEARNIT_LOT4_EXAMPLE
+  patch_dsl_version: "4.0"
+  atomic: true
+  description: Exemple Lot 4 avec replace_text et reporting enrichi.
+  report:
+    enabled: true
+    path: patch_execution_report_lot4_example.yaml
+  files:
+    - file: Constitution_Learn-it_v1_6__core_final__validated.yaml
+      expected_core_id: CORE_LEARNIT_CONSTITUTION_V1_6
+      operations:
+        - op: assert_meta
+          target:
+            field: id
+          equals: CORE_LEARNIT_CONSTITUTION_V1_6
+        - op: assert
+          target:
+            section: INVARIANTS
+            id: INV_RUNTIME_FULLY_LOCAL
+        - op: replace_text
+          target:
+            scope: object_field
+            section: INVARIANTS
+            id: INV_RUNTIME_FULLY_LOCAL
+            field: human_readable
+          old: "100% local"
+          new: "strictement local"
+          require_match: true
+    - file: referentiel_defaults_v0_5__core_final__validated.yaml
+      expected_core_id: CORE_LEARNIT_REFERENTIEL_V0_5
+      operations:
+        - op: assert
+          target:
+            section: RULES
+            id: RULE_REFERENTIEL_INTERLEAVING_ACTIVATION
+        - op: replace_text
+          target:
+            scope: object_field
+            section: RULES
+            id: RULE_REFERENTIEL_INTERLEAVING_ACTIVATION
+            field: human_readable
+          old: "activation"
+          new: "déclenchement"
+          require_match: true
+    - file: learnit__link_core__validated.yaml
+      expected_core_id: CORE_LINK_LEARNIT_CONSTITUTION_V1_6__REFERENTIEL_V0_5
+      operations:
+        - op: no_change
+          reason: LINK inchangé dans l'exemple Lot 4.

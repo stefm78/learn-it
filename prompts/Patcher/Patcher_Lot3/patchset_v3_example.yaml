@@ -1,0 +1,136 @@
+PATCH_SET:
+  id: PATCH_LEARNIT_RELEASE_V1_7__V0_6__LINK
+  patch_dsl_version: "3.0"
+  atomic: true
+  description: >
+    Exemple Lot 3 : propagation contrôlée d'une montée de version des Core,
+    avec renommage des références locales et mise à jour des métadonnées racine.
+  files:
+    - file: Constitution_Learn-it_v1_6__core_final__validated.yaml
+      expected_core_id: CORE_LEARNIT_CONSTITUTION_V1_6
+      operations:
+        - op: assert_meta
+          target:
+            field: id
+          equals: CORE_LEARNIT_CONSTITUTION_V1_6
+        - op: replace_meta_field
+          target:
+            field: id
+          value: CORE_LEARNIT_CONSTITUTION_V1_7
+        - op: replace_meta_field
+          target:
+            field: version
+          value: V1_7_FINAL
+        - op: replace_meta_field
+          target:
+            field: description
+          value: >
+            Core canonique final de la Constitution Learn-it v1.7. Naming normalisé,
+            fermeture locale assurée, références inter-Core explicites matérialisées
+            pour fédération avec le Référentiel.
+        - op: rename
+          target:
+            section: TYPES
+            id: REF_CORE_LEARNIT_REFERENTIEL_V0_5_IN_CONSTITUTION
+          new_id: REF_CORE_LEARNIT_REFERENTIEL_V0_6_IN_CONSTITUTION
+        - op: rewrite_references
+          target:
+            old_id: REF_CORE_LEARNIT_REFERENTIEL_V0_5_IN_CONSTITUTION
+            new_id: REF_CORE_LEARNIT_REFERENTIEL_V0_6_IN_CONSTITUTION
+        - op: replace_field
+          target:
+            section: TYPES
+            id: REF_CORE_LEARNIT_REFERENTIEL_V0_6_IN_CONSTITUTION
+            field: human_readable
+          value: Référence explicite vers le Core Référentiel Learn-it v0.6.
+
+    - file: referentiel_defaults_v0_5__core_final__validated.yaml
+      expected_core_id: CORE_LEARNIT_REFERENTIEL_V0_5
+      operations:
+        - op: assert_meta
+          target:
+            field: id
+          equals: CORE_LEARNIT_REFERENTIEL_V0_5
+        - op: replace_meta_field
+          target:
+            field: id
+          value: CORE_LEARNIT_REFERENTIEL_V0_6
+        - op: replace_meta_field
+          target:
+            field: version
+          value: V0_6_FINAL
+        - op: replace_meta_field
+          target:
+            field: description
+          value: >
+            Core canonique final du Référentiel Learn-it v0.6. Naming normalisé,
+            fermeture locale assurée, références inter-Core explicites matérialisées
+            pour fédération avec la Constitution.
+        - op: rename
+          target:
+            section: TYPES
+            id: REF_CORE_LEARNIT_CONSTITUTION_V1_6_IN_REFERENTIEL
+          new_id: REF_CORE_LEARNIT_CONSTITUTION_V1_7_IN_REFERENTIEL
+        - op: rewrite_references
+          target:
+            old_id: REF_CORE_LEARNIT_CONSTITUTION_V1_6_IN_REFERENTIEL
+            new_id: REF_CORE_LEARNIT_CONSTITUTION_V1_7_IN_REFERENTIEL
+        - op: replace_field
+          target:
+            section: TYPES
+            id: REF_CORE_LEARNIT_CONSTITUTION_V1_7_IN_REFERENTIEL
+            field: human_readable
+          value: Référence explicite vers le Core Constitution Learn-it v1.7.
+
+    - file: learnit__link_core__validated.yaml
+      expected_core_id: CORE_LINK_LEARNIT_CONSTITUTION_V1_6__REFERENTIEL_V0_5
+      operations:
+        - op: assert_meta
+          target:
+            field: id
+          equals: CORE_LINK_LEARNIT_CONSTITUTION_V1_6__REFERENTIEL_V0_5
+        - op: replace_meta_field
+          target:
+            field: id
+          value: CORE_LINK_LEARNIT_CONSTITUTION_V1_7__REFERENTIEL_V0_6
+        - op: replace_meta_field
+          target:
+            field: version
+          value: V1_7__V0_6_FINAL
+        - op: replace_meta_field
+          target:
+            field: description
+          value: >
+            LINK_CORE canonique reliant la Constitution Learn-it v1.7 et le Référentiel
+            Learn-it v0.6. Il explicite les bindings inter-Core nécessaires à la fermeture
+            système, sans logique métier autonome.
+        - op: rename
+          target:
+            section: TYPES
+            id: LINK_REF_CORE_LEARNIT_CONSTITUTION_V1_6
+          new_id: LINK_REF_CORE_LEARNIT_CONSTITUTION_V1_7
+        - op: rewrite_references
+          target:
+            old_id: LINK_REF_CORE_LEARNIT_CONSTITUTION_V1_6
+            new_id: LINK_REF_CORE_LEARNIT_CONSTITUTION_V1_7
+        - op: replace_field
+          target:
+            section: TYPES
+            id: LINK_REF_CORE_LEARNIT_CONSTITUTION_V1_7
+            field: human_readable
+          value: Référence explicite vers le Core Constitution Learn-it v1.7.
+        - op: rename
+          target:
+            section: TYPES
+            id: LINK_REF_CORE_LEARNIT_REFERENTIEL_V0_5
+          new_id: LINK_REF_CORE_LEARNIT_REFERENTIEL_V0_6
+        - op: rewrite_references
+          target:
+            old_id: LINK_REF_CORE_LEARNIT_REFERENTIEL_V0_5
+            new_id: LINK_REF_CORE_LEARNIT_REFERENTIEL_V0_6
+        - op: replace_field
+          target:
+            section: TYPES
+            id: LINK_REF_CORE_LEARNIT_REFERENTIEL_V0_6
+            field: human_readable
+          value: Référence explicite vers le Core Référentiel Learn-it v0.6.

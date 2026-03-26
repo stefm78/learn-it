@@ -1,0 +1,24 @@
+PATCH_SET:
+  id: PATCH_EXAMPLE_LEARNIT_V2
+  patch_dsl_version: "2.0"
+  atomic: true
+  description: Exemple minimal compatible Lot 1.
+  files:
+    - file: Constitution_Learn-it_v1_6__core_final__validated.yaml
+      expected_core_id: CORE_LEARNIT_CONSTITUTION_V1_6
+      operations:
+        - op: assert
+          target:
+            section: TYPES
+            id: TYPE_PATCH_ARTIFACT
+        - op: replace_field
+          target:
+            section: TYPES
+            id: TYPE_PATCH_ARTIFACT
+            field: human_readable
+          value: Patch paramétrique occasionnel, borné et validé localement.
+    - file: learnit__link_core__validated.yaml
+      expected_core_id: CORE_LINK_LEARNIT_CONSTITUTION_V1_6__REFERENTIEL_V0_5
+      operations:
+        - op: no_change
+          reason: Exemple sans modification du LINK.

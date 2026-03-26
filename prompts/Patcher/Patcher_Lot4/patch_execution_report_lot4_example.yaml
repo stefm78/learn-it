@@ -1,0 +1,17 @@
+PATCH_EXECUTION_REPORT:
+  patch_id: PATCH_LEARNIT_LOT4_EXAMPLE
+  patch_dsl_version: '4.0'
+  atomic: true
+  whatif: true
+  started_at: '2026-03-26T09:17:31.049136+00:00'
+  status: FAIL
+  files: []
+  summary:
+    files_total: 3
+    files_changed: 0
+    operations_total: 3
+    operations_applied: 1
+    operations_skipped: 2
+    backups_created: 0
+  error: 'Référence non résolue: INV_PATCH_ARTIFACTS_MUST_BE_PRECOMPUTED_OFF_SESSION -> INV_NO_RUNTIME_NETWORK_CALL'
+  finished_at: '2026-03-26T09:17:31.134422+00:00'
