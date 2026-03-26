@@ -9,6 +9,9 @@
 - `docs/specs/release-patch/current.md`
 
 ### Shared prompts
+- `docs/prompts/shared/Make12GovernanceReview.md`
+- `docs/prompts/shared/Make11GovernancePatch.md`
+- `docs/prompts/shared/Make10GovernanceAudit.md`
 - `docs/prompts/shared/Challenge_constitution.md`
 - `docs/prompts/shared/Make02CoreValidation.md`
 - `docs/prompts/shared/Make05CorePatch.md`

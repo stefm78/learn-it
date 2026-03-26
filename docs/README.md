@@ -110,3 +110,8 @@ Quand un doute existe entre deux fichiers :
 * puis `docs/registry/`
 * puis le pipeline concerné
 * et considérer `legacy/` comme non autoritatif sauf besoin explicite de rétrospection.
+
+
+## Governance
+
+Le pipeline `governance` maintient la cohérence opératoire du repo lui-même.

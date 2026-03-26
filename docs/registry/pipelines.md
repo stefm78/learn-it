@@ -29,3 +29,8 @@
   - son propre dossier `docs/pipelines/<id>/`
 - Les artefacts temporaires doivent rester dans le pipeline qui les a produits
 - Toute promotion vers `current/` ou `releases/` exige validation explicite
+
+### governance
+- Path: `docs/pipelines/governance/pipeline.md`
+- Goal: maintenir la cohérence opératoire du repo, des registres, des pipelines, des chemins canoniques et de la séparation operating / release / legacy
+- Canonical state: `docs/pipelines/governance/state.yaml`
