@@ -1,0 +1,126 @@
+CORE:
+  id: CORE_LINK_LEARNIT_CONSTITUTION_V1_7__REFERENTIEL_V0_6
+  core_type: LINK
+  authority: primary
+  version: V1_7__V0_6_FINAL
+  description: LINK_CORE canonique reliant la Constitution Learn-it v1.7 et le Référentiel Learn-it v0.6. Il explicite les bindings inter-Core nécessaires à la fermeture système, sans logique métier autonome.
+  TYPES:
+  - id: LINK_REF_CORE_LEARNIT_CONSTITUTION_V1_7
+    authority: reference
+    core_type: LINK
+    source_anchor: '[INTERCORE]'
+    depends_on: []
+    relations: []
+    patchable: false
+    parameterizable: false
+    human_readable: Référence explicite vers le Core Constitution Learn-it v1.7.
+    logic:
+      trigger: null
+      condition: null
+      effect: Pointage fédérateur vers le Core Constitution.
+      scope: link_reference
+  - id: LINK_REF_CORE_LEARNIT_REFERENTIEL_V0_6
+    authority: reference
+    core_type: LINK
+    source_anchor: '[INTERCORE]'
+    depends_on: []
+    relations: []
+    patchable: false
+    parameterizable: false
+    human_readable: Référence explicite vers le Core Référentiel Learn-it v0.6.
+    logic:
+      trigger: null
+      condition: null
+      effect: Pointage fédérateur vers le Core Référentiel.
+      scope: link_reference
+  - id: TYPE_BINDING_CONSTITUTION_TO_REFERENTIEL_OPERATIONAL_PARAMETERS
+    authority: derived
+    core_type: LINK
+    source_anchor: '[S1][S14][S20]'
+    depends_on:
+    - LINK_REF_CORE_LEARNIT_CONSTITUTION_V1_7
+    - LINK_REF_CORE_LEARNIT_REFERENTIEL_V0_6
+    relations:
+    - type: requires
+      target:
+        id: LINK_REF_CORE_LEARNIT_REFERENTIEL_V0_6
+    - type: derives_from
+      target:
+        id: LINK_REF_CORE_LEARNIT_CONSTITUTION_V1_7
+    patchable: false
+    parameterizable: false
+    human_readable: Binding des paramètres opérationnels délégués par la Constitution au Référentiel.
+    logic:
+      trigger: Interprétation de règles constitutionnelles dépendantes de bornes et seuils
+      condition: Une règle constitutionnelle mentionne explicitement un seuil, une fourchette ou un paramètre opératoire délégué.
+      effect: Résolution via le Core Référentiel.
+      scope: intercore_binding
+  - id: TYPE_BINDING_REFERENTIEL_TO_CONSTITUTION_GOVERNING_INVARIANTS
+    authority: derived
+    core_type: LINK
+    source_anchor: '[S1][S17B][S17C]'
+    depends_on:
+    - LINK_REF_CORE_LEARNIT_CONSTITUTION_V1_7
+    - LINK_REF_CORE_LEARNIT_REFERENTIEL_V0_6
+    relations:
+    - type: requires
+      target:
+        id: LINK_REF_CORE_LEARNIT_CONSTITUTION_V1_7
+    - type: derives_from
+      target:
+        id: LINK_REF_CORE_LEARNIT_REFERENTIEL_V0_6
+    patchable: false
+    parameterizable: false
+    human_readable: Binding des invariants constitutionnels gouvernant le Référentiel.
+    logic:
+      trigger: Lecture de paramètres ou tables référentielles qui rappellent un invariant constitutionnel
+      condition: Le Référentiel documente une borne ou une note opérationnelle issue d’un invariant non délégable.
+      effect: L’autorité de référence est résolue vers le Core Constitution.
+      scope: intercore_binding
+  - id: TYPE_BINDING_CONSTITUTION_REFERENTIEL_LAYER_SEPARATION
+    authority: derived
+    core_type: LINK
+    source_anchor: '[S1]'
+    depends_on:
+    - LINK_REF_CORE_LEARNIT_CONSTITUTION_V1_7
+    - LINK_REF_CORE_LEARNIT_REFERENTIEL_V0_6
+    relations:
+    - type: validates
+      target:
+        id: LINK_REF_CORE_LEARNIT_CONSTITUTION_V1_7
+    - type: validates
+      target:
+        id: LINK_REF_CORE_LEARNIT_REFERENTIEL_V0_6
+    patchable: false
+    parameterizable: false
+    human_readable: 'Binding de séparation des couches : la Constitution gouverne le quoi/pourquoi, le Référentiel borne le combien/comment.'
+    logic:
+      trigger: Fédération du système final
+      condition: Les deux cores coexistent dans le même système.
+      effect: Séparation de gouvernance explicitée et fermée au niveau système.
+      scope: intercore_governance
+  INVARIANTS: []
+  RULES: []
+  PARAMETERS: []
+  CONSTRAINTS:
+  - id: CONSTRAINT_LINK_NO_BUSINESS_LOGIC
+    authority: primary
+    core_type: LINK
+    source_anchor: '[INTERCORE]'
+    depends_on:
+    - LINK_REF_CORE_LEARNIT_CONSTITUTION_V1_7
+    - LINK_REF_CORE_LEARNIT_REFERENTIEL_V0_6
+    relations:
+    - type: constrains
+      target:
+        id: TYPE_BINDING_CONSTITUTION_REFERENTIEL_LAYER_SEPARATION
+    patchable: false
+    parameterizable: false
+    human_readable: Le LINK ne contient aucune logique métier autonome.
+    logic:
+      trigger: Construction ou révision du LINK_CORE
+      condition: Un élément à contenu métier autonome est envisagé.
+      effect: Interdiction.
+      scope: link_governance
+  EVENTS: []
+  ACTIONS: []
