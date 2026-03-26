@@ -1,11 +1,10 @@
-# Current core aliases
+# Current cores
 
-Ce dossier définit les points d'entrée canoniques pour les Core actifs.
+Ce dossier contient les copies canoniques actives des Core Learn-it.
 
 ## Statut actuel
 
-La promotion complète des Core vers `docs/cores/current/` n'est pas encore finalisée.
-Les fichiers ci-dessous sont donc des alias descriptifs pointant vers les sources legacy actuellement actives :
+Les fichiers suivants sont désormais des copies promues, et non plus des pointeurs descriptifs :
 
 - `constitution.yaml`
 - `referentiel.yaml`
@@ -13,4 +12,8 @@ Les fichiers ci-dessous sont donc des alias descriptifs pointant vers les source
 
 ## Règle
 
-Un pipeline doit d'abord lire le descripteur alias, puis charger le `source_path` indiqué tant que la promotion définitive n'a pas eu lieu.
+Les pipelines doivent consommer directement ces fichiers comme sources canoniques courantes.
+
+## Promotion
+
+Toute mise à jour de `docs/cores/current/` doit passer par le pipeline `release` et un `RELEASE_PATCH_SET`.

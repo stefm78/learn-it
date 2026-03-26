@@ -5,19 +5,25 @@
 - `docs/patcher/shared/apply_patch.py`
 - `docs/patcher/shared/validate_patchset.py`
 - `docs/patcher/shared/apply_patch.sh`
+- `docs/patcher/shared/apply_patch_v4.py`
 - `docs/patcher/shared/validate_patchset_v4.py`
+- `docs/patcher/shared/apply_release_patch.py`
+- `docs/patcher/shared/validate_release_patch.py`
 
 ## Status
 
 ### apply_patch.py
-Wrapper provisoire vers le patcher legacy tant que le vrai moteur v4 n'est pas promu en remplacement.
+Version canonique synchronisée avec le moteur partagé v4.
 
 ### validate_patchset.py
-Validateur minimal de forme externe, utile comme garde-fou d'entrée.
+Version canonique synchronisée avec le validateur Patch DSL v4.
 
-### validate_patchset_v4.py
-Validateur v4 promu, adapté au Patch DSL v4.
+### apply_release_patch.py
+Moteur de promotion/release au niveau dépôt.
 
-## Next target
+### validate_release_patch.py
+Validateur du Release Patch DSL.
 
-Promouvoir le vrai moteur `apply_patch_v4.py` dans ce même dossier et basculer les pipelines dessus.
+## Rule
+
+Les pipelines doivent utiliser les chemins canoniques sans dépendre du legacy patcher.

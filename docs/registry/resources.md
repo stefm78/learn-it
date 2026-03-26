@@ -5,6 +5,9 @@
 ### Patch DSL
 - `docs/specs/patch-dsl/current.md`
 
+### Release Patch DSL
+- `docs/specs/release-patch/current.md`
+
 ### Shared prompts
 - `docs/prompts/shared/Challenge_constitution.md`
 - `docs/prompts/shared/Make02CoreValidation.md`
@@ -12,11 +15,14 @@
 - `docs/prompts/shared/Make06PatchValidation.md`
 - `docs/prompts/shared/Make07CoreRelease.md`
 - `docs/prompts/shared/Make08PatchExecutionReview.md`
+- `docs/prompts/shared/Make09ReleasePatch.md`
 
 ### Shared patchers
 - `docs/patcher/shared/apply_patch.py`
 - `docs/patcher/shared/validate_patchset.py`
 - `docs/patcher/shared/apply_patch.sh`
+- `docs/patcher/shared/apply_release_patch.py`
+- `docs/patcher/shared/validate_release_patch.py`
 
 ### Current cores
 - `docs/cores/current/constitution.yaml`

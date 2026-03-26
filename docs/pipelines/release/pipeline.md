@@ -12,12 +12,16 @@ Synchroniser les versions internes, les références inter-Core, les alias `curr
 
 ### Prompts
 - Release prompt: `docs/prompts/shared/Make07CoreRelease.md`
+- Release patch prompt: `docs/prompts/shared/Make09ReleasePatch.md`
 - Execution review: `docs/prompts/shared/Make08PatchExecutionReview.md`
 
-### Spec and tools
+### Specs and tools
 - Patch DSL: `docs/specs/patch-dsl/current.md`
+- Release Patch DSL: `docs/specs/release-patch/current.md`
 - Apply patch: `docs/patcher/shared/apply_patch.py`
 - Validate patchset: `docs/patcher/shared/validate_patchset.py`
+- Apply release patch: `docs/patcher/shared/apply_release_patch.py`
+- Validate release patch: `docs/patcher/shared/validate_release_patch.py`
 
 ## Inputs
 
@@ -49,7 +53,7 @@ Synchroniser les versions internes, les références inter-Core, les alias `curr
 - Output: `work/03_validation/release_patch_validation.yaml`
 
 ### STAGE_04_PROMOTION
-- Promote validated candidate to `docs/cores/current/` and `docs/cores/releases/`
+- Apply validated release patch to `docs/cores/current/` and shared tools
 - Outputs:
   - `outputs/release_notes.md`
   - `reports/promotion_report.yaml`
