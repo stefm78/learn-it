@@ -1,3 +1,90 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+echo "==> Vérification du repo"
+test -f "README.md"
+test -f "docs/README.md"
+test -f "docs/registry/operating_model.md"
+test -f "docs/registry/resources.md"
+test -d "legacy"
+
+echo "==> Sauvegardes .bak"
+cp README.md README.md.bak
+cp docs/registry/operating_model.md docs/registry/operating_model.md.bak
+cp docs/registry/resources.md docs/registry/resources.md.bak
+
+echo "==> Réécriture de README.md"
+cat > README.md <<'EOF'
+# Learn-it
+
+Moteur d'apprentissage adaptatif basé sur une architecture constitutionnelle formelle.
+
+## Point d'entrée
+
+Le point d'entrée opérationnel du repo est :
+
+- `docs/README.md`
+
+Pour comprendre ou faire évoluer le dépôt, suivre ensuite :
+
+1. `docs/registry/operating_model.md`
+2. `docs/registry/pipelines.md`
+3. `docs/registry/resources.md`
+4. le `pipeline.md` du pipeline concerné
+
+## Vue d'ensemble
+
+Learn-it est un système d'apprentissage adaptatif gouverné par pipelines.
+
+Le repo n'est plus organisé comme un simple dépôt documentaire.
+Il est structuré autour de :
+
+- `docs/registry/` pour les règles d'exploitation
+- `docs/pipelines/` pour les chemins de transformation explicites
+- `docs/cores/current/` pour l'état canonique courant
+- `docs/cores/releases/` pour les snapshots promus
+- `legacy/` pour l'historique, la traçabilité et la migration
+
+## Autorité
+
+L'autorité du repo se lit dans cet ordre :
+
+1. `docs/cores/current/`
+2. `docs/cores/releases/`
+3. `docs/registry/`
+4. `docs/pipelines/`
+5. `docs/prompts/shared/` et `docs/patcher/shared/`
+6. `docs/architecture/`
+7. `legacy/`
+
+## Règle d'interprétation
+
+Quand deux artefacts semblent se contredire :
+
+- privilégier `docs/cores/current/`
+- puis `docs/registry/`
+- puis le pipeline concerné
+- et considérer `legacy/` comme non autoritatif sauf besoin explicite de rétrospection
+
+## Legacy
+
+Le dossier `legacy/` est conservé pour :
+
+- l'historique
+- la traçabilité
+- la migration
+
+Règle :
+
+> Legacy peut informer. Legacy ne gouverne pas.
+
+## Licence
+
+À définir.
+EOF
+
+echo "==> Réécriture de docs/registry/operating_model.md"
+cat > docs/registry/operating_model.md <<'EOF'
 # Operating Model — Learn-it
 
 ## 1. Purpose
@@ -481,3 +568,97 @@ If two artifacts disagree, authority is resolved in this order:
 
 If ambiguity remains, the artifact with the clearer canonical status
 and the more recent explicit promotion wins.
+EOF
+
+echo "==> Réécriture de docs/registry/resources.md"
+cat > docs/registry/resources.md <<'EOF'
+# RESOURCES REGISTRY — Learn-it
+
+## Canonical current resources
+
+### Patch DSL
+- `docs/specs/patch-dsl/current.md`
+
+### Release Patch DSL
+- `docs/specs/release-patch/current.md`
+
+### Shared prompts
+- `docs/prompts/shared/Challenge_constitution.md`
+- `docs/prompts/shared/Make02CoreValidation.md`
+- `docs/prompts/shared/Make05CorePatch.md`
+- `docs/prompts/shared/Make06PatchValidation.md`
+- `docs/prompts/shared/Make07CoreRelease.md`
+- `docs/prompts/shared/Make08PatchExecutionReview.md`
+- `docs/prompts/shared/Make09ReleasePatch.md`
+
+### Shared patchers
+- `docs/patcher/shared/apply_patch.py`
+- `docs/patcher/shared/validate_patchset.py`
+- `docs/patcher/shared/apply_patch.sh`
+- `docs/patcher/shared/apply_release_patch.py`
+- `docs/patcher/shared/validate_release_patch.py`
+
+### Current cores
+- `docs/cores/current/constitution.yaml`
+- `docs/cores/current/referentiel.yaml`
+- `docs/cores/current/link.yaml`
+
+## Legacy resources preserved in `legacy/`
+
+### Legacy modular docs
+- `legacy/00_ROUTING_GLOBAL.md`
+- `legacy/constitution/`
+- `legacy/referentiel/`
+
+### Legacy patch workspace
+- `legacy/make_constitution/`
+
+### Legacy active Core location
+- `legacy/Current_Constitution/`
+
+### Legacy prompts collection
+- `legacy/prompts/`
+
+## Promotion rule
+
+Un fichier `shared/` ou `current/` ne doit être remplacé qu'après :
+
+1. dry-run du patcher
+2. validation patch-level
+3. validation structurelle des Core
+4. décision explicite de promotion
+EOF
+
+echo "==> Création de legacy/README.md"
+cat > legacy/README.md <<'EOF'
+# Legacy — Non authoritative archive
+
+Ce dossier conserve des artefacts historiques, de migration et de traçabilité.
+
+## Règles
+
+- `legacy/` peut informer
+- `legacy/` ne gouverne pas
+- ne pas utiliser `legacy/` comme point d'entrée par défaut
+
+## En cas de doute
+
+Utiliser dans cet ordre :
+
+1. `docs/cores/current/`
+2. `docs/registry/`
+3. le pipeline concerné
+
+## But
+
+Préserver l'historique sans créer d'ambiguïté avec les artefacts canoniques courants.
+EOF
+
+echo "==> Résumé"
+git diff -- README.md docs/registry/operating_model.md docs/registry/resources.md legacy/README.md || true
+
+echo
+echo "Terminé."
+echo "Vérifications conseillées :"
+echo "  git diff --stat"
+echo "  git diff"

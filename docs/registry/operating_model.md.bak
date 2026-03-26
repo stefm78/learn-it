@@ -29,7 +29,7 @@ This operating model applies to all artifacts under the repository's formal prod
 - `docs/patcher/shared/`
 - `docs/cores/current/`
 - `docs/cores/releases/`
-- `legacy/` and any preserved pre-framework materials located there
+- `docs/legacy/` and any preserved pre-framework materials
 
 It governs how artifacts are created, modified, promoted, archived, and interpreted.
 
@@ -81,12 +81,11 @@ A release may be superseded, but it must not be silently rewritten.
 
 ### 3.4 Non-authoritative reference layer
 
-Non-authoritative materials may inform analysis, migration, or traceability,
-but they do not define the current system state.
+Non-authoritative materials may inform analysis, migration, or traceability, but they do not define the current system state.
 
 Typical locations:
 
-- `legacy/`
+- `docs/legacy/`
 - historical DSL documents,
 - migration inputs,
 - analysis notes,
@@ -108,8 +107,7 @@ Every important artifact should be interpretable through one of the following st
 - **RELEASED** — official historical snapshot
 - **LEGACY** — preserved reference, non-authoritative
 
-If an artifact can be mistaken for canonical while not being canonical,
-it must be renamed, moved, marked, or archived.
+If an artifact can be mistaken for canonical while not being canonical, it must be renamed, moved, marked, or archived.
 
 ---
 
@@ -284,9 +282,7 @@ A valid release operation must do all of the following:
 
 Rule:
 
-> A release changes what is authoritative.
-
-It must therefore be explicit, reviewable, and reproducible.
+> A release changes what is authoritative. It must therefore be explicit, reviewable, and reproducible.
 
 ---
 
@@ -366,8 +362,7 @@ It should define and maintain at least:
 
 ## 11. Roles
 
-This repository can be operated by one person or many,
-but the roles should still be conceptually separated.
+This repository can be operated by one person or many, but the roles should still be conceptually separated.
 
 ### 11.1 Repository owner
 
@@ -397,8 +392,7 @@ Responsible for:
 - not bypassing canonical governance,
 - keeping non-authoritative artifacts clearly separated.
 
-These roles may be performed by the same person,
-but they should not be confused conceptually.
+These roles may be performed by the same person, but they should not be confused conceptually.
 
 ---
 
@@ -448,12 +442,12 @@ A change is done only when all of the following are true:
 
 The repository doctrine can be stated concisely as follows:
 
-> Learn-it is governed by pipelines.  
-> `docs/cores/current/` contains the current canonical state.  
-> `docs/cores/releases/` contains historical promoted snapshots.  
-> `docs/registry/` defines how the repository is operated.  
-> Shared prompting and patching logic live in dedicated shared layers.  
-> Legacy informs but never governs.  
+> Learn-it is governed by pipelines.
+> `docs/cores/current/` contains the current canonical state.
+> `docs/cores/releases/` contains historical promoted snapshots.
+> `docs/registry/` defines how the repository is operated.
+> Shared prompting and patching logic live in dedicated shared layers.
+> Legacy informs but never governs.
 > Any change that matters must follow an explicit operational path.
 
 ---
@@ -479,5 +473,5 @@ If two artifacts disagree, authority is resolved in this order:
 4. shared operational tooling,
 5. legacy and historical references.
 
-If ambiguity remains, the artifact with the clearer canonical status
-and the more recent explicit promotion wins.
+If ambiguity remains, the artifact with the clearer canonical status and the more recent explicit promotion wins.
+

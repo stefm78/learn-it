@@ -1,113 +1,66 @@
-# Learn-it 🎓
+# Learn-it
 
-> Moteur d'apprentissage adaptatif basé sur une architecture constitutionnelle formelle.
+Moteur d'apprentissage adaptatif basé sur une architecture constitutionnelle formelle.
 
----
+## Point d'entrée
+
+Le point d'entrée opérationnel du repo est :
+
+- `docs/README.md`
+
+Pour comprendre ou faire évoluer le dépôt, suivre ensuite :
+
+1. `docs/registry/operating_model.md`
+2. `docs/registry/pipelines.md`
+3. `docs/registry/resources.md`
+4. le `pipeline.md` du pipeline concerné
 
 ## Vue d'ensemble
 
-**Learn-it** est un système d'apprentissage adaptatif gouverné par une **Constitution** et un **Référentiel** séparés. La Constitution définit *le quoi et le pourquoi* (types, invariants, règles, contraintes), tandis que le Référentiel borne *le combien et le comment* (seuils, paramètres, valeurs par défaut).
+Learn-it est un système d'apprentissage adaptatif gouverné par pipelines.
 
-Le moteur fonctionne **100 % en local** pendant l'usage apprenant : aucun appel réseau en temps réel, aucune génération de contenu à la volée.
+Le repo n'est plus organisé comme un simple dépôt documentaire.
+Il est structuré autour de :
 
----
+- `docs/registry/` pour les règles d'exploitation
+- `docs/pipelines/` pour les chemins de transformation explicites
+- `docs/cores/current/` pour l'état canonique courant
+- `docs/cores/releases/` pour les snapshots promus
+- `legacy/` pour l'historique, la traçabilité et la migration
 
-## Architecture
+## Autorité
 
-```
-learn-it/
-├── docs/
-│   └── Current_Constitution/
-│       ├── Learn-it_Constitution_v1_7.yaml        # Constitution canonique (TYPES, INVARIANTS, RULES…)
-│       ├── Learn-it_referentiel_defaults_v0_6.yaml # Référentiel des seuils et paramètres
-│       └── Learnit__link_core.yaml                # Liens inter-Core
-└── prompts/                                       # Prompts opérationnels
-```
+L'autorité du repo se lit dans cet ordre :
 
----
+1. `docs/cores/current/`
+2. `docs/cores/releases/`
+3. `docs/registry/`
+4. `docs/pipelines/`
+5. `docs/prompts/shared/` et `docs/patcher/shared/`
+6. `docs/architecture/`
+7. `legacy/`
 
-## Concepts clés
+## Règle d'interprétation
 
-### Knowledge Unit (KU)
-Unité atomique du graphe de connaissances. **Toute KU doit être typée** (déclarative, procédurale, perceptuelle, créative…). Un type absent déclenche un mode de sécurité et interdit l'adaptation fine.
+Quand deux artefacts semblent se contredire :
 
-### Knowledge Graph
-Graphe orienté **acyclique** de KU reliées par des arêtes de dépendance explicites. La propagation d'incertitude est limitée à **un saut** : toute rétrogradation secondaire constitue un nouvel événement indépendant.
+- privilégier `docs/cores/current/`
+- puis `docs/registry/`
+- puis le pipeline concerné
+- et considérer `legacy/` comme non autoritatif sauf besoin explicite de rétrospection
 
-### Modèle de Maîtrise (MSC)
-Agrégation **AND stricte** sur trois composantes :
-| Composante | Signification |
-|------------|---------------|
-| **P** | Précision |
-| **R** | Robustesse temporelle |
-| **A** | Autonomie |
+## Legacy
 
-La composante **T** (transférabilité) est séparée de la maîtrise de base et ne peut jamais en être un prérequis.
+Le dossier `legacy/` est conservé pour :
 
-### Modèle d'état apprenant
-Trois axes observés en continu :
-- **Calibration** — décalage auto-rapport / performance
-- **Activation** — régime productif, détresse ou sous-défi (gouverné par AR-N1)
-- **Valeur-Coût (VC)** — perçue en fin de session via AR-N2 (optionnel)
+- l'historique
+- la traçabilité
+- la migration
 
-### Auto-rapports (AR)
-| Niveau | Moment | Rôle |
-|--------|--------|------|
-| AR-N1 | Événementiel runtime | Distinction confusion / frustration / anxiété |
-| AR-N2 | Fin de session | VC, difficulté perçue, intention de retour |
-| AR-N3 | Périodique | Bilan calibration dérivé AEQ |
+Règle :
 
-En absence d'AR-N1, le système adopte une **réponse conservatrice** (scaffolding léger réversible, sans pénalisation).
-
----
-
-## Invariants fondamentaux
-
-- 🔒 **Séparation Constitution / Référentiel** inviolable
-- 🔒 **Moteur 100 % local** en usage apprenant
-- 🔒 **Aucune génération de contenu** à la volée
-- 🔒 **Graphe acyclique** obligatoire
-- 🔒 **Propagation graphe limitée à 1 saut**
-- 🔒 **Logique AND du MSC** non patchable
-- 🔒 **Bloom ≥ 4 interdit** sans contexte authentique déclaré
-- 🔒 **Pas de biométrie** ni de surveillance hors session
-- 🔒 **Pas de déploiement Assisté** sans infrastructure tutorale
-
----
-
-## Système de Patch
-
-Les patches sont **occasionnels, bornés et atomiques**. Ils doivent être :
-1. **Générés et validés hors session** (QA pédagogique préalable)
-2. **Déterministes** dans leur validation locale (aucun critère sémantique ou interprétatif en local)
-3. **Rollbackés intégralement** en cas d'échec partiel
-
-Une dérive persistante non corrigeable par patch doit être **escaladée** vers la chaîne d'analyse hors session.
-
-> ⚠️ La philosophie adaptative, la logique AND du MSC et la règle de propagation graphe sont **non patchables**.
-
----
-
-## Niveaux d'autonomie moteur
-
-| Mode | Description |
-|------|-------------|
-| **Autonome** | Moteur décide seul |
-| **Hybride recommandé** | Suggestions humaines non bloquantes |
-| **Hybride bloquant** | Validation humaine requise |
-| **Assisté** | Infrastructure tutorale obligatoire |
-
----
-
-## Versions
-
-| Artefact | Version actuelle |
-|----------|------------------|
-| Constitution | v1.7 |
-| Référentiel | v0.6 |
-
----
+> Legacy peut informer. Legacy ne gouverne pas.
 
 ## Licence
 
-*À définir.*
+À définir.

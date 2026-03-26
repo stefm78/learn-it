@@ -29,27 +29,26 @@
 - `docs/cores/current/referentiel.yaml`
 - `docs/cores/current/link.yaml`
 
-## Legacy resources preserved in `legacy/`
+## Legacy resources preserved
 
 ### Legacy modular docs
-- `legacy/00_ROUTING_GLOBAL.md`
-- `legacy/constitution/`
-- `legacy/referentiel/`
+- `docs/00_ROUTING_GLOBAL.md`
+- `docs/constitution/`
+- `docs/referentiel/`
 
 ### Legacy patch workspace
-- `legacy/make_constitution/`
+- `docs/make_constitution/`
 
 ### Legacy active Core location
-- `legacy/Current_Constitution/`
+- `docs/Current_Constitution/`
 
 ### Legacy prompts collection
-- `legacy/prompts/`
+- `prompts/`
 
 ## Promotion rule
 
 Un fichier `shared/` ou `current/` ne doit être remplacé qu'après :
-
-1. dry-run du patcher
-2. validation patch-level
-3. validation structurelle des Core
-4. décision explicite de promotion
+1. dry-run du patcher ;
+2. validation patch-level ;
+3. validation structurelle des Core ;
+4. décision explicite de promotion.
