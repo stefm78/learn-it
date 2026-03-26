@@ -1,0 +1,59 @@
+RELEASE_PATCH_SET:
+  id: RELEASE_PROMOTION_PASSAGE_2C_FINAL
+  version: "1.0"
+  atomic: true
+  description: Promotion finale des Core canoniques et des outils partages v4 vers les chemins current/shared.
+  operations:
+    - op: assert_file_exists
+      path: docs/cores/releases/constitution_v1_7.yaml
+    - op: assert_file_exists
+      path: docs/cores/releases/referentiel_v0_6.yaml
+    - op: assert_file_exists
+      path: docs/cores/releases/link_v1_7__v0_6.yaml
+    - op: assert_file_exists
+      path: docs/patcher/shared/apply_patch_v4.py
+    - op: assert_file_exists
+      path: docs/patcher/shared/validate_patchset_v4.py
+
+    - op: assert_file_contains
+      path: docs/cores/releases/constitution_v1_7.yaml
+      text: CORE_LEARNIT_CONSTITUTION_V1_7
+    - op: assert_file_contains
+      path: docs/cores/releases/referentiel_v0_6.yaml
+      text: CORE_LEARNIT_REFERENTIEL_V0_6
+    - op: assert_file_contains
+      path: docs/cores/releases/link_v1_7__v0_6.yaml
+      text: CORE_LINK_LEARNIT_CONSTITUTION_V1_7__REFERENTIEL_V0_6
+
+    - op: promote_file
+      from: docs/cores/releases/constitution_v1_7.yaml
+      to: docs/cores/current/constitution.yaml
+    - op: promote_file
+      from: docs/cores/releases/referentiel_v0_6.yaml
+      to: docs/cores/current/referentiel.yaml
+    - op: promote_file
+      from: docs/cores/releases/link_v1_7__v0_6.yaml
+      to: docs/cores/current/link.yaml
+
+    - op: sync_copy
+      from: docs/patcher/shared/apply_patch_v4.py
+      to: docs/patcher/shared/apply_patch.py
+    - op: sync_copy
+      from: docs/patcher/shared/validate_patchset_v4.py
+      to: docs/patcher/shared/validate_patchset.py
+
+    - op: replace_text
+      file: docs/architecture/Passage2_Promotion_Status.md
+      old: "docs/cores/current/*.yaml restent des pointeurs descriptifs"
+      new: "docs/cores/current/*.yaml sont des copies canoniques promues"
+      strict: false
+
+    - op: replace_text
+      file: docs/architecture/Passage2_Promotion_Status.md
+      old: "docs/patcher/shared/apply_patch.py reste un wrapper provisoire vers le patcher legacy"
+      new: "docs/patcher/shared/apply_patch.py est maintenant synchronise avec le moteur partage v4"
+      strict: false
+
+    - op: note
+      id: RELEASE_PATCH_FINALIZES_PASSAGE_2C
+      text: Ce release patch termine la promotion fonctionnelle du Passage 2C.

@@ -1,0 +1,24 @@
+RELEASE_PATCH_EXECUTION_REPORT:
+  patch_id: RELEASE_PROMOTION_PASSAGE_2C_FINAL
+  version: '1.0'
+  atomic: true
+  whatif: false
+  status: PASS
+  operations:
+  - assert_file_exists docs/cores/releases/constitution_v1_7.yaml
+  - assert_file_exists docs/cores/releases/referentiel_v0_6.yaml
+  - assert_file_exists docs/cores/releases/link_v1_7__v0_6.yaml
+  - assert_file_exists docs/patcher/shared/apply_patch_v4.py
+  - assert_file_exists docs/patcher/shared/validate_patchset_v4.py
+  - assert_file_contains docs/cores/releases/constitution_v1_7.yaml
+  - assert_file_contains docs/cores/releases/referentiel_v0_6.yaml
+  - assert_file_contains docs/cores/releases/link_v1_7__v0_6.yaml
+  - promote_file docs/cores/releases/constitution_v1_7.yaml -> docs/cores/current/constitution.yaml
+  - promote_file docs/cores/releases/referentiel_v0_6.yaml -> docs/cores/current/referentiel.yaml
+  - promote_file docs/cores/releases/link_v1_7__v0_6.yaml -> docs/cores/current/link.yaml
+  - sync_copy docs/patcher/shared/apply_patch_v4.py -> docs/patcher/shared/apply_patch.py
+  - sync_copy docs/patcher/shared/validate_patchset_v4.py -> docs/patcher/shared/validate_patchset.py
+  - replace_text no-op docs/architecture/Passage2_Promotion_Status.md
+  - replace_text no-op docs/architecture/Passage2_Promotion_Status.md
+  - note RELEASE_PATCH_FINALIZES_PASSAGE_2C
+  errors: []
