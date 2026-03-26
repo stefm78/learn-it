@@ -1,0 +1,20 @@
+RELEASE_PATCH_EXECUTION_REPORT:
+  patch_id: GOVERNANCE_STAGE_04_REGISTRY_ALIGNMENT
+  version: "1.0"
+  atomic: true
+  whatif: false
+  status: FAIL
+  operations:
+    - assert_file_exists docs/registry/pipelines.md
+    - assert_file_exists docs/registry/resources.md
+  errors:
+    - >-
+      Application non finalisée via le connecteur GitHub disponible dans cette session.
+      La création de nouveaux fichiers fonctionne, mais la primitive exposée pour la mise à jour
+      de fichiers existants (`create_file`) ne prend pas en charge le paramètre `sha` nécessaire
+      à l’update de `docs/registry/pipelines.md` et `docs/registry/resources.md`.
+  notes:
+    - Le patchset stage 04 a bien été produit.
+    - La validation stage 05 est PASS.
+    - Aucun changement de contenu n’a été effectivement appliqué aux fichiers de registry existants.
+    - Aucun `.bak` supplémentaire n’a été créé dans le repo via cette exécution.

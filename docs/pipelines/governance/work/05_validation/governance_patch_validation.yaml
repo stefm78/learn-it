@@ -1,0 +1,14 @@
+RELEASE_PATCH_VALIDATION:
+  status: PASS
+  scope: release_patch
+  anomalies_count: 0
+  warnings_count: 1
+  anomalies:
+    - none
+  warnings:
+    - aucune operation de promotion ou synchronisation detectee
+  validated_patch: docs/pipelines/governance/work/04_patch/governance_release_patchset.yaml
+  rationale: >-
+    Le patchset est structurellement valide pour le Release Patch DSL v1.
+    Il utilise des operations assert_file_exists, replace_text et note uniquement,
+    ce qui est coherent avec un correctif repo-level minimal sur fichiers markdown de registry.

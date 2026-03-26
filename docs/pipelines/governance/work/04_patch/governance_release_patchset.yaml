@@ -1,0 +1,230 @@
+RELEASE_PATCH_SET:
+  id: GOVERNANCE_STAGE_04_REGISTRY_ALIGNMENT
+  version: "1.0"
+  atomic: true
+  description: >-
+    Minimal repo-level governance patch for registry alignment after stage 03 arbitrage.
+    Uses release-patch text operations because the current standard patcher is core-YAML-oriented
+    and does not patch markdown registry files directly.
+  operations:
+    - op: assert_file_exists
+      path: docs/registry/pipelines.md
+
+    - op: assert_file_exists
+      path: docs/registry/resources.md
+
+    - op: replace_text
+      file: docs/registry/pipelines.md
+      old: |
+        # PIPELINE REGISTRY — Learn-it
+
+        ## Available pipelines
+
+        ### constitution
+        - Path: `docs/pipelines/constitution/pipeline.md`
+        - Goal: challenger les Core, synthétiser un patch, valider et préparer la promotion
+        - Canonical state: `docs/pipelines/constitution/state.yaml`
+
+        ### release
+        - Path: `docs/pipelines/release/pipeline.md`
+        - Goal: synchroniser versions internes, références inter-Core et notes de release
+        - Canonical state: `docs/pipelines/release/state.yaml`
+
+        ### migration
+        - Path: `docs/pipelines/migration/pipeline.md`
+        - Goal: migrations structurelles ou de format sur les Core, prompts ou patchers
+        - Canonical state: `docs/pipelines/migration/state.yaml`
+
+        ## Global rules
+
+        - Un pipeline ne lit jamais directement un fichier dans `archive/`
+        - Un pipeline consomme uniquement :
+          - `docs/registry/`
+          - `docs/specs/patch-dsl/current.md`
+          - `docs/prompts/shared/`
+          - `docs/patcher/shared/`
+          - `docs/cores/current/`
+          - son propre dossier `docs/pipelines/<id>/`
+        - Les artefacts temporaires doivent rester dans le pipeline qui les a produits
+        - Toute promotion vers `current/` ou `releases/` exige validation explicite
+
+        ### governance
+        - Path: `docs/pipelines/governance/pipeline.md`
+        - Goal: maintenir la cohérence opératoire du repo, des registres, des pipelines, des chemins canoniques et de la séparation operating / release / legacy
+        - Canonical state: `docs/pipelines/governance/state.yaml`
+      new: |
+        # PIPELINE REGISTRY — Learn-it
+
+        ## Available pipelines
+
+        ### constitution
+        - Path: `docs/pipelines/constitution/pipeline.md`
+        - Goal: challenger les Core, synthétiser un patch, valider et préparer la promotion
+        - Canonical state: `docs/pipelines/constitution/state.yaml`
+
+        ### release
+        - Path: `docs/pipelines/release/pipeline.md`
+        - Goal: synchroniser versions internes, références inter-Core et notes de release
+        - Canonical state: `docs/pipelines/release/state.yaml`
+
+        ### migration
+        - Path: `docs/pipelines/migration/pipeline.md`
+        - Goal: migrations structurelles ou de format sur les Core, prompts ou patchers
+        - Canonical state: `docs/pipelines/migration/state.yaml`
+
+        ### governance
+        - Path: `docs/pipelines/governance/pipeline.md`
+        - Goal: maintenir la cohérence opératoire du repo, des registres, des pipelines, des chemins canoniques et de la séparation operating / release / legacy
+        - Canonical state: `docs/pipelines/governance/state.yaml`
+
+        ## Global rules
+
+        - Un pipeline ne lit jamais directement un fichier dans `legacy/` sauf si la tâche vise explicitement l’historique ou une ressource non encore promue
+        - Un pipeline consomme uniquement les couches autorisées par son `pipeline.md`, parmi :
+          - `docs/registry/`
+          - `docs/specs/`
+          - `docs/prompts/shared/`
+          - `docs/patcher/shared/`
+          - `docs/cores/current/`
+          - `docs/cores/releases/`
+          - `docs/architecture/`
+          - `legacy/`
+          - son propre dossier `docs/pipelines/<id>/`
+        - Les artefacts temporaires doivent rester dans le pipeline qui les a produits
+        - Toute promotion vers `current/` ou `releases/` exige validation explicite
+
+    - op: replace_text
+      file: docs/registry/resources.md
+      old: |
+        # RESOURCES REGISTRY — Learn-it
+
+        ## Canonical current resources
+
+        ### Patch DSL
+        - `docs/specs/patch-dsl/current.md`
+
+        ### Release Patch DSL
+        - `docs/specs/release-patch/current.md`
+
+        ### Shared prompts
+        - `docs/prompts/shared/Make12GovernanceReview.md`
+        - `docs/prompts/shared/Make11GovernancePatch.md`
+        - `docs/prompts/shared/Make10GovernanceAudit.md`
+        - `docs/prompts/shared/Challenge_constitution.md`
+        - `docs/prompts/shared/Make02CoreValidation.md`
+        - `docs/prompts/shared/Make05CorePatch.md`
+        - `docs/prompts/shared/Make06PatchValidation.md`
+        - `docs/prompts/shared/Make07CoreRelease.md`
+        - `docs/prompts/shared/Make08PatchExecutionReview.md`
+        - `docs/prompts/shared/Make09ReleasePatch.md`
+
+        ### Shared patchers
+        - `docs/patcher/shared/apply_patch.py`
+        - `docs/patcher/shared/validate_patchset.py`
+        - `docs/patcher/shared/apply_patch.sh`
+        - `docs/patcher/shared/apply_release_patch.py`
+        - `docs/patcher/shared/validate_release_patch.py`
+
+        ### Current cores
+        - `docs/cores/current/constitution.yaml`
+        - `docs/cores/current/referentiel.yaml`
+        - `docs/cores/current/link.yaml`
+
+        ## Legacy resources preserved in `legacy/`
+
+        ### Legacy modular docs
+        - `legacy/00_ROUTING_GLOBAL.md`
+        - `legacy/constitution/`
+        - `legacy/referentiel/`
+
+        ### Legacy patch workspace
+        - `legacy/make_constitution/`
+
+        ### Legacy active Core location
+        - `legacy/Current_Constitution/`
+
+        ### Legacy prompts collection
+        - `legacy/prompts/`
+
+        ## Promotion rule
+
+        Un fichier `shared/` ou `current/` ne doit être remplacé qu'après :
+
+        1. dry-run du patcher
+        2. validation patch-level
+        3. validation structurelle des Core
+        4. décision explicite de promotion
+      new: |
+        # RESOURCES REGISTRY — Learn-it
+
+        ## Canonical current resources
+
+        ### Patch DSL
+        - `docs/specs/patch-dsl/current.md`
+
+        ### Release Patch DSL
+        - `docs/specs/release-patch/current.md`
+
+        ### Shared prompts
+        - `docs/prompts/shared/Make12GovernanceReview.md`
+        - `docs/prompts/shared/Make11GovernancePatch.md`
+        - `docs/prompts/shared/Make10GovernanceAudit.md`
+        - `docs/prompts/shared/Challenge_constitution.md`
+        - `docs/prompts/shared/Make02CoreValidation.md`
+        - `docs/prompts/shared/Make05CorePatch.md`
+        - `docs/prompts/shared/Make06PatchValidation.md`
+        - `docs/prompts/shared/Make07CoreRelease.md`
+        - `docs/prompts/shared/Make08PatchExecutionReview.md`
+        - `docs/prompts/shared/Make09ReleasePatch.md`
+
+        ### Shared patchers
+        - `docs/patcher/shared/apply_patch.py`
+        - `docs/patcher/shared/validate_patchset.py`
+        - `docs/patcher/shared/apply_patch.sh`
+        - `docs/patcher/shared/apply_patch_v4.py`
+        - `docs/patcher/shared/validate_patchset_v4.py`
+        - `docs/patcher/shared/apply_release_patch.py`
+        - `docs/patcher/shared/validate_release_patch.py`
+        - `docs/patcher/shared/README.md`
+
+        ### Current cores
+        - `docs/cores/current/constitution.yaml`
+        - `docs/cores/current/referentiel.yaml`
+        - `docs/cores/current/link.yaml`
+
+        ## Legacy resources preserved in `legacy/`
+
+        ### Legacy modular docs
+        - `legacy/00_ROUTING_GLOBAL.md`
+        - `legacy/constitution/`
+        - `legacy/docs/referentiel/`
+
+        ### Legacy patch workspace
+        - `legacy/make_constitution/`
+
+        ### Legacy former Core location
+        - `legacy/Current_Constitution/`
+
+        ### Legacy prompts collection
+        - `legacy/prompts/`
+
+        ## Promotion rule
+
+        Un fichier `shared/` ou `current/` ne doit être remplacé qu'après :
+
+        1. dry-run du patcher
+        2. validation patch-level
+        3. validation structurelle des Core
+        4. décision explicite de promotion
+
+    - op: note
+      id: MANUAL_REGISTRY_BACKUPS
+      value: >-
+        Les fichiers .bak visibles dans docs/registry/ restent hors du patchset et doivent être
+        traités par edit manuel limité conformément à l’arbitrage stage 03.
+
+    - op: note
+      id: MANUAL_SCAN_CLEANUP
+      value: >-
+        Le nettoyage de docs/pipelines/governance/work/01_scan/repo_inventory.md reste hors du patchset
+        et doit être traité par edit manuel limité conformément à l’arbitrage stage 03.
