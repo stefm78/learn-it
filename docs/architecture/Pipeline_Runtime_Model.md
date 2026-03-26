@@ -17,7 +17,8 @@ Voici un markdown prêt à enregistrer, par exemple sous :
 
 `docs/architecture/Pipeline_Runtime_Model.md`
 
-````md
+---
+
 # Pipeline Runtime Model
 
 ## Objectif
