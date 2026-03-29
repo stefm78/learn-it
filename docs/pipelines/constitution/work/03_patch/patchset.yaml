@@ -8,21 +8,36 @@ PATCH_SET:
     micro-renfort Constitution pour expliciter qu'un axe d'état peut rester unknown/absent
     plutôt qu'être forcé en présence de sources absentes ou non autorisées.
 
+  federation:
+    LINK_REF_CORE_LEARNIT_CONSTITUTION_V1_7:
+      file: docs/cores/current/constitution.yaml
+      expected_core_id: CORE_LEARNIT_CONSTITUTION_V1_7
+    LINK_REF_CORE_LEARNIT_REFERENTIEL_V0_6:
+      file: docs/cores/current/referentiel.yaml
+      expected_core_id: CORE_LEARNIT_REFERENTIEL_V0_6
+
   files:
     - file: docs/cores/current/constitution.yaml
       expected_core_id: CORE_LEARNIT_CONSTITUTION_V1_7
       operations:
         - op: assert_meta
-          fields:
-            core_type: CONSTITUTION
-            version: V1_7_FINAL
+          target:
+            field: core_type
+          value: CONSTITUTION
+
+        - op: assert_meta
+          target:
+            field: version
+          value: V1_7_FINAL
 
         - op: ensure_absent
-          section: RULES
-          id: RULE_LEARNER_STATE_AXIS_UNKNOWN_ALLOWED
+          target:
+            section: RULES
+            id: RULE_LEARNER_STATE_AXIS_UNKNOWN_ALLOWED
 
         - op: append
-          section: RULES
+          target:
+            section: RULES
           value:
             id: RULE_LEARNER_STATE_AXIS_UNKNOWN_ALLOWED
             authority: primary
@@ -49,22 +64,29 @@ PATCH_SET:
               effect: >
                 L'axe concerné reste unknown/absent/non-observable ; aucune valeur n'est forcée
                 par simple complétion implicite au niveau constitutionnel.
-            scope: runtime_state
+              scope: runtime_state
 
     - file: docs/cores/current/link.yaml
       expected_core_id: CORE_LINK_LEARNIT_CONSTITUTION_V1_7__REFERENTIEL_V0_6
       operations:
         - op: assert_meta
-          fields:
-            core_type: LINK
-            version: V1_7__V0_6_FINAL
+          target:
+            field: core_type
+          value: LINK
+
+        - op: assert_meta
+          target:
+            field: version
+          value: V1_7__V0_6_FINAL
 
         - op: ensure_absent
-          section: TYPES
-          id: TYPE_BINDING_LEARNER_STATE_SIGNAL_AUTHORITY_CHAIN
+          target:
+            section: TYPES
+            id: TYPE_BINDING_LEARNER_STATE_SIGNAL_AUTHORITY_CHAIN
 
         - op: append
-          section: TYPES
+          target:
+            section: TYPES
           value:
             id: TYPE_BINDING_LEARNER_STATE_SIGNAL_AUTHORITY_CHAIN
             authority: derived
@@ -77,31 +99,31 @@ PATCH_SET:
             relations:
               - type: binds
                 target:
-                  id: TYPE_STATE_AXIS_ACTIVATION
+                  id: LINK_REF_CORE_LEARNIT_CONSTITUTION_V1_7::TYPE_STATE_AXIS_ACTIVATION
               - type: binds
                 target:
-                  id: TYPE_STATE_AXIS_VALUE_COST
+                  id: LINK_REF_CORE_LEARNIT_CONSTITUTION_V1_7::TYPE_STATE_AXIS_VALUE_COST
               - type: binds
                 target:
-                  id: TYPE_SELF_REPORT_AR_N1
+                  id: LINK_REF_CORE_LEARNIT_CONSTITUTION_V1_7::TYPE_SELF_REPORT_AR_N1
               - type: binds
                 target:
-                  id: TYPE_SELF_REPORT_AR_N2
+                  id: LINK_REF_CORE_LEARNIT_CONSTITUTION_V1_7::TYPE_SELF_REPORT_AR_N2
               - type: binds
                 target:
-                  id: TYPE_SELF_REPORT_AR_N3
+                  id: LINK_REF_CORE_LEARNIT_CONSTITUTION_V1_7::TYPE_SELF_REPORT_AR_N3
               - type: binds
                 target:
-                  id: TYPE_REFERENTIEL_SIGNAL_CONFIDENCE_HIERARCHY
+                  id: LINK_REF_CORE_LEARNIT_REFERENTIEL_V0_6::TYPE_REFERENTIEL_SIGNAL_CONFIDENCE_HIERARCHY
               - type: binds
                 target:
-                  id: RULE_REFERENTIEL_SIGNAL_PRECEDENCE_ORDER
+                  id: LINK_REF_CORE_LEARNIT_REFERENTIEL_V0_6::RULE_REFERENTIEL_SIGNAL_PRECEDENCE_ORDER
               - type: binds
                 target:
-                  id: RULE_REFERENTIEL_LOW_AR_CALIBRATION_TEMPORARILY_REWEIGHTS_SIGNALS
+                  id: LINK_REF_CORE_LEARNIT_REFERENTIEL_V0_6::RULE_REFERENTIEL_LOW_AR_CALIBRATION_TEMPORARILY_REWEIGHTS_SIGNALS
               - type: binds
                 target:
-                  id: INV_REFERENTIEL_VC_UNKNOWN_MEANS_NO_INFERENCE
+                  id: LINK_REF_CORE_LEARNIT_REFERENTIEL_V0_6::INV_REFERENTIEL_VC_UNKNOWN_MEANS_NO_INFERENCE
             patchable: false
             parameterizable: false
             human_readable: >
@@ -114,14 +136,16 @@ PATCH_SET:
               effect: >
                 La Constitution déclare les axes, sources autorisées et statuts admissibles ;
                 le Référentiel borne l'ordre de résolution, le reweighting et les interdits d'inférence.
-            scope: intercore_binding
+              scope: intercore_binding
 
         - op: ensure_absent
-          section: TYPES
-          id: TYPE_BINDING_MSC_COMPONENTS_TO_REFERENTIEL_PARAMETERS
+          target:
+            section: TYPES
+            id: TYPE_BINDING_MSC_COMPONENTS_TO_REFERENTIEL_PARAMETERS
 
         - op: append
-          section: TYPES
+          target:
+            section: TYPES
           value:
             id: TYPE_BINDING_MSC_COMPONENTS_TO_REFERENTIEL_PARAMETERS
             authority: derived
@@ -134,25 +158,25 @@ PATCH_SET:
             relations:
               - type: binds
                 target:
-                  id: TYPE_MASTERY_COMPONENT_P
+                  id: LINK_REF_CORE_LEARNIT_CONSTITUTION_V1_7::TYPE_MASTERY_COMPONENT_P
               - type: binds
                 target:
-                  id: PARAM_REFERENTIEL_MSC_PRECISION_THRESHOLD
+                  id: LINK_REF_CORE_LEARNIT_REFERENTIEL_V0_6::PARAM_REFERENTIEL_MSC_PRECISION_THRESHOLD
               - type: binds
                 target:
-                  id: TYPE_MASTERY_COMPONENT_R
+                  id: LINK_REF_CORE_LEARNIT_CONSTITUTION_V1_7::TYPE_MASTERY_COMPONENT_R
               - type: binds
                 target:
-                  id: PARAM_REFERENTIEL_MSC_ROBUSTNESS_DELAY_SHORT
+                  id: LINK_REF_CORE_LEARNIT_REFERENTIEL_V0_6::PARAM_REFERENTIEL_MSC_ROBUSTNESS_DELAY_SHORT
               - type: binds
                 target:
-                  id: TYPE_MASTERY_COMPONENT_A
+                  id: LINK_REF_CORE_LEARNIT_CONSTITUTION_V1_7::TYPE_MASTERY_COMPONENT_A
               - type: binds
                 target:
-                  id: PARAM_REFERENTIEL_MSC_AUTONOMY_SUCCESS_COUNT
+                  id: LINK_REF_CORE_LEARNIT_REFERENTIEL_V0_6::PARAM_REFERENTIEL_MSC_AUTONOMY_SUCCESS_COUNT
               - type: binds
                 target:
-                  id: TYPE_REFERENTIEL_REFERENTIAL_PARAMETER_LAYER
+                  id: LINK_REF_CORE_LEARNIT_REFERENTIEL_V0_6::TYPE_REFERENTIEL_REFERENTIAL_PARAMETER_LAYER
             patchable: false
             parameterizable: false
             human_readable: >
@@ -164,14 +188,16 @@ PATCH_SET:
               effect: >
                 La résolution de P, R et A vers les paramètres référentiels minimaux obligatoires
                 devient explicite et auditables sans déplacer la logique MSC hors Constitution.
-            scope: intercore_binding
+              scope: intercore_binding
 
         - op: ensure_absent
-          section: TYPES
-          id: TYPE_BINDING_FEEDBACK_COVERAGE_TO_REFERENTIEL_THRESHOLD
+          target:
+            section: TYPES
+            id: TYPE_BINDING_FEEDBACK_COVERAGE_TO_REFERENTIEL_THRESHOLD
 
         - op: append
-          section: TYPES
+          target:
+            section: TYPES
           value:
             id: TYPE_BINDING_FEEDBACK_COVERAGE_TO_REFERENTIEL_THRESHOLD
             authority: derived
@@ -184,19 +210,19 @@ PATCH_SET:
             relations:
               - type: binds
                 target:
-                  id: TYPE_FEEDBACK_COVERAGE_MATRIX
+                  id: LINK_REF_CORE_LEARNIT_CONSTITUTION_V1_7::TYPE_FEEDBACK_COVERAGE_MATRIX
               - type: binds
                 target:
-                  id: RULE_UNCOVERED_ERROR_GENERIC_FEEDBACK
+                  id: LINK_REF_CORE_LEARNIT_CONSTITUTION_V1_7::RULE_UNCOVERED_ERROR_GENERIC_FEEDBACK
               - type: binds
                 target:
-                  id: PARAM_REFERENTIEL_FEEDBACK_COVERAGE_REFERENCE_THRESHOLD
+                  id: LINK_REF_CORE_LEARNIT_REFERENTIEL_V0_6::PARAM_REFERENTIEL_FEEDBACK_COVERAGE_REFERENCE_THRESHOLD
               - type: binds
                 target:
-                  id: RULE_REFERENTIEL_LOW_FEEDBACK_COVERAGE_SIGNALS_REVISION
+                  id: LINK_REF_CORE_LEARNIT_REFERENTIEL_V0_6::RULE_REFERENTIEL_LOW_FEEDBACK_COVERAGE_SIGNALS_REVISION
               - type: binds
                 target:
-                  id: EVENT_REFERENTIEL_FEEDBACK_COVERAGE_LOW
+                  id: LINK_REF_CORE_LEARNIT_REFERENTIEL_V0_6::EVENT_REFERENTIEL_FEEDBACK_COVERAGE_LOW
             patchable: false
             parameterizable: false
             human_readable: >
@@ -208,14 +234,16 @@ PATCH_SET:
               effect: >
                 Le fallback constitutionnel et le signal référentiel de couverture basse
                 sont fédérés sans introduire de logique métier autonome dans le LINK.
-            scope: intercore_binding
+              scope: intercore_binding
 
         - op: ensure_absent
-          section: TYPES
-          id: TYPE_BINDING_PATCH_TRIGGER_GOVERNANCE_CHAIN
+          target:
+            section: TYPES
+            id: TYPE_BINDING_PATCH_TRIGGER_GOVERNANCE_CHAIN
 
         - op: append
-          section: TYPES
+          target:
+            section: TYPES
           value:
             id: TYPE_BINDING_PATCH_TRIGGER_GOVERNANCE_CHAIN
             authority: derived
@@ -228,28 +256,28 @@ PATCH_SET:
             relations:
               - type: binds
                 target:
-                  id: TYPE_PATCH_ARTIFACT
+                  id: LINK_REF_CORE_LEARNIT_CONSTITUTION_V1_7::TYPE_PATCH_ARTIFACT
               - type: binds
                 target:
-                  id: TYPE_PATCH_IMPACT_SCOPE
+                  id: LINK_REF_CORE_LEARNIT_CONSTITUTION_V1_7::TYPE_PATCH_IMPACT_SCOPE
               - type: binds
                 target:
-                  id: TYPE_PATCH_QUALITY_GATE
+                  id: LINK_REF_CORE_LEARNIT_CONSTITUTION_V1_7::TYPE_PATCH_QUALITY_GATE
               - type: binds
                 target:
-                  id: TYPE_REFERENTIEL_PATCH_TRIGGER_TABLE
+                  id: LINK_REF_CORE_LEARNIT_REFERENTIEL_V0_6::TYPE_REFERENTIEL_PATCH_TRIGGER_TABLE
               - type: binds
                 target:
-                  id: EVENT_REFERENTIEL_PATCH_TRIGGER_THRESHOLD_CROSSED
+                  id: LINK_REF_CORE_LEARNIT_REFERENTIEL_V0_6::EVENT_REFERENTIEL_PATCH_TRIGGER_THRESHOLD_CROSSED
               - type: binds
                 target:
-                  id: CONSTRAINT_REFERENTIEL_PATCH_SCOPE_MUST_REMAIN_CONSTITUTIONALLY_BOUNDED
+                  id: LINK_REF_CORE_LEARNIT_REFERENTIEL_V0_6::CONSTRAINT_REFERENTIEL_PATCH_SCOPE_MUST_REMAIN_CONSTITUTIONALLY_BOUNDED
               - type: binds
                 target:
-                  id: CONSTRAINT_REFERENTIEL_LOCAL_VERIFICATION_REQUIRED_BEFORE_PATCH_APPLY
+                  id: LINK_REF_CORE_LEARNIT_REFERENTIEL_V0_6::CONSTRAINT_REFERENTIEL_LOCAL_VERIFICATION_REQUIRED_BEFORE_PATCH_APPLY
               - type: binds
                 target:
-                  id: ACTION_REFERENTIEL_TRIGGER_RELEVANCE_PATCH
+                  id: LINK_REF_CORE_LEARNIT_REFERENTIEL_V0_6::ACTION_REFERENTIEL_TRIGGER_RELEVANCE_PATCH
             patchable: false
             parameterizable: false
             human_readable: >
@@ -263,4 +291,4 @@ PATCH_SET:
                 L'éligibilité référentielle d'un patch est reliée explicitement
                 aux contraintes constitutionnelles d'impact_scope, de quality gate
                 et de validation locale déterministe.
-            scope: intercore_binding
+              scope: intercore_binding

@@ -17,6 +17,9 @@ Vérifier qu'un PATCH_SET est sûr, minimal, cohérent et applicable sans casser
 10. patch minimal
 11. aucune régression évidente de gouvernance
 12. réécriture des références prévue si nécessaire
+13. si des références inter-Core fines sont utilisées, `federation` est présente et cohérente
+14. aucune référence inter-Core fine n'est laissée sous forme d'id brut ambigu
+15. le dry-run du patcher doit être considéré comme validation exécutable finale avant apply réel
 
 # OUTPUT
 

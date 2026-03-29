@@ -17,6 +17,10 @@ PATCH_SET:
   patch_dsl_version:
   atomic:
   description:
+  federation:
+    CORE_REF_ALIAS:
+      file:
+      expected_core_id:
   files:
     - file:
       expected_core_id:
@@ -52,6 +56,13 @@ PATCH_SET:
 - Pas de doublon d'id
 - Pas d'invention gratuite
 - Si un objet existant doit être modifié, préférer `replace`, `replace_field` ou l'opération fine adaptée
+- Si un objet du LINK référence explicitement un objet fin d'un autre Core, utiliser une référence inter-Core qualifiée
+- Une référence inter-Core qualifiée s'écrit `CORE_REF_ALIAS::ITEM_ID`
+- Toute référence inter-Core qualifiée exige une entrée correspondante dans `PATCH_SET.federation`
+- `federation` ne doit déclarer que les Core externes réellement visés par le patch
+- Ne jamais utiliser dans le LINK un `target.id` brut pointant vers un id absent du document courant si la cible est en fait située dans un autre Core
+- Si une cible externe doit être très explicite dans une relation, la forme structurée suivante est autorisée :
+  - `target: { core_ref: LINK_REF_CORE_..., id: ... }`
 
 # OUTPUT
 Tu produis uniquement un PATCH_SET YAML directement applicable.
