@@ -1,66 +1,9 @@
-PATCH_VALIDATION:
+PATCHSET_VALIDATION:
   status: PASS
-  severity: none
-  pipeline_stage: STAGE_04_PATCH_VALIDATION
-  patchset_id: PATCH_CONSTITUTION_PIPELINE_STAGE03_MINIMALISTE_RENFORCEE_2026_03_26
-
-  summary:
-    accepted_checks:
-      - patchset present in expected stage location
-      - patch_dsl_version declared
-      - atomic flag declared
-      - target files are coherent with intended scope
-      - expected_core_id values match current core ids
-      - constitution target rule is absent from current core and can be appended
-      - learner-state signal authority chain references are resolvable
-      - msc-to-referentiel parameter bindings are resolvable
-      - feedback coverage bindings are resolvable
-      - patch trigger governance bindings are resolvable
-
-    blocking_anomalies: []
-
-  validated_targets:
-    constitution:
-      core_id: CORE_LEARNIT_CONSTITUTION_V1_7
-      version: V1_7_FINAL
-      checks:
-        - RULE_LEARNER_STATE_AXIS_UNKNOWN_ALLOWED is absent in current constitution
-        - TYPE_LEARNER_STATE_MODEL exists
-        - TYPE_STATE_AXIS_ACTIVATION exists
-        - TYPE_STATE_AXIS_VALUE_COST exists
-        - TYPE_SELF_REPORT_AR_N1 exists
-        - TYPE_SELF_REPORT_AR_N2 exists
-
-    link:
-      core_id: CORE_LINK_LEARNIT_CONSTITUTION_V1_7__REFERENTIEL_V0_6
-      version: V1_7__V0_6_FINAL
-      checks:
-        - TYPE_BINDING_CONSTITUTION_REFERENTIEL_LAYER_SEPARATION exists
-        - TYPE_BINDING_CONSTITUTION_TO_REFERENTIEL_OPERATIONAL_PARAMETERS exists
-        - TYPE_BINDING_REFERENTIEL_TO_CONSTITUTION_GOVERNING_INVARIANTS exists
-        - new binding ids proposed by patch are currently absent and append-compatible
-
-    referentiel:
-      checks:
-        - TYPE_REFERENTIEL_SIGNAL_CONFIDENCE_HIERARCHY exists
-        - RULE_REFERENTIEL_SIGNAL_PRECEDENCE_ORDER exists
-        - RULE_REFERENTIEL_LOW_AR_CALIBRATION_TEMPORARILY_REWEIGHTS_SIGNALS exists
-        - INV_REFERENTIEL_VC_UNKNOWN_MEANS_NO_INFERENCE exists
-        - TYPE_REFERENTIEL_REFERENTIAL_PARAMETER_LAYER exists
-        - PARAM_REFERENTIEL_MSC_PRECISION_THRESHOLD exists
-        - PARAM_REFERENTIEL_MSC_ROBUSTNESS_DELAY_SHORT exists
-        - PARAM_REFERENTIEL_MSC_AUTONOMY_SUCCESS_COUNT exists
-        - PARAM_REFERENTIEL_FEEDBACK_COVERAGE_REFERENCE_THRESHOLD exists
-        - RULE_REFERENTIEL_LOW_FEEDBACK_COVERAGE_SIGNALS_REVISION exists
-        - EVENT_REFERENTIEL_FEEDBACK_COVERAGE_LOW exists
-        - TYPE_REFERENTIEL_PATCH_TRIGGER_TABLE exists
-        - EVENT_REFERENTIEL_PATCH_TRIGGER_THRESHOLD_CROSSED exists
-        - CONSTRAINT_REFERENTIEL_PATCH_SCOPE_MUST_REMAIN_CONSTITUTIONALLY_BOUNDED exists
-        - CONSTRAINT_REFERENTIEL_LOCAL_VERIFICATION_REQUIRED_BEFORE_PATCH_APPLY exists
-        - ACTION_REFERENTIEL_TRIGGER_RELEVANCE_PATCH exists
-
-  decision:
-    apply_allowed: true
-    reason: >
-      Patch references are resolvable against the current Constitution, LINK and
-      Referentiel cores. No blocking mismatch remains for Stage 05 apply.
+  scope: patchset
+  anomalies_count: 0
+  warnings_count: 0
+  anomalies:
+    - none
+  warnings:
+    - none
