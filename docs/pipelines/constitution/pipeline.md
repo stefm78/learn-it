@@ -208,16 +208,9 @@ Outputs :
   - `work/06_core_validation/core_validation.yaml`
   - `reports/core_validation_report.md`
 
-### STAGE_07_RELEASE_PLAN
+### STAGE_07_RELEASE_MATERIALIZATION
+see `docs/pipelines/constitution/STAGE_07_RELEASE_MATERIALIZATION.md`
 
-- Inputs:
-  - patched validated cores
-  - execution report
-- Prompt:
-  - `docs/prompts/shared/Make07CoreRelease.md`
-- Outputs:
-  - `work/07_release/release_plan.yaml`
-  - `outputs/release_candidate_notes.md`
 
 ## Success criteria
 
