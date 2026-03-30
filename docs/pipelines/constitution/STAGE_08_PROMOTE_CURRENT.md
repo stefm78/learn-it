@@ -45,6 +45,7 @@ Principe opératoire :
 - sinon :
   - copier la release cible vers `docs/cores/current/`
   - écrire ou mettre à jour `docs/cores/current/manifest.yaml`
+  - valider le manifest courant et le report de promotion avant clôture du stage
   - produire la trace canonique de promotion
 
 Portée des modifications :
@@ -67,14 +68,33 @@ Commandes de référence :
   - `test -f ./docs/cores/releases/<release_id>/referentiel.yaml`
   - `test -f ./docs/cores/releases/<release_id>/link.yaml`
   - `test -f ./docs/cores/releases/<release_id>/manifest.yaml`
-- préparer `current/` :
-  - `mkdir -p ./docs/cores/current`
-- promouvoir la release :
-  - `cp ./docs/cores/releases/<release_id>/constitution.yaml ./docs/cores/current/constitution.yaml`
-  - `cp ./docs/cores/releases/<release_id>/referentiel.yaml ./docs/cores/current/referentiel.yaml`
-  - `cp ./docs/cores/releases/<release_id>/link.yaml ./docs/cores/current/link.yaml`
-- écrire le manifest courant :
-  - `./docs/cores/current/manifest.yaml`
+- valider le manifest de release avant promotion :
+  - `python docs/patcher/shared/validate_release_manifest.py ./docs/cores/releases/<release_id>/manifest.yaml ./docs/specs/core-release/release_manifest.schema.yaml`
+- promouvoir la release vers current :
+  - `python docs/patcher/shared/promote_current.py ./docs/pipelines/constitution/work/07_release/release_plan.yaml ./docs/pipelines/constitution/reports/release_materialization_report.yaml ./docs/pipelines/constitution/reports/promotion_report.yaml`
+- valider le manifest courant après promotion :
+  - `python docs/patcher/shared/validate_current_manifest.py ./docs/cores/current/manifest.yaml ./docs/specs/core-release/current_manifest.schema.yaml`
+- valider le report de promotion :
+  - `python docs/patcher/shared/validate_promotion_report.py ./docs/pipelines/constitution/reports/promotion_report.yaml ./docs/specs/core-release/promotion_report.schema.yaml`
+
+Validation attendue :
+- `validate_release_manifest.py` doit retourner `status: PASS` avant promotion
+- `promote_current.py` doit :
+  - copier la release promue dans `docs/cores/current/`
+  - écrire `docs/cores/current/manifest.yaml`
+  - produire `docs/pipelines/constitution/reports/promotion_report.yaml`
+  - gérer correctement le cas idempotent `already_current`
+- `validate_current_manifest.py` doit retourner `status: PASS` après promotion
+- `validate_promotion_report.py` doit retourner `status: PASS` après promotion
+
+Artefacts validés à l’issue du Stage 08 :
+- `docs/cores/current/manifest.yaml`
+- `docs/pipelines/constitution/reports/promotion_report.yaml`
+
+Validation scriptée recommandée (version courte) :
+- `python docs/patcher/shared/validate_release_manifest.py ./docs/cores/releases/<release_id>/manifest.yaml ./docs/specs/core-release/release_manifest.schema.yaml`
+- `python docs/patcher/shared/validate_current_manifest.py ./docs/cores/current/manifest.yaml ./docs/specs/core-release/current_manifest.schema.yaml`
+- `python docs/patcher/shared/validate_promotion_report.py ./docs/pipelines/constitution/reports/promotion_report.yaml ./docs/specs/core-release/promotion_report.schema.yaml`
 
 Outputs :
 - `docs/cores/current/constitution.yaml`

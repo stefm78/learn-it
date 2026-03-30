@@ -132,7 +132,7 @@ Trace de matérialisation :
   - le répertoire créé
   - les fichiers effectivement écrits
   - le statut final de matérialisation
-  
+
 Portée des transformations :
 - les renommages de `core_id`, les mises à jour de `version` et les synchronisations de références inter-Core décidés par `07A_RELEASE_CLASSIFICATION` s’appliquent uniquement aux fichiers écrits sous `docs/cores/releases/<release_id>/`
 - les fichiers source de `work/05_apply/patched/` sont utilisés comme base de matérialisation et ne doivent pas être modifiés en place par `07B`
@@ -145,16 +145,30 @@ Convention de nommage recommandée :
   - `CORE_RELEASE_YYYY_MM_DD_RNN`
 
 Commandes de référence :
-- créer la racine de release :
-  - `mkdir -p ./docs/cores/releases/<release_id>`
-- copier les Core patchés validés :
-  - `cp ./docs/pipelines/constitution/work/05_apply/patched/constitution.yaml ./docs/cores/releases/<release_id>/constitution.yaml`
-  - `cp ./docs/pipelines/constitution/work/05_apply/patched/referentiel.yaml ./docs/cores/releases/<release_id>/referentiel.yaml`
-  - `cp ./docs/pipelines/constitution/work/05_apply/patched/link.yaml ./docs/cores/releases/<release_id>/link.yaml`
-- écrire le manifest :
-  - `./docs/cores/releases/<release_id>/manifest.yaml`
-- écrire les notes de release candidate :
-  - `./docs/pipelines/constitution/outputs/release_candidate_notes.md`
+- valider le plan de release :
+  - `python docs/patcher/shared/validate_release_plan.py ./docs/pipelines/constitution/work/07_release/release_plan.yaml ./docs/specs/core-release/release_plan.schema.yaml`
+- matérialiser la release :
+  - `python docs/patcher/shared/materialize_release.py ./docs/pipelines/constitution/work/07_release/release_plan.yaml ./docs/pipelines/constitution/work/05_apply/patched ./docs/pipelines/constitution/reports/release_materialization_report.yaml ./docs/pipelines/constitution/outputs/release_candidate_notes.md`
+- valider le manifest de release matérialisé :
+  - `python docs/patcher/shared/validate_release_manifest.py ./docs/cores/releases/<release_id>/manifest.yaml ./docs/specs/core-release/release_manifest.schema.yaml`
+
+Validation attendue :
+- `validate_release_plan.py` doit retourner `status: PASS` avant matérialisation
+- `materialize_release.py` doit produire :
+  - la release sous `docs/cores/releases/<release_id>/`
+  - `docs/cores/releases/<release_id>/manifest.yaml`
+  - `docs/pipelines/constitution/reports/release_materialization_report.yaml`
+  - `docs/pipelines/constitution/outputs/release_candidate_notes.md`
+- `validate_release_manifest.py` doit retourner `status: PASS` après matérialisation
+
+Artefacts validés à l’issue de 07B :
+- `work/07_release/release_plan.yaml`
+- `docs/cores/releases/<release_id>/manifest.yaml`
+- `reports/release_materialization_report.yaml`
+
+Validation scriptée recommandée (version courte) :
+- `python docs/patcher/shared/validate_release_plan.py ./docs/pipelines/constitution/work/07_release/release_plan.yaml ./docs/specs/core-release/release_plan.schema.yaml`
+- `python docs/patcher/shared/validate_release_manifest.py ./docs/cores/releases/<release_id>/manifest.yaml ./docs/specs/core-release/release_manifest.schema.yaml`
 
 Outputs :
 - `work/07_release/release_plan.yaml`
