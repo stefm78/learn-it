@@ -215,6 +215,13 @@ Outputs :
 - Rule:
   - `STAGE_07_RELEASE_MATERIALIZATION.md` is the canonical specification for Stage 07
 
+### STAGE_08_PROMOTE_CURRENT
+- Spec détaillée :
+  - `docs/pipelines/constitution/STAGE_08_PROMOTE_CURRENT.md`
+
+- Rule:
+  - `STAGE_08_PROMOTE_CURRENT.md` is the canonical specification for Stage 08
+
 ## Success criteria
 
 - No stage may be skipped
