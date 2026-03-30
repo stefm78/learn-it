@@ -1,0 +1,54 @@
+SCHEMA:
+  id: PROMOTION_REPORT_SCHEMA_V1
+  artifact: promotion_report
+  version: 1
+  root_key: PROMOTION_REPORT
+  description: Schéma canonique du report technique produit par STAGE_08_PROMOTE_CURRENT.
+
+  required:
+    - status
+    - release_id
+    - source_release_path
+    - promotion_mode
+    - files_promoted
+
+  fields:
+    status:
+      type: enum
+      values:
+        - PASS
+        - FAIL
+
+    release_id:
+      type: string
+      pattern_hint: CORE_RELEASE_YYYY_MM_DD_RNN
+
+    source_release_path:
+      type: string
+
+    promotion_mode:
+      type: enum
+      values:
+        - applied
+        - already_current
+        - failed
+
+    files_promoted:
+      type: list
+      required: true
+      item_type: string
+
+    current_manifest_updated:
+      type: boolean
+      required: false
+
+    notes:
+      type: list
+      required: false
+      item_type: string
+
+  invariants:
+    - source_release_path doit pointer sous docs/cores/releases/.
+    - files_promoted ne doit contenir que des chemins sous docs/cores/current/.
+    - promotion_mode=already_current doit être autorisé avec status PASS.
+    - promotion_mode=applied implique que current/ reflète la release promue.
