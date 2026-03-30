@@ -1,0 +1,46 @@
+SCHEMA:
+  id: RELEASE_MATERIALIZATION_REPORT_SCHEMA_V1
+  artifact: release_materialization_report
+  version: 1
+  root_key: RELEASE_MATERIALIZATION_REPORT
+  description: Schéma canonique du report technique produit par 07B_RELEASE_MATERIALIZATION.
+
+  required:
+    - status
+    - release_id
+    - release_path
+    - files_written
+
+  fields:
+    status:
+      type: enum
+      values:
+        - PASS
+        - FAIL
+
+    release_id:
+      type: string
+      pattern_hint: CORE_RELEASE_YYYY_MM_DD_RNN
+
+    release_path:
+      type: string
+
+    files_written:
+      type: list
+      required: true
+      item_type: string
+      description: Fichiers effectivement écrits dans la release matérialisée.
+
+    manifest_written:
+      type: boolean
+      required: false
+
+    notes:
+      type: list
+      required: false
+      item_type: string
+
+  invariants:
+    - release_path doit pointer sous docs/cores/releases/.
+    - files_written ne doit contenir que des fichiers appartenant à la release matérialisée.
+    - Un status PASS implique l'écriture d'au minimum constitution.yaml, referentiel.yaml, link.yaml et manifest.yaml.
