@@ -1,23 +1,23 @@
-# Release candidate notes — Constitution pipeline
+# Release candidate — CORE_RELEASE_2026_03_30_R01
 
-## Status
+- release_required: `True`
+- change_depth: `minor`
+- release_path: `docs\cores\releases\CORE_RELEASE_2026_03_30_R01`
 
-- Stage 07 completed as a documented no-op.
-- `release_required: false`
-- No immutable release bundle was materialized.
+## Cores matérialisés
 
-## Why no release was created
+- `constitution` → `CORE_LEARNIT_CONSTITUTION_V1_8` / `V1_8_FINAL`
+- `referentiel` → `CORE_LEARNIT_REFERENTIEL_V0_6` / `V0_6_FINAL`
+- `link` → `CORE_LINK_LEARNIT_CONSTITUTION_V1_8__REFERENTIEL_V0_6` / `V1_8__V0_6_FINAL`
 
-The validated patched cores from `work/05_apply/patched/` are already aligned with the active state in `docs/cores/current/`:
+## Notes
 
-- Constitution: `CORE_LEARNIT_CONSTITUTION_V1_7` / `V1_7_FINAL`
-- Référentiel: `CORE_LEARNIT_REFERENTIEL_V0_6` / `V0_6_FINAL`
-- LINK: `CORE_LINK_LEARNIT_CONSTITUTION_V1_7__REFERENTIEL_V0_6` / `V1_7__V0_6_FINAL`
+- constitution: change_depth=minor, identical_content=false, added=1, removed=0, modified=0
+- referentiel: change_depth=none, identical_content=true, added=0, removed=0, modified=0
+- link: change_depth=minor, identical_content=false, added=4, removed=0, modified=0
+- aggregate_change_depth=minor
+- release_required=true
 
-No additional change depth beyond the already active state was detected during `07A_RELEASE_CLASSIFICATION`.
+## Statut
 
-## Consequence
-
-- No `docs/cores/releases/<release_id>/` directory was created for this pass.
-- No promotion step is required from this Stage 07 result.
-- `docs/cores/current/` remains unchanged by Stage 07.
+Release matérialisée sans modification de `docs/cores/current/`.
