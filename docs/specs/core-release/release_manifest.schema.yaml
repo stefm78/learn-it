@@ -1,0 +1,72 @@
+SCHEMA:
+  id: RELEASE_MANIFEST_SCHEMA_V1
+  artifact: release_manifest
+  version: 1
+  root_key: RELEASE_MANIFEST
+  description: Schéma canonique du manifest écrit dans une release immuable sous docs/cores/releases/<release_id>/.
+
+  required:
+    - release_id
+    - status
+    - immutable
+    - cores
+    - provenance
+
+  fields:
+    release_id:
+      type: string
+      pattern_hint: CORE_RELEASE_YYYY_MM_DD_RNN
+
+    status:
+      type: enum
+      values:
+        - READY
+        - FAILED
+
+    immutable:
+      type: boolean
+
+    source:
+      type: map
+      required: false
+      description: Origine pipeline et stage de la release.
+
+    cores:
+      type: list
+      required: true
+      item_type: map
+      min_items: 3
+      description: Déclaration canonique des trois Core de la release.
+      required_item_keys:
+        - role
+        - file
+        - core_id
+        - version
+
+    provenance:
+      type: map
+      required: true
+      description: Liens vers les artefacts ayant servi à produire la release.
+
+    promotion:
+      type: map
+      required: false
+      description: État de promotion de la release.
+      fields:
+        promotion_candidate:
+          type: boolean
+          required: false
+        promoted_to_current:
+          type: boolean
+          required: false
+
+    notes:
+      type: list
+      required: false
+      item_type: string
+
+  invariants:
+    - Le manifest de release est écrit dans le répertoire de la release et ne doit pas être modifié par le stage de promotion.
+    - cores doit contenir exactement les rôles constitution, referentiel et link.
+    - Les versions et core_id déclarés dans cores doivent correspondre aux fichiers matérialisés de la release.
+    - immutable doit être true pour toute release READY.
