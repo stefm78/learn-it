@@ -24,6 +24,9 @@ Challenger les Core actifs, arbitrer les corrections, produire un patch, le vali
 - Patch DSL: `docs/specs/patch-dsl/current.md`
 - Apply patch: `docs/patcher/shared/apply_patch.py`
 - Validate patchset: `docs/patcher/shared/validate_patchset.py`
+- `Build release plan: docs/patcher/shared/build_release_plan.py`
+- `Materialize release: docs/patcher/shared/materialize_release.py`
+- `Validate release plan: docs/patcher/shared/validate_release_plan.py`
 
 ### Core inputs
 

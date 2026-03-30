@@ -49,6 +49,14 @@ Principe opératoire :
   - compatibilité LINK avec les deux Core cibles ;
   - alignement des références inter-Core ;
 - calculer une release bundle unique et immuable.
+- le calcul de release doit être produit par un script déterministe à partir de :
+  - `work/05_apply/patched/`
+  - `docs/cores/current/`
+  - `work/06_core_validation/core_validation.yaml`
+  - `reports/patch_execution_report.yaml`
+- ce calcul ne doit pas reposer uniquement sur les `core_id` ou les `version`
+- il doit comparer le contenu réel des Core patchés et courants avant toute décision de versioning
+- le résultat canonique de ce calcul est `work/07_release/release_plan.yaml`
 
 Règles de classification :
 - `none` :
@@ -145,6 +153,8 @@ Convention de nommage recommandée :
   - `CORE_RELEASE_YYYY_MM_DD_RNN`
 
 Commandes de référence :
+- construire le plan de release :
+  - `python docs/patcher/shared/build_release_plan.py ./docs/pipelines/constitution/work/05_apply/patched ./docs/cores/current ./docs/pipelines/constitution/work/06_core_validation/core_validation.yaml ./docs/pipelines/constitution/reports/patch_execution_report.yaml ./docs/pipelines/constitution/work/07_release/release_plan.yaml`
 - valider le plan de release :
   - `python docs/patcher/shared/validate_release_plan.py ./docs/pipelines/constitution/work/07_release/release_plan.yaml ./docs/specs/core-release/release_plan.schema.yaml`
 - matérialiser la release :
@@ -153,6 +163,9 @@ Commandes de référence :
   - `python docs/patcher/shared/validate_release_manifest.py ./docs/cores/releases/<release_id>/manifest.yaml ./docs/specs/core-release/release_manifest.schema.yaml`
 
 Validation attendue :
+- `build_release_plan.py` doit produire un `release_plan.yaml` cohérent avec les différences réelles entre `patched/` et `current/`
+- en cas de différence de contenu, le script doit recalculer `change_depth`, `target_versions`, `required_renames`, `required_reference_updates` et `release_bundle`
+- un simple maintien des mêmes `core_id` / `version` ne suffit pas à conclure à `change_depth: none`
 - `validate_release_plan.py` doit retourner `status: PASS` avant matérialisation
 - `materialize_release.py` doit produire :
   - la release sous `docs/cores/releases/<release_id>/`
@@ -184,3 +197,4 @@ Règle opératoire :
 - `07B_RELEASE_MATERIALIZATION` produit une release immuable
 - aucun fichier de `docs/cores/current/` ne doit être modifié par le Stage 07
 - toute bascule vers `current/` doit être réalisée dans un stage de promotion explicite ultérieur
+- la décision de release de `07A` doit être calculée par script ; l’IA peut commenter ou challenger le résultat, mais ne doit pas remplacer le calcul déterministe
