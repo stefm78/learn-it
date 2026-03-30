@@ -103,12 +103,20 @@ Structure attendue :
   - `current_manifest_updated`
   - `notes`
 
-Manifest courant recommandé :
-- `docs/cores/current/manifest.yaml` doit au minimum indiquer :
-  - le `release_id` actif
-  - la date ou l’horodatage de promotion
-  - les `core_id` et `version` actifs
+Précision sur le manifest courant :
+- `docs/cores/current/manifest.yaml` doit être écrit à partir du `manifest.yaml` de la release promue
+- il doit reprendre fidèlement :
+  - le `release_id`
+  - le `source_release_path`
+  - les `core_id` actifs
+  - les `version` actives
   - la provenance de la release source
+- seuls les champs propres à l’état courant peuvent être ajoutés ou mis à jour localement, par exemple :
+  - la date ou l’horodatage de promotion
+  - le statut actif
+  - le mode de promotion
+- aucune recomposition libre du contenu métier ou des versions ne doit être faite à partir des Core promus eux-mêmes
+- `docs/cores/current/manifest.yaml` est un manifest dérivé de la release promue, pas un manifest recalculé indépendamment
 
 Règle opératoire :
 - `docs/cores/releases/` est la source de vérité des releases publiées
