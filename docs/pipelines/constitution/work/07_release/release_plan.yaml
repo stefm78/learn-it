@@ -1,0 +1,49 @@
+RELEASE_PLAN:
+  status: PASS
+  release_required: false
+  change_depth: none
+
+  validated_inputs:
+    core_validation: docs/pipelines/constitution/work/06_core_validation/core_validation.yaml
+    patch_execution_report: docs/pipelines/constitution/reports/patch_execution_report.yaml
+    patched_cores:
+      constitution: docs/pipelines/constitution/work/05_apply/patched/constitution.yaml
+      referentiel: docs/pipelines/constitution/work/05_apply/patched/referentiel.yaml
+      link: docs/pipelines/constitution/work/05_apply/patched/link.yaml
+
+  compared_against_current:
+    constitution: docs/cores/current/constitution.yaml
+    referentiel: docs/cores/current/referentiel.yaml
+    link: docs/cores/current/link.yaml
+
+  target_versions:
+    constitution:
+      current_core_id: CORE_LEARNIT_CONSTITUTION_V1_7
+      current_version: V1_7_FINAL
+      target_core_id: CORE_LEARNIT_CONSTITUTION_V1_7
+      target_version: V1_7_FINAL
+    referentiel:
+      current_core_id: CORE_LEARNIT_REFERENTIEL_V0_6
+      current_version: V0_6_FINAL
+      target_core_id: CORE_LEARNIT_REFERENTIEL_V0_6
+      target_version: V0_6_FINAL
+    link:
+      current_core_id: CORE_LINK_LEARNIT_CONSTITUTION_V1_7__REFERENTIEL_V0_6
+      current_version: V1_7__V0_6_FINAL
+      target_core_id: CORE_LINK_LEARNIT_CONSTITUTION_V1_7__REFERENTIEL_V0_6
+      target_version: V1_7__V0_6_FINAL
+
+  required_renames: []
+  required_reference_updates: []
+  link_updates: []
+
+  release_bundle:
+    release_id: CORE_RELEASE_2026_03_30_R01
+    release_path: docs/cores/releases/CORE_RELEASE_2026_03_30_R01/
+    promotion_candidate: false
+
+  notes:
+    - Les trois Core validés au Stage 06 sont déjà alignés avec l'état actif sous docs/cores/current/.
+    - Aucune évolution supplémentaire à matérialiser en release immuable n'a été détectée à ce passage 07A.
+    - Aucun renommage, aucune mise à jour de références inter-Core et aucune promotion supplémentaire ne sont requis.
+    - Le Stage 07 est traité comme un no-op documenté.
