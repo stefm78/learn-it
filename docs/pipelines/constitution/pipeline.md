@@ -209,12 +209,16 @@ Outputs :
   - `reports/core_validation_report.md`
 
 ### STAGE_07_RELEASE_MATERIALIZATION
-see `docs/pipelines/constitution/STAGE_07_RELEASE_MATERIALIZATION.md`
+- Spec détaillée :
+  - `docs/pipelines/constitution/STAGE_07_RELEASE_MATERIALIZATION.md`
 
+- Rule:
+  - `STAGE_07_RELEASE_MATERIALIZATION.md` is the canonical specification for Stage 07
 
 ## Success criteria
 
 - No stage may be skipped
-- No file in `current/` may be modified directly by this pipeline
+- No file in `current/` may be modified directly before explicit promotion
 - Any patch application must occur in a sandbox root under `work/05_apply/`
-- Promotion is out of scope of this pipeline and must be explicit
+- Any release materialization must write immutable artifacts under `docs/cores/releases/`
+- Promotion to `current/` must remain explicit and occur in a dedicated stage

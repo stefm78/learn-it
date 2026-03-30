@@ -118,13 +118,25 @@ Principe opératoire :
   - produire une note explicite de non-matérialisation
 - si `release_required: true`
   - créer un répertoire immuable sous `docs/cores/releases/<release_id>/`
-  - copier les Core patchés validés dans cette release
-  - appliquer les renommages et mises à jour de versions décidés par `07A`
-  - appliquer les mises à jour de références inter-Core décidées par `07A`
+  - copier les Core patchés validés dans cette release comme base de matérialisation
+  - appliquer, sur les copies de release uniquement, les renommages et mises à jour de versions décidés par `07A`
+  - appliquer, sur les copies de release uniquement, les mises à jour de références inter-Core décidées par `07A`
   - produire un manifest de release
   - produire les notes de release candidate
 - la release matérialisée devient la source de vérité publiable
 - `docs/cores/current/` ne doit jamais être modifié à ce stage
+
+Trace de matérialisation :
+- produire une trace de matérialisation indiquant :
+  - le `release_id`
+  - le répertoire créé
+  - les fichiers effectivement écrits
+  - le statut final de matérialisation
+  
+Portée des transformations :
+- les renommages de `core_id`, les mises à jour de `version` et les synchronisations de références inter-Core décidés par `07A_RELEASE_CLASSIFICATION` s’appliquent uniquement aux fichiers écrits sous `docs/cores/releases/<release_id>/`
+- les fichiers source de `work/05_apply/patched/` sont utilisés comme base de matérialisation et ne doivent pas être modifiés en place par `07B`
+- les fichiers de `docs/cores/current/` ne doivent jamais être modifiés à ce stage
 
 Convention de nommage recommandée :
 - répertoire de release :
@@ -151,6 +163,7 @@ Outputs :
 - `docs/cores/releases/<release_id>/link.yaml`
 - `docs/cores/releases/<release_id>/manifest.yaml`
 - `outputs/release_candidate_notes.md`
+- `reports/release_materialization_report.yaml`
 
 Règle opératoire :
 - `07A_RELEASE_CLASSIFICATION` produit la décision de versioning et de release
