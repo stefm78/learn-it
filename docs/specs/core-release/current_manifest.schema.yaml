@@ -1,0 +1,55 @@
+SCHEMA:
+  id: CURRENT_MANIFEST_SCHEMA_V1
+  artifact: current_manifest
+  version: 1
+  root_key: CURRENT_CORESET
+  description: Schéma canonique du manifest actif sous docs/cores/current/ dérivé d'une release promue.
+
+  required:
+    - release_id
+    - promoted_at
+    - source_release_path
+    - cores
+
+  fields:
+    release_id:
+      type: string
+      pattern_hint: CORE_RELEASE_YYYY_MM_DD_RNN
+
+    promoted_at:
+      type: string
+      description: Horodatage ou date de promotion.
+
+    source_release_path:
+      type: string
+
+    status:
+      type: string
+      required: false
+      description: Champ optionnel pour indiquer l'état actif courant.
+
+    promotion_mode:
+      type: string
+      required: false
+      description: Exemple attendu : applied ou already_current.
+
+    cores:
+      type: list
+      required: true
+      item_type: map
+      min_items: 3
+      required_item_keys:
+        - role
+        - file
+        - core_id
+        - version
+
+    notes:
+      type: list
+      required: false
+      item_type: string
+
+  invariants:
+    - Le manifest courant doit être dérivé du manifest de la release promue.
+    - Les core_id et versions actifs ne doivent pas être recalculés librement à partir des fichiers current.
+    - cores doit contenir exactement les rôles constitution, referentiel et link.
