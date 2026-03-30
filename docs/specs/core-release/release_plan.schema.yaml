@@ -1,0 +1,95 @@
+SCHEMA:
+  id: RELEASE_PLAN_SCHEMA_V1
+  artifact: release_plan
+  version: 1
+  root_key: RELEASE_PLAN
+  description: Schéma canonique du plan de release produit par 07A_RELEASE_CLASSIFICATION.
+
+  required:
+    - status
+    - release_required
+    - change_depth
+    - target_versions
+    - release_bundle
+
+  fields:
+    status:
+      type: enum
+      values:
+        - PASS
+        - FAIL
+
+    release_required:
+      type: boolean
+
+    change_depth:
+      type: enum
+      values:
+        - none
+        - editorial
+        - minor
+        - major
+
+    validated_inputs:
+      type: map
+      required: false
+      description: Références vers les artefacts amont déjà validés.
+
+    compared_against_current:
+      type: map
+      required: false
+      description: Références vers les Core actifs utilisés pour la comparaison.
+
+    target_versions:
+      type: map
+      required: true
+      description: Versions et identifiants cibles par rôle de Core.
+      expected_keys:
+        - constitution
+        - referentiel
+        - link
+
+    required_renames:
+      type: list
+      required: false
+      item_type: map
+      description: Renommages d'identifiants requis pour matérialiser la release.
+
+    required_reference_updates:
+      type: list
+      required: false
+      item_type: map
+      description: Réécritures de références inter-Core à appliquer dans la release matérialisée.
+
+    link_updates:
+      type: list
+      required: false
+      item_type: string
+      description: Ajustements spécifiques au LINK requis par la release.
+
+    release_bundle:
+      type: map
+      required: true
+      required_keys:
+        - release_id
+        - release_path
+      fields:
+        release_id:
+          type: string
+          pattern_hint: CORE_RELEASE_YYYY_MM_DD_RNN
+        release_path:
+          type: string
+        promotion_candidate:
+          type: boolean
+          required: false
+
+    notes:
+      type: list
+      required: false
+      item_type: string
+
+  invariants:
+    - Le fichier doit contenir exactement une racine RELEASE_PLAN.
+    - Si status=FAIL, release_required doit rester renseigné explicitement.
+    - Si release_required=false, release_bundle.release_id peut rester présent à titre informatif mais ne doit pas impliquer une matérialisation automatique.
+    - target_versions doit toujours décrire les trois rôles constitution, referentiel et link.
