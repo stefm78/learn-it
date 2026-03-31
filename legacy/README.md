@@ -19,3 +19,4 @@ Utiliser dans cet ordre :
 ## But
 
 Préserver l'historique sans créer d'ambiguïté avec les artefacts canoniques courants.
+ 
