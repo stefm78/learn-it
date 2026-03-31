@@ -23,6 +23,10 @@ class PromotionError(Exception):
     pass
 
 
+def repo_path(value: Any) -> str:
+    return str(value).replace("\\", "/")
+
+
 def load_yaml(path: Path) -> Any:
     with open(path, "r", encoding="utf-8") as f:
         return yaml.safe_load(f)
@@ -57,9 +61,9 @@ def build_report(
         "PROMOTION_REPORT": {
             "status": status,
             "release_id": release_id,
-            "source_release_path": source_release_path,
+            "source_release_path": repo_path(source_release_path),
             "promotion_mode": promotion_mode,
-            "files_promoted": files_promoted,
+            "files_promoted": [repo_path(p) for p in files_promoted],
             "current_manifest_updated": current_manifest_updated,
             "notes": notes,
         }
@@ -84,7 +88,7 @@ def build_current_manifest(release_manifest: Dict[str, Any], promotion_mode: str
         CURRENT_MANIFEST_ROOT: {
             "release_id": release_id,
             "promoted_at": utc_now_iso(),
-            "source_release_path": source_release_path,
+            "source_release_path": repo_path(source_release_path),
             "status": "active",
             "promotion_mode": promotion_mode,
             "cores": cores,
@@ -119,14 +123,18 @@ def main() -> None:
             raise PromotionError("release_bundle absent ou invalide")
 
         release_id = release_bundle.get("release_id")
-        source_release_path = release_bundle.get("release_path")
+        source_release_path_raw = release_bundle.get("release_path")
+        source_release_path = repo_path(source_release_path_raw)
+
         if not isinstance(release_id, str) or not release_id:
             raise PromotionError("release_bundle.release_id absent ou invalide")
-        if not isinstance(source_release_path, str) or not source_release_path:
+        if not isinstance(source_release_path_raw, str) or not source_release_path_raw:
             raise PromotionError("release_bundle.release_path absent ou invalide")
 
         report_release_id = materialization_report.get("release_id")
-        report_release_path = materialization_report.get("release_path")
+        report_release_path_raw = materialization_report.get("release_path")
+        report_release_path = repo_path(report_release_path_raw)
+
         if report_release_id != release_id:
             raise PromotionError("release_id incohérent entre release_plan et release_materialization_report")
         if report_release_path != source_release_path:
@@ -188,11 +196,11 @@ def main() -> None:
             source_file = release_path / file_name
             destination_file = current_dir / file_name
             destination_file.write_text(source_file.read_text(encoding="utf-8"), encoding="utf-8")
-            files_promoted.append(str(destination_file))
+            files_promoted.append(repo_path(destination_file))
 
         current_manifest_doc = build_current_manifest(release_manifest, promotion_mode="applied")
         dump_yaml(current_manifest_path, current_manifest_doc)
-        files_promoted.append(str(current_manifest_path))
+        files_promoted.append(repo_path(current_manifest_path))
 
         notes = [
             f"release {release_id} promue vers docs/cores/current/",
