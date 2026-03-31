@@ -57,12 +57,12 @@ Challenger les Core actifs, arbitrer les corrections, produire un patch, le vali
 - Prompt:
   - `docs/prompts/shared/Challenge_constitution.md`
 - Output:
-  - `work/01_challenge/challenge_report.md`
+  - `work/01_challenge/challenge_report_##.md`
 
 ### STAGE_02_ARBITRAGE
 
 - Inputs:
-  - `work/01_challenge/challenge_report.md`
+  - `work/01_challenge/challenge_report_##.md`
   - optional human arbitrage notes
 - Output:
   - `work/02_arbitrage/arbitrage.md`
