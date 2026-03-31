@@ -13,6 +13,7 @@ Challenger les Core actifs, arbitrer les corrections, produire un patch, le vali
 ### Prompts
 
 - Challenge: `docs/prompts/shared/Challenge_constitution.md`
+- Arbitrage: `docs/prompts/shared/Make04ConstitutionArbitrage.md`
 - Patch synthesis: `docs/prompts/shared/Make05CorePatch.md`
 - Patch validation: `docs/prompts/shared/Make06PatchValidation.md`
 - Core validation: `docs/prompts/shared/Make02CoreValidation.md`
@@ -64,8 +65,11 @@ Challenger les Core actifs, arbitrer les corrections, produire un patch, le vali
 - Inputs:
   - challenge reports from `docs/pipelines/constitution/work/01_challenge/`
   - optional human arbitrage notes
+- Prompt:
+  - `docs/prompts/shared/Make04ConstitutionArbitrage.md`
 - Rule:
-  - every `challenge_report*.md` file present in `docs/pipelines/constitution/work/01_challenge/` must be considered
+  - every `challenge_report*.md` file present in `docs/pipelines/constitution/work/01_challenge/` must be considered during arbitrage
+  - the arbitrage must consolidate all retained, rejected, deferred, or out-of-scope findings into a single decision record
 - Output:
   - `work/02_arbitrage/arbitrage.md`
 
