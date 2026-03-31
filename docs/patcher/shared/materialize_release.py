@@ -23,6 +23,16 @@ def repo_path(value: Any) -> str:
     return str(value).replace("\\", "/")
 
 
+def normalize_repo_paths_in_obj(obj: Any) -> Any:
+    if isinstance(obj, str):
+        return repo_path(obj)
+    if isinstance(obj, list):
+        return [normalize_repo_paths_in_obj(item) for item in obj]
+    if isinstance(obj, dict):
+        return {key: normalize_repo_paths_in_obj(value) for key, value in obj.items()}
+    return obj
+
+
 def load_yaml(path: Path) -> Any:
     with open(path, "r", encoding="utf-8") as f:
         return yaml.safe_load(f)
@@ -180,7 +190,7 @@ def build_release_manifest(
     provenance: Dict[str, Any] = {"release_plan": repo_path(plan_path)}
     if isinstance(validated_inputs, dict):
         for key, value in validated_inputs.items():
-            provenance[key] = repo_path(value) if isinstance(value, str) else value
+            provenance[key] = normalize_repo_paths_in_obj(value)
 
     return {
         "RELEASE_MANIFEST": {
