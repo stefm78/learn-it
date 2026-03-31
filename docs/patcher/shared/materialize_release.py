@@ -19,6 +19,10 @@ class MaterializationError(Exception):
     pass
 
 
+def repo_path(value: Any) -> str:
+    return str(value).replace("\\", "/")
+
+
 def load_yaml(path: Path) -> Any:
     with open(path, "r", encoding="utf-8") as f:
         return yaml.safe_load(f)
@@ -149,29 +153,51 @@ def apply_role_replacements(doc: Dict[str, Any], role: str, replacements: List[T
     return deep_replace_strings(doc, scoped_replacements)
 
 
-def build_release_manifest(release_id: str, plan_path: Path, plan: Dict[str, Any], role_docs: Dict[str, Dict[str, Any]]) -> Dict[str, Any]:
+def build_release_manifest(
+    release_id: str,
+    plan_path: Path,
+    plan: Dict[str, Any],
+    role_docs: Dict[str, Dict[str, Any]],
+) -> Dict[str, Any]:
     validated_inputs = plan.get("validated_inputs")
     release_bundle = plan.get("release_bundle", {})
     promotion_candidate = False
     if isinstance(release_bundle, dict):
         promotion_candidate = bool(release_bundle.get("promotion_candidate", False))
+
     cores: List[Dict[str, Any]] = []
     for role, file_name in ROLE_FILES.items():
         core = role_docs[role].get("CORE", {})
-        cores.append({"role": role, "file": file_name, "core_id": core.get("id"), "version": core.get("version")})
-    provenance: Dict[str, Any] = {"release_plan": str(plan_path)}
+        cores.append(
+            {
+                "role": role,
+                "file": file_name,
+                "core_id": core.get("id"),
+                "version": core.get("version"),
+            }
+        )
+
+    provenance: Dict[str, Any] = {"release_plan": repo_path(plan_path)}
     if isinstance(validated_inputs, dict):
         for key, value in validated_inputs.items():
-            provenance[key] = value
+            provenance[key] = repo_path(value) if isinstance(value, str) else value
+
     return {
         "RELEASE_MANIFEST": {
             "release_id": release_id,
             "status": "READY",
             "immutable": True,
-            "source": {"pipeline": "constitution", "stage": "07B_RELEASE_MATERIALIZATION", "release_plan": str(plan_path)},
+            "source": {
+                "pipeline": "constitution",
+                "stage": "07B_RELEASE_MATERIALIZATION",
+                "release_plan": repo_path(plan_path),
+            },
             "cores": cores,
             "provenance": provenance,
-            "promotion": {"promotion_candidate": promotion_candidate, "promoted_to_current": False},
+            "promotion": {
+                "promotion_candidate": promotion_candidate,
+                "promoted_to_current": False,
+            },
             "notes": plan.get("notes", []),
         }
     }
@@ -180,7 +206,16 @@ def build_release_manifest(release_id: str, plan_path: Path, plan: Dict[str, Any
 def build_release_notes(release_id: str, release_path: str, plan: Dict[str, Any], manifest: Dict[str, Any]) -> str:
     change_depth = plan.get("change_depth", "unknown")
     release_required = plan.get("release_required")
-    lines = [f"# Release candidate — {release_id}", "", f"- release_required: `{release_required}`", f"- change_depth: `{change_depth}`", f"- release_path: `{release_path}`", "", "## Cores matérialisés", ""]
+    lines = [
+        f"# Release candidate — {release_id}",
+        "",
+        f"- release_required: `{release_required}`",
+        f"- change_depth: `{change_depth}`",
+        f"- release_path: `{release_path}`",
+        "",
+        "## Cores matérialisés",
+        "",
+    ]
     cores = manifest.get("RELEASE_MANIFEST", {}).get("cores", [])
     for entry in cores:
         if isinstance(entry, dict):
@@ -195,64 +230,103 @@ def build_release_notes(release_id: str, release_path: str, plan: Dict[str, Any]
 
 
 def build_report(status: str, release_id: str, release_path: str, files_written: List[str], notes: List[str]) -> Dict[str, Any]:
-    return {"RELEASE_MATERIALIZATION_REPORT": {"status": status, "release_id": release_id, "release_path": release_path, "files_written": files_written, "manifest_written": any(path.endswith("manifest.yaml") for path in files_written), "notes": notes}}
+    normalized_release_path = repo_path(release_path)
+    normalized_files_written = [repo_path(path) for path in files_written]
+    return {
+        "RELEASE_MATERIALIZATION_REPORT": {
+            "status": status,
+            "release_id": release_id,
+            "release_path": normalized_release_path,
+            "files_written": normalized_files_written,
+            "manifest_written": any(path.endswith("manifest.yaml") for path in normalized_files_written),
+            "notes": notes,
+        }
+    }
 
 
 def main() -> None:
     if len(sys.argv) < 3:
-        raise SystemExit("Usage: materialize_release_v2.py <release_plan.yaml> <patched_dir> [report.yaml] [release_candidate_notes.md]")
+        raise SystemExit(
+            "Usage: materialize_release_v2.py <release_plan.yaml> <patched_dir> [report.yaml] [release_candidate_notes.md]"
+        )
     plan_path = Path(sys.argv[1])
     patched_dir = Path(sys.argv[2])
     report_path = Path(sys.argv[3]) if len(sys.argv) >= 4 else Path(DEFAULT_REPORT_PATH)
     notes_path = Path(sys.argv[4]) if len(sys.argv) >= 5 else Path(DEFAULT_NOTES_PATH)
+
     try:
         plan = read_release_plan(plan_path)
         if plan.get("status") != "PASS":
             raise MaterializationError("release_plan doit être en status PASS")
+
         release_required = plan.get("release_required")
         if not isinstance(release_required, bool):
             raise MaterializationError("release_required doit être explicitement booléen")
+
         release_bundle = plan.get("release_bundle")
         if not isinstance(release_bundle, dict):
             raise MaterializationError("release_bundle absent ou invalide")
+
         release_id = release_bundle.get("release_id")
         release_path_value = release_bundle.get("release_path")
         if not isinstance(release_id, str) or not release_id:
             raise MaterializationError("release_bundle.release_id absent ou invalide")
         if not isinstance(release_path_value, str) or not release_path_value:
             raise MaterializationError("release_bundle.release_path absent ou invalide")
-        release_path = Path(release_path_value)
+
+        normalized_release_path_value = repo_path(release_path_value)
+        release_path = Path(normalized_release_path_value)
+
         if not release_required:
             notes = ["release_required=false : aucune matérialisation effectuée"]
             write_text(notes_path, "# Release candidate\n\nAucune release matérialisée : `release_required=false`.\n")
-            dump_yaml(report_path, build_report("PASS", release_id, str(release_path), [], notes))
+            dump_yaml(report_path, build_report("PASS", release_id, normalized_release_path_value, [], notes))
             return
+
         target_versions = plan.get("target_versions")
         if not isinstance(target_versions, dict):
             raise MaterializationError("target_versions absent ou invalide")
+
         replacements = collect_replacements(plan) + build_editorial_replacements(target_versions)
         role_docs: Dict[str, Dict[str, Any]] = {}
         files_written: List[str] = []
+
         release_path.mkdir(parents=True, exist_ok=True)
+
         for role, file_name in ROLE_FILES.items():
             source_path = patched_dir / file_name
             if not source_path.exists():
                 raise MaterializationError(f"fichier patché manquant: {source_path}")
+
             doc = load_yaml(source_path)
             if not isinstance(doc, dict):
                 raise MaterializationError(f"document YAML invalide: {source_path}")
+
             apply_target_version(doc, role, target_versions)
             doc = apply_role_replacements(doc, role, replacements)
             role_docs[role] = doc
+
             destination_path = release_path / file_name
             dump_yaml(destination_path, doc)
-            files_written.append(str(destination_path))
+            files_written.append(repo_path(destination_path))
+
         manifest = build_release_manifest(release_id, plan_path, plan, role_docs)
         manifest_path = release_path / "manifest.yaml"
         dump_yaml(manifest_path, manifest)
-        files_written.append(str(manifest_path))
-        write_text(notes_path, build_release_notes(release_id, str(release_path), plan, manifest))
-        dump_yaml(report_path, build_report("PASS", release_id, str(release_path), files_written, [f"release matérialisée sous {release_path}", "aucune modification de docs/cores/current/"]))
+        files_written.append(repo_path(manifest_path))
+
+        write_text(notes_path, build_release_notes(release_id, normalized_release_path_value, plan, manifest))
+        dump_yaml(
+            report_path,
+            build_report(
+                "PASS",
+                release_id,
+                normalized_release_path_value,
+                files_written,
+                [f"release matérialisée sous {normalized_release_path_value}", "aucune modification de docs/cores/current/"],
+            ),
+        )
+
     except Exception as exc:
         release_id = "unknown"
         release_path = "unknown"
@@ -262,9 +336,10 @@ def main() -> None:
                 release_bundle = plan.get("release_bundle", {})
                 if isinstance(release_bundle, dict):
                     release_id = str(release_bundle.get("release_id", release_id))
-                    release_path = str(release_bundle.get("release_path", release_path))
+                    release_path = repo_path(release_bundle.get("release_path", release_path))
         except Exception:
             pass
+
         dump_yaml(report_path, build_report("FAIL", release_id, release_path, [], [str(exc)]))
         raise SystemExit(str(exc))
 
