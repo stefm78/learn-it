@@ -62,8 +62,10 @@ Challenger les Core actifs, arbitrer les corrections, produire un patch, le vali
 ### STAGE_02_ARBITRAGE
 
 - Inputs:
-  - `work/01_challenge/challenge_report_##.md`
+  - `work/01_challenge/challenge_report*.md`
   - optional human arbitrage notes
+- Rule:
+  - if multiple challenge reports are present in `docs/pipelines/constitution/work/01_challenge/`, all of them must be considered
 - Output:
   - `work/02_arbitrage/arbitrage.md`
 
