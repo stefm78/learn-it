@@ -3,9 +3,11 @@ CORE:
   core_type: REFERENTIEL
   authority: primary
   version: V0_6_FINAL
-  description: Core canonique final du Référentiel Learn-it v0.6. Naming normalisé, fermeture locale assurée, références inter-Core explicites matérialisées pour fédération avec la Constitution.
+  description: Core canonique final du Référentiel Learn-it v0.6. Naming normalisé,
+    fermeture locale assurée, références inter-Core explicites matérialisées pour
+    fédération avec la Constitution.
   TYPES:
-  - id: REF_CORE_LEARNIT_CONSTITUTION_V1_7_IN_REFERENTIEL
+  - id: REF_CORE_LEARNIT_CONSTITUTION_V1_8_IN_REFERENTIEL
     authority: reference
     core_type: REFERENTIEL
     source_anchor: '[INTERCORE]'
@@ -13,7 +15,7 @@ CORE:
     relations: []
     patchable: false
     parameterizable: false
-    human_readable: Référence explicite vers le Core Constitution Learn-it v1.7.
+    human_readable: Référence explicite vers le Core Constitution Learn-it V1_8.
     logic:
       trigger: null
       condition: null
@@ -24,7 +26,7 @@ CORE:
     core_type: REFERENTIEL
     source_anchor: '[S1]'
     depends_on:
-    - REF_CORE_LEARNIT_CONSTITUTION_V1_7_IN_REFERENTIEL
+    - REF_CORE_LEARNIT_CONSTITUTION_V1_8_IN_REFERENTIEL
     relations:
     - type: governs
       target:
@@ -48,7 +50,7 @@ CORE:
     core_type: REFERENTIEL
     source_anchor: '[S3]'
     depends_on:
-    - REF_CORE_LEARNIT_CONSTITUTION_V1_7_IN_REFERENTIEL
+    - REF_CORE_LEARNIT_CONSTITUTION_V1_8_IN_REFERENTIEL
     relations:
     - type: instantiates
       target:
@@ -66,7 +68,7 @@ CORE:
     core_type: REFERENTIEL
     source_anchor: '[S3]'
     depends_on:
-    - REF_CORE_LEARNIT_CONSTITUTION_V1_7_IN_REFERENTIEL
+    - REF_CORE_LEARNIT_CONSTITUTION_V1_8_IN_REFERENTIEL
     relations:
     - type: governs
       target:
@@ -87,7 +89,7 @@ CORE:
     core_type: REFERENTIEL
     source_anchor: '[S3]'
     depends_on:
-    - REF_CORE_LEARNIT_CONSTITUTION_V1_7_IN_REFERENTIEL
+    - REF_CORE_LEARNIT_CONSTITUTION_V1_8_IN_REFERENTIEL
     relations:
     - type: governs
       target:
@@ -105,7 +107,7 @@ CORE:
     core_type: REFERENTIEL
     source_anchor: '[S3]'
     depends_on:
-    - REF_CORE_LEARNIT_CONSTITUTION_V1_7_IN_REFERENTIEL
+    - REF_CORE_LEARNIT_CONSTITUTION_V1_8_IN_REFERENTIEL
     relations:
     - type: validates
       target:
@@ -123,7 +125,7 @@ CORE:
     core_type: REFERENTIEL
     source_anchor: '[S3][S16]'
     depends_on:
-    - REF_CORE_LEARNIT_CONSTITUTION_V1_7_IN_REFERENTIEL
+    - REF_CORE_LEARNIT_CONSTITUTION_V1_8_IN_REFERENTIEL
     relations:
     - type: governs
       target:
@@ -144,7 +146,7 @@ CORE:
     core_type: REFERENTIEL
     source_anchor: '[S3]'
     depends_on:
-    - REF_CORE_LEARNIT_CONSTITUTION_V1_7_IN_REFERENTIEL
+    - REF_CORE_LEARNIT_CONSTITUTION_V1_8_IN_REFERENTIEL
     relations:
     - type: governs
       target:
@@ -162,7 +164,7 @@ CORE:
     core_type: REFERENTIEL
     source_anchor: '[S4][S18]'
     depends_on:
-    - REF_CORE_LEARNIT_CONSTITUTION_V1_7_IN_REFERENTIEL
+    - REF_CORE_LEARNIT_CONSTITUTION_V1_8_IN_REFERENTIEL
     relations:
     - type: validates
       target:
@@ -180,7 +182,7 @@ CORE:
     core_type: REFERENTIEL
     source_anchor: '[tables]'
     depends_on:
-    - REF_CORE_LEARNIT_CONSTITUTION_V1_7_IN_REFERENTIEL
+    - REF_CORE_LEARNIT_CONSTITUTION_V1_8_IN_REFERENTIEL
     relations:
     - type: governs
       target:
@@ -198,7 +200,7 @@ CORE:
     core_type: REFERENTIEL
     source_anchor: '[tables][S6]'
     depends_on:
-    - REF_CORE_LEARNIT_CONSTITUTION_V1_7_IN_REFERENTIEL
+    - REF_CORE_LEARNIT_CONSTITUTION_V1_8_IN_REFERENTIEL
     relations:
     - type: constrains
       target:
@@ -216,7 +218,7 @@ CORE:
     core_type: REFERENTIEL
     source_anchor: '[S16]'
     depends_on:
-    - REF_CORE_LEARNIT_CONSTITUTION_V1_7_IN_REFERENTIEL
+    - REF_CORE_LEARNIT_CONSTITUTION_V1_8_IN_REFERENTIEL
     relations:
     - type: governs
       target:
@@ -234,7 +236,7 @@ CORE:
     core_type: REFERENTIEL
     source_anchor: '[S17]'
     depends_on:
-    - REF_CORE_LEARNIT_CONSTITUTION_V1_7_IN_REFERENTIEL
+    - REF_CORE_LEARNIT_CONSTITUTION_V1_8_IN_REFERENTIEL
     relations:
     - type: governs
       target:
@@ -252,11 +254,11 @@ CORE:
     core_type: REFERENTIEL
     source_anchor: '[S19]'
     depends_on:
-    - REF_CORE_LEARNIT_CONSTITUTION_V1_7_IN_REFERENTIEL
+    - REF_CORE_LEARNIT_CONSTITUTION_V1_8_IN_REFERENTIEL
     relations:
     - type: derives_from
       target:
-        id: REF_CORE_LEARNIT_CONSTITUTION_V1_7_IN_REFERENTIEL
+        id: REF_CORE_LEARNIT_CONSTITUTION_V1_8_IN_REFERENTIEL
     patchable: false
     parameterizable: false
     human_readable: Note opérationnelle rappelant que la profondeur 1 saut est constitutionnelle.
@@ -277,18 +279,20 @@ CORE:
         id: PARAM_REFERENTIEL_PROXY_MIN_WEIGHT
     patchable: true
     parameterizable: true
-    human_readable: Ensemble minimal de proxys comportementaux utilisables en absence d’AR-N1.
+    human_readable: Ensemble minimal de proxys comportementaux utilisables en absence
+      d’AR-N1.
     logic:
       trigger: Résolution d’état sans auto-rapport événementiel
       condition: AR-N1 absent et proxys disponibles.
-      effect: Activation d’un socle minimal de signaux mesurables, chacun avec seuil déclaré et statut empirique explicite.
+      effect: Activation d’un socle minimal de signaux mesurables, chacun avec seuil
+        déclaré et statut empirique explicite.
       scope: runtime_state
   - id: TYPE_REFERENTIEL_AR_N3_CONFIGURATION
     authority: primary
     core_type: REFERENTIEL
     source_anchor: '[S3][PATCH_V0_6]'
     depends_on:
-    - REF_CORE_LEARNIT_CONSTITUTION_V1_7_IN_REFERENTIEL
+    - REF_CORE_LEARNIT_CONSTITUTION_V1_8_IN_REFERENTIEL
     relations:
     - type: governs
       target:
@@ -307,7 +311,7 @@ CORE:
     core_type: REFERENTIEL
     source_anchor: '[S2]'
     depends_on:
-    - REF_CORE_LEARNIT_CONSTITUTION_V1_7_IN_REFERENTIEL
+    - REF_CORE_LEARNIT_CONSTITUTION_V1_8_IN_REFERENTIEL
     relations:
     - type: constrains
       target:
@@ -325,7 +329,7 @@ CORE:
     core_type: REFERENTIEL
     source_anchor: '[S19]'
     depends_on:
-    - REF_CORE_LEARNIT_CONSTITUTION_V1_7_IN_REFERENTIEL
+    - REF_CORE_LEARNIT_CONSTITUTION_V1_8_IN_REFERENTIEL
     relations:
     - type: constrains
       target:
@@ -343,11 +347,12 @@ CORE:
     core_type: REFERENTIEL
     source_anchor: '[tables][S6]'
     depends_on:
-    - REF_CORE_LEARNIT_CONSTITUTION_V1_7_IN_REFERENTIEL
+    - REF_CORE_LEARNIT_CONSTITUTION_V1_8_IN_REFERENTIEL
     relations: []
     patchable: false
     parameterizable: false
-    human_readable: La checklist qualité pédagogique des patchs n'est pas modifiable ici.
+    human_readable: La checklist qualité pédagogique des patchs n'est pas modifiable
+      ici.
     logic:
       trigger: Révision du contrôle qualité patch
       condition: Modification de la checklist demandée
@@ -471,7 +476,8 @@ CORE:
     relations: []
     patchable: true
     parameterizable: true
-    human_readable: Le régime adaptatif requiert au moins 2 proxys franchissant leur seuil.
+    human_readable: Le régime adaptatif requiert au moins 2 proxys franchissant leur
+      seuil.
     logic:
       trigger: Détection de régime
       condition: Nombre de proxys franchissant leur seuil
@@ -503,7 +509,8 @@ CORE:
     relations: []
     patchable: true
     parameterizable: true
-    human_readable: Réduction de fréquence ou simplification du format de l'intention de session.
+    human_readable: Réduction de fréquence ou simplification du format de l'intention
+      de session.
     logic:
       trigger: Audit de complétion intention
       condition: Taux de complétion sous seuil sur fenêtre donnée
@@ -536,7 +543,8 @@ CORE:
     relations: []
     patchable: true
     parameterizable: true
-    human_readable: Escalade Analyse si le patch relevance n'améliore pas VC après 2 cycles.
+    human_readable: Escalade Analyse si le patch relevance n'améliore pas VC après
+      2 cycles.
     logic:
       trigger: Évaluation post-patch relevance
       condition: Amélioration absente après le nombre de cycles défini
@@ -597,29 +605,34 @@ CORE:
     core_type: REFERENTIEL
     source_anchor: '[S2][PATCH_V0_6]'
     depends_on:
-    - REF_CORE_LEARNIT_CONSTITUTION_V1_7_IN_REFERENTIEL
+    - REF_CORE_LEARNIT_CONSTITUTION_V1_8_IN_REFERENTIEL
     relations: []
     patchable: true
     parameterizable: true
-    human_readable: Distingue la rétrogradation courante pendant apprentissage de la révocation post-maîtrise.
+    human_readable: Distingue la rétrogradation courante pendant apprentissage de
+      la révocation post-maîtrise.
     logic:
       trigger: Baisse MSC détectée
-      condition: Le système doit décider entre correction immédiate et révocation d’un acquis stabilisé.
-      effect: La rétrogradation courante suit la défaillance instantanée ; la révocation post-maîtrise exige une fenêtre temporelle et des répétitions configurées.
+      condition: Le système doit décider entre correction immédiate et révocation
+        d’un acquis stabilisé.
+      effect: La rétrogradation courante suit la défaillance instantanée ; la révocation
+        post-maîtrise exige une fenêtre temporelle et des répétitions configurées.
       scope: runtime_evaluation
   - id: RULE_REFERENTIEL_INTERLEAVING_CONTENT_REQUIRES_A
     authority: primary
     core_type: REFERENTIEL
     source_anchor: '[S3][PATCH_V0_6]'
     depends_on:
-    - REF_CORE_LEARNIT_CONSTITUTION_V1_7_IN_REFERENTIEL
+    - REF_CORE_LEARNIT_CONSTITUTION_V1_8_IN_REFERENTIEL
     relations: []
     patchable: true
     parameterizable: true
-    human_readable: L’interleaving de contenus exige atteinte simultanée de P et A, plus stabilité minimale.
+    human_readable: L’interleaving de contenus exige atteinte simultanée de P et A,
+      plus stabilité minimale.
     logic:
       trigger: Évaluation de passage vers interleaving de contenus
-      condition: Au moins 2 réussites consécutives, au moins 3 tâches distinctes, et composante A au seuil sur les KU concernées.
+      condition: Au moins 2 réussites consécutives, au moins 3 tâches distinctes,
+        et composante A au seuil sur les KU concernées.
       effect: Interleaving contenus autorisé ; sinon maintien en séquencement simple.
       scope: runtime_progression
   - id: RULE_REFERENTIEL_SECONDARY_RETROGRADATION_DEFERRED_REENTRY
@@ -631,11 +644,13 @@ CORE:
     relations: []
     patchable: true
     parameterizable: true
-    human_readable: Une rétrogradation secondaire est marquée puis rejouée comme un nouvel événement autonome.
+    human_readable: Une rétrogradation secondaire est marquée puis rejouée comme un
+      nouvel événement autonome.
     logic:
       trigger: Échec à une tâche diagnostique de propagation
       condition: KU dépendante directe échoue à la vérification prioritaire.
-      effect: Flag de rétrogradation secondaire ; réentrée au prochain cycle autorisé comme nouvel événement autonome.
+      effect: Flag de rétrogradation secondaire ; réentrée au prochain cycle autorisé
+        comme nouvel événement autonome.
       scope: runtime_graph
   - id: RULE_REFERENTIEL_LOW_AR_CALIBRATION_TEMPORARILY_REWEIGHTS_SIGNALS
     authority: primary
@@ -648,26 +663,30 @@ CORE:
     relations: []
     patchable: false
     parameterizable: true
-    human_readable: Une calibration AR basse réduit temporairement le poids d’AR-N1 et restaure les proxys.
+    human_readable: Une calibration AR basse réduit temporairement le poids d’AR-N1
+      et restaure les proxys.
     logic:
       trigger: Résultat AR-N3
       condition: Indice calibration AR bas détecté.
-      effect: Réduction temporaire du poids AR-N1 et relèvement borné du poids des proxys pour un cycle AR-N3.
+      effect: Réduction temporaire du poids AR-N1 et relèvement borné du poids des
+        proxys pour un cycle AR-N3.
       scope: runtime_feedback
   - id: RULE_REFERENTIEL_SYSTEMIC_INVESTIGATION_RUNTIME_BEHAVIOR
     authority: primary
     core_type: REFERENTIEL
     source_anchor: '[PATCH_V0_6]'
     depends_on:
-    - REF_CORE_LEARNIT_CONSTITUTION_V1_7_IN_REFERENTIEL
+    - REF_CORE_LEARNIT_CONSTITUTION_V1_8_IN_REFERENTIEL
     relations: []
     patchable: true
     parameterizable: true
-    human_readable: Pendant une investigation systémique active, le moteur adopte un régime minimal et réversible.
+    human_readable: Pendant une investigation systémique active, le moteur adopte
+      un régime minimal et réversible.
     logic:
       trigger: Investigation systémique ouverte
       condition: Cause locale non résolue ou dérive transversale suspectée.
-      effect: Gel des ajustements agressifs, maintien d’un mode minimal, journalisation renforcée, puis escalade hors session si persistance sur la fenêtre configurée.
+      effect: Gel des ajustements agressifs, maintien d’un mode minimal, journalisation
+        renforcée, puis escalade hors session si persistance sur la fenêtre configurée.
       scope: runtime_safety
   - id: RULE_REFERENTIEL_VC_UNOBSERVABLE_DISABLING
     authority: primary
@@ -679,11 +698,13 @@ CORE:
     relations: []
     patchable: true
     parameterizable: true
-    human_readable: Si VC reste non observable sur une fenêtre suffisante, l’axe VC est désactivé plutôt qu’inféré indirectement.
+    human_readable: Si VC reste non observable sur une fenêtre suffisante, l’axe VC
+      est désactivé plutôt qu’inféré indirectement.
     logic:
       trigger: Agrégation VC
       condition: Absence répétée de donnée VC exploitable sur la fenêtre configurée.
-      effect: État VC=non-observable ; désactivation de l’axe pour l’adaptation concernée ; aucune inférence de substitution.
+      effect: État VC=non-observable ; désactivation de l’axe pour l’adaptation concernée
+        ; aucune inférence de substitution.
       scope: runtime_state
   PARAMETERS:
   - id: PARAM_REFERENTIEL_MSC_PRECISION_THRESHOLD
@@ -1241,7 +1262,8 @@ CORE:
     relations: []
     patchable: false
     parameterizable: true
-    human_readable: Fenêtre maximale autorisée avant vérification prioritaire d’une KU dépendante marquée.
+    human_readable: Fenêtre maximale autorisée avant vérification prioritaire d’une
+      KU dépendante marquée.
     logic:
       trigger: Planification de vérification de propagation
       condition: KU dépendante directe marquée.
@@ -1261,7 +1283,8 @@ CORE:
     logic:
       trigger: Validation d'un patch
       condition: Portée du patch calculée
-      effect: Rejet si composantes MSC, philosophie adaptative, graphe principal, logique AND, propagation 1-saut ou checklist qualité sont visés
+      effect: Rejet si composantes MSC, philosophie adaptative, graphe principal,
+        logique AND, propagation 1-saut ou checklist qualité sont visés
       scope: patch_validation
   - id: CONSTRAINT_REFERENTIEL_DOUBLE_BUFFER_REQUIRED_FOR_PATCH
     authority: primary
@@ -1297,7 +1320,8 @@ CORE:
     logic:
       trigger: Application d'un patch
       condition: Patch prêt à être appliqué
-      effect: "Vérification locale déterministe requise : bornes, impact_scope calculable, attributs obligatoires présents, compatibilité technique et atomicité."
+      effect: 'Vérification locale déterministe requise : bornes, impact_scope calculable,
+        attributs obligatoires présents, compatibilité technique et atomicité.'
       scope: patch_validation
   - id: CONSTRAINT_REFERENTIEL_NO_DIFFICULTY_ADJUSTMENT_FROM_VC_PATCH
     authority: primary

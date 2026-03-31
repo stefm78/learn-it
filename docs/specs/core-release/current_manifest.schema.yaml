@@ -31,7 +31,7 @@ SCHEMA:
     promotion_mode:
       type: string
       required: false
-      description: Exemple attendu : applied ou already_current.
+      description: "Exemple attendu : applied ou already_current."
 
     cores:
       type: list

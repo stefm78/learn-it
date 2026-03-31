@@ -15,7 +15,7 @@ CORE:
     relations: []
     patchable: false
     parameterizable: false
-    human_readable: Référence explicite vers le Core Constitution Learn-it v1.7.
+    human_readable: Référence explicite vers le Core Constitution Learn-it V1_8.
     logic:
       trigger: null
       condition: null

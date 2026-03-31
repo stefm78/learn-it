@@ -70,6 +70,10 @@ def utc_now_iso() -> str:
     return datetime.now(timezone.utc).replace(microsecond=0).isoformat().replace("+00:00", "Z")
 
 
+def normalize_repo_path(path_value: str) -> str:
+    return path_value.replace("\\", "/").rstrip("/")
+
+
 def build_current_manifest(release_manifest: Dict[str, Any], promotion_mode: str) -> Dict[str, Any]:
     release_id = release_manifest.get("release_id")
     source_release_path = release_manifest.get("source", {}).get("release_path")
@@ -120,6 +124,8 @@ def main() -> None:
 
         release_id = release_bundle.get("release_id")
         source_release_path = release_bundle.get("release_path")
+        if isinstance(source_release_path, str):
+            source_release_path = normalize_repo_path(source_release_path)
         if not isinstance(release_id, str) or not release_id:
             raise PromotionError("release_bundle.release_id absent ou invalide")
         if not isinstance(source_release_path, str) or not source_release_path:
@@ -127,6 +133,8 @@ def main() -> None:
 
         report_release_id = materialization_report.get("release_id")
         report_release_path = materialization_report.get("release_path")
+        if isinstance(report_release_path, str):
+            report_release_path = normalize_repo_path(report_release_path)
         if report_release_id != release_id:
             raise PromotionError("release_id incohérent entre release_plan et release_materialization_report")
         if report_release_path != source_release_path:
@@ -188,11 +196,11 @@ def main() -> None:
             source_file = release_path / file_name
             destination_file = current_dir / file_name
             destination_file.write_text(source_file.read_text(encoding="utf-8"), encoding="utf-8")
-            files_promoted.append(str(destination_file))
+            files_promoted.append(destination_file.as_posix())
 
         current_manifest_doc = build_current_manifest(release_manifest, promotion_mode="applied")
         dump_yaml(current_manifest_path, current_manifest_doc)
-        files_promoted.append(str(current_manifest_path))
+        files_promoted.append(current_manifest_path.as_posix())
 
         notes = [
             f"release {release_id} promue vers docs/cores/current/",

@@ -59,7 +59,7 @@ RELEASE_PLAN:
   - link_target_versions_realigned_with_constitution_and_referentiel
   release_bundle:
     release_id: CORE_RELEASE_2026_03_30_R01
-    release_path: docs/cores/releases/CORE_RELEASE_2026_03_30_R01/
+    release_path: docs\cores\releases\CORE_RELEASE_2026_03_30_R01
     promotion_candidate: true
   notes:
   - 'constitution: change_depth=minor, identical_content=false, added=1, removed=0,

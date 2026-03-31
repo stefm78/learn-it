@@ -1,0 +1,19 @@
+CURRENT_CORESET:
+  release_id: CORE_RELEASE_2026_03_30_R01
+  promoted_at: '2026-03-31T12:50:33Z'
+  source_release_path: docs/cores/releases/CORE_RELEASE_2026_03_30_R01
+  status: active
+  promotion_mode: applied
+  cores:
+  - role: constitution
+    file: constitution.yaml
+    core_id: CORE_LEARNIT_CONSTITUTION_V1_8
+    version: V1_8_FINAL
+  - role: referentiel
+    file: referentiel.yaml
+    core_id: CORE_LEARNIT_REFERENTIEL_V0_6
+    version: V0_6_FINAL
+  - role: link
+    file: link.yaml
+    core_id: CORE_LINK_LEARNIT_CONSTITUTION_V1_8__REFERENTIEL_V0_6
+    version: V1_8__V0_6_FINAL
