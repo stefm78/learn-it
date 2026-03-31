@@ -1,11 +1,13 @@
 CORE:
-  id: CORE_LINK_LEARNIT_CONSTITUTION_V1_7__REFERENTIEL_V0_6
+  id: CORE_LINK_LEARNIT_CONSTITUTION_V1_8__REFERENTIEL_V0_6
   core_type: LINK
   authority: primary
-  version: V1_7__V0_6_FINAL
-  description: LINK_CORE canonique reliant la Constitution Learn-it v1.7 et le Référentiel Learn-it v0.6. Il explicite les bindings inter-Core nécessaires à la fermeture système, sans logique métier autonome.
+  version: V1_8__V0_6_FINAL
+  description: LINK_CORE canonique reliant la Constitution Learn-it v1.7 et le Référentiel
+    Learn-it v0.6. Il explicite les bindings inter-Core nécessaires à la fermeture
+    système, sans logique métier autonome.
   TYPES:
-  - id: LINK_REF_CORE_LEARNIT_CONSTITUTION_V1_7
+  - id: LINK_REF_CORE_LEARNIT_CONSTITUTION_V1_8
     authority: reference
     core_type: LINK
     source_anchor: '[INTERCORE]'
@@ -38,7 +40,7 @@ CORE:
     core_type: LINK
     source_anchor: '[S1][S14][S20]'
     depends_on:
-    - LINK_REF_CORE_LEARNIT_CONSTITUTION_V1_7
+    - LINK_REF_CORE_LEARNIT_CONSTITUTION_V1_8
     - LINK_REF_CORE_LEARNIT_REFERENTIEL_V0_6
     relations:
     - type: requires
@@ -46,13 +48,16 @@ CORE:
         id: LINK_REF_CORE_LEARNIT_REFERENTIEL_V0_6
     - type: derives_from
       target:
-        id: LINK_REF_CORE_LEARNIT_CONSTITUTION_V1_7
+        id: LINK_REF_CORE_LEARNIT_CONSTITUTION_V1_8
     patchable: false
     parameterizable: false
-    human_readable: Binding des paramètres opérationnels délégués par la Constitution au Référentiel.
+    human_readable: Binding des paramètres opérationnels délégués par la Constitution
+      au Référentiel.
     logic:
-      trigger: Interprétation de règles constitutionnelles dépendantes de bornes et seuils
-      condition: Une règle constitutionnelle mentionne explicitement un seuil, une fourchette ou un paramètre opératoire délégué.
+      trigger: Interprétation de règles constitutionnelles dépendantes de bornes et
+        seuils
+      condition: Une règle constitutionnelle mentionne explicitement un seuil, une
+        fourchette ou un paramètre opératoire délégué.
       effect: Résolution via le Core Référentiel.
       scope: intercore_binding
   - id: TYPE_BINDING_REFERENTIEL_TO_CONSTITUTION_GOVERNING_INVARIANTS
@@ -60,12 +65,12 @@ CORE:
     core_type: LINK
     source_anchor: '[S1][S17B][S17C]'
     depends_on:
-    - LINK_REF_CORE_LEARNIT_CONSTITUTION_V1_7
+    - LINK_REF_CORE_LEARNIT_CONSTITUTION_V1_8
     - LINK_REF_CORE_LEARNIT_REFERENTIEL_V0_6
     relations:
     - type: requires
       target:
-        id: LINK_REF_CORE_LEARNIT_CONSTITUTION_V1_7
+        id: LINK_REF_CORE_LEARNIT_CONSTITUTION_V1_8
     - type: derives_from
       target:
         id: LINK_REF_CORE_LEARNIT_REFERENTIEL_V0_6
@@ -73,8 +78,10 @@ CORE:
     parameterizable: false
     human_readable: Binding des invariants constitutionnels gouvernant le Référentiel.
     logic:
-      trigger: Lecture de paramètres ou tables référentielles qui rappellent un invariant constitutionnel
-      condition: Le Référentiel documente une borne ou une note opérationnelle issue d’un invariant non délégable.
+      trigger: Lecture de paramètres ou tables référentielles qui rappellent un invariant
+        constitutionnel
+      condition: Le Référentiel documente une borne ou une note opérationnelle issue
+        d’un invariant non délégable.
       effect: L’autorité de référence est résolue vers le Core Constitution.
       scope: intercore_binding
   - id: TYPE_BINDING_CONSTITUTION_REFERENTIEL_LAYER_SEPARATION
@@ -82,23 +89,210 @@ CORE:
     core_type: LINK
     source_anchor: '[S1]'
     depends_on:
-    - LINK_REF_CORE_LEARNIT_CONSTITUTION_V1_7
+    - LINK_REF_CORE_LEARNIT_CONSTITUTION_V1_8
     - LINK_REF_CORE_LEARNIT_REFERENTIEL_V0_6
     relations:
     - type: validates
       target:
-        id: LINK_REF_CORE_LEARNIT_CONSTITUTION_V1_7
+        id: LINK_REF_CORE_LEARNIT_CONSTITUTION_V1_8
     - type: validates
       target:
         id: LINK_REF_CORE_LEARNIT_REFERENTIEL_V0_6
     patchable: false
     parameterizable: false
-    human_readable: 'Binding de séparation des couches : la Constitution gouverne le quoi/pourquoi, le Référentiel borne le combien/comment.'
+    human_readable: 'Binding de séparation des couches : la Constitution gouverne
+      le quoi/pourquoi, le Référentiel borne le combien/comment.'
     logic:
       trigger: Fédération du système final
       condition: Les deux cores coexistent dans le même système.
       effect: Séparation de gouvernance explicitée et fermée au niveau système.
       scope: intercore_governance
+  - id: TYPE_BINDING_LEARNER_STATE_SIGNAL_AUTHORITY_CHAIN
+    authority: derived
+    core_type: LINK
+    source_anchor: '[S3][S7][S11][S16][PATCH_STAGE03]'
+    depends_on:
+    - LINK_REF_CORE_LEARNIT_CONSTITUTION_V1_8
+    - LINK_REF_CORE_LEARNIT_REFERENTIEL_V0_6
+    - TYPE_BINDING_CONSTITUTION_REFERENTIEL_LAYER_SEPARATION
+    relations:
+    - type: binds
+      target:
+        id: LINK_REF_CORE_LEARNIT_CONSTITUTION_V1_8::TYPE_STATE_AXIS_ACTIVATION
+    - type: binds
+      target:
+        id: LINK_REF_CORE_LEARNIT_CONSTITUTION_V1_8::TYPE_STATE_AXIS_VALUE_COST
+    - type: binds
+      target:
+        id: LINK_REF_CORE_LEARNIT_CONSTITUTION_V1_8::TYPE_SELF_REPORT_AR_N1
+    - type: binds
+      target:
+        id: LINK_REF_CORE_LEARNIT_CONSTITUTION_V1_8::TYPE_SELF_REPORT_AR_N2
+    - type: binds
+      target:
+        id: LINK_REF_CORE_LEARNIT_CONSTITUTION_V1_8::TYPE_SELF_REPORT_AR_N3
+    - type: binds
+      target:
+        id: LINK_REF_CORE_LEARNIT_REFERENTIEL_V0_6::TYPE_REFERENTIEL_SIGNAL_CONFIDENCE_HIERARCHY
+    - type: binds
+      target:
+        id: LINK_REF_CORE_LEARNIT_REFERENTIEL_V0_6::RULE_REFERENTIEL_SIGNAL_PRECEDENCE_ORDER
+    - type: binds
+      target:
+        id: LINK_REF_CORE_LEARNIT_REFERENTIEL_V0_6::RULE_REFERENTIEL_LOW_AR_CALIBRATION_TEMPORARILY_REWEIGHTS_SIGNALS
+    - type: binds
+      target:
+        id: LINK_REF_CORE_LEARNIT_REFERENTIEL_V0_6::INV_REFERENTIEL_VC_UNKNOWN_MEANS_NO_INFERENCE
+    patchable: false
+    parameterizable: false
+    human_readable: 'Binding inter-Core de la chaîne d''autorité des signaux état
+      apprenant, reliant les axes constitutionnels et auto-rapports aux règles référentielles
+      de précédence, reweighting et non-inférence.
+
+      '
+    logic:
+      trigger: Résolution d'un état apprenant multi-sources
+      condition: Les Core Constitution et Référentiel sont fédérés dans le même système.
+      effect: 'La Constitution déclare les axes, sources autorisées et statuts admissibles
+        ; le Référentiel borne l''ordre de résolution, le reweighting et les interdits
+        d''inférence.
+
+        '
+      scope: intercore_binding
+  - id: TYPE_BINDING_MSC_COMPONENTS_TO_REFERENTIEL_PARAMETERS
+    authority: derived
+    core_type: LINK
+    source_anchor: '[S1][S2][S20][PATCH_STAGE03]'
+    depends_on:
+    - LINK_REF_CORE_LEARNIT_CONSTITUTION_V1_8
+    - LINK_REF_CORE_LEARNIT_REFERENTIEL_V0_6
+    - TYPE_BINDING_CONSTITUTION_TO_REFERENTIEL_OPERATIONAL_PARAMETERS
+    relations:
+    - type: binds
+      target:
+        id: LINK_REF_CORE_LEARNIT_CONSTITUTION_V1_8::TYPE_MASTERY_COMPONENT_P
+    - type: binds
+      target:
+        id: LINK_REF_CORE_LEARNIT_REFERENTIEL_V0_6::PARAM_REFERENTIEL_MSC_PRECISION_THRESHOLD
+    - type: binds
+      target:
+        id: LINK_REF_CORE_LEARNIT_CONSTITUTION_V1_8::TYPE_MASTERY_COMPONENT_R
+    - type: binds
+      target:
+        id: LINK_REF_CORE_LEARNIT_REFERENTIEL_V0_6::PARAM_REFERENTIEL_MSC_ROBUSTNESS_DELAY_SHORT
+    - type: binds
+      target:
+        id: LINK_REF_CORE_LEARNIT_CONSTITUTION_V1_8::TYPE_MASTERY_COMPONENT_A
+    - type: binds
+      target:
+        id: LINK_REF_CORE_LEARNIT_REFERENTIEL_V0_6::PARAM_REFERENTIEL_MSC_AUTONOMY_SUCCESS_COUNT
+    - type: binds
+      target:
+        id: LINK_REF_CORE_LEARNIT_REFERENTIEL_V0_6::TYPE_REFERENTIEL_REFERENTIAL_PARAMETER_LAYER
+    patchable: false
+    parameterizable: false
+    human_readable: 'Binding inter-Core des composantes MSC P/R/A vers leurs paramètres
+      référentiels minimaux obligatoires.
+
+      '
+    logic:
+      trigger: Lecture ou audit d'un calcul MSC
+      condition: Une composante MSC constitutionnelle requiert un paramètre opératoire
+        délégué.
+      effect: 'La résolution de P, R et A vers les paramètres référentiels minimaux
+        obligatoires devient explicite et auditables sans déplacer la logique MSC
+        hors Constitution.
+
+        '
+      scope: intercore_binding
+  - id: TYPE_BINDING_FEEDBACK_COVERAGE_TO_REFERENTIEL_THRESHOLD
+    authority: derived
+    core_type: LINK
+    source_anchor: '[S4][S18][PATCH_STAGE03]'
+    depends_on:
+    - LINK_REF_CORE_LEARNIT_CONSTITUTION_V1_8
+    - LINK_REF_CORE_LEARNIT_REFERENTIEL_V0_6
+    - TYPE_BINDING_CONSTITUTION_REFERENTIEL_LAYER_SEPARATION
+    relations:
+    - type: binds
+      target:
+        id: LINK_REF_CORE_LEARNIT_CONSTITUTION_V1_8::TYPE_FEEDBACK_COVERAGE_MATRIX
+    - type: binds
+      target:
+        id: LINK_REF_CORE_LEARNIT_CONSTITUTION_V1_8::RULE_UNCOVERED_ERROR_GENERIC_FEEDBACK
+    - type: binds
+      target:
+        id: LINK_REF_CORE_LEARNIT_REFERENTIEL_V0_6::PARAM_REFERENTIEL_FEEDBACK_COVERAGE_REFERENCE_THRESHOLD
+    - type: binds
+      target:
+        id: LINK_REF_CORE_LEARNIT_REFERENTIEL_V0_6::RULE_REFERENTIEL_LOW_FEEDBACK_COVERAGE_SIGNALS_REVISION
+    - type: binds
+      target:
+        id: LINK_REF_CORE_LEARNIT_REFERENTIEL_V0_6::EVENT_REFERENTIEL_FEEDBACK_COVERAGE_LOW
+    patchable: false
+    parameterizable: false
+    human_readable: 'Binding inter-Core entre la matrice constitutionnelle de couverture
+      feedback, son fallback générique, le seuil référentiel de couverture et l''événement
+      de sous-couverture.
+
+      '
+    logic:
+      trigger: Audit de couverture feedback ou fallback d'erreur non couverte
+      condition: Une matrice de couverture existe et un seuil référentiel est applicable.
+      effect: 'Le fallback constitutionnel et le signal référentiel de couverture
+        basse sont fédérés sans introduire de logique métier autonome dans le LINK.
+
+        '
+      scope: intercore_binding
+  - id: TYPE_BINDING_PATCH_TRIGGER_GOVERNANCE_CHAIN
+    authority: derived
+    core_type: LINK
+    source_anchor: '[S6][S14][S16][tables][PATCH_STAGE03]'
+    depends_on:
+    - LINK_REF_CORE_LEARNIT_CONSTITUTION_V1_8
+    - LINK_REF_CORE_LEARNIT_REFERENTIEL_V0_6
+    - TYPE_BINDING_REFERENTIEL_TO_CONSTITUTION_GOVERNING_INVARIANTS
+    relations:
+    - type: binds
+      target:
+        id: LINK_REF_CORE_LEARNIT_CONSTITUTION_V1_8::TYPE_PATCH_ARTIFACT
+    - type: binds
+      target:
+        id: LINK_REF_CORE_LEARNIT_CONSTITUTION_V1_8::TYPE_PATCH_IMPACT_SCOPE
+    - type: binds
+      target:
+        id: LINK_REF_CORE_LEARNIT_CONSTITUTION_V1_8::TYPE_PATCH_QUALITY_GATE
+    - type: binds
+      target:
+        id: LINK_REF_CORE_LEARNIT_REFERENTIEL_V0_6::TYPE_REFERENTIEL_PATCH_TRIGGER_TABLE
+    - type: binds
+      target:
+        id: LINK_REF_CORE_LEARNIT_REFERENTIEL_V0_6::EVENT_REFERENTIEL_PATCH_TRIGGER_THRESHOLD_CROSSED
+    - type: binds
+      target:
+        id: LINK_REF_CORE_LEARNIT_REFERENTIEL_V0_6::CONSTRAINT_REFERENTIEL_PATCH_SCOPE_MUST_REMAIN_CONSTITUTIONALLY_BOUNDED
+    - type: binds
+      target:
+        id: LINK_REF_CORE_LEARNIT_REFERENTIEL_V0_6::CONSTRAINT_REFERENTIEL_LOCAL_VERIFICATION_REQUIRED_BEFORE_PATCH_APPLY
+    - type: binds
+      target:
+        id: LINK_REF_CORE_LEARNIT_REFERENTIEL_V0_6::ACTION_REFERENTIEL_TRIGGER_RELEVANCE_PATCH
+    patchable: false
+    parameterizable: false
+    human_readable: 'Binding inter-Core de la chaîne de gouvernance patch : seuil/trigger
+      référentiel, contraintes d''application locale et admissibilité constitutionnelle
+      du patch artifact.
+
+      '
+    logic:
+      trigger: Qualification d'un patch comme éligible puis applicable
+      condition: Un seuil de patch référentiel est franchi dans le système fédéré.
+      effect: 'L''éligibilité référentielle d''un patch est reliée explicitement aux
+        contraintes constitutionnelles d''impact_scope, de quality gate et de validation
+        locale déterministe.
+
+        '
+      scope: intercore_binding
   INVARIANTS: []
   RULES: []
   PARAMETERS: []
@@ -108,7 +302,7 @@ CORE:
     core_type: LINK
     source_anchor: '[INTERCORE]'
     depends_on:
-    - LINK_REF_CORE_LEARNIT_CONSTITUTION_V1_7
+    - LINK_REF_CORE_LEARNIT_CONSTITUTION_V1_8
     - LINK_REF_CORE_LEARNIT_REFERENTIEL_V0_6
     relations:
     - type: constrains
@@ -124,3 +318,4 @@ CORE:
       scope: link_governance
   EVENTS: []
   ACTIONS: []
+  DEPENDENCIES: []

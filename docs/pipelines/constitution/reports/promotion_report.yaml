@@ -1,0 +1,10 @@
+PROMOTION_REPORT:
+  status: PASS
+  release_id: CORE_RELEASE_2026_03_30_R01
+  source_release_path: docs\cores\releases\CORE_RELEASE_2026_03_30_R01
+  promotion_mode: already_current
+  files_promoted: []
+  current_manifest_updated: false
+  notes:
+  - release déjà active dans docs/cores/current/
+  - aucune réécriture effectuée
