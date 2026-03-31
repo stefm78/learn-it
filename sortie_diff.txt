@@ -1,0 +1,1083 @@
+diff --git a/docs/cores/current/constitution.yaml b/docs/cores/current/constitution.yaml
+index 63c0d09..36594eb 100644
+--- a/docs/cores/current/constitution.yaml
++++ b/docs/cores/current/constitution.yaml
+@@ -1,9 +1,11 @@
+ CORE:
+-  id: CORE_LEARNIT_CONSTITUTION_V1_7
++  id: CORE_LEARNIT_CONSTITUTION_V1_8
+   core_type: CONSTITUTION
+   authority: primary
+-  version: V1_7_FINAL
+-  description: Core canonique final de la Constitution Learn-it v1.7. Naming normalisé, fermeture locale assurée, références inter-Core explicites matérialisées pour fédération avec le Référentiel.
++  version: V1_8_FINAL
++  description: Core canonique final de la Constitution Learn-it V1_8. Naming normalisé,
++    fermeture locale assurée, références inter-Core explicites matérialisées pour
++    fédération avec le Référentiel.
+   TYPES:
+   - id: REF_CORE_LEARNIT_REFERENTIEL_V0_6_IN_CONSTITUTION
+     authority: reference
+@@ -310,7 +312,7 @@ CORE:
+   - id: TYPE_PATCH_ARTIFACT
+     authority: primary
+     core_type: CONSTITUTION
+-    source_anchor: '[S14][PATCH_V1_7]'
++    source_anchor: '[S14][PATCH_V1_8]'
+     depends_on:
+     - TYPE_PATCH_IMPACT_SCOPE
+     - TYPE_PATCH_QUALITY_GATE
+@@ -330,7 +332,9 @@ CORE:
+     human_readable: Patch paramétrique occasionnel et borné.
+     logic:
+       trigger: Événement de révision autorisé
+-      condition: Bornes respectées, impact_scope calculable, attributs obligatoires présents, atomicité garantie ; la QA pédagogique est validée hors session avant soumission.
++      condition: Bornes respectées, impact_scope calculable, attributs obligatoires
++        présents, atomicité garantie ; la QA pédagogique est validée hors session
++        avant soumission.
+       effect: Patch applicable localement ou rejeté/rollbacké.
+       scope: patch_layer
+   - id: TYPE_PATCH_IMPACT_SCOPE
+@@ -450,7 +454,8 @@ CORE:
+     relations: []
+     patchable: false
+     parameterizable: false
+-    human_readable: 'Niveaux d’autonomie moteur : autonome, hybride recommandé, hybride bloquant, assisté.'
++    human_readable: 'Niveaux d’autonomie moteur : autonome, hybride recommandé, hybride
++      bloquant, assisté.'
+     logic:
+       trigger: Conception du déploiement
+       condition: Cadre d’accompagnement déclaré.
+@@ -539,7 +544,8 @@ CORE:
+     relations: []
+     patchable: false
+     parameterizable: false
+-    human_readable: Le canal textuel seul est interdit pour les KU procédurales et perceptuelles.
++    human_readable: Le canal textuel seul est interdit pour les KU procédurales et
++      perceptuelles.
+     logic:
+       trigger: Conception des livrables
+       condition: KU procédurale ou perceptuelle détectée.
+@@ -573,7 +579,8 @@ CORE:
+     relations: []
+     patchable: false
+     parameterizable: false
+-    human_readable: Tout patch hors bornes ou sans impact_scope calculable est rejeté intégralement.
++    human_readable: Tout patch hors bornes ou sans impact_scope calculable est rejeté
++      intégralement.
+     logic:
+       trigger: Validation locale de patch
+       condition: Paramètre hors fourchette ou impact_scope indéterminé.
+@@ -702,7 +709,8 @@ CORE:
+     relations: []
+     patchable: false
+     parameterizable: false
+-    human_readable: Les arêtes de dépendance doivent être explicites pour autoriser la propagation.
++    human_readable: Les arêtes de dépendance doivent être explicites pour autoriser
++      la propagation.
+     logic:
+       trigger: Analyse ou propagation d’incertitude
+       condition: Arêtes non explicites.
+@@ -711,7 +719,7 @@ CORE:
+   - id: INV_KNOWLEDGE_GRAPH_MUST_BE_ACYCLIC
+     authority: primary
+     core_type: CONSTITUTION
+-    source_anchor: '[S4][S18][PATCH_V1_7]'
++    source_anchor: '[S4][S18][PATCH_V1_8]'
+     depends_on:
+     - TYPE_KNOWLEDGE_GRAPH
+     - TYPE_KNOWLEDGE_UNIT
+@@ -730,7 +738,7 @@ CORE:
+   - id: INV_SECONDARY_RETROGRADATION_IS_NEW_EVENT
+     authority: primary
+     core_type: CONSTITUTION
+-    source_anchor: '[S17c][PATCH_V1_7]'
++    source_anchor: '[S17c][PATCH_V1_8]'
+     depends_on:
+     - INV_GRAPH_PROPAGATION_ONE_HOP
+     - TYPE_KNOWLEDGE_GRAPH
+@@ -740,16 +748,19 @@ CORE:
+         id: INV_GRAPH_PROPAGATION_ONE_HOP
+     patchable: false
+     parameterizable: false
+-    human_readable: Toute rétrogradation secondaire issue d’un échec diagnostique constitue un nouvel événement indépendant.
++    human_readable: Toute rétrogradation secondaire issue d’un échec diagnostique
++      constitue un nouvel événement indépendant.
+     logic:
+       trigger: Échec à une tâche diagnostique de propagation
+       condition: Une KU dépendante directe échoue à la vérification prioritaire.
+-      effect: Création d’un nouvel événement autonome de rétrogradation, soumis à la même limite de propagation à un saut ; aucune extension implicite de la propagation courante.
++      effect: Création d’un nouvel événement autonome de rétrogradation, soumis à
++        la même limite de propagation à un saut ; aucune extension implicite de la
++        propagation courante.
+       scope: runtime_graph
+   - id: INV_PATCH_LOCAL_VALIDATION_MUST_BE_DETERMINISTIC
+     authority: primary
+     core_type: CONSTITUTION
+-    source_anchor: '[S14][PATCH_V1_7]'
++    source_anchor: '[S14][PATCH_V1_8]'
+     depends_on:
+     - TYPE_PATCH_ARTIFACT
+     - TYPE_PATCH_IMPACT_SCOPE
+@@ -760,16 +771,19 @@ CORE:
+         id: TYPE_PATCH_ARTIFACT
+     patchable: false
+     parameterizable: false
+-    human_readable: La validation locale d’un patch ne peut reposer que sur des critères déterministes.
++    human_readable: La validation locale d’un patch ne peut reposer que sur des critères
++      déterministes.
+     logic:
+       trigger: Validation locale de patch
+-      condition: Un critère sémantique, pédagogique ou interprétatif est requis localement pour décider.
+-      effect: État interdit ; ce critère doit être déplacé dans la chaîne hors session de QA pédagogique.
++      condition: Un critère sémantique, pédagogique ou interprétatif est requis localement
++        pour décider.
++      effect: État interdit ; ce critère doit être déplacé dans la chaîne hors session
++        de QA pédagogique.
+       scope: patch_validation
+   - id: INV_MISSING_KU_TYPE_FORCES_SAFE_FALLBACK
+     authority: primary
+     core_type: CONSTITUTION
+-    source_anchor: '[S12][S14][PATCH_V1_7]'
++    source_anchor: '[S12][S14][PATCH_V1_8]'
+     depends_on:
+     - TYPE_KNOWLEDGE_UNIT
+     - INV_KU_TYPING_REQUIRED
+@@ -779,16 +793,18 @@ CORE:
+         id: TYPE_KNOWLEDGE_UNIT
+     patchable: false
+     parameterizable: false
+-    human_readable: Une KU sans type déclaré déclenche un mode de sécurité et interdit toute adaptation fine.
++    human_readable: Une KU sans type déclaré déclenche un mode de sécurité et interdit
++      toute adaptation fine.
+     logic:
+       trigger: Chargement ou sélection runtime d’une KU
+       condition: Type KU absent, indéterminé ou invalide.
+-      effect: KU gelée pour l’adaptation fine ; feedback générique uniquement ; exclusion des règles dépendantes du type ; signal de correction obligatoire.
++      effect: KU gelée pour l’adaptation fine ; feedback générique uniquement ; exclusion
++        des règles dépendantes du type ; signal de correction obligatoire.
+       scope: runtime_safety
+   - id: INV_AR_N2_SHORT_FORM_REQUIRES_EXPLICIT_PRIORITY
+     authority: primary
+     core_type: CONSTITUTION
+-    source_anchor: '[S11][PATCH_V1_7]'
++    source_anchor: '[S11][PATCH_V1_8]'
+     depends_on:
+     - TYPE_SELF_REPORT_AR_N2
+     - TYPE_STATE_AXIS_VALUE_COST
+@@ -798,32 +814,36 @@ CORE:
+         id: TYPE_SELF_REPORT_AR_N2
+     patchable: false
+     parameterizable: false
+-    human_readable: Toute version courte d’AR-N2 doit expliciter la priorité entre mesure VC et intention de retour.
++    human_readable: Toute version courte d’AR-N2 doit expliciter la priorité entre
++      mesure VC et intention de retour.
+     logic:
+       trigger: Conception d’un AR-N2 simplifié
+       condition: Le nombre d’items ne permet pas de mesurer complètement VC et intention.
+-      effect: Une priorité déclarée et stable est obligatoire ; aucune inférence implicite d’un axe à partir de l’autre.
++      effect: Une priorité déclarée et stable est obligatoire ; aucune inférence implicite
++        d’un axe à partir de l’autre.
+       scope: runtime_feedback
+   - id: INV_PERSISTENT_DRIFT_REQUIRES_ESCALATION_IF_PATCH_BLOCKED
+     authority: primary
+     core_type: CONSTITUTION
+-    source_anchor: '[S14][PATCH_V1_7]'
++    source_anchor: '[S14][PATCH_V1_8]'
+     depends_on:
+     - TYPE_PATCH_ARTIFACT
+     - INV_INVALID_PATCH_REJECTED
+     relations: []
+     patchable: false
+     parameterizable: false
+-    human_readable: Une dérive persistante non corrigeable par patch localement valide doit être escaladée.
++    human_readable: Une dérive persistante non corrigeable par patch localement valide
++      doit être escaladée.
+     logic:
+       trigger: Répétition d’un besoin de correction sur plusieurs cycles
+-      condition: Le signal de dérive persiste alors que le patch requis reste rejeté ou impossible.
++      condition: Le signal de dérive persiste alors que le patch requis reste rejeté
++        ou impossible.
+       effect: Escalade obligatoire hors session vers la chaîne d’analyse/correction.
+       scope: patch_governance
+   - id: INV_PATCH_ARTIFACTS_MUST_BE_PRECOMPUTED_OFF_SESSION
+     authority: primary
+     core_type: CONSTITUTION
+-    source_anchor: '[S13][S14][PATCH_V1_7]'
++    source_anchor: '[S13][S14][PATCH_V1_8]'
+     depends_on:
+     - TYPE_PATCH_ARTIFACT
+     - INV_RUNTIME_FULLY_LOCAL
+@@ -834,27 +854,31 @@ CORE:
+         id: TYPE_PATCH_ARTIFACT
+     patchable: false
+     parameterizable: false
+-    human_readable: Les artefacts de patch doivent être générés, validés et empaquetés hors session avant leur application locale.
++    human_readable: Les artefacts de patch doivent être générés, validés et empaquetés
++      hors session avant leur application locale.
+     logic:
+       trigger: Préparation d’un patch
+       condition: Le patch nécessite calcul, QA ou génération d’artefact.
+-      effect: Préparation exclusivement hors session ; aucune génération ou validation distante pendant l’usage apprenant.
++      effect: Préparation exclusivement hors session ; aucune génération ou validation
++        distante pendant l’usage apprenant.
+       scope: patch_architecture
+   - id: INV_CREATIVE_KU_AUTONOMY_REQUIRES_DETERMINISTIC_FEEDBACK_PATH
+     authority: primary
+     core_type: CONSTITUTION
+-    source_anchor: '[S12][S17][PATCH_V1_7]'
++    source_anchor: '[S12][S17][PATCH_V1_8]'
+     depends_on:
+     - TYPE_KNOWLEDGE_UNIT
+     - TYPE_FEEDBACK_COVERAGE_MATRIX
+     relations: []
+     patchable: false
+     parameterizable: false
+-    human_readable: Une KU créative ne peut être déployée en régime autonome que si son feedback local déterministe est explicitement formalisé.
++    human_readable: Une KU créative ne peut être déployée en régime autonome que si
++      son feedback local déterministe est explicitement formalisé.
+     logic:
+       trigger: Validation de déploiement d’une KU créative
+       condition: Aucun chemin de feedback local déterministe n’est disponible.
+-      effect: Régime autonome interdit pour cette KU ; checkpoint humain ou redesign requis.
++      effect: Régime autonome interdit pour cette KU ; checkpoint humain ou redesign
++        requis.
+       scope: design_governance
+   RULES:
+   - id: RULE_NO_CALIBRATION_CONSERVATIVE_START
+@@ -880,7 +904,8 @@ CORE:
+     relations: []
+     patchable: false
+     parameterizable: true
+-    human_readable: Un concept utile du corpus n’est pas supprimé du graphe même s’il est absent des annales.
++    human_readable: Un concept utile du corpus n’est pas supprimé du graphe même s’il
++      est absent des annales.
+     logic:
+       trigger: Construction ou révision du graphe
+       condition: Concept présent dans le corpus mais absent des annales.
+@@ -955,7 +980,8 @@ CORE:
+         id: EVENT_UNCOVERED_ERROR
+     patchable: false
+     parameterizable: true
+-    human_readable: 'Erreur non couverte : feedback générique de processus et flag hors-taxonomie.'
++    human_readable: 'Erreur non couverte : feedback générique de processus et flag
++      hors-taxonomie.'
+     logic:
+       trigger: Erreur sans template couvert
+       condition: Aucune entrée matrice applicable.
+@@ -974,11 +1000,13 @@ CORE:
+         id: ACTION_TRIGGER_RELEVANCE_PATCH
+     patchable: false
+     parameterizable: true
+-    human_readable: VC basse persistante déclenche un patch de relevance, pas une baisse de difficulté.
++    human_readable: VC basse persistante déclenche un patch de relevance, pas une
++      baisse de difficulté.
+     logic:
+       trigger: Persistance de VC basse
+       condition: Seuil de persistance atteint.
+-      effect: Révision contextualisation/enjeux/contexte authentique ; difficulté inchangée.
++      effect: Révision contextualisation/enjeux/contexte authentique ; difficulté
++        inchangée.
+       scope: patch_governance
+   - id: RULE_AR_REFRACTORY_PROFILE_TRIGGERS_SOLLICITATION_PATCH
+     authority: primary
+@@ -1079,6 +1107,35 @@ CORE:
+       condition: SIS sous seuil.
+       effect: Pondération ou mise en attente possible, sans pénalisation automatique.
+       scope: runtime_integrity
++  - id: RULE_LEARNER_STATE_AXIS_UNKNOWN_ALLOWED
++    authority: primary
++    core_type: CONSTITUTION
++    source_anchor: '[S7][S11][PATCH_V1_8__STAGE03]'
++    depends_on:
++    - TYPE_LEARNER_STATE_MODEL
++    - TYPE_STATE_AXIS_ACTIVATION
++    - TYPE_STATE_AXIS_VALUE_COST
++    - TYPE_SELF_REPORT_AR_N1
++    - TYPE_SELF_REPORT_AR_N2
++    relations:
++    - type: constrains
++      target:
++        id: TYPE_LEARNER_STATE_MODEL
++    patchable: false
++    parameterizable: false
++    human_readable: 'Un axe d''état apprenant peut rester unknown, absent ou non-observable
++      plutôt qu''être forcé quand la source autorisée manque ou n''est pas exploitable.
++
++      '
++    logic:
++      trigger: Mise à jour de l'état apprenant
++      condition: Source autorisée absente, non renseignée ou non exploitable selon
++        la gouvernance active.
++      effect: 'L''axe concerné reste unknown/absent/non-observable ; aucune valeur
++        n''est forcée par simple complétion implicite au niveau constitutionnel.
++
++        '
++      scope: runtime_state
+   PARAMETERS:
+   - id: PARAM_PROVISIONAL_MASTERY_VERIFICATION_WINDOW
+     authority: primary
+@@ -1088,7 +1145,8 @@ CORE:
+     relations: []
+     patchable: true
+     parameterizable: true
+-    human_readable: Fenêtre constitutionnellement déclarée pour vérifier une maîtrise provisoire.
++    human_readable: Fenêtre constitutionnellement déclarée pour vérifier une maîtrise
++      provisoire.
+     logic:
+       trigger: Maîtrise provisoire héritée
+       condition: Fenêtre initiale ouverte.
+@@ -1478,7 +1536,8 @@ CORE:
+     logic:
+       trigger: VC basse persistante
+       condition: Seuil atteint.
+-      effect: Révision des enjeux, missions de contextualisation et lien au contexte authentique.
++      effect: Révision des enjeux, missions de contextualisation et lien au contexte
++        authentique.
+       scope: patch_layer
+   - id: ACTION_TRIGGER_AR_SOLLICITATION_PATCH
+     authority: primary
+@@ -1566,3 +1625,4 @@ CORE:
+       condition: Réponse conservatrice appliquée.
+       effect: Trace pour finalisation ultérieure.
+       scope: runtime_governance
++  DEPENDENCIES: []
+diff --git a/docs/cores/current/link.yaml b/docs/cores/current/link.yaml
+index 7c2fc1f..0e32687 100644
+--- a/docs/cores/current/link.yaml
++++ b/docs/cores/current/link.yaml
+@@ -1,11 +1,13 @@
+ CORE:
+-  id: CORE_LINK_LEARNIT_CONSTITUTION_V1_7__REFERENTIEL_V0_6
++  id: CORE_LINK_LEARNIT_CONSTITUTION_V1_8__REFERENTIEL_V0_6
+   core_type: LINK
+   authority: primary
+-  version: V1_7__V0_6_FINAL
+-  description: LINK_CORE canonique reliant la Constitution Learn-it v1.7 et le Référentiel Learn-it v0.6. Il explicite les bindings inter-Core nécessaires à la fermeture système, sans logique métier autonome.
++  version: V1_8__V0_6_FINAL
++  description: LINK_CORE canonique reliant la Constitution Learn-it V1_8 et le Référentiel
++    Learn-it v0.6. Il explicite les bindings inter-Core nécessaires à la fermeture
++    système, sans logique métier autonome.
+   TYPES:
+-  - id: LINK_REF_CORE_LEARNIT_CONSTITUTION_V1_7
++  - id: LINK_REF_CORE_LEARNIT_CONSTITUTION_V1_8
+     authority: reference
+     core_type: LINK
+     source_anchor: '[INTERCORE]'
+@@ -13,7 +15,7 @@ CORE:
+     relations: []
+     patchable: false
+     parameterizable: false
+-    human_readable: Référence explicite vers le Core Constitution Learn-it v1.7.
++    human_readable: Référence explicite vers le Core Constitution Learn-it V1_8.
+     logic:
+       trigger: null
+       condition: null
+@@ -38,7 +40,7 @@ CORE:
+     core_type: LINK
+     source_anchor: '[S1][S14][S20]'
+     depends_on:
+-    - LINK_REF_CORE_LEARNIT_CONSTITUTION_V1_7
++    - LINK_REF_CORE_LEARNIT_CONSTITUTION_V1_8
+     - LINK_REF_CORE_LEARNIT_REFERENTIEL_V0_6
+     relations:
+     - type: requires
+@@ -46,13 +48,16 @@ CORE:
+         id: LINK_REF_CORE_LEARNIT_REFERENTIEL_V0_6
+     - type: derives_from
+       target:
+-        id: LINK_REF_CORE_LEARNIT_CONSTITUTION_V1_7
++        id: LINK_REF_CORE_LEARNIT_CONSTITUTION_V1_8
+     patchable: false
+     parameterizable: false
+-    human_readable: Binding des paramètres opérationnels délégués par la Constitution au Référentiel.
++    human_readable: Binding des paramètres opérationnels délégués par la Constitution
++      au Référentiel.
+     logic:
+-      trigger: Interprétation de règles constitutionnelles dépendantes de bornes et seuils
+-      condition: Une règle constitutionnelle mentionne explicitement un seuil, une fourchette ou un paramètre opératoire délégué.
++      trigger: Interprétation de règles constitutionnelles dépendantes de bornes et
++        seuils
++      condition: Une règle constitutionnelle mentionne explicitement un seuil, une
++        fourchette ou un paramètre opératoire délégué.
+       effect: Résolution via le Core Référentiel.
+       scope: intercore_binding
+   - id: TYPE_BINDING_REFERENTIEL_TO_CONSTITUTION_GOVERNING_INVARIANTS
+@@ -60,12 +65,12 @@ CORE:
+     core_type: LINK
+     source_anchor: '[S1][S17B][S17C]'
+     depends_on:
+-    - LINK_REF_CORE_LEARNIT_CONSTITUTION_V1_7
++    - LINK_REF_CORE_LEARNIT_CONSTITUTION_V1_8
+     - LINK_REF_CORE_LEARNIT_REFERENTIEL_V0_6
+     relations:
+     - type: requires
+       target:
+-        id: LINK_REF_CORE_LEARNIT_CONSTITUTION_V1_7
++        id: LINK_REF_CORE_LEARNIT_CONSTITUTION_V1_8
+     - type: derives_from
+       target:
+         id: LINK_REF_CORE_LEARNIT_REFERENTIEL_V0_6
+@@ -73,8 +78,10 @@ CORE:
+     parameterizable: false
+     human_readable: Binding des invariants constitutionnels gouvernant le Référentiel.
+     logic:
+-      trigger: Lecture de paramètres ou tables référentielles qui rappellent un invariant constitutionnel
+-      condition: Le Référentiel documente une borne ou une note opérationnelle issue d’un invariant non délégable.
++      trigger: Lecture de paramètres ou tables référentielles qui rappellent un invariant
++        constitutionnel
++      condition: Le Référentiel documente une borne ou une note opérationnelle issue
++        d’un invariant non délégable.
+       effect: L’autorité de référence est résolue vers le Core Constitution.
+       scope: intercore_binding
+   - id: TYPE_BINDING_CONSTITUTION_REFERENTIEL_LAYER_SEPARATION
+@@ -82,23 +89,210 @@ CORE:
+     core_type: LINK
+     source_anchor: '[S1]'
+     depends_on:
+-    - LINK_REF_CORE_LEARNIT_CONSTITUTION_V1_7
++    - LINK_REF_CORE_LEARNIT_CONSTITUTION_V1_8
+     - LINK_REF_CORE_LEARNIT_REFERENTIEL_V0_6
+     relations:
+     - type: validates
+       target:
+-        id: LINK_REF_CORE_LEARNIT_CONSTITUTION_V1_7
++        id: LINK_REF_CORE_LEARNIT_CONSTITUTION_V1_8
+     - type: validates
+       target:
+         id: LINK_REF_CORE_LEARNIT_REFERENTIEL_V0_6
+     patchable: false
+     parameterizable: false
+-    human_readable: 'Binding de séparation des couches : la Constitution gouverne le quoi/pourquoi, le Référentiel borne le combien/comment.'
++    human_readable: 'Binding de séparation des couches : la Constitution gouverne
++      le quoi/pourquoi, le Référentiel borne le combien/comment.'
+     logic:
+       trigger: Fédération du système final
+       condition: Les deux cores coexistent dans le même système.
+       effect: Séparation de gouvernance explicitée et fermée au niveau système.
+       scope: intercore_governance
++  - id: TYPE_BINDING_LEARNER_STATE_SIGNAL_AUTHORITY_CHAIN
++    authority: derived
++    core_type: LINK
++    source_anchor: '[S3][S7][S11][S16][PATCH_STAGE03]'
++    depends_on:
++    - LINK_REF_CORE_LEARNIT_CONSTITUTION_V1_8
++    - LINK_REF_CORE_LEARNIT_REFERENTIEL_V0_6
++    - TYPE_BINDING_CONSTITUTION_REFERENTIEL_LAYER_SEPARATION
++    relations:
++    - type: binds
++      target:
++        id: LINK_REF_CORE_LEARNIT_CONSTITUTION_V1_8::TYPE_STATE_AXIS_ACTIVATION
++    - type: binds
++      target:
++        id: LINK_REF_CORE_LEARNIT_CONSTITUTION_V1_8::TYPE_STATE_AXIS_VALUE_COST
++    - type: binds
++      target:
++        id: LINK_REF_CORE_LEARNIT_CONSTITUTION_V1_8::TYPE_SELF_REPORT_AR_N1
++    - type: binds
++      target:
++        id: LINK_REF_CORE_LEARNIT_CONSTITUTION_V1_8::TYPE_SELF_REPORT_AR_N2
++    - type: binds
++      target:
++        id: LINK_REF_CORE_LEARNIT_CONSTITUTION_V1_8::TYPE_SELF_REPORT_AR_N3
++    - type: binds
++      target:
++        id: LINK_REF_CORE_LEARNIT_REFERENTIEL_V0_6::TYPE_REFERENTIEL_SIGNAL_CONFIDENCE_HIERARCHY
++    - type: binds
++      target:
++        id: LINK_REF_CORE_LEARNIT_REFERENTIEL_V0_6::RULE_REFERENTIEL_SIGNAL_PRECEDENCE_ORDER
++    - type: binds
++      target:
++        id: LINK_REF_CORE_LEARNIT_REFERENTIEL_V0_6::RULE_REFERENTIEL_LOW_AR_CALIBRATION_TEMPORARILY_REWEIGHTS_SIGNALS
++    - type: binds
++      target:
++        id: LINK_REF_CORE_LEARNIT_REFERENTIEL_V0_6::INV_REFERENTIEL_VC_UNKNOWN_MEANS_NO_INFERENCE
++    patchable: false
++    parameterizable: false
++    human_readable: 'Binding inter-Core de la chaîne d''autorité des signaux état
++      apprenant, reliant les axes constitutionnels et auto-rapports aux règles référentielles
++      de précédence, reweighting et non-inférence.
++
++      '
++    logic:
++      trigger: Résolution d'un état apprenant multi-sources
++      condition: Les Core Constitution et Référentiel sont fédérés dans le même système.
++      effect: 'La Constitution déclare les axes, sources autorisées et statuts admissibles
++        ; le Référentiel borne l''ordre de résolution, le reweighting et les interdits
++        d''inférence.
++
++        '
++      scope: intercore_binding
++  - id: TYPE_BINDING_MSC_COMPONENTS_TO_REFERENTIEL_PARAMETERS
++    authority: derived
++    core_type: LINK
++    source_anchor: '[S1][S2][S20][PATCH_STAGE03]'
++    depends_on:
++    - LINK_REF_CORE_LEARNIT_CONSTITUTION_V1_8
++    - LINK_REF_CORE_LEARNIT_REFERENTIEL_V0_6
++    - TYPE_BINDING_CONSTITUTION_TO_REFERENTIEL_OPERATIONAL_PARAMETERS
++    relations:
++    - type: binds
++      target:
++        id: LINK_REF_CORE_LEARNIT_CONSTITUTION_V1_8::TYPE_MASTERY_COMPONENT_P
++    - type: binds
++      target:
++        id: LINK_REF_CORE_LEARNIT_REFERENTIEL_V0_6::PARAM_REFERENTIEL_MSC_PRECISION_THRESHOLD
++    - type: binds
++      target:
++        id: LINK_REF_CORE_LEARNIT_CONSTITUTION_V1_8::TYPE_MASTERY_COMPONENT_R
++    - type: binds
++      target:
++        id: LINK_REF_CORE_LEARNIT_REFERENTIEL_V0_6::PARAM_REFERENTIEL_MSC_ROBUSTNESS_DELAY_SHORT
++    - type: binds
++      target:
++        id: LINK_REF_CORE_LEARNIT_CONSTITUTION_V1_8::TYPE_MASTERY_COMPONENT_A
++    - type: binds
++      target:
++        id: LINK_REF_CORE_LEARNIT_REFERENTIEL_V0_6::PARAM_REFERENTIEL_MSC_AUTONOMY_SUCCESS_COUNT
++    - type: binds
++      target:
++        id: LINK_REF_CORE_LEARNIT_REFERENTIEL_V0_6::TYPE_REFERENTIEL_REFERENTIAL_PARAMETER_LAYER
++    patchable: false
++    parameterizable: false
++    human_readable: 'Binding inter-Core des composantes MSC P/R/A vers leurs paramètres
++      référentiels minimaux obligatoires.
++
++      '
++    logic:
++      trigger: Lecture ou audit d'un calcul MSC
++      condition: Une composante MSC constitutionnelle requiert un paramètre opératoire
++        délégué.
++      effect: 'La résolution de P, R et A vers les paramètres référentiels minimaux
++        obligatoires devient explicite et auditables sans déplacer la logique MSC
++        hors Constitution.
++
++        '
++      scope: intercore_binding
++  - id: TYPE_BINDING_FEEDBACK_COVERAGE_TO_REFERENTIEL_THRESHOLD
++    authority: derived
++    core_type: LINK
++    source_anchor: '[S4][S18][PATCH_STAGE03]'
++    depends_on:
++    - LINK_REF_CORE_LEARNIT_CONSTITUTION_V1_8
++    - LINK_REF_CORE_LEARNIT_REFERENTIEL_V0_6
++    - TYPE_BINDING_CONSTITUTION_REFERENTIEL_LAYER_SEPARATION
++    relations:
++    - type: binds
++      target:
++        id: LINK_REF_CORE_LEARNIT_CONSTITUTION_V1_8::TYPE_FEEDBACK_COVERAGE_MATRIX
++    - type: binds
++      target:
++        id: LINK_REF_CORE_LEARNIT_CONSTITUTION_V1_8::RULE_UNCOVERED_ERROR_GENERIC_FEEDBACK
++    - type: binds
++      target:
++        id: LINK_REF_CORE_LEARNIT_REFERENTIEL_V0_6::PARAM_REFERENTIEL_FEEDBACK_COVERAGE_REFERENCE_THRESHOLD
++    - type: binds
++      target:
++        id: LINK_REF_CORE_LEARNIT_REFERENTIEL_V0_6::RULE_REFERENTIEL_LOW_FEEDBACK_COVERAGE_SIGNALS_REVISION
++    - type: binds
++      target:
++        id: LINK_REF_CORE_LEARNIT_REFERENTIEL_V0_6::EVENT_REFERENTIEL_FEEDBACK_COVERAGE_LOW
++    patchable: false
++    parameterizable: false
++    human_readable: 'Binding inter-Core entre la matrice constitutionnelle de couverture
++      feedback, son fallback générique, le seuil référentiel de couverture et l''événement
++      de sous-couverture.
++
++      '
++    logic:
++      trigger: Audit de couverture feedback ou fallback d'erreur non couverte
++      condition: Une matrice de couverture existe et un seuil référentiel est applicable.
++      effect: 'Le fallback constitutionnel et le signal référentiel de couverture
++        basse sont fédérés sans introduire de logique métier autonome dans le LINK.
++
++        '
++      scope: intercore_binding
++  - id: TYPE_BINDING_PATCH_TRIGGER_GOVERNANCE_CHAIN
++    authority: derived
++    core_type: LINK
++    source_anchor: '[S6][S14][S16][tables][PATCH_STAGE03]'
++    depends_on:
++    - LINK_REF_CORE_LEARNIT_CONSTITUTION_V1_8
++    - LINK_REF_CORE_LEARNIT_REFERENTIEL_V0_6
++    - TYPE_BINDING_REFERENTIEL_TO_CONSTITUTION_GOVERNING_INVARIANTS
++    relations:
++    - type: binds
++      target:
++        id: LINK_REF_CORE_LEARNIT_CONSTITUTION_V1_8::TYPE_PATCH_ARTIFACT
++    - type: binds
++      target:
++        id: LINK_REF_CORE_LEARNIT_CONSTITUTION_V1_8::TYPE_PATCH_IMPACT_SCOPE
++    - type: binds
++      target:
++        id: LINK_REF_CORE_LEARNIT_CONSTITUTION_V1_8::TYPE_PATCH_QUALITY_GATE
++    - type: binds
++      target:
++        id: LINK_REF_CORE_LEARNIT_REFERENTIEL_V0_6::TYPE_REFERENTIEL_PATCH_TRIGGER_TABLE
++    - type: binds
++      target:
++        id: LINK_REF_CORE_LEARNIT_REFERENTIEL_V0_6::EVENT_REFERENTIEL_PATCH_TRIGGER_THRESHOLD_CROSSED
++    - type: binds
++      target:
++        id: LINK_REF_CORE_LEARNIT_REFERENTIEL_V0_6::CONSTRAINT_REFERENTIEL_PATCH_SCOPE_MUST_REMAIN_CONSTITUTIONALLY_BOUNDED
++    - type: binds
++      target:
++        id: LINK_REF_CORE_LEARNIT_REFERENTIEL_V0_6::CONSTRAINT_REFERENTIEL_LOCAL_VERIFICATION_REQUIRED_BEFORE_PATCH_APPLY
++    - type: binds
++      target:
++        id: LINK_REF_CORE_LEARNIT_REFERENTIEL_V0_6::ACTION_REFERENTIEL_TRIGGER_RELEVANCE_PATCH
++    patchable: false
++    parameterizable: false
++    human_readable: 'Binding inter-Core de la chaîne de gouvernance patch : seuil/trigger
++      référentiel, contraintes d''application locale et admissibilité constitutionnelle
++      du patch artifact.
++
++      '
++    logic:
++      trigger: Qualification d'un patch comme éligible puis applicable
++      condition: Un seuil de patch référentiel est franchi dans le système fédéré.
++      effect: 'L''éligibilité référentielle d''un patch est reliée explicitement aux
++        contraintes constitutionnelles d''impact_scope, de quality gate et de validation
++        locale déterministe.
++
++        '
++      scope: intercore_binding
+   INVARIANTS: []
+   RULES: []
+   PARAMETERS: []
+@@ -108,7 +302,7 @@ CORE:
+     core_type: LINK
+     source_anchor: '[INTERCORE]'
+     depends_on:
+-    - LINK_REF_CORE_LEARNIT_CONSTITUTION_V1_7
++    - LINK_REF_CORE_LEARNIT_CONSTITUTION_V1_8
+     - LINK_REF_CORE_LEARNIT_REFERENTIEL_V0_6
+     relations:
+     - type: constrains
+@@ -124,3 +318,4 @@ CORE:
+       scope: link_governance
+   EVENTS: []
+   ACTIONS: []
++  DEPENDENCIES: []
+diff --git a/docs/cores/current/referentiel.yaml b/docs/cores/current/referentiel.yaml
+index 097b092..ec4ce75 100644
+--- a/docs/cores/current/referentiel.yaml
++++ b/docs/cores/current/referentiel.yaml
+@@ -3,9 +3,11 @@ CORE:
+   core_type: REFERENTIEL
+   authority: primary
+   version: V0_6_FINAL
+-  description: Core canonique final du Référentiel Learn-it v0.6. Naming normalisé, fermeture locale assurée, références inter-Core explicites matérialisées pour fédération avec la Constitution.
++  description: Core canonique final du Référentiel Learn-it v0.6. Naming normalisé,
++    fermeture locale assurée, références inter-Core explicites matérialisées pour
++    fédération avec la Constitution.
+   TYPES:
+-  - id: REF_CORE_LEARNIT_CONSTITUTION_V1_7_IN_REFERENTIEL
++  - id: REF_CORE_LEARNIT_CONSTITUTION_V1_8_IN_REFERENTIEL
+     authority: reference
+     core_type: REFERENTIEL
+     source_anchor: '[INTERCORE]'
+@@ -13,7 +15,7 @@ CORE:
+     relations: []
+     patchable: false
+     parameterizable: false
+-    human_readable: Référence explicite vers le Core Constitution Learn-it v1.7.
++    human_readable: Référence explicite vers le Core Constitution Learn-it V1_8.
+     logic:
+       trigger: null
+       condition: null
+@@ -24,7 +26,7 @@ CORE:
+     core_type: REFERENTIEL
+     source_anchor: '[S1]'
+     depends_on:
+-    - REF_CORE_LEARNIT_CONSTITUTION_V1_7_IN_REFERENTIEL
++    - REF_CORE_LEARNIT_CONSTITUTION_V1_8_IN_REFERENTIEL
+     relations:
+     - type: governs
+       target:
+@@ -48,7 +50,7 @@ CORE:
+     core_type: REFERENTIEL
+     source_anchor: '[S3]'
+     depends_on:
+-    - REF_CORE_LEARNIT_CONSTITUTION_V1_7_IN_REFERENTIEL
++    - REF_CORE_LEARNIT_CONSTITUTION_V1_8_IN_REFERENTIEL
+     relations:
+     - type: instantiates
+       target:
+@@ -66,7 +68,7 @@ CORE:
+     core_type: REFERENTIEL
+     source_anchor: '[S3]'
+     depends_on:
+-    - REF_CORE_LEARNIT_CONSTITUTION_V1_7_IN_REFERENTIEL
++    - REF_CORE_LEARNIT_CONSTITUTION_V1_8_IN_REFERENTIEL
+     relations:
+     - type: governs
+       target:
+@@ -87,7 +89,7 @@ CORE:
+     core_type: REFERENTIEL
+     source_anchor: '[S3]'
+     depends_on:
+-    - REF_CORE_LEARNIT_CONSTITUTION_V1_7_IN_REFERENTIEL
++    - REF_CORE_LEARNIT_CONSTITUTION_V1_8_IN_REFERENTIEL
+     relations:
+     - type: governs
+       target:
+@@ -105,7 +107,7 @@ CORE:
+     core_type: REFERENTIEL
+     source_anchor: '[S3]'
+     depends_on:
+-    - REF_CORE_LEARNIT_CONSTITUTION_V1_7_IN_REFERENTIEL
++    - REF_CORE_LEARNIT_CONSTITUTION_V1_8_IN_REFERENTIEL
+     relations:
+     - type: validates
+       target:
+@@ -123,7 +125,7 @@ CORE:
+     core_type: REFERENTIEL
+     source_anchor: '[S3][S16]'
+     depends_on:
+-    - REF_CORE_LEARNIT_CONSTITUTION_V1_7_IN_REFERENTIEL
++    - REF_CORE_LEARNIT_CONSTITUTION_V1_8_IN_REFERENTIEL
+     relations:
+     - type: governs
+       target:
+@@ -144,7 +146,7 @@ CORE:
+     core_type: REFERENTIEL
+     source_anchor: '[S3]'
+     depends_on:
+-    - REF_CORE_LEARNIT_CONSTITUTION_V1_7_IN_REFERENTIEL
++    - REF_CORE_LEARNIT_CONSTITUTION_V1_8_IN_REFERENTIEL
+     relations:
+     - type: governs
+       target:
+@@ -162,7 +164,7 @@ CORE:
+     core_type: REFERENTIEL
+     source_anchor: '[S4][S18]'
+     depends_on:
+-    - REF_CORE_LEARNIT_CONSTITUTION_V1_7_IN_REFERENTIEL
++    - REF_CORE_LEARNIT_CONSTITUTION_V1_8_IN_REFERENTIEL
+     relations:
+     - type: validates
+       target:
+@@ -180,7 +182,7 @@ CORE:
+     core_type: REFERENTIEL
+     source_anchor: '[tables]'
+     depends_on:
+-    - REF_CORE_LEARNIT_CONSTITUTION_V1_7_IN_REFERENTIEL
++    - REF_CORE_LEARNIT_CONSTITUTION_V1_8_IN_REFERENTIEL
+     relations:
+     - type: governs
+       target:
+@@ -198,7 +200,7 @@ CORE:
+     core_type: REFERENTIEL
+     source_anchor: '[tables][S6]'
+     depends_on:
+-    - REF_CORE_LEARNIT_CONSTITUTION_V1_7_IN_REFERENTIEL
++    - REF_CORE_LEARNIT_CONSTITUTION_V1_8_IN_REFERENTIEL
+     relations:
+     - type: constrains
+       target:
+@@ -216,7 +218,7 @@ CORE:
+     core_type: REFERENTIEL
+     source_anchor: '[S16]'
+     depends_on:
+-    - REF_CORE_LEARNIT_CONSTITUTION_V1_7_IN_REFERENTIEL
++    - REF_CORE_LEARNIT_CONSTITUTION_V1_8_IN_REFERENTIEL
+     relations:
+     - type: governs
+       target:
+@@ -234,7 +236,7 @@ CORE:
+     core_type: REFERENTIEL
+     source_anchor: '[S17]'
+     depends_on:
+-    - REF_CORE_LEARNIT_CONSTITUTION_V1_7_IN_REFERENTIEL
++    - REF_CORE_LEARNIT_CONSTITUTION_V1_8_IN_REFERENTIEL
+     relations:
+     - type: governs
+       target:
+@@ -252,11 +254,11 @@ CORE:
+     core_type: REFERENTIEL
+     source_anchor: '[S19]'
+     depends_on:
+-    - REF_CORE_LEARNIT_CONSTITUTION_V1_7_IN_REFERENTIEL
++    - REF_CORE_LEARNIT_CONSTITUTION_V1_8_IN_REFERENTIEL
+     relations:
+     - type: derives_from
+       target:
+-        id: REF_CORE_LEARNIT_CONSTITUTION_V1_7_IN_REFERENTIEL
++        id: REF_CORE_LEARNIT_CONSTITUTION_V1_8_IN_REFERENTIEL
+     patchable: false
+     parameterizable: false
+     human_readable: Note opérationnelle rappelant que la profondeur 1 saut est constitutionnelle.
+@@ -277,18 +279,20 @@ CORE:
+         id: PARAM_REFERENTIEL_PROXY_MIN_WEIGHT
+     patchable: true
+     parameterizable: true
+-    human_readable: Ensemble minimal de proxys comportementaux utilisables en absence d’AR-N1.
++    human_readable: Ensemble minimal de proxys comportementaux utilisables en absence
++      d’AR-N1.
+     logic:
+       trigger: Résolution d’état sans auto-rapport événementiel
+       condition: AR-N1 absent et proxys disponibles.
+-      effect: Activation d’un socle minimal de signaux mesurables, chacun avec seuil déclaré et statut empirique explicite.
++      effect: Activation d’un socle minimal de signaux mesurables, chacun avec seuil
++        déclaré et statut empirique explicite.
+       scope: runtime_state
+   - id: TYPE_REFERENTIEL_AR_N3_CONFIGURATION
+     authority: primary
+     core_type: REFERENTIEL
+     source_anchor: '[S3][PATCH_V0_6]'
+     depends_on:
+-    - REF_CORE_LEARNIT_CONSTITUTION_V1_7_IN_REFERENTIEL
++    - REF_CORE_LEARNIT_CONSTITUTION_V1_8_IN_REFERENTIEL
+     relations:
+     - type: governs
+       target:
+@@ -307,7 +311,7 @@ CORE:
+     core_type: REFERENTIEL
+     source_anchor: '[S2]'
+     depends_on:
+-    - REF_CORE_LEARNIT_CONSTITUTION_V1_7_IN_REFERENTIEL
++    - REF_CORE_LEARNIT_CONSTITUTION_V1_8_IN_REFERENTIEL
+     relations:
+     - type: constrains
+       target:
+@@ -325,7 +329,7 @@ CORE:
+     core_type: REFERENTIEL
+     source_anchor: '[S19]'
+     depends_on:
+-    - REF_CORE_LEARNIT_CONSTITUTION_V1_7_IN_REFERENTIEL
++    - REF_CORE_LEARNIT_CONSTITUTION_V1_8_IN_REFERENTIEL
+     relations:
+     - type: constrains
+       target:
+@@ -343,11 +347,12 @@ CORE:
+     core_type: REFERENTIEL
+     source_anchor: '[tables][S6]'
+     depends_on:
+-    - REF_CORE_LEARNIT_CONSTITUTION_V1_7_IN_REFERENTIEL
++    - REF_CORE_LEARNIT_CONSTITUTION_V1_8_IN_REFERENTIEL
+     relations: []
+     patchable: false
+     parameterizable: false
+-    human_readable: La checklist qualité pédagogique des patchs n'est pas modifiable ici.
++    human_readable: La checklist qualité pédagogique des patchs n'est pas modifiable
++      ici.
+     logic:
+       trigger: Révision du contrôle qualité patch
+       condition: Modification de la checklist demandée
+@@ -471,7 +476,8 @@ CORE:
+     relations: []
+     patchable: true
+     parameterizable: true
+-    human_readable: Le régime adaptatif requiert au moins 2 proxys franchissant leur seuil.
++    human_readable: Le régime adaptatif requiert au moins 2 proxys franchissant leur
++      seuil.
+     logic:
+       trigger: Détection de régime
+       condition: Nombre de proxys franchissant leur seuil
+@@ -503,7 +509,8 @@ CORE:
+     relations: []
+     patchable: true
+     parameterizable: true
+-    human_readable: Réduction de fréquence ou simplification du format de l'intention de session.
++    human_readable: Réduction de fréquence ou simplification du format de l'intention
++      de session.
+     logic:
+       trigger: Audit de complétion intention
+       condition: Taux de complétion sous seuil sur fenêtre donnée
+@@ -536,7 +543,8 @@ CORE:
+     relations: []
+     patchable: true
+     parameterizable: true
+-    human_readable: Escalade Analyse si le patch relevance n'améliore pas VC après 2 cycles.
++    human_readable: Escalade Analyse si le patch relevance n'améliore pas VC après
++      2 cycles.
+     logic:
+       trigger: Évaluation post-patch relevance
+       condition: Amélioration absente après le nombre de cycles défini
+@@ -597,29 +605,34 @@ CORE:
+     core_type: REFERENTIEL
+     source_anchor: '[S2][PATCH_V0_6]'
+     depends_on:
+-    - REF_CORE_LEARNIT_CONSTITUTION_V1_7_IN_REFERENTIEL
++    - REF_CORE_LEARNIT_CONSTITUTION_V1_8_IN_REFERENTIEL
+     relations: []
+     patchable: true
+     parameterizable: true
+-    human_readable: Distingue la rétrogradation courante pendant apprentissage de la révocation post-maîtrise.
++    human_readable: Distingue la rétrogradation courante pendant apprentissage de
++      la révocation post-maîtrise.
+     logic:
+       trigger: Baisse MSC détectée
+-      condition: Le système doit décider entre correction immédiate et révocation d’un acquis stabilisé.
+-      effect: La rétrogradation courante suit la défaillance instantanée ; la révocation post-maîtrise exige une fenêtre temporelle et des répétitions configurées.
++      condition: Le système doit décider entre correction immédiate et révocation
++        d’un acquis stabilisé.
++      effect: La rétrogradation courante suit la défaillance instantanée ; la révocation
++        post-maîtrise exige une fenêtre temporelle et des répétitions configurées.
+       scope: runtime_evaluation
+   - id: RULE_REFERENTIEL_INTERLEAVING_CONTENT_REQUIRES_A
+     authority: primary
+     core_type: REFERENTIEL
+     source_anchor: '[S3][PATCH_V0_6]'
+     depends_on:
+-    - REF_CORE_LEARNIT_CONSTITUTION_V1_7_IN_REFERENTIEL
++    - REF_CORE_LEARNIT_CONSTITUTION_V1_8_IN_REFERENTIEL
+     relations: []
+     patchable: true
+     parameterizable: true
+-    human_readable: L’interleaving de contenus exige atteinte simultanée de P et A, plus stabilité minimale.
++    human_readable: L’interleaving de contenus exige atteinte simultanée de P et A,
++      plus stabilité minimale.
+     logic:
+       trigger: Évaluation de passage vers interleaving de contenus
+-      condition: Au moins 2 réussites consécutives, au moins 3 tâches distinctes, et composante A au seuil sur les KU concernées.
++      condition: Au moins 2 réussites consécutives, au moins 3 tâches distinctes,
++        et composante A au seuil sur les KU concernées.
+       effect: Interleaving contenus autorisé ; sinon maintien en séquencement simple.
+       scope: runtime_progression
+   - id: RULE_REFERENTIEL_SECONDARY_RETROGRADATION_DEFERRED_REENTRY
+@@ -631,11 +644,13 @@ CORE:
+     relations: []
+     patchable: true
+     parameterizable: true
+-    human_readable: Une rétrogradation secondaire est marquée puis rejouée comme un nouvel événement autonome.
++    human_readable: Une rétrogradation secondaire est marquée puis rejouée comme un
++      nouvel événement autonome.
+     logic:
+       trigger: Échec à une tâche diagnostique de propagation
+       condition: KU dépendante directe échoue à la vérification prioritaire.
+-      effect: Flag de rétrogradation secondaire ; réentrée au prochain cycle autorisé comme nouvel événement autonome.
++      effect: Flag de rétrogradation secondaire ; réentrée au prochain cycle autorisé
++        comme nouvel événement autonome.
+       scope: runtime_graph
+   - id: RULE_REFERENTIEL_LOW_AR_CALIBRATION_TEMPORARILY_REWEIGHTS_SIGNALS
+     authority: primary
+@@ -648,26 +663,30 @@ CORE:
+     relations: []
+     patchable: false
+     parameterizable: true
+-    human_readable: Une calibration AR basse réduit temporairement le poids d’AR-N1 et restaure les proxys.
++    human_readable: Une calibration AR basse réduit temporairement le poids d’AR-N1
++      et restaure les proxys.
+     logic:
+       trigger: Résultat AR-N3
+       condition: Indice calibration AR bas détecté.
+-      effect: Réduction temporaire du poids AR-N1 et relèvement borné du poids des proxys pour un cycle AR-N3.
++      effect: Réduction temporaire du poids AR-N1 et relèvement borné du poids des
++        proxys pour un cycle AR-N3.
+       scope: runtime_feedback
+   - id: RULE_REFERENTIEL_SYSTEMIC_INVESTIGATION_RUNTIME_BEHAVIOR
+     authority: primary
+     core_type: REFERENTIEL
+     source_anchor: '[PATCH_V0_6]'
+     depends_on:
+-    - REF_CORE_LEARNIT_CONSTITUTION_V1_7_IN_REFERENTIEL
++    - REF_CORE_LEARNIT_CONSTITUTION_V1_8_IN_REFERENTIEL
+     relations: []
+     patchable: true
+     parameterizable: true
+-    human_readable: Pendant une investigation systémique active, le moteur adopte un régime minimal et réversible.
++    human_readable: Pendant une investigation systémique active, le moteur adopte
++      un régime minimal et réversible.
+     logic:
+       trigger: Investigation systémique ouverte
+       condition: Cause locale non résolue ou dérive transversale suspectée.
+-      effect: Gel des ajustements agressifs, maintien d’un mode minimal, journalisation renforcée, puis escalade hors session si persistance sur la fenêtre configurée.
++      effect: Gel des ajustements agressifs, maintien d’un mode minimal, journalisation
++        renforcée, puis escalade hors session si persistance sur la fenêtre configurée.
+       scope: runtime_safety
+   - id: RULE_REFERENTIEL_VC_UNOBSERVABLE_DISABLING
+     authority: primary
+@@ -679,11 +698,13 @@ CORE:
+     relations: []
+     patchable: true
+     parameterizable: true
+-    human_readable: Si VC reste non observable sur une fenêtre suffisante, l’axe VC est désactivé plutôt qu’inféré indirectement.
++    human_readable: Si VC reste non observable sur une fenêtre suffisante, l’axe VC
++      est désactivé plutôt qu’inféré indirectement.
+     logic:
+       trigger: Agrégation VC
+       condition: Absence répétée de donnée VC exploitable sur la fenêtre configurée.
+-      effect: État VC=non-observable ; désactivation de l’axe pour l’adaptation concernée ; aucune inférence de substitution.
++      effect: État VC=non-observable ; désactivation de l’axe pour l’adaptation concernée
++        ; aucune inférence de substitution.
+       scope: runtime_state
+   PARAMETERS:
+   - id: PARAM_REFERENTIEL_MSC_PRECISION_THRESHOLD
+@@ -1241,7 +1262,8 @@ CORE:
+     relations: []
+     patchable: false
+     parameterizable: true
+-    human_readable: Fenêtre maximale autorisée avant vérification prioritaire d’une KU dépendante marquée.
++    human_readable: Fenêtre maximale autorisée avant vérification prioritaire d’une
++      KU dépendante marquée.
+     logic:
+       trigger: Planification de vérification de propagation
+       condition: KU dépendante directe marquée.
+@@ -1261,7 +1283,8 @@ CORE:
+     logic:
+       trigger: Validation d'un patch
+       condition: Portée du patch calculée
+-      effect: Rejet si composantes MSC, philosophie adaptative, graphe principal, logique AND, propagation 1-saut ou checklist qualité sont visés
++      effect: Rejet si composantes MSC, philosophie adaptative, graphe principal,
++        logique AND, propagation 1-saut ou checklist qualité sont visés
+       scope: patch_validation
+   - id: CONSTRAINT_REFERENTIEL_DOUBLE_BUFFER_REQUIRED_FOR_PATCH
+     authority: primary
+@@ -1297,7 +1320,8 @@ CORE:
+     logic:
+       trigger: Application d'un patch
+       condition: Patch prêt à être appliqué
+-      effect: "Vérification locale déterministe requise : bornes, impact_scope calculable, attributs obligatoires présents, compatibilité technique et atomicité."
++      effect: 'Vérification locale déterministe requise : bornes, impact_scope calculable,
++        attributs obligatoires présents, compatibilité technique et atomicité.'
+       scope: patch_validation
+   - id: CONSTRAINT_REFERENTIEL_NO_DIFFICULTY_ADJUSTMENT_FROM_VC_PATCH
+     authority: primary
+diff --git a/docs/patcher/shared/promote_current.py b/docs/patcher/shared/promote_current.py
+index e212576..55827e7 100644
+--- a/docs/patcher/shared/promote_current.py
++++ b/docs/patcher/shared/promote_current.py
+@@ -70,6 +70,10 @@ def utc_now_iso() -> str:
+     return datetime.now(timezone.utc).replace(microsecond=0).isoformat().replace("+00:00", "Z")
+ 
+ 
++def normalize_repo_path(path_value: str) -> str:
++    return path_value.replace("\\", "/").rstrip("/")
++
++
+ def build_current_manifest(release_manifest: Dict[str, Any], promotion_mode: str) -> Dict[str, Any]:
+     release_id = release_manifest.get("release_id")
+     source_release_path = release_manifest.get("source", {}).get("release_path")
+@@ -120,6 +124,8 @@ def main() -> None:
+ 
+         release_id = release_bundle.get("release_id")
+         source_release_path = release_bundle.get("release_path")
++        if isinstance(source_release_path, str):
++            source_release_path = normalize_repo_path(source_release_path)
+         if not isinstance(release_id, str) or not release_id:
+             raise PromotionError("release_bundle.release_id absent ou invalide")
+         if not isinstance(source_release_path, str) or not source_release_path:
+@@ -127,6 +133,8 @@ def main() -> None:
+ 
+         report_release_id = materialization_report.get("release_id")
+         report_release_path = materialization_report.get("release_path")
++        if isinstance(report_release_path, str):
++            report_release_path = normalize_repo_path(report_release_path)
+         if report_release_id != release_id:
+             raise PromotionError("release_id incohérent entre release_plan et release_materialization_report")
+         if report_release_path != source_release_path:
+@@ -188,11 +196,11 @@ def main() -> None:
+             source_file = release_path / file_name
+             destination_file = current_dir / file_name
+             destination_file.write_text(source_file.read_text(encoding="utf-8"), encoding="utf-8")
+-            files_promoted.append(str(destination_file))
++            files_promoted.append(destination_file.as_posix())
+ 
+         current_manifest_doc = build_current_manifest(release_manifest, promotion_mode="applied")
+         dump_yaml(current_manifest_path, current_manifest_doc)
+-        files_promoted.append(str(current_manifest_path))
++        files_promoted.append(current_manifest_path.as_posix())
+ 
+         notes = [
+             f"release {release_id} promue vers docs/cores/current/",
