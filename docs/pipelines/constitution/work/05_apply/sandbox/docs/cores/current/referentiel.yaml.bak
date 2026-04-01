@@ -112,9 +112,7 @@ CORE:
         id: RULE_REFERENTIEL_SIGNAL_PRECEDENCE_ORDER
     patchable: true
     parameterizable: true
-    human_readable: 'Hiérarchie de confiance des signaux apprentissage. Ordre : AR-N1 > AR-N2 > AR-N3 (calibration, indirect via reweighting) > proxys > tendances.
-
-      '
+    human_readable: Hiérarchie de confiance des signaux apprentissage.
     logic:
       trigger: Résolution de signaux contradictoires
       condition: Plusieurs sources disponibles
@@ -427,15 +425,11 @@ CORE:
     relations: []
     patchable: true
     parameterizable: true
-    human_readable: 'Ordre de résolution des signaux AR et proxys : AR-N1 > AR-N2 > AR-N3 (calibration) > proxys > tendances. AR-N3 contribue à la hiérarchie via son effet de reweighting borné sur AR-N1, documenté dans RULE_REFERENTIEL_LOW_AR_CALIBRATION_TEMPORARILY_REWEIGHTS_SIGNALS.
-
-      '
+    human_readable: Ordre de résolution des signaux AR et proxys.
     logic:
       trigger: Signaux contradictoires
       condition: Plusieurs signaux simultanés
-      effect: 'Priorité : AR-N1 > AR-N2 > AR-N3 (calibration, effet via reweighting borné) > proxys > tendances. L''effet d''AR-N3 sur AR-N1 est indirect et borné : il passe exclusivement par RULE_REFERENTIEL_LOW_AR_CALIBRATION_TEMPORARILY_REWEIGHTS_SIGNALS et PARAM_REFERENTIEL_LOW_AR_CALIBRATION_CONSECUTIVE_BILANS.
-
-        '
+      effect: Priorité AR-N1 > AR-N2 > proxys > tendances
       scope: runtime_state
   - id: RULE_REFERENTIEL_INTERLEAVING_ACTIVATION
     authority: primary
@@ -690,23 +684,6 @@ CORE:
       trigger: Agrégation VC
       condition: Absence répétée de donnée VC exploitable sur la fenêtre configurée.
       effect: État VC=non-observable ; désactivation de l’axe pour l’adaptation concernée ; aucune inférence de substitution.
-      scope: runtime_state
-  - id: RULE_REFERENTIEL_ADAPTIVE_REGIME_CONFLICT_RESOLUTION
-    authority: primary
-    core_type: REFERENTIEL
-    source_anchor: '[ARBITRAGE_2026_04_01][MATRIX-01]'
-    depends_on:
-    - TYPE_REFERENTIEL_ADAPTIVE_REGIME_MATRIX
-    relations: []
-    patchable: true
-    parameterizable: true
-    human_readable: 'Table de priorité par paire de conflits pour les cellules de frontière de la matrice des régimes adaptatifs. Règle synthétique : (1) Détresse l''emporte toujours. (2) Conservateur l''emporte sur Exploration et Consolidation (sauf MOT-01). (3) Consolidation l''emporte sur Sous-défi sauf si R est déjà atteint. (4) Exploration l''emporte sur Sous-défi. (5) Consolidation vs Exploration → régime oscillatoire piloté par R.
-
-      '
-    logic:
-      trigger: Détection de deux régimes adaptatifs simultanément sur des cellules de frontière
-      condition: Deux régimes ou plus activés simultanément dans la matrice.
-      effect: "Application de la table de priorité : Détresse + tout autre : Détresse prime. Conservateur + Sous-défi : Conservateur (borné par MOT-01). Conservateur + Exploration : Conservateur. Conservateur + Consolidation : Conservateur. Consolidation + Sous-défi : Sous-défi (si R atteint) sinon Consolidation. Consolidation + Exploration : régime oscillatoire (alternance 1 session\n  consolidation satisfaisante → 1 session exploration → retour consolidation,\n  sortie quand R atteint).\nExploration + Sous-défi : Exploration.\n"
       scope: runtime_state
   PARAMETERS:
   - id: PARAM_REFERENTIEL_MSC_PRECISION_THRESHOLD
@@ -1270,105 +1247,6 @@ CORE:
       condition: KU dépendante directe marquée.
       effect: Référence 1 session ; délai non contournable par patch local.
       scope: runtime_graph
-  - id: PARAM_REFERENTIEL_LOW_AR_CALIBRATION_CONSECUTIVE_BILANS
-    authority: primary
-    core_type: REFERENTIEL
-    source_anchor: '[ARBITRAGE_2026_04_01][SIG-01]'
-    depends_on: []
-    relations: []
-    patchable: true
-    parameterizable: true
-    human_readable: 'Nombre de bilans AR-N3 consécutifs confirmant une calibration AR basse requis pour activer l''exception de reweighting temporaire d''AR-N1 (RULE_AR_N1_OVERRIDES_PROXY exception bornée).
-
-      '
-    logic:
-      trigger: Évaluation de déclenchement du reweighting AR-N1
-      condition: Résultats AR-N3 disponibles sur N bilans consécutifs.
-      effect: Référence 3 bilans consécutifs ; fourchette 2–5.
-      scope: runtime_feedback
-  - id: PARAM_REFERENTIEL_CONSERVATIVE_SCAFFOLDING_ESCALATION_SESSIONS
-    authority: primary
-    core_type: REFERENTIEL
-    source_anchor: '[ARBITRAGE_2026_04_01][MOT-01]'
-    depends_on: []
-    relations: []
-    patchable: true
-    parameterizable: true
-    human_readable: 'Nombre de sessions consécutives en mode conservateur sans AR-N1 et sans proxys suffisants avant déclenchement de l''escalade (EVENT_CONSERVATIVE_SCAFFOLDING_ESCALATION).
-
-      '
-    logic:
-      trigger: Supervision du mode conservateur actif
-      condition: Mode conservateur sans sortie depuis N sessions.
-      effect: Référence 5 sessions ; fourchette 3–10.
-      scope: runtime_state
-  - id: PARAM_REFERENTIEL_VC_UNOBSERVABLE_WINDOW_BEFORE_AXIS_DEACTIVATION
-    authority: primary
-    core_type: REFERENTIEL
-    source_anchor: '[ARBITRAGE_2026_04_01][GOV-02]'
-    depends_on: []
-    relations: []
-    patchable: true
-    parameterizable: true
-    human_readable: 'Nombre de sessions consécutives sans valeur VC observable avant désactivation de l''axe VC (autorisée constitutionnellement par RULE_VC_AXIS_DEACTIVATION_AUTHORIZED). La désactivation est réversible dès réapparition d''une valeur observable.
-
-      '
-    logic:
-      trigger: Agrégation VC inobservable
-      condition: Absence de valeur VC observable sur la fenêtre définie.
-      effect: Référence 5 sessions ; fourchette 3–8.
-      scope: runtime_state
-  - id: PARAM_REFERENTIEL_SYSTEMIC_INVESTIGATION_TRIGGER_CONDITIONS
-    authority: primary
-    core_type: REFERENTIEL
-    source_anchor: '[ARBITRAGE_2026_04_01][SYST-01]'
-    depends_on: []
-    relations: []
-    patchable: true
-    parameterizable: true
-    human_readable: 'Conditions paramétriques de déclenchement de l''investigation systémique. Signaux candidats : (1) divergence AR-N1 vs MSC persistante, (2) mode conservateur actif sans sortie, (3) VC inobservable, (4) maîtrise provisoire expirée non résolue. Seuil : 2 signaux simultanés en anomalie pendant N sessions consécutives.
-
-      '
-    logic:
-      trigger: Supervision multi-signaux
-      condition: Au moins 2 signaux candidats en anomalie simultanée.
-      effect: 'Référence : 2 signaux simultanés / 3 sessions consécutives. Fourchette : 2 signaux / 2–5 sessions.
-
-        '
-      scope: runtime_safety
-  - id: PARAM_REFERENTIEL_SYSTEMIC_INVESTIGATION_SESSION_THRESHOLD
-    authority: primary
-    core_type: REFERENTIEL
-    source_anchor: '[ARBITRAGE_2026_04_01][SYST-01]'
-    depends_on:
-    - PARAM_REFERENTIEL_SYSTEMIC_INVESTIGATION_TRIGGER_CONDITIONS
-    relations: []
-    patchable: true
-    parameterizable: true
-    human_readable: 'Nombre de sessions consécutives avec au moins 2 signaux en anomalie avant déclenchement de EVENT_SYSTEMIC_INVESTIGATION_AUTO_OPENED.
-
-      '
-    logic:
-      trigger: Comptage de sessions multi-signaux en anomalie
-      condition: Seuil de sessions consécutives atteint.
-      effect: Référence 3 sessions ; fourchette 2–5.
-      scope: runtime_safety
-  - id: PARAM_REFERENTIEL_MSC_PERCEPTION_DIVERGENCE_THRESHOLD
-    authority: primary
-    core_type: REFERENTIEL
-    source_anchor: '[ARBITRAGE_2026_04_01][DIVMSC-01]'
-    depends_on: []
-    relations: []
-    patchable: true
-    parameterizable: true
-    human_readable: 'Nombre de sessions de divergence persistante entre MSC calculé (P×R×A validés) et état perçu AR-N1 (blocage total signalé) avant déclenchement de EVENT_MSC_PERCEPTION_DIVERGENCE_DETECTED.
-
-      '
-    logic:
-      trigger: Évaluation de divergence MSC calculé vs perçu
-      condition: Divergence persistante sur N sessions consécutives.
-      effect: Référence 3 sessions ; fourchette 2–5.
-      scope: runtime_evaluation
   CONSTRAINTS:
   - id: CONSTRAINT_REFERENTIEL_PATCH_SCOPE_MUST_REMAIN_CONSTITUTIONALLY_BOUNDED
     authority: primary
@@ -1632,4 +1510,3 @@ CORE:
       condition: Nombre de cycles dépassé
       effect: Escalade vers révision Analyse
       scope: governance
-  DEPENDENCIES: []

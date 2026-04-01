@@ -270,53 +270,6 @@ CORE:
 
         '
       scope: intercore_binding
-  - id: TYPE_BINDING_AR_N3_CALIBRATION_TO_SIGNAL_REWEIGHTING
-    authority: derived
-    core_type: LINK
-    source_anchor: '[ARBITRAGE_2026_04_01][AR3-01][SIG-01]'
-    depends_on:
-    - LINK_REF_CORE_LEARNIT_CONSTITUTION_V1_8
-    - LINK_REF_CORE_LEARNIT_REFERENTIEL_V0_6
-    - TYPE_BINDING_LEARNER_STATE_SIGNAL_AUTHORITY_CHAIN
-    relations:
-    - type: binds
-      target:
-        core_ref: LINK_REF_CORE_LEARNIT_CONSTITUTION_V1_8
-        id: TYPE_SELF_REPORT_AR_N3
-    - type: binds
-      target:
-        core_ref: LINK_REF_CORE_LEARNIT_CONSTITUTION_V1_8
-        id: TYPE_STATE_AXIS_CALIBRATION
-    - type: binds
-      target:
-        core_ref: LINK_REF_CORE_LEARNIT_REFERENTIEL_V0_6
-        id: TYPE_REFERENTIEL_SIGNAL_CONFIDENCE_HIERARCHY
-    - type: binds
-      target:
-        core_ref: LINK_REF_CORE_LEARNIT_REFERENTIEL_V0_6
-        id: RULE_REFERENTIEL_SIGNAL_PRECEDENCE_ORDER
-    - type: binds
-      target:
-        core_ref: LINK_REF_CORE_LEARNIT_REFERENTIEL_V0_6
-        id: RULE_REFERENTIEL_LOW_AR_CALIBRATION_TEMPORARILY_REWEIGHTS_SIGNALS
-    - type: binds
-      target:
-        core_ref: LINK_REF_CORE_LEARNIT_REFERENTIEL_V0_6
-        id: PARAM_REFERENTIEL_LOW_AR_CALIBRATION_CONSECUTIVE_BILANS
-    patchable: false
-    parameterizable: false
-    human_readable: 'Binding inter-Core documentant le lien entre AR-N3 (bilan périodique constitutionnel) et la hiérarchie de confiance des signaux référentielle. AR-N3 contribue à TYPE_STATE_AXIS_CALIBRATION et, via RULE_REFERENTIEL_LOW_AR_CALIBRATION_TEMPORARILY_REWEIGHTS_SIGNALS, peut déclencher un reweighting temporaire borné d''AR-N1 si la calibration est basse sur N bilans consécutifs. Ce binding ne modifie pas la logique de précédence : AR-N1 reste premier dans la hiérarchie.
-
-      '
-    logic:
-      trigger: Résolution d'un état apprenant multi-sources impliquant AR-N3
-      condition: 'AR-N3 disponible et résultat de calibration exploitable dans le système fédéré.
-
-        '
-      effect: 'AR-N3 alimente TYPE_STATE_AXIS_CALIBRATION (Constitution) et peut activer le reweighting borné d''AR-N1 via le Référentiel (N bilans consécutifs requis). Le LINK documente ce flux sans introduire de logique métier autonome.
-
-        '
-      scope: intercore_binding
   INVARIANTS: []
   RULES: []
   PARAMETERS: []

@@ -2,7 +2,7 @@ PATCH_EXECUTION_REPORT:
   patch_id: PATCHSET_CONSTITUTION_V1_8_ARBITRAGE_2026_04_01
   patch_dsl_version: '4.0'
   atomic: true
-  whatif: true
+  whatif: false
   status: PASS
   files:
   - file: docs/cores/current/referentiel.yaml

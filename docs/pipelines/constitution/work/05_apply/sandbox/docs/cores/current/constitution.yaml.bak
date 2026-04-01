@@ -1105,29 +1105,6 @@ CORE:
 
         '
       scope: runtime_state
-  - id: RULE_MSC_PERCEPTION_DIVERGENCE_PROTOCOL
-    authority: primary
-    core_type: CONSTITUTION
-    source_anchor: '[ARBITRAGE_2026_04_01][DIVMSC-01]'
-    depends_on:
-    - EVENT_MSC_PERCEPTION_DIVERGENCE_DETECTED
-    - REF_CORE_LEARNIT_REFERENTIEL_V0_6_IN_CONSTITUTION
-    relations:
-    - type: triggers
-      target:
-        id: ACTION_PLAN_SHORT_DIAGNOSTIC_TASK
-    patchable: false
-    parameterizable: true
-    human_readable: 'À la détection d''une divergence MSC calculé vs perçu, le moteur déclenche obligatoirement une phase diagnostique ciblée (révision de la notion supposément maîtrisée). Si la divergence persiste après la phase diagnostique, une escalade vers révision du design du contenu est déclenchée (notification externe).
-
-      '
-    logic:
-      trigger: EVENT_MSC_PERCEPTION_DIVERGENCE_DETECTED
-      condition: Divergence MSC calculé vs perçu persistante.
-      effect: 'Étape 1 : retour obligatoire en phase diagnostique ciblée sur la KU concernée. Étape 2 (si divergence persiste après diagnostique) : escalade vers révision du design du contenu — notification externe obligatoire.
-
-        '
-      scope: runtime_evaluation
   PARAMETERS:
   - id: PARAM_PROVISIONAL_MASTERY_VERIFICATION_WINDOW
     authority: primary
@@ -1485,32 +1462,6 @@ CORE:
       condition: Contexte authentique absent.
       effect: Blocage et plafonnement Bloom 2.
       scope: analysis_design
-  - id: EVENT_MSC_PERCEPTION_DIVERGENCE_DETECTED
-    authority: primary
-    core_type: CONSTITUTION
-    source_anchor: '[ARBITRAGE_2026_04_01][DIVMSC-01]'
-    depends_on:
-    - TYPE_MASTERY_MODEL
-    - TYPE_SELF_REPORT_AR_N1
-    - REF_CORE_LEARNIT_REFERENTIEL_V0_6_IN_CONSTITUTION
-    relations:
-    - type: triggers
-      target:
-        id: RULE_MSC_PERCEPTION_DIVERGENCE_PROTOCOL
-    patchable: false
-    parameterizable: true
-    human_readable: 'Divergence persistante détectée entre MSC calculé (P×R×A validés) et état perçu AR-N1 (blocage total signalé persistant) sur le nombre de sessions défini dans PARAM_REFERENTIEL_MSC_PERCEPTION_DIVERGENCE_THRESHOLD.
-
-      '
-    logic:
-      trigger: 'MSC de base atteint (P, R, A validés) ET AR-N1 signale un blocage total persistant sur PARAM_REFERENTIEL_MSC_PERCEPTION_DIVERGENCE_THRESHOLD sessions consécutives.
-
-        '
-      condition: Divergence entre MSC calculé et état perçu sur le seuil défini.
-      effect: 'Déclenchement du protocole de résolution : retour en phase diagnostique ciblée en priorité ; si persistance après diagnostique, escalade vers révision du design du contenu.
-
-        '
-      scope: runtime_evaluation
   ACTIONS:
   - id: ACTION_PLAN_SHORT_DIAGNOSTIC_TASK
     authority: primary
