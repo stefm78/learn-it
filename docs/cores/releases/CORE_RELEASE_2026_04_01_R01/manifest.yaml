@@ -1,0 +1,40 @@
+RELEASE_MANIFEST:
+  release_id: CORE_RELEASE_2026_04_01_R01
+  status: READY
+  immutable: true
+  source:
+    pipeline: constitution
+    stage: 07B_RELEASE_MATERIALIZATION
+    release_plan: docs/pipelines/constitution/work/07_release/release_plan.yaml
+  cores:
+  - role: constitution
+    file: constitution.yaml
+    core_id: CORE_LEARNIT_CONSTITUTION_V1_9
+    version: V1_9_FINAL
+  - role: referentiel
+    file: referentiel.yaml
+    core_id: CORE_LEARNIT_REFERENTIEL_V1_0
+    version: V1_0_FINAL
+  - role: link
+    file: link.yaml
+    core_id: CORE_LINK_LEARNIT_CONSTITUTION_V1_9__REFERENTIEL_V1_0
+    version: V1_9__V1_0_FINAL
+  provenance:
+    release_plan: docs/pipelines/constitution/work/07_release/release_plan.yaml
+    core_validation: docs/pipelines/constitution/work/06_core_validation/core_validation.yaml
+    patch_execution_report: docs/pipelines/constitution/reports/patch_execution_report.yaml
+    patched_cores:
+      constitution: docs/pipelines/constitution/work/05_apply/patched/constitution.yaml
+      referentiel: docs/pipelines/constitution/work/05_apply/patched/referentiel.yaml
+      link: docs/pipelines/constitution/work/05_apply/patched/link.yaml
+  promotion:
+    promotion_candidate: true
+    promoted_to_current: false
+  notes:
+  - 'constitution: change_depth=minor, identical_content=false, added=2, removed=0,
+    modified=1'
+  - 'referentiel: change_depth=major, identical_content=false, added=7, removed=0,
+    modified=3'
+  - 'link: change_depth=minor, identical_content=false, added=1, removed=0, modified=2'
+  - aggregate_change_depth=major
+  - release_required=true
