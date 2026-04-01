@@ -1,0 +1,235 @@
+--- a/docs/pipelines/constitution/work/02_arbitrage/arbitrage.md
++++ b/docs/pipelines/constitution/work/02_arbitrage/arbitrage.md
+@@ -7,7 +7,7 @@
+ 
+ ## Résumé exécutif
+ 
+-Cet arbitrage consolide les rapports `arbitrage_*.md` disponibles dans `docs/pipelines/constitution/work/01_challenge/`, avec prise en compte complémentaire de `challenge_NemoTron.md`, `challenge_NemoTron_bis.md` et de l'analyse de cohérence complémentaire figurant dans `tmp/Claude.md`.
++Cet arbitrage consolide les rapports `arbitrage_*.md` disponibles dans `docs/pipelines/constitution/work/01_challenge/`, avec prise en compte complémentaire de `arbitrage_BIS_PerplexityDeep.md`, de `challenge_NemoTron.md`, de `challenge_NemoTron_bis.md` et de l'analyse de cohérence complémentaire figurant dans `tmp/Claude.md`.
+ 
+ Le corpus est globalement convergent sur un noyau dur de problèmes structurels :
+ - états moteur indéfinis
+@@ -48,6 +48,7 @@
+ - `arbitrage_Perplexity_Sonnet46.md`
+ - `arbitrage_GPTwoThink.md`
+ - `arbitrage_Perplexity_SonnetThink.md`
++- `arbitrage_BIS_PerplexityDeep.md`
+ 
+ ### Fichiers challenge pris en compte en complément
+ - `challenge_NemoTron.md`
+@@ -65,16 +66,17 @@
+ 
+ ## Corrections à faire maintenant
+ 
+-### ARB-01 — Binding LINK manquant pour la divergence MSC / perception
+-**Décision :** `corriger_maintenant`
+-
+-**Constat consolidé :** `EVENT_MSC_PERCEPTION_DIVERGENCE_DETECTED` dépend de `PARAM_REFERENTIEL_MSC_PERCEPTION_DIVERGENCE_THRESHOLD`, mais le binding explicite côté LINK est manquant ou insuffisant.
+-
+-**Conséquence patch :**
+-- ajouter un `TYPE_BINDING` explicite dans le LINK entre l'EVENT et le PARAM référentiel concerné
+-
+-**Justification :**
+-Sans ce binding, la résolution de la chaîne d'autorité est implicite. Ce point doit être rendu structurellement résoluble et audit-able.
++### ARB-01 — Paramètre et binding LINK manquants pour la divergence MSC / perception
++**Décision :** `corriger_maintenant`
++
++**Constat consolidé :** `EVENT_MSC_PERCEPTION_DIVERGENCE_DETECTED` dépend de `PARAM_REFERENTIEL_MSC_PERCEPTION_DIVERGENCE_THRESHOLD`, mais ce paramètre n'est pas suffisamment matérialisé comme entité référentielle stable et le binding explicite côté LINK est manquant ou insuffisant.
++
++**Conséquence patch :**
++- créer ou confirmer explicitement `PARAM_REFERENTIEL_MSC_PERCEPTION_DIVERGENCE_THRESHOLD` dans le Référentiel
++- ajouter un `TYPE_BINDING` explicite dans le LINK entre l'EVENT, la RULE concernée et le PARAM référentiel
++
++**Justification :**
++Il ne manque pas seulement un raccord inter-Core ; il faut aussi supprimer l'ambiguïté sur l'existence normative du paramètre lui-même. Ce point doit être rendu structurellement résoluble et audit-able.
+ 
+ ---
+ 
+@@ -92,16 +94,18 @@
+ 
+ ---
+ 
+-### ARB-03 — Cas multi-axes `unknown` sans comportement composite explicite
+-**Décision :** `corriger_maintenant`
+-
+-**Constat consolidé :** la gestion d'un axe `unknown` existe, mais pas celle de plusieurs axes `unknown` simultanés.
+-
+-**Conséquence patch :**
+-- ajouter un invariant ou une règle explicite de réponse conservatrice maximale quand plusieurs axes sont simultanément `unknown`
+-
+-**Justification :**
+-C'est un trou de comportement moteur et non une simple préférence de modélisation.
++### ARB-03 — Cas multi-axes `unknown` ou état totalement non observable sans fallback explicite
++**Décision :** `corriger_maintenant`
++
++**Constat consolidé :** la gestion d'un axe `unknown` existe, mais pas celle de plusieurs axes `unknown` simultanés ni celle d'un état apprenant globalement non observable.
++
++**Conséquence patch :**
++- ajouter une règle explicite de fallback de démarrage quand plusieurs axes sont simultanément `unknown` ou non observables
++- cadrer une réponse conservatrice bornée : KU racines, Bloom minimal, séquence courte de prise de repères
++- éviter de réduire ce cas à une simple absence d'information non traitée
++
++**Justification :**
++C'est un trou de comportement moteur et non une simple préférence de modélisation. Le moteur doit savoir quoi faire, pas seulement quoi éviter.
+ 
+ ---
+ 
+@@ -125,16 +129,19 @@
+ 
+ ---
+ 
+-### ARB-06 — Flag `misconception` non autorisé en runtime
+-**Décision :** `corriger_maintenant`
+-
+-**Constat consolidé :** le flag `misconception` est utilisé dans les règles, mais son mode d'attribution n'est pas assez borné ; il faut exclure toute inférence implicite en runtime.
+-
+-**Conséquence patch :**
+-- préciser explicitement que ce flag est posé en conception ou hors session seulement
+-
+-**Justification :**
+-Cela protège la frontière entre design offline et exécution locale.
++### ARB-06 — Dépendances IA implicites non autorisées en runtime
++**Décision :** `corriger_maintenant`
++
++**Constat consolidé :** le flag `misconception` n'est pas le seul point concerné ; d'autres éléments comme l'ICC ou la qualification de contexte authentique peuvent dériver vers des inférences implicites non compatibles avec un moteur local déterministe.
++
++**Conséquence patch :**
++- préciser explicitement que le flag `misconception` est posé en conception ou hors session seulement
++- préciser que l'ICC est un score ou document renseigné hors session
++- préciser que la qualification de contexte authentique pour les usages concernés est décidée hors session sur base d'indicateurs explicites
++- interdire toute inférence LLM implicite en runtime local
++
++**Justification :**
++Il faut protéger explicitement la frontière entre design offline et exécution locale, pas seulement pour `misconception`, mais pour l'ensemble des signaux potentiellement IA-dépendants.
+ 
+ ---
+ 
+@@ -155,16 +162,18 @@
+ 
+ ### ARB-08 — `EVENT_CONSERVATIVE_SCAFFOLDING_ESCALATION` manquant
+ **Décision :** `corriger_maintenant`
+ 
+-**Constat consolidé :** le Référentiel y fait référence, mais l'événement n'est pas formellement déclaré.
++**Constat consolidé :** le Référentiel porte le paramétrage d'escalade du mode conservateur, mais l'événement correspondant n'est pas formellement déclaré.
+ 
+ **Conséquence patch :**
+-- déclarer l'événement dans la bonne couche, ici le Référentiel
++- déclarer `EVENT_CONSERVATIVE_SCAFFOLDING_ESCALATION` dans la Constitution
++- conserver dans le Référentiel le réglage des seuils, fenêtres ou nombres de sessions
++- ajouter le binding inter-Core approprié dans le LINK
+ 
+ **Justification :**
+-Une chaîne d'escalade ne peut pas fonctionner si l'événement déclencheur n'existe pas.
++L'événement doit exister dans la couche qui porte le vocabulaire moteur commun ; le Référentiel en règle le calibrage, mais ne doit pas devenir la couche de déclaration de l'événement lui-même.
+ 
+ ---
+ 
+@@ -261,6 +270,79 @@
+ 
+ Décision humaine validée : par cohérence structurelle, cette boucle ouverte doit être fermée dans ce run.
++
++---
++
++### ARB-16 — Régime oscillatoire Consolidation ↔ Exploration insuffisamment fermé
++**Décision :** `corriger_maintenant`
++
++**Constat consolidé :** le régime oscillatoire est introduit, mais la notion de session de consolidation satisfaisante, les bornes de sortie et le traitement des cas multi-régimes ne sont pas suffisamment explicités.
++
++**Conséquence patch :**
++- définir un critère déterministe minimal de session de consolidation satisfaisante
++- ajouter un nombre maximal de cycles d'oscillation avant escalade
++- expliciter le traitement des cas à trois régimes actifs ou plus
++- aligner cette hiérarchie avec les priorités de sécurité déjà retenues
++
++**Justification :**
++Sans bornes et sans critère de sortie, l'oscillation devient un quasi-état indéfini.
++
++---
++
++### ARB-17 — Maîtrise provisoire : fenêtre de vérification sans sortie définie
++**Décision :** `corriger_maintenant`
++
++**Constat consolidé :** une fenêtre de vérification de maîtrise provisoire existe, mais aucun événement ni comportement de clôture n'est explicitement défini si cette fenêtre expire sans vérification.
++
++**Conséquence patch :**
++- créer un événement de type `EVENT_PROVISIONAL_MASTERY_WINDOW_EXPIRED`
++- définir un comportement conservateur explicite à expiration
++- ne pas laisser la maîtrise provisoire ouverte indéfiniment
++
++**Justification :**
++Une fenêtre temporelle sans sortie explicite crée une boucle ouverte et une ambiguïté d'état.
++
++---
++
++### ARB-18 — Dérive persistante non patchable : action d'escalade hors session non matérialisée
++**Décision :** `corriger_maintenant`
++
++**Constat consolidé :** l'obligation d'escalade en cas de dérive persistante non résoluble existe sur le fond, mais sans action explicite, sans cible ni payload minimal.
++
++**Conséquence patch :**
++- créer une action explicite d'escalade hors session
++- préciser la cible minimale de cette escalade
++- définir un payload minimal traçable : identifiants concernés, contexte, historique pertinent
++
++**Justification :**
++Une escalade obligatoire sans action matérialisée reste partiellement déclarative et non réellement opérable.
++
++---
++
++### ARB-19 — Référence orpheline `MOT-01`
++**Décision :** `corriger_maintenant`
++
++**Constat consolidé :** une référence à `MOT-01` subsiste alors qu'aucune entité formelle correspondante n'est stabilisée dans les Core.
++
++**Conséquence patch :**
++- retirer la référence orpheline
++- reformuler la règle concernée sous forme de condition explicite sur des signaux existants
++- ne pas créer de nouvelle entité autonome dans ce run
++
++**Justification :**
++Le problème relève d'une incohérence de référence, pas d'un besoin avéré de nouveau concept.
++
++---
++
++### ARB-20 — Normalisation de `core_ref` dans le LINK
++**Décision :** `corriger_maintenant`
++
++**Constat consolidé :** certains bindings LINK utilisent `core_ref` de façon hétérogène ou insuffisamment spécifiée.
++
++**Conséquence patch :**
++- harmoniser l'usage de `core_ref` avec une sémantique claire
++- soit le promouvoir explicitement dans le DSL, soit le supprimer des bindings concernés
++- ne pas laisser coexister plusieurs conventions implicites
++
++**Justification :**
++La normalisation syntaxique minimale du LINK relève de l'hygiène structurelle de ce run et réduit les ambiguïtés de patch.
+ 
+ ---
+ 
+@@ -350,6 +432,10 @@
+ **Consigne de cohérence :**
+ - corriger le Référentiel pour pointer vers un élément existant ou retirer la référence fantôme
+ - ne pas enrichir inutilement la Constitution pour satisfaire une référence erronée
++
++**Complément de cohérence :**
++- toute logique référentielle de désactivation de l'axe VC doit pointer vers un élément existant ou être reformulée sans référence fantôme
++- aucune nouvelle règle constitutionnelle autonome n'est créée dans ce run pour satisfaire cette référence
+ 
+ ---
+ 
+@@ -373,13 +459,14 @@
+ 5. Toute nouvelle règle d'escalade externe doit être explicitement hors session.
+ 6. Toute priorité inter-régimes ou inter-escalades ajoutée doit rester minimale et orientée sécurité pédagogique.
+ 7. Les reports REP-01 à REP-03 doivent rester visibles comme backlog de gouvernance assumé, non comme oubli.
++8. Les compléments BIS retenus doivent être intégrés sans rouvrir les décisions humaines déjà tranchées en HUM-01 à HUM-05.
+ 
+ ---
+ 
+ ## Décision de transmission au STAGE_03_PATCH_SYNTHESIS
+ 
+ Transmettre au patch :
+-- ARB-01 à ARB-15
++- ARB-01 à ARB-20, hors points explicitement exclus par décision humaine déjà tranchée
+ 
+ Ne pas transmettre au patch :
+ - REP-01 à REP-03
