@@ -118,7 +118,7 @@ CORE:
     logic:
       trigger: Résolution de signaux contradictoires
       condition: Plusieurs sources disponibles
-      effect: Priorise AR-N1, puis AR-N2, puis proxys, puis tendances
+      effect: Priorise AR-N1, puis AR-N2, puis AR-N3 via un effet indirect et borné de reweighting, puis proxys, puis tendances.
       scope: runtime_state
   - id: TYPE_REFERENTIEL_AR_N2_CONFIGURATION
     authority: primary
