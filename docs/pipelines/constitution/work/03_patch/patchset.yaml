@@ -56,7 +56,11 @@ PATCH_SET:
             section: RULES
             id: RULE_MSC_PERCEPTION_DIVERGENCE_PROTOCOL
             field: logic.effect
-          value: Étape 1 : retour obligatoire en phase diagnostique ciblée sur la KU concernée. Étape 2 si la divergence persiste après diagnostique : ouverture d’une escalade hors session vers révision du design du contenu ; aucune notification externe en session active n’est autorisée.
+          value: >-
+            Étape 1 : retour obligatoire en phase diagnostique ciblée sur la KU concernée.
+            Étape 2 si la divergence persiste après diagnostique : ouverture d’une escalade
+            hors session vers révision du design du contenu ; aucune notification externe
+            en session active n’est autorisée.
 
         - op: ensure_exists
           target:
@@ -671,7 +675,7 @@ PATCH_SET:
             relations: []
             patchable: true
             parameterizable: true
-            human_readable: Priorité explicite des escalades concurrentes : investigation systémique, puis divergence MSC/perception, puis signaux motivationnels ou de sollicitation.
+            human_readable: "Priorité explicite des escalades concurrentes : investigation systémique, puis divergence MSC/perception, puis signaux motivationnels ou de sollicitation."
             logic:
               trigger: Plusieurs escalades deviennent simultanément éligibles.
               condition: Au moins deux chaînes d’escalade franchissent leur seuil sur la même fenêtre.
@@ -683,7 +687,14 @@ PATCH_SET:
             section: RULES
             id: RULE_REFERENTIEL_ADAPTIVE_REGIME_CONFLICT_RESOLUTION
             field: human_readable
-          value: Table de priorité par paire de conflits pour les cellules de frontière de la matrice des régimes adaptatifs. Règle synthétique : (1) Détresse l'emporte toujours. (2) Conservateur l'emporte sur Exploration et Consolidation tant que sa fenêtre référentielle de sortie n'est pas atteinte. (3) Consolidation l'emporte sur Sous-défi sauf si R est déjà atteint. (4) Exploration l'emporte sur Sous-défi. (5) Consolidation vs Exploration ouvre un régime oscillatoire piloté par R et borné par un nombre maximal de cycles explicite.
+          value: >-
+            Table de priorité par paire de conflits pour les cellules de frontière de la
+            matrice des régimes adaptatifs. Règle synthétique : (1) Détresse l'emporte
+            toujours. (2) Conservateur l'emporte sur Exploration et Consolidation tant que
+            sa fenêtre référentielle de sortie n'est pas atteinte. (3) Consolidation
+            l'emporte sur Sous-défi sauf si R est déjà atteint. (4) Exploration l'emporte
+            sur Sous-défi. (5) Consolidation vs Exploration ouvre un régime oscillatoire
+            piloté par R et borné par un nombre maximal de cycles explicite.
         - op: replace_field
           target:
             section: RULES
