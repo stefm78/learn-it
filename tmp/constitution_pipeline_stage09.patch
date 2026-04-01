@@ -1,4 +1,3 @@
-'PATCH'
 diff --git a/docs/pipelines/constitution/pipeline.md b/docs/pipelines/constitution/pipeline.md
 --- a/docs/pipelines/constitution/pipeline.md
 +++ b/docs/pipelines/constitution/pipeline.md
@@ -99,4 +98,3 @@ diff --git a/docs/pipelines/constitution/pipeline.md b/docs/pipelines/constituti
  - Promotion to `current/` must remain explicit and occur in a dedicated stage
 +- Any successful promotion should be followed by an explicit run closeout stage
 +- No destructive cleanup of traceability artifacts may occur without explicit closeout reporting
-PATCH
