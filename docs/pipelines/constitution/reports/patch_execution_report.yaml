@@ -3,10 +3,72 @@ PATCH_EXECUTION_REPORT:
   patch_dsl_version: '4.0'
   atomic: true
   whatif: true
-  status: FAIL
-  files: []
-  errors:
-  - '''id'''
+  status: PASS
+  files:
+  - file: docs/cores/current/referentiel.yaml
+    expected_core_id: CORE_LEARNIT_REFERENTIEL_V0_6
+    actual_core_id: CORE_LEARNIT_REFERENTIEL_V0_6
+    operations:
+    - replace_meta_field description
+    text_replacements: 0
+  - file: docs/cores/current/link.yaml
+    expected_core_id: CORE_LINK_LEARNIT_CONSTITUTION_V1_8__REFERENTIEL_V0_6
+    actual_core_id: CORE_LINK_LEARNIT_CONSTITUTION_V1_8__REFERENTIEL_V0_6
+    operations:
+    - replace_meta_field description
+    text_replacements: 0
+  - file: docs/cores/current/constitution.yaml
+    expected_core_id: CORE_LEARNIT_CONSTITUTION_V1_8
+    actual_core_id: CORE_LEARNIT_CONSTITUTION_V1_8
+    operations:
+    - replace_meta_field description
+    - append INV_LINK_REQUIRED_FOR_INTER_CORE_OPERATION
+    - append EVENT_LINK_MISSING_OR_CORRUPTED
+    - replace_field RULES/RULE_AR_N1_OVERRIDES_PROXY.human_readable
+    - replace_field RULES/RULE_AR_N1_OVERRIDES_PROXY.logic
+    - replace_field INVARIANTS/INV_CONSERVATIVE_RULE_WITHOUT_AR_N1.human_readable
+    - replace_field INVARIANTS/INV_CONSERVATIVE_RULE_WITHOUT_AR_N1.logic
+    - append EVENT_CONSERVATIVE_SCAFFOLDING_ESCALATION
+    - append EVENT_PROVISIONAL_MASTERY_VERIFICATION_EXPIRED
+    - append RULE_PROVISIONAL_MASTERY_EXPIRY_BEHAVIOR
+    - replace_field EVENTS/EVENT_PERSISTENT_LOW_VC.human_readable
+    - replace_field EVENTS/EVENT_PERSISTENT_LOW_VC.logic
+    - append INV_VC_UNKNOWN_DOES_NOT_TRIGGER_PERSISTENT_LOW_VC
+    - append RULE_VC_AXIS_DEACTIVATION_AUTHORIZED
+    - append EVENT_SYSTEMIC_INVESTIGATION_AUTO_OPENED
+    - append RULE_SYSTEMIC_INVESTIGATION_OPENING_PROTOCOL
+    - append INV_POST_MASTERY_REVOCATION_DELEGATED_TO_REFERENTIEL
+    - append INV_MISCONCEPTION_FLAG_IS_EDITORIAL_ONLY
+    text_replacements: 0
+  - file: docs/cores/current/referentiel.yaml
+    expected_core_id: CORE_LEARNIT_REFERENTIEL_V0_6
+    actual_core_id: CORE_LEARNIT_REFERENTIEL_V0_6
+    operations:
+    - append PARAM_REFERENTIEL_LOW_AR_CALIBRATION_CONSECUTIVE_BILANS
+    - append PARAM_REFERENTIEL_CONSERVATIVE_SCAFFOLDING_ESCALATION_SESSIONS
+    - append PARAM_REFERENTIEL_VC_UNOBSERVABLE_WINDOW_BEFORE_AXIS_DEACTIVATION
+    - append PARAM_REFERENTIEL_SYSTEMIC_INVESTIGATION_TRIGGER_CONDITIONS
+    - append PARAM_REFERENTIEL_SYSTEMIC_INVESTIGATION_SESSION_THRESHOLD
+    - replace_field RULES/RULE_REFERENTIEL_SIGNAL_PRECEDENCE_ORDER.human_readable
+    - replace_field RULES/RULE_REFERENTIEL_SIGNAL_PRECEDENCE_ORDER.logic
+    - replace_field TYPES/TYPE_REFERENTIEL_SIGNAL_CONFIDENCE_HIERARCHY.human_readable
+    - append RULE_REFERENTIEL_ADAPTIVE_REGIME_CONFLICT_RESOLUTION
+    - append PARAM_REFERENTIEL_MSC_PERCEPTION_DIVERGENCE_THRESHOLD
+    text_replacements: 0
+  - file: docs/cores/current/constitution.yaml
+    expected_core_id: CORE_LEARNIT_CONSTITUTION_V1_8
+    actual_core_id: CORE_LEARNIT_CONSTITUTION_V1_8
+    operations:
+    - append EVENT_MSC_PERCEPTION_DIVERGENCE_DETECTED
+    - append RULE_MSC_PERCEPTION_DIVERGENCE_PROTOCOL
+    text_replacements: 0
+  - file: docs/cores/current/link.yaml
+    expected_core_id: CORE_LINK_LEARNIT_CONSTITUTION_V1_8__REFERENTIEL_V0_6
+    actual_core_id: CORE_LINK_LEARNIT_CONSTITUTION_V1_8__REFERENTIEL_V0_6
+    operations:
+    - append TYPE_BINDING_AR_N3_CALIBRATION_TO_SIGNAL_REWEIGHTING
+    text_replacements: 0
+  errors: []
   federation:
     LINK_REF_CORE_LEARNIT_CONSTITUTION_V1_8:
       file: docs/cores/current/constitution.yaml
