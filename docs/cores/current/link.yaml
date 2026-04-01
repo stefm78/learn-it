@@ -1,13 +1,13 @@
 CORE:
-  id: CORE_LINK_LEARNIT_CONSTITUTION_V1_8__REFERENTIEL_V0_6
+  id: CORE_LINK_LEARNIT_CONSTITUTION_V1_9__REFERENTIEL_V1_0
   core_type: LINK
   authority: primary
-  version: V1_8__V0_6_FINAL
-  description: LINK_CORE canonique reliant la Constitution Learn-it v1.7 et le Référentiel
-    Learn-it v0.6. Il explicite les bindings inter-Core nécessaires à la fermeture
+  version: V1_9__V1_0_FINAL
+  description: LINK_CORE canonique reliant la Constitution Learn-it v1.9 et le Référentiel
+    Learn-it v1.0. Il explicite les bindings inter-Core nécessaires à la fermeture
     système, sans logique métier autonome.
   TYPES:
-  - id: LINK_REF_CORE_LEARNIT_CONSTITUTION_V1_8
+  - id: LINK_REF_CORE_LEARNIT_CONSTITUTION_V1_9
     authority: reference
     core_type: LINK
     source_anchor: '[INTERCORE]'
@@ -15,13 +15,13 @@ CORE:
     relations: []
     patchable: false
     parameterizable: false
-    human_readable: Référence explicite vers le Core Constitution Learn-it v1.7.
+    human_readable: Référence explicite vers le Core Constitution Learn-it v1.9.
     logic:
       trigger: null
       condition: null
       effect: Pointage fédérateur vers le Core Constitution.
       scope: link_reference
-  - id: LINK_REF_CORE_LEARNIT_REFERENTIEL_V0_6
+  - id: LINK_REF_CORE_LEARNIT_REFERENTIEL_V1_0
     authority: reference
     core_type: LINK
     source_anchor: '[INTERCORE]'
@@ -29,7 +29,7 @@ CORE:
     relations: []
     patchable: false
     parameterizable: false
-    human_readable: Référence explicite vers le Core Référentiel Learn-it v0.6.
+    human_readable: Référence explicite vers le Core Référentiel Learn-it v1.0.
     logic:
       trigger: null
       condition: null
@@ -40,15 +40,15 @@ CORE:
     core_type: LINK
     source_anchor: '[S1][S14][S20]'
     depends_on:
-    - LINK_REF_CORE_LEARNIT_CONSTITUTION_V1_8
-    - LINK_REF_CORE_LEARNIT_REFERENTIEL_V0_6
+    - LINK_REF_CORE_LEARNIT_CONSTITUTION_V1_9
+    - LINK_REF_CORE_LEARNIT_REFERENTIEL_V1_0
     relations:
     - type: requires
       target:
-        id: LINK_REF_CORE_LEARNIT_REFERENTIEL_V0_6
+        id: LINK_REF_CORE_LEARNIT_REFERENTIEL_V1_0
     - type: derives_from
       target:
-        id: LINK_REF_CORE_LEARNIT_CONSTITUTION_V1_8
+        id: LINK_REF_CORE_LEARNIT_CONSTITUTION_V1_9
     patchable: false
     parameterizable: false
     human_readable: Binding des paramètres opérationnels délégués par la Constitution
@@ -65,15 +65,15 @@ CORE:
     core_type: LINK
     source_anchor: '[S1][S17B][S17C]'
     depends_on:
-    - LINK_REF_CORE_LEARNIT_CONSTITUTION_V1_8
-    - LINK_REF_CORE_LEARNIT_REFERENTIEL_V0_6
+    - LINK_REF_CORE_LEARNIT_CONSTITUTION_V1_9
+    - LINK_REF_CORE_LEARNIT_REFERENTIEL_V1_0
     relations:
     - type: requires
       target:
-        id: LINK_REF_CORE_LEARNIT_CONSTITUTION_V1_8
+        id: LINK_REF_CORE_LEARNIT_CONSTITUTION_V1_9
     - type: derives_from
       target:
-        id: LINK_REF_CORE_LEARNIT_REFERENTIEL_V0_6
+        id: LINK_REF_CORE_LEARNIT_REFERENTIEL_V1_0
     patchable: false
     parameterizable: false
     human_readable: Binding des invariants constitutionnels gouvernant le Référentiel.
@@ -89,15 +89,15 @@ CORE:
     core_type: LINK
     source_anchor: '[S1]'
     depends_on:
-    - LINK_REF_CORE_LEARNIT_CONSTITUTION_V1_8
-    - LINK_REF_CORE_LEARNIT_REFERENTIEL_V0_6
+    - LINK_REF_CORE_LEARNIT_CONSTITUTION_V1_9
+    - LINK_REF_CORE_LEARNIT_REFERENTIEL_V1_0
     relations:
     - type: validates
       target:
-        id: LINK_REF_CORE_LEARNIT_CONSTITUTION_V1_8
+        id: LINK_REF_CORE_LEARNIT_CONSTITUTION_V1_9
     - type: validates
       target:
-        id: LINK_REF_CORE_LEARNIT_REFERENTIEL_V0_6
+        id: LINK_REF_CORE_LEARNIT_REFERENTIEL_V1_0
     patchable: false
     parameterizable: false
     human_readable: 'Binding de séparation des couches : la Constitution gouverne
@@ -112,37 +112,37 @@ CORE:
     core_type: LINK
     source_anchor: '[S3][S7][S11][S16][PATCH_STAGE03]'
     depends_on:
-    - LINK_REF_CORE_LEARNIT_CONSTITUTION_V1_8
-    - LINK_REF_CORE_LEARNIT_REFERENTIEL_V0_6
+    - LINK_REF_CORE_LEARNIT_CONSTITUTION_V1_9
+    - LINK_REF_CORE_LEARNIT_REFERENTIEL_V1_0
     - TYPE_BINDING_CONSTITUTION_REFERENTIEL_LAYER_SEPARATION
     relations:
     - type: binds
       target:
-        id: LINK_REF_CORE_LEARNIT_CONSTITUTION_V1_8::TYPE_STATE_AXIS_ACTIVATION
+        id: LINK_REF_CORE_LEARNIT_CONSTITUTION_V1_9::TYPE_STATE_AXIS_ACTIVATION
     - type: binds
       target:
-        id: LINK_REF_CORE_LEARNIT_CONSTITUTION_V1_8::TYPE_STATE_AXIS_VALUE_COST
+        id: LINK_REF_CORE_LEARNIT_CONSTITUTION_V1_9::TYPE_STATE_AXIS_VALUE_COST
     - type: binds
       target:
-        id: LINK_REF_CORE_LEARNIT_CONSTITUTION_V1_8::TYPE_SELF_REPORT_AR_N1
+        id: LINK_REF_CORE_LEARNIT_CONSTITUTION_V1_9::TYPE_SELF_REPORT_AR_N1
     - type: binds
       target:
-        id: LINK_REF_CORE_LEARNIT_CONSTITUTION_V1_8::TYPE_SELF_REPORT_AR_N2
+        id: LINK_REF_CORE_LEARNIT_CONSTITUTION_V1_9::TYPE_SELF_REPORT_AR_N2
     - type: binds
       target:
-        id: LINK_REF_CORE_LEARNIT_CONSTITUTION_V1_8::TYPE_SELF_REPORT_AR_N3
+        id: LINK_REF_CORE_LEARNIT_CONSTITUTION_V1_9::TYPE_SELF_REPORT_AR_N3
     - type: binds
       target:
-        id: LINK_REF_CORE_LEARNIT_REFERENTIEL_V0_6::TYPE_REFERENTIEL_SIGNAL_CONFIDENCE_HIERARCHY
+        id: LINK_REF_CORE_LEARNIT_REFERENTIEL_V1_0::TYPE_REFERENTIEL_SIGNAL_CONFIDENCE_HIERARCHY
     - type: binds
       target:
-        id: LINK_REF_CORE_LEARNIT_REFERENTIEL_V0_6::RULE_REFERENTIEL_SIGNAL_PRECEDENCE_ORDER
+        id: LINK_REF_CORE_LEARNIT_REFERENTIEL_V1_0::RULE_REFERENTIEL_SIGNAL_PRECEDENCE_ORDER
     - type: binds
       target:
-        id: LINK_REF_CORE_LEARNIT_REFERENTIEL_V0_6::RULE_REFERENTIEL_LOW_AR_CALIBRATION_TEMPORARILY_REWEIGHTS_SIGNALS
+        id: LINK_REF_CORE_LEARNIT_REFERENTIEL_V1_0::RULE_REFERENTIEL_LOW_AR_CALIBRATION_TEMPORARILY_REWEIGHTS_SIGNALS
     - type: binds
       target:
-        id: LINK_REF_CORE_LEARNIT_REFERENTIEL_V0_6::INV_REFERENTIEL_VC_UNKNOWN_MEANS_NO_INFERENCE
+        id: LINK_REF_CORE_LEARNIT_REFERENTIEL_V1_0::INV_REFERENTIEL_VC_UNKNOWN_MEANS_NO_INFERENCE
     patchable: false
     parameterizable: false
     human_readable: 'Binding inter-Core de la chaîne d''autorité des signaux état
@@ -164,31 +164,31 @@ CORE:
     core_type: LINK
     source_anchor: '[S1][S2][S20][PATCH_STAGE03]'
     depends_on:
-    - LINK_REF_CORE_LEARNIT_CONSTITUTION_V1_8
-    - LINK_REF_CORE_LEARNIT_REFERENTIEL_V0_6
+    - LINK_REF_CORE_LEARNIT_CONSTITUTION_V1_9
+    - LINK_REF_CORE_LEARNIT_REFERENTIEL_V1_0
     - TYPE_BINDING_CONSTITUTION_TO_REFERENTIEL_OPERATIONAL_PARAMETERS
     relations:
     - type: binds
       target:
-        id: LINK_REF_CORE_LEARNIT_CONSTITUTION_V1_8::TYPE_MASTERY_COMPONENT_P
+        id: LINK_REF_CORE_LEARNIT_CONSTITUTION_V1_9::TYPE_MASTERY_COMPONENT_P
     - type: binds
       target:
-        id: LINK_REF_CORE_LEARNIT_REFERENTIEL_V0_6::PARAM_REFERENTIEL_MSC_PRECISION_THRESHOLD
+        id: LINK_REF_CORE_LEARNIT_REFERENTIEL_V1_0::PARAM_REFERENTIEL_MSC_PRECISION_THRESHOLD
     - type: binds
       target:
-        id: LINK_REF_CORE_LEARNIT_CONSTITUTION_V1_8::TYPE_MASTERY_COMPONENT_R
+        id: LINK_REF_CORE_LEARNIT_CONSTITUTION_V1_9::TYPE_MASTERY_COMPONENT_R
     - type: binds
       target:
-        id: LINK_REF_CORE_LEARNIT_REFERENTIEL_V0_6::PARAM_REFERENTIEL_MSC_ROBUSTNESS_DELAY_SHORT
+        id: LINK_REF_CORE_LEARNIT_REFERENTIEL_V1_0::PARAM_REFERENTIEL_MSC_ROBUSTNESS_DELAY_SHORT
     - type: binds
       target:
-        id: LINK_REF_CORE_LEARNIT_CONSTITUTION_V1_8::TYPE_MASTERY_COMPONENT_A
+        id: LINK_REF_CORE_LEARNIT_CONSTITUTION_V1_9::TYPE_MASTERY_COMPONENT_A
     - type: binds
       target:
-        id: LINK_REF_CORE_LEARNIT_REFERENTIEL_V0_6::PARAM_REFERENTIEL_MSC_AUTONOMY_SUCCESS_COUNT
+        id: LINK_REF_CORE_LEARNIT_REFERENTIEL_V1_0::PARAM_REFERENTIEL_MSC_AUTONOMY_SUCCESS_COUNT
     - type: binds
       target:
-        id: LINK_REF_CORE_LEARNIT_REFERENTIEL_V0_6::TYPE_REFERENTIEL_REFERENTIAL_PARAMETER_LAYER
+        id: LINK_REF_CORE_LEARNIT_REFERENTIEL_V1_0::TYPE_REFERENTIEL_REFERENTIAL_PARAMETER_LAYER
     patchable: false
     parameterizable: false
     human_readable: 'Binding inter-Core des composantes MSC P/R/A vers leurs paramètres
@@ -210,25 +210,25 @@ CORE:
     core_type: LINK
     source_anchor: '[S4][S18][PATCH_STAGE03]'
     depends_on:
-    - LINK_REF_CORE_LEARNIT_CONSTITUTION_V1_8
-    - LINK_REF_CORE_LEARNIT_REFERENTIEL_V0_6
+    - LINK_REF_CORE_LEARNIT_CONSTITUTION_V1_9
+    - LINK_REF_CORE_LEARNIT_REFERENTIEL_V1_0
     - TYPE_BINDING_CONSTITUTION_REFERENTIEL_LAYER_SEPARATION
     relations:
     - type: binds
       target:
-        id: LINK_REF_CORE_LEARNIT_CONSTITUTION_V1_8::TYPE_FEEDBACK_COVERAGE_MATRIX
+        id: LINK_REF_CORE_LEARNIT_CONSTITUTION_V1_9::TYPE_FEEDBACK_COVERAGE_MATRIX
     - type: binds
       target:
-        id: LINK_REF_CORE_LEARNIT_CONSTITUTION_V1_8::RULE_UNCOVERED_ERROR_GENERIC_FEEDBACK
+        id: LINK_REF_CORE_LEARNIT_CONSTITUTION_V1_9::RULE_UNCOVERED_ERROR_GENERIC_FEEDBACK
     - type: binds
       target:
-        id: LINK_REF_CORE_LEARNIT_REFERENTIEL_V0_6::PARAM_REFERENTIEL_FEEDBACK_COVERAGE_REFERENCE_THRESHOLD
+        id: LINK_REF_CORE_LEARNIT_REFERENTIEL_V1_0::PARAM_REFERENTIEL_FEEDBACK_COVERAGE_REFERENCE_THRESHOLD
     - type: binds
       target:
-        id: LINK_REF_CORE_LEARNIT_REFERENTIEL_V0_6::RULE_REFERENTIEL_LOW_FEEDBACK_COVERAGE_SIGNALS_REVISION
+        id: LINK_REF_CORE_LEARNIT_REFERENTIEL_V1_0::RULE_REFERENTIEL_LOW_FEEDBACK_COVERAGE_SIGNALS_REVISION
     - type: binds
       target:
-        id: LINK_REF_CORE_LEARNIT_REFERENTIEL_V0_6::EVENT_REFERENTIEL_FEEDBACK_COVERAGE_LOW
+        id: LINK_REF_CORE_LEARNIT_REFERENTIEL_V1_0::EVENT_REFERENTIEL_FEEDBACK_COVERAGE_LOW
     patchable: false
     parameterizable: false
     human_readable: 'Binding inter-Core entre la matrice constitutionnelle de couverture
@@ -249,34 +249,34 @@ CORE:
     core_type: LINK
     source_anchor: '[S6][S14][S16][tables][PATCH_STAGE03]'
     depends_on:
-    - LINK_REF_CORE_LEARNIT_CONSTITUTION_V1_8
-    - LINK_REF_CORE_LEARNIT_REFERENTIEL_V0_6
+    - LINK_REF_CORE_LEARNIT_CONSTITUTION_V1_9
+    - LINK_REF_CORE_LEARNIT_REFERENTIEL_V1_0
     - TYPE_BINDING_REFERENTIEL_TO_CONSTITUTION_GOVERNING_INVARIANTS
     relations:
     - type: binds
       target:
-        id: LINK_REF_CORE_LEARNIT_CONSTITUTION_V1_8::TYPE_PATCH_ARTIFACT
+        id: LINK_REF_CORE_LEARNIT_CONSTITUTION_V1_9::TYPE_PATCH_ARTIFACT
     - type: binds
       target:
-        id: LINK_REF_CORE_LEARNIT_CONSTITUTION_V1_8::TYPE_PATCH_IMPACT_SCOPE
+        id: LINK_REF_CORE_LEARNIT_CONSTITUTION_V1_9::TYPE_PATCH_IMPACT_SCOPE
     - type: binds
       target:
-        id: LINK_REF_CORE_LEARNIT_CONSTITUTION_V1_8::TYPE_PATCH_QUALITY_GATE
+        id: LINK_REF_CORE_LEARNIT_CONSTITUTION_V1_9::TYPE_PATCH_QUALITY_GATE
     - type: binds
       target:
-        id: LINK_REF_CORE_LEARNIT_REFERENTIEL_V0_6::TYPE_REFERENTIEL_PATCH_TRIGGER_TABLE
+        id: LINK_REF_CORE_LEARNIT_REFERENTIEL_V1_0::TYPE_REFERENTIEL_PATCH_TRIGGER_TABLE
     - type: binds
       target:
-        id: LINK_REF_CORE_LEARNIT_REFERENTIEL_V0_6::EVENT_REFERENTIEL_PATCH_TRIGGER_THRESHOLD_CROSSED
+        id: LINK_REF_CORE_LEARNIT_REFERENTIEL_V1_0::EVENT_REFERENTIEL_PATCH_TRIGGER_THRESHOLD_CROSSED
     - type: binds
       target:
-        id: LINK_REF_CORE_LEARNIT_REFERENTIEL_V0_6::CONSTRAINT_REFERENTIEL_PATCH_SCOPE_MUST_REMAIN_CONSTITUTIONALLY_BOUNDED
+        id: LINK_REF_CORE_LEARNIT_REFERENTIEL_V1_0::CONSTRAINT_REFERENTIEL_PATCH_SCOPE_MUST_REMAIN_CONSTITUTIONALLY_BOUNDED
     - type: binds
       target:
-        id: LINK_REF_CORE_LEARNIT_REFERENTIEL_V0_6::CONSTRAINT_REFERENTIEL_LOCAL_VERIFICATION_REQUIRED_BEFORE_PATCH_APPLY
+        id: LINK_REF_CORE_LEARNIT_REFERENTIEL_V1_0::CONSTRAINT_REFERENTIEL_LOCAL_VERIFICATION_REQUIRED_BEFORE_PATCH_APPLY
     - type: binds
       target:
-        id: LINK_REF_CORE_LEARNIT_REFERENTIEL_V0_6::ACTION_REFERENTIEL_TRIGGER_RELEVANCE_PATCH
+        id: LINK_REF_CORE_LEARNIT_REFERENTIEL_V1_0::ACTION_REFERENTIEL_TRIGGER_RELEVANCE_PATCH
     patchable: false
     parameterizable: false
     human_readable: 'Binding inter-Core de la chaîne de gouvernance patch : seuil/trigger
@@ -293,6 +293,61 @@ CORE:
 
         '
       scope: intercore_binding
+  - id: TYPE_BINDING_AR_N3_CALIBRATION_TO_SIGNAL_REWEIGHTING
+    authority: derived
+    core_type: LINK
+    source_anchor: '[ARBITRAGE_2026_04_01][AR3-01][SIG-01]'
+    depends_on:
+    - LINK_REF_CORE_LEARNIT_CONSTITUTION_V1_9
+    - LINK_REF_CORE_LEARNIT_REFERENTIEL_V1_0
+    - TYPE_BINDING_LEARNER_STATE_SIGNAL_AUTHORITY_CHAIN
+    relations:
+    - type: binds
+      target:
+        core_ref: LINK_REF_CORE_LEARNIT_CONSTITUTION_V1_9
+        id: TYPE_SELF_REPORT_AR_N3
+    - type: binds
+      target:
+        core_ref: LINK_REF_CORE_LEARNIT_CONSTITUTION_V1_9
+        id: TYPE_STATE_AXIS_CALIBRATION
+    - type: binds
+      target:
+        core_ref: LINK_REF_CORE_LEARNIT_REFERENTIEL_V1_0
+        id: TYPE_REFERENTIEL_SIGNAL_CONFIDENCE_HIERARCHY
+    - type: binds
+      target:
+        core_ref: LINK_REF_CORE_LEARNIT_REFERENTIEL_V1_0
+        id: RULE_REFERENTIEL_SIGNAL_PRECEDENCE_ORDER
+    - type: binds
+      target:
+        core_ref: LINK_REF_CORE_LEARNIT_REFERENTIEL_V1_0
+        id: RULE_REFERENTIEL_LOW_AR_CALIBRATION_TEMPORARILY_REWEIGHTS_SIGNALS
+    - type: binds
+      target:
+        core_ref: LINK_REF_CORE_LEARNIT_REFERENTIEL_V1_0
+        id: PARAM_REFERENTIEL_LOW_AR_CALIBRATION_CONSECUTIVE_BILANS
+    patchable: false
+    parameterizable: false
+    human_readable: 'Binding inter-Core documentant le lien entre AR-N3 (bilan périodique
+      constitutionnel) et la hiérarchie de confiance des signaux référentielle. AR-N3
+      contribue à TYPE_STATE_AXIS_CALIBRATION et, via RULE_REFERENTIEL_LOW_AR_CALIBRATION_TEMPORARILY_REWEIGHTS_SIGNALS,
+      peut déclencher un reweighting temporaire borné d''AR-N1 si la calibration est
+      basse sur N bilans consécutifs. Ce binding ne modifie pas la logique de précédence
+      : AR-N1 reste premier dans la hiérarchie.
+
+      '
+    logic:
+      trigger: Résolution d'un état apprenant multi-sources impliquant AR-N3
+      condition: 'AR-N3 disponible et résultat de calibration exploitable dans le
+        système fédéré.
+
+        '
+      effect: 'AR-N3 alimente TYPE_STATE_AXIS_CALIBRATION (Constitution) et peut activer
+        le reweighting borné d''AR-N1 via le Référentiel (N bilans consécutifs requis).
+        Le LINK documente ce flux sans introduire de logique métier autonome.
+
+        '
+      scope: intercore_binding
   INVARIANTS: []
   RULES: []
   PARAMETERS: []
@@ -302,8 +357,8 @@ CORE:
     core_type: LINK
     source_anchor: '[INTERCORE]'
     depends_on:
-    - LINK_REF_CORE_LEARNIT_CONSTITUTION_V1_8
-    - LINK_REF_CORE_LEARNIT_REFERENTIEL_V0_6
+    - LINK_REF_CORE_LEARNIT_CONSTITUTION_V1_9
+    - LINK_REF_CORE_LEARNIT_REFERENTIEL_V1_0
     relations:
     - type: constrains
       target:

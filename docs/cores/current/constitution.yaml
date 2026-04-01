@@ -1,13 +1,13 @@
 CORE:
-  id: CORE_LEARNIT_CONSTITUTION_V1_8
+  id: CORE_LEARNIT_CONSTITUTION_V1_9
   core_type: CONSTITUTION
   authority: primary
-  version: V1_8_FINAL
-  description: Core canonique final de la Constitution Learn-it v1.7. Naming normalisé,
+  version: V1_9_FINAL
+  description: Core canonique final de la Constitution Learn-it v1.9. Naming normalisé,
     fermeture locale assurée, références inter-Core explicites matérialisées pour
     fédération avec le Référentiel.
   TYPES:
-  - id: REF_CORE_LEARNIT_REFERENTIEL_V0_6_IN_CONSTITUTION
+  - id: REF_CORE_LEARNIT_REFERENTIEL_V1_0_IN_CONSTITUTION
     authority: reference
     core_type: CONSTITUTION
     source_anchor: '[INTERCORE]'
@@ -15,7 +15,7 @@ CORE:
     relations: []
     patchable: false
     parameterizable: false
-    human_readable: Référence explicite vers le Core Référentiel Learn-it v0.6.
+    human_readable: Référence explicite vers le Core Référentiel Learn-it v1.0.
     logic:
       trigger: null
       condition: null
@@ -119,7 +119,7 @@ CORE:
     core_type: CONSTITUTION
     source_anchor: '[S20]'
     depends_on:
-    - REF_CORE_LEARNIT_REFERENTIEL_V0_6_IN_CONSTITUTION
+    - REF_CORE_LEARNIT_REFERENTIEL_V1_0_IN_CONSTITUTION
     relations: []
     patchable: false
     parameterizable: true
@@ -134,7 +134,7 @@ CORE:
     core_type: CONSTITUTION
     source_anchor: '[S5][S20]'
     depends_on:
-    - REF_CORE_LEARNIT_REFERENTIEL_V0_6_IN_CONSTITUTION
+    - REF_CORE_LEARNIT_REFERENTIEL_V1_0_IN_CONSTITUTION
     relations: []
     patchable: false
     parameterizable: true
@@ -149,7 +149,7 @@ CORE:
     core_type: CONSTITUTION
     source_anchor: '[S8][S20]'
     depends_on:
-    - REF_CORE_LEARNIT_REFERENTIEL_V0_6_IN_CONSTITUTION
+    - REF_CORE_LEARNIT_REFERENTIEL_V1_0_IN_CONSTITUTION
     relations: []
     patchable: false
     parameterizable: true
@@ -312,11 +312,11 @@ CORE:
   - id: TYPE_PATCH_ARTIFACT
     authority: primary
     core_type: CONSTITUTION
-    source_anchor: '[S14][PATCH_V1_8]'
+    source_anchor: '[S14][PATCH_V1_9]'
     depends_on:
     - TYPE_PATCH_IMPACT_SCOPE
     - TYPE_PATCH_QUALITY_GATE
-    - REF_CORE_LEARNIT_REFERENTIEL_V0_6_IN_CONSTITUTION
+    - REF_CORE_LEARNIT_REFERENTIEL_V1_0_IN_CONSTITUTION
     relations:
     - type: requires
       target:
@@ -575,7 +575,7 @@ CORE:
     source_anchor: '[S14][S20]'
     depends_on:
     - TYPE_PATCH_IMPACT_SCOPE
-    - REF_CORE_LEARNIT_REFERENTIEL_V0_6_IN_CONSTITUTION
+    - REF_CORE_LEARNIT_REFERENTIEL_V1_0_IN_CONSTITUTION
     relations: []
     patchable: false
     parameterizable: false
@@ -657,11 +657,11 @@ CORE:
     core_type: CONSTITUTION
     source_anchor: '[S1]'
     depends_on:
-    - REF_CORE_LEARNIT_REFERENTIEL_V0_6_IN_CONSTITUTION
+    - REF_CORE_LEARNIT_REFERENTIEL_V1_0_IN_CONSTITUTION
     relations:
     - type: governs
       target:
-        id: REF_CORE_LEARNIT_REFERENTIEL_V0_6_IN_CONSTITUTION
+        id: REF_CORE_LEARNIT_REFERENTIEL_V1_0_IN_CONSTITUTION
     patchable: false
     parameterizable: false
     human_readable: Séparation inviolable Constitution/Référentiel.
@@ -719,7 +719,7 @@ CORE:
   - id: INV_KNOWLEDGE_GRAPH_MUST_BE_ACYCLIC
     authority: primary
     core_type: CONSTITUTION
-    source_anchor: '[S4][S18][PATCH_V1_8]'
+    source_anchor: '[S4][S18][PATCH_V1_9]'
     depends_on:
     - TYPE_KNOWLEDGE_GRAPH
     - TYPE_KNOWLEDGE_UNIT
@@ -738,7 +738,7 @@ CORE:
   - id: INV_SECONDARY_RETROGRADATION_IS_NEW_EVENT
     authority: primary
     core_type: CONSTITUTION
-    source_anchor: '[S17c][PATCH_V1_8]'
+    source_anchor: '[S17c][PATCH_V1_9]'
     depends_on:
     - INV_GRAPH_PROPAGATION_ONE_HOP
     - TYPE_KNOWLEDGE_GRAPH
@@ -760,7 +760,7 @@ CORE:
   - id: INV_PATCH_LOCAL_VALIDATION_MUST_BE_DETERMINISTIC
     authority: primary
     core_type: CONSTITUTION
-    source_anchor: '[S14][PATCH_V1_8]'
+    source_anchor: '[S14][PATCH_V1_9]'
     depends_on:
     - TYPE_PATCH_ARTIFACT
     - TYPE_PATCH_IMPACT_SCOPE
@@ -783,7 +783,7 @@ CORE:
   - id: INV_MISSING_KU_TYPE_FORCES_SAFE_FALLBACK
     authority: primary
     core_type: CONSTITUTION
-    source_anchor: '[S12][S14][PATCH_V1_8]'
+    source_anchor: '[S12][S14][PATCH_V1_9]'
     depends_on:
     - TYPE_KNOWLEDGE_UNIT
     - INV_KU_TYPING_REQUIRED
@@ -804,7 +804,7 @@ CORE:
   - id: INV_AR_N2_SHORT_FORM_REQUIRES_EXPLICIT_PRIORITY
     authority: primary
     core_type: CONSTITUTION
-    source_anchor: '[S11][PATCH_V1_8]'
+    source_anchor: '[S11][PATCH_V1_9]'
     depends_on:
     - TYPE_SELF_REPORT_AR_N2
     - TYPE_STATE_AXIS_VALUE_COST
@@ -825,7 +825,7 @@ CORE:
   - id: INV_PERSISTENT_DRIFT_REQUIRES_ESCALATION_IF_PATCH_BLOCKED
     authority: primary
     core_type: CONSTITUTION
-    source_anchor: '[S14][PATCH_V1_8]'
+    source_anchor: '[S14][PATCH_V1_9]'
     depends_on:
     - TYPE_PATCH_ARTIFACT
     - INV_INVALID_PATCH_REJECTED
@@ -843,7 +843,7 @@ CORE:
   - id: INV_PATCH_ARTIFACTS_MUST_BE_PRECOMPUTED_OFF_SESSION
     authority: primary
     core_type: CONSTITUTION
-    source_anchor: '[S13][S14][PATCH_V1_8]'
+    source_anchor: '[S13][S14][PATCH_V1_9]'
     depends_on:
     - TYPE_PATCH_ARTIFACT
     - INV_RUNTIME_FULLY_LOCAL
@@ -865,7 +865,7 @@ CORE:
   - id: INV_CREATIVE_KU_AUTONOMY_REQUIRES_DETERMINISTIC_FEEDBACK_PATH
     authority: primary
     core_type: CONSTITUTION
-    source_anchor: '[S12][S17][PATCH_V1_8]'
+    source_anchor: '[S12][S17][PATCH_V1_9]'
     depends_on:
     - TYPE_KNOWLEDGE_UNIT
     - TYPE_FEEDBACK_COVERAGE_MATRIX
@@ -934,7 +934,7 @@ CORE:
     core_type: CONSTITUTION
     source_anchor: '[S5]'
     depends_on:
-    - REF_CORE_LEARNIT_REFERENTIEL_V0_6_IN_CONSTITUTION
+    - REF_CORE_LEARNIT_REFERENTIEL_V1_0_IN_CONSTITUTION
     relations:
     - type: triggers
       target:
@@ -993,7 +993,7 @@ CORE:
     source_anchor: '[S17d]'
     depends_on:
     - TYPE_STATE_AXIS_VALUE_COST
-    - REF_CORE_LEARNIT_REFERENTIEL_V0_6_IN_CONSTITUTION
+    - REF_CORE_LEARNIT_REFERENTIEL_V1_0_IN_CONSTITUTION
     relations:
     - type: triggers
       target:
@@ -1014,7 +1014,7 @@ CORE:
     source_anchor: '[S7]'
     depends_on:
     - TYPE_SELF_REPORT_AR_N1
-    - REF_CORE_LEARNIT_REFERENTIEL_V0_6_IN_CONSTITUTION
+    - REF_CORE_LEARNIT_REFERENTIEL_V1_0_IN_CONSTITUTION
     relations:
     - type: triggers
       target:
@@ -1110,7 +1110,7 @@ CORE:
   - id: RULE_LEARNER_STATE_AXIS_UNKNOWN_ALLOWED
     authority: primary
     core_type: CONSTITUTION
-    source_anchor: '[S7][S11][PATCH_V1_8__STAGE03]'
+    source_anchor: '[S7][S11][PATCH_V1_9__STAGE03]'
     depends_on:
     - TYPE_LEARNER_STATE_MODEL
     - TYPE_STATE_AXIS_ACTIVATION
@@ -1136,6 +1136,35 @@ CORE:
 
         '
       scope: runtime_state
+  - id: RULE_MSC_PERCEPTION_DIVERGENCE_PROTOCOL
+    authority: primary
+    core_type: CONSTITUTION
+    source_anchor: '[ARBITRAGE_2026_04_01][DIVMSC-01]'
+    depends_on:
+    - EVENT_MSC_PERCEPTION_DIVERGENCE_DETECTED
+    - REF_CORE_LEARNIT_REFERENTIEL_V1_0_IN_CONSTITUTION
+    relations:
+    - type: triggers
+      target:
+        id: ACTION_PLAN_SHORT_DIAGNOSTIC_TASK
+    patchable: false
+    parameterizable: true
+    human_readable: 'À la détection d''une divergence MSC calculé vs perçu, le moteur
+      déclenche obligatoirement une phase diagnostique ciblée (révision de la notion
+      supposément maîtrisée). Si la divergence persiste après la phase diagnostique,
+      une escalade vers révision du design du contenu est déclenchée (notification
+      externe).
+
+      '
+    logic:
+      trigger: EVENT_MSC_PERCEPTION_DIVERGENCE_DETECTED
+      condition: Divergence MSC calculé vs perçu persistante.
+      effect: 'Étape 1 : retour obligatoire en phase diagnostique ciblée sur la KU
+        concernée. Étape 2 (si divergence persiste après diagnostique) : escalade
+        vers révision du design du contenu — notification externe obligatoire.
+
+        '
+      scope: runtime_evaluation
   PARAMETERS:
   - id: PARAM_PROVISIONAL_MASTERY_VERIFICATION_WINDOW
     authority: primary
@@ -1376,7 +1405,7 @@ CORE:
     source_anchor: '[S7][S17d]'
     depends_on:
     - TYPE_STATE_AXIS_VALUE_COST
-    - REF_CORE_LEARNIT_REFERENTIEL_V0_6_IN_CONSTITUTION
+    - REF_CORE_LEARNIT_REFERENTIEL_V1_0_IN_CONSTITUTION
     relations:
     - type: triggers
       target:
@@ -1395,7 +1424,7 @@ CORE:
     source_anchor: '[S7]'
     depends_on:
     - TYPE_SELF_REPORT_AR_N1
-    - REF_CORE_LEARNIT_REFERENTIEL_V0_6_IN_CONSTITUTION
+    - REF_CORE_LEARNIT_REFERENTIEL_V1_0_IN_CONSTITUTION
     relations:
     - type: triggers
       target:
@@ -1413,7 +1442,7 @@ CORE:
     core_type: CONSTITUTION
     source_anchor: '[S5]'
     depends_on:
-    - REF_CORE_LEARNIT_REFERENTIEL_V0_6_IN_CONSTITUTION
+    - REF_CORE_LEARNIT_REFERENTIEL_V1_0_IN_CONSTITUTION
     relations:
     - type: triggers
       target:
@@ -1494,6 +1523,38 @@ CORE:
       condition: Contexte authentique absent.
       effect: Blocage et plafonnement Bloom 2.
       scope: analysis_design
+  - id: EVENT_MSC_PERCEPTION_DIVERGENCE_DETECTED
+    authority: primary
+    core_type: CONSTITUTION
+    source_anchor: '[ARBITRAGE_2026_04_01][DIVMSC-01]'
+    depends_on:
+    - TYPE_MASTERY_MODEL
+    - TYPE_SELF_REPORT_AR_N1
+    - REF_CORE_LEARNIT_REFERENTIEL_V1_0_IN_CONSTITUTION
+    relations:
+    - type: triggers
+      target:
+        id: RULE_MSC_PERCEPTION_DIVERGENCE_PROTOCOL
+    patchable: false
+    parameterizable: true
+    human_readable: 'Divergence persistante détectée entre MSC calculé (P×R×A validés)
+      et état perçu AR-N1 (blocage total signalé persistant) sur le nombre de sessions
+      défini dans PARAM_REFERENTIEL_MSC_PERCEPTION_DIVERGENCE_THRESHOLD.
+
+      '
+    logic:
+      trigger: 'MSC de base atteint (P, R, A validés) ET AR-N1 signale un blocage
+        total persistant sur PARAM_REFERENTIEL_MSC_PERCEPTION_DIVERGENCE_THRESHOLD
+        sessions consécutives.
+
+        '
+      condition: Divergence entre MSC calculé et état perçu sur le seuil défini.
+      effect: 'Déclenchement du protocole de résolution : retour en phase diagnostique
+        ciblée en priorité ; si persistance après diagnostique, escalade vers révision
+        du design du contenu.
+
+        '
+      scope: runtime_evaluation
   ACTIONS:
   - id: ACTION_PLAN_SHORT_DIAGNOSTIC_TASK
     authority: primary
