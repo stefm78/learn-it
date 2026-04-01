@@ -1,0 +1,1040 @@
+PATCH_SET:
+  id: CONSTITUTION_STAGE_03_PATCH_SYNTHESIS_2026_04_01
+  patch_dsl_version: "4.0"
+  atomic: true
+  description: >-
+    STAGE_03 patch synthesis for the constitution pipeline. This patchset translates
+    the consolidated arbitrage into a minimal executable patch across Constitution,
+    Référentiel and LINK: fail-safe on delegated thresholds, unknown-state fallback,
+    closure of open loops, off-session escalation constraints, systemic investigation
+    lifecycle, activation-distress persistence escalation, probation closure, and
+    targeted normalization of LINK core_ref bindings.
+  federation:
+    REF_CORE_LEARNIT_REFERENTIEL_V1_0_IN_CONSTITUTION:
+      file: docs/cores/current/referentiel.yaml
+      expected_core_id: CORE_LEARNIT_REFERENTIEL_V1_0
+    REF_CORE_LEARNIT_CONSTITUTION_V1_9_IN_REFERENTIEL:
+      file: docs/cores/current/constitution.yaml
+      expected_core_id: CORE_LEARNIT_CONSTITUTION_V1_9
+    LINK_REF_CORE_LEARNIT_CONSTITUTION_V1_9:
+      file: docs/cores/current/constitution.yaml
+      expected_core_id: CORE_LEARNIT_CONSTITUTION_V1_9
+    LINK_REF_CORE_LEARNIT_REFERENTIEL_V1_0:
+      file: docs/cores/current/referentiel.yaml
+      expected_core_id: CORE_LEARNIT_REFERENTIEL_V1_0
+  files:
+    - file: docs/cores/current/constitution.yaml
+      expected_core_id: CORE_LEARNIT_CONSTITUTION_V1_9
+      operations:
+        - op: replace_field
+          target:
+            section: INVARIANTS
+            id: INV_KNOWLEDGE_GRAPH_MUST_BE_ACYCLIC
+            field: human_readable
+          value: Le graphe des KU doit rester acyclique au chargement initial comme après tout patch ou rechargement incrémental.
+        - op: replace_field
+          target:
+            section: INVARIANTS
+            id: INV_KNOWLEDGE_GRAPH_MUST_BE_ACYCLIC
+            field: logic.trigger
+          value: Validation design, chargement du graphe ou revalidation post-patch.
+        - op: replace_field
+          target:
+            section: INVARIANTS
+            id: INV_KNOWLEDGE_GRAPH_MUST_BE_ACYCLIC
+            field: logic.effect
+          value: État interdit ; déploiement bloqué, chargement refusé ou patch rejeté tant que l’acyclicité n’est pas rétablie.
+
+        - op: replace_field
+          target:
+            section: RULES
+            id: RULE_MSC_PERCEPTION_DIVERGENCE_PROTOCOL
+            field: human_readable
+          value: À la détection d'une divergence MSC calculé vs perçu, le moteur déclenche d'abord une phase diagnostique ciblée ; si la divergence persiste, seule une escalade hors session vers révision du design du contenu est autorisée.
+        - op: replace_field
+          target:
+            section: RULES
+            id: RULE_MSC_PERCEPTION_DIVERGENCE_PROTOCOL
+            field: logic.effect
+          value: Étape 1 : retour obligatoire en phase diagnostique ciblée sur la KU concernée. Étape 2 si la divergence persiste après diagnostique : ouverture d’une escalade hors session vers révision du design du contenu ; aucune notification externe en session active n’est autorisée.
+
+        - op: ensure_exists
+          target:
+            section: INVARIANTS
+            id: INV_REFERENTIEL_VALIDITY_REQUIRED_FOR_DELEGATED_THRESHOLD_EVALUATION
+          value:
+            id: INV_REFERENTIEL_VALIDITY_REQUIRED_FOR_DELEGATED_THRESHOLD_EVALUATION
+            authority: primary
+            core_type: CONSTITUTION
+            source_anchor: '[ARBITRAGE_2026_04_01][REF-FAILSAFE-01]'
+            depends_on:
+              - REF_CORE_LEARNIT_REFERENTIEL_V1_0_IN_CONSTITUTION
+            relations:
+              - type: constrains
+                target:
+                  id: TYPE_MASTERY_MODEL
+            patchable: false
+            parameterizable: false
+            human_readable: Aucune évaluation constitutionnelle dépendant d’un seuil délégué n’est autorisée sans Référentiel valide et compatible.
+            logic:
+              trigger: Évaluation runtime d’une règle ou composante dépendant d’un seuil délégué.
+              condition: Référentiel absent, invalide ou incompatible avec la Constitution active.
+              effect: Déploiement bloqué ou fallback conservateur explicite ; aucune résolution implicite de seuil n’est permise.
+              scope: runtime_safety
+
+        - op: ensure_exists
+          target:
+            section: RULES
+            id: RULE_MULTI_AXIS_UNKNOWN_OR_UNOBSERVABLE_SAFE_ENTRY
+          value:
+            id: RULE_MULTI_AXIS_UNKNOWN_OR_UNOBSERVABLE_SAFE_ENTRY
+            authority: primary
+            core_type: CONSTITUTION
+            source_anchor: '[ARBITRAGE_2026_04_01][STATE-UNKNOWN-01]'
+            depends_on:
+              - TYPE_LEARNER_STATE_MODEL
+              - TYPE_STATE_AXIS_CALIBRATION
+              - TYPE_STATE_AXIS_ACTIVATION
+              - TYPE_STATE_AXIS_VALUE_COST
+              - RULE_LEARNER_STATE_AXIS_UNKNOWN_ALLOWED
+            relations:
+              - type: triggers
+                target:
+                  id: ACTION_APPLY_LIGHT_REVERSIBLE_SCAFFOLDING
+            patchable: false
+            parameterizable: false
+            human_readable: Si plusieurs axes d’état restent unknown ou non-observables simultanément, le moteur applique une entrée conservative bornée plutôt qu’une complétion implicite.
+            logic:
+              trigger: Initialisation, reprise ou mise à jour d’état avec observabilité insuffisante.
+              condition: Plusieurs axes critiques sont simultanément unknown, absents ou non-observables.
+              effect: Démarrage sur KU racines, Bloom minimal, séquence courte de prise de repères et scaffolding léger réversible ; aucune inférence cachée n’est autorisée.
+              scope: runtime_state
+
+        - op: ensure_exists
+          target:
+            section: RULES
+            id: RULE_MSC_COMPONENT_NON_CALCULABLE_DEFERS_BASE_MASTERY
+          value:
+            id: RULE_MSC_COMPONENT_NON_CALCULABLE_DEFERS_BASE_MASTERY
+            authority: primary
+            core_type: CONSTITUTION
+            source_anchor: '[ARBITRAGE_2026_04_01][MSC-DEFER-01]'
+            depends_on:
+              - TYPE_MASTERY_MODEL
+              - TYPE_MASTERY_COMPONENT_P
+              - TYPE_MASTERY_COMPONENT_R
+              - TYPE_MASTERY_COMPONENT_A
+              - INV_MSC_AND_STRICT
+            relations:
+              - type: constrains
+                target:
+                  id: INV_MSC_AND_STRICT
+            patchable: false
+            parameterizable: false
+            human_readable: Une composante MSC requise mais non calculable diffère la maîtrise de base ; elle ne tombe jamais implicitement à false.
+            logic:
+              trigger: Déclaration de maîtrise de base.
+              condition: Au moins une composante requise est indisponible, non calculable ou insuffisamment observée.
+              effect: Statut deferred/non déclarable jusqu’à collecte suffisante ; aucune pénalisation implicite par défaut.
+              scope: runtime_evaluation
+
+        - op: ensure_exists
+          target:
+            section: INVARIANTS
+            id: INV_RUNTIME_QUALIFICATION_SIGNALS_MUST_BE_EXPLICIT_OR_OFFSESSION
+          value:
+            id: INV_RUNTIME_QUALIFICATION_SIGNALS_MUST_BE_EXPLICIT_OR_OFFSESSION
+            authority: primary
+            core_type: CONSTITUTION
+            source_anchor: '[ARBITRAGE_2026_04_01][OFFLINE-RUNTIME-01]'
+            depends_on:
+              - TYPE_CORPUS_CONFIDENCE_ICC
+              - TYPE_AUTHENTIC_CONTEXT
+              - INV_RUNTIME_FULLY_LOCAL
+              - INV_NO_RUNTIME_CONTENT_GENERATION
+            relations: []
+            patchable: false
+            parameterizable: false
+            human_readable: Les signaux comme misconception, ICC ou contexte authentique doivent provenir d’artefacts hors session ou d’entrées explicites, jamais d’une inférence IA implicite en runtime local.
+            logic:
+              trigger: Qualification d’un signal de gouvernance ou d’un prérequis d’adaptation.
+              condition: Le moteur tente d’inférer localement un signal nécessitant interprétation sémantique ou LLM.
+              effect: Interdiction ; seuls les artefacts précomputés hors session ou les indicateurs explicites déterministes sont autorisés en usage local.
+              scope: runtime_architecture
+
+        - op: ensure_exists
+          target:
+            section: EVENTS
+            id: EVENT_T_EVALUATION_OVERDUE
+          value:
+            id: EVENT_T_EVALUATION_OVERDUE
+            authority: primary
+            core_type: CONSTITUTION
+            source_anchor: '[ARBITRAGE_2026_04_01][T-01]'
+            depends_on:
+              - TYPE_MASTERY_COMPONENT_T
+            relations:
+              - type: triggers
+                target:
+                  id: RULE_T_EVALUATION_OVERDUE_REQUIRES_SIGNAL_OR_FOLLOWUP
+            patchable: false
+            parameterizable: true
+            human_readable: L’évaluation de la composante T est en retard par rapport au cycle attendu.
+            logic:
+              trigger: Supervision de la transférabilité.
+              condition: Une évaluation T attendue n’a pas été réalisée dans la fenêtre opérationnelle prévue.
+              effect: Signal explicite de retard de T ; aucune disparition silencieuse du besoin d’évaluation.
+              scope: runtime_evaluation
+
+        - op: ensure_exists
+          target:
+            section: RULES
+            id: RULE_T_EVALUATION_OVERDUE_REQUIRES_SIGNAL_OR_FOLLOWUP
+          value:
+            id: RULE_T_EVALUATION_OVERDUE_REQUIRES_SIGNAL_OR_FOLLOWUP
+            authority: primary
+            core_type: CONSTITUTION
+            source_anchor: '[ARBITRAGE_2026_04_01][T-02]'
+            depends_on:
+              - EVENT_T_EVALUATION_OVERDUE
+              - ACTION_PLAN_SHORT_DIAGNOSTIC_TASK
+            relations:
+              - type: triggers
+                target:
+                  id: ACTION_PLAN_SHORT_DIAGNOSTIC_TASK
+            patchable: false
+            parameterizable: true
+            human_readable: Un retard d’évaluation de T doit déclencher un suivi explicite plutôt qu’un oubli silencieux.
+            logic:
+              trigger: EVENT_T_EVALUATION_OVERDUE.
+              condition: T non évalué alors que sa fenêtre de contrôle est échue.
+              effect: Planification d’une vérification de transfert ou maintien explicite du statut différé avec journalisation.
+              scope: runtime_evaluation
+
+        - op: ensure_exists
+          target:
+            section: EVENTS
+            id: EVENT_CONSERVATIVE_SCAFFOLDING_ESCALATION
+          value:
+            id: EVENT_CONSERVATIVE_SCAFFOLDING_ESCALATION
+            authority: primary
+            core_type: CONSTITUTION
+            source_anchor: '[ARBITRAGE_2026_04_01][CONS-ESC-01]'
+            depends_on:
+              - INV_CONSERVATIVE_RULE_WITHOUT_AR_N1
+              - REF_CORE_LEARNIT_REFERENTIEL_V1_0_IN_CONSTITUTION::PARAM_REFERENTIEL_CONSERVATIVE_SCAFFOLDING_ESCALATION_SESSIONS
+            relations:
+              - type: triggers
+                target:
+                  id: RULE_CONSERVATIVE_SCAFFOLDING_ESCALATION_REQUIRES_OFFSESSION_REVIEW
+            patchable: false
+            parameterizable: true
+            human_readable: Le maintien prolongé en mode conservateur sans sortie explicite déclenche une escalade formelle.
+            logic:
+              trigger: Persistance du mode conservateur.
+              condition: Mode conservateur actif sans AR-N1 exploitable ni proxys suffisants sur la fenêtre référentielle déclarée.
+              effect: Déclenchement d’une escalade gouvernée ; l’état ne peut rester indéfiniment en simple conservatisme silencieux.
+              scope: runtime_state
+
+        - op: ensure_exists
+          target:
+            section: RULES
+            id: RULE_CONSERVATIVE_SCAFFOLDING_ESCALATION_REQUIRES_OFFSESSION_REVIEW
+          value:
+            id: RULE_CONSERVATIVE_SCAFFOLDING_ESCALATION_REQUIRES_OFFSESSION_REVIEW
+            authority: primary
+            core_type: CONSTITUTION
+            source_anchor: '[ARBITRAGE_2026_04_01][CONS-ESC-02]'
+            depends_on:
+              - EVENT_CONSERVATIVE_SCAFFOLDING_ESCALATION
+              - ACTION_ESCALATE_PERSISTENT_DRIFT_OFFSESSION
+            relations:
+              - type: triggers
+                target:
+                  id: ACTION_ESCALATE_PERSISTENT_DRIFT_OFFSESSION
+            patchable: false
+            parameterizable: true
+            human_readable: Une escalade du mode conservateur prolongé ouvre uniquement une revue hors session.
+            logic:
+              trigger: EVENT_CONSERVATIVE_SCAFFOLDING_ESCALATION.
+              condition: La persistance est confirmée sur la fenêtre référentielle.
+              effect: Ouverture d’une revue hors session et maintien d’un régime minimal/réversible tant que l’analyse n’est pas close.
+              scope: runtime_state
+
+        - op: ensure_exists
+          target:
+            section: EVENTS
+            id: EVENT_SYSTEMIC_INVESTIGATION_AUTO_OPENED
+          value:
+            id: EVENT_SYSTEMIC_INVESTIGATION_AUTO_OPENED
+            authority: primary
+            core_type: CONSTITUTION
+            source_anchor: '[ARBITRAGE_2026_04_01][SYST-OPEN-01]'
+            depends_on:
+              - REF_CORE_LEARNIT_REFERENTIEL_V1_0_IN_CONSTITUTION::PARAM_REFERENTIEL_SYSTEMIC_INVESTIGATION_TRIGGER_CONDITIONS
+              - REF_CORE_LEARNIT_REFERENTIEL_V1_0_IN_CONSTITUTION::PARAM_REFERENTIEL_SYSTEMIC_INVESTIGATION_SESSION_THRESHOLD
+            relations:
+              - type: triggers
+                target:
+                  id: RULE_SYSTEMIC_INVESTIGATION_OPEN_CLOSE_WINDOW
+            patchable: false
+            parameterizable: true
+            human_readable: Une investigation systémique s’ouvre automatiquement lorsque plusieurs signaux anormaux persistent simultanément au-delà du seuil référentiel.
+            logic:
+              trigger: Supervision multi-signaux.
+              condition: Conditions et seuil de sessions consécutives atteints selon le Référentiel.
+              effect: Ouverture formelle de l’investigation systémique et passage à un régime minimal/réversible.
+              scope: runtime_safety
+
+        - op: ensure_exists
+          target:
+            section: EVENTS
+            id: EVENT_SYSTEMIC_INVESTIGATION_CLOSED
+          value:
+            id: EVENT_SYSTEMIC_INVESTIGATION_CLOSED
+            authority: primary
+            core_type: CONSTITUTION
+            source_anchor: '[ARBITRAGE_2026_04_01][SYST-CLOSE-01]'
+            depends_on:
+              - EVENT_SYSTEMIC_INVESTIGATION_AUTO_OPENED
+            relations: []
+            patchable: false
+            parameterizable: true
+            human_readable: L’investigation systémique est explicitement clôturée après résolution, stabilisation ou décision de revue hors session.
+            logic:
+              trigger: Réévaluation du régime systémique.
+              condition: Cause résolue, stabilisée ou transférée vers une chaîne hors session explicite.
+              effect: Sortie formelle du régime systémique ; aucun état d’investigation ouverte permanente n’est autorisé.
+              scope: runtime_safety
+
+        - op: ensure_exists
+          target:
+            section: RULES
+            id: RULE_SYSTEMIC_INVESTIGATION_OPEN_CLOSE_WINDOW
+          value:
+            id: RULE_SYSTEMIC_INVESTIGATION_OPEN_CLOSE_WINDOW
+            authority: primary
+            core_type: CONSTITUTION
+            source_anchor: '[ARBITRAGE_2026_04_01][SYST-WINDOW-01]'
+            depends_on:
+              - EVENT_SYSTEMIC_INVESTIGATION_AUTO_OPENED
+              - EVENT_SYSTEMIC_INVESTIGATION_CLOSED
+              - ACTION_ESCALATE_PERSISTENT_DRIFT_OFFSESSION
+              - REF_CORE_LEARNIT_REFERENTIEL_V1_0_IN_CONSTITUTION::PARAM_REFERENTIEL_SYSTEMIC_INVESTIGATION_MAX_WINDOW_SESSIONS
+            relations:
+              - type: triggers
+                target:
+                  id: ACTION_ESCALATE_PERSISTENT_DRIFT_OFFSESSION
+            patchable: false
+            parameterizable: true
+            human_readable: Toute investigation systémique ouverte doit être explicitement close dans une fenêtre maximale ; au-delà, la revue passe hors session.
+            logic:
+              trigger: Ouverture ou maintien d’une investigation systémique.
+              condition: Investigation ouverte sans résolution à l’intérieur de la fenêtre maximale référentielle.
+              effect: Maintien d’un régime minimal/réversible puis escalade hors session obligatoire si la clôture explicite n’intervient pas dans la borne.
+              scope: runtime_safety
+
+        - op: ensure_exists
+          target:
+            section: EVENTS
+            id: EVENT_ACTIVATION_DISTRESS_PERSISTENCE_ESCALATION
+          value:
+            id: EVENT_ACTIVATION_DISTRESS_PERSISTENCE_ESCALATION
+            authority: primary
+            core_type: CONSTITUTION
+            source_anchor: '[ARBITRAGE_2026_04_01][DISTRESS-01]'
+            depends_on:
+              - TYPE_STATE_AXIS_ACTIVATION
+              - REF_CORE_LEARNIT_REFERENTIEL_V1_0_IN_CONSTITUTION::PARAM_REFERENTIEL_ACTIVATION_DISTRESS_PERSISTENCE_SESSIONS
+            relations:
+              - type: triggers
+                target:
+                  id: RULE_ACTIVATION_DISTRESS_PERSISTENCE_ESCALATION_OFFSESSION
+            patchable: false
+            parameterizable: true
+            human_readable: Une détresse d’activation persistante déclenche une escalade explicite lorsqu’elle se maintient sur la fenêtre référentielle.
+            logic:
+              trigger: Supervision du régime d’activation.
+              condition: État de détresse confirmé sur N sessions consécutives selon le Référentiel.
+              effect: Ouverture d’une escalade explicite ; la détresse ne peut rester indéfiniment en simple conservatisme local.
+              scope: runtime_state
+
+        - op: ensure_exists
+          target:
+            section: RULES
+            id: RULE_ACTIVATION_DISTRESS_PERSISTENCE_ESCALATION_OFFSESSION
+          value:
+            id: RULE_ACTIVATION_DISTRESS_PERSISTENCE_ESCALATION_OFFSESSION
+            authority: primary
+            core_type: CONSTITUTION
+            source_anchor: '[ARBITRAGE_2026_04_01][DISTRESS-02]'
+            depends_on:
+              - EVENT_ACTIVATION_DISTRESS_PERSISTENCE_ESCALATION
+              - ACTION_ESCALATE_PERSISTENT_DRIFT_OFFSESSION
+            relations:
+              - type: triggers
+                target:
+                  id: ACTION_ESCALATE_PERSISTENT_DRIFT_OFFSESSION
+            patchable: false
+            parameterizable: true
+            human_readable: L’escalade de détresse persistante ouvre uniquement une revue hors session et maintient la sécurité pédagogique locale.
+            logic:
+              trigger: EVENT_ACTIVATION_DISTRESS_PERSISTENCE_ESCALATION.
+              condition: La fenêtre référentielle de persistance est atteinte.
+              effect: Revue hors session obligatoire, maintien d’un régime sûr local, aucune notification externe en session active.
+              scope: runtime_state
+
+        - op: ensure_exists
+          target:
+            section: INVARIANTS
+            id: INV_DISTRESS_REGIME_PRIORITY_CANNOT_BE_OVERRIDDEN
+          value:
+            id: INV_DISTRESS_REGIME_PRIORITY_CANNOT_BE_OVERRIDDEN
+            authority: primary
+            core_type: CONSTITUTION
+            source_anchor: '[ARBITRAGE_2026_04_01][DISTRESS-PRIORITY-01]'
+            depends_on:
+              - TYPE_STATE_AXIS_ACTIVATION
+            relations:
+              - type: constrains
+                target:
+                  id: TYPE_LEARNER_STATE_MODEL
+            patchable: false
+            parameterizable: false
+            human_readable: Aucun conflit de régimes ni patch référentiel ne peut rétrograder la priorité structurelle de la détresse.
+            logic:
+              trigger: Résolution de conflits inter-régimes ou révision paramétrique associée.
+              condition: Un régime de détresse est actif ou détecté.
+              effect: La détresse reste prioritaire structurellement jusqu’à sortie explicite ; aucune table opérationnelle ne peut l’abaisser sous un régime moins sûr.
+              scope: runtime_state
+
+        - op: ensure_exists
+          target:
+            section: EVENTS
+            id: EVENT_PROVISIONAL_MASTERY_WINDOW_EXPIRED
+          value:
+            id: EVENT_PROVISIONAL_MASTERY_WINDOW_EXPIRED
+            authority: primary
+            core_type: CONSTITUTION
+            source_anchor: '[ARBITRAGE_2026_04_01][PMW-01]'
+            depends_on:
+              - PARAM_PROVISIONAL_MASTERY_VERIFICATION_WINDOW
+            relations:
+              - type: triggers
+                target:
+                  id: RULE_PROVISIONAL_MASTERY_WINDOW_EXPIRY_SAFE_FALLBACK
+            patchable: false
+            parameterizable: true
+            human_readable: La fenêtre de vérification d’une maîtrise provisoire est expirée sans confirmation explicite.
+            logic:
+              trigger: Supervision de la fenêtre de maîtrise provisoire.
+              condition: La borne déclarée est atteinte sans vérification concluante.
+              effect: Signal explicite d’expiration ; la maîtrise provisoire ne reste pas ouverte indéfiniment.
+              scope: runtime_evaluation
+
+        - op: ensure_exists
+          target:
+            section: RULES
+            id: RULE_PROVISIONAL_MASTERY_WINDOW_EXPIRY_SAFE_FALLBACK
+          value:
+            id: RULE_PROVISIONAL_MASTERY_WINDOW_EXPIRY_SAFE_FALLBACK
+            authority: primary
+            core_type: CONSTITUTION
+            source_anchor: '[ARBITRAGE_2026_04_01][PMW-02]'
+            depends_on:
+              - EVENT_PROVISIONAL_MASTERY_WINDOW_EXPIRED
+              - ACTION_PLAN_SHORT_DIAGNOSTIC_TASK
+            relations:
+              - type: triggers
+                target:
+                  id: ACTION_PLAN_SHORT_DIAGNOSTIC_TASK
+            patchable: false
+            parameterizable: true
+            human_readable: À expiration d’une maîtrise provisoire non vérifiée, le moteur revient à un comportement conservateur explicite.
+            logic:
+              trigger: EVENT_PROVISIONAL_MASTERY_WINDOW_EXPIRED.
+              condition: Vérification non concluante ou absente.
+              effect: Retrait du statut provisoire, retour à un mode sûr et planification d’une vérification ciblée ; aucune prolongation implicite illimitée.
+              scope: runtime_evaluation
+
+        - op: ensure_exists
+          target:
+            section: ACTIONS
+            id: ACTION_ESCALATE_PERSISTENT_DRIFT_OFFSESSION
+          value:
+            id: ACTION_ESCALATE_PERSISTENT_DRIFT_OFFSESSION
+            authority: primary
+            core_type: CONSTITUTION
+            source_anchor: '[ARBITRAGE_2026_04_01][DRIFT-ESC-01]'
+            depends_on: []
+            relations: []
+            patchable: false
+            parameterizable: false
+            human_readable: Ouvrir une escalade hors session avec payload minimal traçable en cas de dérive persistante non résolue localement.
+            logic:
+              trigger: Dérive persistante, investigation systémique non close, détresse persistante ou conservatisme sans sortie.
+              condition: Le runtime local a atteint la borne d’escalade autorisée.
+              effect: Génération d’un payload minimal traçable hors session contenant identifiants concernés, contexte local, historique utile et motif d’ouverture.
+              scope: governance
+
+        - op: ensure_exists
+          target:
+            section: RULES
+            id: RULE_PERSISTENT_DRIFT_BLOCKED_PATCH_ESCALATES_OFFSESSION
+          value:
+            id: RULE_PERSISTENT_DRIFT_BLOCKED_PATCH_ESCALATES_OFFSESSION
+            authority: primary
+            core_type: CONSTITUTION
+            source_anchor: '[ARBITRAGE_2026_04_01][DRIFT-ESC-02]'
+            depends_on:
+              - INV_PERSISTENT_DRIFT_REQUIRES_ESCALATION_IF_PATCH_BLOCKED
+              - ACTION_ESCALATE_PERSISTENT_DRIFT_OFFSESSION
+            relations:
+              - type: triggers
+                target:
+                  id: ACTION_ESCALATE_PERSISTENT_DRIFT_OFFSESSION
+            patchable: false
+            parameterizable: false
+            human_readable: Une dérive persistante non patchable localement doit déboucher sur une action d’escalade hors session explicitement matérialisée.
+            logic:
+              trigger: Persistance d’un besoin de correction non résoluble par patch local valide.
+              condition: Le patch requis reste rejeté, impossible ou hors bornes autorisées.
+              effect: Ouverture d’une escalade hors session avec payload minimal ; aucun maintien implicite dans un état de dérive non traité.
+              scope: patch_governance
+
+        - op: ensure_exists
+          target:
+            section: EVENTS
+            id: EVENT_GAMIFICATION_PROBATION_MAX_DURATION_REACHED
+          value:
+            id: EVENT_GAMIFICATION_PROBATION_MAX_DURATION_REACHED
+            authority: primary
+            core_type: CONSTITUTION
+            source_anchor: '[ARBITRAGE_2026_04_01][GAM-PROB-01]'
+            depends_on:
+              - RULE_UNVERIFIED_GAMIFICATION_PROBATION
+              - REF_CORE_LEARNIT_REFERENTIEL_V1_0_IN_CONSTITUTION::PARAM_REFERENTIEL_GAMIFICATION_PROBATION_MAX_SESSIONS
+            relations:
+              - type: triggers
+                target:
+                  id: RULE_GAMIFICATION_PROBATION_MUST_CLOSE
+            patchable: false
+            parameterizable: true
+            human_readable: La durée maximale autorisée du mode probatoire gamification est atteinte.
+            logic:
+              trigger: Supervision du mode probatoire.
+              condition: Le nombre maximal de sessions probatoires défini référentiellement est atteint sans validation explicite.
+              effect: Ouverture d’une sortie obligatoire du mode probatoire ; aucune probation indéfinie n’est autorisée.
+              scope: deployment
+
+        - op: ensure_exists
+          target:
+            section: RULES
+            id: RULE_GAMIFICATION_PROBATION_MUST_CLOSE
+          value:
+            id: RULE_GAMIFICATION_PROBATION_MUST_CLOSE
+            authority: primary
+            core_type: CONSTITUTION
+            source_anchor: '[ARBITRAGE_2026_04_01][GAM-PROB-02]'
+            depends_on:
+              - EVENT_GAMIFICATION_PROBATION_MAX_DURATION_REACHED
+              - ACTION_INFORM_LEARNER
+            relations:
+              - type: triggers
+                target:
+                  id: ACTION_INFORM_LEARNER
+            patchable: false
+            parameterizable: true
+            human_readable: Une probation gamification doit se clôturer par validation explicite, suspension ou retrait de la mécanique.
+            logic:
+              trigger: EVENT_GAMIFICATION_PROBATION_MAX_DURATION_REACHED.
+              condition: Validation de non-nuisance absente ou incomplète.
+              effect: Sortie explicite du mode probatoire par validation, suspension ou retrait ; l’apprenant est informé si un changement visible intervient.
+              scope: deployment
+
+    - file: docs/cores/current/referentiel.yaml
+      expected_core_id: CORE_LEARNIT_REFERENTIEL_V1_0
+      operations:
+        - op: ensure_exists
+          target:
+            section: PARAMETERS
+            id: PARAM_REFERENTIEL_ACTIVATION_DISTRESS_PERSISTENCE_SESSIONS
+          value:
+            id: PARAM_REFERENTIEL_ACTIVATION_DISTRESS_PERSISTENCE_SESSIONS
+            authority: primary
+            core_type: REFERENTIEL
+            source_anchor: '[ARBITRAGE_2026_04_01][DISTRESS-01]'
+            depends_on: []
+            relations: []
+            patchable: true
+            parameterizable: true
+            human_readable: Nombre de sessions consécutives de détresse d’activation avant escalade explicite hors session.
+            logic:
+              trigger: Supervision du régime de détresse.
+              condition: Détresse d’activation confirmée sur une fenêtre consécutive.
+              effect: Référence 3 sessions ; fourchette 2–5.
+              scope: runtime_state
+
+        - op: ensure_exists
+          target:
+            section: PARAMETERS
+            id: PARAM_REFERENTIEL_SYSTEMIC_INVESTIGATION_MAX_WINDOW_SESSIONS
+          value:
+            id: PARAM_REFERENTIEL_SYSTEMIC_INVESTIGATION_MAX_WINDOW_SESSIONS
+            authority: primary
+            core_type: REFERENTIEL
+            source_anchor: '[ARBITRAGE_2026_04_01][SYST-02]'
+            depends_on: []
+            relations: []
+            patchable: true
+            parameterizable: true
+            human_readable: Nombre maximal de sessions pendant lesquelles une investigation systémique peut rester ouverte avant escalade hors session obligatoire.
+            logic:
+              trigger: Suivi d’une investigation systémique ouverte.
+              condition: Investigation non close explicitement.
+              effect: Référence 3 sessions ; fourchette 2–6.
+              scope: runtime_safety
+
+        - op: ensure_exists
+          target:
+            section: PARAMETERS
+            id: PARAM_REFERENTIEL_GAMIFICATION_PROBATION_MAX_SESSIONS
+          value:
+            id: PARAM_REFERENTIEL_GAMIFICATION_PROBATION_MAX_SESSIONS
+            authority: primary
+            core_type: REFERENTIEL
+            source_anchor: '[ARBITRAGE_2026_04_01][GAM-PROB-01]'
+            depends_on: []
+            relations: []
+            patchable: true
+            parameterizable: true
+            human_readable: Nombre maximal de sessions autorisées pour une gamification en mode probatoire avant décision explicite.
+            logic:
+              trigger: Supervision d’une mécanique gamifiée non validée.
+              condition: Probation active.
+              effect: Référence 5 sessions ; fourchette 3–8.
+              scope: deployment
+
+        - op: ensure_exists
+          target:
+            section: PARAMETERS
+            id: PARAM_REFERENTIEL_OSCILLATION_MAX_CYCLES_BEFORE_ESCALATION
+          value:
+            id: PARAM_REFERENTIEL_OSCILLATION_MAX_CYCLES_BEFORE_ESCALATION
+            authority: primary
+            core_type: REFERENTIEL
+            source_anchor: '[ARBITRAGE_2026_04_01][OSC-01]'
+            depends_on: []
+            relations: []
+            patchable: true
+            parameterizable: true
+            human_readable: Nombre maximal de cycles Consolidation ↔ Exploration avant escalade explicite.
+            logic:
+              trigger: Suivi du régime oscillatoire.
+              condition: Alternance Consolidation ↔ Exploration active sans sortie stable.
+              effect: Référence 3 cycles ; fourchette 2–5.
+              scope: runtime_state
+
+        - op: ensure_exists
+          target:
+            section: PARAMETERS
+            id: PARAM_REFERENTIEL_CONSOLIDATION_SATISFACTORY_SESSION_CRITERION
+          value:
+            id: PARAM_REFERENTIEL_CONSOLIDATION_SATISFACTORY_SESSION_CRITERION
+            authority: primary
+            core_type: REFERENTIEL
+            source_anchor: '[ARBITRAGE_2026_04_01][OSC-02]'
+            depends_on: []
+            relations: []
+            patchable: true
+            parameterizable: true
+            human_readable: Critère déterministe minimal d’une session de consolidation satisfaisante pour piloter la sortie du régime oscillatoire.
+            logic:
+              trigger: Évaluation d’une session de consolidation.
+              condition: Session terminée dans un régime oscillatoire.
+              effect: Référence = réussite de la tâche cœur sans aide additionnelle non prévue, absence de détresse active et stabilité minimale de R sur la KU concernée.
+              scope: runtime_state
+
+        - op: ensure_exists
+          target:
+            section: RULES
+            id: RULE_REFERENTIEL_ESCALATION_PRIORITY_ORDER
+          value:
+            id: RULE_REFERENTIEL_ESCALATION_PRIORITY_ORDER
+            authority: primary
+            core_type: REFERENTIEL
+            source_anchor: '[ARBITRAGE_2026_04_01][ESC-PRIO-01]'
+            depends_on:
+              - PARAM_REFERENTIEL_SYSTEMIC_INVESTIGATION_SESSION_THRESHOLD
+              - PARAM_REFERENTIEL_MSC_PERCEPTION_DIVERGENCE_THRESHOLD
+              - PARAM_REFERENTIEL_ACTIVATION_DISTRESS_PERSISTENCE_SESSIONS
+            relations: []
+            patchable: true
+            parameterizable: true
+            human_readable: Priorité explicite des escalades concurrentes : investigation systémique, puis divergence MSC/perception, puis signaux motivationnels ou de sollicitation.
+            logic:
+              trigger: Plusieurs escalades deviennent simultanément éligibles.
+              condition: Au moins deux chaînes d’escalade franchissent leur seuil sur la même fenêtre.
+              effect: Priorité 1 investigation systémique ; priorité 2 divergence MSC/perception ; priorité 3 signaux motivationnels, VC ou sollicitation. La résolution doit rester stable et audit-able.
+              scope: runtime_safety
+
+        - op: replace_field
+          target:
+            section: RULES
+            id: RULE_REFERENTIEL_ADAPTIVE_REGIME_CONFLICT_RESOLUTION
+            field: human_readable
+          value: Table de priorité par paire de conflits pour les cellules de frontière de la matrice des régimes adaptatifs. Règle synthétique : (1) Détresse l'emporte toujours. (2) Conservateur l'emporte sur Exploration et Consolidation tant que sa fenêtre référentielle de sortie n'est pas atteinte. (3) Consolidation l'emporte sur Sous-défi sauf si R est déjà atteint. (4) Exploration l'emporte sur Sous-défi. (5) Consolidation vs Exploration ouvre un régime oscillatoire piloté par R et borné par un nombre maximal de cycles explicite.
+        - op: replace_field
+          target:
+            section: RULES
+            id: RULE_REFERENTIEL_ADAPTIVE_REGIME_CONFLICT_RESOLUTION
+            field: logic.effect
+          value: |-
+            Application de la table de priorité :
+            - Détresse + tout autre : Détresse prime.
+            - Conservateur + Sous-défi : Conservateur tant que la fenêtre référentielle de sortie n’est pas atteinte.
+            - Conservateur + Exploration : Conservateur.
+            - Conservateur + Consolidation : Conservateur.
+            - Consolidation + Sous-défi : Sous-défi si R atteint, sinon Consolidation.
+            - Consolidation + Exploration : régime oscillatoire borné ; alternance 1 session de consolidation satisfaisante puis 1 session d’exploration, avec sortie quand R atteint ou quand le nombre maximal de cycles est dépassé.
+            - Trois régimes actifs ou plus : appliquer d’abord la priorité Détresse, puis la hiérarchie d’escalade explicite ; si l’état reste ambigu, ouvrir une investigation systémique.
+
+        - op: ensure_exists
+          target:
+            section: RULES
+            id: RULE_REFERENTIEL_OSCILLATION_EXIT_AND_ESCALATION
+          value:
+            id: RULE_REFERENTIEL_OSCILLATION_EXIT_AND_ESCALATION
+            authority: primary
+            core_type: REFERENTIEL
+            source_anchor: '[ARBITRAGE_2026_04_01][OSC-03]'
+            depends_on:
+              - RULE_REFERENTIEL_ADAPTIVE_REGIME_CONFLICT_RESOLUTION
+              - PARAM_REFERENTIEL_CONSOLIDATION_SATISFACTORY_SESSION_CRITERION
+              - PARAM_REFERENTIEL_OSCILLATION_MAX_CYCLES_BEFORE_ESCALATION
+            relations: []
+            patchable: true
+            parameterizable: true
+            human_readable: Le régime oscillatoire Consolidation ↔ Exploration doit avoir un critère de session satisfaisante, une borne de cycles et une sortie explicite.
+            logic:
+              trigger: Activation du régime oscillatoire.
+              condition: Conflit Consolidation ↔ Exploration confirmé.
+              effect: Utiliser le critère déterministe de session satisfaisante pour autoriser l’alternance, sortir quand R atteint, ou ouvrir une escalade explicite si le nombre maximal de cycles est dépassé.
+              scope: runtime_state
+
+    - file: docs/cores/current/link.yaml
+      expected_core_id: CORE_LINK_LEARNIT_CONSTITUTION_V1_9__REFERENTIEL_V1_0
+      operations:
+        - op: replace_field
+          target:
+            section: TYPES
+            id: TYPE_BINDING_LEARNER_STATE_SIGNAL_AUTHORITY_CHAIN
+            field: relations
+          value:
+            - type: binds
+              target:
+                core_ref: LINK_REF_CORE_LEARNIT_CONSTITUTION_V1_9
+                id: TYPE_STATE_AXIS_ACTIVATION
+            - type: binds
+              target:
+                core_ref: LINK_REF_CORE_LEARNIT_CONSTITUTION_V1_9
+                id: TYPE_STATE_AXIS_VALUE_COST
+            - type: binds
+              target:
+                core_ref: LINK_REF_CORE_LEARNIT_CONSTITUTION_V1_9
+                id: TYPE_SELF_REPORT_AR_N1
+            - type: binds
+              target:
+                core_ref: LINK_REF_CORE_LEARNIT_CONSTITUTION_V1_9
+                id: TYPE_SELF_REPORT_AR_N2
+            - type: binds
+              target:
+                core_ref: LINK_REF_CORE_LEARNIT_CONSTITUTION_V1_9
+                id: TYPE_SELF_REPORT_AR_N3
+            - type: binds
+              target:
+                core_ref: LINK_REF_CORE_LEARNIT_REFERENTIEL_V1_0
+                id: TYPE_REFERENTIEL_SIGNAL_CONFIDENCE_HIERARCHY
+            - type: binds
+              target:
+                core_ref: LINK_REF_CORE_LEARNIT_REFERENTIEL_V1_0
+                id: RULE_REFERENTIEL_SIGNAL_PRECEDENCE_ORDER
+            - type: binds
+              target:
+                core_ref: LINK_REF_CORE_LEARNIT_REFERENTIEL_V1_0
+                id: RULE_REFERENTIEL_LOW_AR_CALIBRATION_TEMPORARILY_REWEIGHTS_SIGNALS
+            - type: binds
+              target:
+                core_ref: LINK_REF_CORE_LEARNIT_REFERENTIEL_V1_0
+                id: INV_REFERENTIEL_VC_UNKNOWN_MEANS_NO_INFERENCE
+
+        - op: replace_field
+          target:
+            section: TYPES
+            id: TYPE_BINDING_MSC_COMPONENTS_TO_REFERENTIEL_PARAMETERS
+            field: relations
+          value:
+            - type: binds
+              target:
+                core_ref: LINK_REF_CORE_LEARNIT_CONSTITUTION_V1_9
+                id: TYPE_MASTERY_COMPONENT_P
+            - type: binds
+              target:
+                core_ref: LINK_REF_CORE_LEARNIT_REFERENTIEL_V1_0
+                id: PARAM_REFERENTIEL_MSC_PRECISION_THRESHOLD
+            - type: binds
+              target:
+                core_ref: LINK_REF_CORE_LEARNIT_CONSTITUTION_V1_9
+                id: TYPE_MASTERY_COMPONENT_R
+            - type: binds
+              target:
+                core_ref: LINK_REF_CORE_LEARNIT_REFERENTIEL_V1_0
+                id: PARAM_REFERENTIEL_MSC_ROBUSTNESS_DELAY_SHORT
+            - type: binds
+              target:
+                core_ref: LINK_REF_CORE_LEARNIT_CONSTITUTION_V1_9
+                id: TYPE_MASTERY_COMPONENT_A
+            - type: binds
+              target:
+                core_ref: LINK_REF_CORE_LEARNIT_REFERENTIEL_V1_0
+                id: PARAM_REFERENTIEL_MSC_AUTONOMY_SUCCESS_COUNT
+            - type: binds
+              target:
+                core_ref: LINK_REF_CORE_LEARNIT_REFERENTIEL_V1_0
+                id: TYPE_REFERENTIEL_REFERENTIAL_PARAMETER_LAYER
+
+        - op: replace_field
+          target:
+            section: TYPES
+            id: TYPE_BINDING_FEEDBACK_COVERAGE_TO_REFERENTIEL_THRESHOLD
+            field: relations
+          value:
+            - type: binds
+              target:
+                core_ref: LINK_REF_CORE_LEARNIT_CONSTITUTION_V1_9
+                id: TYPE_FEEDBACK_COVERAGE_MATRIX
+            - type: binds
+              target:
+                core_ref: LINK_REF_CORE_LEARNIT_CONSTITUTION_V1_9
+                id: RULE_UNCOVERED_ERROR_GENERIC_FEEDBACK
+            - type: binds
+              target:
+                core_ref: LINK_REF_CORE_LEARNIT_REFERENTIEL_V1_0
+                id: PARAM_REFERENTIEL_FEEDBACK_COVERAGE_REFERENCE_THRESHOLD
+            - type: binds
+              target:
+                core_ref: LINK_REF_CORE_LEARNIT_REFERENTIEL_V1_0
+                id: RULE_REFERENTIEL_LOW_FEEDBACK_COVERAGE_SIGNALS_REVISION
+            - type: binds
+              target:
+                core_ref: LINK_REF_CORE_LEARNIT_REFERENTIEL_V1_0
+                id: EVENT_REFERENTIEL_FEEDBACK_COVERAGE_LOW
+
+        - op: replace_field
+          target:
+            section: TYPES
+            id: TYPE_BINDING_PATCH_TRIGGER_GOVERNANCE_CHAIN
+            field: relations
+          value:
+            - type: binds
+              target:
+                core_ref: LINK_REF_CORE_LEARNIT_CONSTITUTION_V1_9
+                id: TYPE_PATCH_ARTIFACT
+            - type: binds
+              target:
+                core_ref: LINK_REF_CORE_LEARNIT_CONSTITUTION_V1_9
+                id: TYPE_PATCH_IMPACT_SCOPE
+            - type: binds
+              target:
+                core_ref: LINK_REF_CORE_LEARNIT_CONSTITUTION_V1_9
+                id: TYPE_PATCH_QUALITY_GATE
+            - type: binds
+              target:
+                core_ref: LINK_REF_CORE_LEARNIT_REFERENTIEL_V1_0
+                id: TYPE_REFERENTIEL_PATCH_TRIGGER_TABLE
+            - type: binds
+              target:
+                core_ref: LINK_REF_CORE_LEARNIT_REFERENTIEL_V1_0
+                id: EVENT_REFERENTIEL_PATCH_TRIGGER_THRESHOLD_CROSSED
+            - type: binds
+              target:
+                core_ref: LINK_REF_CORE_LEARNIT_REFERENTIEL_V1_0
+                id: CONSTRAINT_REFERENTIEL_PATCH_SCOPE_MUST_REMAIN_CONSTITUTIONALLY_BOUNDED
+            - type: binds
+              target:
+                core_ref: LINK_REF_CORE_LEARNIT_REFERENTIEL_V1_0
+                id: CONSTRAINT_REFERENTIEL_LOCAL_VERIFICATION_REQUIRED_BEFORE_PATCH_APPLY
+            - type: binds
+              target:
+                core_ref: LINK_REF_CORE_LEARNIT_REFERENTIEL_V1_0
+                id: ACTION_REFERENTIEL_TRIGGER_RELEVANCE_PATCH
+
+        - op: ensure_exists
+          target:
+            section: TYPES
+            id: TYPE_BINDING_MSC_PERCEPTION_DIVERGENCE_THRESHOLD_CHAIN
+          value:
+            id: TYPE_BINDING_MSC_PERCEPTION_DIVERGENCE_THRESHOLD_CHAIN
+            authority: derived
+            core_type: LINK
+            source_anchor: '[ARBITRAGE_2026_04_01][DIVMSC-01]'
+            depends_on:
+              - LINK_REF_CORE_LEARNIT_CONSTITUTION_V1_9
+              - LINK_REF_CORE_LEARNIT_REFERENTIEL_V1_0
+              - TYPE_BINDING_LEARNER_STATE_SIGNAL_AUTHORITY_CHAIN
+            relations:
+              - type: binds
+                target:
+                  core_ref: LINK_REF_CORE_LEARNIT_CONSTITUTION_V1_9
+                  id: EVENT_MSC_PERCEPTION_DIVERGENCE_DETECTED
+              - type: binds
+                target:
+                  core_ref: LINK_REF_CORE_LEARNIT_CONSTITUTION_V1_9
+                  id: RULE_MSC_PERCEPTION_DIVERGENCE_PROTOCOL
+              - type: binds
+                target:
+                  core_ref: LINK_REF_CORE_LEARNIT_REFERENTIEL_V1_0
+                  id: PARAM_REFERENTIEL_MSC_PERCEPTION_DIVERGENCE_THRESHOLD
+            patchable: false
+            parameterizable: false
+            human_readable: Binding inter-Core reliant la divergence MSC/perception constitutionnelle à son seuil référentiel explicite.
+            logic:
+              trigger: Lecture ou audit d’une chaîne de divergence MSC/perception.
+              condition: Les Core Constitution et Référentiel sont fédérés.
+              effect: La détection constitutionnelle de divergence est reliée explicitement au seuil référentiel sans déplacer la logique métier dans le LINK.
+              scope: intercore_binding
+
+        - op: ensure_exists
+          target:
+            section: TYPES
+            id: TYPE_BINDING_CONSERVATIVE_SCAFFOLDING_ESCALATION_CHAIN
+          value:
+            id: TYPE_BINDING_CONSERVATIVE_SCAFFOLDING_ESCALATION_CHAIN
+            authority: derived
+            core_type: LINK
+            source_anchor: '[ARBITRAGE_2026_04_01][CONS-ESC-01]'
+            depends_on:
+              - LINK_REF_CORE_LEARNIT_CONSTITUTION_V1_9
+              - LINK_REF_CORE_LEARNIT_REFERENTIEL_V1_0
+              - TYPE_BINDING_LEARNER_STATE_SIGNAL_AUTHORITY_CHAIN
+            relations:
+              - type: binds
+                target:
+                  core_ref: LINK_REF_CORE_LEARNIT_CONSTITUTION_V1_9
+                  id: INV_CONSERVATIVE_RULE_WITHOUT_AR_N1
+              - type: binds
+                target:
+                  core_ref: LINK_REF_CORE_LEARNIT_CONSTITUTION_V1_9
+                  id: EVENT_CONSERVATIVE_SCAFFOLDING_ESCALATION
+              - type: binds
+                target:
+                  core_ref: LINK_REF_CORE_LEARNIT_CONSTITUTION_V1_9
+                  id: RULE_CONSERVATIVE_SCAFFOLDING_ESCALATION_REQUIRES_OFFSESSION_REVIEW
+              - type: binds
+                target:
+                  core_ref: LINK_REF_CORE_LEARNIT_REFERENTIEL_V1_0
+                  id: PARAM_REFERENTIEL_CONSERVATIVE_SCAFFOLDING_ESCALATION_SESSIONS
+            patchable: false
+            parameterizable: false
+            human_readable: Binding inter-Core de la chaîne d’escalade du mode conservateur prolongé.
+            logic:
+              trigger: Audit de la persistance du mode conservateur.
+              condition: Le système fédéré doit relier le garde-fou constitutionnel au seuil référentiel de sortie.
+              effect: L’événement et la règle d’escalade constitutionnels sont explicitement reliés au paramètre référentiel de persistance.
+              scope: intercore_binding
+
+        - op: ensure_exists
+          target:
+            section: TYPES
+            id: TYPE_BINDING_SYSTEMIC_INVESTIGATION_CHAIN
+          value:
+            id: TYPE_BINDING_SYSTEMIC_INVESTIGATION_CHAIN
+            authority: derived
+            core_type: LINK
+            source_anchor: '[ARBITRAGE_2026_04_01][SYST-01]'
+            depends_on:
+              - LINK_REF_CORE_LEARNIT_CONSTITUTION_V1_9
+              - LINK_REF_CORE_LEARNIT_REFERENTIEL_V1_0
+            relations:
+              - type: binds
+                target:
+                  core_ref: LINK_REF_CORE_LEARNIT_CONSTITUTION_V1_9
+                  id: EVENT_SYSTEMIC_INVESTIGATION_AUTO_OPENED
+              - type: binds
+                target:
+                  core_ref: LINK_REF_CORE_LEARNIT_CONSTITUTION_V1_9
+                  id: EVENT_SYSTEMIC_INVESTIGATION_CLOSED
+              - type: binds
+                target:
+                  core_ref: LINK_REF_CORE_LEARNIT_CONSTITUTION_V1_9
+                  id: RULE_SYSTEMIC_INVESTIGATION_OPEN_CLOSE_WINDOW
+              - type: binds
+                target:
+                  core_ref: LINK_REF_CORE_LEARNIT_REFERENTIEL_V1_0
+                  id: PARAM_REFERENTIEL_SYSTEMIC_INVESTIGATION_TRIGGER_CONDITIONS
+              - type: binds
+                target:
+                  core_ref: LINK_REF_CORE_LEARNIT_REFERENTIEL_V1_0
+                  id: PARAM_REFERENTIEL_SYSTEMIC_INVESTIGATION_SESSION_THRESHOLD
+              - type: binds
+                target:
+                  core_ref: LINK_REF_CORE_LEARNIT_REFERENTIEL_V1_0
+                  id: PARAM_REFERENTIEL_SYSTEMIC_INVESTIGATION_MAX_WINDOW_SESSIONS
+              - type: binds
+                target:
+                  core_ref: LINK_REF_CORE_LEARNIT_REFERENTIEL_V1_0
+                  id: RULE_REFERENTIEL_SYSTEMIC_INVESTIGATION_RUNTIME_BEHAVIOR
+            patchable: false
+            parameterizable: false
+            human_readable: Binding inter-Core de la chaîne d’investigation systémique, de son ouverture automatique à sa clôture bornée.
+            logic:
+              trigger: Lecture ou audit d’une investigation systémique.
+              condition: Le système fédéré doit relier événements constitutionnels, borne référentielle et comportement runtime référentiel.
+              effect: L’ouverture, le maintien et la clôture de l’investigation systémique deviennent explicitement auditables entre Core.
+              scope: intercore_binding
+
+        - op: ensure_exists
+          target:
+            section: TYPES
+            id: TYPE_BINDING_ACTIVATION_DISTRESS_PERSISTENCE_ESCALATION_CHAIN
+          value:
+            id: TYPE_BINDING_ACTIVATION_DISTRESS_PERSISTENCE_ESCALATION_CHAIN
+            authority: derived
+            core_type: LINK
+            source_anchor: '[ARBITRAGE_2026_04_01][DISTRESS-01]'
+            depends_on:
+              - LINK_REF_CORE_LEARNIT_CONSTITUTION_V1_9
+              - LINK_REF_CORE_LEARNIT_REFERENTIEL_V1_0
+            relations:
+              - type: binds
+                target:
+                  core_ref: LINK_REF_CORE_LEARNIT_CONSTITUTION_V1_9
+                  id: TYPE_STATE_AXIS_ACTIVATION
+              - type: binds
+                target:
+                  core_ref: LINK_REF_CORE_LEARNIT_CONSTITUTION_V1_9
+                  id: EVENT_ACTIVATION_DISTRESS_PERSISTENCE_ESCALATION
+              - type: binds
+                target:
+                  core_ref: LINK_REF_CORE_LEARNIT_CONSTITUTION_V1_9
+                  id: RULE_ACTIVATION_DISTRESS_PERSISTENCE_ESCALATION_OFFSESSION
+              - type: binds
+                target:
+                  core_ref: LINK_REF_CORE_LEARNIT_CONSTITUTION_V1_9
+                  id: INV_DISTRESS_REGIME_PRIORITY_CANNOT_BE_OVERRIDDEN
+              - type: binds
+                target:
+                  core_ref: LINK_REF_CORE_LEARNIT_REFERENTIEL_V1_0
+                  id: PARAM_REFERENTIEL_ACTIVATION_DISTRESS_PERSISTENCE_SESSIONS
+              - type: binds
+                target:
+                  core_ref: LINK_REF_CORE_LEARNIT_REFERENTIEL_V1_0
+                  id: RULE_REFERENTIEL_ESCALATION_PRIORITY_ORDER
+            patchable: false
+            parameterizable: false
+            human_readable: Binding inter-Core de la persistance de détresse d’activation, de sa priorité structurelle et de son seuil d’escalade.
+            logic:
+              trigger: Audit de la chaîne de sécurité liée à la détresse d’activation.
+              condition: Les Cores Constitution et Référentiel doivent être alignés sur la priorité et la fenêtre d’escalade.
+              effect: La priorité constitutionnelle de la détresse est reliée au seuil référentiel d’escalade sans introduire de logique métier autonome dans le LINK.
+              scope: intercore_binding
