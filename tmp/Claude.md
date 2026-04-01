@@ -117,12 +117,12 @@ Voici les 7 points où les arbitres divergent, avec les enjeux concrets pour le 
 ## Synthèse pour ton arbitrage
 
 
-| Décision à prendre              | Recommandation                                              | Arbitrage humain                                                                                           |
-| ------------------------------- | ----------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------- |
-| Gamification probatoire         | Corriger maintenant par cohérence structurelle              | OK                                                                                                         |
-| Décroissance de R               | Reporter — prévoir cycle dédié avec données empiriques      | Reporter, Y a t’il moyen d’obliger la prise en considération ultérieurement ?                              |
-| Versioning inter-couches        | Dépend de l'imminence du prochain patch Référentiel         | KO, les 3 fichiers Core évoluent conjointement                                                             |
-| Détresse activation persistante | Corriger maintenant par symétrie avec l'existant            | OK                                                                                                         |
-| Autorapport N3 orphelin         | Décider la couche (ton choix d'architecture) puis corriger  | Couche référentielle, le Référentiel décide de ce qu'on en fait                                            |
-| Conflit notification/session    | Corriger maintenant si rapport Gemini validé — coût minimal | OK                                                                                                         |
-| Priorité entre escalades        | À toi de juger si le scénario concurrent est réaliste       | table de priorité explicite (Investigation systémique > Divergence de perception > Signaux de motivation). |
+| Décision à prendre              | Recommandation                                              |
+| ------------------------------- | ----------------------------------------------------------- |
+| Gamification probatoire         | Corriger maintenant par cohérence structurelle              |
+| Décroissance de R               | Reporter — prévoir cycle dédié avec données empiriques      |
+| Versioning inter-couches        | Dépend de l'imminence du prochain patch Référentiel         |
+| Détresse activation persistante | Corriger maintenant par symétrie avec l'existant            |
+| Autorapport N3 orphelin         | Décider la couche (ton choix d'architecture) puis corriger  |
+| Conflit notification/session    | Corriger maintenant si rapport Gemini validé — coût minimal |
+| Priorité entre escalades        | À toi de juger si le scénario concurrent est réaliste       |
