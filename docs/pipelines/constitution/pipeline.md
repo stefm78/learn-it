@@ -28,6 +28,7 @@ Challenger les Core actifs, arbitrer les corrections, produire un patch, le vali
 - `Build release plan: docs/patcher/shared/build_release_plan.py`
 - `Materialize release: docs/patcher/shared/materialize_release.py`
 - `Validate release plan: docs/patcher/shared/validate_release_plan.py`
+- `Closeout pipeline run: docs/patcher/shared/closeout_pipeline_run.py`
 
 ### Core inputs
 
@@ -231,6 +232,77 @@ Outputs :
 - Rule:
   - `STAGE_08_PROMOTE_CURRENT.md` is the canonical specification for Stage 08
 
+
+### STAGE_09_CLOSEOUT_AND_ARCHIVE
+Objectif :
+- clôturer explicitement le run du pipeline après promotion réussie
+- figer une trace finale de run exploitable humainement et techniquement
+- distinguer les artefacts canoniques à conserver des artefacts techniques reconstituables
+- permettre un redémarrage propre d’un run ultérieur sans ambiguïté sur l’état du précédent
+
+Inputs :
+- `docs/pipelines/constitution/reports/promotion_report.yaml`
+- `docs/cores/current/manifest.yaml`
+- `docs/pipelines/constitution/work/07_release/release_plan.yaml`
+- `docs/pipelines/constitution/reports/release_materialization_report.yaml`
+- `docs/pipelines/constitution/reports/patch_execution_report.yaml`
+- `docs/pipelines/constitution/work/06_core_validation/core_validation.yaml`
+
+Préconditions :
+- `reports/promotion_report.yaml` doit être en `status: PASS`
+- `docs/cores/current/manifest.yaml` doit être valide
+- `docs/cores/current/manifest.yaml` doit pointer vers la release promue par le Stage 08
+
+Principe opératoire :
+- vérifier que la promotion Stage 08 constitue bien l’état actif final du run
+- produire une synthèse finale du run avec :
+  - la release promue
+  - les versions actives
+  - les principaux artefacts de traçabilité
+  - le statut final du pipeline
+- distinguer deux catégories d’artefacts :
+  - artefacts canoniques à conserver
+  - artefacts techniques éphémères éventuellement nettoyables
+- ne jamais supprimer automatiquement les artefacts de traçabilité métier
+- n’autoriser le nettoyage physique que pour les artefacts purement techniques et reconstituables
+- rendre explicite dans le report si un nettoyage a été effectué ou non
+
+Artefacts canoniques à conserver :
+- `work/01_challenge/challenge_report_##.md`
+- `work/02_arbitrage/arbitrage.md`
+- `work/03_patch/patchset.yaml`
+- `work/04_patch_validation/patch_validation.yaml`
+- `reports/patch_execution_report.yaml`
+- `work/06_core_validation/core_validation.yaml`
+- `work/07_release/release_plan.yaml`
+- `reports/release_materialization_report.yaml`
+- `reports/promotion_report.yaml`
+
+Artefacts techniques éphémères :
+- `work/05_apply/sandbox/`
+- toute copie technique strictement reconstituable à partir des artefacts canoniques
+
+Commandes de référence :
+- vérifier l’état courant final :
+  - `python docs/patcher/shared/validate_current_manifest.py ./docs/cores/current/manifest.yaml ./docs/specs/core-release/current_manifest.schema.yaml`
+- vérifier la traçabilité de promotion :
+  - `python docs/patcher/shared/validate_promotion_report.py ./docs/pipelines/constitution/reports/promotion_report.yaml ./docs/specs/core-release/promotion_report.schema.yaml`
+- clôturer le run sans nettoyage technique :
+  - `python docs/patcher/shared/closeout_pipeline_run.py ./docs/pipelines/constitution/reports/promotion_report.yaml ./docs/cores/current/manifest.yaml ./docs/pipelines/constitution/reports/closeout_report.yaml ./docs/pipelines/constitution/outputs/final_run_summary.md false`
+- clôturer le run avec nettoyage technique limité à la sandbox :
+  - `python docs/patcher/shared/closeout_pipeline_run.py ./docs/pipelines/constitution/reports/promotion_report.yaml ./docs/cores/current/manifest.yaml ./docs/pipelines/constitution/reports/closeout_report.yaml ./docs/pipelines/constitution/outputs/final_run_summary.md true`
+
+Outputs :
+- `reports/closeout_report.yaml`
+- `outputs/final_run_summary.md`
+
+Règle opératoire :
+- `docs/cores/releases/` reste l’archive métier immuable
+- `docs/cores/current/` reste uniquement la vue active promue
+- le Stage 09 ne modifie ni la release promue ni les Core courants
+- le Stage 09 clôture le run ; il ne recalcule aucun contenu métier
+- le nettoyage destructif n’est jamais implicite
+
 ## Success criteria
 
 - No stage may be skipped
@@ -238,3 +310,5 @@ Outputs :
 - Any patch application must occur in a sandbox root under `work/05_apply/`
 - Any release materialization must write immutable artifacts under `docs/cores/releases/`
 - Promotion to `current/` must remain explicit and occur in a dedicated stage
+- Any successful promotion should be followed by an explicit run closeout stage
+- No destructive cleanup of traceability artifacts may occur without explicit closeout reporting
