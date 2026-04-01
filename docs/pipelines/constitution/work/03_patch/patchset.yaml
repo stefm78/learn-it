@@ -23,12 +23,13 @@ PATCH_SET:
     - file: docs/cores/current/referentiel.yaml
       expected_core_id: CORE_LEARNIT_REFERENTIEL_V0_6
       operations:
-        - op: replace_field
+        - op: replace_meta_field
           target:
-            section: TYPES
-            id: REF_CORE_LEARNIT_CONSTITUTION_V1_8_IN_REFERENTIEL
-            field: human_readable
-          value: "Référence explicite vers le Core Constitution Learn-it v1.8."
+            field: description
+          value: >
+            Core canonique final du Référentiel Learn-it v0.6. Naming normalisé,
+            fermeture locale assurée, références inter-Core explicites matérialisées
+            pour fédération avec la Constitution v1.8.
 
         - op: replace_field
           target:
@@ -42,12 +43,13 @@ PATCH_SET:
     - file: docs/cores/current/link.yaml
       expected_core_id: CORE_LINK_LEARNIT_CONSTITUTION_V1_8__REFERENTIEL_V0_6
       operations:
-        - op: replace_field
+        - op: replace_meta_field
           target:
-            section: TYPES
-            id: LINK_REF_CORE_LEARNIT_CONSTITUTION_V1_8
-            field: human_readable
-          value: "Référence explicite vers le Core Constitution Learn-it v1.8."
+            field: description
+          value: >
+            LINK_CORE canonique reliant la Constitution Learn-it v1.8 et le Référentiel
+            Learn-it v0.6. Il explicite les bindings inter-Core nécessaires à la
+            fermeture système, sans logique métier autonome.
 
         - op: replace_field
           target:
@@ -61,9 +63,8 @@ PATCH_SET:
     - file: docs/cores/current/constitution.yaml
       expected_core_id: CORE_LEARNIT_CONSTITUTION_V1_8
       operations:
-        - op: replace_field
+        - op: replace_meta_field
           target:
-            section: CORE
             field: description
           value: >
             Core canonique final de la Constitution Learn-it v1.8. Naming normalisé,
