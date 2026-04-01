@@ -3,7 +3,7 @@ CORE:
   core_type: LINK
   authority: primary
   version: V1_8__V0_6_FINAL
-  description: LINK_CORE canonique reliant la Constitution Learn-it v1.7 et le Référentiel Learn-it v0.6. Il explicite les bindings inter-Core nécessaires à la fermeture système, sans logique métier autonome.
+  description: LINK_CORE canonique reliant la Constitution Learn-it v1.8 et le Référentiel Learn-it v0.6. Il explicite les bindings inter-Core nécessaires à la fermeture système, sans logique métier autonome.
   TYPES:
   - id: LINK_REF_CORE_LEARNIT_CONSTITUTION_V1_8
     authority: reference
@@ -13,7 +13,7 @@ CORE:
     relations: []
     patchable: false
     parameterizable: false
-    human_readable: Référence explicite vers le Core Constitution Learn-it v1.7.
+    human_readable: Référence explicite vers le Core Constitution Learn-it v1.8.
     logic:
       trigger: null
       condition: null

@@ -3,7 +3,7 @@ CORE:
   core_type: CONSTITUTION
   authority: primary
   version: V1_8_FINAL
-  description: Core canonique final de la Constitution Learn-it v1.7. Naming normalisé, fermeture locale assurée, références inter-Core explicites matérialisées pour fédération avec le Référentiel.
+  description: Core canonique final de la Constitution Learn-it v1.8. Naming normalisé, fermeture locale assurée, références inter-Core explicites matérialisées pour fédération avec le Référentiel.
   TYPES:
   - id: REF_CORE_LEARNIT_REFERENTIEL_V0_6_IN_CONSTITUTION
     authority: reference
