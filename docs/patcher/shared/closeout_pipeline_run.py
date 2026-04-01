@@ -3,7 +3,7 @@ import shutil
 import sys
 from datetime import datetime, timezone
 from pathlib import Path
-from typing import Any, Dict, List
+from typing import Any, Dict, List, Tuple
 
 import yaml
 
@@ -12,21 +12,10 @@ PROMOTION_REPORT_ROOT = "PROMOTION_REPORT"
 CURRENT_MANIFEST_ROOT = "CURRENT_CORESET"
 DEFAULT_CLOSEOUT_REPORT_PATH = "docs/pipelines/constitution/reports/closeout_report.yaml"
 DEFAULT_FINAL_SUMMARY_PATH = "docs/pipelines/constitution/outputs/final_run_summary.md"
-DEFAULT_SANDBOX_PATH = "docs/pipelines/constitution/work/05_apply/sandbox"
-CANONICAL_ARTIFACTS = [
-    "docs/pipelines/constitution/work/01_challenge/",
-    "docs/pipelines/constitution/work/02_arbitrage/arbitrage.md",
-    "docs/pipelines/constitution/work/03_patch/patchset.yaml",
-    "docs/pipelines/constitution/work/04_patch_validation/patch_validation.yaml",
-    "docs/pipelines/constitution/reports/patch_execution_report.yaml",
-    "docs/pipelines/constitution/work/06_core_validation/core_validation.yaml",
-    "docs/pipelines/constitution/work/07_release/release_plan.yaml",
-    "docs/pipelines/constitution/reports/release_materialization_report.yaml",
-    "docs/pipelines/constitution/reports/promotion_report.yaml",
-]
-EPHEMERAL_ARTIFACTS = [
-    DEFAULT_SANDBOX_PATH,
-]
+DEFAULT_ARCHIVE_ROOT = "docs/pipelines/constitution/archive"
+DEFAULT_WORK_ROOT = "docs/pipelines/constitution/work"
+DEFAULT_REPORTS_ROOT = "docs/pipelines/constitution/reports"
+DEFAULT_OUTPUTS_ROOT = "docs/pipelines/constitution/outputs"
 
 
 class CloseoutError(Exception):
@@ -67,25 +56,6 @@ def utc_now_iso() -> str:
     return datetime.now(timezone.utc).replace(microsecond=0).isoformat().replace("+00:00", "Z")
 
 
-def parse_bool(value: str) -> bool:
-    lowered = value.strip().lower()
-    if lowered in {"true", "1", "yes", "y"}:
-        return True
-    if lowered in {"false", "0", "no", "n"}:
-        return False
-    raise CloseoutError(f"booléen invalide: {value}")
-
-
-def ensure_safe_cleanup_path(path: Path) -> Path:
-    normalized = Path(repo_path(path))
-    expected = Path(DEFAULT_SANDBOX_PATH)
-    if normalized != expected:
-        raise CloseoutError(
-            f"sandbox_path non autorisé pour cleanup: {repo_path(path)} ; attendu: {repo_path(expected)}"
-        )
-    return normalized
-
-
 def validate_promotion_and_current(
     promotion_report: Dict[str, Any], current_manifest: Dict[str, Any]
 ) -> Dict[str, Any]:
@@ -114,13 +84,9 @@ def validate_promotion_and_current(
     if current_promotion_mode not in {"applied", "already_current"}:
         raise CloseoutError("current manifest promotion_mode invalide")
     if current_release_id != promotion_release_id:
-        raise CloseoutError(
-            "release_id incohérent entre promotion_report et current manifest"
-        )
+        raise CloseoutError("release_id incohérent entre promotion_report et current manifest")
     if current_source_release_path != promotion_source_release_path:
-        raise CloseoutError(
-            "source_release_path incohérent entre promotion_report et current manifest"
-        )
+        raise CloseoutError("source_release_path incohérent entre promotion_report et current manifest")
     if not isinstance(current_cores, list) or not current_cores:
         raise CloseoutError("cores absent ou invalide dans current manifest")
 
@@ -132,33 +98,53 @@ def validate_promotion_and_current(
     }
 
 
-def cleanup_sandbox(cleanup_enabled: bool, sandbox_path: Path) -> Dict[str, Any]:
-    sandbox_path = ensure_safe_cleanup_path(sandbox_path)
-    sandbox_repo_path = repo_path(sandbox_path)
+def copy_tree_if_exists(source: Path, destination: Path) -> List[str]:
+    if not source.exists():
+        return []
 
-    if not cleanup_enabled:
-        return {
-            "cleanup_enabled": False,
-            "cleanup_performed": False,
-            "cleaned_paths": [],
-            "notes": ["aucun nettoyage technique demandé"],
-        }
+    if source.is_dir():
+        shutil.copytree(source, destination)
+        archived_paths: List[str] = []
+        for path in sorted(destination.rglob("*")):
+            archived_paths.append(repo_path(path))
+        if not archived_paths:
+            archived_paths.append(repo_path(destination))
+        return archived_paths
 
-    if sandbox_path.exists():
-        shutil.rmtree(sandbox_path)
-        return {
-            "cleanup_enabled": True,
-            "cleanup_performed": True,
-            "cleaned_paths": [sandbox_repo_path],
-            "notes": ["sandbox technique supprimée"],
-        }
+    destination.parent.mkdir(parents=True, exist_ok=True)
+    shutil.copy2(source, destination)
+    return [repo_path(destination)]
 
-    return {
-        "cleanup_enabled": True,
-        "cleanup_performed": False,
-        "cleaned_paths": [],
-        "notes": ["sandbox technique absente ; rien à supprimer"],
-    }
+
+def archive_run_state(
+    release_id: str,
+    archive_root: Path,
+    work_root: Path,
+    reports_root: Path,
+    outputs_root: Path,
+) -> Tuple[str, List[str]]:
+    archive_path = archive_root / release_id
+    if archive_path.exists():
+        raise CloseoutError(f"archive déjà existante pour ce release_id: {repo_path(archive_path)}")
+
+    archive_path.mkdir(parents=True, exist_ok=False)
+
+    archived_paths: List[str] = []
+    archived_paths.extend(copy_tree_if_exists(work_root, archive_path / "work"))
+    archived_paths.extend(copy_tree_if_exists(reports_root, archive_path / "reports"))
+    archived_paths.extend(copy_tree_if_exists(outputs_root, archive_path / "outputs"))
+
+    if not archived_paths:
+        archived_paths.append(repo_path(archive_path))
+
+    return repo_path(archive_path), archived_paths
+
+
+def reset_work_root(work_root: Path) -> bool:
+    if work_root.exists():
+        shutil.rmtree(work_root)
+    work_root.mkdir(parents=True, exist_ok=True)
+    return True
 
 
 def build_closeout_report(
@@ -166,7 +152,9 @@ def build_closeout_report(
     source_release_path: str,
     promotion_mode: str,
     current_cores: List[Dict[str, Any]],
-    cleanup_result: Dict[str, Any],
+    archive_path: str,
+    archived_paths: List[str],
+    work_reset: bool,
     closeout_status: str,
     notes: List[str],
 ) -> Dict[str, Any]:
@@ -179,13 +167,11 @@ def build_closeout_report(
             "release_id": release_id,
             "source_release_path": source_release_path,
             "promotion_mode": promotion_mode,
+            "archive_path": archive_path,
+            "archived_paths": archived_paths,
+            "work_reset": work_reset,
             "active_cores": current_cores,
-            "canonical_artifacts_retained": CANONICAL_ARTIFACTS,
-            "ephemeral_artifacts": EPHEMERAL_ARTIFACTS,
-            "cleanup_enabled": cleanup_result["cleanup_enabled"],
-            "cleanup_performed": cleanup_result["cleanup_performed"],
-            "cleaned_paths": cleanup_result["cleaned_paths"],
-            "notes": notes + cleanup_result["notes"],
+            "notes": notes,
         }
     }
 
@@ -195,7 +181,8 @@ def build_final_summary(
     source_release_path: str,
     promotion_mode: str,
     current_cores: List[Dict[str, Any]],
-    cleanup_result: Dict[str, Any],
+    archive_path: str,
+    work_reset: bool,
 ) -> str:
     lines = [
         "# Final run summary — constitution",
@@ -207,6 +194,8 @@ def build_final_summary(
         f"- Release active: `{release_id}`",
         f"- Source release path: `{source_release_path}`",
         f"- Promotion mode: `{promotion_mode}`",
+        f"- Archive path: `{archive_path}`",
+        f"- Work reset: `{work_reset}`",
         f"- Closed at: `{utc_now_iso()}`",
         "",
         "## Active cores",
@@ -222,39 +211,18 @@ def build_final_summary(
     lines.extend(
         [
             "",
-            "## Canonical retained artifacts",
+            "## Archived run snapshot",
             "",
+            "- Archived directories copied under the release archive:",
+            "  - `work/`",
+            "  - `reports/`",
+            "  - `outputs/`",
+            "",
+            "## Workspace reset",
+            "",
+            "- `docs/pipelines/constitution/work/` has been recreated empty and is ready for a new run.",
         ]
     )
-    for artifact in CANONICAL_ARTIFACTS:
-        lines.append(f"- `{artifact}`")
-
-    lines.extend(
-        [
-            "",
-            "## Ephemeral technical artifacts",
-            "",
-        ]
-    )
-    for artifact in EPHEMERAL_ARTIFACTS:
-        lines.append(f"- `{artifact}`")
-
-    lines.extend(
-        [
-            "",
-            "## Technical cleanup",
-            "",
-            f"- Cleanup requested: `{cleanup_result['cleanup_enabled']}`",
-            f"- Cleanup performed: `{cleanup_result['cleanup_performed']}`",
-        ]
-    )
-
-    if cleanup_result["cleaned_paths"]:
-        lines.append("- Cleaned paths:")
-        for path in cleanup_result["cleaned_paths"]:
-            lines.append(f"  - `{path}`")
-    else:
-        lines.append("- Cleaned paths: none")
 
     return "\n".join(lines) + "\n"
 
@@ -262,7 +230,7 @@ def build_final_summary(
 def main() -> None:
     if len(sys.argv) < 3:
         raise SystemExit(
-            "Usage: closeout_pipeline_run.py <promotion_report.yaml> <current_manifest.yaml> [closeout_report.yaml] [final_run_summary.md] [cleanup_sandbox=false] [sandbox_path]"
+            "Usage: closeout_pipeline_run.py <promotion_report.yaml> <current_manifest.yaml> [closeout_report.yaml] [final_run_summary.md] [archive_root]"
         )
 
     promotion_report_path = Path(sys.argv[1])
@@ -273,12 +241,16 @@ def main() -> None:
     final_summary_path = (
         Path(sys.argv[4]) if len(sys.argv) >= 5 else Path(DEFAULT_FINAL_SUMMARY_PATH)
     )
-    cleanup_enabled = parse_bool(sys.argv[5]) if len(sys.argv) >= 6 else False
-    sandbox_path = Path(sys.argv[6]) if len(sys.argv) >= 7 else Path(DEFAULT_SANDBOX_PATH)
+    archive_root = Path(sys.argv[5]) if len(sys.argv) >= 6 else Path(DEFAULT_ARCHIVE_ROOT)
+
+    work_root = Path(DEFAULT_WORK_ROOT)
+    reports_root = Path(DEFAULT_REPORTS_ROOT)
+    outputs_root = Path(DEFAULT_OUTPUTS_ROOT)
 
     release_id = "unknown"
     source_release_path = "unknown"
     promotion_mode = "unknown"
+    archive_path = "unknown"
 
     try:
         promotion_report = read_rooted_yaml(promotion_report_path, PROMOTION_REPORT_ROOT)
@@ -290,39 +262,76 @@ def main() -> None:
         promotion_mode = checked["promotion_mode"]
         current_cores = checked["current_cores"]
 
-        cleanup_result = cleanup_sandbox(cleanup_enabled, sandbox_path)
-        notes = [
+        archive_root.mkdir(parents=True, exist_ok=True)
+
+        preliminary_notes = [
             "run clôturé après promotion active vérifiée",
-            "aucune modification des artefacts métiers de release ou de current pendant le closeout",
+            "archive complète du run effectuée sous docs/pipelines/constitution/archive/<release_id>/",
+            "workspace docs/pipelines/constitution/work/ réinitialisé pour une nouvelle exécution",
         ]
 
+        preliminary_report = build_closeout_report(
+            release_id=release_id,
+            source_release_path=source_release_path,
+            promotion_mode=promotion_mode,
+            current_cores=current_cores,
+            archive_path="pending",
+            archived_paths=[],
+            work_reset=False,
+            closeout_status="PASS",
+            notes=preliminary_notes,
+        )
+        preliminary_summary = build_final_summary(
+            release_id=release_id,
+            source_release_path=source_release_path,
+            promotion_mode=promotion_mode,
+            current_cores=current_cores,
+            archive_path="pending",
+            work_reset=False,
+        )
+
+        dump_yaml(closeout_report_path, preliminary_report)
+        write_text(final_summary_path, preliminary_summary)
+
+        archive_path, archived_paths = archive_run_state(
+            release_id=release_id,
+            archive_root=archive_root,
+            work_root=work_root,
+            reports_root=reports_root,
+            outputs_root=outputs_root,
+        )
+
+        work_reset = reset_work_root(work_root)
+
+        final_notes = [
+            "run clôturé après promotion active vérifiée",
+            f"run archivé sous {archive_path}",
+            "workspace docs/pipelines/constitution/work/ réinitialisé pour une nouvelle exécution",
+        ]
         closeout_report = build_closeout_report(
             release_id=release_id,
             source_release_path=source_release_path,
             promotion_mode=promotion_mode,
             current_cores=current_cores,
-            cleanup_result=cleanup_result,
+            archive_path=archive_path,
+            archived_paths=archived_paths,
+            work_reset=work_reset,
             closeout_status="PASS",
-            notes=notes,
+            notes=final_notes,
         )
         final_summary = build_final_summary(
             release_id=release_id,
             source_release_path=source_release_path,
             promotion_mode=promotion_mode,
             current_cores=current_cores,
-            cleanup_result=cleanup_result,
+            archive_path=archive_path,
+            work_reset=work_reset,
         )
 
         dump_yaml(closeout_report_path, closeout_report)
         write_text(final_summary_path, final_summary)
 
     except Exception as exc:
-        fail_cleanup = {
-            "cleanup_enabled": cleanup_enabled,
-            "cleanup_performed": False,
-            "cleaned_paths": [],
-            "notes": [],
-        }
         dump_yaml(
             closeout_report_path,
             build_closeout_report(
@@ -330,7 +339,9 @@ def main() -> None:
                 source_release_path=source_release_path,
                 promotion_mode=promotion_mode,
                 current_cores=[],
-                cleanup_result=fail_cleanup,
+                archive_path=archive_path,
+                archived_paths=[],
+                work_reset=False,
                 closeout_status="FAIL",
                 notes=[str(exc)],
             ),
