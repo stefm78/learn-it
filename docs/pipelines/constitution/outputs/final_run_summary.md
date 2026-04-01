@@ -7,7 +7,7 @@
 - Release active: `CORE_RELEASE_2026_04_01_R01`
 - Source release path: `docs/cores/releases/CORE_RELEASE_2026_04_01_R01/`
 - Promotion mode: `applied`
-- Closed at: `2026-04-01T11:01:35Z`
+- Closed at: `2026-04-01T11:03:27Z`
 
 ## Active cores
 
@@ -33,6 +33,7 @@
 
 ## Technical cleanup
 
-- Cleanup requested: `False`
-- Cleanup performed: `False`
-- Cleaned paths: none
+- Cleanup requested: `True`
+- Cleanup performed: `True`
+- Cleaned paths:
+  - `docs/pipelines/constitution/work/05_apply/sandbox`

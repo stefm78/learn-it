@@ -1,7 +1,7 @@
 CLOSEOUT_REPORT:
   status: PASS
   pipeline_id: constitution
-  closed_at: '2026-04-01T11:01:35Z'
+  closed_at: '2026-04-01T11:03:27Z'
   run_closed: true
   release_id: CORE_RELEASE_2026_04_01_R01
   source_release_path: docs/cores/releases/CORE_RELEASE_2026_04_01_R01/
@@ -31,11 +31,12 @@ CLOSEOUT_REPORT:
   - docs/pipelines/constitution/reports/promotion_report.yaml
   ephemeral_artifacts:
   - docs/pipelines/constitution/work/05_apply/sandbox
-  cleanup_enabled: false
-  cleanup_performed: false
-  cleaned_paths: []
+  cleanup_enabled: true
+  cleanup_performed: true
+  cleaned_paths:
+  - docs/pipelines/constitution/work/05_apply/sandbox
   notes:
   - run clôturé après promotion active vérifiée
   - aucune modification des artefacts métiers de release ou de current pendant le
     closeout
-  - aucun nettoyage technique demandé
+  - sandbox technique supprimée
