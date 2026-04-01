@@ -1,6 +1,6 @@
 PATCH_SET:
   id: PATCHSET_CONSTITUTION_V1_8_ARBITRAGE_2026_04_01
-  patch_dsl_version: "1.0"
+  patch_dsl_version: "4.0"
   atomic: true
   description: >
     Patch de synthèse issu de l'arbitrage consolidé du 2026-04-01 (7 challenge reports,
@@ -8,10 +8,10 @@ PATCH_SET:
     l'ordre de l'arbitrage. Patch minimal, sans modification de logique pédagogique
     fondamentale non décidée.
   federation:
-    LINK_REF_CONSTITUTION:
+    LINK_REF_CORE_LEARNIT_CONSTITUTION_V1_8:
       file: docs/cores/current/constitution.yaml
       expected_core_id: CORE_LEARNIT_CONSTITUTION_V1_8
-    LINK_REF_REFERENTIEL:
+    LINK_REF_CORE_LEARNIT_REFERENTIEL_V0_6:
       file: docs/cores/current/referentiel.yaml
       expected_core_id: CORE_LEARNIT_REFERENTIEL_V0_6
 
@@ -822,22 +822,28 @@ PATCH_SET:
             relations:
               - type: binds
                 target:
-                  id: LINK_REF_CORE_LEARNIT_CONSTITUTION_V1_8::TYPE_SELF_REPORT_AR_N3
+                  core_ref: LINK_REF_CORE_LEARNIT_CONSTITUTION_V1_8
+                  id: TYPE_SELF_REPORT_AR_N3
               - type: binds
                 target:
-                  id: LINK_REF_CORE_LEARNIT_CONSTITUTION_V1_8::TYPE_STATE_AXIS_CALIBRATION
+                  core_ref: LINK_REF_CORE_LEARNIT_CONSTITUTION_V1_8
+                  id: TYPE_STATE_AXIS_CALIBRATION
               - type: binds
                 target:
-                  id: LINK_REF_CORE_LEARNIT_REFERENTIEL_V0_6::TYPE_REFERENTIEL_SIGNAL_CONFIDENCE_HIERARCHY
+                  core_ref: LINK_REF_CORE_LEARNIT_REFERENTIEL_V0_6
+                  id: TYPE_REFERENTIEL_SIGNAL_CONFIDENCE_HIERARCHY
               - type: binds
                 target:
-                  id: LINK_REF_CORE_LEARNIT_REFERENTIEL_V0_6::RULE_REFERENTIEL_SIGNAL_PRECEDENCE_ORDER
+                  core_ref: LINK_REF_CORE_LEARNIT_REFERENTIEL_V0_6
+                  id: RULE_REFERENTIEL_SIGNAL_PRECEDENCE_ORDER
               - type: binds
                 target:
-                  id: LINK_REF_CORE_LEARNIT_REFERENTIEL_V0_6::RULE_REFERENTIEL_LOW_AR_CALIBRATION_TEMPORARILY_REWEIGHTS_SIGNALS
+                  core_ref: LINK_REF_CORE_LEARNIT_REFERENTIEL_V0_6
+                  id: RULE_REFERENTIEL_LOW_AR_CALIBRATION_TEMPORARILY_REWEIGHTS_SIGNALS
               - type: binds
                 target:
-                  id: LINK_REF_CORE_LEARNIT_REFERENTIEL_V0_6::PARAM_REFERENTIEL_LOW_AR_CALIBRATION_CONSECUTIVE_BILANS
+                  core_ref: LINK_REF_CORE_LEARNIT_REFERENTIEL_V0_6
+                  id: PARAM_REFERENTIEL_LOW_AR_CALIBRATION_CONSECUTIVE_BILANS
             patchable: false
             parameterizable: false
             human_readable: >
