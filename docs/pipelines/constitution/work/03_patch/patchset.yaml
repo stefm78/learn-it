@@ -1,0 +1,861 @@
+PATCH_SET:
+  id: PATCHSET_CONSTITUTION_V1_8_ARBITRAGE_2026_04_01
+  patch_dsl_version: "1.0"
+  atomic: true
+  description: >
+    Patch de synthèse issu de l'arbitrage consolidé du 2026-04-01 (7 challenge reports,
+    8 runs Perplexity + 1 run ChatGPT). 13 points retenus, priorité 1 à 13 selon
+    l'ordre de l'arbitrage. Patch minimal, sans modification de logique pédagogique
+    fondamentale non décidée.
+  federation:
+    LINK_REF_CONSTITUTION:
+      file: docs/cores/current/constitution.yaml
+      expected_core_id: CORE_LEARNIT_CONSTITUTION_V1_8
+    LINK_REF_REFERENTIEL:
+      file: docs/cores/current/referentiel.yaml
+      expected_core_id: CORE_LEARNIT_REFERENTIEL_V0_6
+
+  files:
+
+    # ──────────────────────────────────────────────────────────────────────────
+    # PRIORITY 1 — VER-01 : Désynchronisation labels human_readable v1.7 → v1.8
+    # ──────────────────────────────────────────────────────────────────────────
+    - file: docs/cores/current/referentiel.yaml
+      expected_core_id: CORE_LEARNIT_REFERENTIEL_V0_6
+      operations:
+        - op: replace_field
+          target:
+            section: TYPES
+            id: REF_CORE_LEARNIT_CONSTITUTION_V1_8_IN_REFERENTIEL
+            field: human_readable
+          value: "Référence explicite vers le Core Constitution Learn-it v1.8."
+
+        - op: replace_field
+          target:
+            section: CORE
+            field: description
+          value: >
+            Core canonique final du Référentiel Learn-it v0.6. Naming normalisé,
+            fermeture locale assurée, références inter-Core explicites matérialisées
+            pour fédération avec la Constitution v1.8.
+
+    - file: docs/cores/current/link.yaml
+      expected_core_id: CORE_LINK_LEARNIT_CONSTITUTION_V1_8__REFERENTIEL_V0_6
+      operations:
+        - op: replace_field
+          target:
+            section: TYPES
+            id: LINK_REF_CORE_LEARNIT_CONSTITUTION_V1_8
+            field: human_readable
+          value: "Référence explicite vers le Core Constitution Learn-it v1.8."
+
+        - op: replace_field
+          target:
+            section: CORE
+            field: description
+          value: >
+            LINK_CORE canonique reliant la Constitution Learn-it v1.8 et le Référentiel
+            Learn-it v0.6. Il explicite les bindings inter-Core nécessaires à la
+            fermeture système, sans logique métier autonome.
+
+    - file: docs/cores/current/constitution.yaml
+      expected_core_id: CORE_LEARNIT_CONSTITUTION_V1_8
+      operations:
+        - op: replace_field
+          target:
+            section: CORE
+            field: description
+          value: >
+            Core canonique final de la Constitution Learn-it v1.8. Naming normalisé,
+            fermeture locale assurée, références inter-Core explicites matérialisées
+            pour fédération avec le Référentiel.
+
+        # ──────────────────────────────────────────────────────────────────────
+        # PRIORITY 2 — LINK-01 : Comportement moteur si LINK absent ou corrompu
+        # ──────────────────────────────────────────────────────────────────────
+        - op: append
+          target:
+            section: INVARIANTS
+          value:
+            id: INV_LINK_REQUIRED_FOR_INTER_CORE_OPERATION
+            authority: primary
+            core_type: CONSTITUTION
+            source_anchor: "[ARBITRAGE_2026_04_01][LINK-01]"
+            depends_on:
+              - REF_CORE_LEARNIT_REFERENTIEL_V0_6_IN_CONSTITUTION
+            relations:
+              - type: triggers
+                target:
+                  id: EVENT_LINK_MISSING_OR_CORRUPTED
+            patchable: false
+            parameterizable: false
+            human_readable: >
+              Le chargement du LINK est obligatoire pour toute opération inter-Core.
+              En l'absence ou en cas de corruption du LINK, le système entre en état
+              bloquant et aucune résolution inter-Core n'est autorisée.
+            logic:
+              trigger: Initialisation du système ou chargement du LINK
+              condition: LINK absent, non chargé ou structure corrompue.
+              effect: >
+                État bloquant déclenché ; aucune résolution inter-Core n'est autorisée
+                tant que le LINK n'est pas disponible et valide.
+              scope: runtime_architecture
+
+        - op: append
+          target:
+            section: EVENTS
+          value:
+            id: EVENT_LINK_MISSING_OR_CORRUPTED
+            authority: primary
+            core_type: CONSTITUTION
+            source_anchor: "[ARBITRAGE_2026_04_01][LINK-01]"
+            depends_on:
+              - INV_LINK_REQUIRED_FOR_INTER_CORE_OPERATION
+            relations: []
+            patchable: false
+            parameterizable: false
+            human_readable: "LINK absent ou corrompu au chargement."
+            logic:
+              trigger: Initialisation ou rechargement du LINK
+              condition: LINK non disponible ou structure invalide.
+              effect: >
+                Blocage immédiat du système pour toute opération inter-Core ;
+                journalisation obligatoire ; aucune inférence de substitution autorisée.
+              scope: runtime_architecture
+
+        # ──────────────────────────────────────────────────────────────────────
+        # PRIORITY 3 — SIG-01 : Conflit autorité AR-N1 vs reweighting AR-N3
+        # Exception constitutionnelle bornée ajoutée à RULE_AR_N1_OVERRIDES_PROXY
+        # ──────────────────────────────────────────────────────────────────────
+        - op: replace_field
+          target:
+            section: RULES
+            id: RULE_AR_N1_OVERRIDES_PROXY
+            field: human_readable
+          value: >
+            AR-N1 prime sur les proxys. Exception : si AR-N3 confirme une calibration
+            AR faible sur N bilans consécutifs (N paramétré dans le Référentiel),
+            le reweighting temporaire du Référentiel s'applique pour la durée d'un
+            cycle AR-N3.
+
+        - op: replace_field
+          target:
+            section: RULES
+            id: RULE_AR_N1_OVERRIDES_PROXY
+            field: logic
+          value:
+            trigger: Discordance AR-N1 / proxy ou résultat AR-N3 de calibration faible
+            condition: >
+              AR-N1 disponible et contradictoire au proxy, OU AR-N3 confirme calibration
+              AR basse sur N bilans consécutifs (N = PARAM_REFERENTIEL_LOW_AR_CALIBRATION_CONSECUTIVE_BILANS).
+            effect: >
+              Par défaut, AR-N1 prévaut et la discordance est journalisée.
+              Exception bornée : si AR-N3 confirme calibration basse sur N bilans
+              consécutifs, le reweighting temporaire défini dans
+              RULE_REFERENTIEL_LOW_AR_CALIBRATION_TEMPORARILY_REWEIGHTS_SIGNALS
+              s'applique pour un cycle AR-N3. La primauté formelle d'AR-N1 est rétablie
+              automatiquement à l'issue du cycle.
+            scope: runtime_state
+
+        # ──────────────────────────────────────────────────────────────────────
+        # PRIORITY 4 — MOT-01 : Boucle conservatrice silencieuse sans AR-N1
+        # ──────────────────────────────────────────────────────────────────────
+        - op: replace_field
+          target:
+            section: INVARIANTS
+            id: INV_CONSERVATIVE_RULE_WITHOUT_AR_N1
+            field: human_readable
+          value: >
+            En absence d'AR-N1 et si moins de 2 proxys franchissent leur seuil,
+            la réponse est conservatrice (scaffolding léger réversible). Si ce mode
+            persiste au-delà de la fenêtre paramétrée sans résolution, une escalade
+            est déclenchée.
+
+        - op: replace_field
+          target:
+            section: INVARIANTS
+            id: INV_CONSERVATIVE_RULE_WITHOUT_AR_N1
+            field: logic
+          value:
+            trigger: Signal runtime sans AR-N1 et proxys insuffisants
+            condition: AR-N1 absent ET moins de 2 proxys franchissant leur seuil.
+            effect: >
+              Scaffolding léger réversible sans dégradation punitive.
+              Si le mode conservateur persiste au-delà de
+              PARAM_REFERENTIEL_CONSERVATIVE_SCAFFOLDING_ESCALATION_SESSIONS
+              sans résolution, EVENT_CONSERVATIVE_SCAFFOLDING_ESCALATION est déclenché.
+            scope: runtime_state
+
+        - op: append
+          target:
+            section: EVENTS
+          value:
+            id: EVENT_CONSERVATIVE_SCAFFOLDING_ESCALATION
+            authority: primary
+            core_type: CONSTITUTION
+            source_anchor: "[ARBITRAGE_2026_04_01][MOT-01]"
+            depends_on:
+              - INV_CONSERVATIVE_RULE_WITHOUT_AR_N1
+            relations: []
+            patchable: false
+            parameterizable: true
+            human_readable: >
+              Escalade déclenchée si le mode conservateur (absence AR-N1, proxys
+              insuffisants) persiste au-delà de la fenêtre paramétrée sans résolution.
+            logic:
+              trigger: Dépassement de PARAM_REFERENTIEL_CONSERVATIVE_SCAFFOLDING_ESCALATION_SESSIONS
+              condition: Mode conservateur actif sans sortie sur la fenêtre définie.
+              effect: >
+                Escalade hors session déclenchée (notification ou trigger investigation
+                systémique) ; le mode conservateur reste actif en attendant résolution.
+              scope: runtime_state
+
+        # ──────────────────────────────────────────────────────────────────────
+        # PRIORITY 5 — PROV-01 : Maîtrise provisoire expiration sans comportement défini
+        # ──────────────────────────────────────────────────────────────────────
+        - op: append
+          target:
+            section: EVENTS
+          value:
+            id: EVENT_PROVISIONAL_MASTERY_VERIFICATION_EXPIRED
+            authority: primary
+            core_type: CONSTITUTION
+            source_anchor: "[ARBITRAGE_2026_04_01][PROV-01]"
+            depends_on:
+              - PARAM_PROVISIONAL_MASTERY_VERIFICATION_WINDOW
+            relations:
+              - type: triggers
+                target:
+                  id: RULE_PROVISIONAL_MASTERY_EXPIRY_BEHAVIOR
+            patchable: false
+            parameterizable: true
+            human_readable: >
+              La fenêtre de vérification d'une maîtrise provisoire a expiré sans
+              que la vérification ait eu lieu.
+            logic:
+              trigger: Dépassement de PARAM_PROVISIONAL_MASTERY_VERIFICATION_WINDOW
+              condition: Maîtrise provisoire active et vérification non réalisée dans la fenêtre.
+              effect: >
+                L'état de maîtrise est marqué to_verify (non révoqué automatiquement).
+                Une reprise diagnostique est obligatoirement déclenchée à la session suivante.
+              scope: runtime_evaluation
+
+        - op: append
+          target:
+            section: RULES
+          value:
+            id: RULE_PROVISIONAL_MASTERY_EXPIRY_BEHAVIOR
+            authority: primary
+            core_type: CONSTITUTION
+            source_anchor: "[ARBITRAGE_2026_04_01][PROV-01]"
+            depends_on:
+              - EVENT_PROVISIONAL_MASTERY_VERIFICATION_EXPIRED
+              - PARAM_PROVISIONAL_MASTERY_VERIFICATION_WINDOW
+            relations:
+              - type: triggers
+                target:
+                  id: ACTION_PLAN_SHORT_DIAGNOSTIC_TASK
+            patchable: false
+            parameterizable: true
+            human_readable: >
+              À l'expiration de la fenêtre de vérification d'une maîtrise provisoire,
+              l'état est marqué to_verify (non révoqué) et une reprise diagnostique
+              est déclenchée obligatoirement à la session suivante.
+            logic:
+              trigger: EVENT_PROVISIONAL_MASTERY_VERIFICATION_EXPIRED
+              condition: Maîtrise provisoire non confirmée dans la fenêtre autorisée.
+              effect: >
+                Marquage to_verify de l'état de maîtrise concerné ; aucune révocation
+                automatique ; déclenchement obligatoire d'une tâche diagnostique courte
+                à la session suivante.
+              scope: runtime_evaluation
+
+        # ──────────────────────────────────────────────────────────────────────
+        # PRIORITY 6 — VC-01 : VC unknown indistinguable de VC basse persistante
+        # ──────────────────────────────────────────────────────────────────────
+        - op: replace_field
+          target:
+            section: EVENTS
+            id: EVENT_PERSISTENT_LOW_VC
+            field: human_readable
+          value: >
+            VC basse persistante observée et confirmée. Cet événement ne peut être
+            déclenché que si VC est une valeur mesurée et confirmée basse. Un état
+            VC unknown ne peut pas déclencher cet événement.
+
+        - op: replace_field
+          target:
+            section: EVENTS
+            id: EVENT_PERSISTENT_LOW_VC
+            field: logic
+          value:
+            trigger: Accumulation de sessions VC basse mesurée et confirmée
+            condition: >
+              Seuil référentiel atteint ET VC n'est pas dans l'état unknown.
+              Si VC est unknown, cet événement ne peut pas être déclenché.
+            effect: Déclencheur de patch relevance.
+            scope: patch_governance
+
+        - op: append
+          target:
+            section: INVARIANTS
+          value:
+            id: INV_VC_UNKNOWN_DOES_NOT_TRIGGER_PERSISTENT_LOW_VC
+            authority: primary
+            core_type: CONSTITUTION
+            source_anchor: "[ARBITRAGE_2026_04_01][VC-01]"
+            depends_on:
+              - TYPE_STATE_AXIS_VALUE_COST
+            relations:
+              - type: constrains
+                target:
+                  id: EVENT_PERSISTENT_LOW_VC
+            patchable: false
+            parameterizable: false
+            human_readable: >
+              Un état VC unknown ne peut pas déclencher EVENT_PERSISTENT_LOW_VC.
+              Seule une VC basse mesurée et confirmée est éligible au déclenchement
+              de l'événement de persistance.
+            logic:
+              trigger: Évaluation de déclenchement de EVENT_PERSISTENT_LOW_VC
+              condition: VC est dans l'état unknown (absence de donnée, non mesurée).
+              effect: >
+                EVENT_PERSISTENT_LOW_VC n'est pas déclenché. L'état unknown est
+                distinct de l'état low observé confirmé.
+              scope: runtime_state
+
+        # ──────────────────────────────────────────────────────────────────────
+        # PRIORITY 7 — GOV-02 : Désactivation axe VC sans autorisation constitutionnelle
+        # ──────────────────────────────────────────────────────────────────────
+        - op: append
+          target:
+            section: RULES
+          value:
+            id: RULE_VC_AXIS_DEACTIVATION_AUTHORIZED
+            authority: primary
+            core_type: CONSTITUTION
+            source_anchor: "[ARBITRAGE_2026_04_01][GOV-02]"
+            depends_on:
+              - TYPE_STATE_AXIS_VALUE_COST
+              - REF_CORE_LEARNIT_REFERENTIEL_V0_6_IN_CONSTITUTION
+            relations: []
+            patchable: false
+            parameterizable: true
+            human_readable: >
+              Le Référentiel est autorisé à désactiver l'axe VC si aucune valeur
+              observable n'a été produite sur une fenêtre consécutive définie dans
+              ses paramètres (PARAM_REFERENTIEL_VC_UNOBSERVABLE_WINDOW_BEFORE_AXIS_DEACTIVATION).
+              La désactivation est réversible dès réapparition d'une valeur observable
+              à la session suivante.
+            logic:
+              trigger: Absence répétée de valeur VC observable sur la fenêtre configurée
+              condition: >
+                Aucune valeur VC observable produite sur
+                PARAM_REFERENTIEL_VC_UNOBSERVABLE_WINDOW_BEFORE_AXIS_DEACTIVATION
+                sessions consécutives.
+              effect: >
+                L'axe VC est désactivé par le Référentiel pour l'adaptation concernée.
+                La désactivation est automatiquement levée dès qu'une valeur VC
+                observable est disponible à la session suivante.
+              scope: runtime_state
+
+        # ──────────────────────────────────────────────────────────────────────
+        # PRIORITY 8 — SYST-01 : Investigation systémique sans trigger défini
+        # ──────────────────────────────────────────────────────────────────────
+        - op: append
+          target:
+            section: EVENTS
+          value:
+            id: EVENT_SYSTEMIC_INVESTIGATION_AUTO_OPENED
+            authority: primary
+            core_type: CONSTITUTION
+            source_anchor: "[ARBITRAGE_2026_04_01][SYST-01]"
+            depends_on:
+              - REF_CORE_LEARNIT_REFERENTIEL_V0_6_IN_CONSTITUTION
+            relations:
+              - type: triggers
+                target:
+                  id: RULE_SYSTEMIC_INVESTIGATION_OPENING_PROTOCOL
+            patchable: false
+            parameterizable: true
+            human_readable: >
+              Investigation systémique ouverte automatiquement quand au moins 2
+              signaux en anomalie sont simultanément détectés pendant 3 sessions
+              consécutives (seuils paramétrés dans le Référentiel).
+            logic:
+              trigger: >
+                Au moins 2 signaux parmi : divergence AR-N1/MSC persistante, mode
+                conservateur sans sortie, VC inobservable, maîtrise provisoire expirée
+                non résolue — simultanément actifs pendant N sessions consécutives
+                (N = PARAM_REFERENTIEL_SYSTEMIC_INVESTIGATION_SESSION_THRESHOLD).
+              condition: >
+                Seuils définis dans PARAM_REFERENTIEL_SYSTEMIC_INVESTIGATION_TRIGGER_CONDITIONS
+                atteints.
+              effect: >
+                Ouverture de l'investigation systémique ; déclenchement obligatoire
+                d'un bilan AR-N3 guidé (3 questions ciblées : VC, AR-N1, MSC perçu).
+              scope: runtime_safety
+
+        - op: append
+          target:
+            section: RULES
+          value:
+            id: RULE_SYSTEMIC_INVESTIGATION_OPENING_PROTOCOL
+            authority: primary
+            core_type: CONSTITUTION
+            source_anchor: "[ARBITRAGE_2026_04_01][SYST-01]"
+            depends_on:
+              - EVENT_SYSTEMIC_INVESTIGATION_AUTO_OPENED
+              - REF_CORE_LEARNIT_REFERENTIEL_V0_6_IN_CONSTITUTION
+            relations: []
+            patchable: false
+            parameterizable: true
+            human_readable: >
+              À l'ouverture d'une investigation systémique, un bilan AR-N3 guidé
+              (3 questions ciblées sur VC, AR-N1, MSC perçu) est obligatoirement
+              déclenché. La fermeture de l'investigation requiert que le bilan soit
+              complété ET qu'au moins 2 des 4 signaux anomaliques soient revenus
+              à l'état normal.
+            logic:
+              trigger: EVENT_SYSTEMIC_INVESTIGATION_AUTO_OPENED
+              condition: Investigation systémique ouverte.
+              effect: >
+                Bilan AR-N3 guidé (3 items ciblés) déclenché obligatoirement.
+                Résultats intégrés comme bilan AR-N3 de référence.
+                Condition de fermeture : bilan AR-N3 complété ET au moins 2 des
+                4 signaux anomaliques revenus à l'état normal.
+              scope: runtime_safety
+
+        # ──────────────────────────────────────────────────────────────────────
+        # PRIORITY 9 — LAY-01 : Révocation post-maîtrise sans ancrage constitutionnel
+        # ──────────────────────────────────────────────────────────────────────
+        - op: append
+          target:
+            section: INVARIANTS
+          value:
+            id: INV_POST_MASTERY_REVOCATION_DELEGATED_TO_REFERENTIEL
+            authority: primary
+            core_type: CONSTITUTION
+            source_anchor: "[ARBITRAGE_2026_04_01][LAY-01]"
+            depends_on:
+              - INV_MSC_AND_STRICT
+              - REF_CORE_LEARNIT_REFERENTIEL_V0_6_IN_CONSTITUTION
+            relations: []
+            patchable: false
+            parameterizable: false
+            human_readable: >
+              La révocation post-maîtrise est une extension de INV_MSC_AND_STRICT
+              dont les paramètres opérationnels (fenêtre temporelle, répétitions
+              requises) sont explicitement délégués au Référentiel. La Constitution
+              en autorise le principe ; le Référentiel en borne les conditions.
+            logic:
+              trigger: Baisse MSC après maîtrise de base établie
+              condition: >
+                L'état de maîtrise avait été déclaré via INV_MSC_AND_STRICT.
+                La révocation post-maîtrise est autorisée constitutionnellement
+                sous délégation au Référentiel pour ses paramètres opérationnels.
+              effect: >
+                Le principe est ancré constitutionnellement ; les conditions
+                d'application (fenêtre, répétitions) sont exclusivement définies
+                dans le Référentiel via RULE_REFERENTIEL_CURRENT_RETROGRADATION_VS_POSTMASTERY_REVOCATION.
+              scope: runtime_evaluation
+
+        # ──────────────────────────────────────────────────────────────────────
+        # PRIORITY 10 — IA-01 : Flagging misconception non opérationnalisé
+        # ──────────────────────────────────────────────────────────────────────
+        - op: append
+          target:
+            section: INVARIANTS
+          value:
+            id: INV_MISCONCEPTION_FLAG_IS_EDITORIAL_ONLY
+            authority: primary
+            core_type: CONSTITUTION
+            source_anchor: "[ARBITRAGE_2026_04_01][IA-01]"
+            depends_on:
+              - INV_NO_RUNTIME_CONTENT_GENERATION
+              - TYPE_KNOWLEDGE_UNIT
+            relations:
+              - type: constrains
+                target:
+                  id: RULE_MISCONCEPTION_REQUIRES_COGNITIVE_CONFLICT
+            patchable: false
+            parameterizable: false
+            human_readable: >
+              L'attribut misconception: true est un attribut éditorial posé
+              exclusivement par le concepteur de contenu lors du design de la KU.
+              Aucune inférence runtime de cet attribut n'est autorisée, conformément
+              à INV_NO_RUNTIME_CONTENT_GENERATION.
+            logic:
+              trigger: Construction ou révision d'une KU
+              condition: Marquage misconception envisagé ou évalué.
+              effect: >
+                misconception: true ne peut être posé qu'en phase de design, par
+                le concepteur humain. Toute inférence automatique ou runtime de
+                ce marquage est interdite.
+              scope: design_governance
+
+    # ──────────────────────────────────────────────────────────────────────────
+    # PRIORITY 3 (suite) — SIG-01 : param N bilans consécutifs
+    # PRIORITY 4 (suite) — MOT-01 : param escalade scaffolding conservateur
+    # PRIORITY 7 (suite) — GOV-02 : param fenêtre VC inobservable avant désactivation
+    # PRIORITY 8 (suite) — SYST-01 : params trigger investigation systémique
+    # → tous dans referentiel.yaml
+    # ──────────────────────────────────────────────────────────────────────────
+    - file: docs/cores/current/referentiel.yaml
+      expected_core_id: CORE_LEARNIT_REFERENTIEL_V0_6
+      operations:
+        # SIG-01 param
+        - op: append
+          target:
+            section: PARAMETERS
+          value:
+            id: PARAM_REFERENTIEL_LOW_AR_CALIBRATION_CONSECUTIVE_BILANS
+            authority: primary
+            core_type: REFERENTIEL
+            source_anchor: "[ARBITRAGE_2026_04_01][SIG-01]"
+            depends_on: []
+            relations: []
+            patchable: true
+            parameterizable: true
+            human_readable: >
+              Nombre de bilans AR-N3 consécutifs confirmant une calibration AR basse
+              requis pour activer l'exception de reweighting temporaire d'AR-N1
+              (RULE_AR_N1_OVERRIDES_PROXY exception bornée).
+            logic:
+              trigger: Évaluation de déclenchement du reweighting AR-N1
+              condition: Résultats AR-N3 disponibles sur N bilans consécutifs.
+              effect: Référence 3 bilans consécutifs ; fourchette 2–5.
+              scope: runtime_feedback
+
+        # MOT-01 param
+        - op: append
+          target:
+            section: PARAMETERS
+          value:
+            id: PARAM_REFERENTIEL_CONSERVATIVE_SCAFFOLDING_ESCALATION_SESSIONS
+            authority: primary
+            core_type: REFERENTIEL
+            source_anchor: "[ARBITRAGE_2026_04_01][MOT-01]"
+            depends_on: []
+            relations: []
+            patchable: true
+            parameterizable: true
+            human_readable: >
+              Nombre de sessions consécutives en mode conservateur sans AR-N1 et
+              sans proxys suffisants avant déclenchement de l'escalade
+              (EVENT_CONSERVATIVE_SCAFFOLDING_ESCALATION).
+            logic:
+              trigger: Supervision du mode conservateur actif
+              condition: Mode conservateur sans sortie depuis N sessions.
+              effect: Référence 5 sessions ; fourchette 3–10.
+              scope: runtime_state
+
+        # GOV-02 param
+        - op: append
+          target:
+            section: PARAMETERS
+          value:
+            id: PARAM_REFERENTIEL_VC_UNOBSERVABLE_WINDOW_BEFORE_AXIS_DEACTIVATION
+            authority: primary
+            core_type: REFERENTIEL
+            source_anchor: "[ARBITRAGE_2026_04_01][GOV-02]"
+            depends_on: []
+            relations: []
+            patchable: true
+            parameterizable: true
+            human_readable: >
+              Nombre de sessions consécutives sans valeur VC observable avant
+              désactivation de l'axe VC (autorisée constitutionnellement par
+              RULE_VC_AXIS_DEACTIVATION_AUTHORIZED). La désactivation est réversible
+              dès réapparition d'une valeur observable.
+            logic:
+              trigger: Agrégation VC inobservable
+              condition: Absence de valeur VC observable sur la fenêtre définie.
+              effect: Référence 5 sessions ; fourchette 3–8.
+              scope: runtime_state
+
+        # SYST-01 params
+        - op: append
+          target:
+            section: PARAMETERS
+          value:
+            id: PARAM_REFERENTIEL_SYSTEMIC_INVESTIGATION_TRIGGER_CONDITIONS
+            authority: primary
+            core_type: REFERENTIEL
+            source_anchor: "[ARBITRAGE_2026_04_01][SYST-01]"
+            depends_on: []
+            relations: []
+            patchable: true
+            parameterizable: true
+            human_readable: >
+              Conditions paramétriques de déclenchement de l'investigation systémique.
+              Signaux candidats : (1) divergence AR-N1 vs MSC persistante,
+              (2) mode conservateur actif sans sortie, (3) VC inobservable,
+              (4) maîtrise provisoire expirée non résolue. Seuil : 2 signaux
+              simultanés en anomalie pendant N sessions consécutives.
+            logic:
+              trigger: Supervision multi-signaux
+              condition: Au moins 2 signaux candidats en anomalie simultanée.
+              effect: >
+                Référence : 2 signaux simultanés / 3 sessions consécutives.
+                Fourchette : 2 signaux / 2–5 sessions.
+              scope: runtime_safety
+
+        - op: append
+          target:
+            section: PARAMETERS
+          value:
+            id: PARAM_REFERENTIEL_SYSTEMIC_INVESTIGATION_SESSION_THRESHOLD
+            authority: primary
+            core_type: REFERENTIEL
+            source_anchor: "[ARBITRAGE_2026_04_01][SYST-01]"
+            depends_on:
+              - PARAM_REFERENTIEL_SYSTEMIC_INVESTIGATION_TRIGGER_CONDITIONS
+            relations: []
+            patchable: true
+            parameterizable: true
+            human_readable: >
+              Nombre de sessions consécutives avec au moins 2 signaux en anomalie
+              avant déclenchement de EVENT_SYSTEMIC_INVESTIGATION_AUTO_OPENED.
+            logic:
+              trigger: Comptage de sessions multi-signaux en anomalie
+              condition: Seuil de sessions consécutives atteint.
+              effect: Référence 3 sessions ; fourchette 2–5.
+              scope: runtime_safety
+
+        # ──────────────────────────────────────────────────────────────────────
+        # PRIORITY 11 — AR3-01 : AR-N3 absent de la hiérarchie de précédence
+        # ──────────────────────────────────────────────────────────────────────
+        - op: replace_field
+          target:
+            section: RULES
+            id: RULE_REFERENTIEL_SIGNAL_PRECEDENCE_ORDER
+            field: human_readable
+          value: >
+            Ordre de résolution des signaux AR et proxys :
+            AR-N1 > AR-N2 > AR-N3 (calibration) > proxys > tendances.
+            AR-N3 contribue à la hiérarchie via son effet de reweighting borné
+            sur AR-N1, documenté dans RULE_REFERENTIEL_LOW_AR_CALIBRATION_TEMPORARILY_REWEIGHTS_SIGNALS.
+
+        - op: replace_field
+          target:
+            section: RULES
+            id: RULE_REFERENTIEL_SIGNAL_PRECEDENCE_ORDER
+            field: logic
+          value:
+            trigger: Signaux contradictoires
+            condition: Plusieurs signaux simultanés
+            effect: >
+              Priorité : AR-N1 > AR-N2 > AR-N3 (calibration, effet via reweighting
+              borné) > proxys > tendances.
+              L'effet d'AR-N3 sur AR-N1 est indirect et borné :
+              il passe exclusivement par RULE_REFERENTIEL_LOW_AR_CALIBRATION_TEMPORARILY_REWEIGHTS_SIGNALS
+              et PARAM_REFERENTIEL_LOW_AR_CALIBRATION_CONSECUTIVE_BILANS.
+            scope: runtime_state
+
+        - op: replace_field
+          target:
+            section: TYPES
+            id: TYPE_REFERENTIEL_SIGNAL_CONFIDENCE_HIERARCHY
+            field: human_readable
+          value: >
+            Hiérarchie de confiance des signaux apprentissage.
+            Ordre : AR-N1 > AR-N2 > AR-N3 (calibration, indirect via reweighting)
+            > proxys > tendances.
+
+        # ──────────────────────────────────────────────────────────────────────
+        # PRIORITY 12 — MATRIX-01 : Cellules de frontière de la matrice des régimes
+        # ──────────────────────────────────────────────────────────────────────
+        - op: append
+          target:
+            section: RULES
+          value:
+            id: RULE_REFERENTIEL_ADAPTIVE_REGIME_CONFLICT_RESOLUTION
+            authority: primary
+            core_type: REFERENTIEL
+            source_anchor: "[ARBITRAGE_2026_04_01][MATRIX-01]"
+            depends_on:
+              - TYPE_REFERENTIEL_ADAPTIVE_REGIME_MATRIX
+            relations: []
+            patchable: true
+            parameterizable: true
+            human_readable: >
+              Table de priorité par paire de conflits pour les cellules de frontière
+              de la matrice des régimes adaptatifs. Règle synthétique :
+              (1) Détresse l'emporte toujours.
+              (2) Conservateur l'emporte sur Exploration et Consolidation (sauf MOT-01).
+              (3) Consolidation l'emporte sur Sous-défi sauf si R est déjà atteint.
+              (4) Exploration l'emporte sur Sous-défi.
+              (5) Consolidation vs Exploration → régime oscillatoire piloté par R.
+            logic:
+              trigger: Détection de deux régimes adaptatifs simultanément sur des cellules de frontière
+              condition: Deux régimes ou plus activés simultanément dans la matrice.
+              effect: >
+                Application de la table de priorité :
+                Détresse + tout autre : Détresse prime.
+                Conservateur + Sous-défi : Conservateur (borné par MOT-01).
+                Conservateur + Exploration : Conservateur.
+                Conservateur + Consolidation : Conservateur.
+                Consolidation + Sous-défi : Sous-défi (si R atteint) sinon Consolidation.
+                Consolidation + Exploration : régime oscillatoire (alternance 1 session
+                  consolidation satisfaisante → 1 session exploration → retour consolidation,
+                  sortie quand R atteint).
+                Exploration + Sous-défi : Exploration.
+              scope: runtime_state
+
+        # ──────────────────────────────────────────────────────────────────────
+        # PRIORITY 13 — DIVMSC-01 : Divergence MSC calculé vs état perçu AR-N1
+        # ──────────────────────────────────────────────────────────────────────
+        - op: append
+          target:
+            section: PARAMETERS
+          value:
+            id: PARAM_REFERENTIEL_MSC_PERCEPTION_DIVERGENCE_THRESHOLD
+            authority: primary
+            core_type: REFERENTIEL
+            source_anchor: "[ARBITRAGE_2026_04_01][DIVMSC-01]"
+            depends_on: []
+            relations: []
+            patchable: true
+            parameterizable: true
+            human_readable: >
+              Nombre de sessions de divergence persistante entre MSC calculé (P×R×A
+              validés) et état perçu AR-N1 (blocage total signalé) avant déclenchement
+              de EVENT_MSC_PERCEPTION_DIVERGENCE_DETECTED.
+            logic:
+              trigger: Évaluation de divergence MSC calculé vs perçu
+              condition: Divergence persistante sur N sessions consécutives.
+              effect: Référence 3 sessions ; fourchette 2–5.
+              scope: runtime_evaluation
+
+    - file: docs/cores/current/constitution.yaml
+      expected_core_id: CORE_LEARNIT_CONSTITUTION_V1_8
+      operations:
+        # DIVMSC-01 — EVENT et RULE dans constitution.yaml
+        - op: append
+          target:
+            section: EVENTS
+          value:
+            id: EVENT_MSC_PERCEPTION_DIVERGENCE_DETECTED
+            authority: primary
+            core_type: CONSTITUTION
+            source_anchor: "[ARBITRAGE_2026_04_01][DIVMSC-01]"
+            depends_on:
+              - TYPE_MASTERY_MODEL
+              - TYPE_SELF_REPORT_AR_N1
+              - REF_CORE_LEARNIT_REFERENTIEL_V0_6_IN_CONSTITUTION
+            relations:
+              - type: triggers
+                target:
+                  id: RULE_MSC_PERCEPTION_DIVERGENCE_PROTOCOL
+            patchable: false
+            parameterizable: true
+            human_readable: >
+              Divergence persistante détectée entre MSC calculé (P×R×A validés) et
+              état perçu AR-N1 (blocage total signalé persistant) sur le nombre de
+              sessions défini dans PARAM_REFERENTIEL_MSC_PERCEPTION_DIVERGENCE_THRESHOLD.
+            logic:
+              trigger: >
+                MSC de base atteint (P, R, A validés) ET AR-N1 signale un blocage
+                total persistant sur PARAM_REFERENTIEL_MSC_PERCEPTION_DIVERGENCE_THRESHOLD
+                sessions consécutives.
+              condition: Divergence entre MSC calculé et état perçu sur le seuil défini.
+              effect: >
+                Déclenchement du protocole de résolution :
+                retour en phase diagnostique ciblée en priorité ;
+                si persistance après diagnostique, escalade vers révision du design
+                du contenu.
+              scope: runtime_evaluation
+
+        - op: append
+          target:
+            section: RULES
+          value:
+            id: RULE_MSC_PERCEPTION_DIVERGENCE_PROTOCOL
+            authority: primary
+            core_type: CONSTITUTION
+            source_anchor: "[ARBITRAGE_2026_04_01][DIVMSC-01]"
+            depends_on:
+              - EVENT_MSC_PERCEPTION_DIVERGENCE_DETECTED
+              - REF_CORE_LEARNIT_REFERENTIEL_V0_6_IN_CONSTITUTION
+            relations:
+              - type: triggers
+                target:
+                  id: ACTION_PLAN_SHORT_DIAGNOSTIC_TASK
+            patchable: false
+            parameterizable: true
+            human_readable: >
+              À la détection d'une divergence MSC calculé vs perçu, le moteur déclenche
+              obligatoirement une phase diagnostique ciblée (révision de la notion
+              supposément maîtrisée). Si la divergence persiste après la phase
+              diagnostique, une escalade vers révision du design du contenu est
+              déclenchée (notification externe).
+            logic:
+              trigger: EVENT_MSC_PERCEPTION_DIVERGENCE_DETECTED
+              condition: Divergence MSC calculé vs perçu persistante.
+              effect: >
+                Étape 1 : retour obligatoire en phase diagnostique ciblée sur la
+                KU concernée.
+                Étape 2 (si divergence persiste après diagnostique) : escalade vers
+                révision du design du contenu — notification externe obligatoire.
+              scope: runtime_evaluation
+
+    # ──────────────────────────────────────────────────────────────────────────
+    # PRIORITY 3 (LINK) — SIG-01 : binding AR-N3 → reweighting AR-N1 dans LINK
+    # PRIORITY 11 (LINK) — AR3-01 : binding AR-N3 dans la hiérarchie de signaux
+    # ──────────────────────────────────────────────────────────────────────────
+    - file: docs/cores/current/link.yaml
+      expected_core_id: CORE_LINK_LEARNIT_CONSTITUTION_V1_8__REFERENTIEL_V0_6
+      operations:
+        - op: append
+          target:
+            section: TYPES
+          value:
+            id: TYPE_BINDING_AR_N3_CALIBRATION_TO_SIGNAL_REWEIGHTING
+            authority: derived
+            core_type: LINK
+            source_anchor: "[ARBITRAGE_2026_04_01][AR3-01][SIG-01]"
+            depends_on:
+              - LINK_REF_CORE_LEARNIT_CONSTITUTION_V1_8
+              - LINK_REF_CORE_LEARNIT_REFERENTIEL_V0_6
+              - TYPE_BINDING_LEARNER_STATE_SIGNAL_AUTHORITY_CHAIN
+            relations:
+              - type: binds
+                target:
+                  id: LINK_REF_CORE_LEARNIT_CONSTITUTION_V1_8::TYPE_SELF_REPORT_AR_N3
+              - type: binds
+                target:
+                  id: LINK_REF_CORE_LEARNIT_CONSTITUTION_V1_8::TYPE_STATE_AXIS_CALIBRATION
+              - type: binds
+                target:
+                  id: LINK_REF_CORE_LEARNIT_REFERENTIEL_V0_6::TYPE_REFERENTIEL_SIGNAL_CONFIDENCE_HIERARCHY
+              - type: binds
+                target:
+                  id: LINK_REF_CORE_LEARNIT_REFERENTIEL_V0_6::RULE_REFERENTIEL_SIGNAL_PRECEDENCE_ORDER
+              - type: binds
+                target:
+                  id: LINK_REF_CORE_LEARNIT_REFERENTIEL_V0_6::RULE_REFERENTIEL_LOW_AR_CALIBRATION_TEMPORARILY_REWEIGHTS_SIGNALS
+              - type: binds
+                target:
+                  id: LINK_REF_CORE_LEARNIT_REFERENTIEL_V0_6::PARAM_REFERENTIEL_LOW_AR_CALIBRATION_CONSECUTIVE_BILANS
+            patchable: false
+            parameterizable: false
+            human_readable: >
+              Binding inter-Core documentant le lien entre AR-N3 (bilan périodique
+              constitutionnel) et la hiérarchie de confiance des signaux référentielle.
+              AR-N3 contribue à TYPE_STATE_AXIS_CALIBRATION et, via
+              RULE_REFERENTIEL_LOW_AR_CALIBRATION_TEMPORARILY_REWEIGHTS_SIGNALS,
+              peut déclencher un reweighting temporaire borné d'AR-N1 si la calibration
+              est basse sur N bilans consécutifs. Ce binding ne modifie pas la logique
+              de précédence : AR-N1 reste premier dans la hiérarchie.
+            logic:
+              trigger: Résolution d'un état apprenant multi-sources impliquant AR-N3
+              condition: >
+                AR-N3 disponible et résultat de calibration exploitable dans le système
+                fédéré.
+              effect: >
+                AR-N3 alimente TYPE_STATE_AXIS_CALIBRATION (Constitution) et peut
+                activer le reweighting borné d'AR-N1 via le Référentiel (N bilans
+                consécutifs requis). Le LINK documente ce flux sans introduire de
+                logique métier autonome.
+              scope: intercore_binding
