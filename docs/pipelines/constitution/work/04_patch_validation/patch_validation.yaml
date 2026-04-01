@@ -1,13 +1,9 @@
 PATCHSET_VALIDATION:
-  status: FAIL
+  status: PASS
   scope: patchset
-  anomalies_count: 5
+  anomalies_count: 0
   warnings_count: 0
   anomalies:
-    - patch_dsl_version doit être '4.0'
-    - alias federation invalide: LINK_REF_CONSTITUTION
-    - alias federation invalide: LINK_REF_REFERENTIEL
-    - référence inter-Core utilisée sans déclaration federation: LINK_REF_CORE_LEARNIT_CONSTITUTION_V1_8
-    - référence inter-Core utilisée sans déclaration federation: LINK_REF_CORE_LEARNIT_REFERENTIEL_V0_6
+    - none
   warnings:
     - none
