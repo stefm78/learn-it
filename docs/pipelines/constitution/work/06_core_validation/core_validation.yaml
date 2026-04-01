@@ -1,0 +1,40 @@
+VALIDATION:
+  status: PASS
+  mode: human_review
+  scope: system
+  pipeline_stage: STAGE_06_CORE_VALIDATION
+  inputs:
+    - docs/pipelines/constitution/work/05_apply/patched/constitution.yaml
+    - docs/pipelines/constitution/work/05_apply/patched/referentiel.yaml
+    - docs/pipelines/constitution/work/05_apply/patched/link.yaml
+  prompt_reference: docs/prompts/shared/Make02CoreValidation.md
+  cores_validated:
+    - CORE_LEARNIT_CONSTITUTION_V1_8
+    - CORE_LEARNIT_REFERENTIEL_V0_6
+    - CORE_LINK_LEARNIT_CONSTITUTION_V1_8__REFERENTIEL_V0_6
+  checks:
+    duplicated_rules: PASS
+    orphan_dependencies: PASS
+    implicit_relations: PASS
+    invariants_non_patchable: PASS
+    logical_contradiction_detected: PASS
+    source_anchor_presence: PASS
+    relations_coherence: PASS
+    graph_connectivity: PASS
+    reinflation_possible: PASS
+    core_type_coherence: PASS
+    explicit_intercore_references: PASS
+    id_collision_detected: PASS
+  anomalies:
+    - type: editorial_consistency
+      id: EDITORIAL_VERSION_DRIFT_CONSTITUTION_REFERENCES
+      description: Des mentions textuelles héritées indiquent encore "v1.7" alors que le core patché et ses références explicites sont en V1_8.
+      severity: mineur
+    - type: editorial_consistency
+      id: EDITORIAL_SIGNAL_HIERARCHY_WORDING_DRIFT
+      description: Une formulation du Référentiel résume l'ordre des signaux sans refléter explicitement la nuance AR-N3 déjà clarifiée ailleurs dans le même core.
+      severity: mineur
+  corrections:
+    - Aligner les descriptions et human_readable concernés sur Constitution v1.8 dans constitution.yaml, referentiel.yaml et link.yaml.
+    - Harmoniser la formulation textuelle de la hiérarchie des signaux dans le Référentiel pour refléter explicitement le rôle borné de AR-N3 déjà défini par les règles référentielles.
+  conclusion: Les trois cores patchés sont recevables pour passage au STAGE_07_RELEASE_MATERIALIZATION. Aucun blocage structurel ou logique majeur n'a été relevé à la revue Stage 06.
