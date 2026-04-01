@@ -1,23 +1,18 @@
 diff --git a/docs/pipelines/constitution/pipeline.md b/docs/pipelines/constitution/pipeline.md
 --- a/docs/pipelines/constitution/pipeline.md
 +++ b/docs/pipelines/constitution/pipeline.md
-@@
- ### Spec and tools
- 
- - Patch DSL: `docs/specs/patch-dsl/current.md`
- - Apply patch: `docs/patcher/shared/apply_patch.py`
- - Validate patchset: `docs/patcher/shared/validate_patchset.py`
+@@ -28,6 +28,7 @@
  - `Build release plan: docs/patcher/shared/build_release_plan.py`
  - `Materialize release: docs/patcher/shared/materialize_release.py`
  - `Validate release plan: docs/patcher/shared/validate_release_plan.py`
 +- `Closeout pipeline run: docs/patcher/shared/closeout_pipeline_run.py`
-@@
- ### STAGE_08_PROMOTE_CURRENT
- - Spec détaillée :
-   - `docs/pipelines/constitution/STAGE_08_PROMOTE_CURRENT.md`
  
+ ### Core inputs
+ 
+@@ -231,6 +232,77 @@
  - Rule:
    - `STAGE_08_PROMOTE_CURRENT.md` is the canonical specification for Stage 08
+ 
 +
 +### STAGE_09_CLOSEOUT_AND_ARCHIVE
 +Objectif :
@@ -88,11 +83,11 @@ diff --git a/docs/pipelines/constitution/pipeline.md b/docs/pipelines/constituti
 +- le Stage 09 ne modifie ni la release promue ni les Core courants
 +- le Stage 09 clôture le run ; il ne recalcule aucun contenu métier
 +- le nettoyage destructif n’est jamais implicite
-@@
++
  ## Success criteria
  
  - No stage may be skipped
- - No file in `current/` may be modified directly before explicit promotion
+@@ -238,3 +310,5 @@
  - Any patch application must occur in a sandbox root under `work/05_apply/`
  - Any release materialization must write immutable artifacts under `docs/cores/releases/`
  - Promotion to `current/` must remain explicit and occur in a dedicated stage
