@@ -31,29 +31,11 @@ PATCH_SET:
             fermeture locale assurée, références inter-Core explicites matérialisées
             pour fédération avec la Constitution v1.8.
 
-        - op: replace_field
-          target:
-            section: CORE
-            field: description
-          value: >
-            Core canonique final du Référentiel Learn-it v0.6. Naming normalisé,
-            fermeture locale assurée, références inter-Core explicites matérialisées
-            pour fédération avec la Constitution v1.8.
-
     - file: docs/cores/current/link.yaml
       expected_core_id: CORE_LINK_LEARNIT_CONSTITUTION_V1_8__REFERENTIEL_V0_6
       operations:
         - op: replace_meta_field
           target:
-            field: description
-          value: >
-            LINK_CORE canonique reliant la Constitution Learn-it v1.8 et le Référentiel
-            Learn-it v0.6. Il explicite les bindings inter-Core nécessaires à la
-            fermeture système, sans logique métier autonome.
-
-        - op: replace_field
-          target:
-            section: CORE
             field: description
           value: >
             LINK_CORE canonique reliant la Constitution Learn-it v1.8 et le Référentiel
