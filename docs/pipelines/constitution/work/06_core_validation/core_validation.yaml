@@ -1,0 +1,39 @@
+VALIDATION:
+  status: PASS
+  mode: human_review
+  scope: system
+  pipeline_stage: STAGE_06_CORE_VALIDATION
+  basis:
+    - STAGE_04 patch validation PASS
+    - STAGE_05 dry-run PASS
+    - STAGE_05 apply PASS
+    - deterministic review of patched cores produced in work/05_apply/patched/
+  inputs:
+    - docs/pipelines/constitution/work/05_apply/patched/constitution.yaml
+    - docs/pipelines/constitution/work/05_apply/patched/referentiel.yaml
+    - docs/pipelines/constitution/work/05_apply/patched/link.yaml
+  prompt_reference: docs/prompts/shared/Make02CoreValidation.md
+  cores_validated:
+    - CORE_LEARNIT_CONSTITUTION_V1_9
+    - CORE_LEARNIT_REFERENTIEL_V1_0
+    - CORE_LINK_LEARNIT_CONSTITUTION_V1_9__REFERENTIEL_V1_0
+  checks:
+    duplicated_rules: PASS
+    orphan_dependencies: PASS
+    implicit_relations: PASS
+    invariants_non_patchable: PASS
+    logical_contradiction_detected: PASS
+    source_anchor_presence: PASS
+    relations_coherence: PASS
+    graph_connectivity: PASS
+    reinflation_possible: PASS
+    core_type_coherence: PASS
+    explicit_intercore_references: PASS
+    id_collision_detected: PASS
+    constitution_referentiel_link_separation: PASS
+    link_without_autonomous_business_logic: PASS
+  anomalies:
+    - none
+  corrections:
+    - none
+  conclusion: Les trois Core patchés sont recevables pour passage au STAGE_07_RELEASE_MATERIALIZATION. Aucun blocage structurel ou logique majeur n'a été relevé à la revue Stage 06.
