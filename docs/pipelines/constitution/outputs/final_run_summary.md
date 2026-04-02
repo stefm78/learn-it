@@ -7,9 +7,9 @@
 - Release active: `CORE_RELEASE_2026_04_01_R01`
 - Source release path: `docs/cores/releases/CORE_RELEASE_2026_04_01_R01/`
 - Promotion mode: `applied`
-- Archive path: `docs/pipelines/constitution/archive/CORE_RELEASE_2026_04_01_R01`
-- Work reset: `True`
-- Closed at: `2026-04-01T11:24:28Z`
+- Archive path: `pending`
+- Work reset: `False`
+- Closed at: `2026-04-02T17:26:51Z`
 
 ## Active cores
 
