@@ -1,0 +1,86 @@
+RELEASE_PLAN:
+  status: PASS
+  release_required: true
+  change_depth: major
+  validated_inputs:
+    core_validation: docs\pipelines\constitution\work\06_core_validation\core_validation.yaml
+    patch_execution_report: docs\pipelines\constitution\reports\patch_execution_report.yaml
+    patched_cores:
+      constitution: docs\pipelines\constitution\work\05_apply\patched\constitution.yaml
+      referentiel: docs\pipelines\constitution\work\05_apply\patched\referentiel.yaml
+      link: docs\pipelines\constitution\work\05_apply\patched\link.yaml
+  compared_against_current:
+    constitution: docs\cores\current\constitution.yaml
+    referentiel: docs\cores\current\referentiel.yaml
+    link: docs\cores\current\link.yaml
+  target_versions:
+    constitution:
+      current_core_id: CORE_LEARNIT_CONSTITUTION_V1_9
+      current_version: V1_9_FINAL
+      target_core_id: CORE_LEARNIT_CONSTITUTION_V2_0
+      target_version: V2_0_FINAL
+    referentiel:
+      current_core_id: CORE_LEARNIT_REFERENTIEL_V1_0
+      current_version: V1_0_FINAL
+      target_core_id: CORE_LEARNIT_REFERENTIEL_V2_0
+      target_version: V2_0_FINAL
+    link:
+      current_core_id: CORE_LINK_LEARNIT_CONSTITUTION_V1_9__REFERENTIEL_V1_0
+      current_version: V1_9__V1_0_FINAL
+      target_core_id: CORE_LINK_LEARNIT_CONSTITUTION_V2_0__REFERENTIEL_V2_0
+      target_version: V2_0__V2_0_FINAL
+  required_renames:
+  - file_role: constitution
+    from: CORE_LEARNIT_CONSTITUTION_V1_9
+    to: CORE_LEARNIT_CONSTITUTION_V2_0
+  - file_role: referentiel
+    from: CORE_LEARNIT_REFERENTIEL_V1_0
+    to: CORE_LEARNIT_REFERENTIEL_V2_0
+  - file_role: link
+    from: CORE_LINK_LEARNIT_CONSTITUTION_V1_9__REFERENTIEL_V1_0
+    to: CORE_LINK_LEARNIT_CONSTITUTION_V2_0__REFERENTIEL_V2_0
+  required_reference_updates:
+  - file_role: constitution
+    from: CORE_LEARNIT_CONSTITUTION_V1_9
+    to: CORE_LEARNIT_CONSTITUTION_V2_0
+  - file_role: constitution
+    from: V1_9
+    to: V2_0
+  - file_role: referentiel
+    from: CORE_LEARNIT_REFERENTIEL_V1_0
+    to: CORE_LEARNIT_REFERENTIEL_V2_0
+  - file_role: referentiel
+    from: V1_0
+    to: V2_0
+  - file_role: link
+    from: CORE_LINK_LEARNIT_CONSTITUTION_V1_9__REFERENTIEL_V1_0
+    to: CORE_LINK_LEARNIT_CONSTITUTION_V2_0__REFERENTIEL_V2_0
+  - file_role: link
+    from: V1_9__V1_0
+    to: V2_0__V2_0
+  - file_role: constitution
+    from: CORE_LEARNIT_REFERENTIEL_V1_0
+    to: CORE_LEARNIT_REFERENTIEL_V2_0
+  - file_role: referentiel
+    from: CORE_LEARNIT_CONSTITUTION_V1_9
+    to: CORE_LEARNIT_CONSTITUTION_V2_0
+  - file_role: link
+    from: CORE_LEARNIT_CONSTITUTION_V1_9
+    to: CORE_LEARNIT_CONSTITUTION_V2_0
+  - file_role: link
+    from: CORE_LEARNIT_REFERENTIEL_V1_0
+    to: CORE_LEARNIT_REFERENTIEL_V2_0
+  link_updates:
+  - link_target_versions_realigned_with_constitution_and_referentiel
+  release_bundle:
+    release_id: CORE_RELEASE_2026_04_02_R01
+    release_path: docs/cores/releases/CORE_RELEASE_2026_04_02_R01/
+    promotion_candidate: true
+  notes:
+  - 'constitution: change_depth=major, identical_content=false, added=20, removed=0,
+    modified=2'
+  - 'referentiel: change_depth=major, identical_content=false, added=7, removed=0,
+    modified=1'
+  - 'link: change_depth=major, identical_content=false, added=4, removed=0, modified=4'
+  - aggregate_change_depth=major
+  - release_required=true
