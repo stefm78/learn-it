@@ -1,0 +1,338 @@
+PLATFORM_FACTORY_ARCHITECTURE:
+  metadata:
+    artifact_id: PLATFORM_FACTORY_ARCHITECTURE_DRAFT_V0_1
+    artifact_type: platform_factory_architecture
+    status: DRAFT
+    canonical_target_path: docs/cores/current/platform_factory_architecture.yaml
+    draft_source_path: docs/architecture/platform_factory_architecture.draft.yaml
+    owner_scope: platform_factory
+    intended_pipeline: platform_factory
+    maturity: initial_structure
+    last_reviewed: TBD
+    notes:
+      - Draft non canonique destiné à revue architecturale.
+      - La structure est fixée avant stabilisation complète du contenu.
+
+  purpose:
+    mission: >-
+      Décrire l'architecture prescriptive de la Platform Factory Learn-it,
+      c'est-à-dire le HOW générique permettant de produire des applications
+      Learn-it conformes à partir du socle canonique.
+    governs:
+      - generic_factory_architecture
+      - generated_projection_rules
+      - produced_application_minimum_contract
+      - multi_ia_parallel_development_readiness
+    does_not_govern:
+      - domain_specific_learning_content
+      - detailed_architecture_of_one_instantiated_application
+      - learner_runtime_state
+      - pedagogical_business_content_of_a_specific_domain
+
+  scope:
+    in_scope:
+      - generic_platform_components
+      - transformation_chain
+      - packaging_rules
+      - observability_rules
+      - traceability_rules
+      - execution_projection_rules
+      - minimum_application_contract
+      - module_reuse_rules
+      - factory_to_instantiation_boundary
+    out_of_scope:
+      - discipline_specific_graph_content
+      - domain_specific_feedback_logic
+      - final_product_ui_specialization
+      - detailed_runtime_behavior_of_one_specific_application
+      - per_domain_content_authoring
+
+  source_of_authority:
+    canonical_dependencies:
+      - docs/cores/current/constitution.yaml
+      - docs/cores/current/referentiel.yaml
+      - docs/cores/current/link.yaml
+    authority_rule: canonical_dependencies_remain_primary_authority
+    projection_rule: >-
+      Les vues dérivées d'exécution peuvent être générées pour les IA,
+      mais elles doivent rester strictement conformes au canonique applicable.
+
+  design_principles:
+    principles:
+      - id: PF_PRINCIPLE_SEPARATE_PLATFORM_AND_APPLICATION
+        statement: Séparer strictement la plateforme générique et l'application instanciée.
+      - id: PF_PRINCIPLE_CANONICAL_TRACEABILITY
+        statement: Toute génération, projection et instanciation doit rester traçable.
+      - id: PF_PRINCIPLE_DETERMINISTIC_TRANSFORMATIONS
+        statement: Les transformations de la factory doivent être déterministes et validables.
+      - id: PF_PRINCIPLE_MULTI_IA_READY
+        statement: La factory doit être exploitable par plusieurs IA en parallèle.
+      - id: PF_PRINCIPLE_NO_NORM_DUPLICATION
+        statement: La factory n'est pas une seconde Constitution ; elle l'opérationnalise.
+      - id: PF_PRINCIPLE_MINIMUM_APPLICATION_CONTRACT
+        statement: Toute application produite doit respecter un contrat minimal générique.
+      - id: PF_PRINCIPLE_REGENERABLE_EXECUTION_PROJECTIONS
+        statement: Les projections dérivées doivent être régénérables et conformes.
+
+  platform_layers:
+    - layer_id: PF_LAYER_CANONICAL_FOUNDATION
+      role: socle_normatif
+      description: Constitution + Référentiel + LINK comme source normative primaire.
+      inputs:
+        - constitution
+        - referentiel
+        - link
+      outputs:
+        - canonical_constraints
+        - canonical_dependencies
+    - layer_id: PF_LAYER_FACTORY_ARCHITECTURE
+      role: architecture_prescriptive
+      description: Définition du HOW générique de la factory.
+      inputs:
+        - canonical_constraints
+      outputs:
+        - generic_factory_rules
+        - produced_application_minimum_contract
+        - generated_projection_rules
+    - layer_id: PF_LAYER_FACTORY_STATE
+      role: state_assessment
+      description: État reconnu de maturité et de capacité de la factory.
+      inputs:
+        - architecture_rules
+        - audit_evidence
+      outputs:
+        - readiness_status
+        - blockers
+        - capability_gaps
+    - layer_id: PF_LAYER_DERIVED_EXECUTION_PROJECTIONS
+      role: ai_execution_interface
+      description: Projections dérivées validées destinées aux IA et pipelines spécialisés.
+      inputs:
+        - canonical_constraints
+        - factory_rules
+      outputs:
+        - scoped_execution_projections
+    - layer_id: PF_LAYER_APPLICATION_INSTANTIATION
+      role: downstream_instantiation
+      description: Pipeline aval produisant une application spécifique à partir du générique et du domaine.
+      inputs:
+        - scoped_execution_projections
+        - generic_modules
+        - domain_specific_inputs
+      outputs:
+        - produced_application_instance
+
+  transformation_chain:
+    phases:
+      - phase_id: PF_CHAIN_01_READ_CANONICAL
+        goal: charger le socle canonique applicable
+      - phase_id: PF_CHAIN_02_APPLY_FACTORY_RULES
+        goal: appliquer les règles génériques de la factory
+      - phase_id: PF_CHAIN_03_GENERATE_EXECUTION_PROJECTIONS
+        goal: produire des projections validées bornées pour IA et pipelines
+      - phase_id: PF_CHAIN_04_REUSE_GENERIC_MODULES
+        goal: préparer les composants génériques réutilisables
+      - phase_id: PF_CHAIN_05_INSTANTIATE_DOMAIN_SPECIFIC_PARTS
+        goal: instancier le spécifique domaine dans un pipeline dédié
+      - phase_id: PF_CHAIN_06_VALIDATE_APPLICATION_MIN_CONTRACT
+        goal: vérifier le respect du contrat minimal générique
+      - phase_id: PF_CHAIN_07_PACKAGE_AND_TRACE
+        goal: packager, tracer et rendre l'application identifiable
+
+  contracts:
+    execution_projection_contract:
+      name: validated_derived_execution_projection
+      rule_of_use: >-
+        Une projection dérivée peut être l'unique artefact fourni à une IA
+        pour un travail donné si elle est validée comme strictement fidèle,
+        sans divergence normative, pour le scope déclaré.
+      invariants:
+        - no_new_rule
+        - no_normative_divergence
+        - no_omission_within_declared_scope
+        - canonical_source_remains_primary_authority
+        - deterministic_regeneration_required
+      prohibited:
+        - manual_normative_override
+        - implicit_rule_addition
+        - uncontrolled_paraphrase
+        - promotion_as_primary_canonical_artifact
+
+    produced_application_minimum_contract:
+      identity:
+        required_blocks:
+          - logical_identity
+          - produced_instance_identity
+          - reproducibility_fingerprints
+      manifest:
+        required: true
+        minimum_contents:
+          - application_identity
+          - origin
+          - canonical_dependencies
+          - reused_generic_modules
+          - instantiated_specific_artifacts
+          - validation_statuses
+          - packaging_metadata
+          - traceability_metadata
+      canonical_dependency_contract:
+        required: true
+        must_declare:
+          - canonical_release_or_versions_used
+          - platform_factory_versions_used
+          - derived_execution_projections_used
+          - reproducibility_references
+      runtime_entrypoint_contract:
+        required: true
+        must_declare:
+          - runtime_entrypoint_id
+          - runtime_entrypoint_type
+          - bootstrap_contract
+          - runtime_prerequisites
+      minimum_configuration_contract:
+        required: true
+        minimum_blocks:
+          - identity
+          - module_activation
+          - instantiation_references
+          - traceability
+      generic_module_reuse_contract:
+        required: true
+      instantiated_specific_artifacts_contract:
+        required: true
+      minimum_validation_contract:
+        required: true
+        minimum_axes:
+          - structure
+          - minimum_contract_conformance
+          - traceability
+          - packaging
+      minimum_packaging_contract:
+        required: true
+        must_be:
+          - identifiable
+          - manifest_linked
+          - completeness_checkable
+      minimum_observability_contract:
+        required: true
+        minimum_signals:
+          - build_identity
+          - activated_modules
+          - derived_projections_used
+          - validation_status
+          - traceability_references
+
+  variant_governance:
+    principle: >-
+      La factory doit autoriser des variantes d'applications sans casser
+      le contrat minimal générique ni la séparation entre générique et spécifique.
+    allowed_variability:
+      - domain_specific_content
+      - domain_specific_assets
+      - domain_specific_graphs
+      - application_specialization_layers
+    forbidden_variability:
+      - bypass_of_canonical_constraints
+      - removal_of_minimum_application_contract
+      - hidden_dependency_on_unspecified_modules
+
+  build_and_packaging_rules:
+    build_requirements:
+      - identifiable_build
+      - reproducible_traceability
+      - explicit_module_list
+      - explicit_dependency_capture
+    packaging_requirements:
+      - package_must_link_to_manifest
+      - package_must_be_verifiable
+      - package_must_be_classifiable_complete_or_incomplete_or_invalid
+
+  observability_requirements:
+    factory_level:
+      - projection_generation_trace
+      - validation_trace
+      - patch_execution_trace
+      - promotion_trace
+    produced_application_level:
+      - build_identity
+      - module_activation_trace
+      - used_projection_trace
+      - packaging_status
+
+  dependencies_to_constitution:
+    mode: explicit_reference_only
+    required_bindings:
+      - governing_invariants
+      - forbidden_behaviors
+      - local_runtime_constraints
+      - canonical_traceability_requirements
+
+  dependencies_to_referentiel:
+    mode: explicit_reference_only
+    required_bindings:
+      - thresholds
+      - operational_bounds
+      - tables_required_for_instantiation
+      - validation_bounds
+
+  dependencies_to_link:
+    mode: explicit_reference_only
+    required_bindings:
+      - inter_core_reference_resolution
+      - binding_traceability
+
+  generated_projection_rules:
+    objectives:
+      - reduce_context_for_ai
+      - support_parallel_ai_work
+      - expose_only_relevant_scope
+      - preserve_strict_normative_fidelity
+    minimum_requirements:
+      - each_projection_has_declared_scope
+      - each_projection_has_declared_sources
+      - each_projection_is_regenerable
+      - each_projection_is_validation_gated
+      - each_projection_can_be_used_as_single_context_for_targeted_task
+    emplacement_policy:
+      status: TBD
+      rule: must_not_blur_docs_cores_current
+
+  multi_ia_parallel_readiness:
+    objective: >-
+      Permettre à plusieurs IA de travailler en parallèle sans ambiguïté
+      de responsabilité ni divergence d'assemblage.
+    minimum_requirements:
+      - bounded_scopes
+      - stable_identifiers
+      - explicit_dependencies
+      - clear_assembly_points
+      - homogeneous_reports
+      - no_hidden_dependencies
+      - regenerable_execution_projections
+    deferred_challenges:
+      - optimal_module_granularity
+      - optimal_projection_size
+      - assembly_protocol_between_ai_outputs
+
+  invariants:
+    - PF_INV_CANONICAL_FOUNDATION_REMAINS_PRIMARY_AUTHORITY
+    - PF_INV_FACTORY_DOES_NOT_DUPLICATE_NORM
+    - PF_INV_DERIVED_PROJECTIONS_MUST_BE_STRICTLY_CONFORMANT
+    - PF_INV_MINIMUM_APPLICATION_CONTRACT_MUST_ALWAYS_BE_DECLARED
+    - PF_INV_FACTORY_MUST_SUPPORT_MULTI_IA_PARALLELISM
+    - PF_INV_GENERIC_AND_SPECIFIC_MUST_REMAIN_SEPARATED
+
+  constraints:
+    - no_direct_redefinition_of_constitution
+    - no_domain_specific_content_inside_factory_architecture
+    - no_derived_projection_with_normative_drift
+    - no_instantiation_without_traceability
+    - no_application_without_manifest
+
+  open_points_for_challenge:
+    - exact_manifest_schema_for_produced_application
+    - exact_runtime_entrypoint_typology
+    - exact_configuration_schema
+    - exact_packaging_schema
+    - exact_location_of_validated_derived_execution_projections
+    - exact_granularity_for_multi_ai_parallel_work
