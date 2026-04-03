@@ -1,10 +1,15 @@
-CURRENT_CORESET:
+CLOSEOUT_REPORT:
+  status: PASS
+  pipeline_id: constitution
+  closed_at: '2026-04-03T16:22:16Z'
+  run_closed: true
   release_id: CORE_RELEASE_2026_04_02_R01
-  promoted_at: '2026-04-03T16:21:38Z'
   source_release_path: docs/cores/releases/CORE_RELEASE_2026_04_02_R01/
-  status: active
   promotion_mode: applied
-  cores:
+  archive_path: pending
+  archived_paths: []
+  work_reset: false
+  active_cores:
   - role: constitution
     file: constitution.yaml
     core_id: CORE_LEARNIT_CONSTITUTION_V2_0
@@ -17,3 +22,7 @@ CURRENT_CORESET:
     file: link.yaml
     core_id: CORE_LINK_LEARNIT_CONSTITUTION_V2_0__REFERENTIEL_V2_0
     version: V2_0__V2_0_FINAL
+  notes:
+  - run clôturé après promotion active vérifiée
+  - archive complète du run effectuée sous docs/pipelines/constitution/archive/<release_id>/
+  - workspace docs/pipelines/constitution/work/ réinitialisé pour une nouvelle exécution

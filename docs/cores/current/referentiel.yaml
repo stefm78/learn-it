@@ -1,13 +1,13 @@
 CORE:
-  id: CORE_LEARNIT_REFERENTIEL_V1_0
+  id: CORE_LEARNIT_REFERENTIEL_V2_0
   core_type: REFERENTIEL
   authority: primary
-  version: V1_0_FINAL
-  description: Core canonique final du Référentiel Learn-it v1.0. Naming normalisé,
+  version: V2_0_FINAL
+  description: Core canonique final du Référentiel Learn-it V2.0. Naming normalisé,
     fermeture locale assurée, références inter-Core explicites matérialisées pour
     fédération avec la Constitution.
   TYPES:
-  - id: REF_CORE_LEARNIT_CONSTITUTION_V1_9_IN_REFERENTIEL
+  - id: REF_CORE_LEARNIT_CONSTITUTION_V2_0_IN_REFERENTIEL
     authority: reference
     core_type: REFERENTIEL
     source_anchor: '[INTERCORE]'
@@ -15,7 +15,7 @@ CORE:
     relations: []
     patchable: false
     parameterizable: false
-    human_readable: Référence explicite vers le Core Constitution Learn-it v1.9.
+    human_readable: Référence explicite vers le Core Constitution Learn-it V2_0.
     logic:
       trigger: null
       condition: null
@@ -26,7 +26,7 @@ CORE:
     core_type: REFERENTIEL
     source_anchor: '[S1]'
     depends_on:
-    - REF_CORE_LEARNIT_CONSTITUTION_V1_9_IN_REFERENTIEL
+    - REF_CORE_LEARNIT_CONSTITUTION_V2_0_IN_REFERENTIEL
     relations:
     - type: governs
       target:
@@ -50,7 +50,7 @@ CORE:
     core_type: REFERENTIEL
     source_anchor: '[S3]'
     depends_on:
-    - REF_CORE_LEARNIT_CONSTITUTION_V1_9_IN_REFERENTIEL
+    - REF_CORE_LEARNIT_CONSTITUTION_V2_0_IN_REFERENTIEL
     relations:
     - type: instantiates
       target:
@@ -68,7 +68,7 @@ CORE:
     core_type: REFERENTIEL
     source_anchor: '[S3]'
     depends_on:
-    - REF_CORE_LEARNIT_CONSTITUTION_V1_9_IN_REFERENTIEL
+    - REF_CORE_LEARNIT_CONSTITUTION_V2_0_IN_REFERENTIEL
     relations:
     - type: governs
       target:
@@ -89,7 +89,7 @@ CORE:
     core_type: REFERENTIEL
     source_anchor: '[S3]'
     depends_on:
-    - REF_CORE_LEARNIT_CONSTITUTION_V1_9_IN_REFERENTIEL
+    - REF_CORE_LEARNIT_CONSTITUTION_V2_0_IN_REFERENTIEL
     relations:
     - type: governs
       target:
@@ -107,7 +107,7 @@ CORE:
     core_type: REFERENTIEL
     source_anchor: '[S3]'
     depends_on:
-    - REF_CORE_LEARNIT_CONSTITUTION_V1_9_IN_REFERENTIEL
+    - REF_CORE_LEARNIT_CONSTITUTION_V2_0_IN_REFERENTIEL
     relations:
     - type: validates
       target:
@@ -129,7 +129,7 @@ CORE:
     core_type: REFERENTIEL
     source_anchor: '[S3][S16]'
     depends_on:
-    - REF_CORE_LEARNIT_CONSTITUTION_V1_9_IN_REFERENTIEL
+    - REF_CORE_LEARNIT_CONSTITUTION_V2_0_IN_REFERENTIEL
     relations:
     - type: governs
       target:
@@ -150,7 +150,7 @@ CORE:
     core_type: REFERENTIEL
     source_anchor: '[S3]'
     depends_on:
-    - REF_CORE_LEARNIT_CONSTITUTION_V1_9_IN_REFERENTIEL
+    - REF_CORE_LEARNIT_CONSTITUTION_V2_0_IN_REFERENTIEL
     relations:
     - type: governs
       target:
@@ -168,7 +168,7 @@ CORE:
     core_type: REFERENTIEL
     source_anchor: '[S4][S18]'
     depends_on:
-    - REF_CORE_LEARNIT_CONSTITUTION_V1_9_IN_REFERENTIEL
+    - REF_CORE_LEARNIT_CONSTITUTION_V2_0_IN_REFERENTIEL
     relations:
     - type: validates
       target:
@@ -186,7 +186,7 @@ CORE:
     core_type: REFERENTIEL
     source_anchor: '[tables]'
     depends_on:
-    - REF_CORE_LEARNIT_CONSTITUTION_V1_9_IN_REFERENTIEL
+    - REF_CORE_LEARNIT_CONSTITUTION_V2_0_IN_REFERENTIEL
     relations:
     - type: governs
       target:
@@ -204,7 +204,7 @@ CORE:
     core_type: REFERENTIEL
     source_anchor: '[tables][S6]'
     depends_on:
-    - REF_CORE_LEARNIT_CONSTITUTION_V1_9_IN_REFERENTIEL
+    - REF_CORE_LEARNIT_CONSTITUTION_V2_0_IN_REFERENTIEL
     relations:
     - type: constrains
       target:
@@ -222,7 +222,7 @@ CORE:
     core_type: REFERENTIEL
     source_anchor: '[S16]'
     depends_on:
-    - REF_CORE_LEARNIT_CONSTITUTION_V1_9_IN_REFERENTIEL
+    - REF_CORE_LEARNIT_CONSTITUTION_V2_0_IN_REFERENTIEL
     relations:
     - type: governs
       target:
@@ -240,7 +240,7 @@ CORE:
     core_type: REFERENTIEL
     source_anchor: '[S17]'
     depends_on:
-    - REF_CORE_LEARNIT_CONSTITUTION_V1_9_IN_REFERENTIEL
+    - REF_CORE_LEARNIT_CONSTITUTION_V2_0_IN_REFERENTIEL
     relations:
     - type: governs
       target:
@@ -258,11 +258,11 @@ CORE:
     core_type: REFERENTIEL
     source_anchor: '[S19]'
     depends_on:
-    - REF_CORE_LEARNIT_CONSTITUTION_V1_9_IN_REFERENTIEL
+    - REF_CORE_LEARNIT_CONSTITUTION_V2_0_IN_REFERENTIEL
     relations:
     - type: derives_from
       target:
-        id: REF_CORE_LEARNIT_CONSTITUTION_V1_9_IN_REFERENTIEL
+        id: REF_CORE_LEARNIT_CONSTITUTION_V2_0_IN_REFERENTIEL
     patchable: false
     parameterizable: false
     human_readable: Note opérationnelle rappelant que la profondeur 1 saut est constitutionnelle.
@@ -274,7 +274,7 @@ CORE:
   - id: TYPE_REFERENTIEL_MINIMAL_BEHAVIORAL_PROXY_SET
     authority: primary
     core_type: REFERENTIEL
-    source_anchor: '[S3][PATCH_V1_0]'
+    source_anchor: '[S3][PATCH_V2_0]'
     depends_on:
     - TYPE_REFERENTIEL_SIGNAL_CONFIDENCE_HIERARCHY
     relations:
@@ -294,9 +294,9 @@ CORE:
   - id: TYPE_REFERENTIEL_AR_N3_CONFIGURATION
     authority: primary
     core_type: REFERENTIEL
-    source_anchor: '[S3][PATCH_V1_0]'
+    source_anchor: '[S3][PATCH_V2_0]'
     depends_on:
-    - REF_CORE_LEARNIT_CONSTITUTION_V1_9_IN_REFERENTIEL
+    - REF_CORE_LEARNIT_CONSTITUTION_V2_0_IN_REFERENTIEL
     relations:
     - type: governs
       target:
@@ -315,7 +315,7 @@ CORE:
     core_type: REFERENTIEL
     source_anchor: '[S2]'
     depends_on:
-    - REF_CORE_LEARNIT_CONSTITUTION_V1_9_IN_REFERENTIEL
+    - REF_CORE_LEARNIT_CONSTITUTION_V2_0_IN_REFERENTIEL
     relations:
     - type: constrains
       target:
@@ -333,7 +333,7 @@ CORE:
     core_type: REFERENTIEL
     source_anchor: '[S19]'
     depends_on:
-    - REF_CORE_LEARNIT_CONSTITUTION_V1_9_IN_REFERENTIEL
+    - REF_CORE_LEARNIT_CONSTITUTION_V2_0_IN_REFERENTIEL
     relations:
     - type: constrains
       target:
@@ -351,7 +351,7 @@ CORE:
     core_type: REFERENTIEL
     source_anchor: '[tables][S6]'
     depends_on:
-    - REF_CORE_LEARNIT_CONSTITUTION_V1_9_IN_REFERENTIEL
+    - REF_CORE_LEARNIT_CONSTITUTION_V2_0_IN_REFERENTIEL
     relations: []
     patchable: false
     parameterizable: false
@@ -616,9 +616,9 @@ CORE:
   - id: RULE_REFERENTIEL_CURRENT_RETROGRADATION_VS_POSTMASTERY_REVOCATION
     authority: primary
     core_type: REFERENTIEL
-    source_anchor: '[S2][PATCH_V1_0]'
+    source_anchor: '[S2][PATCH_V2_0]'
     depends_on:
-    - REF_CORE_LEARNIT_CONSTITUTION_V1_9_IN_REFERENTIEL
+    - REF_CORE_LEARNIT_CONSTITUTION_V2_0_IN_REFERENTIEL
     relations: []
     patchable: true
     parameterizable: true
@@ -634,9 +634,9 @@ CORE:
   - id: RULE_REFERENTIEL_INTERLEAVING_CONTENT_REQUIRES_A
     authority: primary
     core_type: REFERENTIEL
-    source_anchor: '[S3][PATCH_V1_0]'
+    source_anchor: '[S3][PATCH_V2_0]'
     depends_on:
-    - REF_CORE_LEARNIT_CONSTITUTION_V1_9_IN_REFERENTIEL
+    - REF_CORE_LEARNIT_CONSTITUTION_V2_0_IN_REFERENTIEL
     relations: []
     patchable: true
     parameterizable: true
@@ -651,7 +651,7 @@ CORE:
   - id: RULE_REFERENTIEL_SECONDARY_RETROGRADATION_DEFERRED_REENTRY
     authority: primary
     core_type: REFERENTIEL
-    source_anchor: '[S19][PATCH_V1_0]'
+    source_anchor: '[S19][PATCH_V2_0]'
     depends_on:
     - TYPE_REFERENTIEL_GRAPH_PROPAGATION_OPERATIONAL_NOTE
     relations: []
@@ -668,7 +668,7 @@ CORE:
   - id: RULE_REFERENTIEL_LOW_AR_CALIBRATION_TEMPORARILY_REWEIGHTS_SIGNALS
     authority: primary
     core_type: REFERENTIEL
-    source_anchor: '[S3][PATCH_V1_0]'
+    source_anchor: '[S3][PATCH_V2_0]'
     depends_on:
     - TYPE_REFERENTIEL_AR_N3_CONFIGURATION
     - TYPE_REFERENTIEL_SIGNAL_CONFIDENCE_HIERARCHY
@@ -687,9 +687,9 @@ CORE:
   - id: RULE_REFERENTIEL_SYSTEMIC_INVESTIGATION_RUNTIME_BEHAVIOR
     authority: primary
     core_type: REFERENTIEL
-    source_anchor: '[PATCH_V1_0]'
+    source_anchor: '[PATCH_V2_0]'
     depends_on:
-    - REF_CORE_LEARNIT_CONSTITUTION_V1_9_IN_REFERENTIEL
+    - REF_CORE_LEARNIT_CONSTITUTION_V2_0_IN_REFERENTIEL
     relations: []
     patchable: true
     parameterizable: true
@@ -704,7 +704,7 @@ CORE:
   - id: RULE_REFERENTIEL_VC_UNOBSERVABLE_DISABLING
     authority: primary
     core_type: REFERENTIEL
-    source_anchor: '[S16][PATCH_V1_0]'
+    source_anchor: '[S16][PATCH_V2_0]'
     depends_on:
     - TYPE_REFERENTIEL_VC_PARAMETER_BLOCK
     - CONSTRAINT_REFERENTIEL_NO_BEHAVIORAL_PROXY_FOR_VC
@@ -731,22 +731,76 @@ CORE:
     human_readable: 'Table de priorité par paire de conflits pour les cellules de
       frontière de la matrice des régimes adaptatifs. Règle synthétique : (1) Détresse
       l''emporte toujours. (2) Conservateur l''emporte sur Exploration et Consolidation
-      (sauf MOT-01). (3) Consolidation l''emporte sur Sous-défi sauf si R est déjà
-      atteint. (4) Exploration l''emporte sur Sous-défi. (5) Consolidation vs Exploration
-      → régime oscillatoire piloté par R.
-
-      '
+      tant que sa fenêtre référentielle de sortie n''est pas atteinte. (3) Consolidation
+      l''emporte sur Sous-défi sauf si R est déjà atteint. (4) Exploration l''emporte
+      sur Sous-défi. (5) Consolidation vs Exploration ouvre un régime oscillatoire
+      piloté par R et borné par un nombre maximal de cycles explicite.'
     logic:
       trigger: Détection de deux régimes adaptatifs simultanément sur des cellules
         de frontière
       condition: Deux régimes ou plus activés simultanément dans la matrice.
-      effect: "Application de la table de priorité : Détresse + tout autre : Détresse\
-        \ prime. Conservateur + Sous-défi : Conservateur (borné par MOT-01). Conservateur\
-        \ + Exploration : Conservateur. Conservateur + Consolidation : Conservateur.\
-        \ Consolidation + Sous-défi : Sous-défi (si R atteint) sinon Consolidation.\
-        \ Consolidation + Exploration : régime oscillatoire (alternance 1 session\n\
-        \  consolidation satisfaisante → 1 session exploration → retour consolidation,\n\
-        \  sortie quand R atteint).\nExploration + Sous-défi : Exploration.\n"
+      effect: 'Application de la table de priorité :
+
+        - Détresse + tout autre : Détresse prime.
+
+        - Conservateur + Sous-défi : Conservateur tant que la fenêtre référentielle
+        de sortie n’est pas atteinte.
+
+        - Conservateur + Exploration : Conservateur.
+
+        - Conservateur + Consolidation : Conservateur.
+
+        - Consolidation + Sous-défi : Sous-défi si R atteint, sinon Consolidation.
+
+        - Consolidation + Exploration : régime oscillatoire borné ; alternance 1 session
+        de consolidation satisfaisante puis 1 session d’exploration, avec sortie quand
+        R atteint ou quand le nombre maximal de cycles est dépassé.
+
+        - Trois régimes actifs ou plus : appliquer d’abord la priorité Détresse, puis
+        la hiérarchie d’escalade explicite ; si l’état reste ambigu, ouvrir une investigation
+        systémique.'
+      scope: runtime_state
+  - id: RULE_REFERENTIEL_ESCALATION_PRIORITY_ORDER
+    authority: primary
+    core_type: REFERENTIEL
+    source_anchor: '[ARBITRAGE_2026_04_01][ESC-PRIO-01]'
+    depends_on:
+    - PARAM_REFERENTIEL_SYSTEMIC_INVESTIGATION_SESSION_THRESHOLD
+    - PARAM_REFERENTIEL_MSC_PERCEPTION_DIVERGENCE_THRESHOLD
+    - PARAM_REFERENTIEL_ACTIVATION_DISTRESS_PERSISTENCE_SESSIONS
+    relations: []
+    patchable: true
+    parameterizable: true
+    human_readable: 'Priorité explicite des escalades concurrentes : investigation
+      systémique, puis divergence MSC/perception, puis signaux motivationnels ou de
+      sollicitation.'
+    logic:
+      trigger: Plusieurs escalades deviennent simultanément éligibles.
+      condition: Au moins deux chaînes d’escalade franchissent leur seuil sur la même
+        fenêtre.
+      effect: Priorité 1 investigation systémique ; priorité 2 divergence MSC/perception
+        ; priorité 3 signaux motivationnels, VC ou sollicitation. La résolution doit
+        rester stable et audit-able.
+      scope: runtime_safety
+  - id: RULE_REFERENTIEL_OSCILLATION_EXIT_AND_ESCALATION
+    authority: primary
+    core_type: REFERENTIEL
+    source_anchor: '[ARBITRAGE_2026_04_01][OSC-03]'
+    depends_on:
+    - RULE_REFERENTIEL_ADAPTIVE_REGIME_CONFLICT_RESOLUTION
+    - PARAM_REFERENTIEL_CONSOLIDATION_SATISFACTORY_SESSION_CRITERION
+    - PARAM_REFERENTIEL_OSCILLATION_MAX_CYCLES_BEFORE_ESCALATION
+    relations: []
+    patchable: true
+    parameterizable: true
+    human_readable: Le régime oscillatoire Consolidation ↔ Exploration doit avoir
+      un critère de session satisfaisante, une borne de cycles et une sortie explicite.
+    logic:
+      trigger: Activation du régime oscillatoire.
+      condition: Conflit Consolidation ↔ Exploration confirmé.
+      effect: Utiliser le critère déterministe de session satisfaisante pour autoriser
+        l’alternance, sortir quand R atteint, ou ouvrir une escalade explicite si
+        le nombre maximal de cycles est dépassé.
       scope: runtime_state
   PARAMETERS:
   - id: PARAM_REFERENTIEL_MSC_PRECISION_THRESHOLD
@@ -1271,7 +1325,7 @@ CORE:
   - id: PARAM_REFERENTIEL_PROXY_MIN_WEIGHT
     authority: primary
     core_type: REFERENTIEL
-    source_anchor: '[S3][PATCH_V1_0]'
+    source_anchor: '[S3][PATCH_V2_0]'
     depends_on: []
     relations: []
     patchable: false
@@ -1285,7 +1339,7 @@ CORE:
   - id: PARAM_REFERENTIEL_AR_N3_FREQUENCY_REFERENCE
     authority: primary
     core_type: REFERENTIEL
-    source_anchor: '[S3][PATCH_V1_0]'
+    source_anchor: '[S3][PATCH_V2_0]'
     depends_on: []
     relations: []
     patchable: true
@@ -1299,7 +1353,7 @@ CORE:
   - id: PARAM_REFERENTIEL_PROPAGATION_CHECK_MAX_DELAY_SESSIONS
     authority: primary
     core_type: REFERENTIEL
-    source_anchor: '[S19][PATCH_V1_0]'
+    source_anchor: '[S19][PATCH_V2_0]'
     depends_on: []
     relations: []
     patchable: false
@@ -1423,6 +1477,82 @@ CORE:
       condition: Divergence persistante sur N sessions consécutives.
       effect: Référence 3 sessions ; fourchette 2–5.
       scope: runtime_evaluation
+  - id: PARAM_REFERENTIEL_ACTIVATION_DISTRESS_PERSISTENCE_SESSIONS
+    authority: primary
+    core_type: REFERENTIEL
+    source_anchor: '[ARBITRAGE_2026_04_01][DISTRESS-01]'
+    depends_on: []
+    relations: []
+    patchable: true
+    parameterizable: true
+    human_readable: Nombre de sessions consécutives de détresse d’activation avant
+      escalade explicite hors session.
+    logic:
+      trigger: Supervision du régime de détresse.
+      condition: Détresse d’activation confirmée sur une fenêtre consécutive.
+      effect: Référence 3 sessions ; fourchette 2–5.
+      scope: runtime_state
+  - id: PARAM_REFERENTIEL_SYSTEMIC_INVESTIGATION_MAX_WINDOW_SESSIONS
+    authority: primary
+    core_type: REFERENTIEL
+    source_anchor: '[ARBITRAGE_2026_04_01][SYST-02]'
+    depends_on: []
+    relations: []
+    patchable: true
+    parameterizable: true
+    human_readable: Nombre maximal de sessions pendant lesquelles une investigation
+      systémique peut rester ouverte avant escalade hors session obligatoire.
+    logic:
+      trigger: Suivi d’une investigation systémique ouverte.
+      condition: Investigation non close explicitement.
+      effect: Référence 3 sessions ; fourchette 2–6.
+      scope: runtime_safety
+  - id: PARAM_REFERENTIEL_GAMIFICATION_PROBATION_MAX_SESSIONS
+    authority: primary
+    core_type: REFERENTIEL
+    source_anchor: '[ARBITRAGE_2026_04_01][GAM-PROB-01]'
+    depends_on: []
+    relations: []
+    patchable: true
+    parameterizable: true
+    human_readable: Nombre maximal de sessions autorisées pour une gamification en
+      mode probatoire avant décision explicite.
+    logic:
+      trigger: Supervision d’une mécanique gamifiée non validée.
+      condition: Probation active.
+      effect: Référence 5 sessions ; fourchette 3–8.
+      scope: deployment
+  - id: PARAM_REFERENTIEL_OSCILLATION_MAX_CYCLES_BEFORE_ESCALATION
+    authority: primary
+    core_type: REFERENTIEL
+    source_anchor: '[ARBITRAGE_2026_04_01][OSC-01]'
+    depends_on: []
+    relations: []
+    patchable: true
+    parameterizable: true
+    human_readable: Nombre maximal de cycles Consolidation ↔ Exploration avant escalade
+      explicite.
+    logic:
+      trigger: Suivi du régime oscillatoire.
+      condition: Alternance Consolidation ↔ Exploration active sans sortie stable.
+      effect: Référence 3 cycles ; fourchette 2–5.
+      scope: runtime_state
+  - id: PARAM_REFERENTIEL_CONSOLIDATION_SATISFACTORY_SESSION_CRITERION
+    authority: primary
+    core_type: REFERENTIEL
+    source_anchor: '[ARBITRAGE_2026_04_01][OSC-02]'
+    depends_on: []
+    relations: []
+    patchable: true
+    parameterizable: true
+    human_readable: Critère déterministe minimal d’une session de consolidation satisfaisante
+      pour piloter la sortie du régime oscillatoire.
+    logic:
+      trigger: Évaluation d’une session de consolidation.
+      condition: Session terminée dans un régime oscillatoire.
+      effect: Référence = réussite de la tâche cœur sans aide additionnelle non prévue,
+        absence de détresse active et stabilité minimale de R sur la KU concernée.
+      scope: runtime_state
   CONSTRAINTS:
   - id: CONSTRAINT_REFERENTIEL_PATCH_SCOPE_MUST_REMAIN_CONSTITUTIONALLY_BOUNDED
     authority: primary
@@ -1461,7 +1591,7 @@ CORE:
   - id: CONSTRAINT_REFERENTIEL_LOCAL_VERIFICATION_REQUIRED_BEFORE_PATCH_APPLY
     authority: primary
     core_type: REFERENTIEL
-    source_anchor: '[S6][PATCH_V1_0]'
+    source_anchor: '[S6][PATCH_V2_0]'
     depends_on:
     - TYPE_REFERENTIEL_PATCH_SCOPE_TABLE
     relations:

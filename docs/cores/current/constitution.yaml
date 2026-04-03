@@ -1,13 +1,13 @@
 CORE:
-  id: CORE_LEARNIT_CONSTITUTION_V1_9
+  id: CORE_LEARNIT_CONSTITUTION_V2_0
   core_type: CONSTITUTION
   authority: primary
-  version: V1_9_FINAL
-  description: Core canonique final de la Constitution Learn-it v1.9. Naming normalisé,
+  version: V2_0_FINAL
+  description: Core canonique final de la Constitution Learn-it V2_0. Naming normalisé,
     fermeture locale assurée, références inter-Core explicites matérialisées pour
     fédération avec le Référentiel.
   TYPES:
-  - id: REF_CORE_LEARNIT_REFERENTIEL_V1_0_IN_CONSTITUTION
+  - id: REF_CORE_LEARNIT_REFERENTIEL_V2_0_IN_CONSTITUTION
     authority: reference
     core_type: CONSTITUTION
     source_anchor: '[INTERCORE]'
@@ -15,7 +15,7 @@ CORE:
     relations: []
     patchable: false
     parameterizable: false
-    human_readable: Référence explicite vers le Core Référentiel Learn-it v1.0.
+    human_readable: Référence explicite vers le Core Référentiel Learn-it V2.0.
     logic:
       trigger: null
       condition: null
@@ -119,7 +119,7 @@ CORE:
     core_type: CONSTITUTION
     source_anchor: '[S20]'
     depends_on:
-    - REF_CORE_LEARNIT_REFERENTIEL_V1_0_IN_CONSTITUTION
+    - REF_CORE_LEARNIT_REFERENTIEL_V2_0_IN_CONSTITUTION
     relations: []
     patchable: false
     parameterizable: true
@@ -134,7 +134,7 @@ CORE:
     core_type: CONSTITUTION
     source_anchor: '[S5][S20]'
     depends_on:
-    - REF_CORE_LEARNIT_REFERENTIEL_V1_0_IN_CONSTITUTION
+    - REF_CORE_LEARNIT_REFERENTIEL_V2_0_IN_CONSTITUTION
     relations: []
     patchable: false
     parameterizable: true
@@ -149,7 +149,7 @@ CORE:
     core_type: CONSTITUTION
     source_anchor: '[S8][S20]'
     depends_on:
-    - REF_CORE_LEARNIT_REFERENTIEL_V1_0_IN_CONSTITUTION
+    - REF_CORE_LEARNIT_REFERENTIEL_V2_0_IN_CONSTITUTION
     relations: []
     patchable: false
     parameterizable: true
@@ -312,11 +312,11 @@ CORE:
   - id: TYPE_PATCH_ARTIFACT
     authority: primary
     core_type: CONSTITUTION
-    source_anchor: '[S14][PATCH_V1_9]'
+    source_anchor: '[S14][PATCH_V2_0]'
     depends_on:
     - TYPE_PATCH_IMPACT_SCOPE
     - TYPE_PATCH_QUALITY_GATE
-    - REF_CORE_LEARNIT_REFERENTIEL_V1_0_IN_CONSTITUTION
+    - REF_CORE_LEARNIT_REFERENTIEL_V2_0_IN_CONSTITUTION
     relations:
     - type: requires
       target:
@@ -575,7 +575,7 @@ CORE:
     source_anchor: '[S14][S20]'
     depends_on:
     - TYPE_PATCH_IMPACT_SCOPE
-    - REF_CORE_LEARNIT_REFERENTIEL_V1_0_IN_CONSTITUTION
+    - REF_CORE_LEARNIT_REFERENTIEL_V2_0_IN_CONSTITUTION
     relations: []
     patchable: false
     parameterizable: false
@@ -657,11 +657,11 @@ CORE:
     core_type: CONSTITUTION
     source_anchor: '[S1]'
     depends_on:
-    - REF_CORE_LEARNIT_REFERENTIEL_V1_0_IN_CONSTITUTION
+    - REF_CORE_LEARNIT_REFERENTIEL_V2_0_IN_CONSTITUTION
     relations:
     - type: governs
       target:
-        id: REF_CORE_LEARNIT_REFERENTIEL_V1_0_IN_CONSTITUTION
+        id: REF_CORE_LEARNIT_REFERENTIEL_V2_0_IN_CONSTITUTION
     patchable: false
     parameterizable: false
     human_readable: Séparation inviolable Constitution/Référentiel.
@@ -719,7 +719,7 @@ CORE:
   - id: INV_KNOWLEDGE_GRAPH_MUST_BE_ACYCLIC
     authority: primary
     core_type: CONSTITUTION
-    source_anchor: '[S4][S18][PATCH_V1_9]'
+    source_anchor: '[S4][S18][PATCH_V2_0]'
     depends_on:
     - TYPE_KNOWLEDGE_GRAPH
     - TYPE_KNOWLEDGE_UNIT
@@ -729,16 +729,18 @@ CORE:
         id: TYPE_KNOWLEDGE_GRAPH
     patchable: false
     parameterizable: false
-    human_readable: Le graphe des KU doit être acyclique.
+    human_readable: Le graphe des KU doit rester acyclique au chargement initial comme
+      après tout patch ou rechargement incrémental.
     logic:
-      trigger: Validation design ou chargement du graphe
+      trigger: Validation design, chargement du graphe ou revalidation post-patch.
       condition: Un cycle de dépendance est détecté.
-      effect: État interdit ; déploiement bloqué ou chargement refusé.
+      effect: État interdit ; déploiement bloqué, chargement refusé ou patch rejeté
+        tant que l’acyclicité n’est pas rétablie.
       scope: knowledge_model
   - id: INV_SECONDARY_RETROGRADATION_IS_NEW_EVENT
     authority: primary
     core_type: CONSTITUTION
-    source_anchor: '[S17c][PATCH_V1_9]'
+    source_anchor: '[S17c][PATCH_V2_0]'
     depends_on:
     - INV_GRAPH_PROPAGATION_ONE_HOP
     - TYPE_KNOWLEDGE_GRAPH
@@ -760,7 +762,7 @@ CORE:
   - id: INV_PATCH_LOCAL_VALIDATION_MUST_BE_DETERMINISTIC
     authority: primary
     core_type: CONSTITUTION
-    source_anchor: '[S14][PATCH_V1_9]'
+    source_anchor: '[S14][PATCH_V2_0]'
     depends_on:
     - TYPE_PATCH_ARTIFACT
     - TYPE_PATCH_IMPACT_SCOPE
@@ -783,7 +785,7 @@ CORE:
   - id: INV_MISSING_KU_TYPE_FORCES_SAFE_FALLBACK
     authority: primary
     core_type: CONSTITUTION
-    source_anchor: '[S12][S14][PATCH_V1_9]'
+    source_anchor: '[S12][S14][PATCH_V2_0]'
     depends_on:
     - TYPE_KNOWLEDGE_UNIT
     - INV_KU_TYPING_REQUIRED
@@ -804,7 +806,7 @@ CORE:
   - id: INV_AR_N2_SHORT_FORM_REQUIRES_EXPLICIT_PRIORITY
     authority: primary
     core_type: CONSTITUTION
-    source_anchor: '[S11][PATCH_V1_9]'
+    source_anchor: '[S11][PATCH_V2_0]'
     depends_on:
     - TYPE_SELF_REPORT_AR_N2
     - TYPE_STATE_AXIS_VALUE_COST
@@ -825,7 +827,7 @@ CORE:
   - id: INV_PERSISTENT_DRIFT_REQUIRES_ESCALATION_IF_PATCH_BLOCKED
     authority: primary
     core_type: CONSTITUTION
-    source_anchor: '[S14][PATCH_V1_9]'
+    source_anchor: '[S14][PATCH_V2_0]'
     depends_on:
     - TYPE_PATCH_ARTIFACT
     - INV_INVALID_PATCH_REJECTED
@@ -843,7 +845,7 @@ CORE:
   - id: INV_PATCH_ARTIFACTS_MUST_BE_PRECOMPUTED_OFF_SESSION
     authority: primary
     core_type: CONSTITUTION
-    source_anchor: '[S13][S14][PATCH_V1_9]'
+    source_anchor: '[S13][S14][PATCH_V2_0]'
     depends_on:
     - TYPE_PATCH_ARTIFACT
     - INV_RUNTIME_FULLY_LOCAL
@@ -865,7 +867,7 @@ CORE:
   - id: INV_CREATIVE_KU_AUTONOMY_REQUIRES_DETERMINISTIC_FEEDBACK_PATH
     authority: primary
     core_type: CONSTITUTION
-    source_anchor: '[S12][S17][PATCH_V1_9]'
+    source_anchor: '[S12][S17][PATCH_V2_0]'
     depends_on:
     - TYPE_KNOWLEDGE_UNIT
     - TYPE_FEEDBACK_COVERAGE_MATRIX
@@ -880,6 +882,69 @@ CORE:
       effect: Régime autonome interdit pour cette KU ; checkpoint humain ou redesign
         requis.
       scope: design_governance
+  - id: INV_REFERENTIEL_VALIDITY_REQUIRED_FOR_DELEGATED_THRESHOLD_EVALUATION
+    authority: primary
+    core_type: CONSTITUTION
+    source_anchor: '[ARBITRAGE_2026_04_01][REF-FAILSAFE-01]'
+    depends_on:
+    - REF_CORE_LEARNIT_REFERENTIEL_V2_0_IN_CONSTITUTION
+    relations:
+    - type: constrains
+      target:
+        id: TYPE_MASTERY_MODEL
+    patchable: false
+    parameterizable: false
+    human_readable: Aucune évaluation constitutionnelle dépendant d’un seuil délégué
+      n’est autorisée sans Référentiel valide et compatible.
+    logic:
+      trigger: Évaluation runtime d’une règle ou composante dépendant d’un seuil délégué.
+      condition: Référentiel absent, invalide ou incompatible avec la Constitution
+        active.
+      effect: Déploiement bloqué ou fallback conservateur explicite ; aucune résolution
+        implicite de seuil n’est permise.
+      scope: runtime_safety
+  - id: INV_RUNTIME_QUALIFICATION_SIGNALS_MUST_BE_EXPLICIT_OR_OFFSESSION
+    authority: primary
+    core_type: CONSTITUTION
+    source_anchor: '[ARBITRAGE_2026_04_01][OFFLINE-RUNTIME-01]'
+    depends_on:
+    - TYPE_CORPUS_CONFIDENCE_ICC
+    - TYPE_AUTHENTIC_CONTEXT
+    - INV_RUNTIME_FULLY_LOCAL
+    - INV_NO_RUNTIME_CONTENT_GENERATION
+    relations: []
+    patchable: false
+    parameterizable: false
+    human_readable: Les signaux comme misconception, ICC ou contexte authentique doivent
+      provenir d’artefacts hors session ou d’entrées explicites, jamais d’une inférence
+      IA implicite en runtime local.
+    logic:
+      trigger: Qualification d’un signal de gouvernance ou d’un prérequis d’adaptation.
+      condition: Le moteur tente d’inférer localement un signal nécessitant interprétation
+        sémantique ou LLM.
+      effect: Interdiction ; seuls les artefacts précomputés hors session ou les indicateurs
+        explicites déterministes sont autorisés en usage local.
+      scope: runtime_architecture
+  - id: INV_DISTRESS_REGIME_PRIORITY_CANNOT_BE_OVERRIDDEN
+    authority: primary
+    core_type: CONSTITUTION
+    source_anchor: '[ARBITRAGE_2026_04_01][DISTRESS-PRIORITY-01]'
+    depends_on:
+    - TYPE_STATE_AXIS_ACTIVATION
+    relations:
+    - type: constrains
+      target:
+        id: TYPE_LEARNER_STATE_MODEL
+    patchable: false
+    parameterizable: false
+    human_readable: Aucun conflit de régimes ni patch référentiel ne peut rétrograder
+      la priorité structurelle de la détresse.
+    logic:
+      trigger: Résolution de conflits inter-régimes ou révision paramétrique associée.
+      condition: Un régime de détresse est actif ou détecté.
+      effect: La détresse reste prioritaire structurellement jusqu’à sortie explicite
+        ; aucune table opérationnelle ne peut l’abaisser sous un régime moins sûr.
+      scope: runtime_state
   RULES:
   - id: RULE_NO_CALIBRATION_CONSERVATIVE_START
     authority: primary
@@ -934,7 +999,7 @@ CORE:
     core_type: CONSTITUTION
     source_anchor: '[S5]'
     depends_on:
-    - REF_CORE_LEARNIT_REFERENTIEL_V1_0_IN_CONSTITUTION
+    - REF_CORE_LEARNIT_REFERENTIEL_V2_0_IN_CONSTITUTION
     relations:
     - type: triggers
       target:
@@ -993,7 +1058,7 @@ CORE:
     source_anchor: '[S17d]'
     depends_on:
     - TYPE_STATE_AXIS_VALUE_COST
-    - REF_CORE_LEARNIT_REFERENTIEL_V1_0_IN_CONSTITUTION
+    - REF_CORE_LEARNIT_REFERENTIEL_V2_0_IN_CONSTITUTION
     relations:
     - type: triggers
       target:
@@ -1014,7 +1079,7 @@ CORE:
     source_anchor: '[S7]'
     depends_on:
     - TYPE_SELF_REPORT_AR_N1
-    - REF_CORE_LEARNIT_REFERENTIEL_V1_0_IN_CONSTITUTION
+    - REF_CORE_LEARNIT_REFERENTIEL_V2_0_IN_CONSTITUTION
     relations:
     - type: triggers
       target:
@@ -1110,7 +1175,7 @@ CORE:
   - id: RULE_LEARNER_STATE_AXIS_UNKNOWN_ALLOWED
     authority: primary
     core_type: CONSTITUTION
-    source_anchor: '[S7][S11][PATCH_V1_9__STAGE03]'
+    source_anchor: '[S7][S11][PATCH_V2_0__STAGE03]'
     depends_on:
     - TYPE_LEARNER_STATE_MODEL
     - TYPE_STATE_AXIS_ACTIVATION
@@ -1142,29 +1207,224 @@ CORE:
     source_anchor: '[ARBITRAGE_2026_04_01][DIVMSC-01]'
     depends_on:
     - EVENT_MSC_PERCEPTION_DIVERGENCE_DETECTED
-    - REF_CORE_LEARNIT_REFERENTIEL_V1_0_IN_CONSTITUTION
+    - REF_CORE_LEARNIT_REFERENTIEL_V2_0_IN_CONSTITUTION
     relations:
     - type: triggers
       target:
         id: ACTION_PLAN_SHORT_DIAGNOSTIC_TASK
     patchable: false
     parameterizable: true
-    human_readable: 'À la détection d''une divergence MSC calculé vs perçu, le moteur
-      déclenche obligatoirement une phase diagnostique ciblée (révision de la notion
-      supposément maîtrisée). Si la divergence persiste après la phase diagnostique,
-      une escalade vers révision du design du contenu est déclenchée (notification
-      externe).
-
-      '
+    human_readable: À la détection d'une divergence MSC calculé vs perçu, le moteur
+      déclenche d'abord une phase diagnostique ciblée ; si la divergence persiste,
+      seule une escalade hors session vers révision du design du contenu est autorisée.
     logic:
       trigger: EVENT_MSC_PERCEPTION_DIVERGENCE_DETECTED
       condition: Divergence MSC calculé vs perçu persistante.
       effect: 'Étape 1 : retour obligatoire en phase diagnostique ciblée sur la KU
-        concernée. Étape 2 (si divergence persiste après diagnostique) : escalade
-        vers révision du design du contenu — notification externe obligatoire.
-
-        '
+        concernée. Étape 2 si la divergence persiste après diagnostique : ouverture
+        d’une escalade hors session vers révision du design du contenu ; aucune notification
+        externe en session active n’est autorisée.'
       scope: runtime_evaluation
+  - id: RULE_MULTI_AXIS_UNKNOWN_OR_UNOBSERVABLE_SAFE_ENTRY
+    authority: primary
+    core_type: CONSTITUTION
+    source_anchor: '[ARBITRAGE_2026_04_01][STATE-UNKNOWN-01]'
+    depends_on:
+    - TYPE_LEARNER_STATE_MODEL
+    - TYPE_STATE_AXIS_CALIBRATION
+    - TYPE_STATE_AXIS_ACTIVATION
+    - TYPE_STATE_AXIS_VALUE_COST
+    - RULE_LEARNER_STATE_AXIS_UNKNOWN_ALLOWED
+    relations:
+    - type: triggers
+      target:
+        id: ACTION_APPLY_LIGHT_REVERSIBLE_SCAFFOLDING
+    patchable: false
+    parameterizable: false
+    human_readable: Si plusieurs axes d’état restent unknown ou non-observables simultanément,
+      le moteur applique une entrée conservative bornée plutôt qu’une complétion implicite.
+    logic:
+      trigger: Initialisation, reprise ou mise à jour d’état avec observabilité insuffisante.
+      condition: Plusieurs axes critiques sont simultanément unknown, absents ou non-observables.
+      effect: Démarrage sur KU racines, Bloom minimal, séquence courte de prise de
+        repères et scaffolding léger réversible ; aucune inférence cachée n’est autorisée.
+      scope: runtime_state
+  - id: RULE_MSC_COMPONENT_NON_CALCULABLE_DEFERS_BASE_MASTERY
+    authority: primary
+    core_type: CONSTITUTION
+    source_anchor: '[ARBITRAGE_2026_04_01][MSC-DEFER-01]'
+    depends_on:
+    - TYPE_MASTERY_MODEL
+    - TYPE_MASTERY_COMPONENT_P
+    - TYPE_MASTERY_COMPONENT_R
+    - TYPE_MASTERY_COMPONENT_A
+    - INV_MSC_AND_STRICT
+    relations:
+    - type: constrains
+      target:
+        id: INV_MSC_AND_STRICT
+    patchable: false
+    parameterizable: false
+    human_readable: Une composante MSC requise mais non calculable diffère la maîtrise
+      de base ; elle ne tombe jamais implicitement à false.
+    logic:
+      trigger: Déclaration de maîtrise de base.
+      condition: Au moins une composante requise est indisponible, non calculable
+        ou insuffisamment observée.
+      effect: Statut deferred/non déclarable jusqu’à collecte suffisante ; aucune
+        pénalisation implicite par défaut.
+      scope: runtime_evaluation
+  - id: RULE_T_EVALUATION_OVERDUE_REQUIRES_SIGNAL_OR_FOLLOWUP
+    authority: primary
+    core_type: CONSTITUTION
+    source_anchor: '[ARBITRAGE_2026_04_01][T-02]'
+    depends_on:
+    - EVENT_T_EVALUATION_OVERDUE
+    - ACTION_PLAN_SHORT_DIAGNOSTIC_TASK
+    relations:
+    - type: triggers
+      target:
+        id: ACTION_PLAN_SHORT_DIAGNOSTIC_TASK
+    patchable: false
+    parameterizable: true
+    human_readable: Un retard d’évaluation de T doit déclencher un suivi explicite
+      plutôt qu’un oubli silencieux.
+    logic:
+      trigger: EVENT_T_EVALUATION_OVERDUE.
+      condition: T non évalué alors que sa fenêtre de contrôle est échue.
+      effect: Planification d’une vérification de transfert ou maintien explicite
+        du statut différé avec journalisation.
+      scope: runtime_evaluation
+  - id: RULE_CONSERVATIVE_SCAFFOLDING_ESCALATION_REQUIRES_OFFSESSION_REVIEW
+    authority: primary
+    core_type: CONSTITUTION
+    source_anchor: '[ARBITRAGE_2026_04_01][CONS-ESC-02]'
+    depends_on:
+    - EVENT_CONSERVATIVE_SCAFFOLDING_ESCALATION
+    - ACTION_ESCALATE_PERSISTENT_DRIFT_OFFSESSION
+    relations:
+    - type: triggers
+      target:
+        id: ACTION_ESCALATE_PERSISTENT_DRIFT_OFFSESSION
+    patchable: false
+    parameterizable: true
+    human_readable: Une escalade du mode conservateur prolongé ouvre uniquement une
+      revue hors session.
+    logic:
+      trigger: EVENT_CONSERVATIVE_SCAFFOLDING_ESCALATION.
+      condition: La persistance est confirmée sur la fenêtre référentielle.
+      effect: Ouverture d’une revue hors session et maintien d’un régime minimal/réversible
+        tant que l’analyse n’est pas close.
+      scope: runtime_state
+  - id: RULE_SYSTEMIC_INVESTIGATION_OPEN_CLOSE_WINDOW
+    authority: primary
+    core_type: CONSTITUTION
+    source_anchor: '[ARBITRAGE_2026_04_01][SYST-WINDOW-01]'
+    depends_on:
+    - EVENT_SYSTEMIC_INVESTIGATION_AUTO_OPENED
+    - EVENT_SYSTEMIC_INVESTIGATION_CLOSED
+    - ACTION_ESCALATE_PERSISTENT_DRIFT_OFFSESSION
+    - REF_CORE_LEARNIT_REFERENTIEL_V2_0_IN_CONSTITUTION::PARAM_REFERENTIEL_SYSTEMIC_INVESTIGATION_MAX_WINDOW_SESSIONS
+    relations:
+    - type: triggers
+      target:
+        id: ACTION_ESCALATE_PERSISTENT_DRIFT_OFFSESSION
+    patchable: false
+    parameterizable: true
+    human_readable: Toute investigation systémique ouverte doit être explicitement
+      close dans une fenêtre maximale ; au-delà, la revue passe hors session.
+    logic:
+      trigger: Ouverture ou maintien d’une investigation systémique.
+      condition: Investigation ouverte sans résolution à l’intérieur de la fenêtre
+        maximale référentielle.
+      effect: Maintien d’un régime minimal/réversible puis escalade hors session obligatoire
+        si la clôture explicite n’intervient pas dans la borne.
+      scope: runtime_safety
+  - id: RULE_ACTIVATION_DISTRESS_PERSISTENCE_ESCALATION_OFFSESSION
+    authority: primary
+    core_type: CONSTITUTION
+    source_anchor: '[ARBITRAGE_2026_04_01][DISTRESS-02]'
+    depends_on:
+    - EVENT_ACTIVATION_DISTRESS_PERSISTENCE_ESCALATION
+    - ACTION_ESCALATE_PERSISTENT_DRIFT_OFFSESSION
+    relations:
+    - type: triggers
+      target:
+        id: ACTION_ESCALATE_PERSISTENT_DRIFT_OFFSESSION
+    patchable: false
+    parameterizable: true
+    human_readable: L’escalade de détresse persistante ouvre uniquement une revue
+      hors session et maintient la sécurité pédagogique locale.
+    logic:
+      trigger: EVENT_ACTIVATION_DISTRESS_PERSISTENCE_ESCALATION.
+      condition: La fenêtre référentielle de persistance est atteinte.
+      effect: Revue hors session obligatoire, maintien d’un régime sûr local, aucune
+        notification externe en session active.
+      scope: runtime_state
+  - id: RULE_PROVISIONAL_MASTERY_WINDOW_EXPIRY_SAFE_FALLBACK
+    authority: primary
+    core_type: CONSTITUTION
+    source_anchor: '[ARBITRAGE_2026_04_01][PMW-02]'
+    depends_on:
+    - EVENT_PROVISIONAL_MASTERY_WINDOW_EXPIRED
+    - ACTION_PLAN_SHORT_DIAGNOSTIC_TASK
+    relations:
+    - type: triggers
+      target:
+        id: ACTION_PLAN_SHORT_DIAGNOSTIC_TASK
+    patchable: false
+    parameterizable: true
+    human_readable: À expiration d’une maîtrise provisoire non vérifiée, le moteur
+      revient à un comportement conservateur explicite.
+    logic:
+      trigger: EVENT_PROVISIONAL_MASTERY_WINDOW_EXPIRED.
+      condition: Vérification non concluante ou absente.
+      effect: Retrait du statut provisoire, retour à un mode sûr et planification
+        d’une vérification ciblée ; aucune prolongation implicite illimitée.
+      scope: runtime_evaluation
+  - id: RULE_PERSISTENT_DRIFT_BLOCKED_PATCH_ESCALATES_OFFSESSION
+    authority: primary
+    core_type: CONSTITUTION
+    source_anchor: '[ARBITRAGE_2026_04_01][DRIFT-ESC-02]'
+    depends_on:
+    - INV_PERSISTENT_DRIFT_REQUIRES_ESCALATION_IF_PATCH_BLOCKED
+    - ACTION_ESCALATE_PERSISTENT_DRIFT_OFFSESSION
+    relations:
+    - type: triggers
+      target:
+        id: ACTION_ESCALATE_PERSISTENT_DRIFT_OFFSESSION
+    patchable: false
+    parameterizable: false
+    human_readable: Une dérive persistante non patchable localement doit déboucher
+      sur une action d’escalade hors session explicitement matérialisée.
+    logic:
+      trigger: Persistance d’un besoin de correction non résoluble par patch local
+        valide.
+      condition: Le patch requis reste rejeté, impossible ou hors bornes autorisées.
+      effect: Ouverture d’une escalade hors session avec payload minimal ; aucun maintien
+        implicite dans un état de dérive non traité.
+      scope: patch_governance
+  - id: RULE_GAMIFICATION_PROBATION_MUST_CLOSE
+    authority: primary
+    core_type: CONSTITUTION
+    source_anchor: '[ARBITRAGE_2026_04_01][GAM-PROB-02]'
+    depends_on:
+    - EVENT_GAMIFICATION_PROBATION_MAX_DURATION_REACHED
+    - ACTION_INFORM_LEARNER
+    relations:
+    - type: triggers
+      target:
+        id: ACTION_INFORM_LEARNER
+    patchable: false
+    parameterizable: true
+    human_readable: Une probation gamification doit se clôturer par validation explicite,
+      suspension ou retrait de la mécanique.
+    logic:
+      trigger: EVENT_GAMIFICATION_PROBATION_MAX_DURATION_REACHED.
+      condition: Validation de non-nuisance absente ou incomplète.
+      effect: Sortie explicite du mode probatoire par validation, suspension ou retrait
+        ; l’apprenant est informé si un changement visible intervient.
+      scope: deployment
   PARAMETERS:
   - id: PARAM_PROVISIONAL_MASTERY_VERIFICATION_WINDOW
     authority: primary
@@ -1405,7 +1665,7 @@ CORE:
     source_anchor: '[S7][S17d]'
     depends_on:
     - TYPE_STATE_AXIS_VALUE_COST
-    - REF_CORE_LEARNIT_REFERENTIEL_V1_0_IN_CONSTITUTION
+    - REF_CORE_LEARNIT_REFERENTIEL_V2_0_IN_CONSTITUTION
     relations:
     - type: triggers
       target:
@@ -1424,7 +1684,7 @@ CORE:
     source_anchor: '[S7]'
     depends_on:
     - TYPE_SELF_REPORT_AR_N1
-    - REF_CORE_LEARNIT_REFERENTIEL_V1_0_IN_CONSTITUTION
+    - REF_CORE_LEARNIT_REFERENTIEL_V2_0_IN_CONSTITUTION
     relations:
     - type: triggers
       target:
@@ -1442,7 +1702,7 @@ CORE:
     core_type: CONSTITUTION
     source_anchor: '[S5]'
     depends_on:
-    - REF_CORE_LEARNIT_REFERENTIEL_V1_0_IN_CONSTITUTION
+    - REF_CORE_LEARNIT_REFERENTIEL_V2_0_IN_CONSTITUTION
     relations:
     - type: triggers
       target:
@@ -1530,7 +1790,7 @@ CORE:
     depends_on:
     - TYPE_MASTERY_MODEL
     - TYPE_SELF_REPORT_AR_N1
-    - REF_CORE_LEARNIT_REFERENTIEL_V1_0_IN_CONSTITUTION
+    - REF_CORE_LEARNIT_REFERENTIEL_V2_0_IN_CONSTITUTION
     relations:
     - type: triggers
       target:
@@ -1555,6 +1815,151 @@ CORE:
 
         '
       scope: runtime_evaluation
+  - id: EVENT_T_EVALUATION_OVERDUE
+    authority: primary
+    core_type: CONSTITUTION
+    source_anchor: '[ARBITRAGE_2026_04_01][T-01]'
+    depends_on:
+    - TYPE_MASTERY_COMPONENT_T
+    relations:
+    - type: triggers
+      target:
+        id: RULE_T_EVALUATION_OVERDUE_REQUIRES_SIGNAL_OR_FOLLOWUP
+    patchable: false
+    parameterizable: true
+    human_readable: L’évaluation de la composante T est en retard par rapport au cycle
+      attendu.
+    logic:
+      trigger: Supervision de la transférabilité.
+      condition: Une évaluation T attendue n’a pas été réalisée dans la fenêtre opérationnelle
+        prévue.
+      effect: Signal explicite de retard de T ; aucune disparition silencieuse du
+        besoin d’évaluation.
+      scope: runtime_evaluation
+  - id: EVENT_CONSERVATIVE_SCAFFOLDING_ESCALATION
+    authority: primary
+    core_type: CONSTITUTION
+    source_anchor: '[ARBITRAGE_2026_04_01][CONS-ESC-01]'
+    depends_on:
+    - INV_CONSERVATIVE_RULE_WITHOUT_AR_N1
+    - REF_CORE_LEARNIT_REFERENTIEL_V2_0_IN_CONSTITUTION::PARAM_REFERENTIEL_CONSERVATIVE_SCAFFOLDING_ESCALATION_SESSIONS
+    relations:
+    - type: triggers
+      target:
+        id: RULE_CONSERVATIVE_SCAFFOLDING_ESCALATION_REQUIRES_OFFSESSION_REVIEW
+    patchable: false
+    parameterizable: true
+    human_readable: Le maintien prolongé en mode conservateur sans sortie explicite
+      déclenche une escalade formelle.
+    logic:
+      trigger: Persistance du mode conservateur.
+      condition: Mode conservateur actif sans AR-N1 exploitable ni proxys suffisants
+        sur la fenêtre référentielle déclarée.
+      effect: Déclenchement d’une escalade gouvernée ; l’état ne peut rester indéfiniment
+        en simple conservatisme silencieux.
+      scope: runtime_state
+  - id: EVENT_SYSTEMIC_INVESTIGATION_AUTO_OPENED
+    authority: primary
+    core_type: CONSTITUTION
+    source_anchor: '[ARBITRAGE_2026_04_01][SYST-OPEN-01]'
+    depends_on:
+    - REF_CORE_LEARNIT_REFERENTIEL_V2_0_IN_CONSTITUTION::PARAM_REFERENTIEL_SYSTEMIC_INVESTIGATION_TRIGGER_CONDITIONS
+    - REF_CORE_LEARNIT_REFERENTIEL_V2_0_IN_CONSTITUTION::PARAM_REFERENTIEL_SYSTEMIC_INVESTIGATION_SESSION_THRESHOLD
+    relations:
+    - type: triggers
+      target:
+        id: RULE_SYSTEMIC_INVESTIGATION_OPEN_CLOSE_WINDOW
+    patchable: false
+    parameterizable: true
+    human_readable: Une investigation systémique s’ouvre automatiquement lorsque plusieurs
+      signaux anormaux persistent simultanément au-delà du seuil référentiel.
+    logic:
+      trigger: Supervision multi-signaux.
+      condition: Conditions et seuil de sessions consécutives atteints selon le Référentiel.
+      effect: Ouverture formelle de l’investigation systémique et passage à un régime
+        minimal/réversible.
+      scope: runtime_safety
+  - id: EVENT_SYSTEMIC_INVESTIGATION_CLOSED
+    authority: primary
+    core_type: CONSTITUTION
+    source_anchor: '[ARBITRAGE_2026_04_01][SYST-CLOSE-01]'
+    depends_on:
+    - EVENT_SYSTEMIC_INVESTIGATION_AUTO_OPENED
+    relations: []
+    patchable: false
+    parameterizable: true
+    human_readable: L’investigation systémique est explicitement clôturée après résolution,
+      stabilisation ou décision de revue hors session.
+    logic:
+      trigger: Réévaluation du régime systémique.
+      condition: Cause résolue, stabilisée ou transférée vers une chaîne hors session
+        explicite.
+      effect: Sortie formelle du régime systémique ; aucun état d’investigation ouverte
+        permanente n’est autorisé.
+      scope: runtime_safety
+  - id: EVENT_ACTIVATION_DISTRESS_PERSISTENCE_ESCALATION
+    authority: primary
+    core_type: CONSTITUTION
+    source_anchor: '[ARBITRAGE_2026_04_01][DISTRESS-01]'
+    depends_on:
+    - TYPE_STATE_AXIS_ACTIVATION
+    - REF_CORE_LEARNIT_REFERENTIEL_V2_0_IN_CONSTITUTION::PARAM_REFERENTIEL_ACTIVATION_DISTRESS_PERSISTENCE_SESSIONS
+    relations:
+    - type: triggers
+      target:
+        id: RULE_ACTIVATION_DISTRESS_PERSISTENCE_ESCALATION_OFFSESSION
+    patchable: false
+    parameterizable: true
+    human_readable: Une détresse d’activation persistante déclenche une escalade explicite
+      lorsqu’elle se maintient sur la fenêtre référentielle.
+    logic:
+      trigger: Supervision du régime d’activation.
+      condition: État de détresse confirmé sur N sessions consécutives selon le Référentiel.
+      effect: Ouverture d’une escalade explicite ; la détresse ne peut rester indéfiniment
+        en simple conservatisme local.
+      scope: runtime_state
+  - id: EVENT_PROVISIONAL_MASTERY_WINDOW_EXPIRED
+    authority: primary
+    core_type: CONSTITUTION
+    source_anchor: '[ARBITRAGE_2026_04_01][PMW-01]'
+    depends_on:
+    - PARAM_PROVISIONAL_MASTERY_VERIFICATION_WINDOW
+    relations:
+    - type: triggers
+      target:
+        id: RULE_PROVISIONAL_MASTERY_WINDOW_EXPIRY_SAFE_FALLBACK
+    patchable: false
+    parameterizable: true
+    human_readable: La fenêtre de vérification d’une maîtrise provisoire est expirée
+      sans confirmation explicite.
+    logic:
+      trigger: Supervision de la fenêtre de maîtrise provisoire.
+      condition: La borne déclarée est atteinte sans vérification concluante.
+      effect: Signal explicite d’expiration ; la maîtrise provisoire ne reste pas
+        ouverte indéfiniment.
+      scope: runtime_evaluation
+  - id: EVENT_GAMIFICATION_PROBATION_MAX_DURATION_REACHED
+    authority: primary
+    core_type: CONSTITUTION
+    source_anchor: '[ARBITRAGE_2026_04_01][GAM-PROB-01]'
+    depends_on:
+    - RULE_UNVERIFIED_GAMIFICATION_PROBATION
+    - REF_CORE_LEARNIT_REFERENTIEL_V2_0_IN_CONSTITUTION::PARAM_REFERENTIEL_GAMIFICATION_PROBATION_MAX_SESSIONS
+    relations:
+    - type: triggers
+      target:
+        id: RULE_GAMIFICATION_PROBATION_MUST_CLOSE
+    patchable: false
+    parameterizable: true
+    human_readable: La durée maximale autorisée du mode probatoire gamification est
+      atteinte.
+    logic:
+      trigger: Supervision du mode probatoire.
+      condition: Le nombre maximal de sessions probatoires défini référentiellement
+        est atteint sans validation explicite.
+      effect: Ouverture d’une sortie obligatoire du mode probatoire ; aucune probation
+        indéfinie n’est autorisée.
+      scope: deployment
   ACTIONS:
   - id: ACTION_PLAN_SHORT_DIAGNOSTIC_TASK
     authority: primary
@@ -1686,4 +2091,21 @@ CORE:
       condition: Réponse conservatrice appliquée.
       effect: Trace pour finalisation ultérieure.
       scope: runtime_governance
+  - id: ACTION_ESCALATE_PERSISTENT_DRIFT_OFFSESSION
+    authority: primary
+    core_type: CONSTITUTION
+    source_anchor: '[ARBITRAGE_2026_04_01][DRIFT-ESC-01]'
+    depends_on: []
+    relations: []
+    patchable: false
+    parameterizable: false
+    human_readable: Ouvrir une escalade hors session avec payload minimal traçable
+      en cas de dérive persistante non résolue localement.
+    logic:
+      trigger: Dérive persistante, investigation systémique non close, détresse persistante
+        ou conservatisme sans sortie.
+      condition: Le runtime local a atteint la borne d’escalade autorisée.
+      effect: Génération d’un payload minimal traçable hors session contenant identifiants
+        concernés, contexte local, historique utile et motif d’ouverture.
+      scope: governance
   DEPENDENCIES: []
