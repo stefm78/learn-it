@@ -1,4 +1,4 @@
-# Platform Factory — Plan de cadrage et d’implantation
+# Platform Factory — Plan de cadrage et d’implantation (v2)
 
 ## Statut du document
 
@@ -49,6 +49,7 @@ Cette inspiration implique qu’à terme il sera probablement pertinent d’ajou
 - un schéma pour `platform_factory_architecture.yaml` ;
 - un schéma pour `platform_factory_state.yaml` ;
 - un schéma pour la scorecard de progression ;
+- un schéma pour les projections dérivées validées ;
 - éventuellement un schéma pour le report de promotion ou de closeout du pipeline.
 
 ### 5. Lien avec `docs/registry/`
@@ -191,6 +192,9 @@ Avec au minimum :
 - une scorecard YAML structurée ;
 - un rapport delta entre deux runs successifs.
 
+### 3.5. Des projections dérivées validées pour exécution IA
+Le pipeline `platform_factory` devra pouvoir générer des **validated_derived_execution_projections** strictement conformes, destinées à être fournies comme contexte unique à des IA ou à des pipelines spécialisés dans un scope borné.
+
 ---
 
 ## 4. Positionnement de la couche Platform Factory
@@ -213,37 +217,201 @@ Formulation directrice proposée :
 > Le pipeline `platform_factory` ne gouverne pas une application produite.  
 > Il gouverne l’état canonique de la capacité Learn-it à produire des applications.
 
+### 4.1. Portée retenue
+La portée retenue est la suivante :
+- `platform_factory` gouverne la fabrique générique Learn-it ;
+- `platform_factory` gouverne aussi le **contrat minimal générique** d’une application produite ;
+- le spécifique domaine est produit ultérieurement, dans un pipeline d’instanciation distinct ;
+- les projections dérivées validées servent d’interface d’exécution bornée pour les IA et les pipelines aval.
+
+### 4.2. Connexion avec le socle canonique
+La connexion avec le socle canonique (Constitution + Référentiel + LINK) doit être conservée explicitement.
+
+Règles :
+- `platform_factory` ne duplique pas la norme ;
+- `platform_factory` peut produire des projections dérivées générées, à champ restreint ;
+- ces projections restent strictement fidèles au canonique applicable à leur scope ;
+- en cas d’évolution du canonique, les projections doivent être régénérées ;
+- la conformité des projections au canonique devient un point de validation de la factory elle-même.
+
 ---
 
-## 5. Plan détaillé par phases
+## 5. Validated Derived Execution Projections
 
-## PHASE 0 — Validation du cadrage
+### 5.1. Définition
+Une **validated_derived_execution_projection** est une projection dérivée, générée par `platform_factory`, destinée à un usage borné par une IA ou un pipeline spécialisé.
 
-### Objectif
+Elle n’ajoute aucune règle nouvelle. Elle extrait, filtre et réorganise seulement le canonique applicable à un travail donné, complété par les contraintes et contrats génériques fixés par `platform_factory`.
+
+### 5.2. Règle d’usage fondamentale
+
+> Une vue dérivée peut être l’unique artefact fourni à une IA pour un travail donné, à condition qu’elle soit validée comme projection strictement fidèle, sans divergence normative, du canonique applicable à ce travail.
+
+### 5.3. Statut
+Une projection dérivée validée doit être comprise à la fois comme :
+- une **projection d’exécution strictement conforme** pour l’IA qui la consomme ;
+- une projection dérivée régénérable dont la source normative primaire reste le canonique.
+
+### 5.4. Invariants minimaux
+Chaque projection dérivée validée doit respecter au minimum :
+- `no_new_rule`
+- `no_normative_divergence`
+- `no_omission_within_declared_scope`
+- `canonical_source_remains_primary_authority`
+- `deterministic_regeneration_required`
+
+### 5.5. Effet recherché
+Les projections dérivées validées doivent permettre :
+- la réduction du contexte transmis aux IA ;
+- le travail parallèle de plusieurs IA ;
+- la distribution claire des responsabilités ;
+- l’exécution de pipelines spécialisés sans relecture intégrale du socle canonique.
+
+### 5.6. Interdits
+Il est interdit de :
+- modifier manuellement une projection dérivée validée comme source de vérité ;
+- y introduire une règle absente du canonique applicable ;
+- promouvoir une projection dérivée comme artefact canonique primaire ;
+- paraphraser librement une contrainte normative au lieu de l’extraire, la filtrer et la réorganiser.
+
+### 5.7. Emplacement et cycle de vie
+L’emplacement exact reste à préciser, mais le principe est fixé :
+- les projections dérivées ne doivent pas brouiller la couche `docs/cores/current/` ;
+- elles doivent vivre dans une zone logique, stable et facile à suivre pour le développement ;
+- elles doivent être générées, consommées, archivées si utile, puis régénérées dès que le canonique ou la factory évoluent.
+
+---
+
+## 6. Contrat minimal générique d’une application produite
+
+Le contrat minimal générique décrit le minimum requis pour qu’une application puisse être reconnue comme produite par Learn-it, traçable, instanciable, validable et exploitable.
+
+Ce contrat n’a pas vocation à figer toute l’application ni tout le spécifique domaine. Il fixe seulement les obligations minimales génériques.
+
+### 6.1. Identité d’application
+Chaque application produite doit disposer d’une identité explicite, distinguant :
+- l’identité logique de l’application ;
+- l’identité d’instance produite ;
+- les fingerprints ou signatures utiles à la reproductibilité.
+
+Point d’attention explicitement retenu :
+- deux utilisateurs distincts peuvent produire des applications différentes à partir d’inputs identiques ;
+- le modèle d’identité doit donc distinguer clairement identité logique, identité d’instance et empreinte de génération.
+
+### 6.2. Manifest d’application
+Chaque application produite doit disposer d’un manifest minimal décrivant au moins :
+- son identité ;
+- son origine ;
+- ses dépendances au canonique et à la factory ;
+- les modules génériques réutilisés ;
+- les artefacts spécifiques instanciés ;
+- les statuts minimaux de validation ;
+- les informations minimales de packaging et de traçabilité.
+
+### 6.3. Contrat de dépendance au canonique
+L’application produite doit déclarer explicitement :
+- les versions ou releases canoniques utilisées ;
+- les versions pertinentes de la factory ;
+- les projections dérivées utilisées ;
+- les références nécessaires à la reproductibilité et à l’audit.
+
+### 6.4. Point d’entrée runtime explicite
+L’application produite doit posséder un point d’entrée runtime identifiable, avec :
+- un identifiant de point d’entrée ;
+- un type d’entrée ou de bootstrap ;
+- un contrat minimal d’initialisation ;
+- les prérequis minimaux nécessaires à son exécution.
+
+### 6.5. Configuration minimale explicite
+L’application produite doit disposer d’une configuration minimale structurée couvrant au minimum :
+- l’identité ;
+- l’activation des modules ;
+- les références d’instanciation ;
+- la traçabilité.
+
+Le niveau de détail exact reste à challenger, mais la présence de ces quatre blocs minimaux est retenue dès maintenant.
+
+### 6.6. Déclaration des modules génériques réutilisés
+L’application produite doit indiquer explicitement quels modules génériques de la factory elle réutilise.
+
+### 6.7. Déclaration des artefacts spécifiques instanciés
+L’application produite doit déclarer quels artefacts spécifiques ont été instanciés pour le domaine ou le cas d’usage visé.
+
+### 6.8. Validation minimale
+L’application produite doit pouvoir produire au moins un socle minimal de validation couvrant :
+- la structure ;
+- la conformité au contrat minimal ;
+- la traçabilité ;
+- le packaging.
+
+Le détail exact des reports reste à challenger et compléter ultérieurement.
+
+### 6.9. Packaging minimal
+L’application produite doit disposer d’un packaging minimal identifiable, relié à son manifest, et vérifiable comme complet, incomplet ou invalide.
+
+Le détail exact du packaging reste à challenger et compléter ultérieurement.
+
+### 6.10. Observabilité minimale
+L’application produite doit laisser au moins des traces minimales sur :
+- son identité de build ;
+- ses modules activés ;
+- les projections dérivées utilisées ;
+- son statut de validation ;
+- les références nécessaires à la traçabilité.
+
+---
+
+## 7. Multi-IA Parallel Development Readiness
+
+Le développement assisté par plusieurs IA en parallèle est une contrainte clé du design de `platform_factory`.
+
+### 7.1. Exigence structurante
+`platform_factory` doit produire des artefacts suffisamment modulaires, bornés, traçables et stables pour permettre un travail parallèle de plusieurs IA sans ambiguïté de responsabilité ni divergence d’assemblage.
+
+### 7.2. Conséquences minimales
+Cela implique au minimum :
+- des scopes bornés par projection dérivée ;
+- des identifiants stables pour les modules, projections et artefacts ;
+- des dépendances explicites ;
+- des points d’assemblage clairs ;
+- des reports homogènes ;
+- l’absence de dépendances implicites non documentées ;
+- la possibilité de régénérer les projections sans dérive.
+
+### 7.3. Posture retenue
+Le niveau de détail optimal pour le travail parallèle multi-IA sera challengé ultérieurement, mais la contrainte elle-même est déjà retenue comme exigence de premier rang de la factory.
+
+---
+
+## 8. Plan détaillé par phases
+
+### PHASE 0 — Validation du cadrage
+
+**Objectif**
 Valider ensemble le présent plan avant toute exécution structurante.
 
-### Décisions attendues
+**Décisions attendues**
 - accepter ou ajuster le découpage en deux artefacts canoniques ;
 - confirmer le nom du pipeline cible : `platform_factory` ;
 - confirmer que la première étape reste documentaire/architecturale, pas canonique ;
 - confirmer que l’état actuel et la cible doivent rester séparés.
 
-### Livrable
+**Livrable**
 - ce document validé ou amendé.
 
-### Critère de sortie
+**Critère de sortie**
 - accord explicite sur le modèle cible.
 
 ---
 
-## PHASE 1 — Définition du modèle canonique minimal de fabrique
+### PHASE 1 — Définition du modèle canonique minimal de fabrique
 
-### Objectif
+**Objectif**
 Définir la structure logique minimale de :
 - `platform_factory_architecture.yaml`
 - `platform_factory_state.yaml`
 
-### Travail à produire
+**Travail à produire**
 
 #### Pour `platform_factory_architecture.yaml`
 Définir les sections minimales, par exemple :
@@ -261,6 +429,9 @@ Définir les sections minimales, par exemple :
 - dependencies_to_referentiel
 - invariants
 - constraints
+- generated_projection_rules
+- produced_application_minimum_contract
+- multi_ia_parallel_readiness
 
 #### Pour `platform_factory_state.yaml`
 Définir les sections minimales, par exemple :
@@ -276,22 +447,25 @@ Définir les sections minimales, par exemple :
 - evidence
 - last_assessment
 - delta_since_previous
+- derived_projection_conformity_status
+- produced_application_contract_status
+- multi_ia_parallel_readiness_status
 
-### Livrables attendus
+**Livrables attendus**
 - un premier design de structure pour les deux YAML ;
 - une convention de lecture claire : prescriptif vs constatif.
 
-### Critère de sortie
+**Critère de sortie**
 - structure cible stable et assez claire pour justifier un pipeline dédié.
 
 ---
 
-## PHASE 2 — Définition du pipeline `platform_factory`
+### PHASE 2 — Définition du pipeline `platform_factory`
 
-### Objectif
+**Objectif**
 Définir le pipeline qui gouvernera cette nouvelle couche.
 
-### Principe
+**Principe**
 Le pipeline doit conserver le même esprit général que `constitution` :
 - audit ;
 - arbitrage ;
@@ -300,10 +474,10 @@ Le pipeline doit conserver le même esprit général que `constitution` :
 - application en zone de travail ;
 - promotion explicite éventuelle.
 
-### Différence importante
+**Différence importante**
 L’objet gouverné n’est pas un Core pédagogique, mais un **état de fabrique**.
 
-### Stages proposés
+**Stages proposés**
 
 #### STAGE_01_FACTORY_SCAN
 But :
@@ -348,7 +522,8 @@ Outputs proposés :
 But :
 - vérifier que le patch est structurellement recevable ;
 - vérifier que les deux artefacts restent cohérents ;
-- vérifier la séparation prescriptif / constatif.
+- vérifier la séparation prescriptif / constatif ;
+- vérifier la cohérence des règles de projections dérivées et du contrat minimal générique.
 
 Outputs proposés :
 - `work/05_validation/platform_factory_patch_validation.yaml`
@@ -369,7 +544,8 @@ Outputs proposés :
 But :
 - valider la cohérence d’ensemble des artefacts Platform Factory patchés ;
 - vérifier leur lisibilité canonique ;
-- vérifier leur cohérence avec la Constitution et le Référentiel.
+- vérifier leur cohérence avec la Constitution et le Référentiel ;
+- vérifier que la factory peut soutenir la génération de projections dérivées conformes.
 
 Outputs proposés :
 - `work/07_validation/platform_factory_core_validation.yaml`
@@ -392,24 +568,24 @@ Outputs proposés :
 - `reports/platform_factory_closeout_report.yaml`
 - `outputs/platform_factory_summary.md`
 
-### Critère de sortie
+**Critère de sortie**
 - pipeline défini à un niveau comparable aux autres pipelines actifs.
 
 ---
 
-## PHASE 3 — Définition des prompts partagés
+### PHASE 3 — Définition des prompts partagés
 
-### Objectif
+**Objectif**
 Créer une famille cohérente de prompts réexécutables, alignés sur les conventions du repo.
 
-### Prompts proposés
+**Prompts proposés**
 - `Make20PlatformFactoryAudit.md`
 - `Make21PlatformFactoryArbitrage.md`
 - `Make22PlatformFactoryPatch.md`
 - `Make23PlatformFactoryValidation.md`
 - `Make24PlatformFactoryReview.md`
 
-### Contraintes de design
+**Contraintes de design**
 Les prompts doivent conserver la structure canonique déjà présente dans le repo :
 - ROLE
 - OBJECTIF
@@ -418,17 +594,17 @@ Les prompts doivent conserver la structure canonique déjà présente dans le re
 - RÈGLES
 - OUTPUT
 
-### Critère de sortie
+**Critère de sortie**
 - prompts stables, relisibles, réexécutables et localisables.
 
 ---
 
-## PHASE 4 — Définition de la scorecard et du suivi de progression
+### PHASE 4 — Définition de la scorecard et du suivi de progression
 
-### Objectif
+**Objectif**
 Éviter qu’un audit soit uniquement narratif.
 
-### Scorecard proposée
+**Scorecard proposée**
 Le fichier `platform_factory_scorecard.yaml` doit permettre de suivre dans le temps au moins :
 - abstraction_genericity
 - platform_application_separation
@@ -438,50 +614,52 @@ Le fichier `platform_factory_scorecard.yaml` doit permettre de suivre dans le te
 - packaging_readiness
 - observability_readiness
 - variant_governance
+- derived_projection_conformity
+- multi_ia_parallel_readiness
 - blockers
 
-### Pour chaque rubrique
+**Pour chaque rubrique**
 - status: `green | amber | red`
 - score: échelle bornée
 - evidence
 - gaps
 - next_actions
 
-### Rapport delta proposé
+**Rapport delta proposé**
 Le pipeline devrait aussi pouvoir produire un rapport delta du type :
 - progrès ;
 - stagnation ;
 - régression ;
 - ambiguïtés persistantes.
 
-### Critère de sortie
+**Critère de sortie**
 - possibilité réelle de lire l’avancement à mesure.
 
 ---
 
-## PHASE 5 — Intégration au repo
+### PHASE 5 — Intégration au repo
 
-### Objectif
+**Objectif**
 Inscrire la couche Platform Factory dans la gouvernance standard du repo.
 
-### Modifications attendues
+**Modifications attendues**
 Après validation du modèle :
 - ajouter le pipeline dans `docs/registry/pipelines.md` ;
 - ajouter les nouveaux prompts dans `docs/registry/resources.md` ;
 - éventuellement ajuster `docs/README.md` si la navigation doit mentionner la fabrique ;
 - créer les nouveaux artefacts canoniques sous `docs/cores/current/`.
 
-### Critère de sortie
+**Critère de sortie**
 - aucun nouvel artefact important ne reste hors couche d’autorité attendue.
 
 ---
 
-## PHASE 6 — Premier run de baseline
+### PHASE 6 — Premier run de baseline
 
-### Objectif
+**Objectif**
 Produire un premier état de référence officiel de la fabrique.
 
-### Résultat attendu
+**Résultat attendu**
 Le premier run ne vise pas nécessairement à tout corriger.
 Il vise à établir :
 - une architecture cible minimale ;
@@ -489,37 +667,33 @@ Il vise à établir :
 - une première scorecard ;
 - une liste claire des écarts.
 
-### Critère de sortie
+**Critère de sortie**
 - existence d’une baseline exploitable pour les runs suivants.
 
 ---
 
-## 6. Choix d’implantation proposés
+## 9. Choix d’implantation proposés
 
-## 6.1. Emplacement du présent document
-
+### 9.1. Emplacement du présent document
 Le meilleur emplacement de ce plan est `docs/architecture/` car :
 - il s’agit d’un document d’architecture préparatoire ;
 - il ne s’agit pas encore d’un pipeline canonique actif ;
 - il ne doit pas être confondu avec un Core déjà promu.
 
-## 6.2. Emplacement futur des artefacts canoniques
-
+### 9.2. Emplacement futur des artefacts canoniques
 Sous `docs/cores/current/` :
 - `platform_factory_architecture.yaml`
 - `platform_factory_state.yaml`
 
-## 6.3. Emplacement futur du pipeline
-
+### 9.3. Emplacement futur du pipeline
 Sous `docs/pipelines/platform_factory/`.
 
-## 6.4. Emplacement futur des prompts
-
+### 9.4. Emplacement futur des prompts
 Sous `docs/prompts/shared/`.
 
 ---
 
-## 7. Ce que ce plan ne doit pas faire
+## 10. Ce que ce plan ne doit pas faire
 
 Ce plan ne doit pas :
 - créer immédiatement un pipeline non validé ;
@@ -530,7 +704,7 @@ Ce plan ne doit pas :
 
 ---
 
-## 8. Risques majeurs à éviter
+## 11. Risques majeurs à éviter
 
 ### Risque 1 — Fichier unique confus
 Créer un seul `platform_factory.yaml` qui mélange :
@@ -552,9 +726,15 @@ Concevoir la fabrique comme si toutes les applications produites étaient de typ
 ### Risque 5 — Sur-ingénierie précoce
 Créer trop d’artefacts ou trop de couches avant d’avoir stabilisé le besoin minimal.
 
+### Risque 6 — Projection dérivée divergente
+Produire une projection dérivée qui diverge du canonique applicable tout en étant consommée seule par une IA.
+
+### Risque 7 — Factory non découpable pour plusieurs IA
+Produire une factory correcte pour un humain mais mal structurée pour une exécution multi-IA parallèle.
+
 ---
 
-## 9. Checklist de validation avant exécution
+## 12. Checklist de validation avant exécution
 
 Avant de lancer la mise en œuvre, vérifier explicitement :
 
@@ -565,11 +745,12 @@ Avant de lancer la mise en œuvre, vérifier explicitement :
 - [ ] l’idée d’un pipeline dédié est acceptée ;
 - [ ] la logique de scorecard YAML est acceptée ;
 - [ ] le niveau de parallélisme avec `constitution` est accepté ;
+- [ ] les projections dérivées validées sont acceptées comme mécanisme d’exécution pour IA ;
 - [ ] les non-objectifs sont compris.
 
 ---
 
-## 10. Questions à revoir ensemble
+## 13. Questions à revoir ensemble
 
 ### Q1. Nommage
 - faut-il conserver `platform_factory` ?
@@ -591,9 +772,12 @@ Avant de lancer la mise en œuvre, vérifier explicitement :
 - le `state.yaml` de fabrique doit-il rester synthétique ?
 - ou suivre très finement les capacités et sous-capacités ?
 
+### Q6. Emplacement des projections dérivées
+- où doivent vivre concrètement les `validated_derived_execution_projections` pour rester faciles à utiliser et à suivre ?
+
 ---
 
-## 11. Proposition de séquence immédiate
+## 14. Proposition de séquence immédiate
 
 Si ce plan est globalement validé, la suite recommandée est :
 
@@ -607,7 +791,7 @@ Si ce plan est globalement validé, la suite recommandée est :
 
 ---
 
-## 12. Résumé exécutif
+## 15. Résumé exécutif
 
 Le bon choix proposé est le suivant :
 
@@ -615,7 +799,9 @@ Le bon choix proposé est le suivant :
 - créer une couche Platform Factory explicite ;
 - séparer **prescriptif** et **constatif** ;
 - gouverner cette couche par un pipeline dédié ;
-- produire des rapports de progression, mais aussi une vérité canonique promouvable.
+- produire des rapports de progression, mais aussi une vérité canonique promouvable ;
+- produire des projections dérivées validées, strictement conformes, pour l’exécution bornée par IA ;
+- rendre la factory exploitable par plusieurs IA en parallèle.
 
 Formule synthétique :
 
