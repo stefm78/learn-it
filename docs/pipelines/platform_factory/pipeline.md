@@ -12,7 +12,6 @@ It governs:
 
 It keeps the same overall spirit as the `constitution` pipeline:
 - explicit stages,
-- auditable transformations,
 - challenge and arbitrage,
 - patching,
 - validation,
@@ -57,51 +56,41 @@ It may only:
 
 These two roles must remain separate throughout the pipeline.
 
-### Rule 3 — Derived execution projections must remain strictly conformant
+### Rule 3 — Released baseline posture
+The current `platform_factory` artifacts are considered a released baseline.
+A new pipeline run does not start with a discovery audit of an unknown object.
+It starts by challenging the released baseline and deciding whether corrections are required.
+
+### Rule 4 — Derived execution projections must remain strictly conformant
 A `validated_derived_execution_projection` may be the only artifact given to an IA for a bounded task, but only if it is validated as strictly conformant to the applicable canon.
 
-### Rule 4 — Multi-IA readiness is a first-rank design constraint
+### Rule 5 — Multi-IA readiness is a first-rank design constraint
 The pipeline must preserve or improve the ability of the Platform Factory to support bounded, parallel work by multiple IAs.
 
 ---
 
 ## Stage map
 
-### STAGE_01_FACTORY_SCAN
+### STAGE_01_CHALLENGE
 **Goal**
-- inventory factory-relevant artifacts,
-- identify existing architecture/state material,
-- map missing pieces before audit.
+- challenge the released `platform_factory` baseline,
+- identify weaknesses, ambiguities, contradictions, incompletenesses or drifts,
+- prepare explicit findings for arbitrage.
+
+**Inputs**
+- current `platform_factory` artifacts,
+- canonical foundation,
+- optional human focus note in `inputs/`.
 
 **Prompt**
-- no specialized prompt required
-
-**Outputs**
-- `work/01_scan/platform_factory_inventory.md`
-
----
-
-### STAGE_02_FACTORY_AUDIT
-**Goal**
-- audit the Platform Factory as a governed capability,
-- assess readiness of the architecture,
-- assess minimum produced-application contract,
-- assess derived projection fidelity model,
-- assess multi-IA parallel readiness.
-
-**Prompt**
-- primary: `docs/prompts/shared/Make20PlatformFactoryAudit.md`
-
-**Optional complementary prompt**
 - `docs/prompts/shared/Challenge_platform_factory.md`
 
 **Outputs**
-- `work/02_audit/platform_factory_audit.md`
-- `reports/platform_factory_scorecard.yaml`
+- `work/01_challenge/challenge_report_##.md`
 
 ---
 
-### STAGE_03_FACTORY_ARBITRAGE
+### STAGE_02_FACTORY_ARBITRAGE
 **Goal**
 - decide what to correct now,
 - decide what to defer,
@@ -109,44 +98,61 @@ The pipeline must preserve or improve the ability of the Platform Factory to sup
 - decide what belongs to the state,
 - decide what requires later pipeline/tooling work.
 
+**Inputs**
+- challenge reports from `work/01_challenge/`,
+- optional human arbitrage notes.
+
 **Prompt**
 - `docs/prompts/shared/Make21PlatformFactoryArbitrage.md`
 
+**Rule**
+- every `challenge_report*.md` present in `work/01_challenge/` must be considered during arbitrage,
+- the arbitrage must consolidate retained, rejected, deferred and out-of-scope findings into a single decision record.
+
 **Outputs**
-- `work/03_arbitrage/platform_factory_arbitrage.md`
+- `work/02_arbitrage/platform_factory_arbitrage.md`
 
 ---
 
-### STAGE_04_FACTORY_PATCH_SYNTHESIS
+### STAGE_03_FACTORY_PATCH_SYNTHESIS
 **Goal**
 - synthesize selected changes,
 - produce a patchset for `platform_factory_architecture.yaml`, `platform_factory_state.yaml`, or both.
+
+**Inputs**
+- current governed artifacts,
+- challenge reports,
+- arbitrage record.
 
 **Prompt**
 - `docs/prompts/shared/Make22PlatformFactoryPatch.md`
 
 **Outputs**
-- `work/04_patch/platform_factory_patchset.yaml`
+- `work/03_patch/platform_factory_patchset.yaml`
 
 ---
 
-### STAGE_05_FACTORY_PATCH_VALIDATION
+### STAGE_04_FACTORY_PATCH_VALIDATION
 **Goal**
 - validate patch structure,
 - validate architecture/state separation,
 - validate consistency of the minimum application contract,
 - validate consistency of derived projection rules.
 
+**Inputs**
+- `work/03_patch/platform_factory_patchset.yaml`,
+- `work/02_arbitrage/platform_factory_arbitrage.md` if needed.
+
 **Prompt**
 - `docs/prompts/shared/Make23PlatformFactoryValidation.md`
 
 **Outputs**
-- `work/05_validation/platform_factory_patch_validation.yaml`
+- `work/04_patch_validation/platform_factory_patch_validation.yaml`
 - `reports/platform_factory_patch_validation_report.md`
 
 ---
 
-### STAGE_06_FACTORY_APPLY
+### STAGE_05_FACTORY_APPLY
 **Goal**
 - apply the patch in a sandbox,
 - materialize patched factory artifacts,
@@ -156,13 +162,13 @@ The pipeline must preserve or improve the ability of the Platform Factory to sup
 - no specialized prompt required
 
 **Outputs**
-- `work/06_apply/patched/platform_factory_architecture.yaml`
-- `work/06_apply/patched/platform_factory_state.yaml`
+- `work/05_apply/patched/platform_factory_architecture.yaml`
+- `work/05_apply/patched/platform_factory_state.yaml`
 - `reports/platform_factory_execution_report.yaml`
 
 ---
 
-### STAGE_07_FACTORY_CORE_VALIDATION
+### STAGE_06_FACTORY_CORE_VALIDATION
 **Goal**
 - validate the patched `platform_factory` artifacts as a coherent pair,
 - validate coherence with canonical foundation,
@@ -172,12 +178,12 @@ The pipeline must preserve or improve the ability of the Platform Factory to sup
 - `docs/prompts/shared/Make23PlatformFactoryValidation.md`
 
 **Outputs**
-- `work/07_validation/platform_factory_core_validation.yaml`
+- `work/06_core_validation/platform_factory_core_validation.yaml`
 - `reports/platform_factory_core_validation_report.md`
 
 ---
 
-### STAGE_08_FACTORY_PROMOTION
+### STAGE_07_FACTORY_PROMOTION
 **Goal**
 - promote the validated factory artifacts into `docs/cores/current/` if required,
 - preserve explicit traceability of the promotion event.
@@ -190,7 +196,7 @@ The pipeline must preserve or improve the ability of the Platform Factory to sup
 
 ---
 
-### STAGE_09_FACTORY_CLOSEOUT_AND_ARCHIVE
+### STAGE_08_FACTORY_CLOSEOUT_AND_ARCHIVE
 **Goal**
 - archive the run,
 - generate a final summary,
@@ -223,7 +229,6 @@ Primary target artifacts:
 
 Expected shared prompt family:
 - `docs/prompts/shared/Challenge_platform_factory.md`
-- `docs/prompts/shared/Make20PlatformFactoryAudit.md`
 - `docs/prompts/shared/Make21PlatformFactoryArbitrage.md`
 - `docs/prompts/shared/Make22PlatformFactoryPatch.md`
 - `docs/prompts/shared/Make23PlatformFactoryValidation.md`
@@ -242,6 +247,17 @@ At minimum, the pipeline must preserve:
 - explicit dependence on Constitution/Référentiel/LINK,
 - minimum produced-application contract integrity,
 - multi-IA parallel readiness constraints.
+
+---
+
+## Success criteria
+
+- No stage may be skipped
+- A new run starts from challenge of the released baseline, not from a discovery audit
+- No file in `docs/cores/current/` may be modified directly before explicit promotion
+- Any patch application must occur in a sandbox root under `work/05_apply/`
+- Promotion to `current/` must remain explicit and occur in a dedicated stage
+- Any successful promotion should be followed by an explicit archive-and-reset closeout stage
 
 ---
 

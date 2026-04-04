@@ -11,7 +11,6 @@ Il en précise le mode opératoire côté IA.
 
 Prompts disponibles :
 - `docs/prompts/shared/Challenge_platform_factory.md`
-- `docs/prompts/shared/Make20PlatformFactoryAudit.md`
 - `docs/prompts/shared/Make21PlatformFactoryArbitrage.md`
 - `docs/prompts/shared/Make22PlatformFactoryPatch.md`
 - `docs/prompts/shared/Make23PlatformFactoryValidation.md`
@@ -21,40 +20,28 @@ Prompts disponibles :
 
 ## Mapping recommandé par stage
 
-### STAGE_01_FACTORY_SCAN
-Prompt recommandé :
-- aucun prompt spécialisé obligatoire
-
-But :
-- inventorier les artefacts pertinents ;
-- préparer l'audit.
-
----
-
-### STAGE_02_FACTORY_AUDIT
+### STAGE_01_CHALLENGE
 Prompt principal :
-- `docs/prompts/shared/Make20PlatformFactoryAudit.md`
-
-Prompt complémentaire possible :
 - `docs/prompts/shared/Challenge_platform_factory.md`
 
-Rôle :
-- `Make20PlatformFactoryAudit.md` produit l'audit structuré de pipeline ;
-- `Challenge_platform_factory.md` peut être utilisé en second passage pour renforcer la recherche de faiblesses adversariales.
+But :
+- challenger la baseline release actuelle de la factory ;
+- identifier faiblesses, ambiguïtés, contradictions, trous de contrat ou dérives ;
+- préparer les findings pour arbitrage.
 
 ---
 
-### STAGE_03_FACTORY_ARBITRAGE
+### STAGE_02_FACTORY_ARBITRAGE
 Prompt principal :
 - `docs/prompts/shared/Make21PlatformFactoryArbitrage.md`
 
 Input attendu :
-- audit structuré ;
-- éventuellement challenge adversarial complémentaire.
+- un ou plusieurs challenge reports ;
+- éventuellement des arbitrages humains complémentaires.
 
 ---
 
-### STAGE_04_FACTORY_PATCH_SYNTHESIS
+### STAGE_03_FACTORY_PATCH_SYNTHESIS
 Prompt principal :
 - `docs/prompts/shared/Make22PlatformFactoryPatch.md`
 
@@ -63,16 +50,16 @@ But :
 
 ---
 
-### STAGE_05_FACTORY_PATCH_VALIDATION
+### STAGE_04_FACTORY_PATCH_VALIDATION
 Prompt principal :
 - `docs/prompts/shared/Make23PlatformFactoryValidation.md`
 
 But :
-- valider la cohérence du patch avant ou après application selon le mode opératoire retenu.
+- valider la cohérence du patch avant application.
 
 ---
 
-### STAGE_06_FACTORY_APPLY
+### STAGE_05_FACTORY_APPLY
 Prompt recommandé :
 - aucun prompt spécialisé obligatoire
 
@@ -83,7 +70,7 @@ But :
 
 ---
 
-### STAGE_07_FACTORY_CORE_VALIDATION
+### STAGE_06_FACTORY_CORE_VALIDATION
 Prompt principal :
 - `docs/prompts/shared/Make23PlatformFactoryValidation.md`
 
@@ -92,7 +79,7 @@ But :
 
 ---
 
-### STAGE_08_FACTORY_PROMOTION
+### STAGE_07_FACTORY_PROMOTION
 Prompt recommandé :
 - aucun prompt spécialisé obligatoire
 
@@ -102,7 +89,7 @@ But :
 
 ---
 
-### STAGE_09_FACTORY_CLOSEOUT_AND_ARCHIVE
+### STAGE_08_FACTORY_CLOSEOUT_AND_ARCHIVE
 Prompt principal :
 - `docs/prompts/shared/Make24PlatformFactoryReview.md`
 
@@ -113,15 +100,10 @@ But :
 
 ---
 
-## Règle d'usage du challenge adversarial
+## Règle d'usage
 
-`Challenge_platform_factory.md` n'est pas le prompt standard de pipeline.
-C'est un prompt complémentaire de stress-test.
-
-Usage recommandé :
-- avant arbitrage, pour compléter l'audit ;
-- ponctuellement, quand un point semble trop vite considéré comme acquis ;
-- lors d'un run de challenge renforcé.
+Le point d'entrée normal d'un run `platform_factory` est le challenge de la baseline release active.
+Le pipeline ne prévoit pas de stage d'audit initial ni de stage de scan séparé dans son flux nominal.
 
 ---
 
