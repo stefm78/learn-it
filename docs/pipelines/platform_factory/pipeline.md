@@ -15,6 +15,7 @@ It keeps the same overall spirit as the `constitution` pipeline:
 - challenge and arbitrage,
 - patching,
 - validation,
+- release materialization,
 - optional promotion,
 - cleanup and archive.
 
@@ -66,6 +67,10 @@ A `validated_derived_execution_projection` may be the only artifact given to an 
 
 ### Rule 5 — Multi-IA readiness is a first-rank design constraint
 The pipeline must preserve or improve the ability of the Platform Factory to support bounded, parallel work by multiple IAs.
+
+### Rule 6 — Release and promotion are distinct acts
+Release materialization and promotion to `docs/cores/current/` must remain explicitly separated.
+A validated patched state is not yet the promoted current state until a dedicated promotion stage completes.
 
 ---
 
@@ -183,9 +188,25 @@ The pipeline must preserve or improve the ability of the Platform Factory to sup
 
 ---
 
-### STAGE_07_FACTORY_PROMOTION
+### STAGE_07_FACTORY_RELEASE_MATERIALIZATION
 **Goal**
-- promote the validated factory artifacts into `docs/cores/current/` if required,
+- materialize a releasable immutable factory artifact set,
+- prepare explicit release outputs before any promotion to current,
+- preserve traceability between validated patched artifacts and releasable artifacts.
+
+**Prompt**
+- no specialized prompt required
+
+**Outputs**
+- `work/07_release/platform_factory_release_plan.yaml`
+- `reports/platform_factory_release_materialization_report.yaml`
+- `outputs/platform_factory_release_candidate_notes.md`
+
+---
+
+### STAGE_08_FACTORY_PROMOTION
+**Goal**
+- promote the validated released factory artifacts into `docs/cores/current/` if required,
 - preserve explicit traceability of the promotion event.
 
 **Prompt**
@@ -196,7 +217,7 @@ The pipeline must preserve or improve the ability of the Platform Factory to sup
 
 ---
 
-### STAGE_08_FACTORY_CLOSEOUT_AND_ARCHIVE
+### STAGE_09_FACTORY_CLOSEOUT_AND_ARCHIVE
 **Goal**
 - archive the run,
 - generate a final summary,
@@ -256,6 +277,7 @@ At minimum, the pipeline must preserve:
 - A new run starts from challenge of the released baseline, not from a discovery audit
 - No file in `docs/cores/current/` may be modified directly before explicit promotion
 - Any patch application must occur in a sandbox root under `work/05_apply/`
+- Any release materialization should happen before promotion
 - Promotion to `current/` must remain explicit and occur in a dedicated stage
 - Any successful promotion should be followed by an explicit archive-and-reset closeout stage
 

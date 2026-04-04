@@ -79,7 +79,17 @@ But :
 
 ---
 
-### STAGE_07_FACTORY_PROMOTION
+### STAGE_07_FACTORY_RELEASE_MATERIALIZATION
+Prompt recommandé :
+- aucun prompt spécialisé obligatoire
+
+But :
+- matérialiser une release immutable avant toute promotion ;
+- préparer les artefacts de release et leurs reports.
+
+---
+
+### STAGE_08_FACTORY_PROMOTION
 Prompt recommandé :
 - aucun prompt spécialisé obligatoire
 
@@ -89,7 +99,7 @@ But :
 
 ---
 
-### STAGE_08_FACTORY_CLOSEOUT_AND_ARCHIVE
+### STAGE_09_FACTORY_CLOSEOUT_AND_ARCHIVE
 Prompt principal :
 - `docs/prompts/shared/Make24PlatformFactoryReview.md`
 
@@ -104,6 +114,7 @@ But :
 
 Le point d'entrée normal d'un run `platform_factory` est le challenge de la baseline release active.
 Le pipeline ne prévoit pas de stage d'audit initial ni de stage de scan séparé dans son flux nominal.
+La release materialization reste distincte de la promotion, comme dans les autres pipelines de gouvernance du repo.
 
 ---
 
