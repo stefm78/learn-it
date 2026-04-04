@@ -1,0 +1,228 @@
+# Platform Factory Pipeline
+
+## Purpose
+
+This pipeline governs the `platform_factory` layer.
+It does not instantiate a domain application.
+It governs:
+- the prescriptive architecture of the Platform Factory,
+- the recognized current state of the Platform Factory,
+- the rules for validated derived execution projections,
+- the generic minimum contract of a produced application.
+
+It keeps the same overall spirit as the `constitution` pipeline:
+- explicit stages,
+- challenge and arbitrage,
+- patching,
+- validation,
+- release materialization,
+- optional promotion,
+- cleanup and archive.
+
+---
+
+## Governed artifacts
+
+Primary governed artifacts:
+- `docs/cores/current/platform_factory_architecture.yaml`
+- `docs/cores/current/platform_factory_state.yaml`
+
+Related reference inputs:
+- `docs/cores/current/constitution.yaml`
+- `docs/cores/current/referentiel.yaml`
+- `docs/cores/current/link.yaml`
+- `docs/architecture/Platform_Factory_Plan.md`
+
+Non-governed by this pipeline:
+- one specific instantiated application,
+- domain-specific learning content,
+- learner runtime state,
+- the future application instantiation pipeline itself.
+
+---
+
+## Operating doctrine
+
+### Rule 1 — No duplication of normative authority
+The pipeline must not rewrite the Constitution, the Référentiel or the LINK indirectly.
+It may only:
+- reference them,
+- bind to them,
+- derive validated execution projections from them,
+- operationalize them for factory-level concerns.
+
+### Rule 2 — Separation of prescriptive and constatative artifacts
+- `platform_factory_architecture.yaml` is prescriptive.
+- `platform_factory_state.yaml` is constatative.
+
+These two roles must remain separate throughout the pipeline.
+
+### Rule 3 — Released baseline posture
+The current `platform_factory` artifacts are considered a released baseline.
+A new pipeline run does not start with a discovery audit of an unknown object.
+It starts by challenging the released baseline and deciding whether corrections are required.
+
+### Rule 4 — Derived execution projections must remain strictly conformant
+A `validated_derived_execution_projection` may be the only artifact given to an IA for a bounded task, but only if it is validated as strictly conformant to the applicable canon.
+
+### Rule 5 — Multi-IA readiness is a first-rank design constraint
+The pipeline must preserve or improve the ability of the Platform Factory to support bounded, parallel work by multiple IAs.
+
+### Rule 6 — Release and promotion are distinct acts
+Release materialization and promotion to `docs/cores/current/` must remain explicitly separated.
+A validated patched state is not yet the promoted current state until a dedicated promotion stage completes.
+
+---
+
+## Stage map
+
+### STAGE_01_CHALLENGE
+
+- Inputs:
+  - current `platform_factory` artifacts
+  - canonical foundation
+  - optional focus note in `inputs/`
+- Prompt:
+  - `docs/prompts/shared/Challenge_platform_factory.md`
+- Output:
+  - `work/01_challenge/challenge_report_##.md`
+
+### STAGE_02_FACTORY_ARBITRAGE
+
+- Inputs:
+  - challenge reports from `work/01_challenge/`
+  - optional human arbitrage notes
+- Prompt:
+  - `docs/prompts/shared/Make21PlatformFactoryArbitrage.md`
+- Rule:
+  - every `challenge_report*.md` present in `work/01_challenge/` must be considered during arbitrage
+  - the arbitrage must consolidate retained, rejected, deferred and out-of-scope findings into a single decision record
+- Output:
+  - `work/02_arbitrage/platform_factory_arbitrage.md`
+
+### STAGE_03_FACTORY_PATCH_SYNTHESIS
+
+- Inputs:
+  - current governed artifacts
+  - challenge reports
+  - arbitrage
+- Prompt:
+  - `docs/prompts/shared/Make22PlatformFactoryPatch.md`
+- Output:
+  - `work/03_patch/platform_factory_patchset.yaml`
+
+### STAGE_04_FACTORY_PATCH_VALIDATION
+
+- Inputs:
+  - `work/03_patch/platform_factory_patchset.yaml`
+  - `work/02_arbitrage/platform_factory_arbitrage.md`
+- Prompt:
+  - `docs/prompts/shared/Make23PlatformFactoryValidation.md`
+- Outputs:
+  - `work/04_patch_validation/platform_factory_patch_validation.yaml`
+  - `reports/platform_factory_patch_validation_report.md`
+
+### STAGE_05_FACTORY_APPLY
+
+- Inputs:
+  - validated patchset
+- Prompt:
+  - none required
+- Outputs:
+  - `work/05_apply/patched/platform_factory_architecture.yaml`
+  - `work/05_apply/patched/platform_factory_state.yaml`
+  - `reports/platform_factory_execution_report.yaml`
+
+### STAGE_06_FACTORY_CORE_VALIDATION
+
+- Inputs:
+  - patched `platform_factory` artifacts from `work/05_apply/patched/`
+- Prompt:
+  - `docs/prompts/shared/Make23PlatformFactoryValidation.md`
+- Outputs:
+  - `work/06_core_validation/platform_factory_core_validation.yaml`
+  - `reports/platform_factory_core_validation_report.md`
+
+### STAGE_07_FACTORY_RELEASE_MATERIALIZATION
+- Spec détaillée :
+  - `docs/pipelines/platform_factory/STAGE_07_FACTORY_RELEASE_MATERIALIZATION.md`
+
+- Rule:
+  - `STAGE_07_FACTORY_RELEASE_MATERIALIZATION.md` is the canonical specification for Stage 07
+
+### STAGE_08_FACTORY_PROMOTE_CURRENT
+- Spec détaillée :
+  - `docs/pipelines/platform_factory/STAGE_08_FACTORY_PROMOTE_CURRENT.md`
+
+- Rule:
+  - `STAGE_08_FACTORY_PROMOTE_CURRENT.md` is the canonical specification for Stage 08
+
+### STAGE_09_FACTORY_CLOSEOUT_AND_ARCHIVE
+
+- Inputs:
+  - promotion outputs
+  - release outputs
+- Prompt:
+  - `docs/prompts/shared/Make24PlatformFactoryReview.md`
+- Outputs:
+  - `reports/platform_factory_closeout_report.yaml`
+  - `outputs/platform_factory_summary.md`
+
+---
+
+## Minimal write zones
+
+Expected write zones for this pipeline:
+- `docs/pipelines/platform_factory/work/`
+- `docs/pipelines/platform_factory/reports/`
+- `docs/pipelines/platform_factory/outputs/`
+- `docs/pipelines/platform_factory/archive/`
+
+Primary target artifacts:
+- `docs/cores/current/platform_factory_architecture.yaml`
+- `docs/cores/current/platform_factory_state.yaml`
+
+---
+
+## Required shared prompts
+
+Expected shared prompt family:
+- `docs/prompts/shared/Challenge_platform_factory.md`
+- `docs/prompts/shared/Make21PlatformFactoryArbitrage.md`
+- `docs/prompts/shared/Make22PlatformFactoryPatch.md`
+- `docs/prompts/shared/Make23PlatformFactoryValidation.md`
+- `docs/prompts/shared/Make24PlatformFactoryReview.md`
+
+Prompt usage companion:
+- `docs/pipelines/platform_factory/PROMPT_USAGE.md`
+
+---
+
+## Validation expectations
+
+At minimum, the pipeline must preserve:
+- separation between architecture and state,
+- strict fidelity requirements for validated derived execution projections,
+- explicit dependence on Constitution/Référentiel/LINK,
+- minimum produced-application contract integrity,
+- multi-IA parallel readiness constraints.
+
+---
+
+## Success criteria
+
+- No stage may be skipped
+- A new run starts from challenge of the released baseline, not from a discovery audit
+- No file in `docs/cores/current/` may be modified directly before explicit promotion
+- Any patch application must occur in a sandbox root under `work/05_apply/`
+- Any release materialization should happen before promotion
+- Promotion to `current/` must remain explicit and occur in a dedicated stage
+- Any successful promotion should be followed by an explicit archive-and-reset closeout stage
+
+---
+
+## Current V0 posture
+
+This pipeline skeleton is intentionally V0.
+It is sufficient to begin challenge and iterative hardening.
+It is not yet a fully tooled execution framework.
