@@ -11,10 +11,9 @@ Exécuter la consolidation finale du `STAGE_02_FACTORY_ARBITRAGE` du pipeline :
 
 - tous les challenge reports présents dans :
   - `docs/pipelines/platform_factory/work/01_challenge/`
-- toutes les propositions d’arbitrage présentes dans :
+- tous les fichiers `.md` présents dans :
   - `docs/pipelines/platform_factory/work/02_arbitrage/`
-  - plus précisément tous les fichiers `platform_factory_arbitrage_*.md`
-  - en excluant `platform_factory_arbitrage.md` s’il existe déjà
+  - en excluant strictement `platform_factory_arbitrage.md`
 - le pipeline :
   - `docs/pipelines/platform_factory/pipeline.md`
 - le prompt métier canonique d’arbitrage :
@@ -28,38 +27,20 @@ Exécuter la consolidation finale du `STAGE_02_FACTORY_ARBITRAGE` du pipeline :
 - Elle doit conserver les convergences fortes.
 - Elle doit expliciter les zones sans consensus.
 - Elle doit préparer la discussion humaine sur les points encore ouverts.
-- Le résultat attendu doit être écrit dans le repo, dans le fichier canonique imposé ci-dessous.
-- Il ne faut pas considérer qu’une réponse dans le chat suffit à accomplir la tâche.
+- Le résultat attendu ne doit pas être écrit immédiatement dans `platform_factory_arbitrage.md`.
+- Avant validation humaine explicite, le travail doit rester dans les échanges et servir à instruire les arbitrages.
+- `platform_factory_arbitrage.md` n’est écrit qu’avec l’approbation explicite de l’humain.
 
-## Génération obligatoire d’un identifiant unique
+## Fichier de sortie canonique final
 
-Avant toute rédaction, générer un identifiant unique nommé `arbitrage_consolidation_run_id`.
-
-Format obligatoire :
-- `PFARBCON_YYYYMMDD_AGENTTAG_RAND`
-
-Contraintes :
-- `YYYYMMDD` = date du jour au format compact
-- `AGENTTAG` = identifiant court de l’IA, en majuscules, 3 à 8 caractères, sans espace
-- `RAND` = suffixe alphanumérique aléatoire de 4 à 8 caractères, en majuscules
-
-Exemples valides :
-- `PFARBCON_20260404_GPT54_7KQ2`
-- `PFARBCON_20260404_CLAUDE_X91M`
-- `PFARBCON_20260404_GEMINI_A8T4Z`
-
-Tu dois :
-1. afficher d’abord le `arbitrage_consolidation_run_id` choisi ;
-2. le rappeler en tête du rapport final.
-
-## Fichier de sortie obligatoire
-
-Écrire exactement un fichier canonique dans le repo :
+Le fichier canonique final de stage est :
 - `docs/pipelines/platform_factory/work/02_arbitrage/platform_factory_arbitrage.md`
+
+Mais ce fichier ne doit être écrit qu’après approbation explicite de l’humain.
 
 ## Travail attendu
 
-À partir de tous les challenge reports et de toutes les propositions d’arbitrage disponibles, produire l’arbitrage consolidé canonique du stage.
+À partir de tous les challenge reports et de tous les fichiers `.md` disponibles dans `work/02_arbitrage/` sauf `platform_factory_arbitrage.md`, produire la consolidation finale d’arbitrage.
 
 L’arbitrage final doit au minimum :
 - consolider les convergences majeures ;
@@ -73,21 +54,20 @@ L’arbitrage final doit au minimum :
 ## Contraintes
 
 - Lire tous les `challenge_report*.md` présents dans `work/01_challenge/`.
-- Lire tous les `platform_factory_arbitrage_*.md` présents dans `work/02_arbitrage/`, sauf `platform_factory_arbitrage.md`.
-- Ne pas ignorer un challenge report ou une proposition d’arbitrage disponible.
+- Lire tous les fichiers `.md` présents dans `work/02_arbitrage/`, sauf `platform_factory_arbitrage.md`.
+- Ne pas ignorer un challenge report ou un fichier `.md` d’arbitrage disponible.
 - Ne pas produire de patch YAML.
 - Utiliser `docs/prompts/shared/Make21PlatformFactoryArbitrage.md` comme cadre principal de raisonnement et de structuration.
 - Toute décision consolidée importante doit être reliée explicitement à un ou plusieurs challenge reports et, si utile, à une ou plusieurs propositions d’arbitrage.
 - Les points sans consensus ne doivent pas être masqués.
 - Les points non tranchables automatiquement doivent être explicitement envoyés en discussion humaine.
-- Une réponse chat seule n’est pas un livrable suffisant : le livrable attendu est le fichier écrit dans le repo.
+- Tant que l’humain n’a pas explicitement validé la consolidation finale, ne pas écrire `platform_factory_arbitrage.md`.
 
-## Structure minimale obligatoire du rapport final
+## Structure minimale obligatoire du travail de consolidation
 
-Le fichier de sortie doit contenir au minimum :
+Le contenu préparatoire ou final doit contenir au minimum :
 
 - Titre
-- `arbitrage_consolidation_run_id`
 - Date
 - Liste des challenge reports considérés
 - Liste des arbitrage reports considérés
@@ -131,7 +111,12 @@ Pour chaque arbitrage important, préciser si possible :
 
 ## Résultat terminal attendu
 
-À la fin de l’exécution, afficher uniquement :
-1. le `arbitrage_consolidation_run_id`
-2. le chemin exact du fichier écrit
-3. un résumé ultra-court
+Tant qu’il n’y a pas d’approbation humaine explicite :
+- ne pas écrire `platform_factory_arbitrage.md`
+- poursuivre la discussion d’arbitrage avec l’humain
+- fournir les éléments nécessaires pour trancher les désaccords
+
+Après approbation humaine explicite :
+1. écrire `docs/pipelines/platform_factory/work/02_arbitrage/platform_factory_arbitrage.md`
+2. afficher le chemin exact du fichier écrit
+3. afficher un résumé ultra-court
