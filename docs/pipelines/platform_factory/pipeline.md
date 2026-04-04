@@ -67,27 +67,14 @@ The pipeline must preserve or improve the ability of the Platform Factory to sup
 
 ## Stage map
 
-### STAGE_00_SCOPE_AND_INPUT_CHECK
-**Goal**
-- confirm the pipeline intent,
-- confirm the governed artifacts,
-- confirm the current source inputs.
-
-**Inputs**
-- current `platform_factory` artifacts if present,
-- canonical foundation,
-- architecture planning materials.
-
-**Outputs**
-- `work/00_scope/platform_factory_scope_check.md`
-
----
-
 ### STAGE_01_FACTORY_SCAN
 **Goal**
 - inventory factory-relevant artifacts,
 - identify existing architecture/state material,
 - map missing pieces before audit.
+
+**Prompt**
+- no specialized prompt required
 
 **Outputs**
 - `work/01_scan/platform_factory_inventory.md`
@@ -101,6 +88,12 @@ The pipeline must preserve or improve the ability of the Platform Factory to sup
 - assess minimum produced-application contract,
 - assess derived projection fidelity model,
 - assess multi-IA parallel readiness.
+
+**Prompt**
+- primary: `docs/prompts/shared/Make20PlatformFactoryAudit.md`
+
+**Optional complementary prompt**
+- `docs/prompts/shared/Challenge_platform_factory.md`
 
 **Outputs**
 - `work/02_audit/platform_factory_audit.md`
@@ -116,6 +109,9 @@ The pipeline must preserve or improve the ability of the Platform Factory to sup
 - decide what belongs to the state,
 - decide what requires later pipeline/tooling work.
 
+**Prompt**
+- `docs/prompts/shared/Make21PlatformFactoryArbitrage.md`
+
 **Outputs**
 - `work/03_arbitrage/platform_factory_arbitrage.md`
 
@@ -125,6 +121,9 @@ The pipeline must preserve or improve the ability of the Platform Factory to sup
 **Goal**
 - synthesize selected changes,
 - produce a patchset for `platform_factory_architecture.yaml`, `platform_factory_state.yaml`, or both.
+
+**Prompt**
+- `docs/prompts/shared/Make22PlatformFactoryPatch.md`
 
 **Outputs**
 - `work/04_patch/platform_factory_patchset.yaml`
@@ -138,6 +137,9 @@ The pipeline must preserve or improve the ability of the Platform Factory to sup
 - validate consistency of the minimum application contract,
 - validate consistency of derived projection rules.
 
+**Prompt**
+- `docs/prompts/shared/Make23PlatformFactoryValidation.md`
+
 **Outputs**
 - `work/05_validation/platform_factory_patch_validation.yaml`
 - `reports/platform_factory_patch_validation_report.md`
@@ -149,6 +151,9 @@ The pipeline must preserve or improve the ability of the Platform Factory to sup
 - apply the patch in a sandbox,
 - materialize patched factory artifacts,
 - preserve a technical execution trace.
+
+**Prompt**
+- no specialized prompt required
 
 **Outputs**
 - `work/06_apply/patched/platform_factory_architecture.yaml`
@@ -163,6 +168,9 @@ The pipeline must preserve or improve the ability of the Platform Factory to sup
 - validate coherence with canonical foundation,
 - validate support for strictly conformant derived projections.
 
+**Prompt**
+- `docs/prompts/shared/Make23PlatformFactoryValidation.md`
+
 **Outputs**
 - `work/07_validation/platform_factory_core_validation.yaml`
 - `reports/platform_factory_core_validation_report.md`
@@ -174,6 +182,9 @@ The pipeline must preserve or improve the ability of the Platform Factory to sup
 - promote the validated factory artifacts into `docs/cores/current/` if required,
 - preserve explicit traceability of the promotion event.
 
+**Prompt**
+- no specialized prompt required
+
 **Outputs**
 - `reports/platform_factory_promotion_report.yaml`
 
@@ -184,6 +195,9 @@ The pipeline must preserve or improve the ability of the Platform Factory to sup
 - archive the run,
 - generate a final summary,
 - reset working state for the next execution.
+
+**Prompt**
+- `docs/prompts/shared/Make24PlatformFactoryReview.md`
 
 **Outputs**
 - `reports/platform_factory_closeout_report.yaml`
@@ -208,11 +222,15 @@ Primary target artifacts:
 ## Required shared prompts
 
 Expected shared prompt family:
+- `docs/prompts/shared/Challenge_platform_factory.md`
 - `docs/prompts/shared/Make20PlatformFactoryAudit.md`
 - `docs/prompts/shared/Make21PlatformFactoryArbitrage.md`
 - `docs/prompts/shared/Make22PlatformFactoryPatch.md`
 - `docs/prompts/shared/Make23PlatformFactoryValidation.md`
 - `docs/prompts/shared/Make24PlatformFactoryReview.md`
+
+Prompt usage companion:
+- `docs/pipelines/platform_factory/PROMPT_USAGE.md`
 
 ---
 

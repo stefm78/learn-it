@@ -21,17 +21,6 @@ Prompts disponibles :
 
 ## Mapping recommandé par stage
 
-### STAGE_00_SCOPE_AND_INPUT_CHECK
-Prompt recommandé :
-- aucun prompt spécialisé obligatoire
-
-But :
-- confirmer les artefacts gouvernés ;
-- confirmer les inputs disponibles ;
-- cadrer le run.
-
----
-
 ### STAGE_01_FACTORY_SCAN
 Prompt recommandé :
 - aucun prompt spécialisé obligatoire
