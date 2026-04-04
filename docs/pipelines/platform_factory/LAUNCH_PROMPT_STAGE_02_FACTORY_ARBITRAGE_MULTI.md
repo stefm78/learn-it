@@ -82,7 +82,7 @@ L’arbitrage doit au minimum :
 - Ne pas écraser un autre fichier d’arbitrage.
 - Utiliser `docs/prompts/shared/Make21PlatformFactoryArbitrage.md` comme cadre principal de raisonnement et de structuration.
 - Toute décision importante doit être reliée explicitement à un ou plusieurs challenge reports.
-- Une réponse chat seule n’est pas un livrable suffisant : le livrable attendu est le fichier écrit dans le repo.
+- Le livrable attendu est le fichier écrit dans le repo. Le retour Chat doit être très succint.
 
 ## Structure minimale obligatoire du rapport
 
