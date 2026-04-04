@@ -77,158 +77,96 @@ A validated patched state is not yet the promoted current state until a dedicate
 ## Stage map
 
 ### STAGE_01_CHALLENGE
-**Goal**
-- challenge the released `platform_factory` baseline,
-- identify weaknesses, ambiguities, contradictions, incompletenesses or drifts,
-- prepare explicit findings for arbitrage.
 
-**Inputs**
-- current `platform_factory` artifacts,
-- canonical foundation,
-- optional human focus note in `inputs/`.
-
-**Prompt**
-- `docs/prompts/shared/Challenge_platform_factory.md`
-
-**Outputs**
-- `work/01_challenge/challenge_report_##.md`
-
----
+- Inputs:
+  - current `platform_factory` artifacts
+  - canonical foundation
+  - optional focus note in `inputs/`
+- Prompt:
+  - `docs/prompts/shared/Challenge_platform_factory.md`
+- Output:
+  - `work/01_challenge/challenge_report_##.md`
 
 ### STAGE_02_FACTORY_ARBITRAGE
-**Goal**
-- decide what to correct now,
-- decide what to defer,
-- decide what belongs to the architecture,
-- decide what belongs to the state,
-- decide what requires later pipeline/tooling work.
 
-**Inputs**
-- challenge reports from `work/01_challenge/`,
-- optional human arbitrage notes.
-
-**Prompt**
-- `docs/prompts/shared/Make21PlatformFactoryArbitrage.md`
-
-**Rule**
-- every `challenge_report*.md` present in `work/01_challenge/` must be considered during arbitrage,
-- the arbitrage must consolidate retained, rejected, deferred and out-of-scope findings into a single decision record.
-
-**Outputs**
-- `work/02_arbitrage/platform_factory_arbitrage.md`
-
----
+- Inputs:
+  - challenge reports from `work/01_challenge/`
+  - optional human arbitrage notes
+- Prompt:
+  - `docs/prompts/shared/Make21PlatformFactoryArbitrage.md`
+- Rule:
+  - every `challenge_report*.md` present in `work/01_challenge/` must be considered during arbitrage
+  - the arbitrage must consolidate retained, rejected, deferred and out-of-scope findings into a single decision record
+- Output:
+  - `work/02_arbitrage/platform_factory_arbitrage.md`
 
 ### STAGE_03_FACTORY_PATCH_SYNTHESIS
-**Goal**
-- synthesize selected changes,
-- produce a patchset for `platform_factory_architecture.yaml`, `platform_factory_state.yaml`, or both.
 
-**Inputs**
-- current governed artifacts,
-- challenge reports,
-- arbitrage record.
-
-**Prompt**
-- `docs/prompts/shared/Make22PlatformFactoryPatch.md`
-
-**Outputs**
-- `work/03_patch/platform_factory_patchset.yaml`
-
----
+- Inputs:
+  - current governed artifacts
+  - challenge reports
+  - arbitrage
+- Prompt:
+  - `docs/prompts/shared/Make22PlatformFactoryPatch.md`
+- Output:
+  - `work/03_patch/platform_factory_patchset.yaml`
 
 ### STAGE_04_FACTORY_PATCH_VALIDATION
-**Goal**
-- validate patch structure,
-- validate architecture/state separation,
-- validate consistency of the minimum application contract,
-- validate consistency of derived projection rules.
 
-**Inputs**
-- `work/03_patch/platform_factory_patchset.yaml`,
-- `work/02_arbitrage/platform_factory_arbitrage.md` if needed.
-
-**Prompt**
-- `docs/prompts/shared/Make23PlatformFactoryValidation.md`
-
-**Outputs**
-- `work/04_patch_validation/platform_factory_patch_validation.yaml`
-- `reports/platform_factory_patch_validation_report.md`
-
----
+- Inputs:
+  - `work/03_patch/platform_factory_patchset.yaml`
+  - `work/02_arbitrage/platform_factory_arbitrage.md`
+- Prompt:
+  - `docs/prompts/shared/Make23PlatformFactoryValidation.md`
+- Outputs:
+  - `work/04_patch_validation/platform_factory_patch_validation.yaml`
+  - `reports/platform_factory_patch_validation_report.md`
 
 ### STAGE_05_FACTORY_APPLY
-**Goal**
-- apply the patch in a sandbox,
-- materialize patched factory artifacts,
-- preserve a technical execution trace.
 
-**Prompt**
-- no specialized prompt required
-
-**Outputs**
-- `work/05_apply/patched/platform_factory_architecture.yaml`
-- `work/05_apply/patched/platform_factory_state.yaml`
-- `reports/platform_factory_execution_report.yaml`
-
----
+- Inputs:
+  - validated patchset
+- Prompt:
+  - none required
+- Outputs:
+  - `work/05_apply/patched/platform_factory_architecture.yaml`
+  - `work/05_apply/patched/platform_factory_state.yaml`
+  - `reports/platform_factory_execution_report.yaml`
 
 ### STAGE_06_FACTORY_CORE_VALIDATION
-**Goal**
-- validate the patched `platform_factory` artifacts as a coherent pair,
-- validate coherence with canonical foundation,
-- validate support for strictly conformant derived projections.
 
-**Prompt**
-- `docs/prompts/shared/Make23PlatformFactoryValidation.md`
-
-**Outputs**
-- `work/06_core_validation/platform_factory_core_validation.yaml`
-- `reports/platform_factory_core_validation_report.md`
-
----
+- Inputs:
+  - patched `platform_factory` artifacts from `work/05_apply/patched/`
+- Prompt:
+  - `docs/prompts/shared/Make23PlatformFactoryValidation.md`
+- Outputs:
+  - `work/06_core_validation/platform_factory_core_validation.yaml`
+  - `reports/platform_factory_core_validation_report.md`
 
 ### STAGE_07_FACTORY_RELEASE_MATERIALIZATION
-**Goal**
-- materialize a releasable immutable factory artifact set,
-- prepare explicit release outputs before any promotion to current,
-- preserve traceability between validated patched artifacts and releasable artifacts.
+- Spec détaillée :
+  - `docs/pipelines/platform_factory/STAGE_07_FACTORY_RELEASE_MATERIALIZATION.md`
 
-**Prompt**
-- no specialized prompt required
+- Rule:
+  - `STAGE_07_FACTORY_RELEASE_MATERIALIZATION.md` is the canonical specification for Stage 07
 
-**Outputs**
-- `work/07_release/platform_factory_release_plan.yaml`
-- `reports/platform_factory_release_materialization_report.yaml`
-- `outputs/platform_factory_release_candidate_notes.md`
+### STAGE_08_FACTORY_PROMOTE_CURRENT
+- Spec détaillée :
+  - `docs/pipelines/platform_factory/STAGE_08_FACTORY_PROMOTE_CURRENT.md`
 
----
-
-### STAGE_08_FACTORY_PROMOTION
-**Goal**
-- promote the validated released factory artifacts into `docs/cores/current/` if required,
-- preserve explicit traceability of the promotion event.
-
-**Prompt**
-- no specialized prompt required
-
-**Outputs**
-- `reports/platform_factory_promotion_report.yaml`
-
----
+- Rule:
+  - `STAGE_08_FACTORY_PROMOTE_CURRENT.md` is the canonical specification for Stage 08
 
 ### STAGE_09_FACTORY_CLOSEOUT_AND_ARCHIVE
-**Goal**
-- archive the run,
-- generate a final summary,
-- reset working state for the next execution.
 
-**Prompt**
-- `docs/prompts/shared/Make24PlatformFactoryReview.md`
-
-**Outputs**
-- `reports/platform_factory_closeout_report.yaml`
-- `outputs/platform_factory_summary.md`
+- Inputs:
+  - promotion outputs
+  - release outputs
+- Prompt:
+  - `docs/prompts/shared/Make24PlatformFactoryReview.md`
+- Outputs:
+  - `reports/platform_factory_closeout_report.yaml`
+  - `outputs/platform_factory_summary.md`
 
 ---
 
