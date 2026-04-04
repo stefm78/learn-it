@@ -1,0 +1,26 @@
+diff --git a/docs/pipelines/platform_factory/pipeline.md b/docs/pipelines/platform_factory/pipeline.md
+index 3e4e2f6..0000000 100644
+--- a/docs/pipelines/platform_factory/pipeline.md
++++ b/docs/pipelines/platform_factory/pipeline.md
+@@ -49,18 +49,6 @@ The pipeline must preserve or improve the ability of the Platform Factory to sup
+ 
+ ## Stage map
+ 
+-### STAGE_00_SCOPE_AND_INPUT_CHECK
+-**Goal**
+-- confirm the pipeline intent,
+-- confirm the governed artifacts,
+-- confirm the current source inputs.
+-
+-**Inputs**
+-- current `platform_factory` artifacts if present,
+-- canonical foundation,
+-- architecture planning materials.
+-
+-**Outputs**
+-- `work/00_scope/platform_factory_scope_check.md`
+-
+ ---
+ 
+ ### STAGE_01_FACTORY_SCAN
+ **Goal**
