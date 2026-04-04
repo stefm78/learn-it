@@ -13,7 +13,8 @@ Exécuter la consolidation finale du `STAGE_02_FACTORY_ARBITRAGE` du pipeline :
   - `docs/pipelines/platform_factory/work/01_challenge/`
 - toutes les propositions d’arbitrage présentes dans :
   - `docs/pipelines/platform_factory/work/02_arbitrage/`
-  - plus précisément tous les fichiers `arbitrage_proposal_*.md`
+  - plus précisément tous les fichiers `platform_factory_arbitrage_*.md`
+  - en excluant `platform_factory_arbitrage.md` s’il existe déjà
 - le pipeline :
   - `docs/pipelines/platform_factory/pipeline.md`
 - le prompt métier canonique d’arbitrage :
@@ -27,6 +28,8 @@ Exécuter la consolidation finale du `STAGE_02_FACTORY_ARBITRAGE` du pipeline :
 - Elle doit conserver les convergences fortes.
 - Elle doit expliciter les zones sans consensus.
 - Elle doit préparer la discussion humaine sur les points encore ouverts.
+- Le résultat attendu doit être écrit dans le repo, dans le fichier canonique imposé ci-dessous.
+- Il ne faut pas considérer qu’une réponse dans le chat suffit à accomplir la tâche.
 
 ## Génération obligatoire d’un identifiant unique
 
@@ -51,7 +54,7 @@ Tu dois :
 
 ## Fichier de sortie obligatoire
 
-Écrire exactement un fichier canonique :
+Écrire exactement un fichier canonique dans le repo :
 - `docs/pipelines/platform_factory/work/02_arbitrage/platform_factory_arbitrage.md`
 
 ## Travail attendu
@@ -70,13 +73,14 @@ L’arbitrage final doit au minimum :
 ## Contraintes
 
 - Lire tous les `challenge_report*.md` présents dans `work/01_challenge/`.
-- Lire tous les `arbitrage_proposal_*.md` présents dans `work/02_arbitrage/`.
+- Lire tous les `platform_factory_arbitrage_*.md` présents dans `work/02_arbitrage/`, sauf `platform_factory_arbitrage.md`.
 - Ne pas ignorer un challenge report ou une proposition d’arbitrage disponible.
 - Ne pas produire de patch YAML.
 - Utiliser `docs/prompts/shared/Make21PlatformFactoryArbitrage.md` comme cadre principal de raisonnement et de structuration.
 - Toute décision consolidée importante doit être reliée explicitement à un ou plusieurs challenge reports et, si utile, à une ou plusieurs propositions d’arbitrage.
 - Les points sans consensus ne doivent pas être masqués.
 - Les points non tranchables automatiquement doivent être explicitement envoyés en discussion humaine.
+- Une réponse chat seule n’est pas un livrable suffisant : le livrable attendu est le fichier écrit dans le repo.
 
 ## Structure minimale obligatoire du rapport final
 
@@ -86,7 +90,7 @@ Le fichier de sortie doit contenir au minimum :
 - `arbitrage_consolidation_run_id`
 - Date
 - Liste des challenge reports considérés
-- Liste des arbitrage proposals considérées
+- Liste des arbitrage reports considérés
 - Résumé exécutif
 - Décisions consolidées
 - Points retenus

@@ -22,6 +22,8 @@ Exécuter une proposition d’arbitrage pour le `STAGE_02_FACTORY_ARBITRAGE` du 
 - Chaque IA produit une proposition d’arbitrage indépendante.
 - Cette proposition n’est pas encore l’arbitrage canonique final du stage.
 - Le but est de fournir une contribution exploitable par une consolidation finale humaine-assistée.
+- Le résultat attendu doit être écrit dans le repo, dans le fichier de sortie imposé ci-dessous.
+- Il ne faut pas considérer qu’une réponse dans le chat suffit à accomplir la tâche.
 
 ## Génération obligatoire d’un identifiant unique
 
@@ -47,11 +49,11 @@ Tu dois :
 
 ## Fichier de sortie obligatoire
 
-Écrire exactement un fichier :
-- `docs/pipelines/platform_factory/work/02_arbitrage/arbitrage_proposal_<arbitrage_run_id>.md`
+Écrire exactement un fichier dans le repo :
+- `docs/pipelines/platform_factory/work/02_arbitrage/platform_factory_arbitrage_<arbitrage_run_id>.md`
 
 Exemple :
-- `docs/pipelines/platform_factory/work/02_arbitrage/arbitrage_proposal_PFARB_20260404_GPT54_7KQ2.md`
+- `docs/pipelines/platform_factory/work/02_arbitrage/platform_factory_arbitrage_PFARB_20260404_GPT54_7KQ2.md`
 
 ## Travail attendu
 
@@ -80,6 +82,7 @@ L’arbitrage doit au minimum :
 - Ne pas écraser un autre fichier d’arbitrage.
 - Utiliser `docs/prompts/shared/Make21PlatformFactoryArbitrage.md` comme cadre principal de raisonnement et de structuration.
 - Toute décision importante doit être reliée explicitement à un ou plusieurs challenge reports.
+- Une réponse chat seule n’est pas un livrable suffisant : le livrable attendu est le fichier écrit dans le repo.
 
 ## Structure minimale obligatoire du rapport
 

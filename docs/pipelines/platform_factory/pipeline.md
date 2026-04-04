@@ -96,8 +96,11 @@ A validated patched state is not yet the promoted current state until a dedicate
   - `docs/prompts/shared/Make21PlatformFactoryArbitrage.md`
 - Rule:
   - every `challenge_report*.md` present in `work/01_challenge/` must be considered during arbitrage
+  - multiple parallel arbitrage proposals may be produced under `work/02_arbitrage/platform_factory_arbitrage_<ID>.md`
   - the arbitrage must consolidate retained, rejected, deferred and out-of-scope findings into a single decision record
-- Output:
+  - the canonical output of the stage remains `work/02_arbitrage/platform_factory_arbitrage.md`
+- Outputs:
+  - `work/02_arbitrage/platform_factory_arbitrage_<ID>.md`
   - `work/02_arbitrage/platform_factory_arbitrage.md`
 
 ### STAGE_03_FACTORY_PATCH_SYNTHESIS
