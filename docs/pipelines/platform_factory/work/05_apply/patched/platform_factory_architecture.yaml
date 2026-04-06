@@ -158,6 +158,7 @@ PLATFORM_FACTORY_ARCHITECTURE:
         - minimum_contract_conformance
         - traceability
         - packaging
+        - structure_and_state_alignment
       minimum_packaging_contract:
         required: true
         must_be:
@@ -172,6 +173,7 @@ PLATFORM_FACTORY_ARCHITECTURE:
         - derived_projections_used
         - validation_status
         - traceability_references
+        - produced_application_minimum_contract_conformance_status
   variant_governance:
     principle: La factory doit autoriser des variantes d'applications sans casser
       le contrat minimal générique ni la séparation entre générique et spécifique.
@@ -190,10 +192,12 @@ PLATFORM_FACTORY_ARCHITECTURE:
     - reproducible_traceability
     - explicit_module_list
     - explicit_dependency_capture
+    - platform_factory_release_materialization_must_emit_manifest_ready_snapshot
     packaging_requirements:
     - package_must_link_to_manifest
     - package_must_be_verifiable
     - package_must_be_classifiable_complete_or_incomplete_or_invalid
+    - platform_factory_release_snapshot_must_be_linkable_in_future_core_manifest
   observability_requirements:
     factory_level:
     - projection_generation_trace
@@ -236,6 +240,9 @@ PLATFORM_FACTORY_ARCHITECTURE:
     - each_projection_is_regenerable
     - each_projection_is_validation_gated
     - each_projection_can_be_used_as_single_context_for_targeted_task
+    - each_projection_declares_sources_and_traceability_hooks
+    - each_projection_is_tagged_with_validated_derived_execution_projection_status
+    - each_projection_usage_declares_runtime_and_offsession_boundaries
     emplacement_policy:
       status: TBD
       rule: must_not_blur_docs_cores_current
@@ -274,22 +281,3 @@ PLATFORM_FACTORY_ARCHITECTURE:
   - exact_packaging_schema
   - exact_location_of_validated_derived_execution_projections
   - exact_granularity_for_multi_ai_parallel_work
-contracts:
-  produced_application_minimum_contract:
-    minimum_validation_contract:
-      minimum_axes: structure_and_state_alignment
-    minimum_observability_contract:
-      minimum_signals: produced_application_minimum_contract_conformance_status
-generated_projection_rules:
-  minimum_requirements:
-  - each_projection_has_declared_scope
-  - each_projection_has_declared_sources
-  - each_projection_is_regenerable
-  - each_projection_is_validation_gated
-  - each_projection_can_be_used_as_single_context_for_targeted_task
-  - each_projection_declares_sources_and_traceability_hooks
-  - each_projection_is_tagged_with_validated_derived_execution_projection_status
-  - each_projection_usage_declares_runtime_and_offsession_boundaries
-build_and_packaging_rules:
-  build_requirements: platform_factory_release_materialization_must_emit_manifest_ready_snapshot
-  packaging_requirements: platform_factory_release_snapshot_must_be_linkable_in_future_core_manifest

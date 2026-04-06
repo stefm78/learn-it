@@ -82,6 +82,9 @@ PLATFORM_FACTORY_STATE:
     description: Le pipeline platform_factory n'est pas encore complètement matérialisé.
   - capability_id: PF_CAPABILITY_APPLICATION_INSTANTIATION_PIPELINE
     description: Le pipeline d'instanciation n'existe pas encore.
+  - capability_id: PF_CAPABILITY_FACTORY_PRIORITY_VALIDATORS_SHORTLIST_MATERIALIZED
+    description: 'Short-list prioritaire de validateurs définie mais non encore matérialisée
+      en tooling : derived_projection_conformance, minimum_contract_conformance, runtime_policy_conformance.'
   blockers:
   - blocker_id: PF_BLOCKER_MANIFEST_SCHEMA_PENDING
     severity: medium
@@ -127,14 +130,15 @@ PLATFORM_FACTORY_STATE:
     source: docs/cores/current/platform_factory_architecture.yaml
     description: Première version prescriptive posée en current.
   derived_projection_conformity_status:
-    status: defined_in_principle_not_yet_tooling_backed
+    status: defined_in_principle_with_explicit_conditions_and_missing_tooling
     target: validated_strict_conformance
     missing:
     - validator_definition
     - storage_location_decision
     - regeneration_protocol
+    - runtime_and_offsession_usage_policy_documented_and_tooling_aligned
   produced_application_contract_status:
-    status: high_level_defined_not_schema_finalized
+    status: high_level_defined_with_probative_strengthening_in_progress
     present:
     - identity
     - manifest_principle
@@ -144,6 +148,7 @@ PLATFORM_FACTORY_STATE:
     - minimum_validation_axes
     - minimum_packaging_principle
     - minimum_observability
+    - minimum_contract_probative_requirements_recognized_as_work_in_progress
     missing:
     - exact_manifest_schema
     - exact_runtime_typology
@@ -176,13 +181,3 @@ PLATFORM_FACTORY_STATE:
     - factory_scope_clarified
     - derived_projection_model_clarified
     - multi_ia_requirement_explicitly_recorded
-produced_application_contract_status:
-  status: high_level_defined_with_probative_strengthening_in_progress
-  present: minimum_contract_probative_requirements_recognized_as_work_in_progress
-derived_projection_conformity_status:
-  status: defined_in_principle_with_explicit_conditions_and_missing_tooling
-  missing: runtime_and_offsession_usage_policy_documented_and_tooling_aligned
-capabilities_absent:
-  capability_id: PF_CAPABILITY_FACTORY_PRIORITY_VALIDATORS_SHORTLIST_MATERIALIZED
-  description: 'Short-list prioritaire de validateurs définie mais non encore matérialisée
-    en tooling : derived_projection_conformance, minimum_contract_conformance, runtime_policy_conformance.'
