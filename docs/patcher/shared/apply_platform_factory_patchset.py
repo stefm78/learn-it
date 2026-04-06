@@ -6,11 +6,11 @@ This script is dedicated to the Platform Factory patchset structure used by the
 because the patchset model is intentionally specific.
 
 Usage:
-    python docs/patcher/shared/apply_platform_factory_patchset.py \
-        ./docs/pipelines/platform_factory/work/03_patch/platform_factory_patchset.yaml \
-        ./docs/pipelines/platform_factory/work/04_patch_validation/platform_factory_patch_validation.yaml \
-        ./docs/pipelines/platform_factory/work/05_apply/sandbox \
-        true \
+    python docs/patcher/shared/apply_platform_factory_patchset.py \\
+        ./docs/pipelines/platform_factory/work/03_patch/platform_factory_patchset.yaml \\
+        ./docs/pipelines/platform_factory/work/04_patch_validation/platform_factory_patch_validation.yaml \\
+        ./docs/pipelines/platform_factory/work/05_apply/sandbox \\
+        true \\
         ./docs/pipelines/platform_factory/reports/platform_factory_execution_report.yaml
 """
 
@@ -30,6 +30,13 @@ ALLOWED_TARGETS = {
     "docs/cores/current/platform_factory_state.yaml",
 }
 SUPPORTED_ATOMIC_OPS = {"add", "replace", "update", "remove"}
+
+# Mapping target_artifact -> clé racine canonique du document YAML.
+# Les paths du patchset sont résolus depuis ce bloc, pas depuis la racine absolue.
+CANONICAL_ROOT_KEYS = {
+    "docs/cores/current/platform_factory_architecture.yaml": "PLATFORM_FACTORY_ARCHITECTURE",
+    "docs/cores/current/platform_factory_state.yaml": "PLATFORM_FACTORY_STATE",
+}
 
 
 class ApplyContext:
@@ -67,18 +74,15 @@ class ApplyContext:
         return "PASS"
 
 
-
 def _load_yaml(path: Path) -> Any:
     with path.open("r", encoding="utf-8") as handle:
         return yaml.safe_load(handle)
-
 
 
 def _save_yaml(path: Path, data: Any) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     with path.open("w", encoding="utf-8") as handle:
         yaml.safe_dump(data, handle, sort_keys=False, allow_unicode=True)
-
 
 
 def _parse_bool(raw: str) -> bool:
@@ -88,7 +92,6 @@ def _parse_bool(raw: str) -> bool:
     if value in {"false", "0", "no", "n"}:
         return False
     raise ValueError(f"Boolean value attendu, reçu: {raw}")
-
 
 
 def _ensure_parent_mapping(root: Any, keys: list[str]) -> tuple[dict[str, Any], str] | None:
@@ -104,7 +107,6 @@ def _ensure_parent_mapping(root: Any, keys: list[str]) -> tuple[dict[str, Any], 
     if not isinstance(current, dict):
         return None
     return current, keys[-1]
-
 
 
 def _apply_add(document: Any, path: str, value: Any, ctx: ApplyContext) -> None:
@@ -129,7 +131,6 @@ def _apply_add(document: Any, path: str, value: Any, ctx: ApplyContext) -> None:
     )
 
 
-
 def _apply_replace_or_update(document: Any, path: str, value: Any, ctx: ApplyContext) -> None:
     keys = path.split(".")
     parent_and_key = _ensure_parent_mapping(document, keys)
@@ -138,7 +139,6 @@ def _apply_replace_or_update(document: Any, path: str, value: Any, ctx: ApplyCon
         return
     parent, leaf = parent_and_key
     parent[leaf] = copy.deepcopy(value)
-
 
 
 def _apply_remove(document: Any, path: str, ctx: ApplyContext) -> None:
@@ -152,7 +152,6 @@ def _apply_remove(document: Any, path: str, ctx: ApplyContext) -> None:
         ctx.warn(f"Opération remove sur `{path}` ignorée : clé absente.")
         return
     del parent[leaf]
-
 
 
 def _apply_atomic_op(document: Any, op_item: dict[str, Any], ctx: ApplyContext) -> None:
@@ -184,7 +183,6 @@ def _apply_atomic_op(document: Any, op_item: dict[str, Any], ctx: ApplyContext) 
         ctx.operations_applied += 1
 
 
-
 def _build_report(ctx: ApplyContext) -> dict[str, Any]:
     return {
         "PLATFORM_FACTORY_PATCH_EXECUTION": {
@@ -205,7 +203,6 @@ def _build_report(ctx: ApplyContext) -> dict[str, Any]:
             "warnings": ctx.warnings or ["none"],
         }
     }
-
 
 
 def main(argv: list[str]) -> int:
@@ -282,7 +279,16 @@ def main(argv: list[str]) -> int:
                         except Exception as exc:  # pragma: no cover
                             ctx.fail(f"Impossible de charger {sandbox_file}: {exc}")
                             continue
-                    document = document_cache[str(sandbox_file)]
+
+                    # Auto-descente vers le bloc racine canonique.
+                    # Les paths du patchset sont relatifs à ce bloc, pas à la racine YAML absolue.
+                    raw_document = document_cache[str(sandbox_file)]
+                    canonical_root_key = CANONICAL_ROOT_KEYS.get(target_artifact)
+                    if canonical_root_key and isinstance(raw_document, dict) and canonical_root_key in raw_document:
+                        document = raw_document[canonical_root_key]
+                    else:
+                        document = raw_document
+
                     operations = patch.get("operations")
                     if not isinstance(operations, list) or not operations:
                         ctx.fail(
