@@ -1,7 +1,7 @@
 PLATFORM_FACTORY_PATCH_EXECUTION:
   status: PASS
   scope: platform_factory_patchset_apply
-  mode: dry_run
+  mode: apply
   patchset_path: docs\pipelines\platform_factory\work\03_patch\platform_factory_patchset.yaml
   validation_path: docs\pipelines\platform_factory\work\04_patch_validation\platform_factory_patch_validation.yaml
   sandbox_root: docs\pipelines\platform_factory\work\05_apply\sandbox
@@ -10,7 +10,8 @@ PLATFORM_FACTORY_PATCH_EXECUTION:
   - docs\pipelines\platform_factory\work\05_apply\sandbox\docs\cores\current\platform_factory_architecture.yaml
   - docs\pipelines\platform_factory\work\05_apply\sandbox\docs\cores\current\platform_factory_state.yaml
   files_written:
-  - none
+  - docs\pipelines\platform_factory\work\05_apply\sandbox\docs\cores\current\platform_factory_architecture.yaml
+  - docs\pipelines\platform_factory\work\05_apply\sandbox\docs\cores\current\platform_factory_state.yaml
   operations_total: 10
   operations_applied: 10
   anomalies_count: 0
