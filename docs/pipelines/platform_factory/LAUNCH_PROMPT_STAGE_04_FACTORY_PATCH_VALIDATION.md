@@ -33,6 +33,7 @@ Socle canonique de contrôle :
 Contexte d’exécution :
 - `docs/pipelines/platform_factory/pipeline.md`
 - `docs/prompts/shared/Make23PlatformFactoryValidation.md`
+- `docs/patcher/shared/validate_platform_factory_patchset.py`
 - éventuellement une note de focalisation validation dans `docs/pipelines/platform_factory/inputs/`
 
 ## Contexte d’exécution obligatoire
@@ -62,7 +63,21 @@ Contexte d’exécution :
 7. `docs/cores/current/platform_factory_state.yaml`
 8. `docs/pipelines/platform_factory/pipeline.md`
 9. `docs/prompts/shared/Make23PlatformFactoryValidation.md`
-10. éventuellement la note de focalisation validation
+10. `docs/patcher/shared/validate_platform_factory_patchset.py`
+11. éventuellement la note de focalisation validation
+
+## Étape automatique obligatoire
+
+Commencer par exécuter la validation structurelle automatique suivante :
+
+```bash
+mkdir -p ./docs/pipelines/platform_factory/work/04_patch_validation
+python docs/patcher/shared/validate_platform_factory_patchset.py \
+  ./docs/pipelines/platform_factory/work/03_patch/platform_factory_patchset.yaml \
+  > ./docs/pipelines/platform_factory/work/04_patch_validation/platform_factory_patch_validation.yaml
+```
+
+Cette sortie YAML constitue la trace canonique automatique du Stage 04.
 
 ## Objectif exact
 
@@ -105,24 +120,7 @@ La validation doit au minimum couvrir :
 Le fichier :
 - `docs/pipelines/platform_factory/work/04_patch_validation/platform_factory_patch_validation.yaml`
 
-Doit contenir au minimum une structure de validation exploitable par le stage suivant, avec :
-- un statut global
-- la qualification du contexte de validation
-- les vérifications par axe
-- les anomalies bloquantes
-- les warnings
-- la décision de passage de stage
-- les conditions éventuelles avant apply
-
-Pour chaque point important, expliciter si possible :
-- Validation Item ID
-- Axe concerné
-- Statut : PASS | WARN | FAIL
-- Élément concerné
-- Nature du problème ou de la conformité
-- Impact
-- Justification
-- Action attendue avant passage de stage si applicable
+Doit être la sortie du validateur automatique dédié.
 
 ## Structure attendue du report markdown
 
