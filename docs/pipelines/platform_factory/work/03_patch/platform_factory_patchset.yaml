@@ -1,0 +1,209 @@
+PLATFORM_FACTORY_PATCHSET:
+  metadata:
+    patchset_id: PF_PATCHSET_20260406_STAGE03_V0
+    target_artifacts:
+      - docs/cores/current/platform_factory_architecture.yaml
+      - docs/cores/current/platform_factory_state.yaml
+    source_decision_record: docs/pipelines/platform_factory/work/02_arbitrage/platform_factory_arbitrage.md
+    scope: normative_risk_and_governance_closure_only
+    notes:
+      - Patchset limité aux décisions retained_now PFARB-DEC-01, PFARB-DEC-02, PFARB-DEC-03 et PFARB-DEC-06.
+      - Aucun sujet deferred, rejected ou hors périmètre n’est inclus.
+
+  patches:
+    - patch_id: PF_PATCH_ARCH_01_MINIMUM_CONTRACT_PROBATIVITY
+      source_decision: PFARB-DEC-01
+      target_artifact: docs/cores/current/platform_factory_architecture.yaml
+      operation: update
+      change_type: strengthen_minimum_application_contract_clarity
+      rationale: >-
+        Rendre plus probants les invariants critiques du contrat minimal produit
+        en les explicitant comme exigences d’auditabilité, sans changer leur nature.
+      effect: improved_auditability_of_produced_application_minimum_contract
+      risk_avoided: insufficient_normative_clarity_on_downstream_application_contract
+      location_hint:
+        section: contracts.produced_application_minimum_contract
+        keys_to_update:
+          - minimum_validation_contract.minimum_axes
+          - minimum_observability_contract.minimum_signals
+        granularity: list_items
+      operations:
+        - op: add
+          path: contracts.produced_application_minimum_contract.minimum_validation_contract.minimum_axes
+          value: structure_and_state_alignment
+        - op: add
+          path: contracts.produced_application_minimum_contract.minimum_observability_contract.minimum_signals
+          value: produced_application_minimum_contract_conformance_status
+      validation_focus:
+        - separation_architecture_state_preserved
+        - no_new_normative_rule_introduced_beyond_arbitrage
+        - traceability_to_arbitrage_decision
+
+    - patch_id: PF_PATCH_ARCH_02_DERIVED_PROJECTION_CONDITIONS
+      source_decision: PFARB-DEC-02
+      target_artifact: docs/cores/current/platform_factory_architecture.yaml
+      operation: update
+      change_type: clarify_validated_derived_execution_projection_conditions
+      rationale: >-
+        Conditionner explicitement l’usage fort des projections dérivées validées
+        à un ensemble minimal de garanties déjà présentes dans le socle canonique,
+        sans sur-promettre l’outillage.
+      effect: explicit_bounding_of_validated_derived_execution_projection_usage
+      risk_avoided: overconfident_use_of_derived_projections_without_tooling
+      location_hint:
+        section: generated_projection_rules
+        keys_to_update:
+          - minimum_requirements
+          - objectives
+        granularity: list_items
+      operations:
+        - op: add
+          path: generated_projection_rules.minimum_requirements
+          value: each_projection_declares_sources_and_traceability_hooks
+        - op: add
+          path: generated_projection_rules.minimum_requirements
+          value: each_projection_is_tagged_with_validated_derived_execution_projection_status
+        - op: add
+          path: generated_projection_rules.minimum_requirements
+          value: each_projection_usage_declares_runtime_and_offsession_boundaries
+      validation_focus:
+        - strict_fidelity_to_constitution_and_referentiel
+        - no_runtime_generation_introduced
+        - multi_ia_parallel_readiness_preserved
+
+    - patch_id: PF_PATCH_ARCH_03_MANIFEST_RELEASE_GOVERNANCE_HOOK
+      source_decision: PFARB-DEC-03
+      target_artifact: docs/cores/current/platform_factory_architecture.yaml
+      operation: update
+      change_type: add_manifest_release_governance_hook
+      rationale: >-
+        Fermer le trou de gouvernance identifiée entre la présence des artefacts
+        platform_factory en current et leur absence du manifest officiel, en préparant
+        un hook d’architecture pour Stage 07/08 sans modifier la séquence de release
+        actuelle.
+      effect: explicit_link_between_platform_factory_and_future_manifest_governance
+      risk_avoided: long_term_drift_between_current_and_manifest_for_platform_factory
+      location_hint:
+        section: build_and_packaging_rules
+        keys_to_update:
+          - build_requirements
+          - packaging_requirements
+        granularity: list_items
+      operations:
+        - op: add
+          path: build_and_packaging_rules.build_requirements
+          value: platform_factory_release_materialization_must_emit_manifest_ready_snapshot
+        - op: add
+          path: build_and_packaging_rules.packaging_requirements
+          value: platform_factory_release_snapshot_must_be_linkable_in_future_core_manifest
+      validation_focus:
+        - no_direct_change_to_current_manifest_files
+        - alignment_with_pipeline_stage_07_and_08_spec
+        - governance_closure_deferred_to_release_materialization
+
+    - patch_id: PF_PATCH_STATE_01_MINIMUM_CONTRACT_STATUS_SIGNAL
+      source_decision: PFARB-DEC-01
+      target_artifact: docs/cores/current/platform_factory_state.yaml
+      operation: update
+      change_type: add_status_field_for_minimum_contract_probative_level
+      rationale: >-
+        Refléter côté state la reconnaissance que le contrat minimal produit est
+        défini mais encore perfectible, sans sur-déclarer la maturité.
+      effect: explicit_state_signal_on_minimum_application_contract_maturity
+      risk_avoided: confusion_between_defined_high_level_and_fully_hardened_contract
+      location_hint:
+        section: produced_application_contract_status
+        keys_to_update:
+          - present
+          - status
+        granularity: scalar_and_list_items
+      operations:
+        - op: replace
+          path: produced_application_contract_status.status
+          value: high_level_defined_with_probative_strengthening_in_progress
+        - op: add
+          path: produced_application_contract_status.present
+          value: minimum_contract_probative_requirements_recognized_as_work_in_progress
+      validation_focus:
+        - no_overstatement_of_state_maturity
+        - alignment_with_architecture_side_changes
+        - traceability_to_PFARB_DEC_01
+
+    - patch_id: PF_PATCH_STATE_02_DERIVED_PROJECTION_TOOLING_STATUS
+      source_decision: PFARB-DEC-02
+      target_artifact: docs/cores/current/platform_factory_state.yaml
+      operation: update
+      change_type: clarify_derived_projection_tooling_gap
+      rationale: >-
+        Clarifier dans le state que l’usage fort des projections dérivées reste conditionné
+        par l’absence actuelle de tooling complet, en restant cohérent avec le modèle
+        target.
+      effect: explicit_state_acknowledgment_of_derived_projection_tooling_gap
+      risk_avoided: implicit_assumption_that_strong_derived_projection_use_is_already_safe
+      location_hint:
+        section: derived_projection_conformity_status
+        keys_to_update:
+          - status
+          - missing
+        granularity: scalar_and_list_items
+      operations:
+        - op: replace
+          path: derived_projection_conformity_status.status
+          value: defined_in_principle_with_explicit_conditions_and_missing_tooling
+        - op: add
+          path: derived_projection_conformity_status.missing
+          value: runtime_and_offsession_usage_policy_documented_and_tooling_aligned
+      validation_focus:
+        - consistency_with_generated_projection_rules_changes
+        - no_change_to_target_strict_conformance
+        - clarity_on_current_limitations
+
+    - patch_id: PF_PATCH_STATE_03_FACTORY_VALIDATORS_SHORTLIST
+      source_decision: PFARB-DEC-06
+      target_artifact: docs/cores/current/platform_factory_state.yaml
+      operation: update
+      change_type: add_shortlist_of_priority_factory_validators
+      rationale: >-
+        Répercuter dans le state la short-list prioritaire des validateurs à forte
+        valeur retenue par l’arbitrage, sans prétendre les avoir déjà implémentés.
+      effect: clear_signal_on_priority_validation_tooling_targets
+      risk_avoided: diffuse_expectation_of_generic_validation_without_focus
+      location_hint:
+        section: capabilities_absent
+        granularity: new_list_item
+      operations:
+        - op: add
+          path: capabilities_absent
+          value:
+            capability_id: PF_CAPABILITY_FACTORY_PRIORITY_VALIDATORS_SHORTLIST_MATERIALIZED
+            description: >-
+              Short-list prioritaire de validateurs définie mais non encore matérialisée
+              en tooling : derived_projection_conformance, minimum_contract_conformance,
+              runtime_policy_conformance.
+      validation_focus:
+        - alignment_with_PFARB_DEC_06
+        - no_premature_pretension_of_validator_existence
+        - coherence_with_existing_capabilities_absent_and_partial
+
+  exclusions:
+    rationale: >-
+      Les sujets suivants, bien que présents dans l’arbitrage, sont explicitement
+      exclus du patchset courant car ils sont deferred, hors périmètre canonique
+      ou relèvent d’autres artefacts (validator, pipeline, release governance, clarification
+      humaine).
+    items:
+      - id: EXC_PFARB_DEC_04_MULTI_IA_READINESS
+        reason: deferred
+        note: >-
+          Le renforcement de la readiness multi-IA est reconnu comme important mais
+          reporté ; il ne doit pas alourdir ce patchset V0.
+      - id: EXC_PFARB_DEC_05_HANDOFF_CONTRACT_FACTORY_TO_INSTANTIATION
+        reason: deferred
+        note: >-
+          Le contrat de handoff vers l’instanciation est différé à une itération
+          ultérieure focalisée sur le pipeline aval et/ou un artefact dédié.
+      - id: EXC_PFARB_DEC_07_RISK_OF_NORM_DUPLICATION
+        reason: rejected
+        note: >-
+          Le risque de duplication normative par la factory a été jugé non bloquant
+          et ne justifie pas de patch dans l’architecture ou le state à ce stade.
