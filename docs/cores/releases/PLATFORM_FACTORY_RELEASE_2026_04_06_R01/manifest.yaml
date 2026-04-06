@@ -1,0 +1,38 @@
+PLATFORM_FACTORY_RELEASE_MANIFEST:
+  release_id: PLATFORM_FACTORY_RELEASE_2026_04_06_R01
+  release_date: '2026-04-06'
+  release_path: docs/cores/releases/PLATFORM_FACTORY_RELEASE_2026_04_06_R01/
+  change_depth: minor
+  promotion_candidate: true
+  source_patched_dir: docs/pipelines/platform_factory/work/05_apply/patched/
+  artifacts:
+  - role: platform_factory_architecture
+    filename: platform_factory_architecture.yaml
+    artifact_id: PLATFORM_FACTORY_ARCHITECTURE_V0_1
+    version: 0.2.0
+    from_version: 0.1.0
+    patched_sha256: 8aec34ace08b30ef3aedeed467bd6bbb67e48600a1039ada2410cd4cb53ab6ae
+  - role: platform_factory_state
+    filename: platform_factory_state.yaml
+    artifact_id: PLATFORM_FACTORY_STATE_V0_1
+    version: 0.2.0
+    from_version: 0.1.0
+    patched_sha256: 537964e8d0fee63471b81ac21114c8e12f48fae6c1865a45cb54f0f2b4045482
+  validated_by:
+    core_validation: docs/pipelines/platform_factory/work/06_core_validation/platform_factory_core_validation.yaml
+    execution_report: docs/pipelines/platform_factory/reports/platform_factory_execution_report.yaml
+    release_plan: docs/pipelines/platform_factory/work/07_release/platform_factory_release_plan.yaml
+  pipeline_stages_completed:
+  - STAGE_01_CHALLENGE
+  - STAGE_02_ARBITRAGE
+  - STAGE_03_FACTORY_PATCH_SYNTHESIS
+  - STAGE_04_PATCH_VALIDATION
+  - STAGE_05_PATCH_APPLY
+  - STAGE_06_CORE_VALIDATION
+  - STAGE_07A_FACTORY_RELEASE_CLASSIFICATION
+  - STAGE_07B_FACTORY_RELEASE_MATERIALIZATION
+  status: RELEASE_CANDIDATE
+  notes:
+  - Release candidate prête pour promotion Stage 08.
+  - docs/cores/current/ non modifié à ce stage.
+  - La promotion vers current est réservée au Stage 08.
