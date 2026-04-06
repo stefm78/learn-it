@@ -1,0 +1,21 @@
+RELEASE_PLAN:
+  status: FAIL
+  release_required: false
+  change_depth: none
+  validated_inputs: []
+  compared_against_current: []
+  target_versions: []
+  required_renames:
+  - none
+  required_reference_updates:
+  - none
+  release_bundle:
+    release_id: none
+    release_path: none
+    promotion_candidate: false
+    files:
+    - none
+  notes:
+  - Aucun changement détecté nécessitant une nouvelle release Platform Factory.
+  anomalies:
+  - 'Entrée requise introuvable: docs\pipelines\platform_factory\work\06_core_validation\platform_factory_core_validation.yaml'
