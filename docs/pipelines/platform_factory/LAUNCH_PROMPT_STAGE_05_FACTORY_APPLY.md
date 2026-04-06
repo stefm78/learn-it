@@ -36,6 +36,15 @@ Script d’exécution dédié :
 - Le résultat attendu doit être écrit dans le repo, dans les chemins de sortie imposés ci-dessous.
 - Il ne faut pas considérer qu’une réponse dans le chat suffit à accomplir la tâche.
 
+## Règle anti-simulation obligatoire
+
+- Ne jamais simuler le résultat d’un script déterministe.
+- Ne jamais annoncer un `PASS`, `WARN` ou `FAIL` comme si le script avait été exécuté si ce n’est pas le cas.
+- Ne jamais prétendre qu’un dry-run, un apply réel ou un report d’exécution a eu lieu s’il n’a pas réellement eu lieu.
+- Si une commande doit être exécutée par l’humain ou dans un autre contexte d’exécution, cela doit être dit explicitement dans le chat.
+- Dans ce cas, il faut donner clairement la ou les commandes exactes à exécuter.
+- Toute lecture complémentaire du patchset ou des chemins de sortie doit être présentée comme préparatoire ou conditionnelle, jamais comme un résultat d’exécution déjà constaté.
+
 ## Fichiers et répertoires de sortie obligatoires
 
 - `docs/pipelines/platform_factory/work/05_apply/sandbox/`
@@ -97,6 +106,13 @@ cp ./docs/pipelines/platform_factory/work/05_apply/sandbox/docs/cores/current/pl
 cp ./docs/pipelines/platform_factory/work/05_apply/sandbox/docs/cores/current/platform_factory_state.yaml ./docs/pipelines/platform_factory/work/05_apply/patched/platform_factory_state.yaml
 ```
 
+## Si une commande doit être exécutée par l’humain dans le chat
+
+Avant toute interprétation du résultat, dire explicitement :
+- qu’il s’agit d’une commande déterministe à exécuter ;
+- que le résultat automatique n’est pas encore disponible ;
+- que tout statut du report d’exécution reste non confirmé tant que le script n’a pas réellement tourné et écrit son YAML.
+
 ## Contraintes
 
 - Ne pas modifier `docs/cores/current/` directement.
@@ -107,7 +123,7 @@ cp ./docs/pipelines/platform_factory/work/05_apply/sandbox/docs/cores/current/pl
 
 ## Résultat terminal attendu
 
-À la fin de l’exécution, afficher uniquement :
+À la fin de l’exécution, si les scripts ont bien été exécutés et les artefacts bien écrits, afficher uniquement :
 1. les chemins exacts des artefacts écrits
 2. le statut final du report d’exécution : PASS | WARN | FAIL
 3. un résumé ultra-court

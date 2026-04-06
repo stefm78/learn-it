@@ -46,6 +46,15 @@ Contexte d’exécution :
 - Ne pas réouvrir l’arbitrage.
 - Ne pas compenser une ambiguïté par une réécriture implicite.
 
+## Règle anti-simulation obligatoire
+
+- Ne jamais simuler le résultat d’un script déterministe.
+- Ne jamais annoncer un `PASS`, `WARN` ou `FAIL` comme si le script avait été exécuté si ce n’est pas le cas.
+- Ne jamais prétendre qu’un fichier de sortie automatique existe si le script ne l’a pas réellement généré.
+- Si le script n’est pas réellement exécuté dans le repo au cours de ce tour, il faut l’indiquer explicitement dans le chat.
+- Dans ce cas, il faut donner clairement la ou les commandes exactes à exécuter.
+- Toute conclusion métier complémentaire doit être présentée comme une lecture préparatoire ou conditionnelle, jamais comme le résultat du script.
+
 ## Fichiers de sortie obligatoires
 
 Écrire exactement les fichiers suivants dans le repo :
@@ -78,6 +87,13 @@ python docs/patcher/shared/validate_platform_factory_patchset.py \
 ```
 
 Cette sortie YAML constitue la trace canonique automatique du Stage 04.
+
+## Si le script n’est pas exécuté dans ce tour
+
+Avant toute autre réponse, écrire explicitement dans le chat :
+- qu’il s’agit d’une commande déterministe à exécuter ;
+- que le résultat automatique n’est pas encore disponible ;
+- que tout statut global restera non confirmé tant que le fichier YAML n’aura pas été réellement produit.
 
 ## Objectif exact
 
@@ -138,7 +154,7 @@ Doit être une lecture humaine cohérente du YAML de validation, avec au minimum
 
 ## Résultat terminal attendu
 
-À la fin de l’exécution, afficher uniquement :
+À la fin de l’exécution, si le script a bien été exécuté et les fichiers bien écrits, afficher uniquement :
 1. les chemins exacts des fichiers écrits
 2. le statut global : PASS | WARN | FAIL
 3. un résumé ultra-court
