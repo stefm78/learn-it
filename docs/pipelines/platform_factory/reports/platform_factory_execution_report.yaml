@@ -1,5 +1,5 @@
 PLATFORM_FACTORY_PATCH_EXECUTION:
-  status: FAIL
+  status: PASS
   scope: platform_factory_patchset_apply
   mode: dry_run
   patchset_path: docs\pipelines\platform_factory\work\03_patch\platform_factory_patchset.yaml
@@ -11,14 +11,11 @@ PLATFORM_FACTORY_PATCH_EXECUTION:
   - docs\pipelines\platform_factory\work\05_apply\sandbox\docs\cores\current\platform_factory_state.yaml
   files_written:
   - none
-  operations_total: 12
-  operations_applied: 3
-  anomalies_count: 2
+  operations_total: 10
+  operations_applied: 10
+  anomalies_count: 0
   warnings_count: 0
   anomalies:
-  - 'Opération add impossible sur `generated_projection_rules.minimum_requirements`
-    : la cible existe déjà et n''est pas une liste.'
-  - 'Opération add impossible sur `generated_projection_rules.minimum_requirements`
-    : la cible existe déjà et n''est pas une liste.'
+  - none
   warnings:
   - none

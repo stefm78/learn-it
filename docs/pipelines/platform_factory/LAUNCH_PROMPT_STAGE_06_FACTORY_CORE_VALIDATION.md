@@ -37,6 +37,7 @@ Socle canonique de contrôle :
 Contexte d’exécution :
 - `docs/pipelines/platform_factory/pipeline.md`
 - `docs/prompts/shared/Make23PlatformFactoryValidation.md`
+- `docs/patcher/shared/validate_platform_factory_core.py`
 - éventuellement une note de focalisation validation dans `docs/pipelines/platform_factory/inputs/`
 
 ## Préconditions obligatoires
@@ -58,10 +59,13 @@ Contexte d’exécution :
 
 ## Règle anti-simulation obligatoire
 
+- Ne jamais simuler le résultat d’un script déterministe.
 - Ne jamais simuler le contenu des artefacts patchés.
 - Ne jamais annoncer un `PASS`, `WARN` ou `FAIL` comme si les fichiers patchés avaient été relus si ce n’est pas le cas.
 - Ne jamais prétendre qu’un artefact patché existe s’il n’existe pas réellement dans le repo.
 - Si des fichiers requis manquent, il faut le dire explicitement dans le chat et dans le report.
+- Si le script n’est pas réellement exécuté dans le repo au cours de ce tour, il faut l’indiquer explicitement dans le chat.
+- Dans ce cas, il faut donner clairement la ou les commandes exactes à exécuter.
 - Toute conclusion doit être présentée comme conditionnelle si les inputs effectifs ne sont pas tous présents.
 
 ## Fichiers de sortie obligatoires
@@ -85,7 +89,30 @@ Contexte d’exécution :
 11. `docs/cores/current/platform_factory_state.yaml`
 12. `docs/pipelines/platform_factory/pipeline.md`
 13. `docs/prompts/shared/Make23PlatformFactoryValidation.md`
-14. éventuellement la note de focalisation validation
+14. `docs/patcher/shared/validate_platform_factory_core.py`
+15. éventuellement la note de focalisation validation
+
+## Étape automatique obligatoire
+
+Commencer par exécuter la validation structurelle automatique suivante :
+
+```bash
+mkdir -p ./docs/pipelines/platform_factory/work/06_core_validation
+python docs/patcher/shared/validate_platform_factory_core.py \
+  ./docs/pipelines/platform_factory/work/05_apply/patched/platform_factory_architecture.yaml \
+  ./docs/pipelines/platform_factory/work/05_apply/patched/platform_factory_state.yaml \
+  ./docs/pipelines/platform_factory/reports/platform_factory_execution_report.yaml \
+  > ./docs/pipelines/platform_factory/work/06_core_validation/platform_factory_core_validation.yaml
+```
+
+Cette sortie YAML constitue la trace canonique automatique du Stage 06.
+
+## Si le script n’est pas exécuté dans ce tour
+
+Avant toute autre réponse, écrire explicitement dans le chat :
+- qu’il s’agit d’une commande déterministe à exécuter ;
+- que le résultat automatique n’est pas encore disponible ;
+- que tout statut global restera non confirmé tant que le fichier YAML n’aura pas été réellement produit.
 
 ## Objectif exact
 
@@ -127,24 +154,7 @@ La validation doit au minimum couvrir :
 Le fichier :
 - `docs/pipelines/platform_factory/work/06_core_validation/platform_factory_core_validation.yaml`
 
-Doit contenir au minimum :
-- un statut global
-- la qualification du contexte de validation
-- les vérifications par axe
-- les anomalies bloquantes
-- les warnings
-- la décision de passage de stage
-- les conditions éventuelles avant Stage 07
-
-Pour chaque point important, expliciter si possible :
-- Validation Item ID
-- Axe concerné
-- Statut : PASS | WARN | FAIL
-- Élément concerné
-- Nature du problème ou de la conformité
-- Impact
-- Justification
-- Action attendue avant passage de stage si applicable
+Doit être la sortie du validateur automatique dédié.
 
 ## Structure attendue du report markdown
 
@@ -162,7 +172,7 @@ Doit être une lecture humaine cohérente du YAML de validation, avec au minimum
 
 ## Résultat terminal attendu
 
-À la fin de l’exécution, si les fichiers requis ont bien été relus et les livrables bien écrits, afficher uniquement :
+À la fin de l’exécution, si le script a bien été exécuté et les fichiers bien écrits, afficher uniquement :
 1. les chemins exacts des fichiers écrits
 2. le statut global : PASS | WARN | FAIL
 3. un résumé ultra-court
