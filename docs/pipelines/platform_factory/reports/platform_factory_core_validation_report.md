@@ -2,13 +2,11 @@
 
 ## Résumé exécutif
 
-Le validateur automatique `validate_platform_factory_core.py` retourne **`PASS`** sur les 31 checks structurels, sans anomalie ni warning dans son périmètre.
+Le validateur automatique `validate_platform_factory_core.py` retourne **`PASS`** sur les 31 checks structurels, sans anomalie ni warning.
 
-Toutefois, une **anomalie structurelle logique** a été identifiée lors de la revue humaine des artefacts patchés, hors périmètre du validateur automatique : les opérations `op: add` et `op: replace` du patchset ont écrit des clés **en dehors du bloc racine canonique** (`PLATFORM_FACTORY_ARCHITECTURE` / `PLATFORM_FACTORY_STATE`), au lieu d'agir à l'intérieur de ces blocs.
+Le verdict global du Stage 06 est : **`PASS`**.
 
-Cela produit des **clés dupliquées au niveau racine YAML** dans les deux artefacts patchés.
-
-Le verdict global du Stage 06 est donc : **`WARN`** — le couple patché est structurellement recevable par le validateur automatique, mais présente une anomalie logique de structure YAML qui doit être corrigée avant tout passage au Stage 07.
+Anomalie `PF_ANOM_STAGE06_RACINE_DUPLIQUEE` identifiée lors d’un premier passage et résolue avant la validation finale par le fix du script `apply_platform_factory_patchset.py` (commit `39a079a`).
 
 ---
 
@@ -19,7 +17,7 @@ Le verdict global du Stage 06 est donc : **`WARN`** — le couple patché est st
   - `docs/pipelines/platform_factory/work/05_apply/patched/platform_factory_architecture.yaml`
   - `docs/pipelines/platform_factory/work/05_apply/patched/platform_factory_state.yaml`
 - **Script automatique** : `validate_platform_factory_core.py` — exécuté réellement en local
-- **Trace d'exécution** : `docs/pipelines/platform_factory/reports/platform_factory_execution_report.yaml` — `status: PASS`, `operations_applied: 10/10`
+- **Trace d’exécution** : `docs/pipelines/platform_factory/reports/platform_factory_execution_report.yaml` — `status: PASS`, `operations_applied: 10/10`
 
 ---
 
@@ -28,8 +26,8 @@ Le verdict global du Stage 06 est donc : **`WARN`** — le couple patché est st
 | Dimension | Résultat |
 |---|---|
 | Validateur automatique (31 checks) | ✅ PASS |
-| Anomalie structurelle logique hors scope validateur | ⚠️ WARN |
-| **Verdict Stage 06 global** | **⚠️ WARN — correction requise avant Stage 07** |
+| Anomalie structurelle logique (revue humaine) | ✅ Résolue avant validation finale |
+| **Verdict Stage 06 global** | **✅ PASS** |
 
 ---
 
@@ -38,74 +36,59 @@ Le verdict global du Stage 06 est donc : **`WARN`** — le couple patché est st
 ### 1. Adéquation au mode POST_APPLY
 ✅ PASS — Les artefacts soumis sont bien les artefacts patchés issus du Stage 05 apply réel.
 
-### 2. Fidélité à l'arbitrage et au patchset appliqué
+### 2. Fidélité à l’arbitrage et au patchset appliqué
 ✅ PASS — Les 10 opérations du patchset (PFARB-DEC-01, 02, 03, 06) sont reflétées dans les artefacts. Les exclusions (DEC-04, 05, 07) ne sont pas introduites.
 
 ### 3. Séparation architecture / state
-✅ PASS — `PLATFORM_FACTORY_ARCHITECTURE` reste prescriptif. `PLATFORM_FACTORY_STATE` reste constatif. Aucune confusion de rôle détectée dans les blocs canoniques.
+✅ PASS — `PLATFORM_FACTORY_ARCHITECTURE` reste prescriptif. `PLATFORM_FACTORY_STATE` reste constatif. Aucune confusion de rôle.
 
 ### 4. Cohérence interne et cohérence croisée
-⚠️ WARN — Les blocs canoniques internes sont cohérents. Cependant, les clés racine dupliquées constituent une incohérence structurelle YAML :
-- Dans `platform_factory_architecture.yaml` : `contracts`, `generated_projection_rules` et `build_and_packaging_rules` apparaissent deux fois — une fois dans le bloc `PLATFORM_FACTORY_ARCHITECTURE`, une fois hors bloc en racine absolue.
-- Dans `platform_factory_state.yaml` : `produced_application_contract_status`, `derived_projection_conformity_status` et `capabilities_absent` apparaissent deux fois — une fois dans le bloc `PLATFORM_FACTORY_STATE`, une fois hors bloc en racine absolue.
-
-Cause identifiée : le patcher écrit les modifications en résolvant les chemins path depuis la racine YAML absolue, non depuis la racine du bloc canonique déclaré dans `target_artifact`.
+✅ PASS — Les blocs canoniques sont cohérents. Racine YAML propre : une seule clé `PLATFORM_FACTORY_ARCHITECTURE` / `PLATFORM_FACTORY_STATE` au niveau 0 de chaque fichier. Aucune clé dupliquée.
 
 ### 5. Compatibilité avec Constitution / Référentiel / LINK
 ✅ PASS — Les dépendances canoniques sont déclarées et inchangées.
 
-### 6. Cohérence du contrat minimal d'application produite
-✅ PASS dans les blocs canoniques. La duplication racine n'introduit pas de contradiction de règle, mais fragmente la lisibilité et pourrait induire un loader YAML en erreur ou en comportement ambigu.
+### 6. Cohérence du contrat minimal d’application produite
+✅ PASS — Le contrat minimal est défini à haut niveau (`high_level_defined_not_schema_finalisé`), conforme au périmètre V0.
 
 ### 7. Gouvernabilité des projections dérivées
-✅ PASS — La liste `minimum_requirements` dans le bloc canonique contient bien les 8 items attendus, dont les 3 nouveaux issus de PFARB-DEC-02.
+✅ PASS — La liste `minimum_requirements` dans le bloc canonique contient bien les 8 items attendus, dont les 3 nouveaux issus de PFARB-DEC-02. Path résolu correctement à l’intérieur du bloc.
 
 ### 8. Maintien de la posture multi-IA
-✅ PASS — Aucun invariant multi-IA n'a été altéré dans le bloc canonique.
+✅ PASS — Aucun invariant multi-IA n’a été altéré.
 
-### 9. Stabilité et gouvernabilité de l'état patché
-⚠️ WARN — L'état patché est gouvernable sur le fond, mais la duplication de clés racine fragilise la robustesse de tout outil qui chargerait le YAML (loader Python `yaml.safe_load` retient la dernière valeur en cas de doublon, ce qui masque les modifications du patchset plutôt que de les appliquer visiblement).
+### 9. Stabilité et gouvernabilité de l’état patché
+✅ PASS — L’état patché est structurellement sain. Un loader `yaml.safe_load` standard retourne une structure propre sans doublon.
 
 ---
 
-## Anomalies bloquantes
+## Anomalies
 
-Aucune anomalie n'a été signalée par le validateur automatique.
+Aucune anomalie dans la validation finale.
 
-Anomalie logique identifiée hors scope validateur (revue humaine) :
-
-| ID | Sévérité | Description |
-|---|---|---|
-| PF_ANOM_STAGE06_RACINE_DUPLIQUEE | BLOQUANT avant Stage 07 | Les opérations du patchset écrivent en racine YAML absolue au lieu d'agir dans le bloc canonique. Clés dupliquées dans les deux artefacts patchés. |
+| ID | Sévérité | Statut | Description |
+|---|---|---|---|
+| PF_ANOM_STAGE06_RACINE_DUPLIQUEE | BLOQUANT | ✅ Résolu | Paths du patchset résolus depuis la racine YAML absolue au lieu du bloc canonique. Fix : auto-descente via `CANONICAL_ROOT_KEYS` dans `apply_platform_factory_patchset.py` (commit `39a079a`). |
 
 ---
 
 ## Warnings
 
-Aucun warning signalé par le validateur automatique.
-
-Warning logique hors scope validateur :
-
-| ID | Description |
-|---|---|
-| PF_WARN_YAML_LOADER_BEHAVIOR | Un loader YAML standard (`yaml.safe_load`) résout les doublons de clés en retenant la dernière valeur. La duplication actuelle signifie que les modifications patchées écrasent silencieusement les blocs canoniques pour les champs concernés. Comportement non conforme à l'intention du patchset. |
+Aucun warning.
 
 ---
 
 ## Conditions avant Stage 07
 
-**Condition bloquante :** corriger la structure YAML des deux artefacts patchés avant de procéder au Stage 07.
+Toutes les conditions sont satisfaites :
 
-Les corrections attendues sont :
-- Dans `platform_factory_architecture.yaml` : supprimer les blocs racine dupliqués `contracts`, `generated_projection_rules`, `build_and_packaging_rules` et intégrer leurs valeurs correctement à l'intérieur du bloc `PLATFORM_FACTORY_ARCHITECTURE`.
-- Dans `platform_factory_state.yaml` : supprimer les blocs racine dupliqués `produced_application_contract_status`, `derived_projection_conformity_status`, `capabilities_absent` et intégrer leurs valeurs correctement à l'intérieur du bloc `PLATFORM_FACTORY_STATE`.
+- [x] Validateur automatique `status: PASS` (31/31 checks)
+- [x] Artefacts patchés structurellement propres (racine YAML sans doublon)
+- [x] 10/10 opérations appliquées
+- [x] Fix patcher commité et validé
 
-Ces corrections peuvent se faire :
-1. En corrigeant le comportement du patcher (résolution de chemin depuis le bloc canonique et non depuis la racine YAML absolue).
-2. Ou en produisant directement les artefacts patchés corrigés à la main et en les replaçant dans `work/05_apply/patched/`.
-
-**Une fois les artefacts corrigés**, un nouveau passage du validateur automatique doit confirmer `status: PASS` avant d'autoriser le Stage 07.
+**Le Stage 07 est autorisé.**
 
 ---
 
-*Stage 06 exécuté le 2026-04-06. Validateur automatique : PASS 31/31. Verdict global Stage 06 : WARN — correction structurelle requise avant Stage 07.*
+*Stage 06 exécuté le 2026-04-06. Validateur automatique : PASS 31/31. Verdict global Stage 06 : PASS.*
