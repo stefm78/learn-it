@@ -1,222 +1,154 @@
 PLATFORM_FACTORY_PATCH_VALIDATION:
-  metadata:
-    validation_id: PF_PATCH_VALIDATION_20260406_STAGE04_V0
-    mode: PRE_APPLY_PATCH_VALIDATION
-    patchset_ref: docs/pipelines/platform_factory/work/03_patch/platform_factory_patchset.yaml
-    arbitrage_ref: docs/pipelines/platform_factory/work/02_arbitrage/platform_factory_arbitrage.md
-    socle_refs:
-      - docs/cores/current/constitution.yaml
-      - docs/cores/current/referentiel.yaml
-      - docs/cores/current/link.yaml
-    current_artifacts_refs:
-      - docs/cores/current/platform_factory_architecture.yaml
-      - docs/cores/current/platform_factory_state.yaml
-    pipeline_ref: docs/pipelines/platform_factory/pipeline.md
-    validation_prompt_ref: docs/prompts/shared/Make23PlatformFactoryValidation.md
-    assessed_patchset_scope: normative_risk_and_governance_closure_only
-
-  global_status: PASS
-
-  context:
-    detected_mode: PRE_APPLY_PATCH_VALIDATION
-    present_inputs:
-      - platform_factory_patchset.yaml
-      - platform_factory_arbitrage.md
-      - constitution.yaml
-      - referentiel.yaml
-      - link.yaml
-      - platform_factory_architecture.yaml
-      - platform_factory_state.yaml
-      - pipeline.md
-      - Make23PlatformFactoryValidation.md
-    missing_essential_inputs: []
-    perimeter: >-
-      Validation pré-apply du patchset PF_PATCHSET_20260406_STAGE03_V0 limité aux
-      décisions retained_now PFARB-DEC-01, PFARB-DEC-02, PFARB-DEC-03 et PFARB-DEC-06.
-    confidence_level: high
-    notes:
-      - L'arbitrage canonique est disponible et explicite.
-      - Le patchset se limite aux décisions retained_now et documente les exclusions.
-
-  axes:
-    - validation_item_id: VAL_AXE_01_MODE
-      axis: adequation_to_validation_mode
-      status: PASS
-      element: PF_PATCHSET_20260406_STAGE03_V0
-      nature: >-
-        Le patchset est explicitement pré-apply, borné et rattaché à l'arbitrage,
-        sans prétendre représenter un état post-apply.
-      impact: none
-      justification: >-
-        Le patchset se décrit comme patchset V0 de fermeture de risques normatifs
-        et de gouvernance ; aucun artefact patché n'est présenté comme current.
-      action_before_apply: none
-
-    - validation_item_id: VAL_AXE_02_ARBITRAGE_FIDELITY
-      axis: fidelity_to_arbitrage
-      status: PASS
-      element: PFARB-DEC-01_02_03_06
-      nature: >-
-        Le patchset couvre uniquement les décisions retained_now PFARB-DEC-01,
-        PFARB-DEC-02, PFARB-DEC-03 et PFARB-DEC-06, avec une section d'exclusions
-        explicite pour les sujets deferred ou rejected.
-      impact: >-
-        Réduit le risque d'introduire des changements non arbitrés ou prématurés
-        dans la V0.
-      justification: >-
-        Les références aux décisions sont explicites par patch_id, aucune mention
-        de PFARB-DEC-04 ou PFARB-DEC-05 n'apparaît dans les patches, et PFARB-DEC-07
-        est classé en exclusion.
-      action_before_apply: none
-
-    - validation_item_id: VAL_AXE_03_ARCH_STATE_SEPARATION
-      axis: architecture_state_separation
-      status: PASS
-      element: platform_factory_architecture.yaml_vs_platform_factory_state.yaml
-      nature: >-
-        Les patches côté architecture renforcent des contrats prescriptifs et des
-        règles de projections ; les patches côté state ajustent des statuts et capacités
-        constatifs correspondants, sans fusion de rôles.
-      impact: >-
-        Préserve la séparation entre artefact prescriptif et artefact constatif pour
-        la gouvernance de la Platform Factory.
-      justification: >-
-        PF_PATCH_ARCH_* ne touchent que les sections contracts, generated_projection_rules
-        et build_and_packaging_rules ; PF_PATCH_STATE_* ne touchent que les sections
-        produced_application_contract_status, derived_projection_conformity_status
-        et capabilities_absent.
-      action_before_apply: none
-
-    - validation_item_id: VAL_AXE_04_INTERNAL_AND_CROSS_COHERENCE
-      axis: internal_and_cross_coherence
-      status: PASS
-      element: patchset_vs_current_architecture_and_state
-      nature: >-
-        Chaque renforcement côté architecture possède un miroir cohérent côté state
-        lorsque pertinent (contrat minimal, projections dérivées, validateurs), sans
-        sur-déclarer la maturité ni effacer les gaps existants.
-      impact: >-
-        Rend plus auditable la posture V0 sans prétendre à un framework complètement
-        outillé.
-      justification: >-
-        Le state reste en statut high_level_defined / defined_in_principle avec mention
-        explicite de tooling manquant ; les capabilities_absent restent présentes
-        et enrichies plutôt que supprimées.
-      action_before_apply: none
-
-    - validation_item_id: VAL_AXE_05_CANONICAL_COMPATIBILITY
-      axis: compatibility_with_canonical_foundation
-      status: PASS
-      element: constitution_referentiel_link_bindings
-      nature: >-
-        Les patches n'introduisent aucune nouvelle règle constitutionnelle, ne déplacent
-        pas d'invariants et renforcent la traçabilité des dépendances (projections
-        dérivées, contrat minimal, release governance) en cohérence avec les cores
-        Constitution/Référentiel/LINK.
-      impact: >-
-        Réduit le risque de dérive normative locale de la factory tout en préparant
-        de meilleurs hooks de gouvernance.
-      justification: >-
-        Aucun patch ne modifie directement les cores canoniques ; les ajouts restent
-        au niveau architecture/state V0 et se contentent de préciser conditions d'usage
-        et signaux d'observabilité.
-      action_before_apply: none
-
-    - validation_item_id: VAL_AXE_06_MINIMUM_APPLICATION_CONTRACT
-      axis: produced_application_minimum_contract
-      status: PASS
-      element: contracts.produced_application_minimum_contract
-      nature: >-
-        Le patch renforce la probativité du contrat minimal via un axe de validation
-        structure_and_state_alignment et un signal d'observabilité de conformité,
-        sans introduire de nouvelle obligation hors périmètre V0.
-      impact: >-
-        Améliore la capacité future à auditer une application produite sans exiger
-        un schéma final déjà figé.
-      justification: >-
-        Les ajouts restent dans les listes minimum_axes et minimum_signals déjà présentes
-        et ne changent pas la liste must_be ni la structure globale du contrat.
-      action_before_apply: none
-
-    - validation_item_id: VAL_AXE_07_DERIVED_PROJECTIONS
-      axis: validated_derived_execution_projections
-      status: PASS
-      element: generated_projection_rules
-      nature: >-
-        Le patch explicite conditions de déclaration de sources, de hooks de traçabilité
-        et de tagging de statut validated_derived_execution_projection, en cohérence
-        avec les invariants existants et sans promettre un tooling déjà en place.
-      impact: >-
-        Réduit le risque d'usage trop ambitieux des projections dérivées tant que
-        le tooling n'est pas complet.
-      justification: >-
-        Les nouvelles minimum_requirements restent descriptives et compatibles avec
-        le statut actuel defined_in_principle_not_yet_tooling_backed du state.
-      action_before_apply: none
-
-    - validation_item_id: VAL_AXE_08_MULTI_IA_READINESS
-      axis: multi_ia_parallel_readiness
-      status: PASS
-      element: multi_ia_parallel_readiness_and_related_sections
-      nature: >-
-        Aucun patch ne réduit les exigences multi-IA ; certains renforcements (conditions
-        de projections, hooks d'observabilité) améliorent indirectement la capacité
-        à supporter du travail IA parallèle borné.
-      impact: >-
-        Maintient la readiness comme exigence de premier rang, en accord avec PF_DECISION_MULTI_IA_FIRST_CLASS.
-      justification: >-
-        Le state continue de reconnaître la readiness comme requirement_defined_not_yet_operationalized
-        et le patchset n'introduit ni protocole prématuré ni régression.
-      action_before_apply: none
-
-    - validation_item_id: VAL_AXE_09_OPERATIONAL_VALIDATABILITY
-      axis: operational_validatability_of_patchset
-      status: PASS
-      element: PF_PATCHSET_20260406_STAGE03_V0
-      nature: >-
-        Chaque patch item est atomique, localisé, typé (add/replace) et relié à une
-        décision d'arbitrage, ce qui rend l'application et la revue ultérieure quasi
-        mécaniques.
-      impact: >-
-        Facilite l'implémentation du stage 05 apply et la traçabilité des effets
-        de chaque patch.
-      justification: >-
-        Les paths et opérations sont explicitement listés ; aucune opération vague
-        de type "améliorer la cohérence" sans localisation concrète n'est présente.
-      action_before_apply: none
-
-  anomalies_blocking: []
-
+  status: PASS
+  scope: platform_factory_patchset
+  validator: validate_platform_factory_patchset.py
+  patchset_path: docs\pipelines\platform_factory\work\03_patch\platform_factory_patchset.yaml
+  anomalies_count: 0
+  warnings_count: 0
+  checks:
+    root_document: PASS
+    root_key: PASS
+    root_payload: PASS
+    metadata: PASS
+    patchset_id: PASS
+    target_artifacts: PASS
+    source_decision_record: PASS
+    scope: PASS
+    notes: PASS
+    patches: PASS
+    patch_1_id: PASS
+    patch_1_source_decision: PASS
+    patch_1_target_artifact: PASS
+    patch_1_operation: PASS
+    patch_1_change_type: PASS
+    patch_1_rationale: PASS
+    patch_1_effect: PASS
+    patch_1_risk_avoided: PASS
+    patch_1_location_hint_section: PASS
+    patch_1_location_hint_granularity: PASS
+    patch_1_location_hint_keys_to_update: PASS
+    patch_1_operations: PASS
+    patch_1_op_1_op: PASS
+    patch_1_op_1_path: PASS
+    patch_1_op_1_value: PASS
+    patch_1_op_2_op: PASS
+    patch_1_op_2_path: PASS
+    patch_1_op_2_value: PASS
+    patch_1_validation_focus: PASS
+    patch_2_id: PASS
+    patch_2_source_decision: PASS
+    patch_2_target_artifact: PASS
+    patch_2_operation: PASS
+    patch_2_change_type: PASS
+    patch_2_rationale: PASS
+    patch_2_effect: PASS
+    patch_2_risk_avoided: PASS
+    patch_2_location_hint_section: PASS
+    patch_2_location_hint_granularity: PASS
+    patch_2_location_hint_keys_to_update: PASS
+    patch_2_operations: PASS
+    patch_2_op_1_op: PASS
+    patch_2_op_1_path: PASS
+    patch_2_op_1_value: PASS
+    patch_2_op_2_op: PASS
+    patch_2_op_2_path: PASS
+    patch_2_op_2_value: PASS
+    patch_2_op_3_op: PASS
+    patch_2_op_3_path: PASS
+    patch_2_op_3_value: PASS
+    patch_2_validation_focus: PASS
+    patch_3_id: PASS
+    patch_3_source_decision: PASS
+    patch_3_target_artifact: PASS
+    patch_3_operation: PASS
+    patch_3_change_type: PASS
+    patch_3_rationale: PASS
+    patch_3_effect: PASS
+    patch_3_risk_avoided: PASS
+    patch_3_location_hint_section: PASS
+    patch_3_location_hint_granularity: PASS
+    patch_3_location_hint_keys_to_update: PASS
+    patch_3_operations: PASS
+    patch_3_op_1_op: PASS
+    patch_3_op_1_path: PASS
+    patch_3_op_1_value: PASS
+    patch_3_op_2_op: PASS
+    patch_3_op_2_path: PASS
+    patch_3_op_2_value: PASS
+    patch_3_validation_focus: PASS
+    patch_4_id: PASS
+    patch_4_source_decision: PASS
+    patch_4_target_artifact: PASS
+    patch_4_operation: PASS
+    patch_4_change_type: PASS
+    patch_4_rationale: PASS
+    patch_4_effect: PASS
+    patch_4_risk_avoided: PASS
+    patch_4_location_hint_section: PASS
+    patch_4_location_hint_granularity: PASS
+    patch_4_location_hint_keys_to_update: PASS
+    patch_4_operations: PASS
+    patch_4_op_1_op: PASS
+    patch_4_op_1_path: PASS
+    patch_4_op_1_value: PASS
+    patch_4_op_2_op: PASS
+    patch_4_op_2_path: PASS
+    patch_4_op_2_value: PASS
+    patch_4_validation_focus: PASS
+    patch_5_id: PASS
+    patch_5_source_decision: PASS
+    patch_5_target_artifact: PASS
+    patch_5_operation: PASS
+    patch_5_change_type: PASS
+    patch_5_rationale: PASS
+    patch_5_effect: PASS
+    patch_5_risk_avoided: PASS
+    patch_5_location_hint_section: PASS
+    patch_5_location_hint_granularity: PASS
+    patch_5_location_hint_keys_to_update: PASS
+    patch_5_operations: PASS
+    patch_5_op_1_op: PASS
+    patch_5_op_1_path: PASS
+    patch_5_op_1_value: PASS
+    patch_5_op_2_op: PASS
+    patch_5_op_2_path: PASS
+    patch_5_op_2_value: PASS
+    patch_5_validation_focus: PASS
+    patch_6_id: PASS
+    patch_6_source_decision: PASS
+    patch_6_target_artifact: PASS
+    patch_6_operation: PASS
+    patch_6_change_type: PASS
+    patch_6_rationale: PASS
+    patch_6_effect: PASS
+    patch_6_risk_avoided: PASS
+    patch_6_location_hint_section: PASS
+    patch_6_location_hint_granularity: PASS
+    patch_6_operations: PASS
+    patch_6_op_1_op: PASS
+    patch_6_op_1_path: PASS
+    patch_6_op_1_value: PASS
+    patch_6_validation_focus: PASS
+    declared_vs_used_targets: PASS
+    unused_declared_targets: PASS
+    exclusion_1_id: PASS
+    exclusion_1_reason: PASS
+    exclusion_1_note: PASS
+    exclusion_2_id: PASS
+    exclusion_2_reason: PASS
+    exclusion_2_note: PASS
+    exclusion_3_id: PASS
+    exclusion_3_reason: PASS
+    exclusion_3_note: PASS
+  summary:
+    patch_count: 6
+    target_artifacts_declared:
+    - docs/cores/current/platform_factory_architecture.yaml
+    - docs/cores/current/platform_factory_state.yaml
+    target_artifacts_used:
+    - docs/cores/current/platform_factory_architecture.yaml
+    - docs/cores/current/platform_factory_state.yaml
+  anomalies:
+  - none
   warnings:
-    - validation_item_id: WARN_01_MANIFEST_RELEASE_GOVERNANCE_HOOK_DEPENDENCY
-      axis: compatibility_with_canonical_foundation
-      status: WARN
-      element: PF_PATCH_ARCH_03_MANIFEST_RELEASE_GOVERNANCE_HOOK
-      nature: >-
-        Le hook de gouvernance manifest/release ajouté dans build_and_packaging_rules
-        prépare le traitement en Stage 07/08 mais dépend de la bonne matérialisation
-        future de ces stages.
-      impact: >-
-        Risque d'inertie si les stages 07/08 ne sont pas outillés dans un délai
-        raisonnable ; pas bloquant pour l'apply du patchset lui-même.
-      justification: >-
-        L'arbitrage HUM-01/PFARB-DEC-03 prévoit explicitement un traitement en fin
-        de pipeline ; le patchset ajoute uniquement un hook côté architecture.
-      action_before_apply: >-
-        Documenter ce hook dans la spécification détaillée des stages 07/08 lors
-        de leur prochaine révision.
-
-  stage_decision:
-    status: PASS
-    can_proceed_to_stage_05_apply: true
-    conditions_before_apply:
-      - type: recommendation
-        description: >-
-          S'assurer que les scripts/outils du stage 05 appliquent les opérations
-          de patch de manière atomique et traçable, en cohérence avec les invariants
-          de patchabilité constitutionnels.
-    summary: >-
-      Patchset pré-apply jugé fidèle à l'arbitrage, compatible avec le socle canonique
-      et suffisamment atomique et traçable pour être appliqué en posture V0, avec
-      un warning non bloquant sur la dépendance future au traitement manifest/release
-      en Stage 07/08.
+  - none
