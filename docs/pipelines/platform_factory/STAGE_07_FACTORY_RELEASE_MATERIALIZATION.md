@@ -22,6 +22,17 @@ Inputs :
 
 Précondition :
 - `work/06_core_validation/platform_factory_core_validation.yaml` doit être en `status: PASS`
+- `reports/platform_factory_execution_report.yaml` doit être en `status: PASS`
+
+Outillage déterministe attendu :
+- `docs/patcher/shared/build_platform_factory_release_plan.py`
+- `docs/patcher/shared/materialize_platform_factory_release.py`
+
+Règle d’exécution déterministe :
+- le calcul de classification et de release doit être produit par script déterministe ;
+- l’IA peut commenter, challenger et interpréter les résultats ;
+- l’IA ne doit pas simuler les sorties de script ;
+- toute commande à exécuter doit être explicitement donnée comme commande shell.
 
 #### 07A_FACTORY_RELEASE_CLASSIFICATION
 
@@ -101,6 +112,23 @@ Structure attendue :
   - `release_bundle`
   - `notes`
 
+Sémantique de statut attendue :
+- `status: PASS` signifie que la classification déterministe s’est exécutée correctement, y compris si `release_required: false`
+- l’absence de release à matérialiser n’est pas un warning de pipeline
+- `status: FAIL` signifie qu’une précondition, une entrée ou le calcul déterministe lui-même est invalide
+
+Commande recommandée :
+```bash
+mkdir -p ./docs/pipelines/platform_factory/work/07_release
+
+python docs/patcher/shared/build_platform_factory_release_plan.py \
+  ./docs/pipelines/platform_factory/work/05_apply/patched \
+  ./docs/cores/current \
+  ./docs/pipelines/platform_factory/work/06_core_validation/platform_factory_core_validation.yaml \
+  ./docs/pipelines/platform_factory/reports/platform_factory_execution_report.yaml \
+  ./docs/pipelines/platform_factory/work/07_release/platform_factory_release_plan.yaml
+```
+
 #### 07B_FACTORY_RELEASE_MATERIALIZATION
 
 Objectif :
@@ -117,7 +145,8 @@ Précondition :
 Principe opératoire :
 - si `release_required: false`
   - ne pas créer de nouvelle release ;
-  - produire une note explicite de non-matérialisation
+  - produire une note explicite de non-matérialisation ;
+  - produire un report `PASS` indiquant qu’aucune release n’était requise
 - si `release_required: true`
   - créer un répertoire immuable sous `docs/cores/releases/<release_id>/`
   - copier les artefacts patchés validés dans cette release comme base de matérialisation
@@ -146,6 +175,27 @@ Convention de nommage recommandée :
 - format recommandé pour `release_id` :
   - `PLATFORM_FACTORY_RELEASE_YYYY_MM_DD_RNN`
 
+Manifest de release attendu :
+- `docs/cores/releases/<release_id>/manifest.yaml`
+- racine :
+  - `PLATFORM_FACTORY_RELEASE_MANIFEST`
+- contenu minimal :
+  - `release_id`
+  - `release_path`
+  - `status`
+  - `promotion_candidate`
+  - `change_depth`
+  - `materialized_at`
+  - `source_release_plan`
+  - `artifacts`
+- chaque entrée de `artifacts` doit au minimum porter :
+  - `role`
+  - `file`
+  - `artifact_id`
+  - `version`
+  - `status`
+  - `sha256`
+
 Outputs :
 - `work/07_release/platform_factory_release_plan.yaml`
 - `docs/cores/releases/<release_id>/platform_factory_architecture.yaml`
@@ -153,6 +203,15 @@ Outputs :
 - `docs/cores/releases/<release_id>/manifest.yaml`
 - `outputs/platform_factory_release_candidate_notes.md`
 - `reports/platform_factory_release_materialization_report.yaml`
+
+Commande recommandée :
+```bash
+python docs/patcher/shared/materialize_platform_factory_release.py \
+  ./docs/pipelines/platform_factory/work/07_release/platform_factory_release_plan.yaml \
+  ./docs/pipelines/platform_factory/work/05_apply/patched \
+  ./docs/pipelines/platform_factory/reports/platform_factory_release_materialization_report.yaml \
+  ./docs/pipelines/platform_factory/outputs/platform_factory_release_candidate_notes.md
+```
 
 Règle opératoire :
 - `07A_FACTORY_RELEASE_CLASSIFICATION` produit la décision de versioning et de release
@@ -162,5 +221,6 @@ Règle opératoire :
 - la décision de release de `07A` doit être calculée de manière déterministe ; l’IA peut commenter ou challenger le résultat, mais ne doit pas remplacer ce calcul
 
 Note V0 importante :
-- contrairement au pipeline `constitution`, le tooling de release actuellement disponible dans le repo n’est pas encore explicitement généralisé au couple `platform_factory_architecture.yaml` / `platform_factory_state.yaml`
-- ce stage est donc normativement défini ici, mais son outillage scripté dédié pourra nécessiter une extension ultérieure avant exécution complète
+- contrairement au pipeline `constitution`, le tooling de release `platform_factory` reste spécifique à ses deux artefacts dédiés et à leur manifest de release
+- ce stage est exécutable avec l’outillage scripté dédié ci-dessus
+- la mise à jour éventuelle de `docs/cores/current/manifest.yaml` ne fait pas partie de ce Stage 07
