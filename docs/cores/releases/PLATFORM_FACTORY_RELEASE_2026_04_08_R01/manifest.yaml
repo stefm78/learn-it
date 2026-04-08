@@ -1,0 +1,27 @@
+PLATFORM_FACTORY_RELEASE_MANIFEST:
+  release_id: PLATFORM_FACTORY_RELEASE_2026_04_08_R01
+  release_path: docs/cores/releases/PLATFORM_FACTORY_RELEASE_2026_04_08_R01/
+  status: RELEASE_CANDIDATE
+  promotion_candidate: true
+  change_depth: minor
+  materialized_at: '2026-04-08T05:37:11Z'
+  source_release_plan: docs/pipelines/platform_factory/work/07_release/platform_factory_release_plan.yaml
+  artifacts:
+  - role: platform_factory_architecture
+    file: platform_factory_architecture.yaml
+    root_key: PLATFORM_FACTORY_ARCHITECTURE
+    artifact_id: PLATFORM_FACTORY_ARCHITECTURE_V0_2
+    version: 0.2.0
+    status: RELEASE_CANDIDATE
+    sha256: 082caee470932e6743184c79694632b905c249ada371b417d51514a92d985744
+  - role: platform_factory_state
+    file: platform_factory_state.yaml
+    root_key: PLATFORM_FACTORY_STATE
+    artifact_id: PLATFORM_FACTORY_STATE_V0_2
+    version: 0.2.0
+    status: RELEASE_CANDIDATE
+    sha256: bbc92be6a89f4c3c837f4d1221488cac785b12164b6b0759a8a7300fbce08d19
+  files:
+  - docs/cores/releases/PLATFORM_FACTORY_RELEASE_2026_04_08_R01/platform_factory_architecture.yaml
+  - docs/cores/releases/PLATFORM_FACTORY_RELEASE_2026_04_08_R01/platform_factory_state.yaml
+  - docs/cores/releases/PLATFORM_FACTORY_RELEASE_2026_04_08_R01/manifest.yaml
