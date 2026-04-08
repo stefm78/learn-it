@@ -23,10 +23,10 @@ Script dédié :
 
 ## Préconditions obligatoires
 
-- `docs/pipelines/platform_factory/reports/platform_factory_promotion_report.yaml` doit être en `status: PASS`.
-- `docs/pipelines/platform_factory/work/07_release/platform_factory_release_plan.yaml` doit être en `status: PASS`.
-- `docs/pipelines/platform_factory/reports/platform_factory_release_materialization_report.yaml` doit être en `status: PASS`.
-- Le `promotion_mode` doit être compatible avec un closeout post-promotion (`applied` ou `already_current`).
+- `docs/pipelines/platform_factory/reports/platform_factory_promotion_report.yaml` doit porter `PROMOTION_REPORT.status: PASS`.
+- `docs/pipelines/platform_factory/work/07_release/platform_factory_release_plan.yaml` doit porter `RELEASE_PLAN.status: PASS`.
+- `docs/pipelines/platform_factory/reports/platform_factory_release_materialization_report.yaml` doit porter `PLATFORM_FACTORY_RELEASE_MATERIALIZATION.status: PASS`.
+- `PROMOTION_REPORT.promotion_mode` doit être compatible avec un closeout post-promotion (`applied` ou `already_current`).
 - La release promue doit exister réellement sous `docs/cores/releases/<release_id>/`.
 - Le manifest de release doit être présent.
 - Ne pas simuler un closeout si le script n’a pas tourné.
@@ -68,7 +68,7 @@ Archive attendue :
 Exécuter :
 
 ```bash
-python docs/patcher/shared/closeout_platform_factory_run.py           ./docs/pipelines/platform_factory/reports/platform_factory_promotion_report.yaml           ./docs/pipelines/platform_factory/work/07_release/platform_factory_release_plan.yaml           ./docs/pipelines/platform_factory/reports/platform_factory_release_materialization_report.yaml           ./docs/pipelines/platform_factory/reports/platform_factory_closeout_report.yaml           ./docs/pipelines/platform_factory/outputs/platform_factory_summary.md           ./docs/pipelines/platform_factory/archive
+python docs/patcher/shared/closeout_platform_factory_run.py   ./docs/pipelines/platform_factory/reports/platform_factory_promotion_report.yaml   ./docs/pipelines/platform_factory/work/07_release/platform_factory_release_plan.yaml   ./docs/pipelines/platform_factory/reports/platform_factory_release_materialization_report.yaml   ./docs/pipelines/platform_factory/reports/platform_factory_closeout_report.yaml   ./docs/pipelines/platform_factory/outputs/platform_factory_summary.md   ./docs/pipelines/platform_factory/archive
 ```
 
 ## Vérification obligatoire après exécution
@@ -93,7 +93,7 @@ Vérifier aussi :
 - qu’il est recréé vide ;
 - que `docs/pipelines/platform_factory/archive/<release_id>/` existe réellement.
 
-Si le report n’est pas en `status: PASS`, le pipeline ne peut pas être considéré comme proprement clôturé.
+Si `PLATFORM_FACTORY_CLOSEOUT_REPORT.status` n’est pas `PASS`, le pipeline ne peut pas être considéré comme proprement clôturé.
 
 ## Si une commande doit être exécutée par l’humain dans le chat
 
