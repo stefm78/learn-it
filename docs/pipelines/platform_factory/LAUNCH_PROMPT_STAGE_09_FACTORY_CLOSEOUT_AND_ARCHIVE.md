@@ -68,7 +68,13 @@ Archive attendue :
 Exécuter :
 
 ```bash
-python docs/patcher/shared/closeout_platform_factory_run.py   ./docs/pipelines/platform_factory/reports/platform_factory_promotion_report.yaml   ./docs/pipelines/platform_factory/work/07_release/platform_factory_release_plan.yaml   ./docs/pipelines/platform_factory/reports/platform_factory_release_materialization_report.yaml   ./docs/pipelines/platform_factory/reports/platform_factory_closeout_report.yaml   ./docs/pipelines/platform_factory/outputs/platform_factory_summary.md   ./docs/pipelines/platform_factory/archive
+python docs/patcher/shared/closeout_platform_factory_run.py \
+  ./docs/pipelines/platform_factory/reports/platform_factory_promotion_report.yaml \
+  ./docs/pipelines/platform_factory/work/07_release/platform_factory_release_plan.yaml \
+  ./docs/pipelines/platform_factory/reports/platform_factory_release_materialization_report.yaml \
+  ./docs/pipelines/platform_factory/reports/platform_factory_closeout_report.yaml \
+  ./docs/pipelines/platform_factory/outputs/platform_factory_summary.md \
+  ./docs/pipelines/platform_factory/archive
 ```
 
 ## Vérification obligatoire après exécution
