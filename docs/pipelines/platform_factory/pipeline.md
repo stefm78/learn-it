@@ -120,6 +120,8 @@ A validated patched state is not yet the promoted current state until a dedicate
   - `work/03_patch/platform_factory_patchset.yaml`
   - `work/02_arbitrage/platform_factory_arbitrage.md`
 - Prompt:
+  - `docs/pipelines/platform_factory/LAUNCH_PROMPT_STAGE_04_FACTORY_PATCH_VALIDATION.md`
+- Companion prompt:
   - `docs/prompts/shared/Make23PlatformFactoryValidation.md`
 - Outputs:
   - `work/04_patch_validation/platform_factory_patch_validation.yaml`
@@ -130,7 +132,7 @@ A validated patched state is not yet the promoted current state until a dedicate
 - Inputs:
   - validated patchset
 - Prompt:
-  - none required
+  - `docs/pipelines/platform_factory/LAUNCH_PROMPT_STAGE_05_FACTORY_APPLY.md`
 - Outputs:
   - `work/05_apply/patched/platform_factory_architecture.yaml`
   - `work/05_apply/patched/platform_factory_state.yaml`
@@ -141,22 +143,28 @@ A validated patched state is not yet the promoted current state until a dedicate
 - Inputs:
   - patched `platform_factory` artifacts from `work/05_apply/patched/`
 - Prompt:
+  - `docs/pipelines/platform_factory/LAUNCH_PROMPT_STAGE_06_FACTORY_CORE_VALIDATION.md`
+- Companion prompt:
   - `docs/prompts/shared/Make23PlatformFactoryValidation.md`
 - Outputs:
   - `work/06_core_validation/platform_factory_core_validation.yaml`
   - `reports/platform_factory_core_validation_report.md`
 
 ### STAGE_07_FACTORY_RELEASE_MATERIALIZATION
+
+- Prompt:
+  - `docs/pipelines/platform_factory/LAUNCH_PROMPT_STAGE_07_FACTORY_RELEASE_MATERIALIZATION.md`
 - Spec détaillée :
   - `docs/pipelines/platform_factory/STAGE_07_FACTORY_RELEASE_MATERIALIZATION.md`
-
 - Rule:
   - `STAGE_07_FACTORY_RELEASE_MATERIALIZATION.md` is the canonical specification for Stage 07
 
 ### STAGE_08_FACTORY_PROMOTE_CURRENT
+
+- Prompt:
+  - `docs/pipelines/platform_factory/LAUNCH_PROMPT_STAGE_08_FACTORY_PROMOTE_CURRENT.md`
 - Spec détaillée :
   - `docs/pipelines/platform_factory/STAGE_08_FACTORY_PROMOTE_CURRENT.md`
-
 - Rule:
   - `STAGE_08_FACTORY_PROMOTE_CURRENT.md` is the canonical specification for Stage 08
 
@@ -187,7 +195,7 @@ Primary target artifacts:
 
 ---
 
-## Required shared prompts
+## Prompt assets
 
 Expected shared prompt family:
 - `docs/prompts/shared/Challenge_platform_factory.md`
@@ -196,12 +204,18 @@ Expected shared prompt family:
 - `docs/prompts/shared/Make23PlatformFactoryValidation.md`
 
 Stage-specific launch prompts:
+- `docs/pipelines/platform_factory/LAUNCH_PROMPT_STAGE_04_FACTORY_PATCH_VALIDATION.md`
+- `docs/pipelines/platform_factory/LAUNCH_PROMPT_STAGE_05_FACTORY_APPLY.md`
+- `docs/pipelines/platform_factory/LAUNCH_PROMPT_STAGE_06_FACTORY_CORE_VALIDATION.md`
 - `docs/pipelines/platform_factory/LAUNCH_PROMPT_STAGE_07_FACTORY_RELEASE_MATERIALIZATION.md`
 - `docs/pipelines/platform_factory/LAUNCH_PROMPT_STAGE_08_FACTORY_PROMOTE_CURRENT.md`
 - `docs/pipelines/platform_factory/LAUNCH_PROMPT_STAGE_09_FACTORY_CLOSEOUT_AND_ARCHIVE.md`
 
 Prompt usage companion:
 - `docs/pipelines/platform_factory/PROMPT_USAGE.md`
+
+Operator guidance companion:
+- `docs/pipelines/platform_factory/OPERATOR_RUNBOOK.md`
 
 ---
 

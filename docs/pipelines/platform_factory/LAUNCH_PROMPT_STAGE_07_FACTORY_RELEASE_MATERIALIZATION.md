@@ -84,38 +84,41 @@ mkdir -p ./docs/pipelines/platform_factory/outputs
 Exécuter :
 
 ```bash
-python docs/patcher/shared/build_platform_factory_release_plan.py \
-  ./docs/pipelines/platform_factory/work/05_apply/patched \
-  ./docs/cores/current \
-  ./docs/pipelines/platform_factory/work/06_core_validation/platform_factory_core_validation.yaml \
-  ./docs/pipelines/platform_factory/reports/platform_factory_execution_report.yaml \
-  ./docs/pipelines/platform_factory/work/07_release/platform_factory_release_plan.yaml
+python docs/patcher/shared/build_platform_factory_release_plan.py           ./docs/pipelines/platform_factory/work/05_apply/patched           ./docs/cores/current           ./docs/pipelines/platform_factory/work/06_core_validation/platform_factory_core_validation.yaml           ./docs/pipelines/platform_factory/reports/platform_factory_execution_report.yaml           ./docs/pipelines/platform_factory/work/07_release/platform_factory_release_plan.yaml
 ```
 
 ### 3. Vérifier le release plan
 
 - Lire `docs/pipelines/platform_factory/work/07_release/platform_factory_release_plan.yaml`
-- Si le release plan est en `status: FAIL`, arrêter ici.
-- Ne pas lancer la matérialisation.
-- Si `release_required: false`, ne pas créer de release sous `docs/cores/releases/`.
-- Dans ce cas, laisser une trace claire de non-matérialisation via le report de Stage 07.
+- Vérifier explicitement la racine `RELEASE_PLAN` :
+  - `status`
+  - `release_required`
+  - `change_depth`
+  - `release_bundle.release_id`
+  - `release_bundle.release_path`
+  - `release_bundle.promotion_candidate`
+- Si `RELEASE_PLAN.status` n’est pas `PASS`, arrêter ici.
+- Si `RELEASE_PLAN.release_required` vaut `false`, arrêter ici sans lancer 07B.
+- Dans ce cas, ne pas créer de release sous `docs/cores/releases/` et ne pas passer au Stage 08.
 
 ### 4. Exécuter 07B_FACTORY_RELEASE_MATERIALIZATION
 
-Seulement si le release plan est exploitable et si `release_required: true`, exécuter :
+Seulement si le release plan est exploitable et si `RELEASE_PLAN.release_required: true`, exécuter :
 
 ```bash
-python docs/patcher/shared/materialize_platform_factory_release.py \
-  ./docs/pipelines/platform_factory/work/07_release/platform_factory_release_plan.yaml \
-  ./docs/pipelines/platform_factory/work/05_apply/patched \
-  ./docs/pipelines/platform_factory/reports/platform_factory_release_materialization_report.yaml \
-  ./docs/pipelines/platform_factory/outputs/platform_factory_release_candidate_notes.md
+python docs/patcher/shared/materialize_platform_factory_release.py           ./docs/pipelines/platform_factory/work/07_release/platform_factory_release_plan.yaml           ./docs/pipelines/platform_factory/work/05_apply/patched           ./docs/pipelines/platform_factory/reports/platform_factory_release_materialization_report.yaml           ./docs/pipelines/platform_factory/outputs/platform_factory_release_candidate_notes.md
 ```
 
 ### 5. Vérifier le report de matérialisation
 
 - Lire `docs/pipelines/platform_factory/reports/platform_factory_release_materialization_report.yaml`
-- Si le report n’est pas en `status: PASS`, le stage ne franchit pas 07.
+- Vérifier explicitement la racine `PLATFORM_FACTORY_RELEASE_MATERIALIZATION` :
+  - `status`
+  - `release_required`
+  - `release_id`
+  - `release_path`
+  - `files_written`
+- Si `PLATFORM_FACTORY_RELEASE_MATERIALIZATION.status` n’est pas `PASS`, le stage ne franchit pas 07.
 - Ne pas passer à la promotion tant que la matérialisation n’est pas proprement fermée.
 
 ## Si une commande doit être exécutée par l’humain dans le chat
@@ -129,7 +132,7 @@ Avant toute interprétation du résultat, dire explicitement :
 
 - Ne pas modifier `docs/cores/current/` à ce stage.
 - Ne pas inventer un `release_id` à la place du script.
-- Ne pas créer de release immuable si `release_required: false`.
+- Ne pas créer de release immuable si `RELEASE_PLAN.release_required: false`.
 - Ne pas remplacer les scripts dédiés par une interprétation libre.
 - Le livrable attendu est constitué des fichiers écrits dans le repo. Le retour chat doit être très succinct.
 

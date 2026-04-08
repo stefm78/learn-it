@@ -65,23 +65,20 @@ Script dédié :
 Exécuter :
 
 ```bash
-python docs/patcher/shared/promote_platform_factory_current.py \
-  ./docs/pipelines/platform_factory/work/07_release/platform_factory_release_plan.yaml \
-  ./docs/pipelines/platform_factory/reports/platform_factory_release_materialization_report.yaml \
-  ./docs/pipelines/platform_factory/reports/platform_factory_promotion_report.yaml
+python docs/patcher/shared/promote_platform_factory_current.py           ./docs/pipelines/platform_factory/work/07_release/platform_factory_release_plan.yaml           ./docs/pipelines/platform_factory/reports/platform_factory_release_materialization_report.yaml           ./docs/pipelines/platform_factory/reports/platform_factory_promotion_report.yaml
 ```
 
 ## Vérification obligatoire après exécution
 
 - Lire `docs/pipelines/platform_factory/reports/platform_factory_promotion_report.yaml`
-- Vérifier explicitement :
+- Vérifier explicitement la racine `PROMOTION_REPORT` :
   - `status`
   - `release_id`
   - `source_release_path`
   - `promotion_mode`
   - `files_promoted`
-- Si le report n’est pas en `status: PASS`, le stage ne franchit pas 08.
-- Si `promotion_mode: already_current`, considérer la promotion comme idempotente et valide.
+- Si `PROMOTION_REPORT.status` n’est pas en `PASS`, le stage ne franchit pas 08.
+- Si `PROMOTION_REPORT.promotion_mode: already_current`, considérer la promotion comme idempotente et valide.
 
 ## Si une commande doit être exécutée par l’humain dans le chat
 
