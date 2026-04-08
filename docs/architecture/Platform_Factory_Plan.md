@@ -184,7 +184,7 @@ Sous `docs/prompts/shared/` :
 - `Make21PlatformFactoryArbitrage.md`
 - `Make22PlatformFactoryPatch.md`
 - `Make23PlatformFactoryValidation.md`
-- `Make24PlatformFactoryReview.md`
+- `Make24PlatformFactoryReview.md` *(historical candidate, no longer retained in the nominal deterministic Stage 09 flow)*
 
 ### 3.4. Une capacité de suivi d’avancement dans le temps
 Avec au minimum :
@@ -583,7 +583,7 @@ Créer une famille cohérente de prompts réexécutables, alignés sur les conve
 - `Make21PlatformFactoryArbitrage.md`
 - `Make22PlatformFactoryPatch.md`
 - `Make23PlatformFactoryValidation.md`
-- `Make24PlatformFactoryReview.md`
+- `Make24PlatformFactoryReview.md` *(historical candidate, no longer retained in the nominal deterministic Stage 09 flow)*
 
 **Contraintes de design**
 Les prompts doivent conserver la structure canonique déjà présente dans le repo :

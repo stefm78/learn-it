@@ -166,7 +166,7 @@ A validated patched state is not yet the promoted current state until a dedicate
   - promotion outputs
   - release outputs
 - Prompt:
-  - `docs/prompts/shared/Make24PlatformFactoryReview.md`
+  - `docs/pipelines/platform_factory/LAUNCH_PROMPT_STAGE_09_FACTORY_CLOSEOUT_AND_ARCHIVE.md`
 - Outputs:
   - `reports/platform_factory_closeout_report.yaml`
   - `outputs/platform_factory_summary.md`
@@ -194,7 +194,11 @@ Expected shared prompt family:
 - `docs/prompts/shared/Make21PlatformFactoryArbitrage.md`
 - `docs/prompts/shared/Make22PlatformFactoryPatch.md`
 - `docs/prompts/shared/Make23PlatformFactoryValidation.md`
-- `docs/prompts/shared/Make24PlatformFactoryReview.md`
+
+Stage-specific launch prompts:
+- `docs/pipelines/platform_factory/LAUNCH_PROMPT_STAGE_07_FACTORY_RELEASE_MATERIALIZATION.md`
+- `docs/pipelines/platform_factory/LAUNCH_PROMPT_STAGE_08_FACTORY_PROMOTE_CURRENT.md`
+- `docs/pipelines/platform_factory/LAUNCH_PROMPT_STAGE_09_FACTORY_CLOSEOUT_AND_ARCHIVE.md`
 
 Prompt usage companion:
 - `docs/pipelines/platform_factory/PROMPT_USAGE.md`

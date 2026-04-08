@@ -1,6 +1,6 @@
 # Platform Factory — Prompt usage
 
-Ce document complète `pipeline.md` en indiquant quel prompt partagé utiliser à chaque étape du pipeline `platform_factory`.
+Ce document complète `pipeline.md` en indiquant quel prompt utiliser à chaque étape du pipeline `platform_factory`.
 
 Il ne remplace pas le pipeline.
 Il en précise le mode opératoire côté IA.
@@ -89,7 +89,7 @@ But :
 
 ---
 
-### STAGE_08_FACTORY_PROMOTION
+### STAGE_08_FACTORY_PROMOTE_CURRENT
 Prompt recommandé :
 - aucun prompt spécialisé obligatoire
 
@@ -101,13 +101,13 @@ But :
 
 ### STAGE_09_FACTORY_CLOSEOUT_AND_ARCHIVE
 Prompt principal :
-- `docs/prompts/shared/Make24PlatformFactoryReview.md`
+- `docs/pipelines/platform_factory/LAUNCH_PROMPT_STAGE_09_FACTORY_CLOSEOUT_AND_ARCHIVE.md`
 
 But :
-- produire une appréciation de clôture ;
-- capitaliser les décisions ;
-- préparer le prochain cycle.
-
+- exécuter le closeout déterministe du run ;
+- archiver `work/`, `reports/` et `outputs/` ;
+- produire `platform_factory_closeout_report.yaml` et `platform_factory_summary.md` ;
+- réinitialiser `work/` pour le prochain cycle.
 ---
 
 ## Règle d'usage
