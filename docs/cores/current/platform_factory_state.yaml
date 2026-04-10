@@ -1,8 +1,8 @@
 PLATFORM_FACTORY_STATE:
   metadata:
-    artifact_id: PLATFORM_FACTORY_STATE_V0_2
+    artifact_id: PLATFORM_FACTORY_STATE_V0_3
     artifact_type: platform_factory_state
-    version: 0.2.0
+    version: 0.3.0
     status: RELEASE_CANDIDATE
     assessment_mode: initial_baseline
     notes:
@@ -42,12 +42,13 @@ PLATFORM_FACTORY_STATE:
   - capability_id: PF_CAPABILITY_MINIMUM_APPLICATION_CONTRACT_DEFINED_AT_HIGH_LEVEL
     description: Le contrat minimal générique d'une application produite est posé
       à haut niveau.
-  - capability_id: PF_CAPABILITY_DERIVED_PROJECTION_RULE_DEFINED
-    description: La règle d'usage des projections dérivées validées est définie.
   - capability_id: PF_CAPABILITY_MULTI_IA_AS_REQUIREMENT
     description: Le travail parallèle multi-IA est reconnu comme exigence structurante.
   - capability_id: PF_CAPABILITY_FACTORY_PIPELINE_INTENT_DEFINED
-    description: L'intention de pipeline platform_factory est explicitement posée.
+    description: L'intention de pipeline platform_factory est explicitement posée
+      (intent only, not yet tooled execution framework). Les stages existent et les
+      prompts de lancement sont définis, mais le pipeline n'est pas encore automatisé
+      ni complètement outillé.
   capabilities_partial:
   - capability_id: PF_CAPABILITY_APPLICATION_MANIFEST_MODEL
     description: Le manifest minimal est défini en intention mais pas encore en schéma
@@ -69,12 +70,19 @@ PLATFORM_FACTORY_STATE:
   - capability_id: PF_CAPABILITY_MULTI_IA_DECOMPOSITION
     description: Les exigences sont posées, pas encore la granularité opérationnelle
       optimale.
+  - capability_id: PF_CAPABILITY_DERIVED_PROJECTION_RULE_DEFINED
+    description: 'La règle d''usage des projections dérivées est définie. L''emplacement
+      de stockage est désormais décidé (ARB-04). Les champs minimaux obligatoires
+      sont inscrits dans l''architecture (ARB-05). Restent absents : validator dédié,
+      protocole de régénération automatisé, usage comme contexte unique bloqué jusqu''à
+      maturité suffisante.'
+  - capability_id: PF_CAPABILITY_PROJECTION_STORAGE_LOCATION_FINALIZED
+    description: 'Emplacement décidé : docs/cores/platform_factory/projections/. Règle
+      d''interdiction dans docs/cores/current/ inscrite. Outillage de génération et
+      de validation des projections restent à implémenter.'
   capabilities_absent:
   - capability_id: PF_CAPABILITY_MANIFEST_SCHEMA_FINALIZED
     description: Schéma final du manifest d'application non encore arrêté.
-  - capability_id: PF_CAPABILITY_PROJECTION_STORAGE_LOCATION_FINALIZED
-    description: Emplacement concret des validated_derived_execution_projections non
-      encore arrêté.
   - capability_id: PF_CAPABILITY_FACTORY_VALIDATORS_IMPLEMENTED
     description: Validateurs dédiés à la conformité des projections et du contrat
       minimal non encore implémentés.
@@ -92,10 +100,18 @@ PLATFORM_FACTORY_STATE:
   - blocker_id: PF_BLOCKER_PROJECTION_LOCATION_PENDING
     severity: medium
     impact: Limite la mise en œuvre pratique des projections pour IA.
+    resolved: true
+    resolution: 'Emplacement décidé : docs/cores/platform_factory/projections/. Décision
+      humaine PC-1 actée le 2026-04-10.'
+    resolution_date: '2026-04-10'
   - blocker_id: PF_BLOCKER_CURRENT_MANIFEST_SCHEMA_LIMITATION
     severity: medium
     impact: Les artefacts platform_factory sont dans current mais hors manifest officiel
       actuel.
+    exit_condition: Ce blocker est levé uniquement quand STAGE_08 complète sa première
+      exécution formelle avec mise à jour effective du manifest officiel (ou production
+      de docs/cores/platform_factory/manifest.yaml si le schema officiel est encore
+      insuffisant).
   validated_decisions:
   - decision_id: PF_DECISION_TWO_ARTIFACTS
     statement: Séparer architecture prescriptive et état constatif.
@@ -181,3 +197,14 @@ PLATFORM_FACTORY_STATE:
     - factory_scope_clarified
     - derived_projection_model_clarified
     - multi_ia_requirement_explicitly_recorded
+    - runtime_policy_conformance_axis_added_to_minimum_validation_contract
+    - constitutional_invariants_checked_signal_added_to_observability_contract
+    - constitutional_conformance_matrix_ref_added_to_architecture
+    - projection_emplacement_policy_decided_and_inscribed
+    - projection_mandatory_fields_defined
+    - status_corrected_to_current_baseline_under_governance
+    - capability_derived_projection_rule_recalibrated_to_partial
+    - blocker_projection_location_resolved
+    - blocker_manifest_exit_condition_added
+    - reproducibility_fingerprints_defined
+    - bootstrap_contract_tbd_bounded

@@ -1,8 +1,8 @@
 PLATFORM_FACTORY_ARCHITECTURE:
   metadata:
-    artifact_id: PLATFORM_FACTORY_ARCHITECTURE_V0_2
+    artifact_id: PLATFORM_FACTORY_ARCHITECTURE_V0_3
     artifact_type: platform_factory_architecture
-    version: 0.2.0
+    version: 0.3.0
     status: RELEASE_CANDIDATE
     notes:
     - Artefact V0 posé dans docs/cores/current/ pour lancer la gouvernance de la Platform
@@ -114,12 +114,38 @@ PLATFORM_FACTORY_ARCHITECTURE:
       - implicit_rule_addition
       - uncontrolled_paraphrase
       - promotion_as_primary_canonical_artifact
+      mandatory_fields_per_projection:
+      - field: scope
+        description: Périmètre exact couvert par la projection.
+      - field: sources_exact
+        description: Liste exacte des artefacts canoniques sources.
+      - field: version_fingerprint
+        description: Empreinte canonique des artefacts sources permettant de détecter
+          toute dérive.
+      - field: validation_status
+        description: 'Statut de validation : validated | pending | invalidated.'
+      - field: promotion_to_canonical_forbidden
+        value: true
+        description: Une projection dérivée ne peut jamais être promu canonique primaire.
+      - field: usage_policy
+        description: 'Usages autorisés : runtime, offsession, ou les deux.'
+      - field: conformance_matrix_ref
+        description: Référence vers docs/cores/platform_factory/constitutional_conformance_matrix.yaml.
+      - field: usage_as_sole_context
+        value: blocked
+        description: Bloqué jusqu'à maturité suffisante.
     produced_application_minimum_contract:
       identity:
         required_blocks:
         - logical_identity
         - produced_instance_identity
         - reproducibility_fingerprints
+        reproducibility_fingerprints_definition: 'Empreinte canonique des artefacts
+          sources utilisés pour produire cette application : hash ou identifiant de
+          version stable de chaque dépendance canonique (constitution, référentiel,
+          link, architecture factory, projections utilisées). Permet de vérifier qu''une
+          application peut être entièrement retracée et reproduite à partir des mêmes
+          sources.'
       manifest:
         required: true
         minimum_contents:
@@ -140,6 +166,10 @@ PLATFORM_FACTORY_ARCHITECTURE:
         - runtime_entrypoint_type
         - bootstrap_contract
         - runtime_prerequisites
+        bootstrap_contract_tbd_condition: TBD. Ce champ sera défini quand la typologie
+          exacte des runtimes d'application Learn-it sera arrêtée. Il décrira le contrat
+          de démarrage attendu pour chaque type de runtime (local, notebook, package,
+          etc.).
       minimum_configuration_contract:
         required: true
         minimum_blocks:
@@ -159,6 +189,7 @@ PLATFORM_FACTORY_ARCHITECTURE:
         - traceability
         - packaging
         - structure_and_state_alignment
+        - runtime_policy_conformance
       minimum_packaging_contract:
         required: true
         must_be:
@@ -174,6 +205,7 @@ PLATFORM_FACTORY_ARCHITECTURE:
         - validation_status
         - traceability_references
         - produced_application_minimum_contract_conformance_status
+        - constitutional_invariants_checked
   variant_governance:
     principle: La factory doit autoriser des variantes d'applications sans casser
       le contrat minimal générique ni la séparation entre générique et spécifique.
@@ -216,6 +248,7 @@ PLATFORM_FACTORY_ARCHITECTURE:
     - forbidden_behaviors
     - local_runtime_constraints
     - canonical_traceability_requirements
+    constitutional_conformance_matrix_ref: docs/cores/platform_factory/constitutional_conformance_matrix.yaml
   dependencies_to_referentiel:
     mode: explicit_reference_only
     required_bindings:
@@ -244,8 +277,14 @@ PLATFORM_FACTORY_ARCHITECTURE:
     - each_projection_is_tagged_with_validated_derived_execution_projection_status
     - each_projection_usage_declares_runtime_and_offsession_boundaries
     emplacement_policy:
-      status: TBD
-      rule: must_not_blur_docs_cores_current
+      status: DECIDED
+      location: docs/cores/platform_factory/projections/
+      rule_positive: Toutes les validated_derived_execution_projections doivent être
+        stockées dans docs/cores/platform_factory/projections/. Cet emplacement est
+        stable, partagé entre toutes les applications spécifiques futures, et accessible
+        en lecture par tous les pipelines aval.
+      rule_negative: Il est strictement interdit de déposer une projection dérivée
+        dans docs/cores/current/. Cette zone est réservée aux canoniques primaires.
   multi_ia_parallel_readiness:
     objective: Permettre à plusieurs IA de travailler en parallèle sans ambiguïté
       de responsabilité ni divergence d'assemblage.
@@ -279,5 +318,4 @@ PLATFORM_FACTORY_ARCHITECTURE:
   - exact_runtime_entrypoint_typology
   - exact_configuration_schema
   - exact_packaging_schema
-  - exact_location_of_validated_derived_execution_projections
   - exact_granularity_for_multi_ai_parallel_work
