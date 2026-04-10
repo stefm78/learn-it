@@ -9,6 +9,7 @@ PLATFORM_FACTORY_STATE:
     - État reconnu initial de la Platform Factory.
     - Artefact V0 ajouté dans docs/cores/current/ sans intégration au current manifest
       existant.
+    authority_rank: factory_layer
   assessed_scope:
     covers:
     - factory_governance_model
@@ -17,7 +18,6 @@ PLATFORM_FACTORY_STATE:
     - multi_ia_parallel_readiness
     excludes:
     - detailed_application_instantiation_design
-    - exact_projection_storage_location
     - final_packaging_schema
     - final_runtime_entrypoint_typology
   maturity_by_layer:
@@ -44,11 +44,6 @@ PLATFORM_FACTORY_STATE:
       à haut niveau.
   - capability_id: PF_CAPABILITY_MULTI_IA_AS_REQUIREMENT
     description: Le travail parallèle multi-IA est reconnu comme exigence structurante.
-  - capability_id: PF_CAPABILITY_FACTORY_PIPELINE_INTENT_DEFINED
-    description: L'intention de pipeline platform_factory est explicitement posée
-      (intent only, not yet tooled execution framework). Les stages existent et les
-      prompts de lancement sont définis, mais le pipeline n'est pas encore automatisé
-      ni complètement outillé.
   capabilities_partial:
   - capability_id: PF_CAPABILITY_APPLICATION_MANIFEST_MODEL
     description: Le manifest minimal est défini en intention mais pas encore en schéma
@@ -71,21 +66,32 @@ PLATFORM_FACTORY_STATE:
     description: Les exigences sont posées, pas encore la granularité opérationnelle
       optimale.
   - capability_id: PF_CAPABILITY_DERIVED_PROJECTION_RULE_DEFINED
-    description: 'La règle d''usage des projections dérivées est définie. L''emplacement
-      de stockage est désormais décidé (ARB-04). Les champs minimaux obligatoires
-      sont inscrits dans l''architecture (ARB-05). Restent absents : validator dédié,
-      protocole de régénération automatisé, usage comme contexte unique bloqué jusqu''à
-      maturité suffisante.'
+    description: 'Regle d''usage des projections derivees definie. Emplacement de
+      stockage decide (ARB-04). Champs minimaux obligatoires inscrits dans l''architecture
+      (ARB-05). Regime cible: usage comme unique contexte si valide, decrit dans rule_of_use
+      de l''architecture. Politique V0 actuelle: usage_as_sole_context blocked - voir
+      usage_as_sole_context_unblock_conditions dans l''architecture. Restent absents:
+      validator dedie, protocole de regeneration automatise.'
   - capability_id: PF_CAPABILITY_PROJECTION_STORAGE_LOCATION_FINALIZED
-    description: 'Emplacement décidé : docs/cores/platform_factory/projections/. Règle
-      d''interdiction dans docs/cores/current/ inscrite. Outillage de génération et
-      de validation des projections restent à implémenter.'
+    description: 'Emplacement decide (ARB-04): docs/cores/platform_factory/projections/.
+      Regle d''interdiction dans docs/cores/current/ inscrite dans l''architecture.
+      Repertoire non encore cree physiquement. Aucune projection stockee. Outillage
+      de generation et de validation absent. Capacite partielle: decision actee, operationnalisation
+      a faire.'
+  - capability_id: PF_CAPABILITY_FACTORY_PIPELINE_INTENT_DEFINED
+    description: Intent pose, prompts de lancement definis (STAGE_01 a STAGE_09),
+      outillage d'execution absent. Le pipeline est gouverne et executable manuellement
+      mais non automatise. Une intention non outillee n'est pas une capacite presente.
   capabilities_absent:
   - capability_id: PF_CAPABILITY_MANIFEST_SCHEMA_FINALIZED
     description: Schéma final du manifest d'application non encore arrêté.
   - capability_id: PF_CAPABILITY_FACTORY_VALIDATORS_IMPLEMENTED
-    description: Validateurs dédiés à la conformité des projections et du contrat
-      minimal non encore implémentés.
+    description: 'Validateurs dedies a la conformite des projections et du contrat
+      minimal non encore implementes. Consequence directe: tout tag validation_status
+      validated sur une projection derivee est non deterministe et non auditable en
+      l''etat. Aucune projection ne peut etre consideree comme validee de facon probante
+      tant que ce validator n''est pas implemente. De meme, le signal constitutional_invariants_checked
+      ne peut pas etre emis de facon auditable.'
   - capability_id: PF_CAPABILITY_FACTORY_PIPELINE_FILES_COMPLETE
     description: Le pipeline platform_factory n'est pas encore complètement matérialisé.
   - capability_id: PF_CAPABILITY_APPLICATION_INSTANTIATION_PIPELINE
@@ -106,12 +112,31 @@ PLATFORM_FACTORY_STATE:
     resolution_date: '2026-04-10'
   - blocker_id: PF_BLOCKER_CURRENT_MANIFEST_SCHEMA_LIMITATION
     severity: medium
-    impact: Les artefacts platform_factory sont dans current mais hors manifest officiel
-      actuel.
-    exit_condition: Ce blocker est levé uniquement quand STAGE_08 complète sa première
-      exécution formelle avec mise à jour effective du manifest officiel (ou production
-      de docs/cores/platform_factory/manifest.yaml si le schema officiel est encore
-      insuffisant).
+    impact: 'Les artefacts platform_factory sont dans docs/cores/current/ mais hors
+      manifest officiel de current/. La release PLATFORM_FACTORY_RELEASE_2026_04_10_R01
+      est manifestee dans docs/cores/releases/PLATFORM_FACTORY_RELEASE_2026_04_10_R01/manifest.yaml
+      (statut RELEASE_CANDIDATE, promotion_candidate: true). La fenetre residuelle
+      concerne uniquement la promotion vers docs/cores/current/ via STAGE_08. Aucun
+      nouveau fichier manifest cree par ce patch (decision humaine DISC-02 Option
+      C).'
+    exit_condition: Ce blocker est leve quand STAGE_08 complete sa premiere execution
+      formelle avec promotion effective vers docs/cores/current/ et mise a jour du
+      manifest officiel de current/.
+  - blocker_id: PF_BLOCKER_CONFORMANCE_MATRIX_ABSENT
+    severity: high
+    impact: Le fichier docs/cores/platform_factory/constitutional_conformance_matrix.yaml
+      est reference dans l'architecture mais absent du repo. Toute projection ou application
+      produite referençant cette matrice pointe un artefact inexistant, rendant la
+      conformite non auditable.
+    exit_condition: Creation et validation de docs/cores/platform_factory/constitutional_conformance_matrix.yaml
+      dans un cycle de pipeline dedie.
+  - blocker_id: PF_BLOCKER_BOOTSTRAP_CONTRACT_UNDEFINED
+    severity: high
+    impact: Le champ bootstrap_contract dans runtime_entrypoint_contract est obligatoire
+      mais declare TBD dans l'architecture. Aucune application produite ne peut passer
+      la validation complete du contrat minimal tant que ce champ n'est pas defini.
+    exit_condition: Definition de la typologie exacte des runtimes d'application Learn-it
+      et ecriture du bootstrap_contract correspondant dans l'architecture.
   validated_decisions:
   - decision_id: PF_DECISION_TWO_ARTIFACTS
     statement: Séparer architecture prescriptive et état constatif.
@@ -136,8 +161,12 @@ PLATFORM_FACTORY_STATE:
   - gap_id: PF_GAP_VALIDATION_TOOLING_MISSING
     description: Les outils de validation spécifiques à la factory restent à créer.
   - gap_id: PF_GAP_PARALLEL_AI_PROTOCOL_UNDEFINED
-    description: Le protocole fin d'assemblage entre sorties IA parallèles n'est pas
-      encore défini.
+    description: BLOCKER OPERATIONNEL pour tout travail multi-IA reel. Le protocole
+      fin d'assemblage entre sorties IA paralleles n'est pas defini. Aucun mecanisme
+      de decomposition de tache, de granularite modulaire, d'assemblage de sorties
+      ou de resolution de conflit n'existe. L'usage parallele multi-IA sans ce protocole
+      expose a des collisions normatives et a des derivences silencieuses non detectees.
+      Differe a une iteration dediee avec spec de protocole multi-IA.
   evidence:
   - evidence_id: PF_EVIDENCE_PLAN_V2
     source: docs/architecture/Platform_Factory_Plan.md
@@ -150,7 +179,6 @@ PLATFORM_FACTORY_STATE:
     target: validated_strict_conformance
     missing:
     - validator_definition
-    - storage_location_decision
     - regeneration_protocol
     - runtime_and_offsession_usage_policy_documented_and_tooling_aligned
   produced_application_contract_status:

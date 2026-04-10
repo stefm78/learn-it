@@ -9,6 +9,7 @@ PLATFORM_FACTORY_ARCHITECTURE:
       Factory.
     - Non encore intégré au current manifest tant que le schéma core-release reste
       limité au trio constitution/referentiel/link.
+    authority_rank: factory_layer
   purpose:
     mission: Décrire l'architecture prescriptive générique de la Platform Factory
       Learn-it, c'est-à-dire le HOW permettant de produire des applications Learn-it
@@ -100,9 +101,11 @@ PLATFORM_FACTORY_ARCHITECTURE:
   contracts:
     execution_projection_contract:
       name: validated_derived_execution_projection
-      rule_of_use: Une projection dérivée peut être l'unique artefact fourni à une
-        IA pour un travail donné si elle est validée comme strictement fidèle, sans
-        divergence normative, pour le scope déclaré.
+      rule_of_use: Une projection derivee peut etre l'unique artefact fourni a une
+        IA pour un travail donne si elle est validee comme strictement fidele, sans
+        divergence normative, pour le scope declare. Il s'agit du REGIME CIBLE de
+        la factory. Ce regime est actuellement bloque (V0) - voir usage_as_sole_context
+        et usage_as_sole_context_unblock_conditions.
       invariants:
       - no_new_rule
       - no_normative_divergence
@@ -134,6 +137,19 @@ PLATFORM_FACTORY_ARCHITECTURE:
       - field: usage_as_sole_context
         value: blocked
         description: Bloqué jusqu'à maturité suffisante.
+      usage_as_sole_context_regime: 'POLITIQUE V0 ACTUELLE: l''usage d''une projection
+        comme unique contexte est bloque jusqu''a satisfaction des conditions listees
+        dans usage_as_sole_context_unblock_conditions. Le regime cible (usage autorise
+        si valide) est decrit dans rule_of_use.'
+      usage_as_sole_context_unblock_conditions:
+      - validator dedie implemente (PF_CAPABILITY_FACTORY_VALIDATORS_IMPLEMENTED =
+        present)
+      - protocole de regeneration deterministe defini et operationnel
+      - constitutional_conformance_matrix.yaml present et valide (PF_BLOCKER_CONFORMANCE_MATRIX_ABSENT
+        = resolved)
+      mandatory_fields_per_projection_notes: 'conformance_matrix_ref PENDING: PF_BLOCKER_CONFORMANCE_MATRIX_ABSENT.
+        Le fichier docs/cores/platform_factory/constitutional_conformance_matrix.yaml
+        est reference mais absent. Ne pas supprimer la reference (design intent preserve).'
     produced_application_minimum_contract:
       identity:
         required_blocks:
@@ -190,6 +206,32 @@ PLATFORM_FACTORY_ARCHITECTURE:
         - packaging
         - structure_and_state_alignment
         - runtime_policy_conformance
+        - constitutional_invariants_runtime_local
+        - no_runtime_content_generation_proof
+        runtime_policy_conformance_definition:
+          scope: Verification que l'application produite respecte la politique d'execution
+            locale et ne genere pas de contenu a la volee.
+          items_to_verify:
+          - item: no_network_dependency_at_runtime
+            description: Absence de dependance reseau au runtime. Verifiable statiquement
+              par inspection des imports, appels systeme et configuration.
+            invariant_ref: INV_RUNTIME_FULLY_LOCAL
+          - item: no_runtime_content_generation
+            description: Absence de generation de contenu ou de feedback a la volee.
+              Aucun appel LLM, aucune generation dynamique de contenu pedagogique
+              au runtime.
+            invariant_ref: INV_NO_RUNTIME_CONTENT_GENERATION
+          - item: declared_autonomy_regime_respected
+            description: L'application opere dans le regime d'autonomie declare dans
+              son manifest.
+          - item: no_implicit_llm_call
+            description: Absence d'appel implicite a un modele de langage en usage
+              runtime (ni direct, ni via API tierce).
+          - item: runtime_entrypoint_declared_and_traceable
+            description: Le point d'entree runtime est declare dans le manifest et
+              tracable.
+          note: Liste minimale non exhaustive. A completer lors de la definition du
+            validator dedie (PF_CAPABILITY_FACTORY_VALIDATORS_IMPLEMENTED).
       minimum_packaging_contract:
         required: true
         must_be:
@@ -206,6 +248,13 @@ PLATFORM_FACTORY_ARCHITECTURE:
         - traceability_references
         - produced_application_minimum_contract_conformance_status
         - constitutional_invariants_checked
+        note_on_constitutional_invariants_checked: 'Le signal constitutional_invariants_checked
+          doit etre rattache a une liste d''invariants verifies et a un protocole
+          explicite. Invariants minimaux couverts: INV_RUNTIME_FULLY_LOCAL (via constitutional_invariants_runtime_local
+          axis) et INV_NO_RUNTIME_CONTENT_GENERATION (via no_runtime_content_generation_proof
+          axis). Protocole: ce signal ne peut etre emis qu''a PASS des deux axes dans
+          le rapport de validation minimum_contract. Il est non auditable tant que
+          PF_CAPABILITY_FACTORY_VALIDATORS_IMPLEMENTED reste absent.'
   variant_governance:
     principle: La factory doit autoriser des variantes d'applications sans casser
       le contrat minimal générique ni la séparation entre générique et spécifique.
@@ -249,6 +298,8 @@ PLATFORM_FACTORY_ARCHITECTURE:
     - local_runtime_constraints
     - canonical_traceability_requirements
     constitutional_conformance_matrix_ref: docs/cores/platform_factory/constitutional_conformance_matrix.yaml
+    constitutional_conformance_matrix_ref_status: PENDING PF_BLOCKER_CONFORMANCE_MATRIX_ABSENT.
+      Fichier absent, enregistre comme blocker dans platform_factory_state.yaml.
   dependencies_to_referentiel:
     mode: explicit_reference_only
     required_bindings:
