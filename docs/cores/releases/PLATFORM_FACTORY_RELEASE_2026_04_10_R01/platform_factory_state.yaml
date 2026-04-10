@@ -1,0 +1,210 @@
+PLATFORM_FACTORY_STATE:
+  metadata:
+    artifact_id: PLATFORM_FACTORY_STATE_V0_3
+    artifact_type: platform_factory_state
+    version: 0.3.0
+    status: RELEASE_CANDIDATE
+    assessment_mode: initial_baseline
+    notes:
+    - État reconnu initial de la Platform Factory.
+    - Artefact V0 ajouté dans docs/cores/current/ sans intégration au current manifest
+      existant.
+  assessed_scope:
+    covers:
+    - factory_governance_model
+    - generic_application_contract
+    - derived_execution_projection_model
+    - multi_ia_parallel_readiness
+    excludes:
+    - detailed_application_instantiation_design
+    - exact_projection_storage_location
+    - final_packaging_schema
+    - final_runtime_entrypoint_typology
+  maturity_by_layer:
+  - layer_id: PF_LAYER_CANONICAL_FOUNDATION
+    maturity: strong_external_dependency
+    rationale: Le socle canonique existe déjà et sert de fondation.
+  - layer_id: PF_LAYER_FACTORY_ARCHITECTURE
+    maturity: v0_defined
+    rationale: Une première architecture prescriptive est désormais posée.
+  - layer_id: PF_LAYER_FACTORY_STATE
+    maturity: v0_defined
+    rationale: Le présent artefact initialise le constat reconnu.
+  - layer_id: PF_LAYER_DERIVED_EXECUTION_PROJECTIONS
+    maturity: concept_defined_not_yet_operationalized
+    rationale: Le principe et les invariants sont posés, pas encore le mécanisme exact.
+  - layer_id: PF_LAYER_APPLICATION_INSTANTIATION
+    maturity: boundary_defined_only
+    rationale: Le pipeline aval est identifié mais non spécifié.
+  capabilities_present:
+  - capability_id: PF_CAPABILITY_FACTORY_SCOPE_DEFINED
+    description: La portée de la factory est définie et bornée.
+  - capability_id: PF_CAPABILITY_MINIMUM_APPLICATION_CONTRACT_DEFINED_AT_HIGH_LEVEL
+    description: Le contrat minimal générique d'une application produite est posé
+      à haut niveau.
+  - capability_id: PF_CAPABILITY_MULTI_IA_AS_REQUIREMENT
+    description: Le travail parallèle multi-IA est reconnu comme exigence structurante.
+  - capability_id: PF_CAPABILITY_FACTORY_PIPELINE_INTENT_DEFINED
+    description: L'intention de pipeline platform_factory est explicitement posée
+      (intent only, not yet tooled execution framework). Les stages existent et les
+      prompts de lancement sont définis, mais le pipeline n'est pas encore automatisé
+      ni complètement outillé.
+  capabilities_partial:
+  - capability_id: PF_CAPABILITY_APPLICATION_MANIFEST_MODEL
+    description: Le manifest minimal est défini en intention mais pas encore en schéma
+      fin.
+  - capability_id: PF_CAPABILITY_RUNTIME_ENTRYPOINT_MODEL
+    description: Le point d'entrée runtime est défini comme obligation mais pas encore
+      typé finement.
+  - capability_id: PF_CAPABILITY_CONFIGURATION_MODEL
+    description: Les blocs minimaux de configuration sont définis, pas encore leur
+      schéma détaillé.
+  - capability_id: PF_CAPABILITY_MINIMUM_VALIDATION_MODEL
+    description: Les axes minimaux de validation sont posés, pas encore les reports
+      exacts.
+  - capability_id: PF_CAPABILITY_MINIMUM_PACKAGING_MODEL
+    description: Les exigences minimales de packaging sont posées, pas encore leur
+      schéma fin.
+  - capability_id: PF_CAPABILITY_DERIVED_PROJECTION_LIFECYCLE
+    description: Le cycle de vie est décrit au niveau principe, pas encore instrumenté.
+  - capability_id: PF_CAPABILITY_MULTI_IA_DECOMPOSITION
+    description: Les exigences sont posées, pas encore la granularité opérationnelle
+      optimale.
+  - capability_id: PF_CAPABILITY_DERIVED_PROJECTION_RULE_DEFINED
+    description: 'La règle d''usage des projections dérivées est définie. L''emplacement
+      de stockage est désormais décidé (ARB-04). Les champs minimaux obligatoires
+      sont inscrits dans l''architecture (ARB-05). Restent absents : validator dédié,
+      protocole de régénération automatisé, usage comme contexte unique bloqué jusqu''à
+      maturité suffisante.'
+  - capability_id: PF_CAPABILITY_PROJECTION_STORAGE_LOCATION_FINALIZED
+    description: 'Emplacement décidé : docs/cores/platform_factory/projections/. Règle
+      d''interdiction dans docs/cores/current/ inscrite. Outillage de génération et
+      de validation des projections restent à implémenter.'
+  capabilities_absent:
+  - capability_id: PF_CAPABILITY_MANIFEST_SCHEMA_FINALIZED
+    description: Schéma final du manifest d'application non encore arrêté.
+  - capability_id: PF_CAPABILITY_FACTORY_VALIDATORS_IMPLEMENTED
+    description: Validateurs dédiés à la conformité des projections et du contrat
+      minimal non encore implémentés.
+  - capability_id: PF_CAPABILITY_FACTORY_PIPELINE_FILES_COMPLETE
+    description: Le pipeline platform_factory n'est pas encore complètement matérialisé.
+  - capability_id: PF_CAPABILITY_APPLICATION_INSTANTIATION_PIPELINE
+    description: Le pipeline d'instanciation n'existe pas encore.
+  - capability_id: PF_CAPABILITY_FACTORY_PRIORITY_VALIDATORS_SHORTLIST_MATERIALIZED
+    description: 'Short-list prioritaire de validateurs définie mais non encore matérialisée
+      en tooling : derived_projection_conformance, minimum_contract_conformance, runtime_policy_conformance.'
+  blockers:
+  - blocker_id: PF_BLOCKER_MANIFEST_SCHEMA_PENDING
+    severity: medium
+    impact: Limite la finalisation du contrat minimal d'application.
+  - blocker_id: PF_BLOCKER_PROJECTION_LOCATION_PENDING
+    severity: medium
+    impact: Limite la mise en œuvre pratique des projections pour IA.
+    resolved: true
+    resolution: 'Emplacement décidé : docs/cores/platform_factory/projections/. Décision
+      humaine PC-1 actée le 2026-04-10.'
+    resolution_date: '2026-04-10'
+  - blocker_id: PF_BLOCKER_CURRENT_MANIFEST_SCHEMA_LIMITATION
+    severity: medium
+    impact: Les artefacts platform_factory sont dans current mais hors manifest officiel
+      actuel.
+    exit_condition: Ce blocker est levé uniquement quand STAGE_08 complète sa première
+      exécution formelle avec mise à jour effective du manifest officiel (ou production
+      de docs/cores/platform_factory/manifest.yaml si le schema officiel est encore
+      insuffisant).
+  validated_decisions:
+  - decision_id: PF_DECISION_TWO_ARTIFACTS
+    statement: Séparer architecture prescriptive et état constatif.
+  - decision_id: PF_DECISION_SCOPE_B
+    statement: La factory gouverne aussi le contrat minimal générique d'une application
+      produite.
+  - decision_id: PF_DECISION_DERIVED_PROJECTIONS
+    statement: Les vues dérivées sont des validated_derived_execution_projections
+      strictement conformes.
+  - decision_id: PF_DECISION_MULTI_IA_FIRST_CLASS
+    statement: Le travail multi-IA en parallèle est une exigence de premier rang.
+  - decision_id: PF_DECISION_DOWNSTREAM_INSTANTIATION
+    statement: Le spécifique domaine sera produit dans un pipeline d'instanciation
+      distinct.
+  known_gaps:
+  - gap_id: PF_GAP_EXACT_YAML_SCHEMA_NOT_FINALIZED
+    description: La structure détaillée des futurs YAML canoniques doit encore être
+      challengée.
+  - gap_id: PF_GAP_FACTORY_PIPELINE_NOT_MATERIALIZED
+    description: Le pipeline existe au niveau du plan mais pas encore comme structure
+      de repo complète.
+  - gap_id: PF_GAP_VALIDATION_TOOLING_MISSING
+    description: Les outils de validation spécifiques à la factory restent à créer.
+  - gap_id: PF_GAP_PARALLEL_AI_PROTOCOL_UNDEFINED
+    description: Le protocole fin d'assemblage entre sorties IA parallèles n'est pas
+      encore défini.
+  evidence:
+  - evidence_id: PF_EVIDENCE_PLAN_V2
+    source: docs/architecture/Platform_Factory_Plan.md
+    description: Plan de référence consolidé.
+  - evidence_id: PF_EVIDENCE_ARCHITECTURE_V0
+    source: docs/cores/current/platform_factory_architecture.yaml
+    description: Première version prescriptive posée en current.
+  derived_projection_conformity_status:
+    status: defined_in_principle_with_explicit_conditions_and_missing_tooling
+    target: validated_strict_conformance
+    missing:
+    - validator_definition
+    - storage_location_decision
+    - regeneration_protocol
+    - runtime_and_offsession_usage_policy_documented_and_tooling_aligned
+  produced_application_contract_status:
+    status: high_level_defined_with_probative_strengthening_in_progress
+    present:
+    - identity
+    - manifest_principle
+    - canonical_dependency_contract
+    - runtime_entrypoint_principle
+    - minimum_configuration_blocks
+    - minimum_validation_axes
+    - minimum_packaging_principle
+    - minimum_observability
+    - minimum_contract_probative_requirements_recognized_as_work_in_progress
+    missing:
+    - exact_manifest_schema
+    - exact_runtime_typology
+    - exact_configuration_schema
+    - exact_packaging_schema
+  multi_ia_parallel_readiness_status:
+    status: requirement_defined_not_yet_operationalized
+    present:
+    - bounded_scope_principle
+    - stable_identifier_principle
+    - explicit_dependency_principle
+    - clear_assembly_point_principle
+    missing:
+    - decomposition_protocol
+    - module_granularity_convention
+    - ai_output_assembly_protocol
+    - conflict_resolution_protocol
+  last_assessment:
+    assessment_id: PF_BASELINE_ASSESSMENT_V0_1
+    assessment_type: initial_baseline
+    result: foundational_but_incomplete
+    summary: La Platform Factory possède désormais une base conceptuelle et architecturale
+      explicite suffisante pour lancer sa gouvernance, mais demeure encore incomplète
+      sur ses schémas détaillés, ses validateurs et son outillage pipeline.
+  delta_since_previous:
+    previous_state: none
+    changes:
+    - first_current_v0_architecture_added
+    - first_current_v0_state_added
+    - factory_scope_clarified
+    - derived_projection_model_clarified
+    - multi_ia_requirement_explicitly_recorded
+    - runtime_policy_conformance_axis_added_to_minimum_validation_contract
+    - constitutional_invariants_checked_signal_added_to_observability_contract
+    - constitutional_conformance_matrix_ref_added_to_architecture
+    - projection_emplacement_policy_decided_and_inscribed
+    - projection_mandatory_fields_defined
+    - status_corrected_to_current_baseline_under_governance
+    - capability_derived_projection_rule_recalibrated_to_partial
+    - blocker_projection_location_resolved
+    - blocker_manifest_exit_condition_added
+    - reproducibility_fingerprints_defined
+    - bootstrap_contract_tbd_bounded

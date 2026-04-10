@@ -1,0 +1,83 @@
+RELEASE_PLAN:
+  status: PASS
+  release_required: true
+  change_depth: minor
+  validated_inputs:
+  - docs/pipelines/platform_factory/work/06_core_validation/platform_factory_core_validation.yaml
+  - docs/pipelines/platform_factory/reports/platform_factory_execution_report.yaml
+  - docs/pipelines/platform_factory/work/05_apply/patched/platform_factory_architecture.yaml
+  - docs/cores/current/platform_factory_architecture.yaml
+  - docs/pipelines/platform_factory/work/05_apply/patched/platform_factory_state.yaml
+  - docs/cores/current/platform_factory_state.yaml
+  compared_against_current:
+  - role: platform_factory_architecture
+    current_path: docs/cores/current/platform_factory_architecture.yaml
+    patched_path: docs/pipelines/platform_factory/work/05_apply/patched/platform_factory_architecture.yaml
+    content_identical: false
+    change_depth: minor
+    current_sha256: 54510839dd417edb68123244a65702289fdd64f93577d2c3e932e07592ea775f
+    patched_sha256: b9999f3df4413159d88076acdfa2339d5bc71cb14ff119f1ce4be7f0ceca159c
+    current_artifact_id: PLATFORM_FACTORY_ARCHITECTURE_V0_2
+    patched_artifact_id: PLATFORM_FACTORY_ARCHITECTURE_V0_2
+    target_artifact_id: PLATFORM_FACTORY_ARCHITECTURE_V0_3
+    current_version: 0.2.0
+    target_version: 0.3.0
+  - role: platform_factory_state
+    current_path: docs/cores/current/platform_factory_state.yaml
+    patched_path: docs/pipelines/platform_factory/work/05_apply/patched/platform_factory_state.yaml
+    content_identical: false
+    change_depth: minor
+    current_sha256: 8fcb19d199cf1c792969fa9b43328484803021281b1ecef349340e3b7554d10e
+    patched_sha256: 967a968a37cc120a94583afc5ebdd0279aacd2950a7725714923b39a2d9d5214
+    current_artifact_id: PLATFORM_FACTORY_STATE_V0_2
+    patched_artifact_id: PLATFORM_FACTORY_STATE_V0_2
+    target_artifact_id: PLATFORM_FACTORY_STATE_V0_3
+    current_version: 0.2.0
+    target_version: 0.3.0
+  target_versions:
+  - role: platform_factory_architecture
+    from_artifact_id: PLATFORM_FACTORY_ARCHITECTURE_V0_2
+    to_artifact_id: PLATFORM_FACTORY_ARCHITECTURE_V0_3
+    from_version: 0.2.0
+    to_version: 0.3.0
+  - role: platform_factory_state
+    from_artifact_id: PLATFORM_FACTORY_STATE_V0_2
+    to_artifact_id: PLATFORM_FACTORY_STATE_V0_3
+    from_version: 0.2.0
+    to_version: 0.3.0
+  required_renames:
+  - role: platform_factory_architecture
+    field: metadata.artifact_id
+    from: PLATFORM_FACTORY_ARCHITECTURE_V0_2
+    to: PLATFORM_FACTORY_ARCHITECTURE_V0_3
+  - role: platform_factory_state
+    field: metadata.artifact_id
+    from: PLATFORM_FACTORY_STATE_V0_2
+    to: PLATFORM_FACTORY_STATE_V0_3
+  required_reference_updates:
+  - role: platform_factory_architecture
+    field: metadata.version
+    from: 0.2.0
+    to: 0.3.0
+  - role: platform_factory_state
+    field: metadata.version
+    from: 0.2.0
+    to: 0.3.0
+  release_bundle:
+    release_id: PLATFORM_FACTORY_RELEASE_2026_04_10_R01
+    release_path: docs/cores/releases/PLATFORM_FACTORY_RELEASE_2026_04_10_R01/
+    promotion_candidate: true
+    files:
+    - docs/cores/releases/PLATFORM_FACTORY_RELEASE_2026_04_10_R01/platform_factory_architecture.yaml
+    - docs/cores/releases/PLATFORM_FACTORY_RELEASE_2026_04_10_R01/platform_factory_state.yaml
+    - docs/cores/releases/PLATFORM_FACTORY_RELEASE_2026_04_10_R01/manifest.yaml
+  warnings_count: 0
+  warnings:
+  - none
+  notes:
+  - 'platform_factory_architecture: identical=false, change_depth=minor, artifact_id=PLATFORM_FACTORY_ARCHITECTURE_V0_2->PLATFORM_FACTORY_ARCHITECTURE_V0_3,
+    version=0.2.0->0.3.0'
+  - 'platform_factory_state: identical=false, change_depth=minor, artifact_id=PLATFORM_FACTORY_STATE_V0_2->PLATFORM_FACTORY_STATE_V0_3,
+    version=0.2.0->0.3.0'
+  anomalies:
+  - none
