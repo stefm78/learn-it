@@ -1,0 +1,118 @@
+# PATCHSET SCHEMA REFERENCE
+# Ce fichier est la reference normative du schema attendu par
+# validate_platform_factory_patchset.py.
+# Une IA produisant un patchset DOIT lire ce fichier en entier avant de generer
+# docs/pipelines/platform_factory/work/03_patch/platform_factory_patchset.yaml
+#
+# REGLES YAML OBLIGATOIRES :
+# - Toute valeur de type chaine contenant ':', '=', '-', '>' ou multiligne
+#   DOIT etre en style bloc >- (jamais entre guillemets doubles avec backslash)
+# - Les listes de strings simples (sans caracteres speciaux) peuvent rester sans quotes
+# - Ne jamais ecrire de chaine inline contenant ':' sans la mettre en style bloc >-
+
+PLATFORM_FACTORY_PATCHSET:
+
+  # --- METADATA (obligatoire) ---
+  # Tous les champs ci-dessous sont OBLIGATOIRES. Le validateur echoue si l'un est absent.
+  metadata:
+    patchset_id: PFPATCH_YYYYMMDD_INITIALES_ID   # identifiant unique du patchset
+    date: 'YYYY-MM-DD'                            # entre quotes simples
+    target_artifacts:                             # liste NON VIDE obligatoire
+    - docs/cores/current/platform_factory_architecture.yaml
+    - docs/cores/current/platform_factory_state.yaml
+    source_decision_record: docs/pipelines/platform_factory/work/02_arbitrage/platform_factory_arbitrage.md
+    scope: >-
+      Description du perimetre du patchset en une ou plusieurs phrases.
+      Utiliser le style bloc >- pour toute valeur multiligne.
+    notes:                                        # liste de strings
+    - Note 1 sur le patchset.
+    - Note 2.
+
+  # --- PATCHES (obligatoire, liste NON VIDE) ---
+  # Chaque entree de la liste est un patch. Les patches sont a la RACINE de la liste,
+  # PAS imbriques dans des sous-blocs. Le validateur compte les items directement.
+  patches:
+
+  - patch_id: PFPATCH_X1                          # OBLIGATOIRE - identifiant unique
+    source_decision: CONS-01                      # OBLIGATOIRE - ref decision arbitrage
+    target_artifact: docs/cores/current/platform_factory_architecture.yaml  # OBLIGATOIRE
+    operation: add                                # OBLIGATOIRE - add | replace | update
+    change_type: metadata_enrichment             # OBLIGATOIRE - type libre descriptif
+    sequence: 1                                   # optionnel - ordre d'application
+    priority: critique                            # optionnel - critique | eleve | modere
+    rationale: >-
+      Justification de la correction. Pourquoi ce patch est necessaire.
+      Utiliser >- pour toute valeur multiligne ou contenant des caracteres speciaux.
+    effect: >-
+      Ce que le patch ajoute ou modifie dans l'artefact cible.
+    risk_avoided: >-
+      Risque evite si le patch est applique.
+    location_hint:                                # OBLIGATOIRE - les 3 sous-champs sont requis
+      section: PLATFORM_FACTORY_ARCHITECTURE.some.path
+      granularity: field                          # field | block | list_item
+      keys_to_update:
+      - key_name
+    operations:                                   # OBLIGATOIRE - liste NON VIDE
+    - op: add                                     # OBLIGATOIRE - op supportees:
+      # add | replace | update | remove |
+      # list_remove_item | list_remove_mapping | list_replace_mapping
+      path: PLATFORM_FACTORY_ARCHITECTURE.some.dotted.path  # OBLIGATOIRE
+      value: simple_value                         # OBLIGATOIRE pour add/replace/update/list_replace_mapping
+      # Pour list_remove_mapping et list_replace_mapping, ajouter aussi :
+      # match_key: capability_id
+      # match_value: THE_ID_TO_MATCH
+
+  - patch_id: PFPATCH_X2
+    source_decision: CONS-02
+    target_artifact: docs/cores/current/platform_factory_state.yaml
+    operation: update
+    change_type: state_resync
+    sequence: 2
+    priority: eleve
+    rationale: >-
+      Deuxieme exemple de patch ciblant le state.
+    effect: >-
+      Remplace un item dans une liste du state.
+    risk_avoided: >-
+      Incoherence entre architecture et state.
+    location_hint:
+      section: PLATFORM_FACTORY_STATE.capabilities_partial
+      granularity: list_item
+      keys_to_update:
+      - description
+    operations:
+    - op: list_replace_mapping
+      path: PLATFORM_FACTORY_STATE.capabilities_partial
+      match_key: capability_id
+      match_value: PF_CAPABILITY_SOME_ID
+      value:
+        capability_id: PF_CAPABILITY_SOME_ID
+        description: >-
+          Nouvelle description de la capacite.
+
+  # --- EXCLUSIONS (optionnel) ---
+  # Sujets explicitement hors scope de ce patchset.
+  # Chaque item requiert id, reason, note.
+  exclusions:
+    items:
+    - id: DIFF-01
+      reason: >-
+        Raison pour laquelle ce sujet est differe.
+      note: >-
+        Note complementaire sur le report.
+
+# =============================================================================
+# RAPPEL DES CHAMPS OBLIGATOIRES PAR PATCH
+# =============================================================================
+# patch_id, source_decision, target_artifact, operation, change_type,
+# rationale, effect, risk_avoided, location_hint (+ section, granularity,
+# keys_to_update), operations (liste non vide avec op + path par item)
+#
+# RAPPEL DES OPS SUPPORTEES
+# add, replace, update, remove,
+# list_remove_item, list_remove_mapping, list_replace_mapping
+#
+# RAPPEL DES TARGET_ARTIFACTS AUTORISES
+# docs/cores/current/platform_factory_architecture.yaml
+# docs/cores/current/platform_factory_state.yaml
+# =============================================================================
