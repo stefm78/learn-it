@@ -122,7 +122,20 @@ A validated patched state is not yet the promoted current state until a dedicate
 - Inputs:
   - `work/03_patch/platform_factory_patchset.yaml`
   - `work/02_arbitrage/platform_factory_arbitrage.md`
-- Prompt:
+  - `docs/cores/current/platform_factory_architecture.yaml` (pour --check-paths)
+  - `docs/cores/current/platform_factory_state.yaml` (pour --check-paths)
+- Script (obligatoire, à exécuter en premier) :
+  ```bash
+  python docs/patcher/shared/validate_platform_factory_patchset.py \
+    work/03_patch/platform_factory_patchset.yaml \
+    --check-paths \
+    --arch docs/cores/current/platform_factory_architecture.yaml \
+    --state docs/cores/current/platform_factory_state.yaml \
+    > work/04_patch_validation/platform_factory_patch_validation.yaml
+  ```
+  - Le stage ne peut continuer que si `status: PASS` dans le fichier de sortie.
+  - En cas de FAIL ou WARN bloquant : corriger le patchset en STAGE_03 et relancer.
+- Prompt (validation IA sémantique, après PASS script) :
   - `docs/pipelines/platform_factory/LAUNCH_PROMPT_STAGE_04_FACTORY_PATCH_VALIDATION.md`
 - Companion prompt:
   - `docs/prompts/shared/Make23PlatformFactoryValidation.md`
