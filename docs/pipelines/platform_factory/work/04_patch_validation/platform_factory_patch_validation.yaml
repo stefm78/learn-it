@@ -1,0 +1,34 @@
+PLATFORM_FACTORY_PATCH_VALIDATION:
+  status: FAIL
+  scope: platform_factory_patchset
+  check_paths_enabled: false
+  validator: validate_platform_factory_patchset.py
+  patchset_path: docs\pipelines\platform_factory\work\03_patch\platform_factory_patchset.yaml
+  anomalies_count: 6
+  warnings_count: 0
+  checks:
+    root_document: PASS
+    root_key: PASS
+    root_payload: PASS
+    metadata: PASS
+    metadata_patchset_id: FAIL
+    metadata_target_artifacts: FAIL
+    metadata_source_decision_record: FAIL
+    metadata_scope: FAIL
+    metadata_notes: FAIL
+    patches: FAIL
+    declared_vs_used_targets: PASS
+    unused_declared_targets: PASS
+  summary:
+    patch_count: 0
+    target_artifacts_declared: []
+    target_artifacts_used: []
+  anomalies:
+  - Champ obligatoire `patchset_id` absent dans metadata.
+  - Champ obligatoire `target_artifacts` absent dans metadata.
+  - Champ obligatoire `source_decision_record` absent dans metadata.
+  - Champ obligatoire `scope` absent dans metadata.
+  - Champ obligatoire `notes` absent dans metadata.
+  - '`patches` doit être une liste non vide.'
+  warnings:
+  - none
