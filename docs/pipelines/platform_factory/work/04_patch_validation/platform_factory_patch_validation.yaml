@@ -1,0 +1,17 @@
+PLATFORM_FACTORY_PATCH_VALIDATION:
+  status: FAIL
+  scope: platform_factory_patchset
+  validator: validate_platform_factory_patchset.py
+  patchset_path: docs\pipelines\platform_factory\work\03_patch\platform_factory_patchset.yaml
+  anomalies_count: 1
+  warnings_count: 0
+  checks:
+    validator_runtime: FAIL
+  summary: {}
+  anomalies:
+  - "Erreur interne du validateur: expected a single document in the stream\n  in\
+    \ \"docs\\pipelines\\platform_factory\\work\\03_patch\\platform_factory_patchset.yaml\"\
+    , line 1, column 1\nbut found another document\n  in \"docs\\pipelines\\platform_factory\\\
+    work\\03_patch\\platform_factory_patchset.yaml\", line 20, column 1"
+  warnings:
+  - none
