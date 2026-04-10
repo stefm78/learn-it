@@ -34,12 +34,6 @@ SUPPORTED_ATOMIC_OPS = {
     "list_remove_item", "list_remove_mapping", "list_replace_mapping",
 }
 
-# Mapping target_artifact -> clé racine canonique du document YAML.
-CANONICAL_ROOT_KEYS = {
-    "docs/cores/current/platform_factory_architecture.yaml": "PLATFORM_FACTORY_ARCHITECTURE",
-    "docs/cores/current/platform_factory_state.yaml": "PLATFORM_FACTORY_STATE",
-}
-
 
 class ApplyContext:
     def __init__(
@@ -408,12 +402,10 @@ def main(argv: list[str]) -> int:
                             ctx.fail(f"Impossible de charger {sandbox_file}: {exc}")
                             continue
 
-                    raw_document = document_cache[str(sandbox_file)]
-                    canonical_root_key = CANONICAL_ROOT_KEYS.get(target_artifact)
-                    if canonical_root_key and isinstance(raw_document, dict) and canonical_root_key in raw_document:
-                        document = raw_document[canonical_root_key]
-                    else:
-                        document = raw_document
+                    # Paths in patchset operations are fully qualified (include the
+                    # canonical root key). We pass raw_document directly so that
+                    # path resolution starts from the document root.
+                    document = document_cache[str(sandbox_file)]
 
                     operations = patch.get("operations")
                     if not isinstance(operations, list) or not operations:
