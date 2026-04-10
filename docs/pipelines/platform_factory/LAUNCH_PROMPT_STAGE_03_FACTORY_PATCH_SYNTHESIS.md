@@ -21,22 +21,32 @@ Socle canonique de contrôle :
 - `docs/cores/current/referentiel.yaml`
 - `docs/cores/current/link.yaml`
 
-Contexte d'exécution :
+Contexte d'exécution et outillage obligatoire :
 - `docs/pipelines/platform_factory/pipeline.md`
 - `docs/prompts/shared/Make22PlatformFactoryPatch.md`
+- `docs/patcher/shared/patchset_schema_reference.yaml`
+- `docs/patcher/shared/build_platform_factory_patchset.py`
+- `docs/patcher/shared/repair_platform_factory_patchset.py`
+- `docs/patcher/shared/validate_platform_factory_patchset.py`
 - éventuellement une note de focalisation patch dans `docs/pipelines/platform_factory/inputs/`
 
 ## Contexte d'exécution obligatoire
 
-- `platform_factory_arbitrage.md` est la source de vérité du stage.
+- `platform_factory_arbitrage.md` est la source de vérité du stage. [Nouvelle exigence] le patchset final ne doit plus être rédigé directement à la main par l'IA si un fichier d'intention intermédiaire permet d'éviter une dérive de schéma.
 - Les challenge reports historiques peuvent être relus si nécessaire pour traçabilité, mais ils ne doivent pas supplanter l'arbitrage final.
 - Le résultat attendu doit être écrit dans le repo, dans le fichier YAML de sortie imposé ci-dessous.
 - Il ne faut pas considérer qu'une réponse dans le chat suffit à accomplir la tâche.
 - Le but est de produire un patchset exploitable au Stage 04, pas de réouvrir l'arbitrage.
+- Le schéma normatif du patchset est défini par `docs/patcher/shared/patchset_schema_reference.yaml` et contrôlé par `docs/patcher/shared/validate_platform_factory_patchset.py`.
+- Si le patchset final est produit sans utiliser le builder et qu'il échoue au validateur pour un problème de forme, la run est considérée comme incomplète.
 
-## Fichier de sortie obligatoire
+## Fichiers de sortie autorisés
 
-Écrire exactement un fichier dans le repo :
+Écrire au maximum ces fichiers dans le repo :
+- `docs/pipelines/platform_factory/work/03_patch/patchset_intent.yaml` (recommandé)
+- `docs/pipelines/platform_factory/work/03_patch/platform_factory_patchset.yaml` (obligatoire)
+
+Le fichier obligatoire du stage reste :
 - `docs/pipelines/platform_factory/work/03_patch/platform_factory_patchset.yaml`
 
 ## Ordre de lecture obligatoire
@@ -49,11 +59,15 @@ Contexte d'exécution :
 6. `docs/cores/current/platform_factory_state.yaml`
 7. `docs/pipelines/platform_factory/pipeline.md`
 8. `docs/prompts/shared/Make22PlatformFactoryPatch.md`
-9. éventuellement la note de focalisation patch
+9. `docs/patcher/shared/patchset_schema_reference.yaml`
+10. `docs/patcher/shared/build_platform_factory_patchset.py`
+11. `docs/patcher/shared/repair_platform_factory_patchset.py`
+12. `docs/patcher/shared/validate_platform_factory_patchset.py`
+13. éventuellement la note de focalisation patch
 
 ## Objectif exact
 
-Produire directement le patchset YAML final du stage, sous forme d'un fichier :
+Produire le patchset YAML final du stage, sous forme d'un fichier :
 - borné
 - traçable
 - cohérent avec l'arbitrage final
@@ -64,6 +78,85 @@ Produire directement le patchset YAML final du stage, sous forme d'un fichier :
   - pipeline
   - validator/tooling
   - manifest/release governance
+
+## Stratégie de production obligatoire
+
+### Principe général
+
+Le patchset final **ne doit pas être rédigé directement en YAML contraint** si cela peut être évité.
+
+La stratégie par défaut est :
+1. synthétiser l'intention de patch sous une forme IA-friendly
+2. écrire `patchset_intent.yaml`
+3. générer le patchset final via `build_platform_factory_patchset.py`
+4. valider le patchset généré via `validate_platform_factory_patchset.py`
+5. si la validation échoue pour des anomalies récupérables de forme, passer par `repair_platform_factory_patchset.py`, puis revalider
+6. ne considérer la tâche accomplie que si `platform_factory_patchset.yaml` final est conforme au schéma attendu
+
+### Format recommandé du fichier intermédiaire `patchset_intent.yaml`
+
+Le fichier intermédiaire recommandé est :
+- `docs/pipelines/platform_factory/work/03_patch/patchset_intent.yaml`
+
+Il peut utiliser la structure IA-friendly suivante :
+
+```yaml
+intent_metadata:
+  patchset_id: PFPATCH_YYYYMMDD_INITIALES_ID
+  date: 'YYYY-MM-DD'
+  source_decision_record: docs/pipelines/platform_factory/work/02_arbitrage/platform_factory_arbitrage.md
+  scope: Description libre du périmètre
+  notes:
+  - Note 1
+
+patch_intents:
+- id: PFPATCH_A1
+  decision: CONS-04
+  target: arch
+  op_type: add
+  change_type: metadata_enrichment
+  sequence: 1
+  priority: eleve
+  rationale: Justification libre
+  effect: Effet libre
+  risk_avoided: Risque évité
+  section: PLATFORM_FACTORY_ARCHITECTURE.metadata
+  granularity: field
+  keys_to_update:
+  - authority_rank
+  operations:
+  - op: add
+    path: PLATFORM_FACTORY_ARCHITECTURE.metadata.authority_rank
+    value: factory_layer
+```
+
+### Commandes de production recommandées
+
+```bash
+python docs/patcher/shared/build_platform_factory_patchset.py \
+  ./docs/pipelines/platform_factory/work/03_patch/patchset_intent.yaml \
+  ./docs/pipelines/platform_factory/work/03_patch/platform_factory_patchset.yaml
+
+python docs/patcher/shared/validate_platform_factory_patchset.py \
+  ./docs/pipelines/platform_factory/work/03_patch/platform_factory_patchset.yaml
+```
+
+Si nécessaire, en cas d'échec de forme récupérable :
+
+```bash
+python docs/patcher/shared/repair_platform_factory_patchset.py \
+  ./docs/pipelines/platform_factory/work/03_patch/platform_factory_patchset.yaml
+
+python docs/patcher/shared/validate_platform_factory_patchset.py \
+  ./docs/pipelines/platform_factory/work/03_patch/platform_factory_patchset_repaired.yaml
+```
+
+### Politique de fallback
+
+- Le builder est la voie nominale.
+- Le repair script est une voie de rattrapage, pas la voie principale.
+- Si le builder ne peut pas être utilisé, l'IA doit alors respecter strictement `patchset_schema_reference.yaml`.
+- Il est interdit de livrer un patchset non validé au motif qu'il est "structurellement proche".
 
 ## Exigences de contenu
 
@@ -102,11 +195,11 @@ Si un sujet est ambigu ou insuffisamment arbitré :
 
 - Ne pas réouvrir l'arbitrage.
 - Ne pas produire une simple analyse markdown à la place du YAML attendu.
-- Ne pas écrire plusieurs fichiers.
 - Ne pas modifier `docs/cores/current/` directement.
 - Ne pas introduire un besoin de patch non arbitré.
 - Ne pas faire porter au canonique ce qui relève d'un validator, du pipeline ou de la gouvernance de release.
 - Le livrable attendu est le fichier YAML écrit dans le repo. Le retour chat doit être très succinct.
+- Le patchset final doit avoir été soit généré par le builder, soit validé explicitement contre le schéma de référence.
 
 ---
 
@@ -212,8 +305,11 @@ Le patchset doit au minimum :
   - pourquoi
   - dans quel ordre si nécessaire
 
+La structure normative exacte est celle de `docs/patcher/shared/patchset_schema_reference.yaml`.
+
 ## Résultat terminal attendu
 
 À la fin de l'exécution, afficher uniquement :
 1. le chemin exact du fichier écrit
-2. un résumé ultra-court
+2. le statut de validation obtenu (`PASS`, `WARN`, `FAIL`)
+3. un résumé ultra-court
