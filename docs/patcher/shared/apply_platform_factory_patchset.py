@@ -29,10 +29,12 @@ ALLOWED_TARGETS = {
     "docs/cores/current/platform_factory_architecture.yaml",
     "docs/cores/current/platform_factory_state.yaml",
 }
-SUPPORTED_ATOMIC_OPS = {"add", "replace", "update", "remove"}
+SUPPORTED_ATOMIC_OPS = {
+    "add", "replace", "update", "remove",
+    "list_remove_item", "list_remove_mapping", "list_replace_mapping",
+}
 
 # Mapping target_artifact -> clé racine canonique du document YAML.
-# Les paths du patchset sont résolus depuis ce bloc, pas depuis la racine absolue.
 CANONICAL_ROOT_KEYS = {
     "docs/cores/current/platform_factory_architecture.yaml": "PLATFORM_FACTORY_ARCHITECTURE",
     "docs/cores/current/platform_factory_state.yaml": "PLATFORM_FACTORY_STATE",
@@ -154,6 +156,101 @@ def _apply_remove(document: Any, path: str, ctx: ApplyContext) -> None:
     del parent[leaf]
 
 
+def _apply_list_remove_item(document: Any, path: str, value: Any, ctx: ApplyContext) -> None:
+    """Remove an item from a list of strings by exact value."""
+    keys = path.split(".")
+    parent_and_key = _ensure_parent_mapping(document, keys)
+    if parent_and_key is None:
+        ctx.fail(f"Impossible de résoudre le parent du path `{path}` pour op=list_remove_item.")
+        return
+    parent, leaf = parent_and_key
+    if leaf not in parent:
+        ctx.warn(f"Opération list_remove_item sur `{path}` ignorée : clé absente.")
+        return
+    target = parent[leaf]
+    if not isinstance(target, list):
+        ctx.fail(
+            f"Opération list_remove_item impossible sur `{path}` : "
+            f"la cible n'est pas une liste (type={type(target).__name__})."
+        )
+        return
+    if value not in target:
+        ctx.warn(f"Opération list_remove_item sur `{path}` ignorée : valeur `{value}` absente.")
+        return
+    parent[leaf] = [item for item in target if item != value]
+
+
+def _apply_list_remove_mapping(
+    document: Any, path: str, match_key: str, match_value: Any, ctx: ApplyContext
+) -> None:
+    """Remove a mapping from a list of mappings by a discriminant key/value."""
+    keys = path.split(".")
+    parent_and_key = _ensure_parent_mapping(document, keys)
+    if parent_and_key is None:
+        ctx.fail(f"Impossible de résoudre le parent du path `{path}` pour op=list_remove_mapping.")
+        return
+    parent, leaf = parent_and_key
+    if leaf not in parent:
+        ctx.warn(f"Opération list_remove_mapping sur `{path}` ignorée : clé absente.")
+        return
+    target = parent[leaf]
+    if not isinstance(target, list):
+        ctx.fail(
+            f"Opération list_remove_mapping impossible sur `{path}` : "
+            f"la cible n'est pas une liste (type={type(target).__name__})."
+        )
+        return
+    original_len = len(target)
+    parent[leaf] = [
+        item for item in target
+        if not (isinstance(item, dict) and item.get(match_key) == match_value)
+    ]
+    if len(parent[leaf]) == original_len:
+        ctx.warn(
+            f"Opération list_remove_mapping sur `{path}` ignorée : "
+            f"aucun item avec {match_key}={match_value} trouvé."
+        )
+
+
+def _apply_list_replace_mapping(
+    document: Any, path: str, match_key: str, match_value: Any, value: Any, ctx: ApplyContext
+) -> None:
+    """Replace a mapping in a list of mappings by a discriminant key/value."""
+    keys = path.split(".")
+    parent_and_key = _ensure_parent_mapping(document, keys)
+    if parent_and_key is None:
+        ctx.fail(f"Impossible de résoudre le parent du path `{path}` pour op=list_replace_mapping.")
+        return
+    parent, leaf = parent_and_key
+    if leaf not in parent:
+        ctx.fail(
+            f"Opération list_replace_mapping impossible sur `{path}` : clé absente."
+        )
+        return
+    target = parent[leaf]
+    if not isinstance(target, list):
+        ctx.fail(
+            f"Opération list_replace_mapping impossible sur `{path}` : "
+            f"la cible n'est pas une liste (type={type(target).__name__})."
+        )
+        return
+    found = False
+    new_list = []
+    for item in target:
+        if isinstance(item, dict) and item.get(match_key) == match_value:
+            new_list.append(copy.deepcopy(value))
+            found = True
+        else:
+            new_list.append(item)
+    if not found:
+        ctx.fail(
+            f"Opération list_replace_mapping impossible sur `{path}` : "
+            f"aucun item avec {match_key}={match_value} trouvé."
+        )
+        return
+    parent[leaf] = new_list
+
+
 def _apply_atomic_op(document: Any, op_item: dict[str, Any], ctx: ApplyContext) -> None:
     atomic_op = op_item.get("op")
     path = op_item.get("path")
@@ -171,13 +268,44 @@ def _apply_atomic_op(document: Any, op_item: dict[str, Any], ctx: ApplyContext) 
             ctx.fail(f"L'opération add sur `{path}` doit déclarer `value`.")
             return
         _apply_add(document, path, op_item["value"], ctx)
+
     elif atomic_op in {"replace", "update"}:
         if "value" not in op_item:
             ctx.fail(f"L'opération {atomic_op} sur `{path}` doit déclarer `value`.")
             return
         _apply_replace_or_update(document, path, op_item["value"], ctx)
+
     elif atomic_op == "remove":
         _apply_remove(document, path, ctx)
+
+    elif atomic_op == "list_remove_item":
+        if "value" not in op_item:
+            ctx.fail(f"L'opération list_remove_item sur `{path}` doit déclarer `value`.")
+            return
+        _apply_list_remove_item(document, path, op_item["value"], ctx)
+
+    elif atomic_op == "list_remove_mapping":
+        match_key = op_item.get("match_key")
+        match_value = op_item.get("match_value")
+        if not match_key or match_value is None:
+            ctx.fail(
+                f"L'opération list_remove_mapping sur `{path}` doit déclarer `match_key` et `match_value`."
+            )
+            return
+        _apply_list_remove_mapping(document, path, match_key, match_value, ctx)
+
+    elif atomic_op == "list_replace_mapping":
+        match_key = op_item.get("match_key")
+        match_value = op_item.get("match_value")
+        if not match_key or match_value is None:
+            ctx.fail(
+                f"L'opération list_replace_mapping sur `{path}` doit déclarer `match_key` et `match_value`."
+            )
+            return
+        if "value" not in op_item:
+            ctx.fail(f"L'opération list_replace_mapping sur `{path}` doit déclarer `value`.")
+            return
+        _apply_list_replace_mapping(document, path, match_key, match_value, op_item["value"], ctx)
 
     if not ctx.anomalies:
         ctx.operations_applied += 1
@@ -233,7 +361,7 @@ def main(argv: list[str]) -> int:
         try:
             patchset_data = _load_yaml(patchset_path)
             validation_data = _load_yaml(validation_path)
-        except Exception as exc:  # pragma: no cover
+        except Exception as exc:
             ctx.fail(f"Impossible de lire les entrées YAML: {exc}")
 
     if not ctx.anomalies:
@@ -276,12 +404,10 @@ def main(argv: list[str]) -> int:
                     if str(sandbox_file) not in document_cache:
                         try:
                             document_cache[str(sandbox_file)] = _load_yaml(sandbox_file)
-                        except Exception as exc:  # pragma: no cover
+                        except Exception as exc:
                             ctx.fail(f"Impossible de charger {sandbox_file}: {exc}")
                             continue
 
-                    # Auto-descente vers le bloc racine canonique.
-                    # Les paths du patchset sont relatifs à ce bloc, pas à la racine YAML absolue.
                     raw_document = document_cache[str(sandbox_file)]
                     canonical_root_key = CANONICAL_ROOT_KEYS.get(target_artifact)
                     if canonical_root_key and isinstance(raw_document, dict) and canonical_root_key in raw_document:
