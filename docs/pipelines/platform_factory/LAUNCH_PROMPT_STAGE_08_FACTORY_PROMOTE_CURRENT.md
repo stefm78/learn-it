@@ -35,7 +35,11 @@ Script dédié :
 - Le manifest de release doit être présent et lisible.
 - Ne pas promouvoir depuis `work/05_apply/patched/`.
 - Ne pas simuler une promotion si le script n’a pas tourné.
-
+- Avoir vérifié l'état du manifest officiel courant pour déterminer si son schema
+  supporte déjà les artefacts platform_factory (présence de `artifact_type: factory_artifact`).
+- Si le schema ne le supporte pas, préparer la production de `docs/cores/platform_factory/manifest.yaml`
+  comme solution transitoire.
+  
 ## Contexte d’exécution obligatoire
 
 - `docs/cores/releases/` est la source de vérité des releases publiées.
@@ -59,7 +63,9 @@ Script dédié :
 - `docs/cores/current/platform_factory_architecture.yaml`
 - `docs/cores/current/platform_factory_state.yaml`
 - `docs/pipelines/platform_factory/reports/platform_factory_promotion_report.yaml`
-
+- `docs/cores/current/manifest.yaml` (si schema compatible) OU
+  `docs/cores/platform_factory/manifest.yaml` (si solution transitoire)
+  
 ## Étape d’exécution obligatoire
 
 Exécuter :
@@ -79,6 +85,12 @@ python docs/patcher/shared/promote_platform_factory_current.py           ./docs/
   - `files_promoted`
 - Si `PROMOTION_REPORT.status` n’est pas en `PASS`, le stage ne franchit pas 08.
 - Si `PROMOTION_REPORT.promotion_mode: already_current`, considérer la promotion comme idempotente et valide.
+- Vérifier explicitement dans le report :
+  - `manifest_update_status` : `applied` | `blocked_schema_insufficient` | `skipped`
+  - `manifest_update_notes` : description du gap ou confirmation de mise à jour
+- Si `manifest_update_status: blocked_schema_insufficient` :
+  - vérifier que `docs/cores/platform_factory/manifest.yaml` a bien été produit
+  - le stage est en `WARN`, pas en `PASS` complet
 
 ## Si une commande doit être exécutée par l’humain dans le chat
 
