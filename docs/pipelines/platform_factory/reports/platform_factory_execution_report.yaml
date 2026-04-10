@@ -1,5 +1,5 @@
 PLATFORM_FACTORY_PATCH_EXECUTION:
-  status: FAIL
+  status: PASS
   scope: platform_factory_patchset_apply
   mode: apply
   patchset_path: docs\pipelines\platform_factory\work\03_patch\platform_factory_patchset.yaml
@@ -10,37 +10,13 @@ PLATFORM_FACTORY_PATCH_EXECUTION:
   - docs\pipelines\platform_factory\work\05_apply\sandbox\docs\cores\current\platform_factory_architecture.yaml
   - docs\pipelines\platform_factory\work\05_apply\sandbox\docs\cores\current\platform_factory_state.yaml
   files_written:
-  - none
+  - docs\pipelines\platform_factory\work\05_apply\sandbox\docs\cores\current\platform_factory_architecture.yaml
+  - docs\pipelines\platform_factory\work\05_apply\sandbox\docs\cores\current\platform_factory_state.yaml
   operations_total: 21
-  operations_applied: 0
-  anomalies_count: 7
-  warnings_count: 6
+  operations_applied: 21
+  anomalies_count: 0
+  warnings_count: 0
   anomalies:
-  - 'Opération add impossible sur `PLATFORM_FACTORY_ARCHITECTURE.metadata.authority_rank`
-    : la cible existe déjà et n''est pas une liste.'
-  - 'Opération add impossible sur `PLATFORM_FACTORY_STATE.metadata.authority_rank`
-    : la cible existe déjà et n''est pas une liste.'
-  - 'Opération add impossible sur `PLATFORM_FACTORY_ARCHITECTURE.contracts.produced_application_minimum_contract.minimum_validation_contract.runtime_policy_conformance_definition`
-    : la cible existe déjà et n''est pas une liste.'
-  - 'Opération add impossible sur `PLATFORM_FACTORY_ARCHITECTURE.contracts.produced_application_minimum_contract.minimum_observability_contract.note_on_constitutional_invariants_checked`
-    : la cible existe déjà et n''est pas une liste.'
-  - 'Opération add impossible sur `PLATFORM_FACTORY_ARCHITECTURE.contracts.execution_projection_contract.usage_as_sole_context_regime`
-    : la cible existe déjà et n''est pas une liste.'
-  - 'Opération add impossible sur `PLATFORM_FACTORY_ARCHITECTURE.contracts.execution_projection_contract.mandatory_fields_per_projection_notes`
-    : la cible existe déjà et n''est pas une liste.'
-  - 'Opération add impossible sur `PLATFORM_FACTORY_ARCHITECTURE.dependencies_to_constitution.constitutional_conformance_matrix_ref_status`
-    : la cible existe déjà et n''est pas une liste.'
+  - none
   warnings:
-  - 'Opération list_remove_mapping sur `PLATFORM_FACTORY_STATE.capabilities_present`
-    ignorée : aucun item avec capability_id=PF_CAPABILITY_FACTORY_PIPELINE_INTENT_DEFINED
-    trouvé.'
-  - Valeur déjà présente pour add sur `PLATFORM_FACTORY_STATE.capabilities_partial`
-    ; opération ignorée.
-  - 'Opération list_remove_item sur `PLATFORM_FACTORY_STATE.derived_projection_conformity_status.missing`
-    ignorée : valeur `storage_location_decision` absente.'
-  - 'Opération list_remove_item sur `PLATFORM_FACTORY_STATE.assessed_scope.excludes`
-    ignorée : valeur `exact_projection_storage_location` absente.'
-  - Valeur déjà présente pour add sur `PLATFORM_FACTORY_STATE.blockers` ; opération
-    ignorée.
-  - Valeur déjà présente pour add sur `PLATFORM_FACTORY_STATE.blockers` ; opération
-    ignorée.
+  - none
