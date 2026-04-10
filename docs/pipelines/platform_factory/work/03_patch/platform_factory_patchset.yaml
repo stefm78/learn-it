@@ -1,0 +1,429 @@
+PLATFORM_FACTORY_PATCHSET:
+  patchset_id: PFPATCH_20260410_PPLX_FINAL
+  date: '2026-04-10'
+  source_arbitrage: PFARB_CONSOLIDATION_20260410_PPLX_FINAL
+  source_arbitrage_file: docs/pipelines/platform_factory/work/02_arbitrage/platform_factory_arbitrage.md
+  status: DRAFT
+  sequencing_rule: Appliquer dans l'ordre des blocs (A → B → C → D → E). Chaque bloc
+    est indépendant des suivants sauf dépendances explicites.
+
+  # ============================================================
+  # BLOC A — Métadonnées authority_rank (COR-D)
+  # À appliquer EN PREMIER pour protéger la lecture des artefacts
+  # ============================================================
+
+  patches_architecture:
+
+    - patch_id: PFPATCH_A1
+      correction_ref: COR-D
+      cons_ref: CONS-04
+      priority: élevé
+      sequence: 1
+      description: Ajouter authority_rank dans les métadonnées de l'architecture
+      target_artifact: platform_factory_architecture.yaml
+      operation: add_field
+      path: PLATFORM_FACTORY_ARCHITECTURE.metadata
+      field: authority_rank
+      value: factory_layer
+      rationale: Distinguer explicitement la factory des canoniques primaires. Risque
+        de confusion d'autorité documenté par scénario adversarial.
+
+    # ============================================================
+    # BLOC B — Conformité constitutionnelle du contrat minimal
+    # COR-A, COR-A', COR-A''
+    # ============================================================
+
+    - patch_id: PFPATCH_B1
+      correction_ref: COR-A
+      cons_ref: CONS-01
+      priority: critique
+      sequence: 2
+      description: Ajouter deux axes explicites de conformité constitutionnelle dans
+        minimum_validation_contract
+      target_artifact: platform_factory_architecture.yaml
+      operation: replace_field
+      path: PLATFORM_FACTORY_ARCHITECTURE.contracts.produced_application_minimum_contract.minimum_validation_contract
+      field: minimum_axes
+      value:
+      - structure
+      - minimum_contract_conformance
+      - traceability
+      - packaging
+      - structure_and_state_alignment
+      - runtime_policy_conformance
+      - constitutional_invariants_runtime_local
+      - no_runtime_content_generation_proof
+      rationale: 'INV_RUNTIME_FULLY_LOCAL et INV_NO_RUNTIME_CONTENT_GENERATION ne
+        sont pas capturés dans le contrat minimal actuel. Ces deux axes rendent la
+        conformité constitutionnelle auditable. Consensus fort (3/3 challenge reports,
+        3/3 arbitrage reports).'
+
+    - patch_id: PFPATCH_B2
+      correction_ref: COR-A'
+      cons_ref: CONS-05
+      priority: élevé
+      sequence: 3
+      description: Définir le contenu de runtime_policy_conformance avec liste minimale
+        de 5 items déterministes
+      target_artifact: platform_factory_architecture.yaml
+      operation: add_block
+      path: PLATFORM_FACTORY_ARCHITECTURE.contracts.produced_application_minimum_contract.minimum_validation_contract
+      field: runtime_policy_conformance_definition
+      value:
+        scope: Vérification que l'application produite respecte la politique d'exécution
+          locale et ne génère pas de contenu à la volée.
+        items_to_verify:
+        - item: no_network_dependency_at_runtime
+          description: Absence de dépendance réseau au runtime. Vérifiable statiquement
+            par inspection des imports, appels système et configuration.
+          invariant_ref: INV_RUNTIME_FULLY_LOCAL
+        - item: no_runtime_content_generation
+          description: Absence de génération de contenu ou de feedback à la volée.
+            Aucun appel LLM, aucune génération dynamique de contenu pédagogique au
+            runtime.
+          invariant_ref: INV_NO_RUNTIME_CONTENT_GENERATION
+        - item: declared_autonomy_regime_respected
+          description: L'application opère dans le régime d'autonomie déclaré dans
+            son manifest. Aucune ressource hors régime déclaré n'est sollicitée.
+        - item: no_implicit_llm_call
+          description: Absence d'appel implicite à un modèle de langage en usage runtime
+            (ni direct, ni via API tierce).
+        - item: runtime_entrypoint_declared_and_traceable
+          description: Le point d'entrée runtime est déclaré dans le manifest et traçable.
+            L'application ne peut pas démarrer sans que son entrypoint soit explicitement
+            identifié.
+        note: Liste minimale non exhaustive. À compléter lors de la définition du
+          validator dédié (PF_CAPABILITY_FACTORY_VALIDATORS_IMPLEMENTED).
+      rationale: 'Axe runtime_policy_conformance était un label creux sans contenu
+        déterministe. Décision humaine DISC-01 Option A : liste minimale 5 items.'
+
+    - patch_id: PFPATCH_B3
+      correction_ref: COR-A''
+      cons_ref: CONS-01
+      priority: critique
+      sequence: 4
+      description: Rendre constitutional_invariants_checked auditable dans minimum_observability_contract
+      target_artifact: platform_factory_architecture.yaml
+      operation: replace_field
+      path: PLATFORM_FACTORY_ARCHITECTURE.contracts.produced_application_minimum_contract.minimum_observability_contract
+      field: minimum_signals
+      value:
+      - build_identity
+      - activated_modules
+      - derived_projections_used
+      - validation_status
+      - traceability_references
+      - produced_application_minimum_contract_conformance_status
+      - constitutional_invariants_checked
+      note_on_constitutional_invariants_checked: "Le signal constitutional_invariants_checked\
+        \ doit être rattaché à une liste d'invariants vérifiés et à un protocole\
+        \ explicite. Invariants minimaux couverts par ce signal :\n  - INV_RUNTIME_FULLY_LOCAL\
+        \ (via runtime_policy_conformance axis)\n  - INV_NO_RUNTIME_CONTENT_GENERATION\
+        \ (via no_runtime_content_generation_proof axis)\nProtocole : ce signal ne\
+        \ peut être émis qu'à PASS des axes constitutional_invariants_runtime_local\
+        \ et no_runtime_content_generation_proof dans le rapport de validation minimum_contract.\
+        \ Il est non auditable tant que PF_CAPABILITY_FACTORY_VALIDATORS_IMPLEMENTED\
+        \ reste absent."
+      rationale: 'constitutional_invariants_checked était non auditable : aucune liste
+        d''invariants, aucun protocole. La chaîne de preuve constitutionnelle ne peut
+        pas être fermée sans ce rattachement.'
+
+    # ============================================================
+    # BLOC C — Projections dérivées : contradiction + conformance matrix
+    # COR-B, COR-C'
+    # ============================================================
+
+    - patch_id: PFPATCH_C1
+      correction_ref: COR-B
+      cons_ref: CONS-02
+      priority: élevé
+      sequence: 5
+      description: Résoudre la contradiction usage_as_sole_context dans execution_projection_contract
+      target_artifact: platform_factory_architecture.yaml
+      operation: replace_block
+      path: PLATFORM_FACTORY_ARCHITECTURE.contracts.execution_projection_contract
+      fields_to_update:
+        rule_of_use: "Une projection dérivée peut être l'unique artefact fourni à\
+          \ une IA pour un travail donné si elle est validée comme strictement fidèle,\
+          \ sans divergence normative, pour le scope déclaré. Il s'agit du régime\
+          \ CIBLE de la factory. Ce régime est actuellement bloqué (V0) — voir usage_as_sole_context\
+          \ et usage_as_sole_context_unblock_conditions."
+        usage_as_sole_context: blocked
+        usage_as_sole_context_regime: "POLITIQUE V0 ACTUELLE : l'usage d'une projection\
+          \ comme unique contexte est bloqué jusqu'à satisfaction des conditions de\
+          \ déblocage listées dans usage_as_sole_context_unblock_conditions. Le régime\
+          \ cible (usage autorisé si validé) est décrit dans rule_of_use."
+        usage_as_sole_context_unblock_conditions:
+        - validator dédié implémenté (PF_CAPABILITY_FACTORY_VALIDATORS_IMPLEMENTED
+            = present)
+        - protocole de régénération déterministe défini et opérationnel
+        - constitutional_conformance_matrix.yaml présent et validé (PF_BLOCKER_CONFORMANCE_MATRIX_ABSENT
+            = resolved)
+      rationale: 'Deux énoncés contradictoires coexistaient : rule_of_use autorisait
+        l''usage en contexte unique, usage_as_sole_context le bloquait, sans clause
+        de distinction. Risque de dérive normative silencieuse pour toute IA lisant
+        l''architecture.'
+
+    - patch_id: PFPATCH_C2
+      correction_ref: COR-C'
+      cons_ref: CONS-12
+      priority: élevé
+      sequence: 6
+      description: Annoter les deux champs conformance_matrix_ref comme pending blocker
+      target_artifact: platform_factory_architecture.yaml
+      operation: add_annotation
+      targets:
+      - path: PLATFORM_FACTORY_ARCHITECTURE.contracts.execution_projection_contract.mandatory_fields_per_projection
+        field: conformance_matrix_ref
+        annotation: '# pending: PF_BLOCKER_CONFORMANCE_MATRIX_ABSENT — fichier docs/cores/platform_factory/constitutional_conformance_matrix.yaml
+          référencé mais absent. Ne pas supprimer cette référence (design intent préservé).'
+      - path: PLATFORM_FACTORY_ARCHITECTURE.dependencies_to_constitution
+        field: constitutional_conformance_matrix_ref
+        annotation: '# pending: PF_BLOCKER_CONFORMANCE_MATRIX_ABSENT — fichier absent,
+          enregistré comme blocker dans platform_factory_state.yaml.'
+      rationale: Références mortes dans un contrat released. Annotation minimale pour
+        rendre l'absence visible sans casser le design intent.
+
+  # ============================================================
+  # PATCHES STATE
+  # ============================================================
+
+  patches_state:
+
+    - patch_id: PFPATCH_A2
+      correction_ref: COR-D
+      cons_ref: CONS-04
+      priority: élevé
+      sequence: 1
+      description: Ajouter authority_rank dans les métadonnées du state
+      target_artifact: platform_factory_state.yaml
+      operation: add_field
+      path: PLATFORM_FACTORY_STATE.metadata
+      field: authority_rank
+      value: factory_layer
+      rationale: Symétrique de PFPATCH_A1. Même justification.
+
+    - patch_id: PFPATCH_C3
+      correction_ref: COR-B'
+      cons_ref: CONS-11
+      priority: élevé
+      sequence: 5
+      description: Mettre à jour description PF_CAPABILITY_DERIVED_PROJECTION_RULE_DEFINED
+      target_artifact: platform_factory_state.yaml
+      operation: update_field
+      path: PLATFORM_FACTORY_STATE.capabilities_partial
+      target_capability_id: PF_CAPABILITY_DERIVED_PROJECTION_RULE_DEFINED
+      field: description
+      value: "Règle d'usage des projections dérivées définie. Emplacement de stockage\
+        \ décidé (ARB-04). Champs minimaux obligatoires inscrits dans l'architecture\
+        \ (ARB-05). Régime cible : usage comme unique contexte si validé, décrit dans\
+        \ rule_of_use de l'architecture. Politique V0 actuelle : usage_as_sole_context:\
+        \ blocked — voir usage_as_sole_context_unblock_conditions dans l'architecture.\
+        \ Restent absents : validator dédié, protocole de régénération automatisé."
+      rationale: Lié à PFPATCH_C1. Le state doit refléter la distinction régime cible
+        / politique V0 après correction de l'architecture.
+
+    - patch_id: PFPATCH_C4
+      correction_ref: COR-C
+      cons_ref: CONS-03
+      priority: élevé
+      sequence: 6
+      description: Ajouter blocker PF_BLOCKER_CONFORMANCE_MATRIX_ABSENT
+      target_artifact: platform_factory_state.yaml
+      operation: add_blocker
+      path: PLATFORM_FACTORY_STATE.blockers
+      value:
+        blocker_id: PF_BLOCKER_CONFORMANCE_MATRIX_ABSENT
+        severity: high
+        impact: Le fichier docs/cores/platform_factory/constitutional_conformance_matrix.yaml
+          est référencé dans l'architecture à deux endroits (mandatory_fields_per_projection.conformance_matrix_ref
+          et dependencies_to_constitution.constitutional_conformance_matrix_ref) mais
+          absent du repo. Toute projection ou application produite référençant cette
+          matrice pointe un artefact inexistant, rendant la conformité non auditable.
+        exit_condition: Création et validation de docs/cores/platform_factory/constitutional_conformance_matrix.yaml
+          dans un cycle de pipeline dédié, puis mise à jour de ce blocker.
+        related_blockers:
+        - PF_BLOCKER_BOOTSTRAP_CONTRACT_UNDEFINED
+      rationale: Référence morte dans un contrat released. Enregistrement comme blocker
+        est la correction minimale propre sans bâcler un artefact critique.
+
+    - patch_id: PFPATCH_C5
+      correction_ref: COR-C''
+      cons_ref: CONS-09
+      priority: élevé
+      sequence: 7
+      description: Renforcer description PF_CAPABILITY_FACTORY_VALIDATORS_IMPLEMENTED
+        absent
+      target_artifact: platform_factory_state.yaml
+      operation: update_field
+      path: PLATFORM_FACTORY_STATE.capabilities_absent
+      target_capability_id: PF_CAPABILITY_FACTORY_VALIDATORS_IMPLEMENTED
+      field: description
+      value: "Validateurs dédiés à la conformité des projections et du contrat minimal\
+        \ non encore implémentés. Conséquence directe : tout tag validation_status:\
+        \ validated sur une projection dérivée est non déterministe et non auditable\
+        \ en l'état. Aucune projection ne peut être considérée comme validée de façon\
+        \ probante tant que ce validator n'est pas implémenté. De même, le signal constitutional_invariants_checked\
+        \ ne peut pas être émis de façon auditable."
+      rationale: Le state ne liait pas explicitement l'absence du validator au risque
+        de dérive normative sur les projections.
+
+    - patch_id: PFPATCH_D1
+      correction_ref: COR-E
+      cons_ref: CONS-08
+      priority: élevé
+      sequence: 8
+      description: Renforcer description PF_GAP_PARALLEL_AI_PROTOCOL_UNDEFINED comme
+        blocker opérationnel
+      target_artifact: platform_factory_state.yaml
+      operation: update_field
+      path: PLATFORM_FACTORY_STATE.known_gaps
+      target_gap_id: PF_GAP_PARALLEL_AI_PROTOCOL_UNDEFINED
+      field: description
+      value: "BLOCKER OPÉRATIONNEL pour tout travail multi-IA réel. Le protocole fin\
+        \ d'assemblage entre sorties IA parallèles n'est pas défini. Aucun mécanisme\
+        \ de décomposition de tâche, de granularité modulaire, d'assemblage de sorties\
+        \ ou de résolution de conflit n'existe actuellement. L'usage parallèle multi-IA\
+        \ sans ce protocole expose à des collisions normatives et à des dérivences\
+        \ silencieuses non détectées. Différé à une itération dédiée avec spec de\
+        \ protocole multi-IA."
+      rationale: Description précédente minimisait l'impact. Nemotron qualifie l'absence
+        comme impossibilité opérationnelle, pas simple sous-optimalité.
+
+    - patch_id: PFPATCH_D2
+      correction_ref: COR-F
+      cons_ref: CONS-06
+      priority: élevé
+      sequence: 9
+      description: Ajouter blocker PF_BLOCKER_BOOTSTRAP_CONTRACT_UNDEFINED
+      target_artifact: platform_factory_state.yaml
+      operation: add_blocker
+      path: PLATFORM_FACTORY_STATE.blockers
+      value:
+        blocker_id: PF_BLOCKER_BOOTSTRAP_CONTRACT_UNDEFINED
+        severity: high
+        impact: Le champ bootstrap_contract dans runtime_entrypoint_contract est obligatoire
+          mais déclaré TBD dans l'architecture. Aucune application produite ne peut
+          passer la validation complète du contrat minimal tant que ce champ n'est
+          pas défini. Ce n'est pas un simple gap de maturité — c'est un champ contractuellement
+          requis non encore fermable.
+        exit_condition: Définition de la typologie exacte des runtimes d'application
+          Learn-it (local, notebook, package, etc.) et écriture du bootstrap_contract
+          correspondant dans l'architecture.
+        related_blockers:
+        - PF_BLOCKER_CONFORMANCE_MATRIX_ABSENT
+      rationale: Champ obligatoire TBD non tracé comme blocker crée une fausse impression
+        de contrat complet.
+
+    - patch_id: PFPATCH_E1
+      correction_ref: COR-G
+      cons_ref: CONS-07
+      priority: modéré
+      sequence: 10
+      description: Déplacer PF_CAPABILITY_FACTORY_PIPELINE_INTENT_DEFINED de capabilities_present
+        vers capabilities_partial
+      target_artifact: platform_factory_state.yaml
+      operation: move_capability
+      from_section: capabilities_present
+      to_section: capabilities_partial
+      target_capability_id: PF_CAPABILITY_FACTORY_PIPELINE_INTENT_DEFINED
+      new_description: "Intent posé, prompts de lancement définis (STAGE_01 à STAGE_09),\
+        \ outillage d'exécution absent. Le pipeline est gouverné et exécutable manuellement\
+        \ mais non automatisé. Une intention non outillée n'est pas une capacité présente."
+      rationale: Surdéclaration légère mais réelle. Une capacité "intent only, not
+        yet tooled" est partielle, pas présente.
+
+    - patch_id: PFPATCH_E2
+      correction_ref: COR-H
+      cons_ref: CONS-07
+      priority: modéré
+      sequence: 11
+      description: Resynchroniser le state sur la décision ARB-04 — retirer storage_location_decision
+        des manquants et mettre à jour assessed_scope
+      target_artifact: platform_factory_state.yaml
+      operation: multi_update
+      updates:
+      - path: PLATFORM_FACTORY_STATE.derived_projection_conformity_status.missing
+        operation: remove_item
+        item: storage_location_decision
+        rationale: La décision d'emplacement est actée (ARB-04). Ce champ ne doit
+          plus figurer dans les éléments manquants.
+      - path: PLATFORM_FACTORY_STATE.assessed_scope.excludes
+        operation: remove_item
+        item: exact_projection_storage_location
+        rationale: La décision est prise et inscrite dans l'architecture. Ce point
+          n'est plus à exclure du scope.
+      - path: PLATFORM_FACTORY_STATE.capabilities_partial
+        target_capability_id: PF_CAPABILITY_PROJECTION_STORAGE_LOCATION_FINALIZED
+        operation: update_description
+        value: "Emplacement décidé (ARB-04) : docs/cores/platform_factory/projections/.\
+          \ Règle d'interdiction dans docs/cores/current/ inscrite dans l'architecture.\
+          \ Répertoire non encore créé physiquement. Aucune projection stockée. Outillage\
+          \ de génération et de validation absent. Capacité partielle : décision actuelle,\
+          \ opérationnalisation à faire."
+      rationale: Désynchronisation factuelle entre state et décision déjà actée en
+        architecture. Double correction directe.
+
+    - patch_id: PFPATCH_E3
+      correction_ref: COR-I
+      cons_ref: CONS-10
+      priority: modéré
+      sequence: 12
+      description: Mettre à jour description PF_BLOCKER_CURRENT_MANIFEST_SCHEMA_LIMITATION
+        pour refléter la réalité de gouvernance
+      target_artifact: platform_factory_state.yaml
+      operation: update_blocker
+      path: PLATFORM_FACTORY_STATE.blockers
+      target_blocker_id: PF_BLOCKER_CURRENT_MANIFEST_SCHEMA_LIMITATION
+      fields_to_update:
+        impact: "Les artefacts platform_factory sont dans docs/cores/current/ mais\
+          \ hors manifest officiel de current/. La release PLATFORM_FACTORY_RELEASE_2026_04_10_R01\
+          \ est manifestée dans docs/cores/releases/PLATFORM_FACTORY_RELEASE_2026_04_10_R01/manifest.yaml\
+          \ (statut RELEASE_CANDIDATE, promotion_candidate: true). La gouvernance release\
+          \ est donc couverte. La fenêtre résiduelle concerne uniquement la promotion\
+          \ vers docs/cores/current/ via STAGE_08. Aucun nouveau fichier manifest créé\
+          \ par ce patch (décision humaine DISC-02 Option C)."
+        exit_condition: Ce blocker est levé quand STAGE_08 complète sa première exécution
+          formelle avec promotion effective vers docs/cores/current/ et mise à jour
+          du manifest officiel de current/.
+      rationale: La description précédente ne reflétait pas que la release est déjà
+        manifestée dans releases/. Le risque résiduel est uniquement la promotion STAGE_08,
+        pas l'absence totale de manifest.
+
+  # ============================================================
+  # DELTA SUMMARY
+  # ============================================================
+
+  delta_summary:
+    architecture_patches: 6
+    state_patches: 9
+    total_patches: 15
+    corrections_critique: 2
+    corrections_eleve: 11
+    corrections_modere: 2
+    deferred_out_of_scope:
+    - DIFF-01 protocole multi-IA complet (spec requise)
+    - DIFF-02 reproducibility_fingerprints vérifiabilité (itération validators)
+    - DIFF-03 rappel INV_PATCH dans chaîne PF_CHAIN_03→05 (après PFPATCH_C1)
+    new_blockers_added:
+    - PF_BLOCKER_CONFORMANCE_MATRIX_ABSENT
+    - PF_BLOCKER_BOOTSTRAP_CONTRACT_UNDEFINED
+    capabilities_reclassified:
+    - PF_CAPABILITY_FACTORY_PIPELINE_INTENT_DEFINED: capabilities_present → capabilities_partial
+    fields_updated_state:
+    - PF_CAPABILITY_DERIVED_PROJECTION_RULE_DEFINED description
+    - PF_CAPABILITY_FACTORY_VALIDATORS_IMPLEMENTED description
+    - PF_CAPABILITY_PROJECTION_STORAGE_LOCATION_FINALIZED description
+    - PF_GAP_PARALLEL_AI_PROTOCOL_UNDEFINED description
+    - PF_BLOCKER_CURRENT_MANIFEST_SCHEMA_LIMITATION impact + exit_condition
+    fields_added_architecture:
+    - authority_rank (metadata)
+    - constitutional_invariants_runtime_local (minimum_axes)
+    - no_runtime_content_generation_proof (minimum_axes)
+    - runtime_policy_conformance_definition (nouveau bloc)
+    - usage_as_sole_context_regime (execution_projection_contract)
+    - usage_as_sole_context_unblock_conditions (execution_projection_contract)
+    - note_on_constitutional_invariants_checked (minimum_observability_contract)
+    annotations_added_architecture:
+    - conformance_matrix_ref (mandatory_fields_per_projection)
+    - constitutional_conformance_matrix_ref (dependencies_to_constitution)
