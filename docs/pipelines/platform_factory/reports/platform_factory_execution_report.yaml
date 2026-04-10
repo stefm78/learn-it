@@ -1,7 +1,7 @@
 PLATFORM_FACTORY_PATCH_EXECUTION:
-  status: PASS
+  status: FAIL
   scope: platform_factory_patchset_apply
-  mode: apply
+  mode: dry_run
   patchset_path: docs\pipelines\platform_factory\work\03_patch\platform_factory_patchset.yaml
   validation_path: docs\pipelines\platform_factory\work\04_patch_validation\platform_factory_patch_validation.yaml
   sandbox_root: docs\pipelines\platform_factory\work\05_apply\sandbox
@@ -10,13 +10,28 @@ PLATFORM_FACTORY_PATCH_EXECUTION:
   - docs\pipelines\platform_factory\work\05_apply\sandbox\docs\cores\current\platform_factory_architecture.yaml
   - docs\pipelines\platform_factory\work\05_apply\sandbox\docs\cores\current\platform_factory_state.yaml
   files_written:
-  - docs\pipelines\platform_factory\work\05_apply\sandbox\docs\cores\current\platform_factory_architecture.yaml
-  - docs\pipelines\platform_factory\work\05_apply\sandbox\docs\cores\current\platform_factory_state.yaml
-  operations_total: 28
-  operations_applied: 28
-  anomalies_count: 0
-  warnings_count: 0
+  - none
+  operations_total: 21
+  operations_applied: 10
+  anomalies_count: 6
+  warnings_count: 3
   anomalies:
-  - none
+  - 'Opération list_replace_mapping impossible sur `PLATFORM_FACTORY_STATE.capabilities_partial`
+    : clé absente.'
+  - 'Opération list_replace_mapping impossible sur `PLATFORM_FACTORY_STATE.capabilities_absent`
+    : clé absente.'
+  - 'Opération list_replace_mapping impossible sur `PLATFORM_FACTORY_STATE.known_gaps`
+    : clé absente.'
+  - 'Opération add impossible sur `PLATFORM_FACTORY_STATE.blockers` : la cible existe
+    déjà et n''est pas une liste.'
+  - 'Opération list_replace_mapping impossible sur `PLATFORM_FACTORY_STATE.capabilities_partial`
+    : la cible n''est pas une liste (type=dict).'
+  - 'Opération list_replace_mapping impossible sur `PLATFORM_FACTORY_STATE.blockers`
+    : la cible n''est pas une liste (type=dict).'
   warnings:
-  - none
+  - 'Opération list_remove_mapping sur `PLATFORM_FACTORY_STATE.capabilities_present`
+    ignorée : clé absente.'
+  - 'Opération list_remove_item sur `PLATFORM_FACTORY_STATE.derived_projection_conformity_status.missing`
+    ignorée : clé absente.'
+  - 'Opération list_remove_item sur `PLATFORM_FACTORY_STATE.assessed_scope.excludes`
+    ignorée : clé absente.'
