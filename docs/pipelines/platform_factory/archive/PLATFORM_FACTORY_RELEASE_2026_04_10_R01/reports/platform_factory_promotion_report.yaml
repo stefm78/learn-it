@@ -1,0 +1,12 @@
+PROMOTION_REPORT:
+  status: PASS
+  release_id: PLATFORM_FACTORY_RELEASE_2026_04_10_R01
+  source_release_path: docs/cores/releases/PLATFORM_FACTORY_RELEASE_2026_04_10_R01/
+  promotion_mode: applied
+  files_promoted:
+  - docs/cores/current/platform_factory_architecture.yaml
+  - docs/cores/current/platform_factory_state.yaml
+  notes:
+  - promotion appliquée depuis la release matérialisée
+  anomalies:
+  - none
