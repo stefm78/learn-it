@@ -1,0 +1,372 @@
+PLATFORM_FACTORY_ARCHITECTURE:
+  metadata:
+    artifact_id: PLATFORM_FACTORY_ARCHITECTURE_V0_3
+    artifact_type: platform_factory_architecture
+    version: 0.3.0
+    status: RELEASE_CANDIDATE
+    notes:
+    - Artefact V0 posé dans docs/cores/current/ pour lancer la gouvernance de la Platform
+      Factory.
+    - Non encore intégré au current manifest tant que le schéma core-release reste
+      limité au trio constitution/referentiel/link.
+    authority_rank: factory_layer
+  purpose:
+    mission: Décrire l'architecture prescriptive générique de la Platform Factory
+      Learn-it, c'est-à-dire le HOW permettant de produire des applications Learn-it
+      conformes à partir du socle canonique.
+    governs:
+    - generic_factory_architecture
+    - validated_derived_execution_projection_rules
+    - produced_application_minimum_contract
+    - multi_ia_parallel_development_readiness
+    does_not_govern:
+    - domain_specific_learning_content
+    - detailed_architecture_of_one_instantiated_application
+    - learner_runtime_state
+    - specific_domain_feedback_logic
+  scope:
+    in_scope:
+    - generic_platform_components
+    - transformation_chain
+    - packaging_rules
+    - observability_rules
+    - traceability_rules
+    - execution_projection_rules
+    - minimum_application_contract
+    - module_reuse_rules
+    - factory_to_instantiation_boundary
+    out_of_scope:
+    - discipline_specific_graph_content
+    - domain_specific_feedback_logic
+    - final_product_ui_specialization
+    - detailed_runtime_behavior_of_one_specific_application
+    - per_domain_content_authoring
+  source_of_authority:
+    canonical_dependencies:
+    - docs/cores/current/constitution.yaml
+    - docs/cores/current/referentiel.yaml
+    - docs/cores/current/link.yaml
+    authority_rule: canonical_dependencies_remain_primary_authority
+    projection_rule: Les projections dérivées d'exécution peuvent être générées pour
+      les IA, mais elles doivent rester strictement fidèles au canonique applicable.
+  design_principles:
+    principles:
+    - id: PF_PRINCIPLE_SEPARATE_PLATFORM_AND_APPLICATION
+      statement: Séparer strictement la plateforme générique et l'application instanciée.
+    - id: PF_PRINCIPLE_CANONICAL_TRACEABILITY
+      statement: Toute génération, projection et instanciation doit rester traçable.
+    - id: PF_PRINCIPLE_DETERMINISTIC_TRANSFORMATIONS
+      statement: Les transformations de la factory doivent être déterministes et validables.
+    - id: PF_PRINCIPLE_MULTI_IA_READY
+      statement: La factory doit être exploitable par plusieurs IA en parallèle.
+    - id: PF_PRINCIPLE_NO_NORM_DUPLICATION
+      statement: La factory n'est pas une seconde Constitution ; elle l'opérationnalise.
+    - id: PF_PRINCIPLE_MINIMUM_APPLICATION_CONTRACT
+      statement: Toute application produite doit respecter un contrat minimal générique.
+    - id: PF_PRINCIPLE_REGENERABLE_EXECUTION_PROJECTIONS
+      statement: Les projections dérivées doivent être régénérables et conformes.
+  platform_layers:
+  - layer_id: PF_LAYER_CANONICAL_FOUNDATION
+    role: normative_foundation
+    description: Constitution + Référentiel + LINK comme source normative primaire.
+  - layer_id: PF_LAYER_FACTORY_ARCHITECTURE
+    role: prescriptive_factory_how
+    description: Définition du HOW générique de la factory.
+  - layer_id: PF_LAYER_FACTORY_STATE
+    role: recognized_current_state
+    description: État reconnu de maturité et de capacité de la factory.
+  - layer_id: PF_LAYER_DERIVED_EXECUTION_PROJECTIONS
+    role: ai_execution_interface
+    description: Projections dérivées validées destinées aux IA et aux pipelines spécialisés.
+  - layer_id: PF_LAYER_APPLICATION_INSTANTIATION
+    role: downstream_instantiation
+    description: Pipeline aval produisant une application spécifique à partir du générique
+      et du domaine.
+  transformation_chain:
+    phases:
+    - phase_id: PF_CHAIN_01_READ_CANONICAL
+      goal: charger le socle canonique applicable
+    - phase_id: PF_CHAIN_02_APPLY_FACTORY_RULES
+      goal: appliquer les règles génériques de la factory
+    - phase_id: PF_CHAIN_03_GENERATE_EXECUTION_PROJECTIONS
+      goal: produire des projections validées bornées pour IA et pipelines
+    - phase_id: PF_CHAIN_04_PREPARE_GENERIC_MODULES
+      goal: préparer les composants génériques réutilisables
+    - phase_id: PF_CHAIN_05_INSTANTIATE_DOMAIN_SPECIFIC_PARTS
+      goal: instancier le spécifique domaine dans un pipeline dédié
+    - phase_id: PF_CHAIN_06_VALIDATE_APPLICATION_MIN_CONTRACT
+      goal: vérifier le respect du contrat minimal générique
+    - phase_id: PF_CHAIN_07_PACKAGE_AND_TRACE
+      goal: packager, tracer et rendre l'application identifiable
+  contracts:
+    execution_projection_contract:
+      name: validated_derived_execution_projection
+      rule_of_use: Une projection derivee peut etre l'unique artefact fourni a une
+        IA pour un travail donne si elle est validee comme strictement fidele, sans
+        divergence normative, pour le scope declare. Il s'agit du REGIME CIBLE de
+        la factory. Ce regime est actuellement bloque (V0) - voir usage_as_sole_context
+        et usage_as_sole_context_unblock_conditions.
+      invariants:
+      - no_new_rule
+      - no_normative_divergence
+      - no_omission_within_declared_scope
+      - canonical_source_remains_primary_authority
+      - deterministic_regeneration_required
+      prohibited:
+      - manual_normative_override
+      - implicit_rule_addition
+      - uncontrolled_paraphrase
+      - promotion_as_primary_canonical_artifact
+      mandatory_fields_per_projection:
+      - field: scope
+        description: Périmètre exact couvert par la projection.
+      - field: sources_exact
+        description: Liste exacte des artefacts canoniques sources.
+      - field: version_fingerprint
+        description: Empreinte canonique des artefacts sources permettant de détecter
+          toute dérive.
+      - field: validation_status
+        description: 'Statut de validation : validated | pending | invalidated.'
+      - field: promotion_to_canonical_forbidden
+        value: true
+        description: Une projection dérivée ne peut jamais être promu canonique primaire.
+      - field: usage_policy
+        description: 'Usages autorisés : runtime, offsession, ou les deux.'
+      - field: conformance_matrix_ref
+        description: Référence vers docs/cores/platform_factory/constitutional_conformance_matrix.yaml.
+      - field: usage_as_sole_context
+        value: blocked
+        description: Bloqué jusqu'à maturité suffisante.
+      usage_as_sole_context_regime: 'POLITIQUE V0 ACTUELLE: l''usage d''une projection
+        comme unique contexte est bloque jusqu''a satisfaction des conditions listees
+        dans usage_as_sole_context_unblock_conditions. Le regime cible (usage autorise
+        si valide) est decrit dans rule_of_use.'
+      usage_as_sole_context_unblock_conditions:
+      - validator dedie implemente (PF_CAPABILITY_FACTORY_VALIDATORS_IMPLEMENTED =
+        present)
+      - protocole de regeneration deterministe defini et operationnel
+      - constitutional_conformance_matrix.yaml present et valide (PF_BLOCKER_CONFORMANCE_MATRIX_ABSENT
+        = resolved)
+      mandatory_fields_per_projection_notes: 'conformance_matrix_ref PENDING: PF_BLOCKER_CONFORMANCE_MATRIX_ABSENT.
+        Le fichier docs/cores/platform_factory/constitutional_conformance_matrix.yaml
+        est reference mais absent. Ne pas supprimer la reference (design intent preserve).'
+    produced_application_minimum_contract:
+      identity:
+        required_blocks:
+        - logical_identity
+        - produced_instance_identity
+        - reproducibility_fingerprints
+        reproducibility_fingerprints_definition: 'Empreinte canonique des artefacts
+          sources utilisés pour produire cette application : hash ou identifiant de
+          version stable de chaque dépendance canonique (constitution, référentiel,
+          link, architecture factory, projections utilisées). Permet de vérifier qu''une
+          application peut être entièrement retracée et reproduite à partir des mêmes
+          sources.'
+      manifest:
+        required: true
+        minimum_contents:
+        - application_identity
+        - origin
+        - canonical_dependencies
+        - reused_generic_modules
+        - instantiated_specific_artifacts
+        - validation_statuses
+        - packaging_metadata
+        - traceability_metadata
+      canonical_dependency_contract:
+        required: true
+      runtime_entrypoint_contract:
+        required: true
+        must_declare:
+        - runtime_entrypoint_id
+        - runtime_entrypoint_type
+        - bootstrap_contract
+        - runtime_prerequisites
+        bootstrap_contract_tbd_condition: TBD. Ce champ sera défini quand la typologie
+          exacte des runtimes d'application Learn-it sera arrêtée. Il décrira le contrat
+          de démarrage attendu pour chaque type de runtime (local, notebook, package,
+          etc.).
+      minimum_configuration_contract:
+        required: true
+        minimum_blocks:
+        - identity
+        - module_activation
+        - instantiation_references
+        - traceability
+      generic_module_reuse_contract:
+        required: true
+      instantiated_specific_artifacts_contract:
+        required: true
+      minimum_validation_contract:
+        required: true
+        minimum_axes:
+        - structure
+        - minimum_contract_conformance
+        - traceability
+        - packaging
+        - structure_and_state_alignment
+        - runtime_policy_conformance
+        - constitutional_invariants_runtime_local
+        - no_runtime_content_generation_proof
+        runtime_policy_conformance_definition:
+          scope: Verification que l'application produite respecte la politique d'execution
+            locale et ne genere pas de contenu a la volee.
+          items_to_verify:
+          - item: no_network_dependency_at_runtime
+            description: Absence de dependance reseau au runtime. Verifiable statiquement
+              par inspection des imports, appels systeme et configuration.
+            invariant_ref: INV_RUNTIME_FULLY_LOCAL
+          - item: no_runtime_content_generation
+            description: Absence de generation de contenu ou de feedback a la volee.
+              Aucun appel LLM, aucune generation dynamique de contenu pedagogique
+              au runtime.
+            invariant_ref: INV_NO_RUNTIME_CONTENT_GENERATION
+          - item: declared_autonomy_regime_respected
+            description: L'application opere dans le regime d'autonomie declare dans
+              son manifest.
+          - item: no_implicit_llm_call
+            description: Absence d'appel implicite a un modele de langage en usage
+              runtime (ni direct, ni via API tierce).
+          - item: runtime_entrypoint_declared_and_traceable
+            description: Le point d'entree runtime est declare dans le manifest et
+              tracable.
+          note: Liste minimale non exhaustive. A completer lors de la definition du
+            validator dedie (PF_CAPABILITY_FACTORY_VALIDATORS_IMPLEMENTED).
+      minimum_packaging_contract:
+        required: true
+        must_be:
+        - identifiable
+        - manifest_linked
+        - completeness_checkable
+      minimum_observability_contract:
+        required: true
+        minimum_signals:
+        - build_identity
+        - activated_modules
+        - derived_projections_used
+        - validation_status
+        - traceability_references
+        - produced_application_minimum_contract_conformance_status
+        - constitutional_invariants_checked
+        note_on_constitutional_invariants_checked: 'Le signal constitutional_invariants_checked
+          doit etre rattache a une liste d''invariants verifies et a un protocole
+          explicite. Invariants minimaux couverts: INV_RUNTIME_FULLY_LOCAL (via constitutional_invariants_runtime_local
+          axis) et INV_NO_RUNTIME_CONTENT_GENERATION (via no_runtime_content_generation_proof
+          axis). Protocole: ce signal ne peut etre emis qu''a PASS des deux axes dans
+          le rapport de validation minimum_contract. Il est non auditable tant que
+          PF_CAPABILITY_FACTORY_VALIDATORS_IMPLEMENTED reste absent.'
+  variant_governance:
+    principle: La factory doit autoriser des variantes d'applications sans casser
+      le contrat minimal générique ni la séparation entre générique et spécifique.
+    allowed_variability:
+    - domain_specific_content
+    - domain_specific_assets
+    - domain_specific_graphs
+    - application_specialization_layers
+    forbidden_variability:
+    - bypass_of_canonical_constraints
+    - removal_of_minimum_application_contract
+    - hidden_dependency_on_unspecified_modules
+  build_and_packaging_rules:
+    build_requirements:
+    - identifiable_build
+    - reproducible_traceability
+    - explicit_module_list
+    - explicit_dependency_capture
+    - platform_factory_release_materialization_must_emit_manifest_ready_snapshot
+    packaging_requirements:
+    - package_must_link_to_manifest
+    - package_must_be_verifiable
+    - package_must_be_classifiable_complete_or_incomplete_or_invalid
+    - platform_factory_release_snapshot_must_be_linkable_in_future_core_manifest
+  observability_requirements:
+    factory_level:
+    - projection_generation_trace
+    - validation_trace
+    - patch_execution_trace
+    - promotion_trace
+    produced_application_level:
+    - build_identity
+    - module_activation_trace
+    - used_projection_trace
+    - packaging_status
+  dependencies_to_constitution:
+    mode: explicit_reference_only
+    required_bindings:
+    - governing_invariants
+    - forbidden_behaviors
+    - local_runtime_constraints
+    - canonical_traceability_requirements
+    constitutional_conformance_matrix_ref: docs/cores/platform_factory/constitutional_conformance_matrix.yaml
+    constitutional_conformance_matrix_ref_status: PENDING PF_BLOCKER_CONFORMANCE_MATRIX_ABSENT.
+      Fichier absent, enregistre comme blocker dans platform_factory_state.yaml.
+  dependencies_to_referentiel:
+    mode: explicit_reference_only
+    required_bindings:
+    - thresholds
+    - operational_bounds
+    - tables_required_for_instantiation
+    - validation_bounds
+  dependencies_to_link:
+    mode: explicit_reference_only
+    required_bindings:
+    - inter_core_reference_resolution
+    - binding_traceability
+  generated_projection_rules:
+    objectives:
+    - reduce_context_for_ai
+    - support_parallel_ai_work
+    - expose_only_relevant_scope
+    - preserve_strict_normative_fidelity
+    minimum_requirements:
+    - each_projection_has_declared_scope
+    - each_projection_has_declared_sources
+    - each_projection_is_regenerable
+    - each_projection_is_validation_gated
+    - each_projection_can_be_used_as_single_context_for_targeted_task
+    - each_projection_declares_sources_and_traceability_hooks
+    - each_projection_is_tagged_with_validated_derived_execution_projection_status
+    - each_projection_usage_declares_runtime_and_offsession_boundaries
+    emplacement_policy:
+      status: DECIDED
+      location: docs/cores/platform_factory/projections/
+      rule_positive: Toutes les validated_derived_execution_projections doivent être
+        stockées dans docs/cores/platform_factory/projections/. Cet emplacement est
+        stable, partagé entre toutes les applications spécifiques futures, et accessible
+        en lecture par tous les pipelines aval.
+      rule_negative: Il est strictement interdit de déposer une projection dérivée
+        dans docs/cores/current/. Cette zone est réservée aux canoniques primaires.
+  multi_ia_parallel_readiness:
+    objective: Permettre à plusieurs IA de travailler en parallèle sans ambiguïté
+      de responsabilité ni divergence d'assemblage.
+    minimum_requirements:
+    - bounded_scopes
+    - stable_identifiers
+    - explicit_dependencies
+    - clear_assembly_points
+    - homogeneous_reports
+    - no_hidden_dependencies
+    - regenerable_execution_projections
+    deferred_challenges:
+    - optimal_module_granularity
+    - optimal_projection_size
+    - assembly_protocol_between_ai_outputs
+  invariants:
+  - PF_INV_CANONICAL_FOUNDATION_REMAINS_PRIMARY_AUTHORITY
+  - PF_INV_FACTORY_DOES_NOT_DUPLICATE_NORM
+  - PF_INV_DERIVED_PROJECTIONS_MUST_BE_STRICTLY_CONFORMANT
+  - PF_INV_MINIMUM_APPLICATION_CONTRACT_MUST_ALWAYS_BE_DECLARED
+  - PF_INV_FACTORY_MUST_SUPPORT_MULTI_IA_PARALLELISM
+  - PF_INV_GENERIC_AND_SPECIFIC_MUST_REMAIN_SEPARATED
+  constraints:
+  - no_direct_redefinition_of_constitution
+  - no_domain_specific_content_inside_factory_architecture
+  - no_derived_projection_with_normative_drift
+  - no_instantiation_without_traceability
+  - no_application_without_manifest
+  open_points_for_challenge:
+  - exact_manifest_schema_for_produced_application
+  - exact_runtime_entrypoint_typology
+  - exact_configuration_schema
+  - exact_packaging_schema
+  - exact_granularity_for_multi_ai_parallel_work
