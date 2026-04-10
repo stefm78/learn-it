@@ -1,5 +1,5 @@
 PLATFORM_FACTORY_PATCH_EXECUTION:
-  status: FAIL
+  status: PASS
   scope: platform_factory_patchset_apply
   mode: dry_run
   patchset_path: docs\pipelines\platform_factory\work\03_patch\platform_factory_patchset.yaml
@@ -12,26 +12,10 @@ PLATFORM_FACTORY_PATCH_EXECUTION:
   files_written:
   - none
   operations_total: 21
-  operations_applied: 14
-  anomalies_count: 6
-  warnings_count: 3
+  operations_applied: 21
+  anomalies_count: 0
+  warnings_count: 0
   anomalies:
-  - 'Opération list_replace_mapping impossible sur `PLATFORM_FACTORY_STATE.capabilities_partial`
-    : la cible n''est pas une liste (type=dict).'
-  - 'Opération list_replace_mapping impossible sur `PLATFORM_FACTORY_STATE.capabilities_partial`
-    : la cible n''est pas une liste (type=dict).'
-  - 'Opération list_replace_mapping impossible sur `PLATFORM_FACTORY_STATE.capabilities_absent`
-    : clé absente.'
-  - 'Opération list_replace_mapping impossible sur `PLATFORM_FACTORY_STATE.known_gaps`
-    : clé absente.'
-  - 'Opération list_replace_mapping impossible sur `PLATFORM_FACTORY_STATE.blockers`
-    : clé absente.'
-  - 'Opération add impossible sur `PLATFORM_FACTORY_STATE.blockers` : la cible existe
-    déjà et n''est pas une liste.'
+  - none
   warnings:
-  - 'Opération list_remove_mapping sur `PLATFORM_FACTORY_STATE.capabilities_present`
-    ignorée : clé absente.'
-  - 'Opération list_remove_item sur `PLATFORM_FACTORY_STATE.derived_projection_conformity_status.missing`
-    ignorée : clé absente.'
-  - 'Opération list_remove_item sur `PLATFORM_FACTORY_STATE.assessed_scope.excludes`
-    ignorée : clé absente.'
+  - none
