@@ -1,6 +1,6 @@
 PLATFORM_FACTORY_PATCHSET:
   metadata:
-    patchset_id: PF_PATCHSET_20260410_V1
+    patchset_id: PF_PATCHSET_20260410_V2
     date: "2026-04-10"
     source_decision_record: docs/pipelines/platform_factory/work/02_arbitrage/platform_factory_arbitrage.md
     scope: pre_apply_patch_validation
@@ -8,8 +8,8 @@ PLATFORM_FACTORY_PATCHSET:
       - docs/cores/current/platform_factory_architecture.yaml
       - docs/cores/current/platform_factory_state.yaml
     notes:
-      - "Patchset issu de l'arbitrage canonique PFARB_FINAL_20260410_CONSOLIDATION"
-      - "9 patches architecture, 7 patches state, 1 nouveau fichier spec (constitutional_conformance_matrix)"
+      - "Patchset V2 — correction DSL ops (list_remove_item, list_remove_mapping, list_replace_mapping)"
+      - "9 patches architecture, 7 patches state"
       - "ARB-09 (pipeline.md), validators/tooling, release governance et différés exclus"
 
   patches:
@@ -35,7 +35,7 @@ PLATFORM_FACTORY_PATCHSET:
           - status
       operations:
         - op: replace
-          path: PLATFORM_FACTORY_ARCHITECTURE.metadata.status
+          path: metadata.status
           value: CURRENT_BASELINE_UNDER_GOVERNANCE
       validation_focus:
         - semantic_alignment_with_governance_posture
@@ -51,8 +51,8 @@ PLATFORM_FACTORY_PATCHSET:
       change_type: missing_constitutional_enforcement
       rationale: >
         Sans cet axe, une application peut passer toute la validation factory sans
-        que ses invariants runtime constitutionnels aient été vérifiés
-        (100% local, no-generation, no-AI-continuous). Consensus unanime 5/5 rapports.
+        que ses invariants runtime constitutionnels aient été vérifiés.
+        Consensus unanime 5/5 rapports.
       effect: Axe runtime_policy_conformance ajouté à minimum_validation_contract.minimum_axes.
       risk_avoided: Application produite non vérifiée sur les invariants runtime constitutionnels.
       location_hint:
@@ -62,7 +62,7 @@ PLATFORM_FACTORY_PATCHSET:
           - minimum_axes
       operations:
         - op: add
-          path: PLATFORM_FACTORY_ARCHITECTURE.contracts.produced_application_minimum_contract.minimum_validation_contract.minimum_axes
+          path: contracts.produced_application_minimum_contract.minimum_validation_contract.minimum_axes
           value: runtime_policy_conformance
       validation_focus:
         - constitutional_invariant_coverage
@@ -88,7 +88,7 @@ PLATFORM_FACTORY_PATCHSET:
           - minimum_signals
       operations:
         - op: add
-          path: PLATFORM_FACTORY_ARCHITECTURE.contracts.produced_application_minimum_contract.minimum_observability_contract.minimum_signals
+          path: contracts.produced_application_minimum_contract.minimum_observability_contract.minimum_signals
           value: constitutional_invariants_checked
       validation_focus:
         - observability_completeness
@@ -103,9 +103,8 @@ PLATFORM_FACTORY_PATCHSET:
       operation: add
       change_type: new_reference_to_dedicated_file
       rationale: >
-        Approche granulaire maîtrisée : fichier séparé référencé pour que les IAs
-        d'audit puissent charger uniquement ce contexte ciblé sans charger
-        l'intégralité de l'architecture. Décision humaine PC-2/A.
+        Fichier séparé référencé pour que les IAs d'audit puissent charger uniquement
+        ce contexte ciblé. Décision humaine PC-2/A.
       effect: Champ constitutional_conformance_matrix_ref ajouté dans dependencies_to_constitution.
       risk_avoided: IAs d'audit sans accès ciblé à la matrice de preuves constitutionnelles.
       location_hint:
@@ -115,11 +114,10 @@ PLATFORM_FACTORY_PATCHSET:
           - constitutional_conformance_matrix_ref
       operations:
         - op: add
-          path: PLATFORM_FACTORY_ARCHITECTURE.dependencies_to_constitution.constitutional_conformance_matrix_ref
+          path: dependencies_to_constitution.constitutional_conformance_matrix_ref
           value: docs/cores/platform_factory/constitutional_conformance_matrix.yaml
       validation_focus:
         - reference_coherence
-        - new_file_not_yet_created_content_deferred_to_stage_04_05
 
     # --------------------------------------------------------
     # ARCH_05 — Résolution emplacement_policy projections
@@ -131,11 +129,9 @@ PLATFORM_FACTORY_PATCHSET:
       change_type: tbd_resolution
       rationale: >
         Décision humaine PC-1 actée le 2026-04-10. Les projections sont des ressources
-        de référence factory partagées, non des artefacts de travail éphémères
-        ni des canoniques primaires.
+        de référence factory partagées.
       effect: >
-        emplacement_policy passé de TBD à DECIDED avec location docs/cores/platform_factory/projections/
-        et règle d'interdiction dans docs/cores/current/ explicitement inscrite.
+        emplacement_policy passé de TBD à DECIDED avec location et règles explicites.
       risk_avoided: Projections déposées dans docs/cores/current/ ou dans work/ par défaut.
       location_hint:
         section: PLATFORM_FACTORY_ARCHITECTURE.generated_projection_rules.emplacement_policy
@@ -147,7 +143,7 @@ PLATFORM_FACTORY_PATCHSET:
           - rule_negative
       operations:
         - op: replace
-          path: PLATFORM_FACTORY_ARCHITECTURE.generated_projection_rules.emplacement_policy
+          path: generated_projection_rules.emplacement_policy
           value:
             status: DECIDED
             location: docs/cores/platform_factory/projections/
@@ -173,11 +169,10 @@ PLATFORM_FACTORY_PATCHSET:
       operation: add
       change_type: contract_strengthening
       rationale: >
-        Le principe des projections dérivées est solide mais aucun mécanisme de sûreté
-        n'était implémenté. Ces champs rendent la déclaration minimale d'une projection
-        contraignante et auditable. Consensus unanime 5/5 rapports.
-      effect: Bloc mandatory_fields_per_projection ajouté dans execution_projection_contract avec 8 champs obligatoires.
-      risk_avoided: Projections dérivées produites sans preuve de scope, source, version ou statut de validation.
+        Ces champs rendent la déclaration minimale d'une projection contraignante
+        et auditable. Consensus unanime 5/5 rapports.
+      effect: Bloc mandatory_fields_per_projection ajouté dans execution_projection_contract.
+      risk_avoided: Projections dérivées produites sans preuve de scope, source, version ou statut.
       location_hint:
         section: PLATFORM_FACTORY_ARCHITECTURE.contracts.execution_projection_contract
         granularity: block
@@ -185,7 +180,7 @@ PLATFORM_FACTORY_PATCHSET:
           - mandatory_fields_per_projection
       operations:
         - op: add
-          path: PLATFORM_FACTORY_ARCHITECTURE.contracts.execution_projection_contract.mandatory_fields_per_projection
+          path: contracts.execution_projection_contract.mandatory_fields_per_projection
           value:
             - field: scope
               description: Périmètre exact couvert par la projection.
@@ -204,11 +199,10 @@ PLATFORM_FACTORY_PATCHSET:
               description: Référence vers docs/cores/platform_factory/constitutional_conformance_matrix.yaml.
             - field: usage_as_sole_context
               value: blocked
-              description: Bloqué jusqu'à maturité suffisante (mécanisme de génération outillé et premier usage comme contexte unique envisagé).
+              description: Bloqué jusqu'à maturité suffisante.
       validation_focus:
         - dependency_on_ARCH_05
         - no_validator_tooling_in_canonique
-        - usage_as_sole_context_correctly_blocked
 
     # --------------------------------------------------------
     # ARCH_07 — Définition reproducibility_fingerprints
@@ -219,9 +213,9 @@ PLATFORM_FACTORY_PATCHSET:
       operation: add
       change_type: undefined_term_definition
       rationale: >
-        Terme imposé comme obligatoire dans le contrat minimal sans définition.
-        Définition minimale inscrite pour éviter qu'une IA doive improviser.
-      effect: Note de définition ajoutée pour reproducibility_fingerprints dans identity.required_blocks.
+        Terme imposé comme obligatoire sans définition. Définition minimale inscrite
+        pour éviter l'improvisation IA.
+      effect: Note de définition ajoutée pour reproducibility_fingerprints.
       risk_avoided: Improvisation IA sur la sémantique d'un terme obligatoire non défini.
       location_hint:
         section: PLATFORM_FACTORY_ARCHITECTURE.contracts.produced_application_minimum_contract.identity
@@ -230,7 +224,7 @@ PLATFORM_FACTORY_PATCHSET:
           - reproducibility_fingerprints_definition
       operations:
         - op: add
-          path: PLATFORM_FACTORY_ARCHITECTURE.contracts.produced_application_minimum_contract.identity.reproducibility_fingerprints_definition
+          path: contracts.produced_application_minimum_contract.identity.reproducibility_fingerprints_definition
           value: >-
             Empreinte canonique des artefacts sources utilisés pour produire cette application :
             hash ou identifiant de version stable de chaque dépendance canonique
@@ -250,10 +244,10 @@ PLATFORM_FACTORY_PATCHSET:
       operation: add
       change_type: undefined_term_bounded
       rationale: >
-        Terme imposé comme obligatoire sans définition. Marqué TBD explicitement
-        avec condition de déblocage pour éviter l'improvisation.
-      effect: Note TBD + condition de déblocage ajoutée pour bootstrap_contract dans runtime_entrypoint_contract.
-      risk_avoided: Improvisation IA sur la sémantique de bootstrap_contract avant que la typologie runtime soit arrêtée.
+        Terme imposé comme obligatoire sans définition. Marqué TBD avec condition
+        de déblocage.
+      effect: Note TBD + condition de déblocage ajoutée pour bootstrap_contract.
+      risk_avoided: Improvisation IA sur bootstrap_contract avant que la typologie runtime soit arrêtée.
       location_hint:
         section: PLATFORM_FACTORY_ARCHITECTURE.contracts.produced_application_minimum_contract.runtime_entrypoint_contract
         granularity: field_note
@@ -261,7 +255,7 @@ PLATFORM_FACTORY_PATCHSET:
           - bootstrap_contract_tbd_condition
       operations:
         - op: add
-          path: PLATFORM_FACTORY_ARCHITECTURE.contracts.produced_application_minimum_contract.runtime_entrypoint_contract.bootstrap_contract_tbd_condition
+          path: contracts.produced_application_minimum_contract.runtime_entrypoint_contract.bootstrap_contract_tbd_condition
           value: >-
             TBD. Ce champ sera défini quand la typologie exacte des runtimes d'application
             Learn-it sera arrêtée. Il décrira le contrat de démarrage attendu pour
@@ -280,7 +274,7 @@ PLATFORM_FACTORY_PATCHSET:
       change_type: resolved_open_point_removal
       rationale: >
         Le point ouvert exact_location_of_validated_derived_execution_projections est
-        résolu par ARB-04 (décision PC-1). Il ne doit plus apparaître dans open_points_for_challenge.
+        résolu par ARB-04 (décision PC-1).
       effect: Item exact_location_of_validated_derived_execution_projections retiré de open_points_for_challenge.
       risk_avoided: Point ouvert résolu ressortant comme non résolu lors du prochain challenge.
       location_hint:
@@ -289,8 +283,9 @@ PLATFORM_FACTORY_PATCHSET:
         keys_to_update:
           - exact_location_of_validated_derived_execution_projections
       operations:
-        - op: remove
-          path: PLATFORM_FACTORY_ARCHITECTURE.open_points_for_challenge[exact_location_of_validated_derived_execution_projections]
+        - op: list_remove_item
+          path: open_points_for_challenge
+          value: exact_location_of_validated_derived_execution_projections
       validation_focus:
         - consistency_with_ARCH_05
         - no_residual_tbd
@@ -313,7 +308,7 @@ PLATFORM_FACTORY_PATCHSET:
           - status
       operations:
         - op: replace
-          path: PLATFORM_FACTORY_STATE.metadata.status
+          path: metadata.status
           value: CURRENT_BASELINE_UNDER_GOVERNANCE
       validation_focus:
         - consistency_with_ARCH_01
@@ -327,23 +322,28 @@ PLATFORM_FACTORY_PATCHSET:
       operation: add
       change_type: blocker_exit_condition
       rationale: >
-        Sans condition de sortie explicite, le blocker reste indéfiniment ouvert
-        et ne génère pas de signal lors du prochain challenge.
-      effect: Champ exit_condition ajouté au blocker PF_BLOCKER_CURRENT_MANIFEST_SCHEMA_LIMITATION.
-      risk_avoided: Blocker ouvert indéfiniment sans critère de levee observable.
+        Sans condition de sortie explicite, le blocker reste indéfiniment ouvert.
+      effect: Champ exit_condition ajouté au blocker PF_BLOCKER_CURRENT_MANIFEST_SCHEMA_LIMITATION via list_replace_mapping.
+      risk_avoided: Blocker ouvert indéfiniment sans critère de levée observable.
       location_hint:
-        section: "PLATFORM_FACTORY_STATE.blockers[PF_BLOCKER_CURRENT_MANIFEST_SCHEMA_LIMITATION]"
-        granularity: field
+        section: PLATFORM_FACTORY_STATE.blockers
+        granularity: list_item
         keys_to_update:
           - exit_condition
       operations:
-        - op: add
-          path: "PLATFORM_FACTORY_STATE.blockers[blocker_id=PF_BLOCKER_CURRENT_MANIFEST_SCHEMA_LIMITATION].exit_condition"
-          value: >-
-            Ce blocker est levé uniquement quand STAGE_08 complète sa première
-            exécution formelle avec mise à jour effective du manifest officiel
-            (ou production de docs/cores/platform_factory/manifest.yaml si le
-            schema officiel est encore insuffisant).
+        - op: list_replace_mapping
+          path: blockers
+          match_key: blocker_id
+          match_value: PF_BLOCKER_CURRENT_MANIFEST_SCHEMA_LIMITATION
+          value:
+            blocker_id: PF_BLOCKER_CURRENT_MANIFEST_SCHEMA_LIMITATION
+            severity: medium
+            impact: Les artefacts platform_factory sont dans current mais hors manifest officiel actuel.
+            exit_condition: >-
+              Ce blocker est levé uniquement quand STAGE_08 complète sa première
+              exécution formelle avec mise à jour effective du manifest officiel
+              (ou production de docs/cores/platform_factory/manifest.yaml si le
+              schema officiel est encore insuffisant).
       validation_focus:
         - exit_condition_observable_and_linked_to_STAGE_08
 
@@ -357,19 +357,21 @@ PLATFORM_FACTORY_PATCHSET:
       change_type: capability_recalibration
       rationale: >
         La capacité était surdéclarée en present alors que le mécanisme complet
-        est absent. Recalibrage honnête en partial. Consensus fort 5 rapports.
-      effect: PF_CAPABILITY_DERIVED_PROJECTION_RULE_DEFINED déplacé de capabilities_present vers capabilities_partial avec description mise à jour.
-      risk_avoided: Surdéclaration de capacité induisant une IA en erreur sur le degré d'outillage des projections.
+        est absent. Recalibrage honnête en partial.
+      effect: PF_CAPABILITY_DERIVED_PROJECTION_RULE_DEFINED déplacé de capabilities_present vers capabilities_partial.
+      risk_avoided: Surdéclaration de capacité induisant une IA en erreur.
       location_hint:
         section: PLATFORM_FACTORY_STATE.capabilities_present
         granularity: list_item
         keys_to_update:
           - PF_CAPABILITY_DERIVED_PROJECTION_RULE_DEFINED
       operations:
-        - op: remove
-          path: PLATFORM_FACTORY_STATE.capabilities_present[capability_id=PF_CAPABILITY_DERIVED_PROJECTION_RULE_DEFINED]
+        - op: list_remove_mapping
+          path: capabilities_present
+          match_key: capability_id
+          match_value: PF_CAPABILITY_DERIVED_PROJECTION_RULE_DEFINED
         - op: add
-          path: PLATFORM_FACTORY_STATE.capabilities_partial
+          path: capabilities_partial
           value:
             capability_id: PF_CAPABILITY_DERIVED_PROJECTION_RULE_DEFINED
             description: >-
@@ -392,8 +394,7 @@ PLATFORM_FACTORY_PATCHSET:
       change_type: wording_precision
       rationale: >
         Aligner le wording du state avec la réalité déjà reconnue dans pipeline.md.
-        Une IA qui lit le state ne doit pas surestimer le degré d'outillage.
-      effect: Description de PF_CAPABILITY_FACTORY_PIPELINE_INTENT_DEFINED précisée avec mention intent only, not yet tooled execution framework.
+      effect: Description de PF_CAPABILITY_FACTORY_PIPELINE_INTENT_DEFINED précisée.
       risk_avoided: IA surestimant le niveau d'outillage du pipeline factory.
       location_hint:
         section: PLATFORM_FACTORY_STATE.capabilities_present
@@ -401,13 +402,17 @@ PLATFORM_FACTORY_PATCHSET:
         keys_to_update:
           - PF_CAPABILITY_FACTORY_PIPELINE_INTENT_DEFINED.description
       operations:
-        - op: replace
-          path: "PLATFORM_FACTORY_STATE.capabilities_present[capability_id=PF_CAPABILITY_FACTORY_PIPELINE_INTENT_DEFINED].description"
-          value: >-
-            L'intention de pipeline platform_factory est explicitement posée
-            (intent only, not yet tooled execution framework). Les stages existent
-            et les prompts de lancement sont définis, mais le pipeline n'est pas
-            encore automatisé ni complètement outillé.
+        - op: list_replace_mapping
+          path: capabilities_present
+          match_key: capability_id
+          match_value: PF_CAPABILITY_FACTORY_PIPELINE_INTENT_DEFINED
+          value:
+            capability_id: PF_CAPABILITY_FACTORY_PIPELINE_INTENT_DEFINED
+            description: >-
+              L'intention de pipeline platform_factory est explicitement posée
+              (intent only, not yet tooled execution framework). Les stages existent
+              et les prompts de lancement sont définis, mais le pipeline n'est pas
+              encore automatisé ni complètement outillé.
       validation_focus:
         - wording_honest_and_bounded
 
@@ -422,27 +427,29 @@ PLATFORM_FACTORY_PATCHSET:
       rationale: >
         Le blocker PF_BLOCKER_PROJECTION_LOCATION_PENDING est levé par la décision PC-1
         actée le 2026-04-10.
-      effect: Champs resolved, resolution et resolution_date ajoutés au blocker PF_BLOCKER_PROJECTION_LOCATION_PENDING.
+      effect: Blocker PF_BLOCKER_PROJECTION_LOCATION_PENDING mis à jour avec resolved, resolution et resolution_date.
       risk_avoided: Blocker résolu ressortant comme encore ouvert lors du prochain challenge.
       location_hint:
-        section: "PLATFORM_FACTORY_STATE.blockers[PF_BLOCKER_PROJECTION_LOCATION_PENDING]"
-        granularity: field
+        section: PLATFORM_FACTORY_STATE.blockers
+        granularity: list_item
         keys_to_update:
           - resolved
           - resolution
           - resolution_date
       operations:
-        - op: add
-          path: "PLATFORM_FACTORY_STATE.blockers[blocker_id=PF_BLOCKER_PROJECTION_LOCATION_PENDING].resolved"
-          value: true
-        - op: add
-          path: "PLATFORM_FACTORY_STATE.blockers[blocker_id=PF_BLOCKER_PROJECTION_LOCATION_PENDING].resolution"
-          value: >-
-            Emplacement décidé : docs/cores/platform_factory/projections/.
-            Décision humaine PC-1 actée le 2026-04-10.
-        - op: add
-          path: "PLATFORM_FACTORY_STATE.blockers[blocker_id=PF_BLOCKER_PROJECTION_LOCATION_PENDING].resolution_date"
-          value: "2026-04-10"
+        - op: list_replace_mapping
+          path: blockers
+          match_key: blocker_id
+          match_value: PF_BLOCKER_PROJECTION_LOCATION_PENDING
+          value:
+            blocker_id: PF_BLOCKER_PROJECTION_LOCATION_PENDING
+            severity: medium
+            impact: Limite la mise en œuvre pratique des projections pour IA.
+            resolved: true
+            resolution: >-
+              Emplacement décidé : docs/cores/platform_factory/projections/.
+              Décision humaine PC-1 actée le 2026-04-10.
+            resolution_date: "2026-04-10"
       validation_focus:
         - consistency_with_ARCH_05
 
@@ -456,19 +463,21 @@ PLATFORM_FACTORY_PATCHSET:
       change_type: capability_recalibration
       rationale: >
         La décision d'emplacement est prise mais l'outillage reste absent.
-        Passer en partial plutôt qu'absent reflète l'état réel.
+        Passer en partial reflète l'état réel.
       effect: PF_CAPABILITY_PROJECTION_STORAGE_LOCATION_FINALIZED déplacé de capabilities_absent vers capabilities_partial.
-      risk_avoided: Emplacement décidé apparaîtsant encore comme absent dans le state.
+      risk_avoided: Emplacement décidé apparaissant encore comme absent dans le state.
       location_hint:
         section: PLATFORM_FACTORY_STATE.capabilities_absent
         granularity: list_item
         keys_to_update:
           - PF_CAPABILITY_PROJECTION_STORAGE_LOCATION_FINALIZED
       operations:
-        - op: remove
-          path: PLATFORM_FACTORY_STATE.capabilities_absent[capability_id=PF_CAPABILITY_PROJECTION_STORAGE_LOCATION_FINALIZED]
+        - op: list_remove_mapping
+          path: capabilities_absent
+          match_key: capability_id
+          match_value: PF_CAPABILITY_PROJECTION_STORAGE_LOCATION_FINALIZED
         - op: add
-          path: PLATFORM_FACTORY_STATE.capabilities_partial
+          path: capabilities_partial
           value:
             capability_id: PF_CAPABILITY_PROJECTION_STORAGE_LOCATION_FINALIZED
             description: >-
@@ -486,8 +495,8 @@ PLATFORM_FACTORY_PATCHSET:
       target_artifact: docs/cores/current/platform_factory_state.yaml
       operation: add
       change_type: delta_traceability
-      rationale: Tracer le cycle de patch 2026-04-10 dans le state pour éviter tout doute lors du prochain challenge.
-      effect: Entrée PF_DELTA_20260410_PATCH_V0_3 ajoutée dans delta_since_previous.
+      rationale: Tracer le cycle de patch 2026-04-10 dans le state.
+      effect: Entrée de delta ajoutée dans delta_since_previous.changes.
       risk_avoided: Perte de traçabilité des changements effectués lors de ce cycle.
       location_hint:
         section: PLATFORM_FACTORY_STATE.delta_since_previous
@@ -496,19 +505,38 @@ PLATFORM_FACTORY_PATCHSET:
           - changes
       operations:
         - op: add
-          path: PLATFORM_FACTORY_STATE.delta_since_previous.changes
-          value:
-            - runtime_policy_conformance_axis_added_to_minimum_validation_contract
-            - constitutional_invariants_checked_signal_added_to_observability_contract
-            - constitutional_conformance_matrix_ref_added_to_architecture
-            - projection_emplacement_policy_decided_and_inscribed
-            - projection_mandatory_fields_defined
-            - status_corrected_to_current_baseline_under_governance
-            - capability_derived_projection_rule_recalibrated_to_partial
-            - blocker_projection_location_resolved
-            - blocker_manifest_exit_condition_added
-            - reproducibility_fingerprints_defined
-            - bootstrap_contract_tbd_bounded
+          path: delta_since_previous.changes
+          value: runtime_policy_conformance_axis_added_to_minimum_validation_contract
+        - op: add
+          path: delta_since_previous.changes
+          value: constitutional_invariants_checked_signal_added_to_observability_contract
+        - op: add
+          path: delta_since_previous.changes
+          value: constitutional_conformance_matrix_ref_added_to_architecture
+        - op: add
+          path: delta_since_previous.changes
+          value: projection_emplacement_policy_decided_and_inscribed
+        - op: add
+          path: delta_since_previous.changes
+          value: projection_mandatory_fields_defined
+        - op: add
+          path: delta_since_previous.changes
+          value: status_corrected_to_current_baseline_under_governance
+        - op: add
+          path: delta_since_previous.changes
+          value: capability_derived_projection_rule_recalibrated_to_partial
+        - op: add
+          path: delta_since_previous.changes
+          value: blocker_projection_location_resolved
+        - op: add
+          path: delta_since_previous.changes
+          value: blocker_manifest_exit_condition_added
+        - op: add
+          path: delta_since_previous.changes
+          value: reproducibility_fingerprints_defined
+        - op: add
+          path: delta_since_previous.changes
+          value: bootstrap_contract_tbd_bounded
       validation_focus:
         - completeness_of_delta_trace
 
@@ -528,13 +556,13 @@ PLATFORM_FACTORY_PATCHSET:
         note: Reporté à la conception du premier pipeline d'instanciation domaine.
       - id: PC2B_filtered_matrix_in_projections
         reason: deferred
-        note: Reporté à maturité suffisante (mécanisme génération outillé + premier usage comme contexte unique envisagé).
+        note: Reporté à maturité suffisante.
       - id: validators_tooling_all
         reason: validator_or_tooling
         note: Tous les validators dédiés sont hors périmètre canonique pour ce cycle.
       - id: constitutional_conformance_matrix_content
         reason: deferred
-        note: Structure spécifiée dans le patchset. Contenu détaillé (invariants avec preuves) à produire en STAGE_04/05 après lecture des canoniques.
+        note: Contenu détaillé à produire après apply en STAGE_05/06.
       - id: PC3_pipeline_patches
         reason: pipeline_work
-        note: Patches pipeline.md Rule 3 et STAGE_08 appliqués hors cycle le 2026-04-10 via tmp/.
+        note: Patches pipeline.md appliqués hors cycle le 2026-04-10 via tmp/.
