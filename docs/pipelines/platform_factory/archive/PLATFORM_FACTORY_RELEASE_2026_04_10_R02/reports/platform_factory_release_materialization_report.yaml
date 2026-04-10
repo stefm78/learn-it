@@ -1,0 +1,19 @@
+PLATFORM_FACTORY_RELEASE_MATERIALIZATION:
+  status: PASS
+  release_required: true
+  release_id: PLATFORM_FACTORY_RELEASE_2026_04_10_R02
+  release_path: docs/cores/releases/PLATFORM_FACTORY_RELEASE_2026_04_10_R02/
+  promotion_candidate: true
+  release_plan_path: docs/pipelines/platform_factory/work/07_release/platform_factory_release_plan.yaml
+  patched_dir: docs/pipelines/platform_factory/work/05_apply/patched
+  files_written:
+  - docs/cores/releases/PLATFORM_FACTORY_RELEASE_2026_04_10_R02/platform_factory_architecture.yaml
+  - docs/cores/releases/PLATFORM_FACTORY_RELEASE_2026_04_10_R02/platform_factory_state.yaml
+  - docs/cores/releases/PLATFORM_FACTORY_RELEASE_2026_04_10_R02/manifest.yaml
+  - docs/pipelines/platform_factory/outputs/platform_factory_release_candidate_notes.md
+  anomalies_count: 0
+  warnings_count: 0
+  anomalies:
+  - none
+  warnings:
+  - none

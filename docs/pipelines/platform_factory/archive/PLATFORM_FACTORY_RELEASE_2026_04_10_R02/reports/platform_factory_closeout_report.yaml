@@ -1,0 +1,17 @@
+PLATFORM_FACTORY_CLOSEOUT_REPORT:
+  status: PASS
+  pipeline_id: platform_factory
+  closed_at: '2026-04-10T17:23:40Z'
+  run_closed: true
+  release_id: PLATFORM_FACTORY_RELEASE_2026_04_10_R02
+  source_release_path: docs/cores/releases/PLATFORM_FACTORY_RELEASE_2026_04_10_R02/
+  promotion_mode: applied
+  manifest_path: docs/cores/releases/PLATFORM_FACTORY_RELEASE_2026_04_10_R02/manifest.yaml
+  archive_path: pending
+  archived_paths: []
+  work_reset: false
+  notes:
+  - run clôturé après promotion active vérifiée
+  - archive complète du run effectuée sous docs/pipelines/platform_factory/archive/<release_id>/
+  - workspace docs/pipelines/platform_factory/work/ réinitialisé pour une nouvelle
+    exécution

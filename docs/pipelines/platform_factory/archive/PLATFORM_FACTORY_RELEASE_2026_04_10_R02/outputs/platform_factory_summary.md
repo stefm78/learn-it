@@ -8,8 +8,8 @@
 - Source release path: `docs/cores/releases/PLATFORM_FACTORY_RELEASE_2026_04_10_R02/`
 - Promotion mode: `applied`
 - Release manifest: `docs/cores/releases/PLATFORM_FACTORY_RELEASE_2026_04_10_R02/manifest.yaml`
-- Archive path: `docs/pipelines/platform_factory/archive/PLATFORM_FACTORY_RELEASE_2026_04_10_R02`
-- Work reset: `True`
+- Archive path: `pending`
+- Work reset: `False`
 - Closed at: `2026-04-10T17:23:40Z`
 
 ## Archived run snapshot
