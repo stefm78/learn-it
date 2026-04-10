@@ -1,7 +1,7 @@
 PLATFORM_FACTORY_PATCH_EXECUTION:
-  status: PASS
+  status: FAIL
   scope: platform_factory_patchset_apply
-  mode: apply
+  mode: dry_run
   patchset_path: docs\pipelines\platform_factory\work\03_patch\platform_factory_patchset.yaml
   validation_path: docs\pipelines\platform_factory\work\04_patch_validation\platform_factory_patch_validation.yaml
   sandbox_root: docs\pipelines\platform_factory\work\05_apply\sandbox
@@ -10,13 +10,18 @@ PLATFORM_FACTORY_PATCH_EXECUTION:
   - docs\pipelines\platform_factory\work\05_apply\sandbox\docs\cores\current\platform_factory_architecture.yaml
   - docs\pipelines\platform_factory\work\05_apply\sandbox\docs\cores\current\platform_factory_state.yaml
   files_written:
-  - docs\pipelines\platform_factory\work\05_apply\sandbox\docs\cores\current\platform_factory_architecture.yaml
-  - docs\pipelines\platform_factory\work\05_apply\sandbox\docs\cores\current\platform_factory_state.yaml
-  operations_total: 10
-  operations_applied: 10
-  anomalies_count: 0
-  warnings_count: 0
+  - none
+  operations_total: 20
+  operations_applied: 18
+  anomalies_count: 1
+  warnings_count: 3
   anomalies:
-  - none
+  - 'Opération add impossible sur `PLATFORM_FACTORY_STATE.capabilities_partial` :
+    la cible existe déjà et n''est pas une liste.'
   warnings:
-  - none
+  - 'Opération remove sur `PLATFORM_FACTORY_ARCHITECTURE.open_points_for_challenge[exact_location_of_validated_derived_execution_projections]`
+    ignorée : clé absente.'
+  - 'Opération remove sur `PLATFORM_FACTORY_STATE.capabilities_present[capability_id=PF_CAPABILITY_DERIVED_PROJECTION_RULE_DEFINED]`
+    ignorée : clé absente.'
+  - 'Opération remove sur `PLATFORM_FACTORY_STATE.capabilities_absent[capability_id=PF_CAPABILITY_PROJECTION_STORAGE_LOCATION_FINALIZED]`
+    ignorée : clé absente.'
