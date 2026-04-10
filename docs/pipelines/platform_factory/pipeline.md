@@ -58,7 +58,10 @@ It may only:
 These two roles must remain separate throughout the pipeline.
 
 ### Rule 3 — Released baseline posture
-The current `platform_factory` artifacts are considered a released baseline.
+The current `platform_factory` artifacts are considered a governed working baseline.
+They are not yet officially manifest-integrated.
+Manifest integration is completed explicitly at STAGE_08 of each formal release cycle,
+and constitutes the exit condition for PF_BLOCKER_CURRENT_MANIFEST_SCHEMA_LIMITATION.
 A new pipeline run does not start with a discovery audit of an unknown object.
 It starts by challenging the released baseline and deciding whether corrections are required.
 
