@@ -2,466 +2,539 @@ PLATFORM_FACTORY_PATCHSET:
   metadata:
     patchset_id: PF_PATCHSET_20260410_V1
     date: "2026-04-10"
-    source_arbitrage: PFARB_FINAL_20260410_CONSOLIDATION
-    arbitrage_file: docs/pipelines/platform_factory/work/02_arbitrage/platform_factory_arbitrage.md
-    status: READY_FOR_VALIDATION
-    target_files:
+    source_decision_record: docs/pipelines/platform_factory/work/02_arbitrage/platform_factory_arbitrage.md
+    scope: pre_apply_patch_validation
+    target_artifacts:
       - docs/cores/current/platform_factory_architecture.yaml
       - docs/cores/current/platform_factory_state.yaml
-    new_files:
-      - docs/cores/platform_factory/constitutional_conformance_matrix.yaml
-    excluded_from_patchset:
-      - validator/tooling (différé)
-      - pipeline.md ARB-09 (gouvernance pipeline, pas canonique)
-      - manifest/release governance (hors cycle STAGE_03)
-      - ARB-10 / ARB-11 / ARB-12 (différés)
-      - PC-3 patches pipeline (appliqués hors cycle le 2026-04-10)
+    notes:
+      - "Patchset issu de l'arbitrage canonique PFARB_FINAL_20260410_CONSOLIDATION"
+      - "9 patches architecture, 7 patches state, 1 nouveau fichier spec (constitutional_conformance_matrix)"
+      - "ARB-09 (pipeline.md), validators/tooling, release governance et différés exclus"
 
----
+  patches:
 
-# ============================================================
-# FICHIER CIBLE 1 : platform_factory_architecture.yaml
-# ============================================================
+    # --------------------------------------------------------
+    # ARCH_01 — Statut architecture metadata
+    # --------------------------------------------------------
+    - patch_id: ARCH_01_STATUS_METADATA
+      source_decision: ARB-06
+      target_artifact: docs/cores/current/platform_factory_architecture.yaml
+      operation: replace
+      change_type: semantic_correction
+      rationale: >
+        Le statut RELEASE_CANDIDATE est trompeur : les artefacts ne sont pas encore
+        intégrés au manifest officiel. CURRENT_BASELINE_UNDER_GOVERNANCE reflète
+        honnêtement la maturité réelle.
+      effect: Statut metadata architecture passé de RELEASE_CANDIDATE à CURRENT_BASELINE_UNDER_GOVERNANCE.
+      risk_avoided: Surinterprétation du degré de maturité par une IA lisant l'architecture.
+      location_hint:
+        section: PLATFORM_FACTORY_ARCHITECTURE.metadata
+        granularity: field
+        keys_to_update:
+          - status
+      operations:
+        - op: replace
+          path: PLATFORM_FACTORY_ARCHITECTURE.metadata.status
+          value: CURRENT_BASELINE_UNDER_GOVERNANCE
+      validation_focus:
+        - semantic_alignment_with_governance_posture
+        - consistency_with_state_status
 
-patches_architecture:
+    # --------------------------------------------------------
+    # ARCH_02 — Axe runtime_policy_conformance (critique)
+    # --------------------------------------------------------
+    - patch_id: ARCH_02_RUNTIME_POLICY_CONFORMANCE_AXIS
+      source_decision: ARB-01
+      target_artifact: docs/cores/current/platform_factory_architecture.yaml
+      operation: add
+      change_type: missing_constitutional_enforcement
+      rationale: >
+        Sans cet axe, une application peut passer toute la validation factory sans
+        que ses invariants runtime constitutionnels aient été vérifiés
+        (100% local, no-generation, no-AI-continuous). Consensus unanime 5/5 rapports.
+      effect: Axe runtime_policy_conformance ajouté à minimum_validation_contract.minimum_axes.
+      risk_avoided: Application produite non vérifiée sur les invariants runtime constitutionnels.
+      location_hint:
+        section: PLATFORM_FACTORY_ARCHITECTURE.contracts.produced_application_minimum_contract.minimum_validation_contract
+        granularity: list_item
+        keys_to_update:
+          - minimum_axes
+      operations:
+        - op: add
+          path: PLATFORM_FACTORY_ARCHITECTURE.contracts.produced_application_minimum_contract.minimum_validation_contract.minimum_axes
+          value: runtime_policy_conformance
+      validation_focus:
+        - constitutional_invariant_coverage
+        - no_validator_tooling_in_canonique
 
-  # ----------------------------------------------------------
-  # PATCH ARB-06a : Statut metadata
-  # Priorité : 3
-  # ----------------------------------------------------------
-  - patch_id: ARCH_01_STATUS_METADATA
-    arb_ref: ARB-06
-    priority: 3
-    target_file: docs/cores/current/platform_factory_architecture.yaml
-    target_path: PLATFORM_FACTORY_ARCHITECTURE.metadata.status
-    operation: replace
-    current_value: RELEASE_CANDIDATE
-    new_value: CURRENT_BASELINE_UNDER_GOVERNANCE
-    rationale: >
-      Le statut RELEASE_CANDIDATE est trompeur : les artefacts ne sont pas encore
-      intégrés au manifest officiel. CURRENT_BASELINE_UNDER_GOVERNANCE reflète
-      honnêtement la maturité réelle et évite toute sur-interprétation par une IA.
+    # --------------------------------------------------------
+    # ARCH_03 — Signal constitutional_invariants_checked (critique)
+    # --------------------------------------------------------
+    - patch_id: ARCH_03_CONSTITUTIONAL_INVARIANTS_SIGNAL
+      source_decision: ARB-02
+      target_artifact: docs/cores/current/platform_factory_architecture.yaml
+      operation: add
+      change_type: missing_observability_signal
+      rationale: >
+        Corollaire direct de ARCH_02. Sans signal d'observabilité correspondant,
+        l'axe runtime_policy_conformance serait déclaré mais non observable à l'exécution.
+      effect: Signal constitutional_invariants_checked ajouté à minimum_observability_contract.minimum_signals.
+      risk_avoided: Axe de validation déclaré sans signal d'observabilité correspondant.
+      location_hint:
+        section: PLATFORM_FACTORY_ARCHITECTURE.contracts.produced_application_minimum_contract.minimum_observability_contract
+        granularity: list_item
+        keys_to_update:
+          - minimum_signals
+      operations:
+        - op: add
+          path: PLATFORM_FACTORY_ARCHITECTURE.contracts.produced_application_minimum_contract.minimum_observability_contract.minimum_signals
+          value: constitutional_invariants_checked
+      validation_focus:
+        - observability_completeness
+        - consistency_with_ARCH_02
 
-  # ----------------------------------------------------------
-  # PATCH ARB-01 : Axe runtime_policy_conformance
-  # Priorité : 1 (critique)
-  # ----------------------------------------------------------
-  - patch_id: ARCH_02_RUNTIME_POLICY_CONFORMANCE_AXIS
-    arb_ref: ARB-01
-    priority: 1
-    target_file: docs/cores/current/platform_factory_architecture.yaml
-    target_path: PLATFORM_FACTORY_ARCHITECTURE.contracts.produced_application_minimum_contract.minimum_validation_contract.minimum_axes
-    operation: append_item
-    new_item: runtime_policy_conformance
-    rationale: >
-      Sans cet axe, une application peut passer toute la validation factory sans
-      que ses invariants runtime constitutionnels aient été vérifiés
-      (100% local, no-generation, no-AI-continuous). Consensus unanime 5/5 rapports.
-    dependency: aucune
-    validator_note: validator dédié différé, axe inscrit maintenant dans le contrat.
+    # --------------------------------------------------------
+    # ARCH_04 — Référence constitutional_conformance_matrix
+    # --------------------------------------------------------
+    - patch_id: ARCH_04_CONFORMANCE_MATRIX_REF
+      source_decision: ARB-08
+      target_artifact: docs/cores/current/platform_factory_architecture.yaml
+      operation: add
+      change_type: new_reference_to_dedicated_file
+      rationale: >
+        Approche granulaire maîtrisée : fichier séparé référencé pour que les IAs
+        d'audit puissent charger uniquement ce contexte ciblé sans charger
+        l'intégralité de l'architecture. Décision humaine PC-2/A.
+      effect: Champ constitutional_conformance_matrix_ref ajouté dans dependencies_to_constitution.
+      risk_avoided: IAs d'audit sans accès ciblé à la matrice de preuves constitutionnelles.
+      location_hint:
+        section: PLATFORM_FACTORY_ARCHITECTURE.dependencies_to_constitution
+        granularity: field
+        keys_to_update:
+          - constitutional_conformance_matrix_ref
+      operations:
+        - op: add
+          path: PLATFORM_FACTORY_ARCHITECTURE.dependencies_to_constitution.constitutional_conformance_matrix_ref
+          value: docs/cores/platform_factory/constitutional_conformance_matrix.yaml
+      validation_focus:
+        - reference_coherence
+        - new_file_not_yet_created_content_deferred_to_stage_04_05
 
-  # ----------------------------------------------------------
-  # PATCH ARB-02 : Signal constitutional_invariants_checked
-  # Priorité : 1 (critique, corollaire ARB-01)
-  # ----------------------------------------------------------
-  - patch_id: ARCH_03_CONSTITUTIONAL_INVARIANTS_SIGNAL
-    arb_ref: ARB-02
-    priority: 1
-    target_file: docs/cores/current/platform_factory_architecture.yaml
-    target_path: PLATFORM_FACTORY_ARCHITECTURE.contracts.produced_application_minimum_contract.minimum_observability_contract.minimum_signals
-    operation: append_item
-    new_item: constitutional_invariants_checked
-    rationale: >
-      Corollaire direct de ARCH_02. Sans signal d'observabilité correspondant,
-      l'axe runtime_policy_conformance serait déclaré mais non observable
-      à l'exécution.
-    dependency: ARCH_02_RUNTIME_POLICY_CONFORMANCE_AXIS
-
-  # ----------------------------------------------------------
-  # PATCH ARB-08 : Référence vers constitutional_conformance_matrix
-  # Priorité : 2
-  # ----------------------------------------------------------
-  - patch_id: ARCH_04_CONFORMANCE_MATRIX_REF
-    arb_ref: ARB-08
-    priority: 2
-    target_file: docs/cores/current/platform_factory_architecture.yaml
-    target_path: PLATFORM_FACTORY_ARCHITECTURE.dependencies_to_constitution
-    operation: add_field
-    new_field:
-      constitutional_conformance_matrix_ref: docs/cores/platform_factory/constitutional_conformance_matrix.yaml
-      constitutional_conformance_matrix_note: >
-        Ce fichier décrit pour chaque invariant constitutionnel la preuve minimale
-        attendue dans une application produite, l'artefact porteur, le signal
-        d'observabilité et le validator attendu. Il doit être chargé par toute IA
-        d'audit en charge de vérifier la conformité constitutionnelle d'une application.
-    rationale: >
-      Approche granulaire maîtrisée : fichier séparé référencé pour que les IAs
-      d'audit puissent charger uniquement ce contexte ciblé sans charger
-      l'intégralité de l'architecture.
-
-  # ----------------------------------------------------------
-  # PATCH ARB-04 : Résolution emplacement_policy
-  # Priorité : 2
-  # ----------------------------------------------------------
-  - patch_id: ARCH_05_PROJECTION_EMPLACEMENT_POLICY
-    arb_ref: ARB-04
-    priority: 2
-    target_file: docs/cores/current/platform_factory_architecture.yaml
-    target_path: PLATFORM_FACTORY_ARCHITECTURE.generated_projection_rules.emplacement_policy
-    operation: replace
-    current_value:
-      status: TBD
-      rule: must_not_blur_docs_cores_current
-    new_value:
-      status: DECIDED
-      location: docs/cores/platform_factory/projections/
-      rule_positive: >
-        Toutes les validated_derived_execution_projections doivent être stockées
-        dans docs/cores/platform_factory/projections/. Cet emplacement est stable,
-        partagé entre toutes les applications spécifiques futures, et accessible
-        en lecture par tous les pipelines aval.
-      rule_negative: >
-        Il est strictement interdit de déposer une projection dérivée dans
-        docs/cores/current/. Cette zone est réservée aux canoniques primaires.
+    # --------------------------------------------------------
+    # ARCH_05 — Résolution emplacement_policy projections
+    # --------------------------------------------------------
+    - patch_id: ARCH_05_PROJECTION_EMPLACEMENT_POLICY
+      source_decision: ARB-04
+      target_artifact: docs/cores/current/platform_factory_architecture.yaml
+      operation: replace
+      change_type: tbd_resolution
       rationale: >
         Décision humaine PC-1 actée le 2026-04-10. Les projections sont des ressources
         de référence factory partagées, non des artefacts de travail éphémères
         ni des canoniques primaires.
+      effect: >
+        emplacement_policy passé de TBD à DECIDED avec location docs/cores/platform_factory/projections/
+        et règle d'interdiction dans docs/cores/current/ explicitement inscrite.
+      risk_avoided: Projections déposées dans docs/cores/current/ ou dans work/ par défaut.
+      location_hint:
+        section: PLATFORM_FACTORY_ARCHITECTURE.generated_projection_rules.emplacement_policy
+        granularity: block
+        keys_to_update:
+          - status
+          - location
+          - rule_positive
+          - rule_negative
+      operations:
+        - op: replace
+          path: PLATFORM_FACTORY_ARCHITECTURE.generated_projection_rules.emplacement_policy
+          value:
+            status: DECIDED
+            location: docs/cores/platform_factory/projections/
+            rule_positive: >-
+              Toutes les validated_derived_execution_projections doivent être stockées
+              dans docs/cores/platform_factory/projections/. Cet emplacement est stable,
+              partagé entre toutes les applications spécifiques futures, et accessible
+              en lecture par tous les pipelines aval.
+            rule_negative: >-
+              Il est strictement interdit de déposer une projection dérivée dans
+              docs/cores/current/. Cette zone est réservée aux canoniques primaires.
+      validation_focus:
+        - tbd_resolution_completeness
+        - consistency_with_STATE_05
+        - rule_negative_explicitly_inscribed
 
-  # ----------------------------------------------------------
-  # PATCH ARB-05 : Champs minimaux obligatoires d'une projection
-  # Priorité : 2
-  # ----------------------------------------------------------
-  - patch_id: ARCH_06_PROJECTION_MANDATORY_FIELDS
-    arb_ref: ARB-05
-    priority: 2
-    target_file: docs/cores/current/platform_factory_architecture.yaml
-    target_path: PLATFORM_FACTORY_ARCHITECTURE.contracts.execution_projection_contract
-    operation: add_fields
-    new_fields:
-      mandatory_fields_per_projection:
-        - field: scope
-          description: Périmètre exact couvert par la projection (domaine, couche, invariants applicables).
-        - field: sources_exact
-          description: Liste exacte des artefacts canoniques sources utilisés pour générer la projection.
-        - field: version_fingerprint
-          description: >
-            Empreinte canonique des artefacts sources (hash de version ou identifiant
-            de version stable). Permet de détecter toute dérive entre la projection
-            et ses sources.
-        - field: validation_status
-          description: Statut de validation de la projection (validated | pending | invalidated).
-        - field: promotion_to_canonical_forbidden
+    # --------------------------------------------------------
+    # ARCH_06 — Champs minimaux obligatoires d'une projection
+    # --------------------------------------------------------
+    - patch_id: ARCH_06_PROJECTION_MANDATORY_FIELDS
+      source_decision: ARB-05
+      target_artifact: docs/cores/current/platform_factory_architecture.yaml
+      operation: add
+      change_type: contract_strengthening
+      rationale: >
+        Le principe des projections dérivées est solide mais aucun mécanisme de sûreté
+        n'était implémenté. Ces champs rendent la déclaration minimale d'une projection
+        contraignante et auditable. Consensus unanime 5/5 rapports.
+      effect: Bloc mandatory_fields_per_projection ajouté dans execution_projection_contract avec 8 champs obligatoires.
+      risk_avoided: Projections dérivées produites sans preuve de scope, source, version ou statut de validation.
+      location_hint:
+        section: PLATFORM_FACTORY_ARCHITECTURE.contracts.execution_projection_contract
+        granularity: block
+        keys_to_update:
+          - mandatory_fields_per_projection
+      operations:
+        - op: add
+          path: PLATFORM_FACTORY_ARCHITECTURE.contracts.execution_projection_contract.mandatory_fields_per_projection
+          value:
+            - field: scope
+              description: Périmètre exact couvert par la projection.
+            - field: sources_exact
+              description: Liste exacte des artefacts canoniques sources.
+            - field: version_fingerprint
+              description: Empreinte canonique des artefacts sources permettant de détecter toute dérive.
+            - field: validation_status
+              description: "Statut de validation : validated | pending | invalidated."
+            - field: promotion_to_canonical_forbidden
+              value: true
+              description: Une projection dérivée ne peut jamais être promu canonique primaire.
+            - field: usage_policy
+              description: "Usages autorisés : runtime, offsession, ou les deux."
+            - field: conformance_matrix_ref
+              description: Référence vers docs/cores/platform_factory/constitutional_conformance_matrix.yaml.
+            - field: usage_as_sole_context
+              value: blocked
+              description: Bloqué jusqu'à maturité suffisante (mécanisme de génération outillé et premier usage comme contexte unique envisagé).
+      validation_focus:
+        - dependency_on_ARCH_05
+        - no_validator_tooling_in_canonique
+        - usage_as_sole_context_correctly_blocked
+
+    # --------------------------------------------------------
+    # ARCH_07 — Définition reproducibility_fingerprints
+    # --------------------------------------------------------
+    - patch_id: ARCH_07_REPRODUCIBILITY_FINGERPRINTS
+      source_decision: ARB-03
+      target_artifact: docs/cores/current/platform_factory_architecture.yaml
+      operation: add
+      change_type: undefined_term_definition
+      rationale: >
+        Terme imposé comme obligatoire dans le contrat minimal sans définition.
+        Définition minimale inscrite pour éviter qu'une IA doive improviser.
+      effect: Note de définition ajoutée pour reproducibility_fingerprints dans identity.required_blocks.
+      risk_avoided: Improvisation IA sur la sémantique d'un terme obligatoire non défini.
+      location_hint:
+        section: PLATFORM_FACTORY_ARCHITECTURE.contracts.produced_application_minimum_contract.identity
+        granularity: field_note
+        keys_to_update:
+          - reproducibility_fingerprints_definition
+      operations:
+        - op: add
+          path: PLATFORM_FACTORY_ARCHITECTURE.contracts.produced_application_minimum_contract.identity.reproducibility_fingerprints_definition
+          value: >-
+            Empreinte canonique des artefacts sources utilisés pour produire cette application :
+            hash ou identifiant de version stable de chaque dépendance canonique
+            (constitution, référentiel, link, architecture factory, projections utilisées).
+            Permet de vérifier qu'une application peut être entièrement retracée
+            et reproduite à partir des mêmes sources.
+      validation_focus:
+        - no_normative_addition
+        - definition_minimal_and_bounded
+
+    # --------------------------------------------------------
+    # ARCH_08 — Bornage bootstrap_contract TBD
+    # --------------------------------------------------------
+    - patch_id: ARCH_08_BOOTSTRAP_CONTRACT_TBD
+      source_decision: ARB-03
+      target_artifact: docs/cores/current/platform_factory_architecture.yaml
+      operation: add
+      change_type: undefined_term_bounded
+      rationale: >
+        Terme imposé comme obligatoire sans définition. Marqué TBD explicitement
+        avec condition de déblocage pour éviter l'improvisation.
+      effect: Note TBD + condition de déblocage ajoutée pour bootstrap_contract dans runtime_entrypoint_contract.
+      risk_avoided: Improvisation IA sur la sémantique de bootstrap_contract avant que la typologie runtime soit arrêtée.
+      location_hint:
+        section: PLATFORM_FACTORY_ARCHITECTURE.contracts.produced_application_minimum_contract.runtime_entrypoint_contract
+        granularity: field_note
+        keys_to_update:
+          - bootstrap_contract_tbd_condition
+      operations:
+        - op: add
+          path: PLATFORM_FACTORY_ARCHITECTURE.contracts.produced_application_minimum_contract.runtime_entrypoint_contract.bootstrap_contract_tbd_condition
+          value: >-
+            TBD. Ce champ sera défini quand la typologie exacte des runtimes d'application
+            Learn-it sera arrêtée. Il décrira le contrat de démarrage attendu pour
+            chaque type de runtime (local, notebook, package, etc.).
+      validation_focus:
+        - no_normative_addition
+        - tbd_condition_explicit
+
+    # --------------------------------------------------------
+    # ARCH_09 — Retirer open_point emplacement résolu
+    # --------------------------------------------------------
+    - patch_id: ARCH_09_REMOVE_OPEN_POINT_LOCATION
+      source_decision: ARB-04
+      target_artifact: docs/cores/current/platform_factory_architecture.yaml
+      operation: remove
+      change_type: resolved_open_point_removal
+      rationale: >
+        Le point ouvert exact_location_of_validated_derived_execution_projections est
+        résolu par ARB-04 (décision PC-1). Il ne doit plus apparaître dans open_points_for_challenge.
+      effect: Item exact_location_of_validated_derived_execution_projections retiré de open_points_for_challenge.
+      risk_avoided: Point ouvert résolu ressortant comme non résolu lors du prochain challenge.
+      location_hint:
+        section: PLATFORM_FACTORY_ARCHITECTURE.open_points_for_challenge
+        granularity: list_item
+        keys_to_update:
+          - exact_location_of_validated_derived_execution_projections
+      operations:
+        - op: remove
+          path: PLATFORM_FACTORY_ARCHITECTURE.open_points_for_challenge[exact_location_of_validated_derived_execution_projections]
+      validation_focus:
+        - consistency_with_ARCH_05
+        - no_residual_tbd
+
+    # --------------------------------------------------------
+    # STATE_01 — Statut state metadata
+    # --------------------------------------------------------
+    - patch_id: STATE_01_STATUS_METADATA
+      source_decision: ARB-06
+      target_artifact: docs/cores/current/platform_factory_state.yaml
+      operation: replace
+      change_type: semantic_correction
+      rationale: Alignement avec ARCH_01. Cohérence entre architecture et state.
+      effect: Statut metadata state passé de RELEASE_CANDIDATE à CURRENT_BASELINE_UNDER_GOVERNANCE.
+      risk_avoided: Incohérence de statut entre les deux artefacts factory courants.
+      location_hint:
+        section: PLATFORM_FACTORY_STATE.metadata
+        granularity: field
+        keys_to_update:
+          - status
+      operations:
+        - op: replace
+          path: PLATFORM_FACTORY_STATE.metadata.status
+          value: CURRENT_BASELINE_UNDER_GOVERNANCE
+      validation_focus:
+        - consistency_with_ARCH_01
+
+    # --------------------------------------------------------
+    # STATE_02 — exit_condition blocker manifest
+    # --------------------------------------------------------
+    - patch_id: STATE_02_BLOCKER_MANIFEST_EXIT_CONDITION
+      source_decision: ARB-06
+      target_artifact: docs/cores/current/platform_factory_state.yaml
+      operation: add
+      change_type: blocker_exit_condition
+      rationale: >
+        Sans condition de sortie explicite, le blocker reste indéfiniment ouvert
+        et ne génère pas de signal lors du prochain challenge.
+      effect: Champ exit_condition ajouté au blocker PF_BLOCKER_CURRENT_MANIFEST_SCHEMA_LIMITATION.
+      risk_avoided: Blocker ouvert indéfiniment sans critère de levee observable.
+      location_hint:
+        section: "PLATFORM_FACTORY_STATE.blockers[PF_BLOCKER_CURRENT_MANIFEST_SCHEMA_LIMITATION]"
+        granularity: field
+        keys_to_update:
+          - exit_condition
+      operations:
+        - op: add
+          path: "PLATFORM_FACTORY_STATE.blockers[blocker_id=PF_BLOCKER_CURRENT_MANIFEST_SCHEMA_LIMITATION].exit_condition"
+          value: >-
+            Ce blocker est levé uniquement quand STAGE_08 complète sa première
+            exécution formelle avec mise à jour effective du manifest officiel
+            (ou production de docs/cores/platform_factory/manifest.yaml si le
+            schema officiel est encore insuffisant).
+      validation_focus:
+        - exit_condition_observable_and_linked_to_STAGE_08
+
+    # --------------------------------------------------------
+    # STATE_03 — DERIVED_PROJECTION_RULE_DEFINED -> partial
+    # --------------------------------------------------------
+    - patch_id: STATE_03_CAPABILITY_PROJECTION_RULE_TO_PARTIAL
+      source_decision: ARB-07
+      target_artifact: docs/cores/current/platform_factory_state.yaml
+      operation: reclassify
+      change_type: capability_recalibration
+      rationale: >
+        La capacité était surdéclarée en present alors que le mécanisme complet
+        est absent. Recalibrage honnête en partial. Consensus fort 5 rapports.
+      effect: PF_CAPABILITY_DERIVED_PROJECTION_RULE_DEFINED déplacé de capabilities_present vers capabilities_partial avec description mise à jour.
+      risk_avoided: Surdéclaration de capacité induisant une IA en erreur sur le degré d'outillage des projections.
+      location_hint:
+        section: PLATFORM_FACTORY_STATE.capabilities_present
+        granularity: list_item
+        keys_to_update:
+          - PF_CAPABILITY_DERIVED_PROJECTION_RULE_DEFINED
+      operations:
+        - op: remove
+          path: PLATFORM_FACTORY_STATE.capabilities_present[capability_id=PF_CAPABILITY_DERIVED_PROJECTION_RULE_DEFINED]
+        - op: add
+          path: PLATFORM_FACTORY_STATE.capabilities_partial
+          value:
+            capability_id: PF_CAPABILITY_DERIVED_PROJECTION_RULE_DEFINED
+            description: >-
+              La règle d'usage des projections dérivées est définie. L'emplacement de
+              stockage est désormais décidé (ARB-04). Les champs minimaux obligatoires
+              sont inscrits dans l'architecture (ARB-05). Restent absents : validator
+              dédié, protocole de régénération automatisé, usage comme contexte unique
+              bloqué jusqu'à maturité suffisante.
+      validation_focus:
+        - honesty_of_capability_level
+        - consistency_with_ARCH_05_and_ARCH_06
+
+    # --------------------------------------------------------
+    # STATE_04 — Wording FACTORY_PIPELINE_INTENT_DEFINED
+    # --------------------------------------------------------
+    - patch_id: STATE_04_CAPABILITY_PIPELINE_INTENT_WORDING
+      source_decision: ARB-07
+      target_artifact: docs/cores/current/platform_factory_state.yaml
+      operation: clarify_wording
+      change_type: wording_precision
+      rationale: >
+        Aligner le wording du state avec la réalité déjà reconnue dans pipeline.md.
+        Une IA qui lit le state ne doit pas surestimer le degré d'outillage.
+      effect: Description de PF_CAPABILITY_FACTORY_PIPELINE_INTENT_DEFINED précisée avec mention intent only, not yet tooled execution framework.
+      risk_avoided: IA surestimant le niveau d'outillage du pipeline factory.
+      location_hint:
+        section: PLATFORM_FACTORY_STATE.capabilities_present
+        granularity: field
+        keys_to_update:
+          - PF_CAPABILITY_FACTORY_PIPELINE_INTENT_DEFINED.description
+      operations:
+        - op: replace
+          path: "PLATFORM_FACTORY_STATE.capabilities_present[capability_id=PF_CAPABILITY_FACTORY_PIPELINE_INTENT_DEFINED].description"
+          value: >-
+            L'intention de pipeline platform_factory est explicitement posée
+            (intent only, not yet tooled execution framework). Les stages existent
+            et les prompts de lancement sont définis, mais le pipeline n'est pas
+            encore automatisé ni complètement outillé.
+      validation_focus:
+        - wording_honest_and_bounded
+
+    # --------------------------------------------------------
+    # STATE_05 — Blocker PROJECTION_LOCATION_PENDING -> résolu
+    # --------------------------------------------------------
+    - patch_id: STATE_05_BLOCKER_PROJECTION_LOCATION_RESOLVED
+      source_decision: ARB-04
+      target_artifact: docs/cores/current/platform_factory_state.yaml
+      operation: update
+      change_type: blocker_resolution
+      rationale: >
+        Le blocker PF_BLOCKER_PROJECTION_LOCATION_PENDING est levé par la décision PC-1
+        actée le 2026-04-10.
+      effect: Champs resolved, resolution et resolution_date ajoutés au blocker PF_BLOCKER_PROJECTION_LOCATION_PENDING.
+      risk_avoided: Blocker résolu ressortant comme encore ouvert lors du prochain challenge.
+      location_hint:
+        section: "PLATFORM_FACTORY_STATE.blockers[PF_BLOCKER_PROJECTION_LOCATION_PENDING]"
+        granularity: field
+        keys_to_update:
+          - resolved
+          - resolution
+          - resolution_date
+      operations:
+        - op: add
+          path: "PLATFORM_FACTORY_STATE.blockers[blocker_id=PF_BLOCKER_PROJECTION_LOCATION_PENDING].resolved"
           value: true
-          description: Une projection dérivée ne peut jamais être promu comme artefact canonique primaire.
-        - field: usage_policy
-          description: >
-            Déclare les usages autorisés : runtime (utilisation durant une session IA),
-            offsession (utilisation hors session), ou les deux.
-        - field: conformance_matrix_ref
-          description: >
-            Référence vers docs/cores/platform_factory/constitutional_conformance_matrix.yaml.
-            Toute projection doit pointer vers la matrice pour que les IAs sachent
-            quelles preuves sont attendues pour son scope.
-        - field: usage_as_sole_context
-          value: blocked
-          description: >
-            Bloqué jusqu'à maturité suffisante : le mécanisme de génération de
-            projections doit être outillé et le premier usage comme contexte unique
-            envisagé. Critère de levée : maturité opérationnelle suffisante
-            (indépendant d'un numéro de version). Ce point doit ressortir lors du
-            prochain challenge si le mécanisme de génération est outillé.
-    rationale: >
-      Le principe des projections dérivées est solide mais aucun mécanisme de sûreté
-      n'était implémenté. Ces champs rendent la déclaration minimale d'une projection
-      contraignante et auditable. Consensus unanime 5/5 rapports.
-    dependency: ARCH_05_PROJECTION_EMPLACEMENT_POLICY
+        - op: add
+          path: "PLATFORM_FACTORY_STATE.blockers[blocker_id=PF_BLOCKER_PROJECTION_LOCATION_PENDING].resolution"
+          value: >-
+            Emplacement décidé : docs/cores/platform_factory/projections/.
+            Décision humaine PC-1 actée le 2026-04-10.
+        - op: add
+          path: "PLATFORM_FACTORY_STATE.blockers[blocker_id=PF_BLOCKER_PROJECTION_LOCATION_PENDING].resolution_date"
+          value: "2026-04-10"
+      validation_focus:
+        - consistency_with_ARCH_05
 
-  # ----------------------------------------------------------
-  # PATCH ARB-03a : Définition reproducibility_fingerprints
-  # Priorité : 4
-  # ----------------------------------------------------------
-  - patch_id: ARCH_07_REPRODUCIBILITY_FINGERPRINTS
-    arb_ref: ARB-03
-    priority: 4
-    target_file: docs/cores/current/platform_factory_architecture.yaml
-    target_path: PLATFORM_FACTORY_ARCHITECTURE.contracts.produced_application_minimum_contract.identity.required_blocks
-    operation: add_definition_note
-    target_item: reproducibility_fingerprints
-    definition: >
-      Empreinte canonique des artefacts sources utilisés pour produire cette application :
-      hash ou identifiant de version stable de chaque dépendance canonique
-      (constitution, référentiel, link, architecture factory, projections utilisées).
-      Permet de vérifier qu'une application peut être entièrement retracée
-      et reproduite à partir des mêmes sources.
-    rationale: >
-      Terme imposé comme obligatoire dans le contrat minimal sans définition.
-      Définition minimale inscrite pour éviter qu'une IA doive improviser.
+    # --------------------------------------------------------
+    # STATE_06 — PROJECTION_STORAGE_LOCATION_FINALIZED: absent -> partial
+    # --------------------------------------------------------
+    - patch_id: STATE_06_CAPABILITY_PROJECTION_STORAGE_RESOLVED
+      source_decision: ARB-04
+      target_artifact: docs/cores/current/platform_factory_state.yaml
+      operation: reclassify
+      change_type: capability_recalibration
+      rationale: >
+        La décision d'emplacement est prise mais l'outillage reste absent.
+        Passer en partial plutôt qu'absent reflète l'état réel.
+      effect: PF_CAPABILITY_PROJECTION_STORAGE_LOCATION_FINALIZED déplacé de capabilities_absent vers capabilities_partial.
+      risk_avoided: Emplacement décidé apparaîtsant encore comme absent dans le state.
+      location_hint:
+        section: PLATFORM_FACTORY_STATE.capabilities_absent
+        granularity: list_item
+        keys_to_update:
+          - PF_CAPABILITY_PROJECTION_STORAGE_LOCATION_FINALIZED
+      operations:
+        - op: remove
+          path: PLATFORM_FACTORY_STATE.capabilities_absent[capability_id=PF_CAPABILITY_PROJECTION_STORAGE_LOCATION_FINALIZED]
+        - op: add
+          path: PLATFORM_FACTORY_STATE.capabilities_partial
+          value:
+            capability_id: PF_CAPABILITY_PROJECTION_STORAGE_LOCATION_FINALIZED
+            description: >-
+              Emplacement décidé : docs/cores/platform_factory/projections/. Règle
+              d'interdiction dans docs/cores/current/ inscrite. Outillage de génération
+              et de validation des projections restent à implémenter.
+      validation_focus:
+        - consistency_with_STATE_05_and_ARCH_05
 
-  # ----------------------------------------------------------
-  # PATCH ARB-03b : Bornage bootstrap_contract
-  # Priorité : 4
-  # ----------------------------------------------------------
-  - patch_id: ARCH_08_BOOTSTRAP_CONTRACT_TBD
-    arb_ref: ARB-03
-    priority: 4
-    target_file: docs/cores/current/platform_factory_architecture.yaml
-    target_path: PLATFORM_FACTORY_ARCHITECTURE.contracts.produced_application_minimum_contract.runtime_entrypoint_contract.must_declare
-    operation: add_definition_note
-    target_item: bootstrap_contract
-    definition: TBD
-    tbd_condition: >
-      Ce champ sera défini quand la typologie exacte des runtimes d'application
-      Learn-it sera arrêtée. Il décrira le contrat de démarrage attendu pour
-      chaque type de runtime (local, notebook, package, etc.).
-    rationale: >
-      Terme imposé comme obligatoire sans définition. Marqué TBD explicitement
-      avec condition de déblocage pour éviter l'improvisation.
+    # --------------------------------------------------------
+    # STATE_07 — Delta cycle 2026-04-10
+    # --------------------------------------------------------
+    - patch_id: STATE_07_DELTA_RECORD
+      source_decision: PFARB_FINAL_20260410_CONSOLIDATION
+      target_artifact: docs/cores/current/platform_factory_state.yaml
+      operation: add
+      change_type: delta_traceability
+      rationale: Tracer le cycle de patch 2026-04-10 dans le state pour éviter tout doute lors du prochain challenge.
+      effect: Entrée PF_DELTA_20260410_PATCH_V0_3 ajoutée dans delta_since_previous.
+      risk_avoided: Perte de traçabilité des changements effectués lors de ce cycle.
+      location_hint:
+        section: PLATFORM_FACTORY_STATE.delta_since_previous
+        granularity: list_item
+        keys_to_update:
+          - changes
+      operations:
+        - op: add
+          path: PLATFORM_FACTORY_STATE.delta_since_previous.changes
+          value:
+            - runtime_policy_conformance_axis_added_to_minimum_validation_contract
+            - constitutional_invariants_checked_signal_added_to_observability_contract
+            - constitutional_conformance_matrix_ref_added_to_architecture
+            - projection_emplacement_policy_decided_and_inscribed
+            - projection_mandatory_fields_defined
+            - status_corrected_to_current_baseline_under_governance
+            - capability_derived_projection_rule_recalibrated_to_partial
+            - blocker_projection_location_resolved
+            - blocker_manifest_exit_condition_added
+            - reproducibility_fingerprints_defined
+            - bootstrap_contract_tbd_bounded
+      validation_focus:
+        - completeness_of_delta_trace
 
-  # ----------------------------------------------------------
-  # PATCH ARB-04b : Retirer de open_points_for_challenge
-  # Priorité : 2
-  # ----------------------------------------------------------
-  - patch_id: ARCH_09_REMOVE_OPEN_POINT_LOCATION
-    arb_ref: ARB-04
-    priority: 2
-    target_file: docs/cores/current/platform_factory_architecture.yaml
-    target_path: PLATFORM_FACTORY_ARCHITECTURE.open_points_for_challenge
-    operation: remove_item
-    item_to_remove: exact_location_of_validated_derived_execution_projections
-    rationale: >
-      Ce point ouvert est résolu par ARB-04 (décision PC-1). Il ne doit plus
-      apparaître dans la liste des open_points_for_challenge.
-
----
-
-# ============================================================
-# FICHIER CIBLE 2 : platform_factory_state.yaml
-# ============================================================
-
-patches_state:
-
-  # ----------------------------------------------------------
-  # PATCH ARB-06b : Statut metadata state
-  # Priorité : 3
-  # ----------------------------------------------------------
-  - patch_id: STATE_01_STATUS_METADATA
-    arb_ref: ARB-06
-    priority: 3
-    target_file: docs/cores/current/platform_factory_state.yaml
-    target_path: PLATFORM_FACTORY_STATE.metadata.status
-    operation: replace
-    current_value: RELEASE_CANDIDATE
-    new_value: CURRENT_BASELINE_UNDER_GOVERNANCE
-    rationale: Alignement avec ARCH_01. Cohérence entre architecture et state.
-
-  # ----------------------------------------------------------
-  # PATCH ARB-06c : exit_condition blocker manifest
-  # Priorité : 3
-  # ----------------------------------------------------------
-  - patch_id: STATE_02_BLOCKER_MANIFEST_EXIT_CONDITION
-    arb_ref: ARB-06
-    priority: 3
-    target_file: docs/cores/current/platform_factory_state.yaml
-    target_path: PLATFORM_FACTORY_STATE.blockers[PF_BLOCKER_CURRENT_MANIFEST_SCHEMA_LIMITATION]
-    operation: add_field
-    new_field:
-      exit_condition: >
-        Ce blocker est levé uniquement quand STAGE_08 complète sa première
-        exécution formelle avec mise à jour effective du manifest officiel
-        (ou production de docs/cores/platform_factory/manifest.yaml si le
-        schema officiel est encore insuffisant).
-    rationale: >
-      Sans condition de sortie explicite, le blocker reste indéfiniment ouvert
-      et ne génère pas de signal lors du prochain challenge.
-
-  # ----------------------------------------------------------
-  # PATCH ARB-07a : PF_CAPABILITY_DERIVED_PROJECTION_RULE_DEFINED -> partial
-  # Priorité : 3
-  # ----------------------------------------------------------
-  - patch_id: STATE_03_CAPABILITY_PROJECTION_RULE_TO_PARTIAL
-    arb_ref: ARB-07
-    priority: 3
-    target_file: docs/cores/current/platform_factory_state.yaml
-    target_path: PLATFORM_FACTORY_STATE.capabilities_present
-    operation: move_to_partial
-    capability_id: PF_CAPABILITY_DERIVED_PROJECTION_RULE_DEFINED
-    updated_description: >
-      La règle d'usage des projections dérivées est définie. L'emplacement de
-      stockage est désormais décidé (ARB-04). Les champs minimaux obligatoires
-      sont inscrits dans l'architecture (ARB-05). Restent absents : validator
-      dédié, protocole de régénération automatisé, usage comme contexte unique
-      bloqué jusqu'à maturité suffisante.
-    remaining_gaps:
-      - validator_absent
-      - regeneration_protocol_absent
-      - usage_as_sole_context_blocked_until_sufficient_maturity
-    rationale: >
-      La capacité était surdeclarée en 'present' alors que le mécanisme complet
-      est absent. Recalibrage honnête en 'partial'. Consensus fort 5 rapports.
-
-  # ----------------------------------------------------------
-  # PATCH ARB-07b : PF_CAPABILITY_FACTORY_PIPELINE_INTENT_DEFINED wording
-  # Priorité : 3
-  # ----------------------------------------------------------
-  - patch_id: STATE_04_CAPABILITY_PIPELINE_INTENT_WORDING
-    arb_ref: ARB-07
-    priority: 3
-    target_file: docs/cores/current/platform_factory_state.yaml
-    target_path: PLATFORM_FACTORY_STATE.capabilities_present[PF_CAPABILITY_FACTORY_PIPELINE_INTENT_DEFINED].description
-    operation: replace
-    current_value: L'intention de pipeline platform_factory est explicitement posée.
-    new_value: >
-      L'intention de pipeline platform_factory est explicitement posée
-      (intent only, not yet tooled execution framework). Les stages existent
-      et les prompts de lancement sont définis, mais le pipeline n'est pas
-      encore automatisé ni complètement outillé.
-    rationale: >
-      Aligner le wording du state avec la réalité déjà reconnue dans pipeline.md.
-      Une IA qui lit le state ne doit pas surestimer le degré d'outillage.
-
-  # ----------------------------------------------------------
-  # PATCH ARB-04c : Blocker PROJECTION_LOCATION_PENDING -> résolu
-  # Priorité : 2
-  # ----------------------------------------------------------
-  - patch_id: STATE_05_BLOCKER_PROJECTION_LOCATION_RESOLVED
-    arb_ref: ARB-04
-    priority: 2
-    target_file: docs/cores/current/platform_factory_state.yaml
-    target_path: PLATFORM_FACTORY_STATE.blockers[PF_BLOCKER_PROJECTION_LOCATION_PENDING]
-    operation: add_resolution
-    new_fields:
-      resolved: true
-      resolution: >
-        Emplacement décidé : docs/cores/platform_factory/projections/.
-        Décision humaine PC-1 actée le 2026-04-10. Inscrite dans l'architecture
-        via ARCH_05_PROJECTION_EMPLACEMENT_POLICY.
-      resolution_date: "2026-04-10"
-    rationale: >
-      Le blocker PROJECTION_LOCATION_PENDING est levé par la décision PC-1.
-      Il doit être marqué comme résolu pour ne pas ressortir lors du prochain challenge.
-
-  # ----------------------------------------------------------
-  # PATCH ARB-07c : capabilities_absent -> retirer PROJECTION_STORAGE_LOCATION_FINALIZED
-  # Priorité : 2
-  # ----------------------------------------------------------
-  - patch_id: STATE_06_CAPABILITY_PROJECTION_STORAGE_RESOLVED
-    arb_ref: ARB-04
-    priority: 2
-    target_file: docs/cores/current/platform_factory_state.yaml
-    target_path: PLATFORM_FACTORY_STATE.capabilities_absent
-    operation: move_to_partial
-    capability_id: PF_CAPABILITY_PROJECTION_STORAGE_LOCATION_FINALIZED
-    updated_description: >
-      Emplacement décidé : docs/cores/platform_factory/projections/. Règle
-      d'interdiction dans docs/cores/current/ inscrite. Outillage de génération
-      et de validation des projections restent à implémenter.
-    rationale: >
-      La décision d'emplacement est prise mais l'outillage reste absent.
-      Passer en partial plutôt qu'absent reflète l'état réel.
-
-  # ----------------------------------------------------------
-  # PATCH delta : Enregistrer le cycle d'arbitrage 2026-04-08/10
-  # Priorité : 3
-  # ----------------------------------------------------------
-  - patch_id: STATE_07_DELTA_RECORD
-    arb_ref: PFARB_FINAL_20260410_CONSOLIDATION
-    priority: 3
-    target_file: docs/cores/current/platform_factory_state.yaml
-    target_path: PLATFORM_FACTORY_STATE.delta_since_previous
-    operation: add_delta_entry
-    new_entry:
-      delta_id: PF_DELTA_20260410_PATCH_V0_3
-      date: "2026-04-10"
-      changes:
-        - runtime_policy_conformance_axis_added_to_minimum_validation_contract
-        - constitutional_invariants_checked_signal_added_to_observability_contract
-        - constitutional_conformance_matrix_file_created
-        - projection_emplacement_policy_decided_and_inscribed
-        - projection_mandatory_fields_defined
-        - status_corrected_from_release_candidate_to_current_baseline_under_governance
-        - capabilities_recalibrated_derived_projection_rule_to_partial
-        - blocker_projection_location_resolved
-        - blocker_manifest_exit_condition_added
-        - reproducibility_fingerprints_defined
-        - bootstrap_contract_tbd_bounded_with_condition
-
----
-
-# ============================================================
-# NOUVEAU FICHIER : constitutional_conformance_matrix.yaml
-# ============================================================
-
-new_file:
-  path: docs/cores/platform_factory/constitutional_conformance_matrix.yaml
-  arb_ref: ARB-08
-  priority: 2
-  rationale: >
-    Fichier séparé référencé depuis l'architecture pour permettre aux IAs d'audit
-    de charger uniquement ce contexte ciblé sans charger l'intégralité de l'architecture.
-    Structure minimale par invariant : preuve attendue, artefact porteur,
-    signal d'observabilité, validator attendu.
-  content_spec:
-    structure_per_invariant:
-      - invariant_id: identifiant de l'invariant constitutionnel
-      - invariant_description: formulation de l'invariant
-      - preuve_minimale_attendue: quelle preuve technique attendue dans l'application produite
-      - artefact_porteur: où cette preuve doit apparaître (manifest, observabilité, configuration)
-      - signal_observabilite: signal d'observabilité attendu dans minimum_observability_contract
-      - validator_attendu: validator responsable de vérifier cette preuve (TBD si différé)
-    invariants_to_cover:
-      - INV_RUNTIME_FULLY_LOCAL
-      - INV_NO_RUNTIME_GENERATION
-      - INV_NO_AI_CONTINUOUS_DEPENDENCY
-      - INV_CANONICAL_TRACEABILITY
-      - INV_DOUBLE_BUFFER_PATCH
-      - INV_SEPARATION_CONSTITUTION_REFERENTIEL
-      - INV_MINIMUM_CONTRACT_ALWAYS_DECLARED
-      - INV_GENERIC_SPECIFIC_SEPARATION
-      - INV_FACTORY_DOES_NOT_DUPLICATE_NORM
-      - INV_DERIVED_PROJECTIONS_STRICTLY_CONFORMANT
-    note: >
-      La liste exacte des invariants et leur formulation doivent être vérifiées
-      lors de STAGE_04 contre constitution.yaml, referentiel.yaml et link.yaml.
-      Le validator doit compléter le contenu de ce fichier après lecture des
-      artefacts canoniques.
-
----
-
-# ============================================================
-# SÉQUENCEMENT DES PATCHES
-# ============================================================
-
-application_order:
-  step_1:
-    patches: [ARCH_01_STATUS_METADATA, STATE_01_STATUS_METADATA]
-    note: Alignement statut des deux artefacts en premier.
-  step_2:
-    patches: [ARCH_02_RUNTIME_POLICY_CONFORMANCE_AXIS, ARCH_03_CONSTITUTIONAL_INVARIANTS_SIGNAL]
-    note: Priorité critique. ARCH_03 dépend de ARCH_02.
-  step_3:
-    patches: [ARCH_04_CONFORMANCE_MATRIX_REF]
-    note: Lié à la création du nouveau fichier.
-  step_4:
-    patches: [ARCH_05_PROJECTION_EMPLACEMENT_POLICY, ARCH_09_REMOVE_OPEN_POINT_LOCATION,
-              STATE_05_BLOCKER_PROJECTION_LOCATION_RESOLVED, STATE_06_CAPABILITY_PROJECTION_STORAGE_RESOLVED]
-    note: Décision PC-1 emplacement projections. Cohérence architecture + state.
-  step_5:
-    patches: [ARCH_06_PROJECTION_MANDATORY_FIELDS]
-    note: Dépend de ARCH_05.
-  step_6:
-    patches: [STATE_02_BLOCKER_MANIFEST_EXIT_CONDITION, STATE_03_CAPABILITY_PROJECTION_RULE_TO_PARTIAL,
-              STATE_04_CAPABILITY_PIPELINE_INTENT_WORDING]
-    note: Alignement sémantique et recalibrage state.
-  step_7:
-    patches: [ARCH_07_REPRODUCIBILITY_FINGERPRINTS, ARCH_08_BOOTSTRAP_CONTRACT_TBD]
-    note: Définition des termes flottants. Non bloquant.
-  step_8:
-    patches: [STATE_07_DELTA_RECORD]
-    note: Enregistrement du cycle. En dernier.
-  new_file_creation:
-    files: [docs/cores/platform_factory/constitutional_conformance_matrix.yaml]
-    note: >
-      Le contenu détaillé (invariants avec preuves) doit être produit lors de STAGE_04
-      ou STAGE_05 après lecture des artefacts canoniques. Le patchset définit la
-      structure cible et les invariants à couvrir.
+  exclusions:
+    items:
+      - id: ARB-09_pipeline_STAGE04_STAGE06_prompt_priority
+        reason: pipeline_work
+        note: Correction à apporter à pipeline.md, hors périmètre des artefacts canoniques courants.
+      - id: ARB-10_multi_ia_protocol
+        reason: deferred
+        note: Reporté à la première instance de travail multi-IA réel.
+      - id: ARB-11_detailed_schemas
+        reason: deferred
+        note: Reporté à une décision de passage à une version de maturité suffisante.
+      - id: ARB-12_factory_instantiation_boundary
+        reason: deferred
+        note: Reporté à la conception du premier pipeline d'instanciation domaine.
+      - id: PC2B_filtered_matrix_in_projections
+        reason: deferred
+        note: Reporté à maturité suffisante (mécanisme génération outillé + premier usage comme contexte unique envisagé).
+      - id: validators_tooling_all
+        reason: validator_or_tooling
+        note: Tous les validators dédiés sont hors périmètre canonique pour ce cycle.
+      - id: constitutional_conformance_matrix_content
+        reason: deferred
+        note: Structure spécifiée dans le patchset. Contenu détaillé (invariants avec preuves) à produire en STAGE_04/05 après lecture des canoniques.
+      - id: PC3_pipeline_patches
+        reason: pipeline_work
+        note: Patches pipeline.md Rule 3 et STAGE_08 appliqués hors cycle le 2026-04-10 via tmp/.
