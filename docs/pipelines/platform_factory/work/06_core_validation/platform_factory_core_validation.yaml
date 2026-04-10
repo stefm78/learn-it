@@ -1,0 +1,69 @@
+PLATFORM_FACTORY_CORE_VALIDATION:
+  status: PASS
+  scope: platform_factory_patched_core
+  validator: validate_platform_factory_core.py
+  patched_architecture_path: docs\pipelines\platform_factory\work\05_apply\patched\platform_factory_architecture.yaml
+  patched_state_path: docs\pipelines\platform_factory\work\05_apply\patched\platform_factory_state.yaml
+  execution_report_path: docs\pipelines\platform_factory\reports\platform_factory_execution_report.yaml
+  anomalies_count: 0
+  warnings_count: 0
+  checks:
+    patched_architecture_exists: PASS
+    patched_state_exists: PASS
+    execution_report_exists: PASS
+    arch_root_document: PASS
+    state_root_document: PASS
+    execution_root_document: PASS
+    arch_root_key: PASS
+    state_root_key: PASS
+    execution_root_key: PASS
+    arch_metadata: PASS
+    state_metadata: PASS
+    arch_artifact_id: PASS
+    arch_artifact_type: PASS
+    arch_version: PASS
+    arch_status: PASS
+    state_artifact_id: PASS
+    state_artifact_type: PASS
+    state_version: PASS
+    state_status: PASS
+    execution_report_status: PASS
+    execution_report_files_written: PASS
+    canonical_dependencies: PASS
+    architecture_contracts: PASS
+    state_validated_decisions: PASS
+    state_known_gaps: PASS
+    state_capabilities_absent: PASS
+    multi_ia_status: PASS
+    derived_projection_status: PASS
+    produced_application_contract_status: PASS
+    architecture_invariants: PASS
+    layer_cross_check: PASS
+  summary:
+    canonical_dependencies:
+    - docs/cores/current/constitution.yaml
+    - docs/cores/current/referentiel.yaml
+    - docs/cores/current/link.yaml
+    multi_ia_parallel_readiness_status: requirement_defined_not_yet_operationalized
+    derived_projection_conformity_status: defined_in_principle_with_explicit_conditions_and_missing_tooling
+    produced_application_contract_status: high_level_defined_with_probative_strengthening_in_progress
+    architecture_invariants_count: 6
+    layer_ids_architecture:
+    - PF_LAYER_APPLICATION_INSTANTIATION
+    - PF_LAYER_CANONICAL_FOUNDATION
+    - PF_LAYER_DERIVED_EXECUTION_PROJECTIONS
+    - PF_LAYER_FACTORY_ARCHITECTURE
+    - PF_LAYER_FACTORY_STATE
+    layer_ids_state:
+    - PF_LAYER_APPLICATION_INSTANTIATION
+    - PF_LAYER_CANONICAL_FOUNDATION
+    - PF_LAYER_DERIVED_EXECUTION_PROJECTIONS
+    - PF_LAYER_FACTORY_ARCHITECTURE
+    - PF_LAYER_FACTORY_STATE
+    patched_architecture_path: docs\pipelines\platform_factory\work\05_apply\patched\platform_factory_architecture.yaml
+    patched_state_path: docs\pipelines\platform_factory\work\05_apply\patched\platform_factory_state.yaml
+    execution_report_path: docs\pipelines\platform_factory\reports\platform_factory_execution_report.yaml
+  anomalies:
+  - none
+  warnings:
+  - none

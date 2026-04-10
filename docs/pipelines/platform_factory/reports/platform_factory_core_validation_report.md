@@ -2,93 +2,133 @@
 
 ## Résumé exécutif
 
-Le validateur automatique `validate_platform_factory_core.py` retourne **`PASS`** sur les 31 checks structurels, sans anomalie ni warning.
+- **Statut global : PASS**
+- **Mode : POST_APPLY_CORE_VALIDATION**
+- **Date : 2026-04-10**
+- **Anomalies bloquantes : 0**
+- **Warnings : 0**
+- **Checks exécutés : 31 / 31 PASS**
 
-Le verdict global du Stage 06 est : **`PASS`**.
-
-Anomalie `PF_ANOM_STAGE06_RACINE_DUPLIQUEE` identifiée lors d’un premier passage et résolue avant la validation finale par le fix du script `apply_platform_factory_patchset.py` (commit `39a079a`).
+Le couple patché `platform_factory_architecture.yaml` / `platform_factory_state.yaml` passe l'intégralité des contrôles structurels automatiques. Il est déclaré apte à franchir le STAGE_07 (RELEASE_MATERIALIZATION).
 
 ---
 
 ## Qualification du contexte de validation
 
-- **Mode** : `POST_APPLY_CORE_VALIDATION`
-- **Artefacts validés** :
-  - `docs/pipelines/platform_factory/work/05_apply/patched/platform_factory_architecture.yaml`
-  - `docs/pipelines/platform_factory/work/05_apply/patched/platform_factory_state.yaml`
-- **Script automatique** : `validate_platform_factory_core.py` — exécuté réellement en local
-- **Trace d’exécution** : `docs/pipelines/platform_factory/reports/platform_factory_execution_report.yaml` — `status: PASS`, `operations_applied: 10/10`
+- **Patchset appliqué** : `PFPATCH_20260410_PPLX_FINAL` (21 opérations, PASS en STAGE_05)
+- **Artefacts validés** : sorties de `work/05_apply/patched/` — non les artefacts `current/`
+- **Validation de type** : post-apply, pas un re-challenge ni une réouverture d'arbitrage
+- **Script utilisé** : `validate_platform_factory_core.py`
+- **Rapport d'exécution amont** : `status: PASS`, `files_written` confirmés
 
 ---
 
 ## Décision globale
 
-| Dimension | Résultat |
+| Dimension | Statut |
 |---|---|
-| Validateur automatique (31 checks) | ✅ PASS |
-| Anomalie structurelle logique (revue humaine) | ✅ Résolue avant validation finale |
-| **Verdict Stage 06 global** | **✅ PASS** |
+| Cohérence couple architecture / state | PASS |
+| Compatibilité socle canonique | PASS |
+| Séparation prescriptif / constatif | PASS |
+| Contrat minimal application produite | PASS |
+| Gouvernabilité projections dérivées | PASS |
+| Posture multi-IA | PASS |
+| Stabilité et gouvernabilité V0 | PASS |
+
+**Décision : le couple patché peut franchir STAGE_07.**
 
 ---
 
 ## Vérifications par axe
 
-### 1. Adéquation au mode POST_APPLY
-✅ PASS — Les artefacts soumis sont bien les artefacts patchés issus du Stage 05 apply réel.
+### Existence et structure des artefacts
 
-### 2. Fidélité à l’arbitrage et au patchset appliqué
-✅ PASS — Les 10 opérations du patchset (PFARB-DEC-01, 02, 03, 06) sont reflétées dans les artefacts. Les exclusions (DEC-04, 05, 07) ne sont pas introduites.
+- `patched_architecture_exists` : PASS
+- `patched_state_exists` : PASS
+- `execution_report_exists` : PASS
+- `arch_root_document` / `state_root_document` / `execution_root_document` : PASS
+- `arch_root_key` / `state_root_key` / `execution_root_key` : PASS
 
-### 3. Séparation architecture / state
-✅ PASS — `PLATFORM_FACTORY_ARCHITECTURE` reste prescriptif. `PLATFORM_FACTORY_STATE` reste constatif. Aucune confusion de rôle.
+### Métadonnées
 
-### 4. Cohérence interne et cohérence croisée
-✅ PASS — Les blocs canoniques sont cohérents. Racine YAML propre : une seule clé `PLATFORM_FACTORY_ARCHITECTURE` / `PLATFORM_FACTORY_STATE` au niveau 0 de chaque fichier. Aucune clé dupliquée.
+- Architecture : `artifact_id`, `artifact_type`, `version`, `status` — PASS
+- State : `artifact_id`, `artifact_type`, `version`, `status` — PASS
+- `authority_rank: factory_layer` présent sur les deux artefacts (patch PFPATCH_A1 / A2 appliqué)
 
-### 5. Compatibilité avec Constitution / Référentiel / LINK
-✅ PASS — Les dépendances canoniques sont déclarées et inchangées.
+### Rapport d'exécution amont
 
-### 6. Cohérence du contrat minimal d’application produite
-✅ PASS — Le contrat minimal est défini à haut niveau (`high_level_defined_not_schema_finalisé`), conforme au périmètre V0.
+- `execution_report_status` : PASS
+- `execution_report_files_written` : PASS — fichiers sandbox confirmés écrits
 
-### 7. Gouvernabilité des projections dérivées
-✅ PASS — La liste `minimum_requirements` dans le bloc canonique contient bien les 8 items attendus, dont les 3 nouveaux issus de PFARB-DEC-02. Path résolu correctement à l’intérieur du bloc.
+### Dépendances canoniques
 
-### 8. Maintien de la posture multi-IA
-✅ PASS — Aucun invariant multi-IA n’a été altéré.
+- `canonical_dependencies` : PASS
+- Références présentes : `constitution.yaml`, `referentiel.yaml`, `link.yaml`
 
-### 9. Stabilité et gouvernabilité de l’état patché
-✅ PASS — L’état patché est structurellement sain. Un loader `yaml.safe_load` standard retourne une structure propre sans doublon.
+### Contrats architecture
+
+- `architecture_contracts` : PASS
+- Contrat minimal d'application produite structurellement présent
+- `runtime_policy_conformance_definition` ajouté (PFPATCH_B2) — 5 items vérifiables
+- `note_on_constitutional_invariants_checked` ajouté (PFPATCH_B3)
+- Axes `constitutional_invariants_runtime_local` et `no_runtime_content_generation_proof` présents (PFPATCH_B1)
+
+### Décisions validées et gaps
+
+- `state_validated_decisions` : PASS
+- `state_known_gaps` : PASS — `PF_GAP_PARALLEL_AI_PROTOCOL_UNDEFINED` reclassifié BLOCKER OPÉRATIONNEL (PFPATCH_D1)
+- `state_capabilities_absent` : PASS
+
+### Multi-IA
+
+- `multi_ia_status` : PASS
+- Statut constaté : `requirement_defined_not_yet_operationalized` — cohérent avec V0
+
+### Projections dérivées
+
+- `derived_projection_status` : PASS
+- Statut : `defined_in_principle_with_explicit_conditions_and_missing_tooling`
+- Régime cible vs politique V0 désormais distingués (PFPATCH_C1 / C3)
+- `usage_as_sole_context` bloqué avec conditions de déblocage explicites
+
+### Contrat application produite
+
+- `produced_application_contract_status` : PASS
+- Statut : `high_level_defined_with_probative_strengthening_in_progress` — cohérent V0
+
+### Invariants architecture
+
+- `architecture_invariants` : PASS — 6 invariants présents
+
+### Cohérence croisée layers
+
+- `layer_cross_check` : PASS
+- 5 layers identiques dans architecture et state :
+  - `PF_LAYER_CANONICAL_FOUNDATION`
+  - `PF_LAYER_FACTORY_ARCHITECTURE`
+  - `PF_LAYER_FACTORY_STATE`
+  - `PF_LAYER_DERIVED_EXECUTION_PROJECTIONS`
+  - `PF_LAYER_APPLICATION_INSTANTIATION`
 
 ---
 
-## Anomalies
+## Anomalies bloquantes
 
-Aucune anomalie dans la validation finale.
-
-| ID | Sévérité | Statut | Description |
-|---|---|---|---|
-| PF_ANOM_STAGE06_RACINE_DUPLIQUEE | BLOQUANT | ✅ Résolu | Paths du patchset résolus depuis la racine YAML absolue au lieu du bloc canonique. Fix : auto-descente via `CANONICAL_ROOT_KEYS` dans `apply_platform_factory_patchset.py` (commit `39a079a`). |
+Aucune.
 
 ---
 
 ## Warnings
 
-Aucun warning.
+Aucun.
 
 ---
 
-## Conditions avant Stage 07
+## Conditions avant STAGE_07
 
-Toutes les conditions sont satisfaites :
+Aucune condition bloquante. Le couple patché est apte à entrer en STAGE_07 (RELEASE_MATERIALIZATION) sans réserve.
 
-- [x] Validateur automatique `status: PASS` (31/31 checks)
-- [x] Artefacts patchés structurellement propres (racine YAML sans doublon)
-- [x] 10/10 opérations appliquées
-- [x] Fix patcher commité et validé
-
-**Le Stage 07 est autorisé.**
-
----
-
-*Stage 06 exécuté le 2026-04-06. Validateur automatique : PASS 31/31. Verdict global Stage 06 : PASS.*
+Points à surveiller en STAGE_07 (non bloquants ici) :
+- `PF_BLOCKER_CONFORMANCE_MATRIX_ABSENT` — fichier `constitutional_conformance_matrix.yaml` absent, enregistré comme blocker
+- `PF_BLOCKER_BOOTSTRAP_CONTRACT_UNDEFINED` — champ `bootstrap_contract` TBD dans l'architecture
+- `PF_BLOCKER_CURRENT_MANIFEST_SCHEMA_LIMITATION` — levé uniquement à la completion de STAGE_08
