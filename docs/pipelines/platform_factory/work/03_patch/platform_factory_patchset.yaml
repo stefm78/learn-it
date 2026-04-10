@@ -18,6 +18,7 @@ PLATFORM_FACTORY_PATCHSET:
     - 2 nouveaux blockers enregistres dans le state.
     - 3 sujets differes explicitement hors scope de ce patch.
     - Appliquer dans l'ordre de sequence (sequence 1 en premier).
+    - v2 - sequences state reordonnees pour eviter corruption sandbox (list_replace_mapping avant add sur meme cle).
 
   patches:
 
@@ -285,202 +286,17 @@ PLATFORM_FACTORY_PATCHSET:
         PENDING PF_BLOCKER_CONFORMANCE_MATRIX_ABSENT. Fichier absent, enregistre comme
         blocker dans platform_factory_state.yaml.
 
-  - patch_id: PFPATCH_C3
-    source_decision: CONS-11
-    target_artifact: docs/cores/current/platform_factory_state.yaml
-    operation: update
-    change_type: state_resync
-    sequence: 5
-    priority: eleve
-    rationale: >-
-      Lie a PFPATCH_C1. Le state doit refleter la distinction regime cible / politique
-      V0 apres correction de l'architecture.
-    effect: >-
-      Met a jour la description de PF_CAPABILITY_DERIVED_PROJECTION_RULE_DEFINED pour
-      y indiquer explicitement le regime cible vs la politique V0 actuelle.
-    risk_avoided: >-
-      State incoherent avec l'architecture apres patch CONS-02.
-    location_hint:
-      section: PLATFORM_FACTORY_STATE.capabilities_partial
-      granularity: list_item
-      keys_to_update:
-      - description
-    operations:
-    - op: list_replace_mapping
-      path: PLATFORM_FACTORY_STATE.capabilities_partial
-      match_key: capability_id
-      match_value: PF_CAPABILITY_DERIVED_PROJECTION_RULE_DEFINED
-      value:
-        capability_id: PF_CAPABILITY_DERIVED_PROJECTION_RULE_DEFINED
-        description: >-
-          Regle d'usage des projections derivees definie. Emplacement de stockage
-          decide (ARB-04). Champs minimaux obligatoires inscrits dans l'architecture
-          (ARB-05). Regime cible: usage comme unique contexte si valide, decrit dans
-          rule_of_use de l'architecture. Politique V0 actuelle: usage_as_sole_context
-          blocked - voir usage_as_sole_context_unblock_conditions dans l'architecture.
-          Restent absents: validator dedie, protocole de regeneration automatise.
-
-  - patch_id: PFPATCH_C4
-    source_decision: CONS-03
-    target_artifact: docs/cores/current/platform_factory_state.yaml
-    operation: add
-    change_type: blocker_registration
-    sequence: 6
-    priority: eleve
-    rationale: >-
-      Le fichier constitutional_conformance_matrix.yaml est reference a deux endroits
-      dans l'architecture mais absent. Non liste comme blocker dans le state. Consensus
-      fort 3/3 rapports.
-    effect: >-
-      Enregistre PF_BLOCKER_CONFORMANCE_MATRIX_ABSENT dans la liste des blockers du
-      state avec impact et exit_condition explicites.
-    risk_avoided: >-
-      Absence non tracee d'un artefact obligatoire, creant une fausse impression de
-      completude du contrat de projection.
-    location_hint:
-      section: PLATFORM_FACTORY_STATE.blockers
-      granularity: list_item
-      keys_to_update:
-      - blocker_id
-      - severity
-      - impact
-      - exit_condition
-    operations:
-    - op: add
-      path: PLATFORM_FACTORY_STATE.blockers
-      value:
-        blocker_id: PF_BLOCKER_CONFORMANCE_MATRIX_ABSENT
-        severity: high
-        impact: >-
-          Le fichier docs/cores/platform_factory/constitutional_conformance_matrix.yaml
-          est reference dans l'architecture mais absent du repo. Toute projection ou
-          application produite referençant cette matrice pointe un artefact inexistant,
-          rendant la conformite non auditable.
-        exit_condition: >-
-          Creation et validation de
-          docs/cores/platform_factory/constitutional_conformance_matrix.yaml dans un
-          cycle de pipeline dedie.
-
-  - patch_id: PFPATCH_C5
-    source_decision: CONS-09
-    target_artifact: docs/cores/current/platform_factory_state.yaml
-    operation: update
-    change_type: description_strengthening
-    sequence: 7
-    priority: eleve
-    rationale: >-
-      Le state ne liait pas explicitement l'absence du validator au risque de derive
-      normative sur les projections.
-    effect: >-
-      Enrichit la description de PF_CAPABILITY_FACTORY_VALIDATORS_IMPLEMENTED pour
-      y indiquer que tout validation_status validated est non auditable tant que le
-      validator n'est pas implemente.
-    risk_avoided: >-
-      Pipeline ou IA supposant qu'une projection taguee validated est reellement
-      conforme, sans aucun validator sous-jacent.
-    location_hint:
-      section: PLATFORM_FACTORY_STATE.capabilities_absent
-      granularity: list_item
-      keys_to_update:
-      - description
-    operations:
-    - op: list_replace_mapping
-      path: PLATFORM_FACTORY_STATE.capabilities_absent
-      match_key: capability_id
-      match_value: PF_CAPABILITY_FACTORY_VALIDATORS_IMPLEMENTED
-      value:
-        capability_id: PF_CAPABILITY_FACTORY_VALIDATORS_IMPLEMENTED
-        description: >-
-          Validateurs dedies a la conformite des projections et du contrat minimal non
-          encore implementes. Consequence directe: tout tag validation_status validated
-          sur une projection derivee est non deterministe et non auditable en l'etat.
-          Aucune projection ne peut etre consideree comme validee de facon probante
-          tant que ce validator n'est pas implemente. De meme, le signal
-          constitutional_invariants_checked ne peut pas etre emis de facon auditable.
-
-  - patch_id: PFPATCH_D1
-    source_decision: CONS-08
-    target_artifact: docs/cores/current/platform_factory_state.yaml
-    operation: update
-    change_type: description_strengthening
-    sequence: 8
-    priority: eleve
-    rationale: >-
-      La description de PF_GAP_PARALLEL_AI_PROTOCOL_UNDEFINED minimisait l'impact.
-      CR-Nemotron qualifie l'absence comme impossibilite operationnelle pour tout
-      travail multi-IA reel, pas simple sous-optimalite. Consensus fort 3/3 rapports.
-    effect: >-
-      Met a jour la description du gap pour qualifier explicitement le blocker
-      operationnel et ses consequences.
-    risk_avoided: >-
-      Sous-evaluation du risque multi-IA conduisant a un usage parallele sans protocole,
-      avec collisions normatives et derivences silencieuses.
-    location_hint:
-      section: PLATFORM_FACTORY_STATE.known_gaps
-      granularity: list_item
-      keys_to_update:
-      - description
-    operations:
-    - op: list_replace_mapping
-      path: PLATFORM_FACTORY_STATE.known_gaps
-      match_key: gap_id
-      match_value: PF_GAP_PARALLEL_AI_PROTOCOL_UNDEFINED
-      value:
-        gap_id: PF_GAP_PARALLEL_AI_PROTOCOL_UNDEFINED
-        description: >-
-          BLOCKER OPERATIONNEL pour tout travail multi-IA reel. Le protocole fin
-          d'assemblage entre sorties IA paralleles n'est pas defini. Aucun mecanisme
-          de decomposition de tache, de granularite modulaire, d'assemblage de sorties
-          ou de resolution de conflit n'existe. L'usage parallele multi-IA sans ce
-          protocole expose a des collisions normatives et a des derivences silencieuses
-          non detectees. Differe a une iteration dediee avec spec de protocole multi-IA.
-
-  - patch_id: PFPATCH_D2
-    source_decision: CONS-06
-    target_artifact: docs/cores/current/platform_factory_state.yaml
-    operation: add
-    change_type: blocker_registration
-    sequence: 9
-    priority: eleve
-    rationale: >-
-      Le champ bootstrap_contract dans runtime_entrypoint_contract est obligatoire
-      mais declare TBD dans l'architecture. Non trace comme blocker dans le state.
-      Retenu dans ARB-PPLX-M3F8 (ARB-PF-07) et ARB-PPLX-R7M4 (ARB-E1).
-    effect: >-
-      Enregistre PF_BLOCKER_BOOTSTRAP_CONTRACT_UNDEFINED dans les blockers du state
-      avec impact et exit_condition explicites.
-    risk_avoided: >-
-      Contrat minimal donnant une fausse impression de completude alors qu'un champ
-      obligatoire est TBD.
-    location_hint:
-      section: PLATFORM_FACTORY_STATE.blockers
-      granularity: list_item
-      keys_to_update:
-      - blocker_id
-      - severity
-      - impact
-      - exit_condition
-    operations:
-    - op: add
-      path: PLATFORM_FACTORY_STATE.blockers
-      value:
-        blocker_id: PF_BLOCKER_BOOTSTRAP_CONTRACT_UNDEFINED
-        severity: high
-        impact: >-
-          Le champ bootstrap_contract dans runtime_entrypoint_contract est obligatoire
-          mais declare TBD dans l'architecture. Aucune application produite ne peut
-          passer la validation complete du contrat minimal tant que ce champ n'est
-          pas defini.
-        exit_condition: >-
-          Definition de la typologie exacte des runtimes d'application Learn-it et
-          ecriture du bootstrap_contract correspondant dans l'architecture.
+  # --- STATE PATCHES : ordre impose par les dependances de liste ---
+  # Regle : les list_replace_mapping doivent passer AVANT tout add sur la meme liste.
+  # Regle : les list_remove_mapping / list_remove_item doivent passer AVANT tout add
+  #         sur la meme liste pour eviter que la liste soit convertie en dict.
 
   - patch_id: PFPATCH_E1
     source_decision: CONS-07
     target_artifact: docs/cores/current/platform_factory_state.yaml
     operation: update
     change_type: capability_reclassification
-    sequence: 10
+    sequence: 7
     priority: modere
     rationale: >-
       PF_CAPABILITY_FACTORY_PIPELINE_INTENT_DEFINED est classe capabilities_present
@@ -517,7 +333,7 @@ PLATFORM_FACTORY_PATCHSET:
     target_artifact: docs/cores/current/platform_factory_state.yaml
     operation: update
     change_type: state_resync
-    sequence: 11
+    sequence: 8
     priority: modere
     rationale: >-
       storage_location_decision figure encore dans derived_projection_conformity_status.missing
@@ -558,6 +374,115 @@ PLATFORM_FACTORY_PATCHSET:
           de generation et de validation absent. Capacite partielle: decision actee,
           operationnalisation a faire.
 
+  - patch_id: PFPATCH_C3
+    source_decision: CONS-11
+    target_artifact: docs/cores/current/platform_factory_state.yaml
+    operation: update
+    change_type: state_resync
+    sequence: 9
+    priority: eleve
+    rationale: >-
+      Lie a PFPATCH_C1. Le state doit refleter la distinction regime cible / politique
+      V0 apres correction de l'architecture.
+    effect: >-
+      Met a jour la description de PF_CAPABILITY_DERIVED_PROJECTION_RULE_DEFINED pour
+      y indiquer explicitement le regime cible vs la politique V0 actuelle.
+    risk_avoided: >-
+      State incoherent avec l'architecture apres patch CONS-02.
+    location_hint:
+      section: PLATFORM_FACTORY_STATE.capabilities_partial
+      granularity: list_item
+      keys_to_update:
+      - description
+    operations:
+    - op: list_replace_mapping
+      path: PLATFORM_FACTORY_STATE.capabilities_partial
+      match_key: capability_id
+      match_value: PF_CAPABILITY_DERIVED_PROJECTION_RULE_DEFINED
+      value:
+        capability_id: PF_CAPABILITY_DERIVED_PROJECTION_RULE_DEFINED
+        description: >-
+          Regle d'usage des projections derivees definie. Emplacement de stockage
+          decide (ARB-04). Champs minimaux obligatoires inscrits dans l'architecture
+          (ARB-05). Regime cible: usage comme unique contexte si valide, decrit dans
+          rule_of_use de l'architecture. Politique V0 actuelle: usage_as_sole_context
+          blocked - voir usage_as_sole_context_unblock_conditions dans l'architecture.
+          Restent absents: validator dedie, protocole de regeneration automatise.
+
+  - patch_id: PFPATCH_C5
+    source_decision: CONS-09
+    target_artifact: docs/cores/current/platform_factory_state.yaml
+    operation: update
+    change_type: description_strengthening
+    sequence: 10
+    priority: eleve
+    rationale: >-
+      Le state ne liait pas explicitement l'absence du validator au risque de derive
+      normative sur les projections.
+    effect: >-
+      Enrichit la description de PF_CAPABILITY_FACTORY_VALIDATORS_IMPLEMENTED pour
+      y indiquer que tout validation_status validated est non auditable tant que le
+      validator n'est pas implemente.
+    risk_avoided: >-
+      Pipeline ou IA supposant qu'une projection taguee validated est reellement
+      conforme, sans aucun validator sous-jacent.
+    location_hint:
+      section: PLATFORM_FACTORY_STATE.capabilities_absent
+      granularity: list_item
+      keys_to_update:
+      - description
+    operations:
+    - op: list_replace_mapping
+      path: PLATFORM_FACTORY_STATE.capabilities_absent
+      match_key: capability_id
+      match_value: PF_CAPABILITY_FACTORY_VALIDATORS_IMPLEMENTED
+      value:
+        capability_id: PF_CAPABILITY_FACTORY_VALIDATORS_IMPLEMENTED
+        description: >-
+          Validateurs dedies a la conformite des projections et du contrat minimal non
+          encore implementes. Consequence directe: tout tag validation_status validated
+          sur une projection derivee est non deterministe et non auditable en l'etat.
+          Aucune projection ne peut etre consideree comme validee de facon probante
+          tant que ce validator n'est pas implemente. De meme, le signal
+          constitutional_invariants_checked ne peut pas etre emis de facon auditable.
+
+  - patch_id: PFPATCH_D1
+    source_decision: CONS-08
+    target_artifact: docs/cores/current/platform_factory_state.yaml
+    operation: update
+    change_type: description_strengthening
+    sequence: 11
+    priority: eleve
+    rationale: >-
+      La description de PF_GAP_PARALLEL_AI_PROTOCOL_UNDEFINED minimisait l'impact.
+      CR-Nemotron qualifie l'absence comme impossibilite operationnelle pour tout
+      travail multi-IA reel, pas simple sous-optimalite. Consensus fort 3/3 rapports.
+    effect: >-
+      Met a jour la description du gap pour qualifier explicitement le blocker
+      operationnel et ses consequences.
+    risk_avoided: >-
+      Sous-evaluation du risque multi-IA conduisant a un usage parallele sans protocole,
+      avec collisions normatives et derivences silencieuses.
+    location_hint:
+      section: PLATFORM_FACTORY_STATE.known_gaps
+      granularity: list_item
+      keys_to_update:
+      - description
+    operations:
+    - op: list_replace_mapping
+      path: PLATFORM_FACTORY_STATE.known_gaps
+      match_key: gap_id
+      match_value: PF_GAP_PARALLEL_AI_PROTOCOL_UNDEFINED
+      value:
+        gap_id: PF_GAP_PARALLEL_AI_PROTOCOL_UNDEFINED
+        description: >-
+          BLOCKER OPERATIONNEL pour tout travail multi-IA reel. Le protocole fin
+          d'assemblage entre sorties IA paralleles n'est pas defini. Aucun mecanisme
+          de decomposition de tache, de granularite modulaire, d'assemblage de sorties
+          ou de resolution de conflit n'existe. L'usage parallele multi-IA sans ce
+          protocole expose a des collisions normatives et a des derivences silencieuses
+          non detectees. Differe a une iteration dediee avec spec de protocole multi-IA.
+
   - patch_id: PFPATCH_E3
     source_decision: CONS-10
     target_artifact: docs/cores/current/platform_factory_state.yaml
@@ -566,7 +491,7 @@ PLATFORM_FACTORY_PATCHSET:
     sequence: 12
     priority: modere
     rationale: >-
-      La description de PF_BLOCKER_CURRENT_MANIFEST_SCHEMA_LIMITATION ne reflétait
+      La description de PF_BLOCKER_CURRENT_MANIFEST_SCHEMA_LIMITATION ne refletait
       pas que la release PLATFORM_FACTORY_RELEASE_2026_04_10_R01 est deja manifestee
       dans docs/cores/releases/. Decision humaine DISC-02 Option C.
     effect: >-
@@ -599,6 +524,87 @@ PLATFORM_FACTORY_PATCHSET:
           Ce blocker est leve quand STAGE_08 complete sa premiere execution formelle
           avec promotion effective vers docs/cores/current/ et mise a jour du manifest
           officiel de current/.
+
+  - patch_id: PFPATCH_C4
+    source_decision: CONS-03
+    target_artifact: docs/cores/current/platform_factory_state.yaml
+    operation: add
+    change_type: blocker_registration
+    sequence: 13
+    priority: eleve
+    rationale: >-
+      Le fichier constitutional_conformance_matrix.yaml est reference a deux endroits
+      dans l'architecture mais absent. Non liste comme blocker dans le state. Consensus
+      fort 3/3 rapports.
+    effect: >-
+      Enregistre PF_BLOCKER_CONFORMANCE_MATRIX_ABSENT dans la liste des blockers du
+      state avec impact et exit_condition explicites.
+    risk_avoided: >-
+      Absence non tracee d'un artefact obligatoire, creant une fausse impression de
+      completude du contrat de projection.
+    location_hint:
+      section: PLATFORM_FACTORY_STATE.blockers
+      granularity: list_item
+      keys_to_update:
+      - blocker_id
+      - severity
+      - impact
+      - exit_condition
+    operations:
+    - op: add
+      path: PLATFORM_FACTORY_STATE.blockers
+      value:
+        blocker_id: PF_BLOCKER_CONFORMANCE_MATRIX_ABSENT
+        severity: high
+        impact: >-
+          Le fichier docs/cores/platform_factory/constitutional_conformance_matrix.yaml
+          est reference dans l'architecture mais absent du repo. Toute projection ou
+          application produite referençant cette matrice pointe un artefact inexistant,
+          rendant la conformite non auditable.
+        exit_condition: >-
+          Creation et validation de
+          docs/cores/platform_factory/constitutional_conformance_matrix.yaml dans un
+          cycle de pipeline dedie.
+
+  - patch_id: PFPATCH_D2
+    source_decision: CONS-06
+    target_artifact: docs/cores/current/platform_factory_state.yaml
+    operation: add
+    change_type: blocker_registration
+    sequence: 14
+    priority: eleve
+    rationale: >-
+      Le champ bootstrap_contract dans runtime_entrypoint_contract est obligatoire
+      mais declare TBD dans l'architecture. Non trace comme blocker dans le state.
+      Retenu dans ARB-PPLX-M3F8 (ARB-PF-07) et ARB-PPLX-R7M4 (ARB-E1).
+    effect: >-
+      Enregistre PF_BLOCKER_BOOTSTRAP_CONTRACT_UNDEFINED dans les blockers du state
+      avec impact et exit_condition explicites.
+    risk_avoided: >-
+      Contrat minimal donnant une fausse impression de completude alors qu'un champ
+      obligatoire est TBD.
+    location_hint:
+      section: PLATFORM_FACTORY_STATE.blockers
+      granularity: list_item
+      keys_to_update:
+      - blocker_id
+      - severity
+      - impact
+      - exit_condition
+    operations:
+    - op: add
+      path: PLATFORM_FACTORY_STATE.blockers
+      value:
+        blocker_id: PF_BLOCKER_BOOTSTRAP_CONTRACT_UNDEFINED
+        severity: high
+        impact: >-
+          Le champ bootstrap_contract dans runtime_entrypoint_contract est obligatoire
+          mais declare TBD dans l'architecture. Aucune application produite ne peut
+          passer la validation complete du contrat minimal tant que ce champ n'est
+          pas defini.
+        exit_condition: >-
+          Definition de la typologie exacte des runtimes d'application Learn-it et
+          ecriture du bootstrap_contract correspondant dans l'architecture.
 
   exclusions:
     items:
