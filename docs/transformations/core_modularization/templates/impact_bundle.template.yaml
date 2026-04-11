@@ -1,0 +1,57 @@
+impact_bundle:
+  schema_version: 0.1
+  scope_id: SCOPE_EXAMPLE_CONSTITUTION_LEARNER_STATE
+  status: draft
+
+  primary_targets:
+    files:
+      - docs/cores/current/constitution.yaml
+    modules:
+      - learner_state
+    ids:
+      - TYPE_LEARNER_STATE_MODEL
+      - TYPE_STATE_AXIS_ACTIVATION
+      - TYPE_SELF_REPORT_AR_N1
+
+  logical_neighbors_to_read:
+    files:
+      - docs/cores/current/referentiel.yaml
+      - docs/cores/current/link.yaml
+    ids:
+      - INV_CONSERVATIVE_RULE_WITHOUT_AR_N1
+      - RULE_MULTI_AXIS_UNKNOWN_OR_UNOBSERVABLE_SAFE_ENTRY
+      - RULE_LEARNER_STATE_AXIS_UNKNOWN_ALLOWED
+    invariants:
+      - INV_CONSTITUTION_REFERENTIAL_SEPARATION
+      - INV_RUNTIME_FULLY_LOCAL
+      - INV_NO_RUNTIME_CONTENT_GENERATION
+
+  dependency_view:
+    upstream_dependencies:
+      - TYPE_SELF_REPORT_AR_N1
+    downstream_dependencies:
+      - TYPE_STATE_AXIS_ACTIVATION
+      - TYPE_LEARNER_STATE_MODEL
+    cross_core_dependencies:
+      - REF_CORE_LEARNIT_REFERENTIEL_V2_0_IN_CONSTITUTION
+
+  review_payload:
+    prior_artifacts_to_consider:
+      - docs/pipelines/constitution/work/01_challenge/
+      - docs/pipelines/constitution/work/02_arbitrage/arbitrage.md
+    watchpoints:
+      - Ne pas déplacer de logique seuil dans la Constitution.
+      - Ne pas introduire de modification implicite du Référentiel.
+      - Vérifier les effets sur les règles conservatrices et les axes unknown.
+
+  expected_outputs:
+    - bounded_challenge_report
+    - bounded_arbitrage_record
+    - bounded_patchset
+    - local_validation_artifacts
+    - integration_gate_reference
+
+  notes:
+    - >-
+      Le impact_bundle déclare ce qui doit être relu pour travailler sûrement.
+      Il n'étend pas automatiquement le droit de modifier.
