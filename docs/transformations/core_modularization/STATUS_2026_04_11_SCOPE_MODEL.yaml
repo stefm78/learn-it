@@ -1,0 +1,44 @@
+snapshot:
+  date: 2026-04-11
+  branch: feat/core-modularization-bootstrap
+  topic: constitution_scope_catalog_and_runs_model
+
+state:
+  status_files_main_sync: partial
+  overall_progress_percent_estimate: 41
+  summary: >-
+    Le pipeline constitution a été rendu scope-aware, les prompts principaux ont
+    été adaptés, un premier pilote borné learner_state a été posé, puis le modèle
+    structurel cible a été clarifié : scope catalog, run instances, et scoring
+    de maturité des scopes.
+
+completed_since_initial_status:
+  - constitution_pipeline_scope_aware_applied
+  - constitution_prompts_scope_aware_applied
+  - first_bounded_pilot_inputs_created
+  - pilot_note_created
+  - scope_catalog_runs_model_documented
+  - scope_catalog_readme_created
+  - runs_readme_created
+  - scope_definition_template_created
+  - run_manifest_template_created
+  - scope_maturity_model_documented
+
+design_decisions:
+  - scopes_are_cataloged_objects
+  - runs_are_scope_instances
+  - scope_definition_should_not_be_improvised_inside_a_bounded_run
+  - scope_catalog_refresh_should_be_a_distinct_cycle_or_stage
+  - scope_definitions_should_carry_maturity_scores
+
+next_structural_targets:
+  - create_scope_catalog_manifest_for_constitution
+  - create_first_scope_definition_for_learner_state
+  - create_first_real_run_manifest_under_runs
+  - migrate_pilot_inputs_from_flat_inputs_to_runs_run_id_inputs
+  - then adapt_pipeline_paths_from_flat_layout_to_run_layout
+
+notes:
+  - >-
+    Ce snapshot complète l'état du chantier en attendant la prochaine
+    synchronisation des fichiers centraux STATUS.yaml et WORKLOG.md.
