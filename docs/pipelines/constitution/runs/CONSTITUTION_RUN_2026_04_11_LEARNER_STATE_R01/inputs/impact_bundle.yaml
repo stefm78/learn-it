@@ -1,0 +1,68 @@
+impact_bundle:
+  schema_version: 0.1
+  run_id: CONSTITUTION_RUN_2026_04_11_LEARNER_STATE_R01
+  scope_id: CONSTITUTION_SCOPE_LEARNER_STATE
+  status: materialized_from_scope_catalog
+
+  primary_targets:
+    files:
+      - docs/cores/current/constitution.yaml
+    modules:
+      - learner_state
+      - self_report
+    ids:
+      - TYPE_LEARNER_STATE_MODEL
+      - TYPE_STATE_AXIS_ACTIVATION
+      - TYPE_STATE_AXIS_VALUE_COST
+      - TYPE_SELF_REPORT_AR_N1
+      - TYPE_SELF_REPORT_AR_N2
+      - RULE_AR_N1_OVERRIDES_PROXY
+      - RULE_LEARNER_STATE_AXIS_UNKNOWN_ALLOWED
+      - RULE_MULTI_AXIS_UNKNOWN_OR_UNOBSERVABLE_SAFE_ENTRY
+
+  logical_neighbors_to_read:
+    files:
+      - docs/cores/current/referentiel.yaml
+      - docs/cores/current/link.yaml
+    ids:
+      - REF_CORE_LEARNIT_REFERENTIEL_V2_0_IN_CONSTITUTION
+      - TYPE_AUTONOMY_REGIME
+      - INV_CONSTITUTION_REFERENTIAL_SEPARATION
+      - INV_RUNTIME_FULLY_LOCAL
+      - INV_NO_RUNTIME_CONTENT_GENERATION
+      - EVENT_ACTIVATION_DISTRESS_PERSISTENCE_ESCALATION
+      - RULE_ACTIVATION_DISTRESS_PERSISTENCE_ESCALATION_OFFSESSION
+      - RULE_SESSION_INTENTION_NON_BLOCKING
+      - INV_VC_NOT_GENERAL_MOTIVATION_PROXY
+
+  dependency_view:
+    upstream_dependencies:
+      - TYPE_SELF_REPORT_AR_N1
+      - TYPE_SELF_REPORT_AR_N2
+      - TYPE_SELF_REPORT_AR_N3
+      - REF_CORE_LEARNIT_REFERENTIEL_V2_0_IN_CONSTITUTION
+    downstream_dependencies:
+      - TYPE_STATE_AXIS_ACTIVATION
+      - TYPE_STATE_AXIS_VALUE_COST
+      - TYPE_LEARNER_STATE_MODEL
+      - RULE_MULTI_AXIS_UNKNOWN_OR_UNOBSERVABLE_SAFE_ENTRY
+      - EVENT_ACTIVATION_DISTRESS_PERSISTENCE_ESCALATION
+    cross_core_dependencies:
+      - REF_CORE_LEARNIT_REFERENTIEL_V2_0_IN_CONSTITUTION
+
+  review_payload:
+    prior_artifacts_to_consider:
+      - docs/pipelines/constitution/pipeline.md
+      - docs/prompts/shared/Challenge_constitution.md
+      - docs/prompts/shared/Make04ConstitutionArbitrage.md
+      - docs/transformations/core_modularization/PILOT_01_CONSTITUTION_LEARNER_STATE.md
+    watchpoints:
+      - Ne pas transformer un seuil référentiel en règle constitutionnelle implicite.
+      - Ne pas déduire une inférence psychologique plus forte que le cadre autorisé.
+      - Vérifier les frontières entre état unknown, détresse, conservatisme et escalade.
+      - Vérifier que les liens au Référentiel restent explicites et non silencieux.
+
+  notes:
+    - >-
+      Cette matérialisation de run est dérivée du scope catalog et remplace
+      conceptuellement le précédent impact bundle à plat dans `inputs/`.
