@@ -1,0 +1,45 @@
+integration_gate:
+  schema_version: 0.1
+  scope_id: SCOPE_EXAMPLE_CONSTITUTION_LEARNER_STATE
+  status: required_before_release_or_promotion
+
+  local_run_result:
+    local_scope_validation_status: pending
+    bounded_patch_status: pending
+    out_of_scope_findings_present: false
+
+  mandatory_global_checks:
+    - full_canonical_re-read_required
+    - cross_reference_validation_required
+    - invariant_recheck_required
+    - collision_check_with_parallel_runs_required
+    - release_and_promotion_remain_explicit
+
+  global_invariants_to_recheck:
+    - INV_CONSTITUTION_REFERENTIAL_SEPARATION
+    - INV_RUNTIME_FULLY_LOCAL
+    - INV_NO_RUNTIME_CONTENT_GENERATION
+
+  integration_risks:
+    - id_collision
+    - cross_module_semantic_drift
+    - hidden_cross_core_side_effect
+    - conflicting_parallel_patch
+
+  decision_policy:
+    local_success_is_not_global_success: true
+    promotion_blocked_without_gate_clearance: true
+    manual_or_explicit_ai_arbitration_allowed_for_conflicts: true
+
+  clearance:
+    status: blocked
+    unblock_conditions:
+      - global_checks_all_pass
+      - no_unresolved_parallel_conflict
+      - no_unresolved_out_of_scope_impact
+      - release_materialization_policy_respected
+
+  notes:
+    - >-
+      Le integration_gate est volontairement simple à ce stade. Il formalise un
+      point de vérité essentiel : un succès local ne vaut pas promotion globale.
