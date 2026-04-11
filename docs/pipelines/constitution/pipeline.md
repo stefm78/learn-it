@@ -1,7 +1,7 @@
 # PIPELINE — constitution
 
 id: constitution
-version: 1.1
+version: 1.2
 scope: core-governance
 
 ## Goal
@@ -10,19 +10,26 @@ Challenger les Core actifs, arbitrer les corrections, produire un patch, le vali
 
 ## Operating modes
 
-Le pipeline `constitution` supporte désormais deux modes opératoires :
+Le pipeline `constitution` supporte désormais trois régimes opératoires :
 
 ### Mode nominal global
 - aucun `scope_manifest` fourni ;
+- aucun `run_id` fourni ;
 - le pipeline s'exécute sur le périmètre canonique complet ;
 - le comportement reste celui du pipeline historique.
 
-### Mode borné (`bounded_local_run`)
+### Mode borné historique de transition
 - un `scope_manifest` est fourni dans `inputs/` ;
 - le pipeline travaille sur un sous-ensemble borné ;
-- le droit de modifier est gouverné par le `scope_manifest` ;
-- le devoir de lecture du voisinage logique est gouverné par le `impact_bundle` ;
-- tout passage vers release/promotion reste soumis à un `integration_gate` explicite.
+- le layout plat historique reste utilisé ;
+- ce mode est transitoire.
+
+### Mode borné par run (`bounded_local_run`)
+- un `run_id` est fourni ;
+- le pipeline travaille à partir d'un scope catalogué matérialisé dans `runs/<run_id>/...` ;
+- le droit de modifier est gouverné par le `scope_manifest` du run ;
+- le devoir de lecture du voisinage logique est gouverné par le `impact_bundle` du run ;
+- tout passage vers release/promotion reste soumis au `integration_gate` du run.
 
 Règle structurante :
 - un succès local en mode borné n'est jamais équivalent à une cohérence canonique globale acquise ;
@@ -57,13 +64,31 @@ Canonical inputs:
 - `docs/cores/current/referentiel.yaml`
 - `docs/cores/current/link.yaml`
 
-Optional bounded-run control inputs:
+Historical flat bounded-run control inputs:
 - `docs/pipelines/constitution/inputs/scope_manifest.yaml`
 - `docs/pipelines/constitution/inputs/impact_bundle.yaml`
 - `docs/pipelines/constitution/inputs/integration_gate.yaml`
 
+Run-based bounded-run control inputs:
+- `docs/pipelines/constitution/runs/<run_id>/run_manifest.yaml`
+- `docs/pipelines/constitution/runs/<run_id>/inputs/scope_manifest.yaml`
+- `docs/pipelines/constitution/runs/<run_id>/inputs/impact_bundle.yaml`
+- `docs/pipelines/constitution/runs/<run_id>/inputs/integration_gate.yaml`
+
+## Layout resolution
+
+Reference companion:
+- `docs/pipelines/constitution/RUN_LAYOUT_RESOLUTION.md`
+
+Resolution rules:
+- if `run_id` is provided and the run exists, the pipeline must resolve paths from `docs/pipelines/constitution/runs/<run_id>/...`
+- else if `inputs/scope_manifest.yaml` exists, the pipeline may run in bounded transition mode using the historical flat layout
+- else the pipeline runs in nominal global mode
+- bounded runs should no longer open new artifacts in the flat historical layout except during explicit transition handling
+
 ## Staging
 
+Historical flat layout:
 - inputs: `docs/pipelines/constitution/inputs/`
 - work/01_challenge: `docs/pipelines/constitution/work/01_challenge/`
 - work/02_arbitrage: `docs/pipelines/constitution/work/02_arbitrage/`
@@ -75,6 +100,19 @@ Optional bounded-run control inputs:
 - outputs: `docs/pipelines/constitution/outputs/`
 - reports: `docs/pipelines/constitution/reports/`
 - archive: `docs/pipelines/constitution/archive/`
+
+Run-based layout:
+- `docs/pipelines/constitution/runs/<run_id>/inputs/`
+- `docs/pipelines/constitution/runs/<run_id>/work/01_challenge/`
+- `docs/pipelines/constitution/runs/<run_id>/work/02_arbitrage/`
+- `docs/pipelines/constitution/runs/<run_id>/work/03_patch/`
+- `docs/pipelines/constitution/runs/<run_id>/work/04_patch_validation/`
+- `docs/pipelines/constitution/runs/<run_id>/work/05_apply/`
+- `docs/pipelines/constitution/runs/<run_id>/work/06_core_validation/`
+- `docs/pipelines/constitution/runs/<run_id>/work/07_release/`
+- `docs/pipelines/constitution/runs/<run_id>/reports/`
+- `docs/pipelines/constitution/runs/<run_id>/outputs/`
+- `docs/pipelines/constitution/runs/<run_id>/archive/`
 
 ## Scope control artifacts
 
@@ -90,49 +128,58 @@ Il étend le devoir de lecture, pas le droit de modifier.
 Déclare les contrôles globaux à rejouer avant release/promotion.
 En mode borné, il bloque toute promotion implicite d'un succès local.
 
+### `run_manifest`
+Déclare l'identité du run, son `scope_id`, ses chemins d'exécution et la référence vers la scope definition source.
+
 ## Stages
 
 ### STAGE_01_CHALLENGE
 
 - Inputs:
   - current cores
-  - optional focus note in `inputs/`
-  - optional `inputs/scope_manifest.yaml`
-  - optional `inputs/impact_bundle.yaml`
+  - optional focus note
+  - optional `run_id`
+  - optional run-scoped inputs under `runs/<run_id>/inputs/`
+  - optional flat `inputs/scope_manifest.yaml`
+  - optional flat `inputs/impact_bundle.yaml`
 - Prompt:
   - `docs/prompts/shared/Challenge_constitution.md`
 - Rules:
-  - if `scope_manifest.yaml` is absent, the stage runs in nominal global mode
-  - if `scope_manifest.yaml` is present, the stage runs in bounded mode and must challenge only the declared scope
+  - if `run_id` is present, the stage runs in bounded run mode and writes in `runs/<run_id>/work/01_challenge/`
+  - else if `scope_manifest.yaml` is present, the stage runs in bounded transition mode in the flat layout
+  - else the stage runs in nominal global mode
   - any impact, weakness, contradiction or required change detected outside the declared scope must be explicitly flagged as `out_of_scope`
   - no hidden recommendation of out-of-scope modification is allowed
 - Output:
-  - `work/01_challenge/challenge_report_##.md`
+  - flat mode: `work/01_challenge/challenge_report_##.md`
+  - run mode: `runs/<run_id>/work/01_challenge/challenge_report_##.md`
 
 ### STAGE_02_ARBITRAGE
 
 - Inputs:
-  - challenge reports from `docs/pipelines/constitution/work/01_challenge/`
+  - challenge reports from the resolved challenge directory
   - optional human arbitrage notes
-  - optional `inputs/scope_manifest.yaml`
-  - optional `inputs/impact_bundle.yaml`
+  - optional `run_id`
+  - optional resolved `scope_manifest`
+  - optional resolved `impact_bundle`
 - Prompt:
   - `docs/prompts/shared/Make04ConstitutionArbitrage.md`
 - Rule:
-  - every `challenge_report*.md` file present in `docs/pipelines/constitution/work/01_challenge/` must be considered during arbitrage
+  - every `challenge_report*.md` file present in the resolved challenge directory must be considered during arbitrage
   - the arbitrage must consolidate all retained, rejected, deferred, or out-of-scope findings into a single decision record
   - in bounded mode, the arbitrage must distinguish retained in-scope findings, retained out-of-scope findings, and deferred findings caused by scope limits
   - any required scope extension must be made explicit
 - Output:
-  - `work/02_arbitrage/arbitrage.md`
-
+  - flat mode: `work/02_arbitrage/arbitrage.md`
+  - run mode: `runs/<run_id>/work/02_arbitrage/arbitrage.md`
 ### STAGE_03_PATCH_SYNTHESIS
 
 - Inputs:
   - current cores
-  - challenge report
-  - arbitrage
-  - optional `inputs/scope_manifest.yaml`
+  - challenge report from the resolved challenge directory
+  - arbitrage from the resolved arbitrage directory
+  - optional `run_id`
+  - optional resolved `scope_manifest`
 - Prompt:
   - `docs/prompts/shared/Make05CorePatch.md`
 - Rules:
@@ -141,7 +188,9 @@ En mode borné, il bloque toute promotion implicite d'un succès local.
   - any dependency outside the scope that cannot be ignored must be flagged explicitly
   - no silent out-of-scope modification is allowed
 - Output:
-  - `work/03_patch/patchset.yaml`
+  - flat mode: `work/03_patch/patchset.yaml`
+  - run mode: `runs/<run_id>/work/03_patch/patchset.yaml`
+
 ### STAGE_04_PATCH_VALIDATION
 Objectif :
 - vérifier que le patch synthétisé au Stage 03 est structurellement valide
@@ -150,16 +199,18 @@ Objectif :
 - décider s’il est autorisé ou non à passer au Stage 05_APPLY
 
 Inputs :
-- `work/03_patch/patchset.yaml`
-- contexte d’arbitrage si nécessaire :
-  - `work/02_arbitrage/arbitrage.md`
-- optional `inputs/scope_manifest.yaml`
+- patchset depuis le répertoire résolu de Stage 03
+- contexte d’arbitrage depuis le répertoire résolu de Stage 02
+- optional `run_id`
+- optional resolved `scope_manifest`
 - éventuellement le prompt de revue :
   - `docs/prompts/shared/Make06PatchValidation.md`
 
 Commandes de référence :
-- validation structurelle automatique du patchset :
+- validation structurelle automatique du patchset en layout plat :
   - `python docs/patcher/shared/validate_patchset.py ./docs/pipelines/constitution/work/03_patch/patchset.yaml > ./docs/pipelines/constitution/work/04_patch_validation/patch_validation.yaml`
+- validation structurelle automatique du patchset en layout run :
+  - `python docs/patcher/shared/validate_patchset.py ./docs/pipelines/constitution/runs/<run_id>/work/03_patch/patchset.yaml > ./docs/pipelines/constitution/runs/<run_id>/work/04_patch_validation/patch_validation.yaml`
 
 Vérifications attendues :
 - présence de `PATCH_SET`
@@ -184,7 +235,7 @@ Revue logique attendue en complément :
 
 Interprétation du résultat :
 - si `patch_validation.yaml` retourne `status: PASS`, le patch peut être considéré comme structurellement recevable pour le Stage 05
-- si `patch_validation.yaml` retourne `status: FAIL`, le pipeline s’arrête ici et le patch doit être corrigé en `work/03_patch/patchset.yaml` avant nouvelle validation
+- si `patch_validation.yaml` retourne `status: FAIL`, le pipeline s’arrête ici et le patch doit être corrigé dans le répertoire résolu de Stage 03 avant nouvelle validation
 - un `PASS` structurel n’exonère pas d’une revue logique ciblée si le patch modifie des bindings inter-Core sensibles
 - le dry-run du Stage 05 constitue la validation exécutable finale avant apply réel
 - en mode borné, un PASS local ne vaut pas clearance globale d’intégration
@@ -194,8 +245,8 @@ Tools :
 - `docs/prompts/shared/Make06PatchValidation.md`
 
 Outputs :
-- `work/04_patch_validation/patch_validation.yaml`
-- `reports/patch_validation_report.md`
+- flat mode: `work/04_patch_validation/patch_validation.yaml`, `reports/patch_validation_report.md`
+- run mode: `runs/<run_id>/work/04_patch_validation/patch_validation.yaml`, `runs/<run_id>/reports/patch_validation_report.md`
 
 Règle opératoire :
 - `patch_validation.yaml` est la trace canonique de validation automatique du Stage 04
@@ -209,74 +260,50 @@ Objectif :
 - matérialiser les Core patchés sans modifier directement `docs/cores/current/`
 
 Inputs :
-- `work/03_patch/patchset.yaml`
-- `work/04_patch_validation/patch_validation.yaml`
+- patchset depuis le répertoire résolu de Stage 03
+- patch validation depuis le répertoire résolu de Stage 04
 - copies de référence issues de :
   - `docs/cores/current/constitution.yaml`
   - `docs/cores/current/referentiel.yaml`
   - `docs/cores/current/link.yaml`
 
 Précondition :
-- `work/04_patch_validation/patch_validation.yaml` doit être en `status: PASS`
+- la validation du répertoire résolu Stage 04 doit être en `status: PASS`
 
 Principe opératoire :
 - le patchset peut continuer à référencer les chemins canoniques `docs/cores/current/*.yaml`
-- l’application réelle du patch se fait sur une racine sandbox située sous `work/05_apply/`
+- l’application réelle du patch se fait sur une racine sandbox située sous le répertoire résolu `work/05_apply/`
 - la sandbox reproduit la structure canonique du repo pour éviter toute réécriture du patchset d’exécution
 - `docs/cores/current/` ne doit jamais être modifié directement par ce stage
 - en mode borné, le succès d’apply reste un succès local tant que le `integration_gate` n’est pas clarifié
 
-Commandes de référence :
+Commandes de référence layout plat :
 - préparer la racine sandbox :
   - `mkdir -p ./docs/pipelines/constitution/work/05_apply/sandbox/docs/cores/current`
-  - `cp ./docs/cores/current/constitution.yaml ./docs/pipelines/constitution/work/05_apply/sandbox/docs/cores/current/constitution.yaml`
-  - `cp ./docs/cores/current/referentiel.yaml ./docs/pipelines/constitution/work/05_apply/sandbox/docs/cores/current/referentiel.yaml`
-  - `cp ./docs/cores/current/link.yaml ./docs/pipelines/constitution/work/05_apply/sandbox/docs/cores/current/link.yaml`
-
-- dry-run sur sandbox :
+- dry-run :
   - `python docs/patcher/shared/apply_patch.py ./docs/pipelines/constitution/work/03_patch/patchset.yaml ./docs/pipelines/constitution/work/05_apply/sandbox true ./docs/pipelines/constitution/reports/patch_execution_report.yaml`
-
-- apply sur sandbox :
+- apply :
   - `python docs/patcher/shared/apply_patch.py ./docs/pipelines/constitution/work/03_patch/patchset.yaml ./docs/pipelines/constitution/work/05_apply/sandbox false ./docs/pipelines/constitution/reports/patch_execution_report.yaml`
 
-- matérialiser la sortie patchée :
-  - `mkdir -p ./docs/pipelines/constitution/work/05_apply/patched`
-  - `cp ./docs/pipelines/constitution/work/05_apply/sandbox/docs/cores/current/constitution.yaml ./docs/pipelines/constitution/work/05_apply/patched/constitution.yaml`
-  - `cp ./docs/pipelines/constitution/work/05_apply/sandbox/docs/cores/current/referentiel.yaml ./docs/pipelines/constitution/work/05_apply/patched/referentiel.yaml`
-  - `cp ./docs/pipelines/constitution/work/05_apply/sandbox/docs/cores/current/link.yaml ./docs/pipelines/constitution/work/05_apply/patched/link.yaml`
-
-Effets attendus :
-- en dry-run :
-  - aucune modification effective des fichiers sandbox
-  - vérification finale de l’applicabilité du patch
-  - génération du report d’exécution si un chemin est fourni
-
-- en apply :
-  - application effective du patch dans la racine sandbox uniquement
-  - génération ou mise à jour de `reports/patch_execution_report.yaml`
-  - matérialisation des Core patchés dans `work/05_apply/patched/`
-
-Interprétation du résultat :
-- si `patch_execution_report.yaml` est en `PASS`, le pipeline peut passer au `STAGE_06_CORE_VALIDATION`
-- si le report est en `FAIL`, le pipeline s’arrête ici
-- aucun succès du Stage 05 n’autorise à modifier `current/` sans étape explicite de promotion
-
-Tools :
-- `docs/patcher/shared/apply_patch.py`
+Commandes de référence layout run :
+- préparer la racine sandbox :
+  - `mkdir -p ./docs/pipelines/constitution/runs/<run_id>/work/05_apply/sandbox/docs/cores/current`
+- dry-run :
+  - `python docs/patcher/shared/apply_patch.py ./docs/pipelines/constitution/runs/<run_id>/work/03_patch/patchset.yaml ./docs/pipelines/constitution/runs/<run_id>/work/05_apply/sandbox true ./docs/pipelines/constitution/runs/<run_id>/reports/patch_execution_report.yaml`
+- apply :
+  - `python docs/patcher/shared/apply_patch.py ./docs/pipelines/constitution/runs/<run_id>/work/03_patch/patchset.yaml ./docs/pipelines/constitution/runs/<run_id>/work/05_apply/sandbox false ./docs/pipelines/constitution/runs/<run_id>/reports/patch_execution_report.yaml`
 
 Outputs :
-- `work/05_apply/sandbox/`
-- `work/05_apply/patched/`
-- `reports/patch_execution_report.yaml`
+- flat mode: `work/05_apply/sandbox/`, `work/05_apply/patched/`, `reports/patch_execution_report.yaml`
+- run mode: `runs/<run_id>/work/05_apply/sandbox/`, `runs/<run_id>/work/05_apply/patched/`, `runs/<run_id>/reports/patch_execution_report.yaml`
 
 ### STAGE_06_CORE_VALIDATION
 
 - Inputs:
-  - `work/05_apply/patched/constitution.yaml`
-  - `work/05_apply/patched/referentiel.yaml`
-  - `work/05_apply/patched/link.yaml`
-  - optional `inputs/scope_manifest.yaml`
-  - optional `inputs/integration_gate.yaml`
+  - patched cores from the resolved apply directory
+  - optional `run_id`
+  - optional resolved `scope_manifest`
+  - optional resolved `integration_gate`
 - Prompt:
   - `docs/prompts/shared/Make02CoreValidation.md`
 - Rules:
@@ -284,15 +311,15 @@ Outputs :
   - in bounded mode, this stage must distinguish local scope validation from full global validation
   - any unmet global recheck requirement must be propagated to the `integration_gate`
 - Outputs:
-  - `work/06_core_validation/core_validation.yaml`
-  - `reports/core_validation_report.md`
+  - flat mode: `work/06_core_validation/core_validation.yaml`, `reports/core_validation_report.md`
+  - run mode: `runs/<run_id>/work/06_core_validation/core_validation.yaml`, `runs/<run_id>/reports/core_validation_report.md`
 ### STAGE_07_RELEASE_MATERIALIZATION
 - Spec détaillée :
   - `docs/pipelines/constitution/STAGE_07_RELEASE_MATERIALIZATION.md`
 
 - Rule:
   - `STAGE_07_RELEASE_MATERIALIZATION.md` is the canonical specification for Stage 07
-  - in bounded mode, no release materialization may be treated as promotable if the `integration_gate` is not explicitly cleared
+  - in bounded mode, no release materialization may be treated as promotable if the resolved `integration_gate` is not explicitly cleared
 
 ### STAGE_08_PROMOTE_CURRENT
 - Spec détaillée :
@@ -300,76 +327,48 @@ Outputs :
 
 - Rule:
   - `STAGE_08_PROMOTE_CURRENT.md` is the canonical specification for Stage 08
-  - in bounded mode, promotion remains blocked until global checks required by the `integration_gate` are explicitly satisfied
-
+  - in bounded mode, promotion remains blocked until global checks required by the resolved `integration_gate` are explicitly satisfied
 
 ### STAGE_09_CLOSEOUT_AND_ARCHIVE
 Objectif :
 - clôturer explicitement le run du pipeline après promotion réussie
-- archiver le run terminé sous `docs/pipelines/constitution/archive/<release_id>/`
-- réinitialiser `docs/pipelines/constitution/work/` pour rendre le pipeline immédiatement prêt à une nouvelle exécution
+- archiver le run terminé sous un répertoire d'archive cohérent avec le layout résolu
+- réinitialiser l'espace de travail du run courant
 - conserver une trace finale de clôture exploitable humainement et techniquement
 
 Inputs :
-- `docs/pipelines/constitution/reports/promotion_report.yaml`
+- promotion report depuis le répertoire résolu de reports
 - `docs/cores/current/manifest.yaml`
-- `docs/pipelines/constitution/work/07_release/release_plan.yaml`
-- `docs/pipelines/constitution/reports/release_materialization_report.yaml`
-- `docs/pipelines/constitution/reports/patch_execution_report.yaml`
-- `docs/pipelines/constitution/work/06_core_validation/core_validation.yaml`
+- release plan depuis le répertoire résolu de `work/07_release/`
+- release materialization report depuis le répertoire résolu de reports
+- patch execution report depuis le répertoire résolu de reports
+- core validation depuis le répertoire résolu de `work/06_core_validation/`
 
 Préconditions :
-- `reports/promotion_report.yaml` doit être en `status: PASS`
+- le promotion report résolu doit être en `status: PASS`
 - `docs/cores/current/manifest.yaml` doit être valide
 - `docs/cores/current/manifest.yaml` doit pointer vers la release promue par le Stage 08
 
 Principe opératoire :
 - vérifier que la promotion Stage 08 constitue bien l’état actif final du run
-- produire `reports/closeout_report.yaml` et `outputs/final_run_summary.md`
-- archiver une copie complète du run terminé sous `docs/pipelines/constitution/archive/<release_id>/` avec :
-  - `work/`
-  - `reports/`
-  - `outputs/`
-- considérer `work/` comme un workspace transitoire et non comme une archive canonique
-- supprimer puis recréer `docs/pipelines/constitution/work/` vide
+- produire le closeout report et le final run summary dans le layout résolu
+- archiver une copie complète du run terminé sous le répertoire d'archive résolu
+- considérer l'espace `work/` du run comme transitoire et non comme archive canonique
 - ne modifier ni `docs/cores/releases/` ni `docs/cores/current/`
 
-Archive attendue :
-- `archive/<release_id>/work/`
-- `archive/<release_id>/reports/`
-- `archive/<release_id>/outputs/`
-
-Commandes de référence :
-- vérifier l’état courant final :
-  - `python docs/patcher/shared/validate_current_manifest.py ./docs/cores/current/manifest.yaml ./docs/specs/core-release/current_manifest.schema.yaml`
-- vérifier la traçabilité de promotion :
-  - `python docs/patcher/shared/validate_promotion_report.py ./docs/pipelines/constitution/reports/promotion_report.yaml ./docs/specs/core-release/promotion_report.schema.yaml`
-- clôturer, archiver et réinitialiser le workspace :
-  - `python docs/patcher/shared/closeout_pipeline_run.py ./docs/pipelines/constitution/reports/promotion_report.yaml ./docs/cores/current/manifest.yaml ./docs/pipelines/constitution/reports/closeout_report.yaml ./docs/pipelines/constitution/outputs/final_run_summary.md ./docs/pipelines/constitution/archive`
-
-Outputs :
-- `reports/closeout_report.yaml`
-- `outputs/final_run_summary.md`
-- `archive/<release_id>/`
-- `work/` recréé vide
-
 Règle opératoire :
-- `docs/cores/releases/` reste l’archive métier immuable
-- `docs/cores/current/` reste uniquement la vue active promue
-- `docs/pipelines/constitution/work/` est un workspace transitoire du run courant
-- l’archive des runs terminés se trouve sous `docs/pipelines/constitution/archive/`
-- le Stage 09 ne laisse pas l’historique d’un run uniquement dans `work/`
+- en layout plat, le comportement historique reste valable
+- en layout run, l'archive et le reset s'appliquent au run courant sous `runs/<run_id>/...`
 - le Stage 09 clôture, archive et réinitialise ; il ne recalcule aucun contenu métier
 
 ## Success criteria
 
 - No stage may be skipped
 - No file in `current/` may be modified directly before explicit promotion
-- Any patch application must occur in a sandbox root under `work/05_apply/`
+- Any patch application must occur in a sandbox root under the resolved `work/05_apply/`
 - Any release materialization must write immutable artifacts under `docs/cores/releases/`
 - Promotion to `current/` must remain explicit and occur in a dedicated stage
 - Any successful promotion should be followed by an explicit archive-and-reset closeout stage
-- Any completed run should be archived under `docs/pipelines/constitution/archive/<release_id>/`
-- `docs/pipelines/constitution/work/` should be reset after closeout to prepare the next execution
 - In bounded mode, no silent out-of-scope modification is allowed
 - In bounded mode, no promotion may occur until the `integration_gate` is explicitly cleared
+- In run mode, the run instance is the primary execution unit and its own `work/`, `reports/`, `outputs/` and `archive/` directories are authoritative for the local cycle
