@@ -1,0 +1,37 @@
+scope_catalog:
+  schema_version: 0.1
+  catalog_id: CONSTITUTION_SCOPE_CATALOG_V0_1
+  status: draft_bootstrap
+  pipeline_id: constitution
+
+  source_state:
+    constitution_ref: docs/cores/current/constitution.yaml
+    referentiel_ref: docs/cores/current/referentiel.yaml
+    link_ref: docs/cores/current/link.yaml
+    source_fingerprint: TO_BE_FILLED
+
+  generation:
+    mode: hybrid
+    status: initial_bootstrap
+    validated_by: human_plus_successive_ai
+    notes:
+      - Première matérialisation du catalogue de scopes pour le pipeline constitution.
+      - Le catalogue devra être recalculé ou revalidé après évolution significative de la Constitution active.
+
+  maturity_policy:
+    scoring_model_ref: docs/transformations/core_modularization/CONSTITUTION_SCOPE_MATURITY_MODEL.md
+    minimum_recommended_level_for_parallel_runs: L2_usable_with_care
+
+  published_scopes:
+    - scope_id: CONSTITUTION_SCOPE_LEARNER_STATE
+      scope_key: learner_state
+      definition_ref: docs/pipelines/constitution/scope_catalog/scope_definitions/learner_state.yaml
+      maturity:
+        score_total: 17
+        level: L3_operational
+      publication_status: published_bootstrap
+
+  notes:
+    - >-
+      Catalogue V0 initial. Les scopes futurs devront être ajoutés ici avec leur
+      score de maturité et leur provenance.
