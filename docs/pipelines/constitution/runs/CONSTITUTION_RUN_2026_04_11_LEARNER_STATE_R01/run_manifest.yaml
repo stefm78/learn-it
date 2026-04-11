@@ -1,0 +1,43 @@
+run_manifest:
+  schema_version: 0.1
+  run_id: CONSTITUTION_RUN_2026_04_11_LEARNER_STATE_R01
+  pipeline_id: constitution
+  mode: bounded_local_run
+  status: bootstrap_open
+
+  scope_binding:
+    scope_id: CONSTITUTION_SCOPE_LEARNER_STATE
+    scope_definition_ref: docs/pipelines/constitution/scope_catalog/scope_definitions/learner_state.yaml
+    source_catalog_manifest_ref: docs/pipelines/constitution/scope_catalog/manifest.yaml
+
+  source_state:
+    constitution_ref: docs/cores/current/constitution.yaml
+    referentiel_ref: docs/cores/current/referentiel.yaml
+    link_ref: docs/cores/current/link.yaml
+    source_fingerprint: TO_BE_FILLED
+
+  materialized_inputs:
+    scope_manifest_ref: docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_11_LEARNER_STATE_R01/inputs/scope_manifest.yaml
+    impact_bundle_ref: docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_11_LEARNER_STATE_R01/inputs/impact_bundle.yaml
+    integration_gate_ref: docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_11_LEARNER_STATE_R01/inputs/integration_gate.yaml
+
+  execution_paths:
+    work_root: docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_11_LEARNER_STATE_R01/work
+    reports_root: docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_11_LEARNER_STATE_R01/reports
+    outputs_root: docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_11_LEARNER_STATE_R01/outputs
+    archive_root: docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_11_LEARNER_STATE_R01/archive
+
+  scope_maturity:
+    score_total: 17
+    level: L3_operational
+    policy_note: Scope suffisamment mûr pour un pilote borné prudent.
+
+  overrides:
+    allowed: true
+    policy: explicit_and_traceable_only
+    current_overrides: none
+
+  notes:
+    - >-
+      Premier run instancié à partir du catalogue de scopes constitution. Ce run
+      matérialise le pilote learner_state dans le layout cible `runs/<run_id>/...`.
