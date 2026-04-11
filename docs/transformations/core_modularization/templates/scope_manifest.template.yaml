@@ -1,0 +1,62 @@
+scope_manifest:
+  schema_version: 0.1
+  scope_id: SCOPE_EXAMPLE_CONSTITUTION_LEARNER_STATE
+  status: draft
+
+  governance:
+    pipeline_id: constitution
+    run_mode: bounded_local_run
+    promotion_authority: centralized_only
+
+  target:
+    artifact_family: constitution
+    files_in_scope:
+      - docs/cores/current/constitution.yaml
+    modules_in_scope:
+      - learner_state
+      - activation_regime
+    ids_in_scope:
+      - TYPE_LEARNER_STATE_MODEL
+      - TYPE_STATE_AXIS_ACTIVATION
+      - TYPE_SELF_REPORT_AR_N1
+      - RULE_AR_N1_OVERRIDES_PROXY
+
+  allowed_operations:
+    - challenge
+    - arbitrage
+    - patch
+    - local_validation
+
+  forbidden_operations:
+    - direct_current_promotion
+    - silent_out_of_scope_modification
+    - implicit_cross_core_reallocation
+
+  out_of_scope:
+    files:
+      - docs/cores/current/referentiel.yaml
+      - docs/cores/current/link.yaml
+    modules:
+      - patch_governance
+      - runtime_integrity
+    ids:
+      - INV_RUNTIME_FULLY_LOCAL
+      - INV_NO_RUNTIME_CONTENT_GENERATION
+
+  out_of_scope_policy:
+    detect_and_flag: true
+    silent_change_forbidden: true
+    scope_extension_requires_explicit_decision: true
+    defer_allowed: true
+
+  success_criteria:
+    - findings_are_bounded
+    - arbitrage_is_bounded
+    - patch_is_bounded
+    - local_validation_passes
+    - integration_gate_is_generated_or_referenced
+
+  notes:
+    - >-
+      Template de départ. Les champs exacts pourront être raffinés après un premier
+      pilote réel.
