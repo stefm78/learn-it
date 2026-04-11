@@ -1,0 +1,34 @@
+snapshot:
+  date: 2026-04-11
+  branch: feat/core-modularization-bootstrap
+  topic: constitution_entry_gate_hardening
+
+state:
+  status_files_main_sync: partial
+  overall_progress_percent_estimate: 68
+  summary: >-
+    Les protocoles de startup ont été durcis : décision d'entrée explicite,
+    priorité des artefacts d'état, anti-patterns documentés, et maintenant une
+    vraie entry gate imposant un arrêt avant toute lecture profonde si aucun
+    run_id n'est fourni.
+
+completed_since_startup_closeout:
+  - state_artifacts_priority_documented
+  - entry_decision_protocol_documented
+  - entry_prompt_template_without_run_id_created
+  - entry_hardening_notes_documented
+  - startup_entry_decision_record_template_created
+  - run_tracking_bootstrap_usage_documented
+  - entry_gate_documented
+
+next_structural_targets:
+  - reference_entry_gate_from_pipeline_and startup docs
+  - produce a single canonical launch prompt family for constitution
+  - test a no-run-id startup against the entry gate behavior
+  - then replicate the model to platform_factory
+
+notes:
+  - >-
+    Ce snapshot reflète le fait que l'inefficacité observée ne vient plus d'un
+    manque d'artefacts, mais d'un manque de contrainte suffisante dans l'ordre
+    de lecture et d'arrêt au startup.
