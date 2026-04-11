@@ -1,0 +1,20 @@
+run_launch_request:
+  schema_version: 0.1
+  pipeline_id: constitution
+  stage_id: STAGE_01_CHALLENGE
+
+  target:
+    resolution_kind: scope_id
+    scope_id: CONSTITUTION_SCOPE_LEARNER_STATE
+    # alternatives:
+    # scope_key: learner_state
+    # run_id: CONSTITUTION_RUN_2026_04_11_LEARNER_STATE_R01
+    # semantic_query: etat apprenant et auto-reports
+
+  execution_policy:
+    create_or_resume: auto
+    allow_semantic_match: true
+    require_explicit_resolution_if_ambiguous: true
+
+  operator_notes:
+    - Requête de lancement courte matérialisée en contrat de résolution.
