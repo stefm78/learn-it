@@ -1,0 +1,61 @@
+scope_manifest:
+  schema_version: 0.1
+  run_id: CONSTITUTION_RUN_2026_04_11_LEARNER_STATE_R01
+  scope_id: CONSTITUTION_SCOPE_LEARNER_STATE
+  status: materialized_from_scope_catalog
+
+  governance:
+    pipeline_id: constitution
+    run_mode: bounded_local_run
+    promotion_authority: centralized_only
+    source_scope_definition_ref: docs/pipelines/constitution/scope_catalog/scope_definitions/learner_state.yaml
+    transformation_ref: docs/transformations/core_modularization/J1_SCOPED_RUN_CONTRACT.md
+
+  target:
+    artifact_family: constitution
+    files_in_scope:
+      - docs/cores/current/constitution.yaml
+    modules_in_scope:
+      - learner_state
+      - self_report
+      - conservative_entry_logic
+    ids_in_scope:
+      - TYPE_LEARNER_STATE_MODEL
+      - TYPE_STATE_AXIS_CALIBRATION
+      - TYPE_STATE_AXIS_ACTIVATION
+      - TYPE_STATE_AXIS_VALUE_COST
+      - TYPE_SELF_REPORT_AR_N1
+      - TYPE_SELF_REPORT_AR_N2
+      - TYPE_SELF_REPORT_AR_N3
+      - INV_CONSERVATIVE_RULE_WITHOUT_AR_N1
+      - INV_VC_NOT_GENERAL_MOTIVATION_PROXY
+      - RULE_AR_N1_OVERRIDES_PROXY
+      - RULE_SESSION_INTENTION_NON_BLOCKING
+      - RULE_LEARNER_STATE_AXIS_UNKNOWN_ALLOWED
+      - RULE_MULTI_AXIS_UNKNOWN_OR_UNOBSERVABLE_SAFE_ENTRY
+      - EVENT_ACTIVATION_DISTRESS_PERSISTENCE_ESCALATION
+      - RULE_ACTIVATION_DISTRESS_PERSISTENCE_ESCALATION_OFFSESSION
+
+  allowed_operations:
+    - challenge
+    - arbitrage
+    - patch
+    - local_validation
+
+  forbidden_operations:
+    - direct_current_promotion
+    - silent_out_of_scope_modification
+    - implicit_cross_core_reallocation
+    - silent_threshold_redefinition
+
+  out_of_scope_policy:
+    detect_and_flag: true
+    silent_change_forbidden: true
+    scope_extension_requires_explicit_decision: true
+    defer_allowed: true
+
+  notes:
+    - >-
+      Cette matérialisation de run est dérivée de la scope definition learner_state.
+      Elle remplace conceptuellement le précédent scope manifest posé à plat dans
+      `docs/pipelines/constitution/inputs/`.
