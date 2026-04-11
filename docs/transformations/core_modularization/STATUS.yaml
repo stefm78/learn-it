@@ -11,15 +11,15 @@ transformation:
     de cohérence canonique globale.
 
 current_state:
-  phase_id: P0
-  phase_label: Bootstrap du chantier
-  phase_status: done
-  overall_progress_percent: 8
+  phase_id: P3
+  phase_label: Adaptation pipeline Constitution
+  phase_status: in_progress
+  overall_progress_percent: 31
   confidence: medium
   summary: >-
-    Le socle minimal de continuité est posé sur une branche dédiée. La
-    transformation est désormais traçable, reprenable et gouvernable sans dépendre
-    du contexte implicite d'une conversation unique.
+    Le pipeline `constitution` scope-aware et ses deux prompts principaux sont
+    préparés sur la branche dans `tmp/`, avec notices d'application et états de
+    suivi prêts à synchroniser après application locale.
 
 completed:
   - id: BOOTSTRAP_BRANCH_CREATED
@@ -34,23 +34,42 @@ completed:
   - id: BOOTSTRAP_STATUS_CREATED
     status: done
     note: Fichier STATUS.yaml ajouté.
-  - id: BOOTSTRAP_WORKLOG_PENDING
-    status: in_progress
-    note: Journal append-only à initialiser.
+  - id: BOOTSTRAP_WORKLOG_INITIALIZED
+    status: done
+    note: Journal append-only initialisé.
+  - id: J1_SCOPE_CONTRACT_DEFINED
+    status: done
+    note: Contrat minimal `scope_manifest` / `impact_bundle` / `integration_gate` défini.
+  - id: J1_SCOPE_TEMPLATES_CREATED
+    status: done
+    note: Templates de scope ajoutés.
+  - id: J1_CONSTITUTION_PIPELINE_MINIMAL_DELTA_DEFINED
+    status: done
+    note: Delta minimal de pipeline documenté.
+  - id: J1_CONSTITUTION_PIPELINE_REPLACEMENT_PREPARED
+    status: done
+    note: Remplacement scope-aware préparé dans `tmp/constitution_pipeline_scoped_v1_1/`.
+  - id: J1_CONSTITUTION_PROMPTS_REPLACEMENT_PREPARED
+    status: done
+    note: Remplacements scope-aware préparés pour `Challenge_constitution.md` et `Make04ConstitutionArbitrage.md`.
 
 next_targets:
-  - id: J1_SCOPE_CONTRACT
+  - id: P3_APPLY_CONSTITUTION_PIPELINE_REPLACEMENT
     priority: high
     status: todo
-    description: Définir le contrat minimal d'un run borné.
-  - id: J1_CONSTITUTION_PIPELINE_DELTA
+    description: Appliquer localement le remplacement de `docs/pipelines/constitution/pipeline.md` depuis `tmp/`.
+  - id: P3_APPLY_CONSTITUTION_PROMPTS_REPLACEMENT
     priority: high
     status: todo
-    description: Définir les changements minimaux à apporter au pipeline constitution.
-  - id: J1_TARGET_SOURCE_LAYOUT
+    description: Appliquer localement les remplacements des prompts `Challenge_constitution.md` et `Make04ConstitutionArbitrage.md`.
+  - id: P3_SYNC_TRACKING_FILES
+    priority: high
+    status: todo
+    description: Synchroniser `STATUS.yaml` et `WORKLOG.md` avec l'état réellement appliqué.
+  - id: P3_FIRST_BOUNDED_PILOT
     priority: medium
     status: todo
-    description: Définir la structure cible minimale des sources modulaires.
+    description: Préparer un premier pilote borné sur un sous-ensemble simple de la Constitution.
 
 non_goals_yet:
   - Refonte complète et immédiate des pipelines existants.
@@ -63,30 +82,8 @@ guardrails:
   - Le parallélisme s'applique aux scopes locaux, pas à la promotion finale.
   - Toute reprise doit mettre à jour STATUS.yaml et WORKLOG.md.
 
-risks:
-  - id: RISK_SCOPE_OVERDESIGN
-    severity: medium
-    description: Concevoir trop de mécanismes avant d'avoir un premier contrat de scope minimal.
-  - id: RISK_PIPELINE_EXPLOSION
-    severity: high
-    description: Multiplier pipelines et prompts au lieu de rendre les artefacts existants scope-aware.
-  - id: RISK_HIDDEN_STATE
-    severity: high
-    description: Laisser des décisions seulement dans des échanges conversationnels et non dans le repo.
-
-resume_protocol:
-  ordered_reading:
-    - docs/transformations/core_modularization/README.md
-    - docs/transformations/core_modularization/ROADMAP.md
-    - docs/transformations/core_modularization/STATUS.yaml
-    - docs/transformations/core_modularization/WORKLOG.md
-  mandatory_before_next_change:
-    - Lire les artefacts de transformation ci-dessus.
-    - Vérifier la branche active de travail.
-    - Ajouter une entrée WORKLOG avant ou juste après un changement significatif.
-
 immediate_next_step:
-  id: INIT_WORKLOG_AND_DEFINE_J1
+  id: APPLY_PREPARED_CONSTITUTION_SCOPE_AWARE_ASSETS
   description: >-
-    Initialiser le WORKLOG puis poser le premier livrable J1 : contrat minimal
-    d'un run borné (`scope_manifest`, `impact_bundle`, `integration_gate`).
+    Appliquer localement les remplacements préparés pour le pipeline et les prompts
+    `constitution`, puis synchroniser `STATUS.yaml` et `WORKLOG.md`.

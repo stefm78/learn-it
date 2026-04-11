@@ -1,12 +1,32 @@
 # PIPELINE — constitution
 
 id: constitution
-version: 1
+version: 1.1
 scope: core-governance
 
 ## Goal
 
 Challenger les Core actifs, arbitrer les corrections, produire un patch, le valider, l'appliquer dans une zone de travail et préparer la promotion.
+
+## Operating modes
+
+Le pipeline `constitution` supporte désormais deux modes opératoires :
+
+### Mode nominal global
+- aucun `scope_manifest` fourni ;
+- le pipeline s'exécute sur le périmètre canonique complet ;
+- le comportement reste celui du pipeline historique.
+
+### Mode borné (`bounded_local_run`)
+- un `scope_manifest` est fourni dans `inputs/` ;
+- le pipeline travaille sur un sous-ensemble borné ;
+- le droit de modifier est gouverné par le `scope_manifest` ;
+- le devoir de lecture du voisinage logique est gouverné par le `impact_bundle` ;
+- tout passage vers release/promotion reste soumis à un `integration_gate` explicite.
+
+Règle structurante :
+- un succès local en mode borné n'est jamais équivalent à une cohérence canonique globale acquise ;
+- la promotion de `current/` reste un acte centralisé et explicite.
 
 ## Canonical resources
 
@@ -32,9 +52,15 @@ Challenger les Core actifs, arbitrer les corrections, produire un patch, le vali
 
 ### Core inputs
 
+Canonical inputs:
 - `docs/cores/current/constitution.yaml`
 - `docs/cores/current/referentiel.yaml`
 - `docs/cores/current/link.yaml`
+
+Optional bounded-run control inputs:
+- `docs/pipelines/constitution/inputs/scope_manifest.yaml`
+- `docs/pipelines/constitution/inputs/impact_bundle.yaml`
+- `docs/pipelines/constitution/inputs/integration_gate.yaml`
 
 ## Staging
 
@@ -50,6 +76,20 @@ Challenger les Core actifs, arbitrer les corrections, produire un patch, le vali
 - reports: `docs/pipelines/constitution/reports/`
 - archive: `docs/pipelines/constitution/archive/`
 
+## Scope control artifacts
+
+### `scope_manifest`
+Déclare le périmètre modifiable autorisé du run.
+En mode borné, ce qui n'est pas dans le scope ne peut pas être modifié implicitement.
+
+### `impact_bundle`
+Déclare le voisinage logique à relire pour travailler sûrement.
+Il étend le devoir de lecture, pas le droit de modifier.
+
+### `integration_gate`
+Déclare les contrôles globaux à rejouer avant release/promotion.
+En mode borné, il bloque toute promotion implicite d'un succès local.
+
 ## Stages
 
 ### STAGE_01_CHALLENGE
@@ -57,8 +97,15 @@ Challenger les Core actifs, arbitrer les corrections, produire un patch, le vali
 - Inputs:
   - current cores
   - optional focus note in `inputs/`
+  - optional `inputs/scope_manifest.yaml`
+  - optional `inputs/impact_bundle.yaml`
 - Prompt:
   - `docs/prompts/shared/Challenge_constitution.md`
+- Rules:
+  - if `scope_manifest.yaml` is absent, the stage runs in nominal global mode
+  - if `scope_manifest.yaml` is present, the stage runs in bounded mode and must challenge only the declared scope
+  - any impact, weakness, contradiction or required change detected outside the declared scope must be explicitly flagged as `out_of_scope`
+  - no hidden recommendation of out-of-scope modification is allowed
 - Output:
   - `work/01_challenge/challenge_report_##.md`
 
@@ -67,11 +114,15 @@ Challenger les Core actifs, arbitrer les corrections, produire un patch, le vali
 - Inputs:
   - challenge reports from `docs/pipelines/constitution/work/01_challenge/`
   - optional human arbitrage notes
+  - optional `inputs/scope_manifest.yaml`
+  - optional `inputs/impact_bundle.yaml`
 - Prompt:
   - `docs/prompts/shared/Make04ConstitutionArbitrage.md`
 - Rule:
   - every `challenge_report*.md` file present in `docs/pipelines/constitution/work/01_challenge/` must be considered during arbitrage
   - the arbitrage must consolidate all retained, rejected, deferred, or out-of-scope findings into a single decision record
+  - in bounded mode, the arbitrage must distinguish retained in-scope findings, retained out-of-scope findings, and deferred findings caused by scope limits
+  - any required scope extension must be made explicit
 - Output:
   - `work/02_arbitrage/arbitrage.md`
 
@@ -81,21 +132,28 @@ Challenger les Core actifs, arbitrer les corrections, produire un patch, le vali
   - current cores
   - challenge report
   - arbitrage
+  - optional `inputs/scope_manifest.yaml`
 - Prompt:
   - `docs/prompts/shared/Make05CorePatch.md`
+- Rules:
+  - in nominal mode, patch synthesis remains global
+  - in bounded mode, the patch must remain inside the declared writable scope
+  - any dependency outside the scope that cannot be ignored must be flagged explicitly
+  - no silent out-of-scope modification is allowed
 - Output:
   - `work/03_patch/patchset.yaml`
-
 ### STAGE_04_PATCH_VALIDATION
 Objectif :
 - vérifier que le patch synthétisé au Stage 03 est structurellement valide
 - vérifier qu’il reste minimal, cohérent et compatible avec la séparation Constitution / Référentiel / LINK
+- en mode borné, vérifier qu’il n’écrit pas hors du scope déclaré
 - décider s’il est autorisé ou non à passer au Stage 05_APPLY
 
 Inputs :
 - `work/03_patch/patchset.yaml`
 - contexte d’arbitrage si nécessaire :
   - `work/02_arbitrage/arbitrage.md`
+- optional `inputs/scope_manifest.yaml`
 - éventuellement le prompt de revue :
   - `docs/prompts/shared/Make06PatchValidation.md`
 
@@ -112,6 +170,7 @@ Vérifications attendues :
 - cohérence minimale des opérations `rename`, `rewrite_references`, `replace_field`, `replace_text`
 - cohérence du bloc `federation` si des références inter-Core fines sont utilisées
 - absence d’anomalie bloquante dans la structure du patchset
+- en mode borné, absence d’écriture hors du périmètre autorisé ou signalement explicite du dépassement
 
 Revue logique attendue en complément :
 - patch sûr
@@ -121,12 +180,14 @@ Revue logique attendue en complément :
 - absence de régression évidente de gouvernance
 - absence de déplacement injustifié de logique entre couches
 - réécriture des références prévue si nécessaire
+- en mode borné, cohérence du patch avec le `scope_manifest`
 
 Interprétation du résultat :
 - si `patch_validation.yaml` retourne `status: PASS`, le patch peut être considéré comme structurellement recevable pour le Stage 05
 - si `patch_validation.yaml` retourne `status: FAIL`, le pipeline s’arrête ici et le patch doit être corrigé en `work/03_patch/patchset.yaml` avant nouvelle validation
 - un `PASS` structurel n’exonère pas d’une revue logique ciblée si le patch modifie des bindings inter-Core sensibles
 - le dry-run du Stage 05 constitue la validation exécutable finale avant apply réel
+- en mode borné, un PASS local ne vaut pas clearance globale d’intégration
 
 Tools :
 - `docs/patcher/shared/validate_patchset.py`
@@ -163,6 +224,7 @@ Principe opératoire :
 - l’application réelle du patch se fait sur une racine sandbox située sous `work/05_apply/`
 - la sandbox reproduit la structure canonique du repo pour éviter toute réécriture du patchset d’exécution
 - `docs/cores/current/` ne doit jamais être modifié directement par ce stage
+- en mode borné, le succès d’apply reste un succès local tant que le `integration_gate` n’est pas clarifié
 
 Commandes de référence :
 - préparer la racine sandbox :
@@ -213,18 +275,24 @@ Outputs :
   - `work/05_apply/patched/constitution.yaml`
   - `work/05_apply/patched/referentiel.yaml`
   - `work/05_apply/patched/link.yaml`
+  - optional `inputs/scope_manifest.yaml`
+  - optional `inputs/integration_gate.yaml`
 - Prompt:
   - `docs/prompts/shared/Make02CoreValidation.md`
+- Rules:
+  - in nominal mode, this stage remains the standard post-apply core validation
+  - in bounded mode, this stage must distinguish local scope validation from full global validation
+  - any unmet global recheck requirement must be propagated to the `integration_gate`
 - Outputs:
   - `work/06_core_validation/core_validation.yaml`
   - `reports/core_validation_report.md`
-
 ### STAGE_07_RELEASE_MATERIALIZATION
 - Spec détaillée :
   - `docs/pipelines/constitution/STAGE_07_RELEASE_MATERIALIZATION.md`
 
 - Rule:
   - `STAGE_07_RELEASE_MATERIALIZATION.md` is the canonical specification for Stage 07
+  - in bounded mode, no release materialization may be treated as promotable if the `integration_gate` is not explicitly cleared
 
 ### STAGE_08_PROMOTE_CURRENT
 - Spec détaillée :
@@ -232,6 +300,7 @@ Outputs :
 
 - Rule:
   - `STAGE_08_PROMOTE_CURRENT.md` is the canonical specification for Stage 08
+  - in bounded mode, promotion remains blocked until global checks required by the `integration_gate` are explicitly satisfied
 
 
 ### STAGE_09_CLOSEOUT_AND_ARCHIVE
@@ -302,3 +371,5 @@ Règle opératoire :
 - Any successful promotion should be followed by an explicit archive-and-reset closeout stage
 - Any completed run should be archived under `docs/pipelines/constitution/archive/<release_id>/`
 - `docs/pipelines/constitution/work/` should be reset after closeout to prepare the next execution
+- In bounded mode, no silent out-of-scope modification is allowed
+- In bounded mode, no promotion may occur until the `integration_gate` is explicitly cleared
