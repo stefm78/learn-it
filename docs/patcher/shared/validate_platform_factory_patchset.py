@@ -359,7 +359,14 @@ def _validate_patch(
             f"Champ obligatoire `{key}` absent dans patch {patch_idx}.",
         )
     if "target_artifact" in patch:
-        ctx.target_artifacts_used.add(patch["target_artifact"])
+        target = patch["target_artifact"]
+        ctx.target_artifacts_used.add(target)
+        ctx.record(
+            f"{prefix}_target_artifact_allowed",
+            target in ALLOWED_TARGETS,
+            f"patch {patch_idx} : target_artifact `{target}` hors de la liste des cibles autorisées "
+            f"{sorted(ALLOWED_TARGETS)}.",
+        )
     location_hint = patch.get("location_hint")
     if isinstance(location_hint, dict):
         for key in REQUIRED_LOCATION_HINT_KEYS:
