@@ -1,0 +1,25 @@
+run_resolution_record:
+  schema_version: 0.1
+  request_ref: TO_BE_FILLED
+  pipeline_id: constitution
+  stage_id: STAGE_01_CHALLENGE
+
+  input_resolution:
+    resolution_mode: resolved_by_scope_id
+    action: create_new_run
+    scope_id: CONSTITUTION_SCOPE_LEARNER_STATE
+    run_id: CONSTITUTION_RUN_2026_04_11_LEARNER_STATE_R01
+
+  resolved_paths:
+    run_manifest_ref: docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_11_LEARNER_STATE_R01/run_manifest.yaml
+    inputs_root: docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_11_LEARNER_STATE_R01/inputs
+    work_root: docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_11_LEARNER_STATE_R01/work
+    reports_root: docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_11_LEARNER_STATE_R01/reports
+    outputs_root: docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_11_LEARNER_STATE_R01/outputs
+
+  ambiguity:
+    status: none
+    note: Resolution succeeded without ambiguity.
+
+  notes:
+    - Cette trace rend la résolution du lancement explicite et auditable.
