@@ -1,0 +1,61 @@
+scope_definition:
+  schema_version: 0.1
+  scope_id: CONSTITUTION_SCOPE_LEARNER_STATE
+  scope_key: learner_state
+  status: draft
+
+  provenance:
+    source_pipeline: constitution
+    extraction_mode: hybrid
+    source_artifacts:
+      - docs/cores/current/constitution.yaml
+      - docs/cores/current/referentiel.yaml
+      - docs/cores/current/link.yaml
+    source_fingerprint: TO_BE_FILLED
+
+  target:
+    artifact_family: constitution
+    files:
+      - docs/cores/current/constitution.yaml
+    modules:
+      - learner_state
+      - self_report
+      - conservative_entry_logic
+    ids:
+      - TYPE_LEARNER_STATE_MODEL
+      - TYPE_STATE_AXIS_ACTIVATION
+      - TYPE_STATE_AXIS_VALUE_COST
+      - TYPE_SELF_REPORT_AR_N1
+      - TYPE_SELF_REPORT_AR_N2
+      - RULE_LEARNER_STATE_AXIS_UNKNOWN_ALLOWED
+
+  default_neighbors_to_read:
+    files:
+      - docs/cores/current/referentiel.yaml
+      - docs/cores/current/link.yaml
+    ids:
+      - REF_CORE_LEARNIT_REFERENTIEL_V2_0_IN_CONSTITUTION
+      - INV_CONSTITUTION_REFERENTIAL_SEPARATION
+      - INV_RUNTIME_FULLY_LOCAL
+      - INV_NO_RUNTIME_CONTENT_GENERATION
+
+  governance:
+    default_allowed_operations:
+      - challenge
+      - arbitrage
+      - patch
+      - local_validation
+    default_forbidden_operations:
+      - direct_current_promotion
+      - silent_out_of_scope_modification
+    scope_extension_policy:
+      explicit_decision_required: true
+
+  watchpoints:
+    - Vérifier les effets de bord hors scope.
+    - Vérifier les dépendances référentielles explicites.
+
+  notes:
+    - >-
+      Une scope definition est un objet catalogué et réutilisable. Elle doit être
+      matérialisée dans un run avant exécution.
