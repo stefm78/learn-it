@@ -1,0 +1,26 @@
+runs_index:
+  schema_version: 0.1
+  pipeline_id: constitution
+  status: bootstrap
+  last_updated: 2026-04-11
+
+  active_runs:
+    - run_id: CONSTITUTION_RUN_2026_04_11_LEARNER_STATE_R01
+      scope_id: CONSTITUTION_SCOPE_LEARNER_STATE
+      scope_key: learner_state
+      run_status: bootstrap_open
+      current_stage: STAGE_01_CHALLENGE
+      mode: bounded_local_run
+      run_manifest_ref: docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_11_LEARNER_STATE_R01/run_manifest.yaml
+
+  closed_runs: []
+
+  resolution_hints:
+    - If a single active run exists for a resolved scope, prefer resume.
+    - If no active run exists for a resolved scope, create a new run.
+    - If multiple active runs exist for the same scope, require disambiguation.
+
+  notes:
+    - >-
+      Index léger destiné au startup des IA sans contexte. Il évite d'avoir à
+      scanner l'ensemble de `runs/` avant de déterminer le bon point d'entrée.
