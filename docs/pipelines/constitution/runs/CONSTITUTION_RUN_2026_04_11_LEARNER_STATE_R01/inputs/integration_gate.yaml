@@ -1,0 +1,61 @@
+integration_gate:
+  schema_version: 0.1
+  run_id: CONSTITUTION_RUN_2026_04_11_LEARNER_STATE_R01
+  scope_id: CONSTITUTION_SCOPE_LEARNER_STATE
+  status: required_before_release_or_promotion
+
+  local_run_result:
+    local_scope_validation_status: pending
+    bounded_patch_status: pending
+    out_of_scope_findings_present: unknown
+    scope_extension_requested: false
+
+  mandatory_global_checks:
+    - full_canonical_reread_required
+    - cross_reference_validation_required
+    - referentiel_binding_recheck_required
+    - invariant_recheck_required
+    - collision_check_with_parallel_runs_required
+    - release_and_promotion_remain_explicit
+
+  global_invariants_to_recheck:
+    - INV_CONSTITUTION_REFERENTIAL_SEPARATION
+    - INV_RUNTIME_FULLY_LOCAL
+    - INV_NO_RUNTIME_CONTENT_GENERATION
+    - INV_VC_NOT_GENERAL_MOTIVATION_PROXY
+
+  integration_risks:
+    - hidden_referentiel_threshold_shift
+    - semantic_drift_between_unknown_and_distress
+    - silent_cross_scope_side_effect
+    - conflicting_parallel_patch
+
+  decision_policy:
+    local_success_is_not_global_success: true
+    promotion_blocked_without_gate_clearance: true
+    manual_or_explicit_ai_arbitration_allowed_for_conflicts: true
+
+  pilot_specific_expectations:
+    - verify_bounded_findings_are_explicitly_classified
+    - verify_out_of_scope_effects_are_not_silently_patched
+    - verify_referentiel_dependencies_remain_explicit
+
+  scope_maturity_context:
+    score_total: 17
+    level: L3_operational
+    policy_note: Scope published as operational for prudent bounded runs.
+
+  clearance:
+    status: blocked
+    unblock_conditions:
+      - local_scope_validation_passed
+      - global_checks_all_pass
+      - no_unresolved_parallel_conflict
+      - no_unresolved_out_of_scope_impact
+      - no_unresolved_scope_extension_need
+      - release_materialization_policy_respected
+
+  notes:
+    - >-
+      Cette matérialisation de run est dérivée du scope catalog et remplace
+      conceptuellement le précédent integration gate à plat dans `inputs/`.
