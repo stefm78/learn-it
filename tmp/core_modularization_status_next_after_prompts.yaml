@@ -1,0 +1,89 @@
+transformation:
+  id: CORE_MODULARIZATION_BOOTSTRAP
+  title: Modularisation des Core et adaptation des pipelines
+  branch: feat/core-modularization-bootstrap
+  status: active
+  owner_mode: human_plus_successive_ai
+  started_on: 2026-04-11
+  objective: >-
+    Transformer progressivement le régime documentaire et pipeline du repo pour
+    permettre le traitement de sous-ensembles bornés, sans perte de rigueur ni
+    de cohérence canonique globale.
+
+current_state:
+  phase_id: P3
+  phase_label: Adaptation pipeline Constitution
+  phase_status: in_progress
+  overall_progress_percent: 31
+  confidence: medium
+  summary: >-
+    Le pipeline `constitution` scope-aware et ses deux prompts principaux sont
+    préparés sur la branche dans `tmp/`, avec notices d'application et états de
+    suivi prêts à synchroniser après application locale.
+
+completed:
+  - id: BOOTSTRAP_BRANCH_CREATED
+    status: done
+    note: Branche dédiée créée depuis la baseline main.
+  - id: BOOTSTRAP_ENTRYPOINT_CREATED
+    status: done
+    note: README de transformation ajouté.
+  - id: BOOTSTRAP_ROADMAP_CREATED
+    status: done
+    note: Roadmap initiale ajoutée.
+  - id: BOOTSTRAP_STATUS_CREATED
+    status: done
+    note: Fichier STATUS.yaml ajouté.
+  - id: BOOTSTRAP_WORKLOG_INITIALIZED
+    status: done
+    note: Journal append-only initialisé.
+  - id: J1_SCOPE_CONTRACT_DEFINED
+    status: done
+    note: Contrat minimal `scope_manifest` / `impact_bundle` / `integration_gate` défini.
+  - id: J1_SCOPE_TEMPLATES_CREATED
+    status: done
+    note: Templates de scope ajoutés.
+  - id: J1_CONSTITUTION_PIPELINE_MINIMAL_DELTA_DEFINED
+    status: done
+    note: Delta minimal de pipeline documenté.
+  - id: J1_CONSTITUTION_PIPELINE_REPLACEMENT_PREPARED
+    status: done
+    note: Remplacement scope-aware préparé dans `tmp/constitution_pipeline_scoped_v1_1/`.
+  - id: J1_CONSTITUTION_PROMPTS_REPLACEMENT_PREPARED
+    status: done
+    note: Remplacements scope-aware préparés pour `Challenge_constitution.md` et `Make04ConstitutionArbitrage.md`.
+
+next_targets:
+  - id: P3_APPLY_CONSTITUTION_PIPELINE_REPLACEMENT
+    priority: high
+    status: todo
+    description: Appliquer localement le remplacement de `docs/pipelines/constitution/pipeline.md` depuis `tmp/`.
+  - id: P3_APPLY_CONSTITUTION_PROMPTS_REPLACEMENT
+    priority: high
+    status: todo
+    description: Appliquer localement les remplacements des prompts `Challenge_constitution.md` et `Make04ConstitutionArbitrage.md`.
+  - id: P3_SYNC_TRACKING_FILES
+    priority: high
+    status: todo
+    description: Synchroniser `STATUS.yaml` et `WORKLOG.md` avec l'état réellement appliqué.
+  - id: P3_FIRST_BOUNDED_PILOT
+    priority: medium
+    status: todo
+    description: Préparer un premier pilote borné sur un sous-ensemble simple de la Constitution.
+
+non_goals_yet:
+  - Refonte complète et immédiate des pipelines existants.
+  - Déplacement effectif des artefacts canoniques vers un nouveau layout source.
+  - Implémentation immédiate des compileurs, validateurs et projections dérivées.
+
+guardrails:
+  - Le canon publié reste unique tant que la nouvelle chaîne n'est pas validée.
+  - Les pipelines existants restent la référence opérationnelle tant qu'ils ne sont pas explicitement adaptés.
+  - Le parallélisme s'applique aux scopes locaux, pas à la promotion finale.
+  - Toute reprise doit mettre à jour STATUS.yaml et WORKLOG.md.
+
+immediate_next_step:
+  id: APPLY_PREPARED_CONSTITUTION_SCOPE_AWARE_ASSETS
+  description: >-
+    Appliquer localement les remplacements préparés pour le pipeline et les prompts
+    `constitution`, puis synchroniser `STATUS.yaml` et `WORKLOG.md`.
