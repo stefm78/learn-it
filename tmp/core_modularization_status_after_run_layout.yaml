@@ -1,0 +1,103 @@
+transformation:
+  id: CORE_MODULARIZATION_BOOTSTRAP
+  title: Modularisation des Core et adaptation des pipelines
+  branch: feat/core-modularization-bootstrap
+  status: active
+  owner_mode: human_plus_successive_ai
+  started_on: 2026-04-11
+  objective: >-
+    Transformer progressivement le régime documentaire et pipeline du repo pour
+    permettre le traitement de sous-ensembles bornés, sans perte de rigueur ni
+    de cohérence canonique globale.
+
+current_state:
+  phase_id: P3
+  phase_label: Adaptation pipeline Constitution
+  phase_status: in_progress
+  overall_progress_percent: 56
+  confidence: medium
+  summary: >-
+    Le pipeline constitution est scope-aware, les prompts principaux sont adaptés,
+    le premier scope catalogué et le premier run instancié existent, et un
+    remplacement run-aware du pipeline est préparé pour faire du `run_id` l'unité
+    primaire d'exécution des runs bornés.
+
+completed:
+  - id: BOOTSTRAP_BRANCH_CREATED
+    status: done
+    note: Branche dédiée créée depuis la baseline main.
+  - id: BOOTSTRAP_ENTRYPOINT_CREATED
+    status: done
+    note: README de transformation ajouté.
+  - id: BOOTSTRAP_ROADMAP_CREATED
+    status: done
+    note: Roadmap initiale ajoutée.
+  - id: BOOTSTRAP_STATUS_CREATED
+    status: done
+    note: Fichier STATUS.yaml ajouté.
+  - id: BOOTSTRAP_WORKLOG_INITIALIZED
+    status: done
+    note: Journal append-only initialisé.
+  - id: J1_SCOPE_CONTRACT_DEFINED
+    status: done
+    note: Contrat minimal `scope_manifest` / `impact_bundle` / `integration_gate` défini.
+  - id: CONSTITUTION_PIPELINE_SCOPE_AWARE_APPLIED
+    status: done
+    note: Le pipeline constitution a été rendu scope-aware en version 1.1.
+  - id: CONSTITUTION_PROMPTS_SCOPE_AWARE_APPLIED
+    status: done
+    note: Les prompts principaux constitution sont compatibles avec les modes global et bounded.
+  - id: FIRST_BOUNDED_PILOT_INPUTS_CREATED
+    status: done
+    note: Premier pilote borné learner_state posé en inputs plats historiques.
+  - id: CONSTITUTION_SCOPE_CATALOG_MODEL_DOCUMENTED
+    status: done
+    note: Modèle catalogue de scopes + runs documenté.
+  - id: CONSTITUTION_SCOPE_MATURITY_MODEL_DOCUMENTED
+    status: done
+    note: Scoring de maturité des scopes documenté.
+  - id: CONSTITUTION_SCOPE_CATALOG_BOOTSTRAPPED
+    status: done
+    note: Premier catalogue de scopes matérialisé avec learner_state.
+  - id: CONSTITUTION_FIRST_RUN_INSTANCE_BOOTSTRAPPED
+    status: done
+    note: Premier run `CONSTITUTION_RUN_2026_04_11_LEARNER_STATE_R01` matérialisé.
+  - id: CONSTITUTION_RUN_AWARE_PIPELINE_REPLACEMENT_PREPARED
+    status: done
+    note: Remplacement run-aware du pipeline préparé dans `tmp/constitution_pipeline_run_layout_v1_2/`.
+
+next_targets:
+  - id: APPLY_CONSTITUTION_RUN_AWARE_PIPELINE
+    priority: high
+    status: todo
+    description: Appliquer localement le remplacement run-aware de `docs/pipelines/constitution/pipeline.md`.
+  - id: RUN_LAYOUT_EXECUTION_PLACEHOLDERS
+    priority: medium
+    status: todo
+    description: Poser les placeholders de `work/`, `reports/` et `outputs/` sous le premier run.
+  - id: FIRST_RUN_EXECUTION_ON_RUN_LAYOUT
+    priority: medium
+    status: todo
+    description: Exécuter le premier pilote learner_state directement sous `runs/<run_id>/...`.
+  - id: DEPRECATION_PLAN_FLAT_BOUNDED_LAYOUT
+    priority: medium
+    status: todo
+    description: Formaliser la dépréciation du layout plat pour les runs bornés.
+
+non_goals_yet:
+  - Refonte complète et immédiate des pipelines existants.
+  - Déplacement effectif des artefacts canoniques vers un nouveau layout source.
+  - Implémentation immédiate des compileurs, validateurs et projections dérivées.
+
+guardrails:
+  - Le canon publié reste unique tant que la nouvelle chaîne n'est pas validée.
+  - Les pipelines existants restent la référence opérationnelle tant qu'ils ne sont pas explicitement adaptés.
+  - Le parallélisme s'applique aux scopes locaux, pas à la promotion finale.
+  - Toute reprise doit mettre à jour STATUS.yaml et WORKLOG.md.
+
+immediate_next_step:
+  id: APPLY_RUN_AWARE_PIPELINE_AND_RUN_FIRST_EXECUTION
+  description: >-
+    Appliquer le remplacement run-aware du pipeline constitution, puis préparer et
+    utiliser les répertoires `work/`, `reports/` et `outputs/` du premier run
+    instancié sous `runs/<run_id>/...`.
