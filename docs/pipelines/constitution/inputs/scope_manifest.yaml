@@ -1,0 +1,87 @@
+scope_manifest:
+  schema_version: 0.1
+  scope_id: CONSTITUTION_BOUNDARY_PILOT_01_LEARNER_STATE
+  status: draft_pilot
+
+  governance:
+    pipeline_id: constitution
+    run_mode: bounded_local_run
+    promotion_authority: centralized_only
+    transformation_ref: docs/transformations/core_modularization/J1_SCOPED_RUN_CONTRACT.md
+
+  target:
+    artifact_family: constitution
+    files_in_scope:
+      - docs/cores/current/constitution.yaml
+    modules_in_scope:
+      - learner_state
+      - self_report
+      - conservative_entry_logic
+    ids_in_scope:
+      - TYPE_LEARNER_STATE_MODEL
+      - TYPE_STATE_AXIS_CALIBRATION
+      - TYPE_STATE_AXIS_ACTIVATION
+      - TYPE_STATE_AXIS_VALUE_COST
+      - TYPE_SELF_REPORT_AR_N1
+      - TYPE_SELF_REPORT_AR_N2
+      - TYPE_SELF_REPORT_AR_N3
+      - INV_CONSERVATIVE_RULE_WITHOUT_AR_N1
+      - INV_VC_NOT_GENERAL_MOTIVATION_PROXY
+      - RULE_AR_N1_OVERRIDES_PROXY
+      - RULE_SESSION_INTENTION_NON_BLOCKING
+      - RULE_LEARNER_STATE_AXIS_UNKNOWN_ALLOWED
+      - RULE_MULTI_AXIS_UNKNOWN_OR_UNOBSERVABLE_SAFE_ENTRY
+      - EVENT_ACTIVATION_DISTRESS_PERSISTENCE_ESCALATION
+      - RULE_ACTIVATION_DISTRESS_PERSISTENCE_ESCALATION_OFFSESSION
+
+  allowed_operations:
+    - challenge
+    - arbitrage
+    - patch
+    - local_validation
+
+  forbidden_operations:
+    - direct_current_promotion
+    - silent_out_of_scope_modification
+    - implicit_cross_core_reallocation
+    - silent_threshold_redefinition
+
+  out_of_scope:
+    files:
+      - docs/cores/current/referentiel.yaml
+      - docs/cores/current/link.yaml
+    modules:
+      - mastery_model
+      - knowledge_graph
+      - patch_governance
+      - runtime_integrity
+      - deployment_and_autonomy
+    ids:
+      - INV_RUNTIME_FULLY_LOCAL
+      - INV_NO_RUNTIME_CONTENT_GENERATION
+      - TYPE_MASTERY_MODEL
+      - TYPE_KNOWLEDGE_GRAPH
+      - TYPE_PATCH_ARTIFACT
+
+  out_of_scope_policy:
+    detect_and_flag: true
+    silent_change_forbidden: true
+    scope_extension_requires_explicit_decision: true
+    defer_allowed: true
+
+  success_criteria:
+    - findings_are_bounded
+    - arbitrage_is_bounded
+    - patch_is_bounded
+    - local_validation_passes
+    - integration_gate_is_present
+
+  pilot_intent:
+    objective: >-
+      Tester le premier run borné sur un sous-ensemble lisible mais relié de la
+      Constitution, centré sur l'état apprenant, les auto-reports et la logique
+      d'entrée conservatrice.
+    why_this_scope: >-
+      Le sous-ensemble learner_state est suffisamment circonscrit pour un premier
+      pilote, tout en exerçant des dépendances transverses utiles à observer
+      (Référentiel, conservatisme, distress, axes unknown).
