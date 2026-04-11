@@ -1,0 +1,24 @@
+startup_entry_decision_record:
+  schema_version: 0.1
+  pipeline_id: constitution
+  branch: feat/core-modularization-bootstrap
+
+  input:
+    resolution_context: no_run_id_provided
+    user_request: Exécute le pipeline docs/pipelines/constitution/pipeline.md
+
+  startup_resolution:
+    resolution_status: ambiguous
+    active_runs_detected:
+      - run_id: CONSTITUTION_RUN_2026_04_11_LEARNER_STATE_R01
+        scope_id: CONSTITUTION_SCOPE_LEARNER_STATE
+        scope_key: learner_state
+        current_stage: STAGE_01_CHALLENGE
+    recommended_action: ask_continue_or_new_run
+    next_best_action: >-
+      Proposer de continuer CONSTITUTION_RUN_2026_04_11_LEARNER_STATE_R01 ou d'ouvrir un nouveau run.
+
+  notes:
+    - >-
+      Cette trace légère peut être produite avant toute lecture profonde des Core ou
+      des prompts détaillés, afin de matérialiser la décision d'entrée.
