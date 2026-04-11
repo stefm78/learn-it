@@ -4,6 +4,10 @@ id: constitution
 version: 1.2
 scope: core-governance
 
+## AI startup note
+
+For AI startup and run resolution, use `docs/pipelines/constitution/AI_PROTOCOL.yaml` as the authoritative entrypoint.
+
 ## Goal
 
 Challenger les Core actifs, arbitrer les corrections, produire un patch, le valider, l'appliquer dans une zone de travail et préparer la promotion.
