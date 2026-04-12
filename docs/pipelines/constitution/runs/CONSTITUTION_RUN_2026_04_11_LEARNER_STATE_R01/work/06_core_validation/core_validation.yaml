@@ -1,0 +1,37 @@
+CORE_VALIDATION:
+  status: PASS
+  run_id: CONSTITUTION_RUN_2026_04_11_LEARNER_STATE_R01
+  scope_id: CONSTITUTION_SCOPE_LEARNER_STATE
+  mode: bounded_local_run
+  validation_level: local_scope_validation
+  local_scope_validation_status: PASS
+  global_integration_status: NOT_CLEARED
+  anomalies_count: 0
+  warnings_count: 2
+  anomalies:
+    - none
+  warnings:
+    - Local PASS does not imply global canonical validation or promotion readiness.
+    - The AR-N1/AR-N3 authority-chain issue remains outside the current patch scope and still requires explicit broader arbitration if it is to be addressed.
+  checks:
+    patch_effect_matches_arbitrage: PASS
+    in_scope_write_boundary_respected: PASS
+    constitution_referentiel_link_separation_preserved: PASS
+    obvious_reference_breakage_detected: PASS
+    learner_state_rule_clarification_present: PASS
+    hidden_out_of_scope_change_detected: PASS
+  propagated_integration_gate_requirements:
+    - full_canonical_reread_required
+    - cross_reference_validation_required
+    - referentiel_binding_recheck_required
+    - invariant_recheck_required
+    - collision_check_with_parallel_runs_required
+    - release_and_promotion_remain_explicit
+  summary: >-
+    Stage 06 local core validation passed for the bounded learner_state run. The
+    patched Constitution remains coherent with the unchanged Referentiel and LINK,
+    and the only effective change is the in-scope clarification of
+    RULE_MULTI_AXIS_UNKNOWN_OR_UNOBSERVABLE_SAFE_ENTRY. No obvious local regression,
+    orphan dependency, scope violation, or layer-allocation issue was detected in
+    the patched core set. Global integration clearance remains blocked by the
+    integration_gate and must not be inferred from this local PASS.

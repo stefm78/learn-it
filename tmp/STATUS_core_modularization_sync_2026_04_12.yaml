@@ -1,0 +1,158 @@
+transformation:
+  id: CORE_MODULARIZATION_BOOTSTRAP
+  title: Modularisation des Core et adaptation des pipelines
+  branch: feat/core-modularization-bootstrap
+  status: active
+  owner_mode: human_plus_successive_ai
+  started_on: 2026-04-11
+  objective: >-
+    Transformer progressivement le régime documentaire et pipeline du repo pour
+    permettre le traitement de sous-ensembles bornés, sans perte de rigueur ni
+    de cohérence canonique globale.
+
+current_state:
+  phase_id: P4
+  phase_label: Consolidation de la modularisation bidirectionnelle
+  phase_status: in_progress
+  overall_progress_percent: 89
+  confidence: medium
+  summary: >-
+    Le pipeline constitution est désormais run-aware et piloté côté IA par un
+    point d'entrée unique `docs/pipelines/constitution/AI_PROTOCOL.yaml`.
+    La transformation a maintenant clarifié deux marches structurelles
+    supplémentaires : J2 pour la réduction de la surface de lecture effective
+    des runs bornés, puis J3 pour la reconstruction canonique déterministe à
+    partir de résultats bornés intégrés. La priorité de ce chantier devient la
+    concrétisation ids-first/projection-first côté scopes et la préparation du
+    contrat d'entrée d'un futur reconstructeur canonique.
+
+completed:
+  - id: BOOTSTRAP_BRANCH_CREATED
+    status: done
+    note: Branche dédiée créée depuis la baseline main.
+  - id: BOOTSTRAP_ENTRYPOINT_CREATED
+    status: done
+    note: README de transformation ajouté.
+  - id: BOOTSTRAP_ROADMAP_CREATED
+    status: done
+    note: Roadmap initiale ajoutée.
+  - id: BOOTSTRAP_STATUS_CREATED
+    status: done
+    note: Fichier STATUS.yaml ajouté.
+  - id: BOOTSTRAP_WORKLOG_INITIALIZED
+    status: done
+    note: Journal append-only initialisé.
+  - id: J1_SCOPE_CONTRACT_DEFINED
+    status: done
+    note: Contrat minimal `scope_manifest` / `impact_bundle` / `integration_gate` défini.
+  - id: CONSTITUTION_PIPELINE_SCOPE_AWARE_APPLIED
+    status: done
+    note: Le pipeline constitution a été rendu scope-aware.
+  - id: CONSTITUTION_PROMPTS_SCOPE_AWARE_APPLIED
+    status: done
+    note: Les prompts principaux constitution sont compatibles avec les modes global et bounded.
+  - id: FIRST_BOUNDED_PILOT_INPUTS_CREATED
+    status: done
+    note: Premier pilote borné learner_state posé en inputs plats historiques.
+  - id: CONSTITUTION_SCOPE_CATALOG_MODEL_DOCUMENTED
+    status: done
+    note: Modèle catalogue de scopes + runs documenté.
+  - id: CONSTITUTION_SCOPE_MATURITY_MODEL_DOCUMENTED
+    status: done
+    note: Scoring de maturité des scopes documenté.
+  - id: CONSTITUTION_SCOPE_CATALOG_BOOTSTRAPPED
+    status: done
+    note: Premier catalogue de scopes matérialisé avec learner_state.
+  - id: CONSTITUTION_FIRST_RUN_INSTANCE_BOOTSTRAPPED
+    status: done
+    note: Premier run `CONSTITUTION_RUN_2026_04_11_LEARNER_STATE_R01` matérialisé.
+  - id: CONSTITUTION_RUN_AWARE_PIPELINE_APPLIED
+    status: done
+    note: `docs/pipelines/constitution/pipeline.md` contient désormais la logique run-aware et pointe vers `AI_PROTOCOL.yaml` pour le startup IA.
+  - id: CONSTITUTION_RUN_WORKSPACE_PLACEHOLDERS_CREATED
+    status: done
+    note: Les répertoires `work/`, `reports/` et `outputs/` du premier run ont été matérialisés.
+  - id: CONSTITUTION_RUN_TRACKING_SCRIPT_CREATED
+    status: done
+    note: `docs/patcher/shared/update_run_tracking.py` permet de suivre explicitement stage et run.
+  - id: CONSTITUTION_AI_PROTOCOL_CONSOLIDATED
+    status: done
+    note: `docs/pipelines/constitution/AI_PROTOCOL.yaml` est le point d'entrée IA unique ; les anciens RUN_*.md sont dépréciés.
+  - id: CONSTITUTION_LAUNCHER_HELPER_CREATED
+    status: done
+    note: Un launcher candidat unique existe dans `tmp/pipeline_launcher.py` et produit un menu synthétique avec next best actions.
+  - id: CONSTITUTION_ADDITIONAL_SCOPE_DEFINITIONS_PREPARED
+    status: done
+    note: `mastery_model` existe déjà dans le catalogue ; `knowledge_graph` a été ajouté ; un manifeste V0.2 du catalogue a été préparé dans tmp.
+  - id: SCOPE_EXTRACTION_AND_READ_SURFACE_CLARIFIED
+    status: done
+    note: Clarification formalisée : les scopes restent des dérivés du canon et la vraie lacune ouverte concerne la surface de lecture effective.
+  - id: J2_EFFECTIVE_READ_SURFACE_REDUCTION_DOCUMENTED
+    status: done
+    note: J2 documente un régime ids-first/projection-first pour réduire la lecture réelle, avec fichiers complets en fallback.
+  - id: J3_CANONICAL_RECONSTRUCTION_DOCUMENTED
+    status: done
+    note: J3 documente la reconstruction canonique déterministe à partir de résultats bornés intégrés.
+  - id: INTEGRATED_SCOPED_CHANGESET_TEMPLATE_CREATED
+    status: done
+    note: Un template `integrated_scoped_changeset` a été ajouté comme futur contrat d'entrée du reconstructeur canonique.
+
+next_targets:
+  - id: SYNC_CENTRAL_STATUS_AND_WORKLOG
+    priority: high
+    status: todo
+    description: Remplacer les fichiers centraux `STATUS.yaml` et `WORKLOG.md` par les versions synchronisées préparées.
+  - id: APPLY_SCOPE_CATALOG_V0_2_IF_NEEDED
+    priority: high
+    status: todo
+    description: Vérifier si `tmp/constitution_scope_catalog_manifest_v0_2.yaml` a été appliqué ; sinon remplacer le manifeste du catalogue.
+  - id: PROTOTYPE_IDS_FIRST_FIELDS_ON_LEARNER_STATE
+    priority: high
+    status: todo
+    description: Faire évoluer `learner_state.yaml` pour distinguer provenance canonique, cible gouvernée, lecture primaire par IDs et fallback fichiers.
+  - id: EVOLVE_IMPACT_BUNDLE_TO_MINIMAL_READ_PLAN
+    priority: high
+    status: todo
+    description: Faire évoluer le `impact_bundle` d'un run pilote pour matérialiser un vrai plan de lecture minimal ids-first.
+  - id: PROTOTYPE_INTEGRATED_SCOPED_CHANGESET
+    priority: medium
+    status: todo
+    description: Instancier le template `integrated_scoped_changeset` sur un exemple constitution borné.
+  - id: DESIGN_DETERMINISTIC_SCOPE_GENERATION
+    priority: medium
+    status: todo
+    description: Définir le mécanisme déterministe de calcul des scopes à partir du canon et d'un jeu de règles de découpage versionné.
+  - id: STUB_DETERMINISTIC_CANONICAL_REBUILDER
+    priority: medium
+    status: todo
+    description: Préparer le squelette d'un reconstructeur canonique déterministe consommant un `integrated_scoped_changeset`.
+  - id: RETEST_LAUNCHER_WITH_MULTI_SCOPE_CATALOG
+    priority: medium
+    status: todo
+    description: Relancer `tmp/pipeline_launcher.py` après publication effective des scopes supplémentaires pour vérifier un vrai `new_run` possible.
+  - id: EXTEND_MODEL_TO_PLATFORM_FACTORY
+    priority: medium
+    status: todo
+    description: Une fois constitution stabilisé, appliquer le même modèle à platform_factory.
+
+non_goals_yet:
+  - Refonte complète et immédiate de tous les pipelines.
+  - Promotion du launcher hors de tmp avant stabilisation.
+  - Implémentation immédiate d'un compilateur canonique de production.
+
+guardrails:
+  - Le canon publié reste unique tant que la nouvelle chaîne n'est pas validée.
+  - Les pipelines existants restent la référence opérationnelle tant qu'ils ne sont pas explicitement adaptés.
+  - Le parallélisme s'applique aux scopes locaux, pas à la promotion finale.
+  - Le launcher est un helper ; il ne doit pas devenir un chantier principal concurrent.
+  - Toute reprise doit mettre à jour STATUS.yaml et WORKLOG.md.
+  - Les scopes ne deviennent pas une seconde source de vérité.
+  - La reconstruction canonique ne consomme pas de texte libre comme entrée primaire.
+
+immediate_next_step:
+  id: PROTOTYPE_IDS_FIRST_SCOPE_AND_REBUILD_INPUT_CONTRACT
+  description: >-
+    Synchroniser les fichiers centraux de suivi, puis prototyper sur
+    `learner_state` un premier scope distinguant provenance, cible gouvernée,
+    lecture primaire par IDs et fallback fichiers, en parallèle de
+    l'instanciation d'un premier `integrated_scoped_changeset` de démonstration.
