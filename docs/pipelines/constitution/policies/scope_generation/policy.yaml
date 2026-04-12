@@ -1,0 +1,173 @@
+scope_generation_policy:
+  schema_version: 0.1
+  policy_id: CONSTITUTION_SCOPE_GENERATION_POLICY_V1
+  status: active
+  pipeline_id: constitution
+
+  source_state:
+    constitution_ref: docs/cores/current/constitution.yaml
+    referentiel_ref: docs/cores/current/referentiel.yaml
+    link_ref: docs/cores/current/link.yaml
+    source_fingerprint: TO_BE_FILLED
+
+  output_contract:
+    catalog_manifest_path: docs/pipelines/constitution/scope_catalog/manifest.yaml
+    scope_definitions_dir: docs/pipelines/constitution/scope_catalog/scope_definitions
+    catalog_id: CONSTITUTION_SCOPE_CATALOG_V1
+    catalog_status: generated
+
+  generation_mode:
+    scope_definitions_are_generated_outputs: true
+    canonical_source_of_truth_remains_current_cores: true
+    regenerate_after_canonical_change: true
+
+  shared_defaults:
+    provenance:
+      source_pipeline: constitution
+      extraction_mode: deterministic_governed
+      source_artifacts:
+        - docs/cores/current/constitution.yaml
+        - docs/cores/current/referentiel.yaml
+        - docs/cores/current/link.yaml
+    target:
+      artifact_family: constitution
+    governance:
+      default_allowed_operations:
+        - challenge
+        - arbitrage
+        - patch
+        - local_validation
+      default_forbidden_operations:
+        - direct_current_promotion
+        - silent_out_of_scope_modification
+        - implicit_cross_core_reallocation
+      scope_extension_policy:
+        explicit_decision_required: true
+    maturity:
+      scoring_model_ref: docs/transformations/core_modularization/CONSTITUTION_SCOPE_MATURITY_MODEL.md
+    read_surface:
+      mode: ids_first_with_explicit_file_fallback
+      fallback_files:
+        - docs/cores/current/constitution.yaml
+        - docs/cores/current/referentiel.yaml
+        - docs/cores/current/link.yaml
+      fallback_trigger_conditions:
+        - unresolved_ambiguity
+        - unresolved_cross_core_dependency
+        - collision_detected
+        - integration_gate_requires_wider_reread
+
+  declared_scopes:
+    - scope_key: learner_state
+      scope_id: CONSTITUTION_SCOPE_LEARNER_STATE
+      publication_status: published_generated
+      target_files:
+        - docs/cores/current/constitution.yaml
+      target_modules:
+        - learner_state
+        - self_report
+        - conservative_entry_logic
+      neighbor_files:
+        - docs/cores/current/referentiel.yaml
+        - docs/cores/current/link.yaml
+      watchpoints:
+        - Ne pas transformer un seuil référentiel en règle constitutionnelle implicite.
+        - Ne pas déduire une inférence psychologique plus forte que le cadre autorisé.
+        - Vérifier les frontières entre état unknown, détresse, conservatisme et escalade.
+        - Vérifier que les liens au Référentiel restent explicites et non silencieux.
+      maturity:
+        axes:
+          clarity_of_scope: 3
+          internal_coherence: 3
+          inter_scope_boundaries: 2
+          dependency_explicitness: 3
+          bounded_run_executability: 3
+          inter_release_stability: 3
+        score_total: 17
+        level: L3_operational
+        rationale:
+          - Scope lisible et assez bien borné pour un premier run.
+          - Frontières encore perfectibles vis-à-vis des mécanismes de distress et des dépendances référentielles.
+          - Suffisamment stable et exécutable pour un pilote borné prudent.
+      notes:
+        - >-
+          Scope généré learner_state. Sa structure reste régénérable à partir du
+          canon et des décisions de partition/voisinage.
+
+    - scope_key: mastery_model
+      scope_id: CONSTITUTION_SCOPE_MASTERY_MODEL
+      publication_status: published_generated
+      target_files:
+        - docs/cores/current/constitution.yaml
+      target_modules:
+        - mastery_model
+        - runtime_evaluation
+        - transfer
+      neighbor_files:
+        - docs/cores/current/referentiel.yaml
+        - docs/cores/current/link.yaml
+      watchpoints:
+        - Ne pas diluer la logique MSC AND strict dans des simplifications de score.
+        - Préserver la séparation entre maîtrise de base et transférabilité.
+        - Vérifier les frontières entre évaluation locale, propagation graphe et dépendances référentielles.
+        - Vérifier qu'une composante non calculable reste deferred et ne tombe jamais implicitement à false.
+      maturity:
+        axes:
+          clarity_of_scope: 3
+          internal_coherence: 4
+          inter_scope_boundaries: 2
+          dependency_explicitness: 3
+          bounded_run_executability: 3
+          inter_release_stability: 3
+        score_total: 18
+        level: L3_operational
+        rationale:
+          - Scope conceptuellement très cohérent autour de l'évaluation de maîtrise et de transfert.
+          - Dépendances explicites mais frontières à surveiller avec le graphe et les seuils référentiels.
+          - Suffisamment stable pour un run borné prudent.
+      notes:
+        - >-
+          Scope généré mastery_model. Sa structure reste régénérable à partir du
+          canon et des décisions de partition/voisinage.
+
+    - scope_key: knowledge_graph
+      scope_id: CONSTITUTION_SCOPE_KNOWLEDGE_GRAPH
+      publication_status: published_generated
+      target_files:
+        - docs/cores/current/constitution.yaml
+      target_modules:
+        - knowledge_graph
+        - competency_graph
+        - prerequisite_logic
+      neighbor_files:
+        - docs/cores/current/referentiel.yaml
+        - docs/cores/current/link.yaml
+      watchpoints:
+        - Vérifier la frontière entre structure de graphe et politique pédagogique.
+        - Vérifier que la gestion des inconnues ne force pas une topologie artificielle.
+        - Vérifier que les prérequis restent localement exécutables sans IA continue.
+      maturity:
+        axes:
+          clarity_of_scope: 2
+          internal_coherence: 3
+          inter_scope_boundaries: 2
+          dependency_explicitness: 2
+          bounded_run_executability: 2
+          inter_release_stability: 2
+        score_total: 13
+        level: L2_usable_with_care
+        rationale:
+          - Scope structurant et probablement indispensable à terme.
+          - Publié avec prudence pour permettre des runs distincts sur le graphe de compétences.
+      notes:
+        - >-
+          Scope généré knowledge_graph. Sa structure reste régénérable à partir
+          du canon et des décisions de partition/voisinage.
+
+  serialization_policy:
+    stable_sort_required: true
+    scope_sort_key:
+      - scope_key
+      - scope_id
+    id_sort_mode: lexical
+    yaml_style: block
