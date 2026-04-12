@@ -30,6 +30,7 @@ SECTION_NAMES = [
     "DEPENDENCIES",
 ]
 CHANGE_RANK = {"none": 0, "editorial": 1, "minor": 2, "major": 3}
+NESTED_CORE_SUBPATH = Path("docs/cores/current")
 
 
 class ReleasePlanError(Exception):
@@ -68,6 +69,21 @@ def dump_yaml(path: Path, data: Any) -> None:
 def ensure_file(path: Path) -> None:
     if not path.exists():
         raise ReleasePlanError(f"fichier introuvable: {path}")
+
+
+
+def resolve_core_file(base_dir: Path, file_name: str) -> Path:
+    candidates = [
+        base_dir / file_name,
+        base_dir / NESTED_CORE_SUBPATH / file_name,
+    ]
+    for candidate in candidates:
+        if candidate.exists():
+            return candidate
+    tried = " | ".join(str(candidate) for candidate in candidates)
+    raise ReleasePlanError(
+        f"fichier introuvable pour {file_name} sous {base_dir}. chemins essayés: {tried}"
+    )
 
 
 
@@ -413,8 +429,17 @@ def main() -> None:
 
     repo_root = Path.cwd()
 
-    patched_docs = {role: read_core(patched_dir / file_name) for role, file_name in ROLE_FILES.items()}
-    current_docs = {role: read_core(current_dir / file_name) for role, file_name in ROLE_FILES.items()}
+    patched_paths = {
+        role: resolve_core_file(patched_dir, file_name)
+        for role, file_name in ROLE_FILES.items()
+    }
+    current_paths = {
+        role: resolve_core_file(current_dir, file_name)
+        for role, file_name in ROLE_FILES.items()
+    }
+
+    patched_docs = {role: read_core(path) for role, path in patched_paths.items()}
+    current_docs = {role: read_core(path) for role, path in current_paths.items()}
 
     assessments = {
         role: assess_role(role, patched_docs[role], current_docs[role])
@@ -477,13 +502,13 @@ def main() -> None:
                 "core_validation": str(core_validation_path),
                 "patch_execution_report": str(patch_execution_report_path),
                 "patched_cores": {
-                    role: str(patched_dir / file_name)
-                    for role, file_name in ROLE_FILES.items()
+                    role: str(path)
+                    for role, path in patched_paths.items()
                 },
             },
             "compared_against_current": {
-                role: str(current_dir / file_name)
-                for role, file_name in ROLE_FILES.items()
+                role: str(path)
+                for role, path in current_paths.items()
             },
             "target_versions": {
                 role: {
