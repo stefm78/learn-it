@@ -11,16 +11,18 @@ transformation:
     de cohérence canonique globale.
 
 current_state:
-  phase_id: P3
-  phase_label: Adaptation pipeline Constitution
+  phase_id: P4
+  phase_label: Consolidation IA + reprise de la transformation réelle
   phase_status: in_progress
-  overall_progress_percent: 56
+  overall_progress_percent: 86
   confidence: medium
   summary: >-
-    Le pipeline constitution est scope-aware, les prompts principaux sont adaptés,
-    le premier scope catalogué et le premier run instancié existent, et un
-    remplacement run-aware du pipeline est préparé pour faire du `run_id` l'unité
-    primaire d'exécution des runs bornés.
+    Le pipeline constitution est désormais run-aware et piloté côté IA par un
+    point d'entrée unique `docs/pipelines/constitution/AI_PROTOCOL.yaml`.
+    Un launcher léger candidat unique existe dans `tmp/pipeline_launcher.py`
+    pour résoudre `continue / new run` à faible contexte. La priorité revient
+    maintenant à la transformation réelle : nettoyage, publication effective de
+    plusieurs scopes, puis exécution réelle du run learner_state.
 
 completed:
   - id: BOOTSTRAP_BRANCH_CREATED
@@ -43,7 +45,7 @@ completed:
     note: Contrat minimal `scope_manifest` / `impact_bundle` / `integration_gate` défini.
   - id: CONSTITUTION_PIPELINE_SCOPE_AWARE_APPLIED
     status: done
-    note: Le pipeline constitution a été rendu scope-aware en version 1.1.
+    note: Le pipeline constitution a été rendu scope-aware.
   - id: CONSTITUTION_PROMPTS_SCOPE_AWARE_APPLIED
     status: done
     note: Les prompts principaux constitution sont compatibles avec les modes global et bounded.
@@ -62,42 +64,75 @@ completed:
   - id: CONSTITUTION_FIRST_RUN_INSTANCE_BOOTSTRAPPED
     status: done
     note: Premier run `CONSTITUTION_RUN_2026_04_11_LEARNER_STATE_R01` matérialisé.
-  - id: CONSTITUTION_RUN_AWARE_PIPELINE_REPLACEMENT_PREPARED
+  - id: CONSTITUTION_RUN_AWARE_PIPELINE_APPLIED
     status: done
-    note: Remplacement run-aware du pipeline préparé dans `tmp/constitution_pipeline_run_layout_v1_2/`.
+    note: `docs/pipelines/constitution/pipeline.md` contient désormais la logique run-aware et pointe vers `AI_PROTOCOL.yaml` pour le startup IA.
+  - id: CONSTITUTION_RUN_WORKSPACE_PLACEHOLDERS_CREATED
+    status: done
+    note: Les répertoires `work/`, `reports/` et `outputs/` du premier run ont été matérialisés.
+  - id: CONSTITUTION_RUN_TRACKING_SCRIPT_CREATED
+    status: done
+    note: `docs/patcher/shared/update_run_tracking.py` permet de suivre explicitement stage et run.
+  - id: CONSTITUTION_AI_PROTOCOL_CONSOLIDATED
+    status: done
+    note: `docs/pipelines/constitution/AI_PROTOCOL.yaml` est le point d'entrée IA unique ; les anciens RUN_*.md sont dépréciés.
+  - id: CONSTITUTION_LAUNCHER_HELPER_CREATED
+    status: done
+    note: Un launcher candidat unique existe dans `tmp/pipeline_launcher.py` et produit un menu synthétique avec next best actions.
+  - id: CONSTITUTION_ADDITIONAL_SCOPE_DEFINITIONS_PREPARED
+    status: done
+    note: `mastery_model` existe déjà dans le catalogue ; `knowledge_graph` a été ajouté ; un manifeste V0.2 du catalogue a été préparé dans tmp.
 
 next_targets:
-  - id: APPLY_CONSTITUTION_RUN_AWARE_PIPELINE
+  - id: CLEAN_TMP_LAUNCHER_OLD_VERSIONS
     priority: high
     status: todo
-    description: Appliquer localement le remplacement run-aware de `docs/pipelines/constitution/pipeline.md`.
-  - id: RUN_LAYOUT_EXECUTION_PLACEHOLDERS
+    description: Supprimer les anciennes versions expérimentales du launcher dans tmp et ne garder qu'un candidat unique.
+  - id: CLEAN_DEPRECATED_CONSTITUTION_RUN_DOCS
+    priority: high
+    status: todo
+    description: Supprimer les anciens RUN_*.md dépréciés côté constitution si ce n'est pas encore fait.
+  - id: APPLY_SCOPE_CATALOG_V0_2_IF_NEEDED
+    priority: high
+    status: todo
+    description: Vérifier si `tmp/constitution_scope_catalog_manifest_v0_2.yaml` a été appliqué ; sinon remplacer le manifeste du catalogue.
+  - id: RETEST_LAUNCHER_WITH_MULTI_SCOPE_CATALOG
     priority: medium
     status: todo
-    description: Poser les placeholders de `work/`, `reports/` et `outputs/` sous le premier run.
-  - id: FIRST_RUN_EXECUTION_ON_RUN_LAYOUT
+    description: Relancer `tmp/pipeline_launcher.py` après publication effective des scopes supplémentaires pour vérifier un vrai `new_run` possible.
+  - id: EXECUTE_LEARNER_STATE_STAGE_01_FOR_REAL
+    priority: high
+    status: todo
+    description: Reprendre `CONSTITUTION_RUN_2026_04_11_LEARNER_STATE_R01` et produire réellement le livrable STAGE_01_CHALLENGE.
+  - id: EXECUTE_LEARNER_STATE_STAGE_02_FOR_REAL
+    priority: high
+    status: todo
+    description: Enchaîner avec STAGE_02_ARBITRAGE après clôture propre du Stage 01.
+  - id: REDUCE_EFFECTIVE_READ_SURFACE
     priority: medium
     status: todo
-    description: Exécuter le premier pilote learner_state directement sous `runs/<run_id>/...`.
-  - id: DEPRECATION_PLAN_FLAT_BOUNDED_LAYOUT
+    description: Passer d'une logique `files to read` à des unités de lecture minimales plus fines pour réduire réellement le coût de contexte.
+  - id: EXTEND_MODEL_TO_PLATFORM_FACTORY
     priority: medium
     status: todo
-    description: Formaliser la dépréciation du layout plat pour les runs bornés.
+    description: Une fois constitution stabilisé, appliquer le même modèle à platform_factory.
 
 non_goals_yet:
-  - Refonte complète et immédiate des pipelines existants.
-  - Déplacement effectif des artefacts canoniques vers un nouveau layout source.
-  - Implémentation immédiate des compileurs, validateurs et projections dérivées.
+  - Refonte complète et immédiate de tous les pipelines.
+  - Promotion du launcher hors de tmp avant stabilisation.
+  - Implémentation immédiate de projections minimales générées automatiquement.
 
 guardrails:
   - Le canon publié reste unique tant que la nouvelle chaîne n'est pas validée.
   - Les pipelines existants restent la référence opérationnelle tant qu'ils ne sont pas explicitement adaptés.
   - Le parallélisme s'applique aux scopes locaux, pas à la promotion finale.
+  - Le launcher est un helper ; il ne doit pas devenir un chantier principal concurrent.
   - Toute reprise doit mettre à jour STATUS.yaml et WORKLOG.md.
 
 immediate_next_step:
-  id: APPLY_RUN_AWARE_PIPELINE_AND_RUN_FIRST_EXECUTION
+  id: CLEANUP_SCOPE_PUBLICATION_AND_REAL_RUN_EXECUTION
   description: >-
-    Appliquer le remplacement run-aware du pipeline constitution, puis préparer et
-    utiliser les répertoires `work/`, `reports/` et `outputs/` du premier run
-    instancié sous `runs/<run_id>/...`.
+    Nettoyer les anciennes versions du launcher et les anciens docs RUN_*.md,
+    publier effectivement le catalogue de scopes V0.2 si nécessaire, puis
+    reprendre pour de vrai le run `CONSTITUTION_RUN_2026_04_11_LEARNER_STATE_R01`
+    au STAGE_01_CHALLENGE avec tracking explicite.
