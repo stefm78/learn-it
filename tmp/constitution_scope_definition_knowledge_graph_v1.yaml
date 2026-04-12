@@ -1,0 +1,73 @@
+scope_definition:
+  schema_version: 0.1
+  scope_id: CONSTITUTION_SCOPE_KNOWLEDGE_GRAPH
+  scope_key: knowledge_graph
+  status: candidate_bootstrap
+
+  provenance:
+    source_pipeline: constitution
+    extraction_mode: hybrid
+    source_artifacts:
+      - docs/cores/current/constitution.yaml
+      - docs/cores/current/referentiel.yaml
+      - docs/cores/current/link.yaml
+    source_fingerprint: TO_BE_FILLED
+
+  target:
+    artifact_family: constitution
+    files:
+      - docs/cores/current/constitution.yaml
+    modules:
+      - knowledge_graph
+      - competency_graph
+      - prerequisite_logic
+    ids:
+      - TYPE_KNOWLEDGE_GRAPH
+      - TYPE_COMPETENCY_NODE
+      - TYPE_PREREQUISITE_EDGE
+      - INV_GRAPH_ACYCLICITY_WHEN_REQUIRED
+      - RULE_PREREQUISITE_RESPECT
+      - RULE_GRAPH_UNKNOWN_ALLOWED
+
+  default_neighbors_to_read:
+    files:
+      - docs/cores/current/referentiel.yaml
+      - docs/cores/current/link.yaml
+    ids:
+      - INV_CONSTITUTION_REFERENTIAL_SEPARATION
+      - INV_RUNTIME_FULLY_LOCAL
+      - INV_NO_RUNTIME_CONTENT_GENERATION
+      - TYPE_AUTONOMY_REGIME
+
+  governance:
+    default_allowed_operations:
+      - challenge
+      - arbitrage
+      - patch
+      - local_validation
+    default_forbidden_operations:
+      - direct_current_promotion
+      - silent_out_of_scope_modification
+      - implicit_cross_core_reallocation
+    scope_extension_policy:
+      explicit_decision_required: true
+
+  watchpoints:
+    - Vérifier la frontière entre structure de graphe et politique pédagogique.
+    - Vérifier que la gestion des inconnues ne force pas une topologie artificielle.
+    - Vérifier que les prérequis restent localement exécutables sans IA continue.
+
+  maturity:
+    scoring_model_ref: docs/transformations/core_modularization/CONSTITUTION_SCOPE_MATURITY_MODEL.md
+    axes:
+      clarity_of_scope: 2
+      internal_coherence: 3
+      inter_scope_boundaries: 2
+      dependency_explicitness: 2
+      bounded_run_executability: 2
+      inter_release_stability: 2
+    score_total: 13
+    level: L2_usable_with_care
+    rationale:
+      - Scope structurant et probablement indispensable à terme.
+      - Candidate bootstrap encore à valider avant publication dans le catalogue.
