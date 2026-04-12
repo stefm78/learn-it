@@ -1,0 +1,79 @@
+scope_generation_policy:
+  schema_version: 0.1
+  policy_id: SCOPE_GENERATION_POLICY_V1
+  status: draft
+  pipeline_id: constitution
+
+  source_state:
+    constitution_ref: docs/cores/current/constitution.yaml
+    referentiel_ref: docs/cores/current/referentiel.yaml
+    link_ref: docs/cores/current/link.yaml
+    source_fingerprint: TO_BE_FILLED
+
+  partition_rules:
+    default_mode: ids_first
+    scope_keys_declared:
+      - learner_state
+      - mastery_model
+      - knowledge_graph
+    assignment_rules:
+      - rule_id: PARTITION_001
+        status: active
+        scope_key: learner_state
+        match_mode: explicit_ids
+        target_ids:
+          - TYPE_LEARNER_STATE_MODEL
+          - TYPE_STATE_AXIS_ACTIVATION
+          - TYPE_STATE_AXIS_VALUE_COST
+        notes:
+          - Règle d'assignation explicite d'exemple.
+
+  dependency_closure_rules:
+    include_upstream_dependencies: true
+    include_downstream_dependencies: true
+    include_cross_core_bindings: true
+    closure_stop_conditions:
+      - explicit_scope_boundary
+      - invariant_already_collected
+    max_closure_depth: bounded_by_rule
+
+  primary_read_rules:
+    mode: ids_first
+    include_target_ids: true
+    include_scope_invariants: true
+    include_critical_bindings: true
+    include_logical_neighbor_ids: true
+
+  fallback_read_rules:
+    allow_full_file_fallback: true
+    fallback_files:
+      - docs/cores/current/constitution.yaml
+      - docs/cores/current/referentiel.yaml
+      - docs/cores/current/link.yaml
+    fallback_trigger_conditions:
+      - unresolved_ambiguity
+      - unresolved_cross_core_dependency
+      - collision_detected
+
+  cross_scope_boundary_rules:
+    overlapping_ids_policy: explicit_decision_required
+    invariant_sharing_policy: allowed_with_traceability
+    cross_scope_reference_policy: declare_and_trace
+
+  serialization_policy:
+    stable_sort_required: true
+    sort_order:
+      - scope_key
+      - scope_id
+      - ids
+    canonical_yaml_style: block
+
+  publication_policy:
+    generated_scopes_are_outputs: true
+    manual_edit_of_generated_scope_definitions: forbidden
+    publication_requires_explicit_validation: true
+
+  notes:
+    - >-
+      Cette politique n'est pas un scope généré. Elle est l'une des entrées
+      gouvernées du calcul déterministe du catalogue de scopes.
