@@ -305,6 +305,13 @@ Outputs :
 - flat mode: `work/05_apply/sandbox/`, `work/05_apply/patched/`, `reports/patch_execution_report.yaml`
 - run mode: `runs/<run_id>/work/05_apply/sandbox/`, `runs/<run_id>/work/05_apply/patched/`, `runs/<run_id>/reports/patch_execution_report.yaml`
 
+Règle opératoire supplémentaire :
+- l’exécution réelle de `docs/patcher/shared/apply_patch.py` en dry-run est obligatoire avant tout apply réel
+- si l’apply réel fait partie du stage courant, son exécution réelle est également obligatoire ; elle ne peut jamais être simulée, supposée ou remplacée par une simple lecture du patchset
+- le Stage 05 ne peut pas être déclaré `done` tant que `reports/patch_execution_report.yaml` n’a pas été produit par exécution effective du script sur la sandbox cible
+- si l’IA ne peut pas exécuter elle-même le script, elle doit fournir explicitement à l’utilisateur les commandes exactes à lancer et ne pas conclure le stage comme entièrement exécuté avant retour du résultat réel
+- aucune matérialisation de `sandbox/` ou `patched/` ne doit être décrite comme faite si elle n’a pas été effectivement produite par l’exécution du script et les copies attendues
+
 ### STAGE_06_CORE_VALIDATION
 
 - Inputs:
@@ -328,6 +335,10 @@ Outputs :
 - Rule:
   - `STAGE_07_RELEASE_MATERIALIZATION.md` is the canonical specification for Stage 07
   - in bounded mode, no release materialization may be treated as promotable if the resolved `integration_gate` is not explicitly cleared
+  - any deterministic script declared by the Stage 07 specification is mandatory and must be actually executed before the stage can be declared `done`
+  - the AI may comment or challenge the script outputs, but must never replace their execution with a simulated result
+  - if the AI cannot execute the required scripts itself, it must provide the exact commands to the user and keep the stage non-final until real outputs are available
+  - Stage 07 must not be declared `done` without real production of the required script artifacts, including at minimum `work/07_release/release_plan.yaml` and the materialization/validation traces required by the Stage 07 specification
 
 ### STAGE_08_PROMOTE_CURRENT
 - Spec détaillée :
@@ -336,6 +347,10 @@ Outputs :
 - Rule:
   - `STAGE_08_PROMOTE_CURRENT.md` is the canonical specification for Stage 08
   - in bounded mode, promotion remains blocked until global checks required by the resolved `integration_gate` are explicitly satisfied
+  - any deterministic script declared by the Stage 08 specification is mandatory and must be actually executed before the stage can be declared `done`
+  - the AI must never simulate promotion, manifest validation, or promotion report validation
+  - if the AI cannot execute the required scripts itself, it must provide the exact commands to the user and keep the stage non-final until real outputs are available
+  - Stage 08 must not be declared `done` without real production of `docs/cores/current/manifest.yaml`, `reports/promotion_report.yaml`, and the required validation outputs defined by the Stage 08 specification
 
 ### STAGE_09_CLOSEOUT_AND_ARCHIVE
 Objectif :
@@ -368,6 +383,9 @@ Règle opératoire :
 - en layout plat, le comportement historique reste valable
 - en layout run, l'archive et le reset s'appliquent au run courant sous `runs/<run_id>/...`
 - le Stage 09 clôture, archive et réinitialise ; il ne recalcule aucun contenu métier
+- si `docs/patcher/shared/closeout_pipeline_run.py` est utilisé comme script canonique de clôture, son exécution réelle est obligatoire avant de déclarer le stage `done`
+- l’IA ne doit jamais simuler une clôture, une archive ou un reset de workspace si les artefacts correspondants n’ont pas été effectivement produits
+- si l’IA ne peut pas exécuter le script de clôture elle-même, elle doit fournir la commande exacte à l’utilisateur et garder le stage non final tant que le résultat réel n’est pas disponible
 
 ## Success criteria
 
@@ -380,3 +398,4 @@ Règle opératoire :
 - In bounded mode, no silent out-of-scope modification is allowed
 - In bounded mode, no promotion may occur until the `integration_gate` is explicitly cleared
 - In run mode, the run instance is the primary execution unit and its own `work/`, `reports/`, `outputs/` and `archive/` directories are authoritative for the local cycle
+- Any stage that depends on a mandatory deterministic script must not be declared `done` until that script has been actually executed and its expected artifacts have been materially produced
