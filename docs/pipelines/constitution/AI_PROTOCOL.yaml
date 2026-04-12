@@ -1,6 +1,6 @@
 ai_protocol:
-  schema_version: 0.1
-  protocol_id: CONSTITUTION_AI_PROTOCOL_V1
+  schema_version: 0.2
+  protocol_id: CONSTITUTION_AI_PROTOCOL_V2
   authoritative_for_ai: true
   primary_entrypoint:
     - docs/pipelines/constitution/AI_PROTOCOL.yaml
@@ -33,8 +33,17 @@ ai_protocol:
       - docs/pipelines/constitution/reports/*
     decision_algorithm:
       if_active_runs_count_eq_0: propose_create_new_run
-      if_active_runs_count_eq_1: ask_continue_or_new_run
+      if_active_runs_count_eq_1: ask_continue_existing_or_open_new_on_other_scope
       if_active_runs_count_gt_1: ask_disambiguation_with_shortlist
+    decision_output_requirements:
+      must_offer:
+        - continue_active_run
+        - open_new_run
+      should_include_if_available:
+        - active_run_id
+        - active_scope_key
+        - active_current_stage
+        - shortlist_of_other_scope_keys
     stop_after_decision: true
 
   run_id_mode:
@@ -65,8 +74,9 @@ ai_protocol:
     - repo_wide_search_for_entry_resolution
     - compare_commits_for_entry_resolution
     - reading_flat_layout_when_run_layout_exists
+    - implicit_resume_when_user_did_not_provide_run_id
 
   responses:
-    single_active_run: "Je vois un run actif: <RUN_ID> sur <SCOPE_KEY>, actuellement sur <CURRENT_STAGE>. On le continue ou tu veux ouvrir un nouveau run ?"
+    single_active_run: "Je vois un run actif: <RUN_ID> sur <SCOPE_KEY>, actuellement sur <CURRENT_STAGE>. On peut soit continuer ce run, soit ouvrir un nouveau run sur un autre scope publié. Recommandation: continuer le run actif."
     no_active_run: "Aucun run actif n'est ouvert. Veux-tu que j'ouvre un nouveau run à partir d'un scope du catalogue ?"
     ambiguous: "emit_short_next_best_action_only"
