@@ -1,0 +1,54 @@
+integration_policy:
+  schema_version: 0.1
+  policy_id: CONSTITUTION_INTEGRATION_POLICY_V1
+  status: active_bootstrap_seed
+  pipeline_family: constitution
+
+  source_state:
+    source_fingerprint: TO_BE_FILLED
+    scope_policy_ref: docs/transformations/core_modularization/policies/constitution/scope_generation/policy.yaml
+
+  run_admission_rules:
+    eligible_run_statuses:
+      - done
+    required_local_validation_statuses:
+      - pass
+    required_integration_gate_statuses:
+      - cleared_for_integration
+    reject_if_unresolved_scope_extension: true
+    reject_if_unresolved_parallel_collision: true
+
+  collision_resolution_rules:
+    conflicting_change_policy: explicit_decision_required
+    overlapping_target_ids_policy: explicit_decision_required
+    priority_order:
+      - invariant_preservation
+      - referential_separation
+      - explicit_human_decision
+      - deterministic_sort_order
+
+  global_recheck_rules:
+    invariants_to_recheck:
+      - INV_CONSTITUTION_REFERENTIAL_SEPARATION
+      - INV_RUNTIME_FULLY_LOCAL
+      - INV_NO_RUNTIME_CONTENT_GENERATION
+      - INV_VC_NOT_GENERAL_MOTIVATION_PROXY
+    cross_reference_validation_required: true
+    parallel_run_collision_check_required: true
+    explicit_scope_extension_review_required: true
+
+  accepted_output_contract:
+    integrated_changeset_required: true
+    free_text_only_decision_forbidden: true
+    stable_order_required: true
+    traceability_to_source_runs_required: true
+
+  publication_policy:
+    integration_result_is_structured_input_to_rebuild: true
+    promotion_of_current_remains_explicit: true
+
+  notes:
+    - >-
+      Cette politique est un fichier réel de bootstrap pour l'intégration
+      globale constitution. Elle convertit les résultats locaux validés en un
+      résultat intégré structuré consommable par la reconstruction canonique.
