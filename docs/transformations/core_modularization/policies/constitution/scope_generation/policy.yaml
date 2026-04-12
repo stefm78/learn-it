@@ -1,0 +1,105 @@
+scope_generation_policy:
+  schema_version: 0.1
+  policy_id: CONSTITUTION_SCOPE_GENERATION_POLICY_V1
+  status: active_bootstrap_seed
+  pipeline_id: constitution
+
+  source_state:
+    constitution_ref: docs/cores/current/constitution.yaml
+    referentiel_ref: docs/cores/current/referentiel.yaml
+    link_ref: docs/cores/current/link.yaml
+    source_fingerprint: TO_BE_FILLED
+
+  generation_mode:
+    scope_definitions_are_generated_outputs: true
+    bootstrap_seed_derived_from_existing_published_scopes: true
+    canonical_source_of_truth_remains_current_cores: true
+
+  policy_domains:
+    partition_mode: ids_first
+    read_surface_mode: ids_first_with_explicit_file_fallback
+    maturity_scoring_mode: hybrid_governed
+
+  declared_scopes:
+    - scope_key: learner_state
+      scope_id: CONSTITUTION_SCOPE_LEARNER_STATE
+      target_core: constitution
+      target_files:
+        - docs/cores/current/constitution.yaml
+      target_modules:
+        - learner_state
+        - self_report
+        - conservative_entry_logic
+      maturity_target_level: L3_operational
+
+    - scope_key: mastery_model
+      scope_id: CONSTITUTION_SCOPE_MASTERY_MODEL
+      target_core: constitution
+      target_files:
+        - docs/cores/current/constitution.yaml
+      target_modules:
+        - mastery_model
+        - runtime_evaluation
+        - transfer
+      maturity_target_level: L3_operational
+
+    - scope_key: knowledge_graph
+      scope_id: CONSTITUTION_SCOPE_KNOWLEDGE_GRAPH
+      target_core: constitution
+      target_files:
+        - docs/cores/current/constitution.yaml
+      target_modules:
+        - knowledge_graph
+        - competency_graph
+        - prerequisite_logic
+      maturity_target_level: L2_usable_with_care
+
+  dependency_closure_rules:
+    include_upstream_dependencies: true
+    include_downstream_dependencies: true
+    include_cross_core_bindings: true
+    include_transverse_invariants_when_explicitly_declared: true
+    closure_requires_traceability: true
+
+  primary_read_rules:
+    include_target_ids: true
+    include_explicit_neighbor_ids: true
+    include_declared_transverse_invariants: true
+    include_declared_cross_core_bindings: true
+
+  fallback_read_rules:
+    allow_full_file_fallback: true
+    fallback_files:
+      - docs/cores/current/constitution.yaml
+      - docs/cores/current/referentiel.yaml
+      - docs/cores/current/link.yaml
+    fallback_trigger_conditions:
+      - unresolved_ambiguity
+      - unresolved_cross_core_dependency
+      - collision_detected
+      - integration_gate_requires_wider_reread
+
+  cross_scope_boundary_rules:
+    overlapping_target_ids_policy: explicit_decision_required
+    invariant_sharing_policy: allowed_with_traceability
+    cross_scope_reference_policy: declare_and_trace
+    hidden_scope_leakage_forbidden: true
+
+  serialization_policy:
+    stable_sort_required: true
+    scope_sort_key:
+      - scope_key
+      - scope_id
+    id_sort_mode: lexical
+    yaml_style: block
+
+  publication_policy:
+    publication_requires_explicit_validation: true
+    manual_edit_of_generated_scope_definitions: forbidden
+    regenerate_after_canonical_change: true
+
+  notes:
+    - >-
+      Cette politique est un fichier réel de bootstrap gouverné. Elle sert de
+      base au passage des scopes `constitution` vers un régime explicitement
+      généré à partir du canon et de décisions normalisées.
