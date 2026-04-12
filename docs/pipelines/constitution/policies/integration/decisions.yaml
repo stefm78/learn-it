@@ -1,0 +1,63 @@
+integration_decisions:
+  schema_version: 0.1
+  decisionset_id: CONSTITUTION_INTEGRATION_DECISIONS_2026_04_12_R01
+  status: active
+  pipeline_family: constitution
+
+  source_state:
+    source_fingerprint: TO_BE_FILLED
+    policy_ref: docs/pipelines/constitution/policies/integration/policy.yaml
+
+  decisions:
+    - decision_id: INTEGRATION_DECISION_001
+      status: approved
+      decision_type: accept_change_after_local_run
+      run_ids:
+        - CONSTITUTION_RUN_2026_04_11_LEARNER_STATE_R01
+      target_ids:
+        - RULE_MULTI_AXIS_UNKNOWN_OR_UNOBSERVABLE_SAFE_ENTRY
+      decision_payload:
+        integration_action: accept_if_patch_and_local_validation_pass
+        priority: normal
+      applies_from: 2026-04-12
+      decided_by: human
+      challenged_with_ai: true
+      justification: >-
+        Le sujet a été retenu par l'arbitrage du run learner_state comme
+        correction in-scope à traduire en patch minimal, puis à intégrer si les
+        validations structurelles et globales passent.
+
+    - decision_id: INTEGRATION_DECISION_002
+      status: approved
+      decision_type: reject_change_requires_scope_extension
+      run_ids:
+        - CONSTITUTION_RUN_2026_04_11_LEARNER_STATE_R01
+      target_ids:
+        - RULE_AR_N1_OVERRIDES_PROXY
+      decision_payload:
+        integration_action: reject
+        reason: requires_scope_extension
+      applies_from: 2026-04-12
+      decided_by: human
+      challenged_with_ai: true
+      justification: >-
+        Le sujet a été classé `needs_scope_extension` par l'arbitrage du run
+        learner_state et ne doit donc pas entrer dans un changeset intégré sans
+        décision inter-Core supplémentaire.
+
+    - decision_id: INTEGRATION_DECISION_003
+      status: approved
+      decision_type: defer_low_priority_editorial_change
+      run_ids:
+        - CONSTITUTION_RUN_2026_04_11_LEARNER_STATE_R01
+      target_ids:
+        - RULE_LEARNER_STATE_AXIS_UNKNOWN_ALLOWED
+      decision_payload:
+        integration_action: defer
+        reason: editorial_normalization_not_in_current_patch_scope
+      applies_from: 2026-04-12
+      decided_by: human
+      challenged_with_ai: true
+      justification: >-
+        La normalisation lexicale a été reportée dans l'arbitrage du run pour
+        préserver la minimalité du changement actuellement visé.
