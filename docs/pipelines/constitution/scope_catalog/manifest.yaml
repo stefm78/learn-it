@@ -1,37 +1,47 @@
 scope_catalog:
   schema_version: 0.1
-  catalog_id: CONSTITUTION_SCOPE_CATALOG_V0_1
-  status: draft_bootstrap
+  catalog_id: CONSTITUTION_SCOPE_CATALOG_V1
+  status: generated
   pipeline_id: constitution
-
   source_state:
     constitution_ref: docs/cores/current/constitution.yaml
     referentiel_ref: docs/cores/current/referentiel.yaml
     link_ref: docs/cores/current/link.yaml
-    source_fingerprint: TO_BE_FILLED
-
+    source_fingerprint: d01b62f616afdcb5898451f987f9fb1cda04911510d7edd286fe43f1198ea6fd
   generation:
-    mode: hybrid
-    status: initial_bootstrap
+    mode: deterministic_governed
+    status: generated
     validated_by: human_plus_successive_ai
     notes:
-      - Première matérialisation du catalogue de scopes pour le pipeline constitution.
-      - Le catalogue devra être recalculé ou revalidé après évolution significative de la Constitution active.
-
+    - Catalogue généré de manière déterministe à partir du canon courant et des politiques canonisées
+      du pipeline constitution.
+    - Les scope_definitions sont des outputs générés et non des fichiers source maintenus manuellement.
   maturity_policy:
     scoring_model_ref: docs/transformations/core_modularization/CONSTITUTION_SCOPE_MATURITY_MODEL.md
     minimum_recommended_level_for_parallel_runs: L2_usable_with_care
-
   published_scopes:
-    - scope_id: CONSTITUTION_SCOPE_LEARNER_STATE
-      scope_key: learner_state
-      definition_ref: docs/pipelines/constitution/scope_catalog/scope_definitions/learner_state.yaml
-      maturity:
-        score_total: 17
-        level: L3_operational
-      publication_status: published_bootstrap
-
+  - scope_id: CONSTITUTION_SCOPE_KNOWLEDGE_GRAPH
+    scope_key: knowledge_graph
+    definition_ref: docs/pipelines/constitution/scope_catalog/scope_definitions/knowledge_graph.yaml
+    maturity:
+      score_total: 13
+      level: L2_usable_with_care
+    publication_status: published_generated
+  - scope_id: CONSTITUTION_SCOPE_LEARNER_STATE
+    scope_key: learner_state
+    definition_ref: docs/pipelines/constitution/scope_catalog/scope_definitions/learner_state.yaml
+    maturity:
+      score_total: 17
+      level: L3_operational
+    publication_status: published_generated
+  - scope_id: CONSTITUTION_SCOPE_MASTERY_MODEL
+    scope_key: mastery_model
+    definition_ref: docs/pipelines/constitution/scope_catalog/scope_definitions/mastery_model.yaml
+    maturity:
+      score_total: 18
+      level: L3_operational
+    publication_status: published_generated
   notes:
-    - >-
-      Catalogue V0 initial. Les scopes futurs devront être ajoutés ici avec leur
-      score de maturité et leur provenance.
+  - Catalogue généré par docs/patcher/shared/generate_constitution_scopes.py.
+  - Toute modification gouvernante doit entrer via les fichiers de politique et de décisions du pipeline
+    constitution.

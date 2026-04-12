@@ -1,0 +1,23 @@
+scope_generation_report:
+  schema_version: 0.1
+  pipeline_id: constitution
+  policy_ref: docs/pipelines/constitution/policies/scope_generation/policy.yaml
+  decisions_ref: docs/pipelines/constitution/policies/scope_generation/decisions.yaml
+  source_fingerprint: d01b62f616afdcb5898451f987f9fb1cda04911510d7edd286fe43f1198ea6fd
+  apply_mode: true
+  generated_scope_count: 3
+  generated_scope_keys:
+  - knowledge_graph
+  - learner_state
+  - mastery_model
+  changed_files:
+  - docs/pipelines/constitution/scope_catalog/scope_definitions/knowledge_graph.yaml
+  - docs/pipelines/constitution/scope_catalog/scope_definitions/learner_state.yaml
+  - docs/pipelines/constitution/scope_catalog/scope_definitions/mastery_model.yaml
+  - docs/pipelines/constitution/scope_catalog/manifest.yaml
+  outputs:
+  - docs/pipelines/constitution/scope_catalog/scope_definitions/knowledge_graph.yaml
+  - docs/pipelines/constitution/scope_catalog/scope_definitions/learner_state.yaml
+  - docs/pipelines/constitution/scope_catalog/scope_definitions/mastery_model.yaml
+  - docs/pipelines/constitution/scope_catalog/manifest.yaml
+  status: PASS

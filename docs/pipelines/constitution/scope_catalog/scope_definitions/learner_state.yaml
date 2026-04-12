@@ -2,77 +2,70 @@ scope_definition:
   schema_version: 0.1
   scope_id: CONSTITUTION_SCOPE_LEARNER_STATE
   scope_key: learner_state
-  status: published_bootstrap
-
+  status: published_generated
   provenance:
     source_pipeline: constitution
-    extraction_mode: hybrid
+    extraction_mode: deterministic_governed
     source_artifacts:
-      - docs/cores/current/constitution.yaml
-      - docs/cores/current/referentiel.yaml
-      - docs/cores/current/link.yaml
-    source_fingerprint: TO_BE_FILLED
-
+    - docs/cores/current/constitution.yaml
+    - docs/cores/current/referentiel.yaml
+    - docs/cores/current/link.yaml
+    source_fingerprint: d01b62f616afdcb5898451f987f9fb1cda04911510d7edd286fe43f1198ea6fd
   target:
     artifact_family: constitution
     files:
-      - docs/cores/current/constitution.yaml
+    - docs/cores/current/constitution.yaml
     modules:
-      - learner_state
-      - self_report
-      - conservative_entry_logic
+    - learner_state
+    - self_report
+    - conservative_entry_logic
     ids:
-      - TYPE_LEARNER_STATE_MODEL
-      - TYPE_STATE_AXIS_CALIBRATION
-      - TYPE_STATE_AXIS_ACTIVATION
-      - TYPE_STATE_AXIS_VALUE_COST
-      - TYPE_SELF_REPORT_AR_N1
-      - TYPE_SELF_REPORT_AR_N2
-      - TYPE_SELF_REPORT_AR_N3
-      - INV_CONSERVATIVE_RULE_WITHOUT_AR_N1
-      - INV_VC_NOT_GENERAL_MOTIVATION_PROXY
-      - RULE_AR_N1_OVERRIDES_PROXY
-      - RULE_SESSION_INTENTION_NON_BLOCKING
-      - RULE_LEARNER_STATE_AXIS_UNKNOWN_ALLOWED
-      - RULE_MULTI_AXIS_UNKNOWN_OR_UNOBSERVABLE_SAFE_ENTRY
-      - EVENT_ACTIVATION_DISTRESS_PERSISTENCE_ESCALATION
-      - RULE_ACTIVATION_DISTRESS_PERSISTENCE_ESCALATION_OFFSESSION
-
+    - EVENT_ACTIVATION_DISTRESS_PERSISTENCE_ESCALATION
+    - INV_CONSERVATIVE_RULE_WITHOUT_AR_N1
+    - INV_VC_NOT_GENERAL_MOTIVATION_PROXY
+    - RULE_ACTIVATION_DISTRESS_PERSISTENCE_ESCALATION_OFFSESSION
+    - RULE_AR_N1_OVERRIDES_PROXY
+    - RULE_LEARNER_STATE_AXIS_UNKNOWN_ALLOWED
+    - RULE_MULTI_AXIS_UNKNOWN_OR_UNOBSERVABLE_SAFE_ENTRY
+    - RULE_SESSION_INTENTION_NON_BLOCKING
+    - TYPE_LEARNER_STATE_MODEL
+    - TYPE_SELF_REPORT_AR_N1
+    - TYPE_SELF_REPORT_AR_N2
+    - TYPE_SELF_REPORT_AR_N3
+    - TYPE_STATE_AXIS_ACTIVATION
+    - TYPE_STATE_AXIS_CALIBRATION
+    - TYPE_STATE_AXIS_VALUE_COST
   default_neighbors_to_read:
     files:
-      - docs/cores/current/referentiel.yaml
-      - docs/cores/current/link.yaml
+    - docs/cores/current/referentiel.yaml
+    - docs/cores/current/link.yaml
     ids:
-      - REF_CORE_LEARNIT_REFERENTIEL_V2_0_IN_CONSTITUTION
-      - TYPE_AUTONOMY_REGIME
-      - INV_CONSTITUTION_REFERENTIAL_SEPARATION
-      - INV_RUNTIME_FULLY_LOCAL
-      - INV_NO_RUNTIME_CONTENT_GENERATION
-      - EVENT_ACTIVATION_DISTRESS_PERSISTENCE_ESCALATION
-      - RULE_ACTIVATION_DISTRESS_PERSISTENCE_ESCALATION_OFFSESSION
-      - RULE_SESSION_INTENTION_NON_BLOCKING
-      - INV_VC_NOT_GENERAL_MOTIVATION_PROXY
-
+    - EVENT_ACTIVATION_DISTRESS_PERSISTENCE_ESCALATION
+    - INV_CONSTITUTION_REFERENTIAL_SEPARATION
+    - INV_NO_RUNTIME_CONTENT_GENERATION
+    - INV_RUNTIME_FULLY_LOCAL
+    - INV_VC_NOT_GENERAL_MOTIVATION_PROXY
+    - REF_CORE_LEARNIT_REFERENTIEL_V2_0_IN_CONSTITUTION
+    - RULE_ACTIVATION_DISTRESS_PERSISTENCE_ESCALATION_OFFSESSION
+    - RULE_SESSION_INTENTION_NON_BLOCKING
+    - TYPE_AUTONOMY_REGIME
   governance:
     default_allowed_operations:
-      - challenge
-      - arbitrage
-      - patch
-      - local_validation
+    - challenge
+    - arbitrage
+    - patch
+    - local_validation
     default_forbidden_operations:
-      - direct_current_promotion
-      - silent_out_of_scope_modification
-      - implicit_cross_core_reallocation
-      - silent_threshold_redefinition
+    - direct_current_promotion
+    - silent_out_of_scope_modification
+    - implicit_cross_core_reallocation
     scope_extension_policy:
       explicit_decision_required: true
-
   watchpoints:
-    - Ne pas transformer un seuil référentiel en règle constitutionnelle implicite.
-    - Ne pas déduire une inférence psychologique plus forte que le cadre autorisé.
-    - Vérifier les frontières entre état unknown, détresse, conservatisme et escalade.
-    - Vérifier que les liens au Référentiel restent explicites et non silencieux.
-
+  - Ne pas transformer un seuil référentiel en règle constitutionnelle implicite.
+  - Ne pas déduire une inférence psychologique plus forte que le cadre autorisé.
+  - Vérifier les frontières entre état unknown, détresse, conservatisme et escalade.
+  - Vérifier que les liens au Référentiel restent explicites et non silencieux.
   maturity:
     scoring_model_ref: docs/transformations/core_modularization/CONSTITUTION_SCOPE_MATURITY_MODEL.md
     axes:
@@ -85,11 +78,8 @@ scope_definition:
     score_total: 17
     level: L3_operational
     rationale:
-      - Scope lisible et assez bien borné pour un premier run.
-      - Frontières encore perfectibles vis-à-vis des mécanismes de distress et des dépendances référentielles.
-      - Suffisamment stable et exécutable pour un pilote borné prudent.
-
+    - Scope lisible et assez bien borné pour un premier run.
+    - Frontières encore perfectibles vis-à-vis des mécanismes de distress et des dépendances référentielles.
+    - Suffisamment stable et exécutable pour un pilote borné prudent.
   notes:
-    - >-
-      Première scope definition publiée dans le catalogue constitution. Elle sert
-      de base au premier run instancié learner_state.
+  - Scope généré learner_state. Sa structure reste régénérable à partir du canon et des décisions de partition/voisinage.

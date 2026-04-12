@@ -2,61 +2,55 @@ scope_definition:
   schema_version: 0.1
   scope_id: CONSTITUTION_SCOPE_KNOWLEDGE_GRAPH
   scope_key: knowledge_graph
-  status: published_bootstrap
-
+  status: published_generated
   provenance:
     source_pipeline: constitution
-    extraction_mode: hybrid
+    extraction_mode: deterministic_governed
     source_artifacts:
-      - docs/cores/current/constitution.yaml
-      - docs/cores/current/referentiel.yaml
-      - docs/cores/current/link.yaml
-    source_fingerprint: TO_BE_FILLED
-
+    - docs/cores/current/constitution.yaml
+    - docs/cores/current/referentiel.yaml
+    - docs/cores/current/link.yaml
+    source_fingerprint: d01b62f616afdcb5898451f987f9fb1cda04911510d7edd286fe43f1198ea6fd
   target:
     artifact_family: constitution
     files:
-      - docs/cores/current/constitution.yaml
+    - docs/cores/current/constitution.yaml
     modules:
-      - knowledge_graph
-      - competency_graph
-      - prerequisite_logic
+    - knowledge_graph
+    - competency_graph
+    - prerequisite_logic
     ids:
-      - TYPE_KNOWLEDGE_GRAPH
-      - TYPE_COMPETENCY_NODE
-      - TYPE_PREREQUISITE_EDGE
-      - INV_GRAPH_ACYCLICITY_WHEN_REQUIRED
-      - RULE_PREREQUISITE_RESPECT
-      - RULE_GRAPH_UNKNOWN_ALLOWED
-
+    - INV_GRAPH_ACYCLICITY_WHEN_REQUIRED
+    - RULE_GRAPH_UNKNOWN_ALLOWED
+    - RULE_PREREQUISITE_RESPECT
+    - TYPE_COMPETENCY_NODE
+    - TYPE_KNOWLEDGE_GRAPH
+    - TYPE_PREREQUISITE_EDGE
   default_neighbors_to_read:
     files:
-      - docs/cores/current/referentiel.yaml
-      - docs/cores/current/link.yaml
+    - docs/cores/current/referentiel.yaml
+    - docs/cores/current/link.yaml
     ids:
-      - INV_CONSTITUTION_REFERENTIAL_SEPARATION
-      - INV_RUNTIME_FULLY_LOCAL
-      - INV_NO_RUNTIME_CONTENT_GENERATION
-      - TYPE_AUTONOMY_REGIME
-
+    - INV_CONSTITUTION_REFERENTIAL_SEPARATION
+    - INV_NO_RUNTIME_CONTENT_GENERATION
+    - INV_RUNTIME_FULLY_LOCAL
+    - TYPE_AUTONOMY_REGIME
   governance:
     default_allowed_operations:
-      - challenge
-      - arbitrage
-      - patch
-      - local_validation
+    - challenge
+    - arbitrage
+    - patch
+    - local_validation
     default_forbidden_operations:
-      - direct_current_promotion
-      - silent_out_of_scope_modification
-      - implicit_cross_core_reallocation
+    - direct_current_promotion
+    - silent_out_of_scope_modification
+    - implicit_cross_core_reallocation
     scope_extension_policy:
       explicit_decision_required: true
-
   watchpoints:
-    - Vérifier la frontière entre structure de graphe et politique pédagogique.
-    - Vérifier que la gestion des inconnues ne force pas une topologie artificielle.
-    - Vérifier que les prérequis restent localement exécutables sans IA continue.
-
+  - Vérifier la frontière entre structure de graphe et politique pédagogique.
+  - Vérifier que la gestion des inconnues ne force pas une topologie artificielle.
+  - Vérifier que les prérequis restent localement exécutables sans IA continue.
   maturity:
     scoring_model_ref: docs/transformations/core_modularization/CONSTITUTION_SCOPE_MATURITY_MODEL.md
     axes:
@@ -69,10 +63,8 @@ scope_definition:
     score_total: 13
     level: L2_usable_with_care
     rationale:
-      - Scope structurant et probablement indispensable à terme.
-      - Publié avec prudence pour permettre des runs distincts sur le graphe de compétences.
-
+    - Scope structurant et probablement indispensable à terme.
+    - Publié avec prudence pour permettre des runs distincts sur le graphe de compétences.
   notes:
-    - >-
-      Scope bootstrap publié pour permettre l'ouverture d'un run borné knowledge_graph,
-      en complément de learner_state et mastery_model.
+  - Scope généré knowledge_graph. Sa structure reste régénérable à partir du canon et des décisions de
+    partition/voisinage.
