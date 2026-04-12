@@ -1,0 +1,14 @@
+stage_completion_record:
+  schema_version: 0.1
+  pipeline_id: constitution
+  run_id: CONSTITUTION_RUN_2026_04_11_LEARNER_STATE_R01
+  stage_id: STAGE_06_CORE_VALIDATION
+  stage_status: done
+  run_status: active
+  next_stage: STAGE_07_RELEASE_MATERIALIZATION
+  scope_status: confirmed_for_bounded_run
+  summary: Stage 06 core validation completed for the bounded learner_state run; local
+    scope validation passed on the patched core set, no obvious local regression or
+    out-of-scope drift was detected, and the integration gate remains blocked for
+    any release or promotion pending explicit global checks.
+  recorded_at: '2026-04-12T15:40:41Z'

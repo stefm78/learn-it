@@ -34,16 +34,17 @@ run_manifest:
   - Premier run instancié à partir du catalogue de scopes constitution. Ce run matérialise
     le pilote learner_state dans le layout cible `runs/<run_id>/...`.
   execution_state:
-    current_stage: STAGE_05_APPLY
+    current_stage: STAGE_06_CORE_VALIDATION
     last_stage_status: done
-    last_updated: '2026-04-12T15:34:04Z'
-    next_stage: STAGE_06_CORE_VALIDATION
+    last_updated: '2026-04-12T15:40:41Z'
+    next_stage: STAGE_07_RELEASE_MATERIALIZATION
     completed_stages:
     - STAGE_01_CHALLENGE
     - STAGE_02_ARBITRAGE
     - STAGE_03_PATCH_SYNTHESIS
     - STAGE_04_PATCH_VALIDATION
     - STAGE_05_APPLY
+    - STAGE_06_CORE_VALIDATION
     stage_history:
     - stage_id: STAGE_01_CHALLENGE
       stage_status: in_progress
@@ -114,10 +115,17 @@ run_manifest:
         successful dry-run; patch was applied successfully in sandbox, patch_execution_report.yaml
         recorded a real PASS execution, and patched core snapshots were materialized
         under runs/CONSTITUTION_RUN_2026_04_11_LEARNER_STATE_R01/work/05_apply/patched.
+    - stage_id: STAGE_06_CORE_VALIDATION
+      stage_status: done
+      recorded_at: '2026-04-12T15:40:41Z'
+      summary: Stage 06 core validation completed for the bounded learner_state run;
+        local scope validation passed on the patched core set, no obvious local regression
+        or out-of-scope drift was detected, and the integration gate remains blocked
+        for any release or promotion pending explicit global checks.
   scope_tracking:
     scope_status: confirmed_for_bounded_run
-    last_updated: '2026-04-12T15:34:04Z'
-    last_note: Stage 05 apply completed with real execution of apply_patch.py after
-      successful dry-run; patch was applied successfully in sandbox, patch_execution_report.yaml
-      recorded a real PASS execution, and patched core snapshots were materialized
-      under runs/CONSTITUTION_RUN_2026_04_11_LEARNER_STATE_R01/work/05_apply/patched.
+    last_updated: '2026-04-12T15:40:41Z'
+    last_note: Stage 06 core validation completed for the bounded learner_state run;
+      local scope validation passed on the patched core set, no obvious local regression
+      or out-of-scope drift was detected, and the integration gate remains blocked
+      for any release or promotion pending explicit global checks.
