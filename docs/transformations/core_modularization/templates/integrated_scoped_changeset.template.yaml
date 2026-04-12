@@ -1,0 +1,78 @@
+integrated_scoped_changeset:
+  schema_version: 0.1
+  pipeline_family: constitution
+  integration_id: INTEGRATION_YYYY_MM_DD_R01
+  status: draft
+
+  source_state:
+    constitution_ref: docs/cores/current/constitution.yaml
+    referentiel_ref: docs/cores/current/referentiel.yaml
+    link_ref: docs/cores/current/link.yaml
+    source_fingerprint: TO_BE_FILLED
+
+  integration_scope:
+    integrated_runs:
+      - run_id: CONSTITUTION_RUN_YYYY_MM_DD_LEARNER_STATE_R01
+        scope_id: CONSTITUTION_SCOPE_LEARNER_STATE
+        run_status: done
+        local_validation_status: pass
+        integration_gate_status: cleared_for_integration
+    excluded_runs:
+      - none
+    deferred_runs:
+      - none
+
+  accepted_changes:
+    - change_id: CHG_001
+      source_run_id: CONSTITUTION_RUN_YYYY_MM_DD_LEARNER_STATE_R01
+      target_core: constitution
+      target_file: docs/cores/current/constitution.yaml
+      target_ids:
+        - RULE_MULTI_AXIS_UNKNOWN_OR_UNOBSERVABLE_SAFE_ENTRY
+      change_type: patchset_operation
+      change_ref: docs/pipelines/constitution/runs/CONSTITUTION_RUN_YYYY_MM_DD_LEARNER_STATE_R01/work/03_patch/patchset.yaml
+      integration_decision: accepted
+      notes:
+        - Modification locale acceptée après validation et arbitrage global.
+
+  rejected_changes:
+    - change_id: CHG_002
+      source_run_id: CONSTITUTION_RUN_YYYY_MM_DD_LEARNER_STATE_R01
+      reason: requires_scope_extension
+      target_ids:
+        - RULE_AR_N1_OVERRIDES_PROXY
+      notes:
+        - Sujet retenu comme pertinent mais non intégrable sans extension de scope.
+
+  resolved_collisions:
+    - none
+
+  global_checks:
+    invariants_rechecked:
+      - INV_CONSTITUTION_REFERENTIAL_SEPARATION
+      - INV_RUNTIME_FULLY_LOCAL
+      - INV_NO_RUNTIME_CONTENT_GENERATION
+    cross_reference_validation_status: pending
+    parallel_run_collision_status: none_detected
+    release_promotion_authority: centralized_only
+
+  reconstruction_policy:
+    deterministic_rebuild_required: true
+    stable_serialization_required: true
+    no_free_text_as_primary_input: true
+    explicit_fallback_to_source_canon_allowed: true
+
+  expected_outputs:
+    rebuilt_files:
+      - docs/cores/current/constitution.yaml
+      - docs/cores/current/referentiel.yaml
+      - docs/cores/current/link.yaml
+    rebuild_report:
+      - docs/pipelines/constitution/reports/canonical_rebuild_report.yaml
+    rebuilt_fingerprint: TO_BE_FILLED
+
+  notes:
+    - >-
+      Cet artefact n'est pas une trace narrative de pipeline. Il représente la
+      forme structurée minimale destinée à être consommée par un mécanisme de
+      reconstruction canonique déterministe.
