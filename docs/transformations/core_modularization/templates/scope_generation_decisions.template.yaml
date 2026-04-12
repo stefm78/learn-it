@@ -1,0 +1,53 @@
+scope_generation_decisions:
+  schema_version: 0.1
+  decisionset_id: SCOPE_GENERATION_DECISIONS_YYYY_MM_DD_R01
+  status: draft
+  pipeline_id: constitution
+
+  source_state:
+    source_fingerprint: TO_BE_FILLED
+    policy_ref: docs/transformations/core_modularization/templates/scope_generation_policy.template.yaml
+
+  decisions:
+    - decision_id: DECISION_001
+      status: approved
+      decision_type: assign_ids_to_scope
+      scope_keys_affected:
+        - learner_state
+      target_ids:
+        - TYPE_SELF_REPORT_AR_N1
+        - TYPE_SELF_REPORT_AR_N2
+      target_patterns: []
+      decision_payload:
+        assignment_mode: force_include
+        priority: high
+      applies_from: 2026-04-12
+      decided_by: human
+      challenged_with_ai: true
+      justification: >-
+        Les IDs ciblés sont explicitement rattachés au scope learner_state pour
+        éviter une dérive de partition implicite lors du calcul automatique.
+
+    - decision_id: DECISION_002
+      status: approved
+      decision_type: force_logical_neighbor
+      scope_keys_affected:
+        - learner_state
+      target_ids:
+        - INV_CONSTITUTION_REFERENTIAL_SEPARATION
+      target_patterns: []
+      decision_payload:
+        neighbor_class: invariant
+        read_mode: primary
+      applies_from: 2026-04-12
+      decided_by: human
+      challenged_with_ai: true
+      justification: >-
+        Invariant transverse imposé comme voisin logique primaire malgré son
+        caractère non local.
+
+  notes:
+    - >-
+      Ce fichier capture les arbitrages humains normalisés qui complètent la
+      politique de génération. Il ne remplace pas la politique durable ; il la
+      spécialise ou l'amende de manière explicite et versionnée.
