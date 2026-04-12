@@ -1,0 +1,50 @@
+snapshot:
+  date: 2026-04-12
+  branch: feat/core-modularization-bootstrap
+  topic: j4_generated_scopes_and_domain_policy_split
+
+state:
+  status_files_main_sync: partial
+  overall_progress_percent_estimate: 90
+  summary: >-
+    J4 a entériné que les `scope_definitions` doivent devenir des artefacts
+    générés à partir du canon et de fichiers de politique/décision versionnés.
+    Un arbitrage complémentaire a été pris : les politiques et décisions ne
+    doivent pas être regroupées dans un fichier géant unique pour tout
+    `constitution`, mais découpées par grands domaines fonctionnels.
+
+completed_since_last_sync_point:
+  - generated_scopes_model_explicitly_accepted
+  - domain_based_policy_split_explicitly_accepted
+  - scope_generation_policy_template_created
+  - scope_generation_decisions_template_created
+
+linked_artifacts:
+  - docs/transformations/core_modularization/J4_GENERATED_SCOPES_FROM_CANON_AND_POLICY.md
+  - docs/transformations/core_modularization/templates/scope_generation_policy.template.yaml
+  - docs/transformations/core_modularization/templates/scope_generation_decisions.template.yaml
+
+policy_domains_retained:
+  - scope_generation
+  - integration
+  - canonical_rebuild
+
+implementation_rule:
+  policy_split_mode: domain_based
+  anti_pattern_rejected: one_giant_policy_file_for_constitution
+
+next_structural_targets:
+  - add_integration_policy_templates
+  - add_canonical_rebuild_policy_templates
+  - synchronize_STATUS_yaml_and_WORKLOG_md_with_J4
+  - instantiate_first_real_scope_generation_policy
+
+guardrails:
+  - domain_split_must_not_turn_into_micro_file_sprawl
+  - each_domain_must_keep_policy_vs_decisions_separation_clear
+  - generated_scopes_remain_outputs_not_sources
+
+notes:
+  - >-
+    Ce snapshot complète l'état du chantier en attendant la synchronisation des
+    fichiers centraux STATUS.yaml et WORKLOG.md.
