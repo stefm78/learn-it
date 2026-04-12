@@ -1,0 +1,56 @@
+canonical_rebuild_decisions:
+  schema_version: 0.1
+  decisionset_id: CANONICAL_REBUILD_DECISIONS_YYYY_MM_DD_R01
+  status: draft
+  pipeline_family: constitution
+
+  source_state:
+    source_fingerprint: TO_BE_FILLED
+    policy_ref: docs/transformations/core_modularization/templates/canonical_rebuild_policy.template.yaml
+
+  decisions:
+    - decision_id: REBUILD_DECISION_001
+      status: approved
+      decision_type: set_stable_serialization_order
+      target_cores:
+        - constitution
+      decision_payload:
+        serialization_order:
+          - core_header
+          - TYPES
+          - INVARIANTS
+          - RULES
+          - PARAMETERS
+          - CONSTRAINTS
+          - EVENTS
+          - ACTIONS
+      applies_from: 2026-04-12
+      decided_by: human
+      challenged_with_ai: true
+      justification: >-
+        Ordre de sérialisation explicitement fixé pour garantir la stabilité du
+        rebuild canonique à entrée égale.
+
+    - decision_id: REBUILD_DECISION_002
+      status: approved
+      decision_type: define_reference_rebuild_priority
+      target_cores:
+        - constitution
+        - referentiel
+        - link
+      decision_payload:
+        priority_order:
+          - preserve_explicit_ids
+          - preserve_cross_core_references
+          - preserve_stable_sort_order
+      applies_from: 2026-04-12
+      decided_by: human
+      challenged_with_ai: true
+      justification: >-
+        La priorité de rebuild est explicitée pour éviter qu'un conflit de
+        sérialisation ne masque une dérive de référence plus importante.
+
+  notes:
+    - >-
+      Ce fichier capture les arbitrages humains normalisés qui spécialisent la
+      politique de reconstruction canonique déterministe.
