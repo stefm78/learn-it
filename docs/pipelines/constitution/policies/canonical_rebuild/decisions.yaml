@@ -1,0 +1,96 @@
+canonical_rebuild_decisions:
+  schema_version: 0.1
+  decisionset_id: CONSTITUTION_CANONICAL_REBUILD_DECISIONS_2026_04_12_R01
+  status: active
+  pipeline_family: constitution
+
+  source_state:
+    source_fingerprint: TO_BE_FILLED
+    policy_ref: docs/pipelines/constitution/policies/canonical_rebuild/policy.yaml
+
+  decisions:
+    - decision_id: REBUILD_DECISION_001
+      status: approved
+      decision_type: set_constitution_serialization_order
+      target_cores:
+        - constitution
+      decision_payload:
+        serialization_order:
+          - core_header
+          - TYPES
+          - INVARIANTS
+          - RULES
+          - PARAMETERS
+          - CONSTRAINTS
+          - EVENTS
+          - ACTIONS
+      applies_from: 2026-04-12
+      decided_by: human
+      challenged_with_ai: true
+      justification: >-
+        Ordre de sérialisation explicitement fixé pour garantir la stabilité du
+        rebuild canonique à entrée égale pour la Constitution.
+
+    - decision_id: REBUILD_DECISION_002
+      status: approved
+      decision_type: set_referentiel_serialization_order
+      target_cores:
+        - referentiel
+      decision_payload:
+        serialization_order:
+          - core_header
+          - TYPES
+          - INVARIANTS
+          - RULES
+          - PARAMETERS
+          - CONSTRAINTS
+          - EVENTS
+          - ACTIONS
+      applies_from: 2026-04-12
+      decided_by: human
+      challenged_with_ai: true
+      justification: >-
+        Ordre de sérialisation fixé explicitement pour homogénéiser les futurs
+        rebuilds entre Constitution et Référentiel.
+
+    - decision_id: REBUILD_DECISION_003
+      status: approved
+      decision_type: set_link_serialization_order
+      target_cores:
+        - link
+      decision_payload:
+        serialization_order:
+          - core_header
+          - TYPES
+          - INVARIANTS
+          - RULES
+          - PARAMETERS
+          - CONSTRAINTS
+          - EVENTS
+          - ACTIONS
+      applies_from: 2026-04-12
+      decided_by: human
+      challenged_with_ai: true
+      justification: >-
+        Ordre de sérialisation fixé explicitement pour garantir un régime de
+        rebuild cohérent sur les trois Core canoniques.
+
+    - decision_id: REBUILD_DECISION_004
+      status: approved
+      decision_type: define_reference_rebuild_priority
+      target_cores:
+        - constitution
+        - referentiel
+        - link
+      decision_payload:
+        priority_order:
+          - preserve_explicit_ids
+          - preserve_cross_core_references
+          - preserve_integration_decision_traceability
+          - preserve_stable_sort_order
+      applies_from: 2026-04-12
+      decided_by: human
+      challenged_with_ai: true
+      justification: >-
+        La priorité de rebuild est explicitée afin qu'une préférence de tri ou
+        de sérialisation ne masque jamais une dérive de référence plus grave.
