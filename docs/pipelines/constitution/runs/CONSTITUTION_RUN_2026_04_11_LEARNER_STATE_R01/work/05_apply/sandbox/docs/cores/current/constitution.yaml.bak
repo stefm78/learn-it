@@ -1194,10 +1194,10 @@ CORE:
         id: ACTION_APPLY_LIGHT_REVERSIBLE_SCAFFOLDING
     patchable: false
     parameterizable: false
-    human_readable: Si au moins deux des trois axes critiques d’état apprenant (`calibration`, `activation`, `value_cost`) restent unknown, absents ou non-observables simultanément, le moteur applique une entrée conservative bornée plutôt qu’une complétion implicite.
+    human_readable: Si plusieurs axes d’état restent unknown ou non-observables simultanément, le moteur applique une entrée conservative bornée plutôt qu’une complétion implicite.
     logic:
       trigger: Initialisation, reprise ou mise à jour d’état avec observabilité insuffisante.
-      condition: Au moins deux des trois axes critiques (`calibration`, `activation`, `value_cost`) sont simultanément unknown, absents ou non-observables.
+      condition: Plusieurs axes critiques sont simultanément unknown, absents ou non-observables.
       effect: Démarrage sur KU racines, Bloom minimal, séquence courte de prise de repères et scaffolding léger réversible ; aucune inférence cachée n’est autorisée.
       scope: runtime_state
   - id: RULE_MSC_COMPONENT_NON_CALCULABLE_DEFERS_BASE_MASTERY

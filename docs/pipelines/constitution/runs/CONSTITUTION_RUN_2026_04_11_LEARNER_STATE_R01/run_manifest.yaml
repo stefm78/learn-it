@@ -34,15 +34,16 @@ run_manifest:
   - Premier run instancié à partir du catalogue de scopes constitution. Ce run matérialise
     le pilote learner_state dans le layout cible `runs/<run_id>/...`.
   execution_state:
-    current_stage: STAGE_04_PATCH_VALIDATION
+    current_stage: STAGE_05_APPLY
     last_stage_status: done
-    last_updated: '2026-04-12T15:30:09Z'
-    next_stage: STAGE_05_APPLY
+    last_updated: '2026-04-12T15:32:22Z'
+    next_stage: STAGE_06_CORE_VALIDATION
     completed_stages:
     - STAGE_01_CHALLENGE
     - STAGE_02_ARBITRAGE
     - STAGE_03_PATCH_SYNTHESIS
     - STAGE_04_PATCH_VALIDATION
+    - STAGE_05_APPLY
     stage_history:
     - stage_id: STAGE_01_CHALLENGE
       stage_status: in_progress
@@ -92,9 +93,17 @@ run_manifest:
       summary: Stage 04 patch validation completed with real execution of validate_patchset.py
         on the bounded learner_state patchset; structural validation passed, logical
         review remained acceptable, and the run can now proceed to Stage 05 apply.
+    - stage_id: STAGE_05_APPLY
+      stage_status: done
+      recorded_at: '2026-04-12T15:32:22Z'
+      summary: Stage 05 apply completed with real execution of apply_patch.py after
+        successful dry-run; patch was applied in sandbox, patch_execution_report.yaml
+        was updated from real execution, and patched core snapshots were materialized
+        under runs/CONSTITUTION_RUN_2026_04_11_LEARNER_STATE_R01/work/05_apply/patched.
   scope_tracking:
     scope_status: confirmed_for_bounded_run
-    last_updated: '2026-04-12T15:30:09Z'
-    last_note: Stage 04 patch validation completed with real execution of validate_patchset.py
-      on the bounded learner_state patchset; structural validation passed, logical
-      review remained acceptable, and the run can now proceed to Stage 05 apply.
+    last_updated: '2026-04-12T15:32:22Z'
+    last_note: Stage 05 apply completed with real execution of apply_patch.py after
+      successful dry-run; patch was applied in sandbox, patch_execution_report.yaml
+      was updated from real execution, and patched core snapshots were materialized
+      under runs/CONSTITUTION_RUN_2026_04_11_LEARNER_STATE_R01/work/05_apply/patched.
