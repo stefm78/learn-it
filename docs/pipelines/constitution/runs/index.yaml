@@ -8,7 +8,7 @@ runs_index:
     scope_id: CONSTITUTION_SCOPE_LEARNER_STATE
     scope_key: learner_state
     run_status: active
-    current_stage: STAGE_03_PATCH_SYNTHESIS
+    current_stage: STAGE_04_PATCH_VALIDATION
     mode: bounded_local_run
     run_manifest_ref: docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_11_LEARNER_STATE_R01/run_manifest.yaml
     scope_status: confirmed_for_bounded_run

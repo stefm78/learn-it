@@ -1,0 +1,14 @@
+stage_completion_record:
+  schema_version: 0.1
+  pipeline_id: constitution
+  run_id: CONSTITUTION_RUN_2026_04_11_LEARNER_STATE_R01
+  stage_id: STAGE_04_PATCH_VALIDATION
+  stage_status: done
+  run_status: active
+  next_stage: STAGE_05_APPLY
+  scope_status: confirmed_for_bounded_run
+  summary: Stage 04 patch validation completed in bounded run mode on learner_state
+    scope; patchset validation passed structurally and logically, the patch remained
+    strictly within constitution.yaml and aligned with Stage 02 arbitrage, with Stage
+    05 dry-run/apply remaining the next executable validation step.
+  recorded_at: '2026-04-12T15:07:37Z'

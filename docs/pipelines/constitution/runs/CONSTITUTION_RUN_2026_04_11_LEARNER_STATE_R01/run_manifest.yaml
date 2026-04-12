@@ -34,14 +34,15 @@ run_manifest:
   - Premier run instancié à partir du catalogue de scopes constitution. Ce run matérialise
     le pilote learner_state dans le layout cible `runs/<run_id>/...`.
   execution_state:
-    current_stage: STAGE_03_PATCH_SYNTHESIS
+    current_stage: STAGE_04_PATCH_VALIDATION
     last_stage_status: done
-    last_updated: '2026-04-12T15:00:47Z'
-    next_stage: STAGE_04_PATCH_VALIDATION
+    last_updated: '2026-04-12T15:07:37Z'
+    next_stage: STAGE_05_APPLY
     completed_stages:
     - STAGE_01_CHALLENGE
     - STAGE_02_ARBITRAGE
     - STAGE_03_PATCH_SYNTHESIS
+    - STAGE_04_PATCH_VALIDATION
     stage_history:
     - stage_id: STAGE_01_CHALLENGE
       stage_status: in_progress
@@ -78,11 +79,17 @@ run_manifest:
         to clarify the trigger threshold of RULE_MULTI_AXIS_UNKNOWN_OR_UNOBSERVABLE_SAFE_ENTRY,
         while the AR-N1/AR-N3 authority-chain issue remained explicitly excluded as
         requiring scope extension and lexical normalization was deferred.
+    - stage_id: STAGE_04_PATCH_VALIDATION
+      stage_status: done
+      recorded_at: '2026-04-12T15:07:37Z'
+      summary: Stage 04 patch validation completed in bounded run mode on learner_state
+        scope; patchset validation passed structurally and logically, the patch remained
+        strictly within constitution.yaml and aligned with Stage 02 arbitrage, with
+        Stage 05 dry-run/apply remaining the next executable validation step.
   scope_tracking:
     scope_status: confirmed_for_bounded_run
-    last_updated: '2026-04-12T15:00:47Z'
-    last_note: Stage 03 patch synthesis completed in bounded run mode on learner_state
-      scope; a minimal patchset was produced under runs/CONSTITUTION_RUN_2026_04_11_LEARNER_STATE_R01/work/03_patch
-      to clarify the trigger threshold of RULE_MULTI_AXIS_UNKNOWN_OR_UNOBSERVABLE_SAFE_ENTRY,
-      while the AR-N1/AR-N3 authority-chain issue remained explicitly excluded as
-      requiring scope extension and lexical normalization was deferred.
+    last_updated: '2026-04-12T15:07:37Z'
+    last_note: Stage 04 patch validation completed in bounded run mode on learner_state
+      scope; patchset validation passed structurally and logically, the patch remained
+      strictly within constitution.yaml and aligned with Stage 02 arbitrage, with
+      Stage 05 dry-run/apply remaining the next executable validation step.
