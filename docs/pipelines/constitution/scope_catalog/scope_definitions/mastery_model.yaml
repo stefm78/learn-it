@@ -1,0 +1,95 @@
+scope_definition:
+  schema_version: 0.1
+  scope_id: CONSTITUTION_SCOPE_MASTERY_MODEL
+  scope_key: mastery_model
+  status: published_bootstrap
+
+  provenance:
+    source_pipeline: constitution
+    extraction_mode: hybrid
+    source_artifacts:
+      - docs/cores/current/constitution.yaml
+      - docs/cores/current/referentiel.yaml
+      - docs/cores/current/link.yaml
+    source_fingerprint: TO_BE_FILLED
+
+  target:
+    artifact_family: constitution
+    files:
+      - docs/cores/current/constitution.yaml
+    modules:
+      - mastery_model
+      - runtime_evaluation
+      - transfer
+    ids:
+      - TYPE_MASTERY_MODEL
+      - TYPE_MASTERY_COMPONENT_P
+      - TYPE_MASTERY_COMPONENT_R
+      - TYPE_MASTERY_COMPONENT_A
+      - TYPE_MASTERY_COMPONENT_T
+      - INV_MSC_AND_STRICT
+      - INV_TRANSFER_SEPARATE_FROM_BASE_MASTERY
+      - RULE_MSC_DOWNGRADE_MARKS_DEPENDENTS
+      - RULE_MSC_COMPONENT_NON_CALCULABLE_DEFERS_BASE_MASTERY
+      - RULE_MSC_PERCEPTION_DIVERGENCE_PROTOCOL
+      - RULE_T_EVALUATION_OVERDUE_REQUIRES_SIGNAL_OR_FOLLOWUP
+      - RULE_PROVISIONAL_MASTERY_WINDOW_EXPIRY_SAFE_FALLBACK
+      - EVENT_MSC_DOWNGRADE
+      - EVENT_MSC_PERCEPTION_DIVERGENCE_DETECTED
+      - EVENT_T_EVALUATION_OVERDUE
+      - EVENT_PROVISIONAL_MASTERY_WINDOW_EXPIRED
+      - PARAM_PROVISIONAL_MASTERY_VERIFICATION_WINDOW
+
+  default_neighbors_to_read:
+    files:
+      - docs/cores/current/referentiel.yaml
+      - docs/cores/current/link.yaml
+    ids:
+      - REF_CORE_LEARNIT_REFERENTIEL_V2_0_IN_CONSTITUTION
+      - TYPE_KNOWLEDGE_GRAPH
+      - INV_GRAPH_PROPAGATION_ONE_HOP
+      - INV_EXPLICIT_DEPENDENCY_EDGES_REQUIRED
+      - INV_REFERENTIEL_VALIDITY_REQUIRED_FOR_DELEGATED_THRESHOLD_EVALUATION
+      - TYPE_SESSION_INTEGRITY_SCORE
+      - TYPE_NC_MSC
+
+  governance:
+    default_allowed_operations:
+      - challenge
+      - arbitrage
+      - patch
+      - local_validation
+    default_forbidden_operations:
+      - direct_current_promotion
+      - silent_out_of_scope_modification
+      - implicit_cross_core_reallocation
+      - silent_threshold_redefinition
+    scope_extension_policy:
+      explicit_decision_required: true
+
+  watchpoints:
+    - Ne pas diluer la logique MSC AND strict dans des simplifications de score.
+    - Préserver la séparation entre maîtrise de base et transférabilité.
+    - Vérifier les frontières entre évaluation locale, propagation graphe et dépendances référentielles.
+    - Vérifier qu'une composante non calculable reste deferred et ne tombe jamais implicitement à false.
+
+  maturity:
+    scoring_model_ref: docs/transformations/core_modularization/CONSTITUTION_SCOPE_MATURITY_MODEL.md
+    axes:
+      clarity_of_scope: 3
+      internal_coherence: 4
+      inter_scope_boundaries: 2
+      dependency_explicitness: 3
+      bounded_run_executability: 3
+      inter_release_stability: 3
+    score_total: 18
+    level: L3_operational
+    rationale:
+      - Scope conceptuellement très cohérent autour de l'évaluation de maîtrise et de transfert.
+      - Dépendances explicites mais frontières à surveiller avec le graphe et les seuils référentiels.
+      - Suffisamment stable pour un run borné prudent.
+
+  notes:
+    - >-
+      Scope bootstrap publié pour permettre des runs bornés distincts sur le modèle
+      de maîtrise, en complément du scope learner_state.
