@@ -1,0 +1,47 @@
+canonical_rebuild_policy:
+  schema_version: 0.1
+  policy_id: CANONICAL_REBUILD_POLICY_V1
+  status: draft
+  pipeline_family: constitution
+
+  source_state:
+    source_fingerprint: TO_BE_FILLED
+    integration_policy_ref: docs/transformations/core_modularization/templates/integration_policy.template.yaml
+    integrated_changeset_ref: docs/transformations/core_modularization/templates/integrated_scoped_changeset.template.yaml
+
+  allowed_primary_inputs:
+    - integrated_scoped_changeset
+  forbidden_primary_inputs:
+    - challenge_report
+    - arbitrage_markdown
+    - free_text_note
+
+  rebuild_rules:
+    deterministic_rebuild_required: true
+    stable_serialization_required: true
+    stable_sort_order_required: true
+    explicit_fallback_to_source_canon_allowed: true
+
+  round_trip_invariants:
+    no_silent_id_loss: true
+    no_silent_id_duplication: true
+    no_silent_reference_drift: true
+    identical_output_if_no_logical_change: true
+    same_input_same_output: true
+
+  output_contract:
+    rebuilt_files:
+      - docs/cores/current/constitution.yaml
+      - docs/cores/current/referentiel.yaml
+      - docs/cores/current/link.yaml
+    rebuild_report_required: true
+    rebuilt_fingerprint_required: true
+
+  promotion_policy:
+    rebuild_does_not_imply_promotion: true
+    promotion_of_current_remains_explicit: true
+
+  notes:
+    - >-
+      Cette politique gouverne la reconstruction canonique déterministe à
+      partir d'un résultat intégré global déjà structuré et validé.
