@@ -1,0 +1,74 @@
+scope_definition:
+  schema_version: 0.1
+  scope_id: CONSTITUTION_SCOPE_MASTERY_MODEL
+  scope_key: mastery_model
+  status: candidate_bootstrap
+
+  provenance:
+    source_pipeline: constitution
+    extraction_mode: hybrid
+    source_artifacts:
+      - docs/cores/current/constitution.yaml
+      - docs/cores/current/referentiel.yaml
+      - docs/cores/current/link.yaml
+    source_fingerprint: TO_BE_FILLED
+
+  target:
+    artifact_family: constitution
+    files:
+      - docs/cores/current/constitution.yaml
+    modules:
+      - mastery_model
+      - mastery_signal_hierarchy
+      - progression_logic
+    ids:
+      - TYPE_MASTERY_MODEL
+      - TYPE_MASTERY_SIGNAL
+      - TYPE_MASTERY_STATE
+      - INV_MASTERY_SIGNAL_HIERARCHY
+      - RULE_MASTERY_EVIDENCE_PRIORITIZATION
+      - RULE_MASTERY_UNKNOWN_ALLOWED
+      - RULE_MASTERY_PROGRESSION_REQUIRES_SUFFICIENT_EVIDENCE
+
+  default_neighbors_to_read:
+    files:
+      - docs/cores/current/referentiel.yaml
+      - docs/cores/current/link.yaml
+    ids:
+      - INV_CONSTITUTION_REFERENTIAL_SEPARATION
+      - INV_RUNTIME_FULLY_LOCAL
+      - INV_NO_RUNTIME_CONTENT_GENERATION
+      - TYPE_AUTONOMY_REGIME
+
+  governance:
+    default_allowed_operations:
+      - challenge
+      - arbitrage
+      - patch
+      - local_validation
+    default_forbidden_operations:
+      - direct_current_promotion
+      - silent_out_of_scope_modification
+      - implicit_cross_core_reallocation
+    scope_extension_policy:
+      explicit_decision_required: true
+
+  watchpoints:
+    - Ne pas mélanger signaux de maîtrise et signaux d'état apprenant.
+    - Vérifier que les règles de progression restent compatibles avec la séparation Constitution / Référentiel.
+    - Vérifier que l'unknown reste autorisé quand l'évidence est insuffisante.
+
+  maturity:
+    scoring_model_ref: docs/transformations/core_modularization/CONSTITUTION_SCOPE_MATURITY_MODEL.md
+    axes:
+      clarity_of_scope: 2
+      internal_coherence: 3
+      inter_scope_boundaries: 2
+      dependency_explicitness: 2
+      bounded_run_executability: 2
+      inter_release_stability: 2
+    score_total: 13
+    level: L2_usable_with_care
+    rationale:
+      - Scope plausible et probablement nécessaire pour sortir du mono-scope learner_state.
+      - Candidate bootstrap encore à valider contre la Constitution active.
