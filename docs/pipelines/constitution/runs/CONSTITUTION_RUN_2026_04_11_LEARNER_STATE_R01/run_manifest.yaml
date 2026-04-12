@@ -36,7 +36,7 @@ run_manifest:
   execution_state:
     current_stage: STAGE_05_APPLY
     last_stage_status: done
-    last_updated: '2026-04-12T15:33:04Z'
+    last_updated: '2026-04-12T15:34:04Z'
     next_stage: STAGE_06_CORE_VALIDATION
     completed_stages:
     - STAGE_01_CHALLENGE
@@ -107,9 +107,16 @@ run_manifest:
         successful dry-run; patch was applied successfully in sandbox, patch_execution_report.yaml
         recorded a real PASS execution, and patched core snapshots were materialized
         under runs/CONSTITUTION_RUN_2026_04_11_LEARNER_STATE_R01/work/05_apply/patched.
+    - stage_id: STAGE_05_APPLY
+      stage_status: done
+      recorded_at: '2026-04-12T15:34:04Z'
+      summary: Stage 05 apply completed with real execution of apply_patch.py after
+        successful dry-run; patch was applied successfully in sandbox, patch_execution_report.yaml
+        recorded a real PASS execution, and patched core snapshots were materialized
+        under runs/CONSTITUTION_RUN_2026_04_11_LEARNER_STATE_R01/work/05_apply/patched.
   scope_tracking:
     scope_status: confirmed_for_bounded_run
-    last_updated: '2026-04-12T15:33:04Z'
+    last_updated: '2026-04-12T15:34:04Z'
     last_note: Stage 05 apply completed with real execution of apply_patch.py after
       successful dry-run; patch was applied successfully in sandbox, patch_execution_report.yaml
       recorded a real PASS execution, and patched core snapshots were materialized
