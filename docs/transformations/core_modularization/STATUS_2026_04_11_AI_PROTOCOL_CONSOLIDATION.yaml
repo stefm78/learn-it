@@ -1,0 +1,24 @@
+snapshot:
+  date: 2026-04-11
+  branch: feat/core-modularization-bootstrap
+  topic: constitution_ai_protocol_consolidation
+
+state:
+  overall_progress_percent_estimate: 74
+  summary: >-
+    Constitution is moving to a single AI entrypoint: docs/pipelines/constitution/AI_PROTOCOL.yaml.
+    Cleanup is now focused on removing competing RUN_*.md and AI_PROTOCOL_*.yaml documents.
+
+completed:
+  - ai_protocol_yaml_is_primary_ai_entrypoint
+  - pipeline_md_points_to_ai_protocol_yaml
+  - tmp_constitution_ai_protocol_v2_prepared
+  - cleanup_commands_prepared
+
+next:
+  - apply_tmp_constitution_ai_protocol_v2
+  - delete_deprecated_run_docs
+  - delete_deprecated_ai_protocol_side_files
+
+notes:
+  - keep repo aligned with consolidation around one machine-first protocol
