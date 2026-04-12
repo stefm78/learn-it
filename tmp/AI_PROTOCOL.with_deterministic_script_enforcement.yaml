@@ -1,0 +1,95 @@
+ai_protocol:
+  schema_version: 0.2
+  protocol_id: CONSTITUTION_AI_PROTOCOL_V2
+  authoritative_for_ai: true
+  primary_entrypoint:
+    - docs/pipelines/constitution/AI_PROTOCOL.yaml
+    - docs/pipelines/constitution/pipeline.md
+
+  state_chain:
+    - docs/pipelines/constitution/runs/index.yaml
+    - docs/pipelines/constitution/runs/<run_id>/run_manifest.yaml
+    - docs/pipelines/constitution/runs/<run_id>/inputs/scope_manifest.yaml
+    - docs/pipelines/constitution/runs/<run_id>/inputs/impact_bundle.yaml
+    - docs/pipelines/constitution/runs/<run_id>/inputs/integration_gate.yaml
+
+  no_run_id_mode:
+    mode: entry_gate_zero_search
+    allowed_reads:
+      - docs/pipelines/constitution/AI_PROTOCOL.yaml
+      - docs/pipelines/constitution/pipeline.md
+      - docs/pipelines/constitution/runs/index.yaml
+      - docs/pipelines/constitution/scope_catalog/manifest.yaml
+    forbidden_before_entry_decision:
+      - any_search
+      - compare_commits
+      - docs/cores/current/constitution.yaml
+      - docs/cores/current/referentiel.yaml
+      - docs/cores/current/link.yaml
+      - docs/prompts/shared/Challenge_constitution.md
+      - docs/prompts/shared/Make04ConstitutionArbitrage.md
+      - docs/pipelines/constitution/inputs/*
+      - docs/pipelines/constitution/work/*
+      - docs/pipelines/constitution/reports/*
+    decision_algorithm:
+      if_active_runs_count_eq_0: propose_create_new_run
+      if_active_runs_count_eq_1: ask_continue_existing_or_open_new_on_other_scope
+      if_active_runs_count_gt_1: ask_disambiguation_with_shortlist
+    decision_output_requirements:
+      must_offer:
+        - continue_active_run
+        - open_new_run
+      should_include_if_available:
+        - active_run_id
+        - active_scope_key
+        - active_current_stage
+        - shortlist_of_other_scope_keys
+    stop_after_decision: true
+
+  run_id_mode:
+    allowed_reads:
+      - docs/pipelines/constitution/AI_PROTOCOL.yaml
+      - docs/pipelines/constitution/pipeline.md
+      - docs/pipelines/constitution/runs/index.yaml
+      - docs/pipelines/constitution/runs/<run_id>/run_manifest.yaml
+      - docs/pipelines/constitution/runs/<run_id>/inputs/scope_manifest.yaml
+      - docs/pipelines/constitution/runs/<run_id>/inputs/impact_bundle.yaml
+      - docs/pipelines/constitution/runs/<run_id>/inputs/integration_gate.yaml
+    forbidden_before_run_resolution:
+      - any_search
+      - compare_commits
+      - docs/cores/current/constitution.yaml
+      - docs/cores/current/referentiel.yaml
+      - docs/cores/current/link.yaml
+      - docs/pipelines/constitution/inputs/*
+    if_run_exists: resume_existing_run
+    if_run_missing: emit_next_best_action_only
+
+  deterministic_script_policy:
+    mandatory_behavior: true
+    rules:
+      - any_stage_that_declares_a_deterministic_validation_or_execution_script_as_required_must_not_be_considered_complete_until_that_script_has_been_actually_executed
+      - the_ai_must_never_simulate_or_assume_execution_of_a_required_script
+      - if_the_ai_cannot_execute_the_script_itself_it_must_provide_the_exact_command_to_the_user_and_keep_the_stage_status_non_final_until_real_execution_feedback_is_available
+      - logical_review_or_document_reading_may_complement_a_required_script_execution_but_must_never_replace_it
+    examples:
+      - stage_04_patch_validation_requires_validate_patchset_py_execution_before_done
+      - stage_05_apply_requires_real_apply_patch_py_execution_before_done
+
+  tracking:
+    bootstrap_command_template: "python docs/patcher/shared/update_run_tracking.py --pipeline constitution --run-id <RUN_ID> --stage-id <STAGE_ID> --stage-status in_progress --run-status active --next-stage <STAGE_ID> --scope-status <SCOPE_STATUS> --summary '<ENTRY_DECISION_SUMMARY>'"
+    closeout_command_template: "python docs/patcher/shared/update_run_tracking.py --pipeline constitution --run-id <RUN_ID> --stage-id <STAGE_ID> --stage-status <done|blocked|failed> --run-status <active|blocked|failed|closed> --next-stage <NEXT_STAGE_ID> --scope-status <SCOPE_STATUS> --summary '<STAGE_SUMMARY>'"
+
+  anti_patterns:
+    - deep_read_before_entry_decision
+    - repo_wide_search_for_entry_resolution
+    - compare_commits_for_entry_resolution
+    - reading_flat_layout_when_run_layout_exists
+    - implicit_resume_when_user_did_not_provide_run_id
+    - simulating_required_script_execution
+    - declaring_stage_done_without_required_deterministic_script_evidence
+
+  responses:
+    single_active_run: "Je vois un run actif: <RUN_ID> sur <SCOPE_KEY>, actuellement sur <CURRENT_STAGE>. On peut soit continuer ce run, soit ouvrir un nouveau run sur un autre scope publié. Recommandation: continuer le run actif."
+    no_active_run: "Aucun run actif n'est ouvert. Veux-tu que j'ouvre un nouveau run à partir d'un scope du catalogue ?"
+    ambiguous: "emit_short_next_best_action_only"
