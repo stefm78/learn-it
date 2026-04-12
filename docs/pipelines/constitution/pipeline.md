@@ -256,6 +256,10 @@ Règle opératoire :
 - `patch_validation.yaml` est la trace canonique de validation automatique du Stage 04
 - `patch_validation_report.md` est une trace de lecture humaine complémentaire, utile si une revue logique explicite est produite
 - aucun passage à l’apply réel du Stage 05 ne doit avoir lieu sans validation `PASS`
+- l’exécution réelle de `docs/patcher/shared/validate_patchset.py` est obligatoire ; la validation structurelle ne peut jamais être simulée, supposée ou remplacée par une simple lecture du patchset
+- le Stage 04 ne peut pas être déclaré `done` tant que `patch_validation.yaml` n’a pas été produit par exécution effective du script de validation sur le patchset cible
+- si l’IA ne peut pas exécuter elle-même le script, elle doit fournir explicitement à l’utilisateur la commande exacte à lancer et ne pas conclure le stage comme entièrement validé avant retour du résultat
+- la revue logique humaine ou assistée par IA vient seulement en complément de la validation structurelle automatique, jamais en substitution
 
 ### STAGE_05_APPLY
 Objectif :
