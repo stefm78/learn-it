@@ -1,0 +1,172 @@
+scope_generation_decisions:
+  schema_version: 0.1
+  decisionset_id: CONSTITUTION_SCOPE_GENERATION_DECISIONS_2026_04_12_R01
+  status: active_bootstrap_seed
+  pipeline_id: constitution
+
+  source_state:
+    source_fingerprint: TO_BE_FILLED
+    policy_ref: docs/transformations/core_modularization/policies/constitution/scope_generation/policy.yaml
+
+  decisions:
+    - decision_id: SGEN_DECISION_001
+      status: approved
+      decision_type: assign_ids_to_scope
+      scope_keys_affected:
+        - learner_state
+      target_ids:
+        - TYPE_LEARNER_STATE_MODEL
+        - TYPE_STATE_AXIS_CALIBRATION
+        - TYPE_STATE_AXIS_ACTIVATION
+        - TYPE_STATE_AXIS_VALUE_COST
+        - TYPE_SELF_REPORT_AR_N1
+        - TYPE_SELF_REPORT_AR_N2
+        - TYPE_SELF_REPORT_AR_N3
+        - INV_CONSERVATIVE_RULE_WITHOUT_AR_N1
+        - INV_VC_NOT_GENERAL_MOTIVATION_PROXY
+        - RULE_AR_N1_OVERRIDES_PROXY
+        - RULE_SESSION_INTENTION_NON_BLOCKING
+        - RULE_LEARNER_STATE_AXIS_UNKNOWN_ALLOWED
+        - RULE_MULTI_AXIS_UNKNOWN_OR_UNOBSERVABLE_SAFE_ENTRY
+        - EVENT_ACTIVATION_DISTRESS_PERSISTENCE_ESCALATION
+        - RULE_ACTIVATION_DISTRESS_PERSISTENCE_ESCALATION_OFFSESSION
+      target_patterns: []
+      decision_payload:
+        assignment_mode: force_include
+        source_basis: bootstrap_scope_definition_alignment
+      applies_from: 2026-04-12
+      decided_by: human
+      challenged_with_ai: true
+      justification: >-
+        Cette décision fige explicitement le contenu bootstrap du scope
+        learner_state comme entrée du futur calcul déterministe.
+
+    - decision_id: SGEN_DECISION_002
+      status: approved
+      decision_type: assign_ids_to_scope
+      scope_keys_affected:
+        - mastery_model
+      target_ids:
+        - TYPE_MASTERY_MODEL
+        - TYPE_MASTERY_COMPONENT_P
+        - TYPE_MASTERY_COMPONENT_R
+        - TYPE_MASTERY_COMPONENT_A
+        - TYPE_MASTERY_COMPONENT_T
+        - INV_MSC_AND_STRICT
+        - INV_TRANSFER_SEPARATE_FROM_BASE_MASTERY
+        - RULE_MSC_DOWNGRADE_MARKS_DEPENDENTS
+        - RULE_MSC_COMPONENT_NON_CALCULABLE_DEFERS_BASE_MASTERY
+        - RULE_MSC_PERCEPTION_DIVERGENCE_PROTOCOL
+        - RULE_T_EVALUATION_OVERDUE_REQUIRES_SIGNAL_OR_FOLLOWUP
+        - RULE_PROVISIONAL_MASTERY_WINDOW_EXPIRY_SAFE_FALLBACK
+        - EVENT_MSC_DOWNGRADE
+        - EVENT_MSC_PERCEPTION_DIVERGENCE_DETECTED
+        - EVENT_T_EVALUATION_OVERDUE
+        - EVENT_PROVISIONAL_MASTERY_WINDOW_EXPIRED
+        - PARAM_PROVISIONAL_MASTERY_VERIFICATION_WINDOW
+      target_patterns: []
+      decision_payload:
+        assignment_mode: force_include
+        source_basis: bootstrap_scope_definition_alignment
+      applies_from: 2026-04-12
+      decided_by: human
+      challenged_with_ai: true
+      justification: >-
+        Cette décision reprend le contenu publié de mastery_model comme base de
+        génération explicite du scope.
+
+    - decision_id: SGEN_DECISION_003
+      status: approved
+      decision_type: assign_ids_to_scope
+      scope_keys_affected:
+        - knowledge_graph
+      target_ids:
+        - TYPE_KNOWLEDGE_GRAPH
+        - TYPE_COMPETENCY_NODE
+        - TYPE_PREREQUISITE_EDGE
+        - INV_GRAPH_ACYCLICITY_WHEN_REQUIRED
+        - RULE_PREREQUISITE_RESPECT
+        - RULE_GRAPH_UNKNOWN_ALLOWED
+      target_patterns: []
+      decision_payload:
+        assignment_mode: force_include
+        source_basis: bootstrap_scope_definition_alignment
+      applies_from: 2026-04-12
+      decided_by: human
+      challenged_with_ai: true
+      justification: >-
+        Cette décision reprend le contenu publié de knowledge_graph comme base
+        de génération explicite du scope.
+
+    - decision_id: SGEN_DECISION_004
+      status: approved
+      decision_type: force_logical_neighbors
+      scope_keys_affected:
+        - learner_state
+      target_ids:
+        - REF_CORE_LEARNIT_REFERENTIEL_V2_0_IN_CONSTITUTION
+        - TYPE_AUTONOMY_REGIME
+        - INV_CONSTITUTION_REFERENTIAL_SEPARATION
+        - INV_RUNTIME_FULLY_LOCAL
+        - INV_NO_RUNTIME_CONTENT_GENERATION
+      target_patterns: []
+      decision_payload:
+        neighbor_class: primary_read_neighbor
+        read_mode: primary
+      applies_from: 2026-04-12
+      decided_by: human
+      challenged_with_ai: true
+      justification: >-
+        Voisinage logique primaire imposé pour learner_state afin de préserver la
+        séparation Constitution/Référentiel/LINK et les contraintes runtime.
+
+    - decision_id: SGEN_DECISION_005
+      status: approved
+      decision_type: force_logical_neighbors
+      scope_keys_affected:
+        - mastery_model
+      target_ids:
+        - REF_CORE_LEARNIT_REFERENTIEL_V2_0_IN_CONSTITUTION
+        - TYPE_KNOWLEDGE_GRAPH
+        - INV_GRAPH_PROPAGATION_ONE_HOP
+        - INV_EXPLICIT_DEPENDENCY_EDGES_REQUIRED
+        - INV_REFERENTIEL_VALIDITY_REQUIRED_FOR_DELEGATED_THRESHOLD_EVALUATION
+        - TYPE_SESSION_INTEGRITY_SCORE
+        - TYPE_NC_MSC
+      target_patterns: []
+      decision_payload:
+        neighbor_class: primary_read_neighbor
+        read_mode: primary
+      applies_from: 2026-04-12
+      decided_by: human
+      challenged_with_ai: true
+      justification: >-
+        Voisinage logique primaire imposé pour mastery_model conformément au
+        scope bootstrap publié.
+
+    - decision_id: SGEN_DECISION_006
+      status: approved
+      decision_type: force_logical_neighbors
+      scope_keys_affected:
+        - knowledge_graph
+      target_ids:
+        - INV_CONSTITUTION_REFERENTIAL_SEPARATION
+        - INV_RUNTIME_FULLY_LOCAL
+        - INV_NO_RUNTIME_CONTENT_GENERATION
+        - TYPE_AUTONOMY_REGIME
+      target_patterns: []
+      decision_payload:
+        neighbor_class: primary_read_neighbor
+        read_mode: primary
+      applies_from: 2026-04-12
+      decided_by: human
+      challenged_with_ai: true
+      justification: >-
+        Voisinage logique primaire imposé pour knowledge_graph conformément au
+        scope bootstrap publié.
+
+  notes:
+    - >-
+      Ce fichier transforme les scopes bootstrap existants en décisions de seed
+      explicites, afin que le futur générateur puisse produire les mêmes scopes
+      sans dépendre d'une maintenance manuelle implicite des outputs.
