@@ -1,0 +1,70 @@
+snapshot:
+  date: 2026-04-12
+  branch: feat/core-modularization-bootstrap
+  topic: scope_extraction_vs_effective_read_surface
+
+state:
+  status_files_main_sync: partial
+  overall_progress_percent_estimate: 87
+  summary: >-
+    Clarification importante de la transformation : les scopes du pipeline
+    constitution doivent être compris comme des extractions gouvernées des Core
+    canoniques, et non comme de nouvelles sources autonomes. Le principal
+    problème restant n'est donc pas la provenance canonique des scopes, mais la
+    réduction encore insuffisante de la surface de lecture effective, car le
+    modèle reste trop `files-first`.
+
+completed_since_last_sync_point:
+  - scope_as_canonical_extraction_clarified
+  - source_artifacts_reinterpreted_as_provenance_not_minimal_payload
+  - architectural_gap_reframed_as_read_surface_reduction_problem
+
+design_decisions:
+  - scopes_are_derived_from_canonical_cores
+  - canonical_source_of_truth_remains_docs_cores_current
+  - source_artifacts_may_remain_canonical_and_complete_as_provenance
+  - scope_governance_progress_and_context_reduction_progress_are_not_the_same
+  - next_architectural_target_is_ids_first_or_projection_first_reading
+
+clarifications:
+  canonical_files:
+    - docs/cores/current/constitution.yaml
+    - docs/cores/current/referentiel.yaml
+    - docs/cores/current/link.yaml
+  interpretation_of_source_artifacts: provenance
+  interpretation_of_scope_manifest: writable_scope_authority
+  interpretation_of_effective_read_surface: >-
+    Payload documentaire réellement relu par une IA pour exécuter un run borné.
+
+identified_gap:
+  problem_statement: >-
+    Les scopes actuels améliorent déjà le droit d'action et la focalisation
+    logique, mais ne réduisent pas encore suffisamment le coût de contexte tant
+    que `target.files` et `default_neighbors_to_read.files` restent au niveau
+    des Core complets.
+  still_too_files_first:
+    - target.files
+    - default_neighbors_to_read.files
+  not_the_primary_problem:
+    - source_artifacts_as_complete_canonical_provenance
+
+next_structural_targets:
+  - define_ids_first_read_contract_for_scopes
+  - define_projection_first_or_excerpt_bundle_option
+  - keep_traceability_to_canonical_sources
+  - synchronize_STATUS_yaml_and_WORKLOG_md_with_this_clarification
+
+guardrails:
+  - scopes_do_not_become_a_second_source_of_truth
+  - canonical_changes_require_scope_revalidation_or_regeneration
+  - do_not_confuse_provenance_writable_scope_and_minimal_read_payload
+  - do_not_use_tmp_as_authoritative_transformation_tracking
+
+notes:
+  - >-
+    Ce snapshot complète l'état du chantier en attendant la prochaine
+    synchronisation des fichiers centraux STATUS.yaml et WORKLOG.md.
+  - >-
+    Une note intermédiaire a été posée à tort dans tmp ; elle doit être
+    considérée comme non autoritative au profit de ce snapshot dans
+    docs/transformations/core_modularization/.
