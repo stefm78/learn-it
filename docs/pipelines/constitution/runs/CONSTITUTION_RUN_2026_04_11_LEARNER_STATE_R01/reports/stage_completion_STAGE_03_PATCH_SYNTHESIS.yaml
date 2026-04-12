@@ -1,0 +1,15 @@
+stage_completion_record:
+  schema_version: 0.1
+  pipeline_id: constitution
+  run_id: CONSTITUTION_RUN_2026_04_11_LEARNER_STATE_R01
+  stage_id: STAGE_03_PATCH_SYNTHESIS
+  stage_status: done
+  run_status: active
+  next_stage: STAGE_04_PATCH_VALIDATION
+  scope_status: confirmed_for_bounded_run
+  summary: Stage 03 patch synthesis completed in bounded run mode on learner_state
+    scope; a minimal patchset was produced under runs/CONSTITUTION_RUN_2026_04_11_LEARNER_STATE_R01/work/03_patch
+    to clarify the trigger threshold of RULE_MULTI_AXIS_UNKNOWN_OR_UNOBSERVABLE_SAFE_ENTRY,
+    while the AR-N1/AR-N3 authority-chain issue remained explicitly excluded as requiring
+    scope extension and lexical normalization was deferred.
+  recorded_at: '2026-04-12T15:00:47Z'

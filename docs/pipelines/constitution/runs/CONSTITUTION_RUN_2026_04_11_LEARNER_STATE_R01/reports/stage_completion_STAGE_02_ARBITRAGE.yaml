@@ -1,0 +1,14 @@
+stage_completion_record:
+  schema_version: 0.1
+  pipeline_id: constitution
+  run_id: CONSTITUTION_RUN_2026_04_11_LEARNER_STATE_R01
+  stage_id: STAGE_02_ARBITRAGE
+  stage_status: done
+  run_status: active
+  next_stage: STAGE_03_PATCH_SYNTHESIS
+  scope_status: confirmed_for_bounded_run
+  summary: Stage 02 arbitrage completed in bounded run mode on learner_state scope;
+    one in-scope correction retained for patch, one editorial improvement deferred,
+    and one inter-core signal-authority issue explicitly classified as requiring scope
+    extension.
+  recorded_at: '2026-04-12T14:57:02Z'

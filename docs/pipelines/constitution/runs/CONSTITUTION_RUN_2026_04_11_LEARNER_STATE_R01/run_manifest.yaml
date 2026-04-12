@@ -34,19 +34,55 @@ run_manifest:
   - Premier run instancié à partir du catalogue de scopes constitution. Ce run matérialise
     le pilote learner_state dans le layout cible `runs/<run_id>/...`.
   execution_state:
-    current_stage: STAGE_01_CHALLENGE
-    last_stage_status: in_progress
-    last_updated: '2026-04-11T14:54:48Z'
-    next_stage: STAGE_01_CHALLENGE
-    completed_stages: []
+    current_stage: STAGE_03_PATCH_SYNTHESIS
+    last_stage_status: done
+    last_updated: '2026-04-12T15:00:47Z'
+    next_stage: STAGE_04_PATCH_VALIDATION
+    completed_stages:
+    - STAGE_01_CHALLENGE
+    - STAGE_02_ARBITRAGE
+    - STAGE_03_PATCH_SYNTHESIS
     stage_history:
     - stage_id: STAGE_01_CHALLENGE
       stage_status: in_progress
       recorded_at: '2026-04-11T14:54:48Z'
       summary: Entry decision resolved; resuming existing learner_state run at Stage
         01
+    - stage_id: STAGE_01_CHALLENGE
+      stage_status: done
+      recorded_at: '2026-04-12T14:40:57Z'
+      summary: Stage 01 challenge materialized in runs/CONSTITUTION_RUN_2026_04_11_LEARNER_STATE_R01/work/01_challenge/challenge_report_01.md;
+        proceed to Stage 02 arbitrage
+    - stage_id: STAGE_02_ARBITRAGE
+      stage_status: done
+      recorded_at: '2026-04-12T14:41:11Z'
+      summary: Stage 02 arbitrage completed; patch scope restricted to clarifying
+        RULE_MULTI_AXIS_UNKNOWN_OR_UNOBSERVABLE_SAFE_ENTRY, with AR-N1/AR-N3 tension
+        marked as scope extension and lexical normalization deferred
+    - stage_id: STAGE_02_ARBITRAGE
+      stage_status: in_progress
+      recorded_at: '2026-04-12T14:49:33Z'
+      summary: Entry decision resolved; resuming existing learner_state run at STAGE_02_ARBITRAGE
+    - stage_id: STAGE_02_ARBITRAGE
+      stage_status: done
+      recorded_at: '2026-04-12T14:57:02Z'
+      summary: Stage 02 arbitrage completed in bounded run mode on learner_state scope;
+        one in-scope correction retained for patch, one editorial improvement deferred,
+        and one inter-core signal-authority issue explicitly classified as requiring
+        scope extension.
+    - stage_id: STAGE_03_PATCH_SYNTHESIS
+      stage_status: done
+      recorded_at: '2026-04-12T15:00:47Z'
+      summary: Stage 03 patch synthesis completed in bounded run mode on learner_state
+        scope; a minimal patchset was produced under runs/CONSTITUTION_RUN_2026_04_11_LEARNER_STATE_R01/work/03_patch
+        to clarify the trigger threshold of RULE_MULTI_AXIS_UNKNOWN_OR_UNOBSERVABLE_SAFE_ENTRY,
+        while the AR-N1/AR-N3 authority-chain issue remained explicitly excluded as
+        requiring scope extension and lexical normalization was deferred.
   scope_tracking:
     scope_status: confirmed_for_bounded_run
-    last_updated: '2026-04-11T14:54:48Z'
-    last_note: Entry decision resolved; resuming existing learner_state run at Stage
-      01
+    last_updated: '2026-04-12T15:00:47Z'
+    last_note: Stage 03 patch synthesis completed in bounded run mode on learner_state
+      scope; a minimal patchset was produced under runs/CONSTITUTION_RUN_2026_04_11_LEARNER_STATE_R01/work/03_patch
+      to clarify the trigger threshold of RULE_MULTI_AXIS_UNKNOWN_OR_UNOBSERVABLE_SAFE_ENTRY,
+      while the AR-N1/AR-N3 authority-chain issue remained explicitly excluded as
+      requiring scope extension and lexical normalization was deferred.

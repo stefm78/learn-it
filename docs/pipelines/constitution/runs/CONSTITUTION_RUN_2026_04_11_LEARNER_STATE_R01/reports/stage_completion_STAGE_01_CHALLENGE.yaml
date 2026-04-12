@@ -3,9 +3,10 @@ stage_completion_record:
   pipeline_id: constitution
   run_id: CONSTITUTION_RUN_2026_04_11_LEARNER_STATE_R01
   stage_id: STAGE_01_CHALLENGE
-  stage_status: in_progress
+  stage_status: done
   run_status: active
-  next_stage: STAGE_01_CHALLENGE
+  next_stage: STAGE_02_ARBITRAGE
   scope_status: confirmed_for_bounded_run
-  summary: Entry decision resolved; resuming existing learner_state run at Stage 01
-  recorded_at: '2026-04-11T14:54:48Z'
+  summary: Stage 01 challenge materialized in runs/CONSTITUTION_RUN_2026_04_11_LEARNER_STATE_R01/work/01_challenge/challenge_report_01.md;
+    proceed to Stage 02 arbitrage
+  recorded_at: '2026-04-12T14:40:57Z'
