@@ -1,0 +1,42 @@
+PATCH_SET:
+  id: CONSTITUTION_RUN_2026_04_11_LEARNER_STATE_R01_STAGE_03_PATCHSET
+  patch_dsl_version: "4.0"
+  atomic: true
+  description: >-
+    Bounded Stage 03 patch synthesis for run CONSTITUTION_RUN_2026_04_11_LEARNER_STATE_R01.
+    Minimal in-scope patch on constitution.yaml only. Clarifies the trigger threshold
+    of RULE_MULTI_AXIS_UNKNOWN_OR_UNOBSERVABLE_SAFE_ENTRY, as decided in Stage 02 arbitrage.
+    Explicitly excludes the inter-Core AR-N1/AR-N3 authority-chain issue and the lexical
+    normalization of unknown/absent/non-observable statuses from the current patch.
+  files:
+    - file: docs/cores/current/constitution.yaml
+      expected_core_id: CORE_LEARNIT_CONSTITUTION_V2_0
+      operations:
+        - op: replace_field
+          target:
+            section: RULES
+            id: RULE_MULTI_AXIS_UNKNOWN_OR_UNOBSERVABLE_SAFE_ENTRY
+            field: human_readable
+          value: >-
+            Si au moins deux des trois axes critiques d’état apprenant
+            (`calibration`, `activation`, `value_cost`) restent unknown,
+            absents ou non-observables simultanément, le moteur applique
+            une entrée conservative bornée plutôt qu’une complétion implicite.
+        - op: replace_field
+          target:
+            section: RULES
+            id: RULE_MULTI_AXIS_UNKNOWN_OR_UNOBSERVABLE_SAFE_ENTRY
+            field: logic.condition
+          value: >-
+            Au moins deux des trois axes critiques (`calibration`, `activation`,
+            `value_cost`) sont simultanément unknown, absents ou non-observables.
+        - op: note
+          text: >-
+            Stage 02 decision P02 intentionally excluded from this patchset:
+            the AR-N1 / AR-N3 authority-chain issue requires explicit scope extension
+            and coordinated Constitution / Referentiel / LINK arbitration.
+        - op: note
+          text: >-
+            Stage 02 decision P03 intentionally deferred from this patchset:
+            lexical normalization between unknown / absent / non-observable is
+            useful but not necessary for the minimal bounded pilot patch.
