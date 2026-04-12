@@ -39,10 +39,18 @@ Règle structurante :
 - un succès local en mode borné n'est jamais équivalent à une cohérence canonique globale acquise ;
 - la promotion de `current/` reste un acte centralisé et explicite.
 
+
+### Mode de maintenance optionnel `partition_refresh`
+- aucun `run_id` actif ne doit exister ;
+- ce mode sert uniquement à réviser le partitionnement sémantique des scopes avant ouverture de nouveaux runs ;
+- l’analyse de partition suit une chaîne mixte : script déterministe obligatoire, puis revue sémantique assistée par IA, puis arbitrage humain ;
+- la publication reste déterministe et passe par mise à jour des policy/decisions canonisés puis régénération du catalogue.
+
 ## Canonical resources
 
 ### Prompts
 
+- Scope partition review: `docs/prompts/shared/Make00ConstitutionScopePartitionReview.md`
 - Challenge: `docs/prompts/shared/Challenge_constitution.md`
 - Arbitrage: `docs/prompts/shared/Make04ConstitutionArbitrage.md`
 - Patch synthesis: `docs/prompts/shared/Make05CorePatch.md`
@@ -53,6 +61,7 @@ Règle structurante :
 
 ### Spec and tools
 
+- Analyze scope partition: `docs/patcher/shared/analyze_constitution_scope_partition.py`
 - Patch DSL: `docs/specs/patch-dsl/current.md`
 - Apply patch: `docs/patcher/shared/apply_patch.py`
 - Validate patchset: `docs/patcher/shared/validate_patchset.py`
@@ -136,6 +145,18 @@ En mode borné, il bloque toute promotion implicite d'un succès local.
 Déclare l'identité du run, son `scope_id`, ses chemins d'exécution et la référence vers la scope definition source.
 
 ## Stages
+
+
+### STAGE_00_SCOPE_PARTITION_REVIEW_AND_REGEN
+- Spec détaillée :
+  - `docs/pipelines/constitution/STAGE_00_SCOPE_PARTITION_REVIEW_AND_REGEN.md`
+
+- Rule:
+  - `STAGE_00_SCOPE_PARTITION_REVIEW_AND_REGEN.md` is the canonical specification for Stage 00
+  - Stage 00 is optional
+  - Stage 00 is forbidden if any run is active in `docs/pipelines/constitution/runs/index.yaml`
+  - any deterministic script declared by the Stage 00 specification is mandatory and must be actually executed before the stage can be declared `done`
+  - any AI semantic review remains advisory until policy/decisions are updated and the scope catalog is regenerated deterministically
 
 ### STAGE_01_CHALLENGE
 
@@ -390,6 +411,7 @@ Règle opératoire :
 ## Success criteria
 
 - No stage may be skipped
+- Stage 00 partition review may only run when no active run exists and must never mutate the published partition without deterministic regeneration
 - No file in `current/` may be modified directly before explicit promotion
 - Any patch application must occur in a sandbox root under the resolved `work/05_apply/`
 - Any release materialization must write immutable artifacts under `docs/cores/releases/`

@@ -32,13 +32,14 @@ ai_protocol:
       - docs/pipelines/constitution/work/*
       - docs/pipelines/constitution/reports/*
     decision_algorithm:
-      if_active_runs_count_eq_0: propose_create_new_run
+      if_active_runs_count_eq_0: propose_create_new_run_or_partition_refresh
       if_active_runs_count_eq_1: ask_continue_existing_or_open_new_on_other_scope
       if_active_runs_count_gt_1: ask_disambiguation_with_shortlist
     decision_output_requirements:
       must_offer:
         - continue_active_run
         - open_new_run
+        - review_scope_partition_if_no_active_run
       should_include_if_available:
         - active_run_id
         - active_scope_key
@@ -64,6 +65,24 @@ ai_protocol:
       - docs/pipelines/constitution/inputs/*
     if_run_exists: resume_existing_run
     if_run_missing: emit_next_best_action_only
+
+
+  partition_refresh_mode:
+    precondition:
+      no_active_runs_required: true
+    allowed_reads:
+      - docs/pipelines/constitution/AI_PROTOCOL.yaml
+      - docs/pipelines/constitution/pipeline.md
+      - docs/pipelines/constitution/runs/index.yaml
+      - docs/pipelines/constitution/STAGE_00_SCOPE_PARTITION_REVIEW_AND_REGEN.md
+      - docs/pipelines/constitution/policies/scope_generation/policy.yaml
+      - docs/pipelines/constitution/policies/scope_generation/decisions.yaml
+      - docs/pipelines/constitution/scope_catalog/manifest.yaml
+    forbidden_if_active_runs: true
+    mandatory_script:
+      - docs/patcher/shared/analyze_constitution_scope_partition.py
+    publication_rule:
+      - semantic_review_is_advisory_only_until_policy_and_decisions_are_updated_and_generate_constitution_scopes_py_is_executed
 
   deterministic_script_policy:
     mandatory_behavior: true
@@ -91,5 +110,5 @@ ai_protocol:
 
   responses:
     single_active_run: "Je vois un run actif: <RUN_ID> sur <SCOPE_KEY>, actuellement sur <CURRENT_STAGE>. On peut soit continuer ce run, soit ouvrir un nouveau run sur un autre scope publié. Recommandation: continuer le run actif."
-    no_active_run: "Aucun run actif n'est ouvert. Veux-tu que j'ouvre un nouveau run à partir d'un scope du catalogue ?"
+    no_active_run: "Aucun run actif n'est ouvert. On peut soit ouvrir un nouveau run à partir d'un scope publié, soit lancer un refresh optionnel du partitionnement des scopes avant d'ouvrir de nouveaux runs."
     ambiguous: "emit_short_next_best_action_only"

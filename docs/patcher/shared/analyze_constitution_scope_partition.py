@@ -20,13 +20,12 @@ import json
 import sys
 from collections import Counter, defaultdict
 from pathlib import Path
-from typing import Any, Dict, Iterable, List, Set, Tuple
+from typing import Any, Dict, Iterable, List, Tuple
 
 try:
     import yaml
 except ImportError as exc:  # pragma: no cover
     raise SystemExit("PyYAML is required to run this script.") from exc
-
 
 ENTRY_SECTIONS = ["TYPES", "INVARIANTS", "RULES", "PARAMETERS", "CONSTRAINTS", "EVENTS", "ACTIONS"]
 
@@ -41,12 +40,8 @@ def load_yaml(path: Path) -> Dict[str, Any]:
     return data
 
 
-ndef dump_yaml(data: Dict[str, Any]) -> str:
+def dump_yaml(data: Dict[str, Any]) -> str:
     return yaml.safe_dump(data, sort_keys=False, allow_unicode=True, default_flow_style=False, width=100)
-
-
-def repo_relative(path: Path, repo_root: Path) -> str:
-    return path.relative_to(repo_root).as_posix()
 
 
 def sha256_text(text: str) -> str:

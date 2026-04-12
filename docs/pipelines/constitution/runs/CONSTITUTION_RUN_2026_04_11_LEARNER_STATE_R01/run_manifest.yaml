@@ -3,7 +3,7 @@ run_manifest:
   run_id: CONSTITUTION_RUN_2026_04_11_LEARNER_STATE_R01
   pipeline_id: constitution
   mode: bounded_local_run
-  status: active
+  status: closed
   scope_binding:
     scope_id: CONSTITUTION_SCOPE_LEARNER_STATE
     scope_definition_ref: docs/pipelines/constitution/scope_catalog/scope_definitions/learner_state.yaml
@@ -36,8 +36,8 @@ run_manifest:
   execution_state:
     current_stage: STAGE_07_RELEASE_MATERIALIZATION
     last_stage_status: blocked
-    last_updated: '2026-04-12T16:00:37Z'
-    next_stage: STAGE_07_RELEASE_MATERIALIZATION
+    last_updated: '2026-04-12T17:20:32Z'
+    next_stage: ''
     completed_stages:
     - STAGE_01_CHALLENGE
     - STAGE_02_ARBITRAGE
@@ -130,11 +130,19 @@ run_manifest:
         the real run-aware patched layout, release_plan.yaml was produced, but 07B
         materialization and any promotion-related steps were intentionally not executed
         because this test must not create a release or modify active cores.
+    - stage_id: STAGE_07_RELEASE_MATERIALIZATION
+      stage_status: blocked
+      recorded_at: '2026-04-12T17:20:32Z'
+      summary: Run intentionally closed after successful 07A release classification
+        as a non-finalizing transformation test. build_release_plan.py was corrected
+        to support the real run-aware patched layout, release_plan.yaml was produced
+        and validated, but 07B materialization, release creation, promotion, and any
+        modification of active cores were intentionally not executed.
   scope_tracking:
     scope_status: confirmed_for_bounded_run
-    last_updated: '2026-04-12T16:00:37Z'
-    last_note: Stage 07A release classification was executed as a non-finalizing transformation
-      test. build_release_plan.py was corrected and successfully validated against
-      the real run-aware patched layout, release_plan.yaml was produced, but 07B materialization
-      and any promotion-related steps were intentionally not executed because this
-      test must not create a release or modify active cores.
+    last_updated: '2026-04-12T17:20:32Z'
+    last_note: Run intentionally closed after successful 07A release classification
+      as a non-finalizing transformation test. build_release_plan.py was corrected
+      to support the real run-aware patched layout, release_plan.yaml was produced
+      and validated, but 07B materialization, release creation, promotion, and any
+      modification of active cores were intentionally not executed.
