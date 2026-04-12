@@ -1,0 +1,61 @@
+snapshot:
+  date: 2026-04-12
+  branch: feat/core-modularization-bootstrap
+  topic: stage00_partition_refresh_ready
+
+state:
+  status_files_main_sync: partial
+  overall_progress_percent_estimate: 92
+  summary: >-
+    Le pipeline constitution connaît désormais explicitement un mode optionnel
+    `partition_refresh` et un `STAGE_00_SCOPE_PARTITION_REVIEW_AND_REGEN`.
+    Ce stage est autorisé uniquement lorsqu'aucun run n'est actif. L'analyse
+    déterministe de partition existe, le prompt d'analyse sémantique existe, et
+    le run learner_state a été clôturé dans `runs/index.yaml`. Le repo est donc
+    prêt à exécuter réellement le refresh de partition avant ouverture de
+    nouveaux runs.
+
+completed_since_last_sync_point:
+  - stage00_scope_partition_review_and_regen_spec_added
+  - make00_constitution_scope_partition_review_prompt_added
+  - constitution_partition_review_analyzer_added
+  - constitution_pipeline_md_updated_with_partition_refresh_mode
+  - constitution_ai_protocol_updated_with_partition_refresh_mode
+  - learner_state_run_closed_in_runs_index
+
+linked_artifacts:
+  - docs/pipelines/constitution/STAGE_00_SCOPE_PARTITION_REVIEW_AND_REGEN.md
+  - docs/prompts/shared/Make00ConstitutionScopePartitionReview.md
+  - docs/patcher/shared/analyze_constitution_scope_partition.py
+  - docs/pipelines/constitution/pipeline.md
+  - docs/pipelines/constitution/AI_PROTOCOL.yaml
+  - docs/pipelines/constitution/runs/index.yaml
+
+current_execution_readiness:
+  stage00_allowed_now: true
+  blocking_condition: none
+  canonical_stage00_report_path: docs/pipelines/constitution/reports/scope_partition_review_report.yaml
+  canonical_stage00_command: >-
+    python docs/patcher/shared/analyze_constitution_scope_partition.py --report
+    ./docs/pipelines/constitution/reports/scope_partition_review_report.yaml
+
+next_structural_targets:
+  - execute_stage00_deterministic_partition_review
+  - review_scope_partition_report_with_make00_prompt
+  - arbitrate_policy_and_decision_changes_for_adaptive_scope_count
+  - regenerate_scope_catalog_deterministically_after_policy_update
+
+guardrails:
+  - do_not_run_stage00_if_a_new_active_run_is_opened
+  - stage00_semantic_review_remains_advisory_until_policy_and_decisions_are_updated
+  - scope_catalog_remains_generated_output
+  - no_hierarchical_subscopes_model_should_be_introduced
+
+notes:
+  - >-
+    La cible retenue est un seul niveau de scope avec un nombre de scopes
+    variable et déterministe selon l'état du canon.
+  - >-
+    Les politiques durables ont été canonisées dans
+    `docs/pipelines/constitution/policies/` et ne doivent plus rester dans
+    `docs/transformations/`.
