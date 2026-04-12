@@ -34,9 +34,9 @@ run_manifest:
   - Premier run instancié à partir du catalogue de scopes constitution. Ce run matérialise
     le pilote learner_state dans le layout cible `runs/<run_id>/...`.
   execution_state:
-    current_stage: STAGE_06_CORE_VALIDATION
-    last_stage_status: done
-    last_updated: '2026-04-12T15:40:41Z'
+    current_stage: STAGE_07_RELEASE_MATERIALIZATION
+    last_stage_status: blocked
+    last_updated: '2026-04-12T16:00:37Z'
     next_stage: STAGE_07_RELEASE_MATERIALIZATION
     completed_stages:
     - STAGE_01_CHALLENGE
@@ -122,10 +122,19 @@ run_manifest:
         local scope validation passed on the patched core set, no obvious local regression
         or out-of-scope drift was detected, and the integration gate remains blocked
         for any release or promotion pending explicit global checks.
+    - stage_id: STAGE_07_RELEASE_MATERIALIZATION
+      stage_status: blocked
+      recorded_at: '2026-04-12T16:00:37Z'
+      summary: Stage 07A release classification was executed as a non-finalizing transformation
+        test. build_release_plan.py was corrected and successfully validated against
+        the real run-aware patched layout, release_plan.yaml was produced, but 07B
+        materialization and any promotion-related steps were intentionally not executed
+        because this test must not create a release or modify active cores.
   scope_tracking:
     scope_status: confirmed_for_bounded_run
-    last_updated: '2026-04-12T15:40:41Z'
-    last_note: Stage 06 core validation completed for the bounded learner_state run;
-      local scope validation passed on the patched core set, no obvious local regression
-      or out-of-scope drift was detected, and the integration gate remains blocked
-      for any release or promotion pending explicit global checks.
+    last_updated: '2026-04-12T16:00:37Z'
+    last_note: Stage 07A release classification was executed as a non-finalizing transformation
+      test. build_release_plan.py was corrected and successfully validated against
+      the real run-aware patched layout, release_plan.yaml was produced, but 07B materialization
+      and any promotion-related steps were intentionally not executed because this
+      test must not create a release or modify active cores.
