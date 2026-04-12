@@ -36,7 +36,7 @@ run_manifest:
   execution_state:
     current_stage: STAGE_04_PATCH_VALIDATION
     last_stage_status: done
-    last_updated: '2026-04-12T15:07:37Z'
+    last_updated: '2026-04-12T15:30:09Z'
     next_stage: STAGE_05_APPLY
     completed_stages:
     - STAGE_01_CHALLENGE
@@ -86,10 +86,15 @@ run_manifest:
         scope; patchset validation passed structurally and logically, the patch remained
         strictly within constitution.yaml and aligned with Stage 02 arbitrage, with
         Stage 05 dry-run/apply remaining the next executable validation step.
+    - stage_id: STAGE_04_PATCH_VALIDATION
+      stage_status: done
+      recorded_at: '2026-04-12T15:30:09Z'
+      summary: Stage 04 patch validation completed with real execution of validate_patchset.py
+        on the bounded learner_state patchset; structural validation passed, logical
+        review remained acceptable, and the run can now proceed to Stage 05 apply.
   scope_tracking:
     scope_status: confirmed_for_bounded_run
-    last_updated: '2026-04-12T15:07:37Z'
-    last_note: Stage 04 patch validation completed in bounded run mode on learner_state
-      scope; patchset validation passed structurally and logically, the patch remained
-      strictly within constitution.yaml and aligned with Stage 02 arbitrage, with
-      Stage 05 dry-run/apply remaining the next executable validation step.
+    last_updated: '2026-04-12T15:30:09Z'
+    last_note: Stage 04 patch validation completed with real execution of validate_patchset.py
+      on the bounded learner_state patchset; structural validation passed, logical
+      review remained acceptable, and the run can now proceed to Stage 05 apply.

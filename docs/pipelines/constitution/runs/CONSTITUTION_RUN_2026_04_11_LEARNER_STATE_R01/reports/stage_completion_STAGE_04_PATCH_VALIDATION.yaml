@@ -7,8 +7,7 @@ stage_completion_record:
   run_status: active
   next_stage: STAGE_05_APPLY
   scope_status: confirmed_for_bounded_run
-  summary: Stage 04 patch validation completed in bounded run mode on learner_state
-    scope; patchset validation passed structurally and logically, the patch remained
-    strictly within constitution.yaml and aligned with Stage 02 arbitrage, with Stage
-    05 dry-run/apply remaining the next executable validation step.
-  recorded_at: '2026-04-12T15:07:37Z'
+  summary: Stage 04 patch validation completed with real execution of validate_patchset.py
+    on the bounded learner_state patchset; structural validation passed, logical review
+    remained acceptable, and the run can now proceed to Stage 05 apply.
+  recorded_at: '2026-04-12T15:30:09Z'
