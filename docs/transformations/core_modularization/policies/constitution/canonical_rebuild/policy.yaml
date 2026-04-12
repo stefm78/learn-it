@@ -1,0 +1,49 @@
+canonical_rebuild_policy:
+  schema_version: 0.1
+  policy_id: CONSTITUTION_CANONICAL_REBUILD_POLICY_V1
+  status: active_bootstrap_seed
+  pipeline_family: constitution
+
+  source_state:
+    source_fingerprint: TO_BE_FILLED
+    integration_policy_ref: docs/transformations/core_modularization/policies/constitution/integration/policy.yaml
+    integrated_changeset_contract_ref: docs/transformations/core_modularization/templates/integrated_scoped_changeset.template.yaml
+
+  allowed_primary_inputs:
+    - integrated_scoped_changeset
+  forbidden_primary_inputs:
+    - challenge_report
+    - arbitrage_markdown
+    - free_text_note
+    - raw_chat_reasoning
+
+  rebuild_rules:
+    deterministic_rebuild_required: true
+    stable_serialization_required: true
+    stable_sort_order_required: true
+    explicit_fallback_to_source_canon_allowed: true
+
+  round_trip_invariants:
+    no_silent_id_loss: true
+    no_silent_id_duplication: true
+    no_silent_reference_drift: true
+    identical_output_if_no_logical_change: true
+    same_input_same_output: true
+    rebuilt_fingerprint_required: true
+
+  output_contract:
+    rebuilt_files:
+      - docs/cores/current/constitution.yaml
+      - docs/cores/current/referentiel.yaml
+      - docs/cores/current/link.yaml
+    rebuild_report_required: true
+    rebuild_report_path: docs/pipelines/constitution/reports/canonical_rebuild_report.yaml
+
+  promotion_policy:
+    rebuild_does_not_imply_promotion: true
+    promotion_of_current_remains_explicit: true
+
+  notes:
+    - >-
+      Cette politique réelle de bootstrap gouverne la reconstruction canonique
+      déterministe à partir d'un résultat intégré global déjà structuré.
