@@ -13,13 +13,14 @@ Maturity model reference:
   docs/transformations/core_modularization/CONSTITUTION_SCOPE_MATURITY_MODEL.md
 
   Score = sum of 6 axes (A1 to A6), each 0-4, total on 24.
+  Displayed as percentage (0-100%) for human readability.
   Levels:
-    L0_experimental   :  0-8
-    L1_fragile        :  9-12
-    L2_usable_with_care: 13-16
-    L3_operational    : 17-20
-    L4_strong         : 21-24
-  Minimum for recommended parallel runs: L2_usable_with_care (score >= 13)
+    L0_experimental   :  0-8   (  0% -  33%)
+    L1_fragile        :  9-12  ( 37% -  50%)
+    L2_usable_with_care: 13-16 ( 54% -  67%)
+    L3_operational    : 17-20  ( 71% -  83%)
+    L4_strong         : 21-24  ( 87% - 100%)
+  Minimum for recommended parallel runs: L2_usable_with_care (>= 54%)
   Scores L0/L1 are gated: available=false in action menu.
 
 Still experimental: kept in tmp/ until hardened and promoted.
@@ -49,6 +50,11 @@ MATURITY_LEVELS: list[tuple[str, int, int]] = [
 ]
 MATURITY_MINIMUM_LEVEL = "L2_usable_with_care"  # minimum for recommended runs
 MATURITY_GATED_LEVELS = {"L0_experimental", "L1_fragile"}  # blocked in menu
+
+
+def maturity_pct(score: int) -> str:
+    """Convert raw score to human-readable percentage string, e.g. '79%'."""
+    return f"{round(score * 100 / MATURITY_MAX_SCORE)}%"
 
 
 def maturity_level_from_score(score: int) -> str:
@@ -148,20 +154,23 @@ def build_maturity_summary(enriched_scopes: list[dict[str, Any]]) -> dict[str, A
     available = [s for s in enriched_scopes if s["maturity_available_for_run"]]
     gated = [s for s in enriched_scopes if not s["maturity_available_for_run"]]
     return {
-        "score_max": MATURITY_MAX_SCORE,
-        "axes_count": MATURITY_AXES_COUNT,
+        "score_model": f"6 axes x 4 pts = {MATURITY_MAX_SCORE} pts max (displayed as %)",
         "levels_scale": [
-            {"level": lvl, "range": f"{lo}-{hi}"}
+            {
+                "level": lvl,
+                "range_pct": f"{round(lo * 100 / MATURITY_MAX_SCORE)}% - {round(hi * 100 / MATURITY_MAX_SCORE)}%",
+            }
             for lvl, lo, hi in MATURITY_LEVELS
         ],
         "minimum_recommended_level": MATURITY_MINIMUM_LEVEL,
+        "minimum_recommended_pct": maturity_pct(13),  # L2 lower bound
         "scopes_available_count": len(available),
         "scopes_gated_count": len(gated),
         "scopes_ranked": [
             {
                 "scope_key": s["scope_key"],
-                "score": f"{s['maturity_score']}/{MATURITY_MAX_SCORE}",
-                "level": s["maturity_level"],
+                "maturity_pct": maturity_pct(s["maturity_score"]),
+                "maturity_level": s["maturity_level"],
                 "available_for_run": s["maturity_available_for_run"],
             }
             for s in enriched_scopes
@@ -182,7 +191,6 @@ def discover_constitution(repo_root: Path) -> dict[str, Any]:
     active_runs = runs_index.get("runs_index", {}).get("active_runs", [])
     published_scopes_raw = scope_catalog.get("scope_catalog", {}).get("published_scopes", [])
 
-    # Enrich and sort by maturity
     enriched_scopes = [enrich_scope_maturity(s) for s in published_scopes_raw]
     enriched_scopes = sort_scopes_by_maturity(enriched_scopes)
     maturity_summary = build_maturity_summary(enriched_scopes)
@@ -237,7 +245,7 @@ def _scope_choice_entry(s: dict[str, Any]) -> dict[str, Any]:
     """Build a scope entry for the action menu scope_choices list."""
     entry: dict[str, Any] = {
         "scope_key": s["scope_key"],
-        "maturity_score": f"{s['maturity_score']}/{s['maturity_score_max']}",
+        "maturity_pct": maturity_pct(s["maturity_score"]),
         "maturity_level": s["maturity_level"],
         "available": s["maturity_available_for_run"],
     }
@@ -321,7 +329,7 @@ def build_continue_actions(branch: str, state: dict[str, Any]) -> dict[str, Any]
 
 def build_open_new_actions(branch: str, state: dict[str, Any]) -> dict[str, Any]:
     all_scopes = state.get("published_scopes", [])
-    scope_choices = [_scope_choice_entry(s) for s in all_scopes]  # already sorted by maturity desc
+    scope_choices = [_scope_choice_entry(s) for s in all_scopes]
     available_choices = [c for c in scope_choices if c["available"]]
     gated_choices = [c for c in scope_choices if not c["available"]]
 
@@ -329,7 +337,10 @@ def build_open_new_actions(branch: str, state: dict[str, Any]) -> dict[str, Any]
         f"Dans le repo learn-it, sur la branche {branch}, exécute le pipeline docs/pipelines/constitution/pipeline.md. "
         f"Pour l'instant, ne résous que l'ouverture d'un nouveau run selon docs/pipelines/constitution/AI_PROTOCOL.yaml. "
         f"Scopes disponibles (triés par maturité décroissante): "
-        + ", ".join(f"{c['scope_key']} ({c['maturity_score']} — {c['maturity_level']})" for c in available_choices)
+        + ", ".join(
+            f"{c['scope_key']} ({c['maturity_pct']} — {c['maturity_level']})"
+            for c in available_choices
+        )
         + "."
     ) if available_choices else "Aucun scope disponible — publie des scopes d'abord."
 
@@ -347,7 +358,7 @@ def build_open_new_actions(branch: str, state: dict[str, Any]) -> dict[str, Any]
                 "label": "Open new run on a published scope",
                 "available": bool(available_choices),
                 "recommended": True,
-                "scope_choices": scope_choices,  # all scopes with availability flag
+                "scope_choices": scope_choices,
                 "recommended_scope": available_choices[0]["scope_key"] if available_choices else "",
             }
         ],
