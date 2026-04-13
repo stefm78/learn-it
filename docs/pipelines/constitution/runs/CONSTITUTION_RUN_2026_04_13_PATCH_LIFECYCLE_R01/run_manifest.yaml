@@ -28,10 +28,10 @@ run_manifest:
   execution_state:
     opened_at: '2026-04-13T10:58:00Z'
     opened_by: AI
-    current_stage: STAGE_06_CORE_VALIDATION
+    current_stage: STAGE_07_RELEASE_MATERIALIZATION
     last_stage_status: done
-    last_updated: '2026-04-13T18:04:09Z'
-    next_stage: STAGE_07_RELEASE_MATERIALIZATION
+    last_updated: '2026-04-13T18:31:04Z'
+    next_stage: STAGE_08_PROMOTE_CURRENT
     completed_stages:
     - STAGE_01_CHALLENGE
     - STAGE_02_ARBITRAGE
@@ -39,6 +39,7 @@ run_manifest:
     - STAGE_04_PATCH_VALIDATION
     - STAGE_05_PATCH_APPLICATION
     - STAGE_06_CORE_VALIDATION
+    - STAGE_07_RELEASE_MATERIALIZATION
     stage_history:
     - stage_id: STAGE_01_CHALLENGE
       stage_status: in_progress
@@ -96,6 +97,10 @@ run_manifest:
       summary: 'STAGE_06 PASS local borné — 12/12 tests Make02CoreValidation. Flag:
         PARAM_REFERENTIEL_MAX_PATCH_ITERATIONS_BEFORE_ESCALATION absent du Référentiel,
         à inscrire en integration_gate avant promotion.'
+    - stage_id: STAGE_07_RELEASE_MATERIALIZATION
+      stage_status: done
+      recorded_at: '2026-04-13T18:31:04Z'
+      summary: ''
   overrides:
     allowed: true
     policy: explicit_and_traceable_only

@@ -1,0 +1,11 @@
+stage_completion_record:
+  schema_version: 0.1
+  pipeline_id: constitution
+  run_id: CONSTITUTION_RUN_2026_04_13_PATCH_LIFECYCLE_R01
+  stage_id: STAGE_07_RELEASE_MATERIALIZATION
+  stage_status: done
+  run_status: active
+  next_stage: STAGE_08_PROMOTE_CURRENT
+  scope_status: ''
+  summary: ''
+  recorded_at: '2026-04-13T18:31:04Z'
