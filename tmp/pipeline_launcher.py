@@ -90,6 +90,37 @@ def load_yaml(path: Path) -> dict[str, Any]:
 
 
 # ---------------------------------------------------------------------------
+# run_context availability probe
+# ---------------------------------------------------------------------------
+
+def probe_run_context(pipeline_root: Path, run_id: str) -> dict[str, Any]:
+    """Check whether run_context.yaml and extracts are present for a run."""
+    inputs_dir = pipeline_root / "runs" / run_id / "inputs"
+    run_context_path = inputs_dir / "run_context.yaml"
+    scope_extract_path = inputs_dir / "scope_extract.yaml"
+    neighbor_extract_path = inputs_dir / "neighbor_extract.yaml"
+
+    run_context_present = run_context_path.exists()
+    scope_extract_present = scope_extract_path.exists()
+    neighbor_extract_present = neighbor_extract_path.exists()
+
+    # Check missing_ids in scope_extract
+    scope_extract_complete = False
+    if scope_extract_present:
+        se = load_yaml(scope_extract_path)
+        missing = se.get("scope_extract", {}).get("missing_ids", [])
+        scope_extract_complete = len(missing) == 0
+
+    return {
+        "run_context_present": run_context_present,
+        "scope_extract_present": scope_extract_present,
+        "scope_extract_complete": scope_extract_complete,
+        "neighbor_extract_present": neighbor_extract_present,
+        "ids_first_ready": run_context_present and scope_extract_present and scope_extract_complete,
+    }
+
+
+# ---------------------------------------------------------------------------
 # Registry discovery
 # ---------------------------------------------------------------------------
 
@@ -195,17 +226,24 @@ def discover_constitution(repo_root: Path) -> dict[str, Any]:
     enriched_scopes = sort_scopes_by_maturity(enriched_scopes)
     maturity_summary = build_maturity_summary(enriched_scopes)
 
+    # Probe run_context availability for each active run
+    enriched_runs = []
+    for run in active_runs:
+        run_id = run.get("run_id", "")
+        probe = probe_run_context(pipeline_root, run_id)
+        enriched_runs.append({**run, "ids_first": probe})
+
     result: dict[str, Any] = {
         "pipeline_id": "constitution",
         "ai_protocol_present": bool(ai_protocol),
         "active_runs_count": len(active_runs),
-        "active_runs": active_runs,
+        "active_runs": enriched_runs,
         "published_scopes": enriched_scopes,
         "maturity_summary": maturity_summary,
     }
 
     if len(active_runs) == 1:
-        run = active_runs[0]
+        run = enriched_runs[0]
         other_scopes = [s for s in enriched_scopes if s.get("scope_key") != run.get("scope_key")]
         result.update(
             {
@@ -213,6 +251,7 @@ def discover_constitution(repo_root: Path) -> dict[str, Any]:
                 "recommended_run_id": run.get("run_id"),
                 "recommended_scope_key": run.get("scope_key"),
                 "recommended_current_stage": run.get("current_stage"),
+                "recommended_ids_first": run.get("ids_first", {}),
                 "other_available_scopes": other_scopes,
                 "can_open_new_run_on_other_scope_now": any(s["maturity_available_for_run"] for s in other_scopes),
             }
@@ -254,10 +293,55 @@ def _scope_choice_entry(s: dict[str, Any]) -> dict[str, Any]:
     return entry
 
 
+def build_stage_prompt(branch: str, run_id: str, scope_key: str,
+                        current_stage: str, ids_first: dict[str, Any]) -> str:
+    """Build the stage_prompt for the AI, ids-first if run_context is ready."""
+    ids_first_ready = ids_first.get("ids_first_ready", False)
+    scope_extract_complete = ids_first.get("scope_extract_complete", False)
+
+    if ids_first_ready:
+        # Optimal path: run_context + extracts available, no full Core read needed
+        return (
+            f"Dans le repo learn-it, sur la branche {branch}, exécute le pipeline "
+            f"docs/pipelines/constitution/pipeline.md au {current_stage} en mode run-aware "
+            f"pour run_id={run_id}. "
+            f"ORDRE DE LECTURE IDS-FIRST (obligatoire) : "
+            f"1. runs/{run_id}/inputs/run_context.yaml (fichier synthétique — identité run, stage, IDs) ; "
+            f"2. runs/{run_id}/inputs/scope_extract.yaml (entrées Core du scope uniquement) ; "
+            f"3. runs/{run_id}/inputs/neighbor_extract.yaml (entrées Core voisinage). "
+            f"Ne lis les Core complets (constitution.yaml, referentiel.yaml, link.yaml) "
+            f"QUE si missing_ids est non vide dans les extraits. "
+            f"Produis le livrable du stage uniquement sous runs/{run_id}/... "
+            f"À la fin, donne la commande update_run_tracking.py de clôture du stage."
+        )
+    elif scope_extract_complete:
+        # Extracts present but run_context missing — regenerate it first
+        return (
+            f"Dans le repo learn-it, sur la branche {branch}, avant de démarrer {current_stage} "
+            f"pour run_id={run_id}, génère d'abord run_context.yaml manquant : "
+            f"python docs/patcher/shared/build_run_context.py --run-id {run_id} "
+            f"Ensuite applique l'ordre de lecture ids-first : "
+            f"run_context.yaml → scope_extract.yaml → neighbor_extract.yaml. "
+            f"Ne lis les Core complets que si missing_ids est non vide."
+        )
+    else:
+        # Extracts absent or incomplete — full materialization needed first
+        return (
+            f"Dans le repo learn-it, sur la branche {branch}, les extraits ids-first sont absents "
+            f"ou incomplets pour run_id={run_id}. "
+            f"Exécute d'abord la séquence de matérialisation complète : "
+            f"1. python docs/patcher/shared/materialize_run_inputs.py --run-id {run_id} ; "
+            f"2. python docs/patcher/shared/extract_scope_slice.py --run-id {run_id} ; "
+            f"3. python docs/patcher/shared/build_run_context.py --run-id {run_id} ; "
+            f"Puis démarre {current_stage} en mode ids-first."
+        )
+
+
 def build_continue_actions(branch: str, state: dict[str, Any]) -> dict[str, Any]:
     run_id = state["recommended_run_id"]
     scope_key = state["recommended_scope_key"]
     current_stage = state["recommended_current_stage"]
+    ids_first = state.get("recommended_ids_first", {})
     other_scopes = state.get("other_available_scopes", [])
     other_scope_choices = [_scope_choice_entry(s) for s in other_scopes]
 
@@ -268,13 +352,7 @@ def build_continue_actions(branch: str, state: dict[str, Any]) -> dict[str, Any]
         f"Entry decision resolved; resuming existing {scope_key} run at {current_stage}\""
     )
 
-    stage_prompt = (
-        f"Dans le repo learn-it, sur la branche {branch}, exécute le pipeline docs/pipelines/constitution/pipeline.md "
-        f"au {current_stage} en mode run-aware pour run_id={run_id}. "
-        f"Lis d'abord docs/pipelines/constitution/AI_PROTOCOL.yaml, puis le run_manifest.yaml et les inputs du run, "
-        f"et produis le livrable du stage uniquement sous docs/pipelines/constitution/runs/{run_id}/... "
-        f"À la fin, donne-moi la commande update_run_tracking.py de clôture du stage à exécuter."
-    )
+    stage_prompt = build_stage_prompt(branch, run_id, scope_key, current_stage, ids_first)
 
     return {
         "decision_summary": {
@@ -283,6 +361,7 @@ def build_continue_actions(branch: str, state: dict[str, Any]) -> dict[str, Any]
             "active_run": run_id,
             "active_scope": scope_key,
             "active_stage": current_stage,
+            "ids_first_ready": ids_first.get("ids_first_ready", False),
         },
         "action_menu": [
             {
@@ -293,6 +372,7 @@ def build_continue_actions(branch: str, state: dict[str, Any]) -> dict[str, Any]
                 "run_id": run_id,
                 "scope_key": scope_key,
                 "current_stage": current_stage,
+                "ids_first_ready": ids_first.get("ids_first_ready", False),
             },
             {
                 "key": "new_run",
