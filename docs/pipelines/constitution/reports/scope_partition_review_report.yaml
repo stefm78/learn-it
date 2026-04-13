@@ -1,0 +1,484 @@
+scope_partition_review_report:
+  schema_version: 0.1
+  pipeline_id: constitution
+  status: READY_FOR_SEMANTIC_REVIEW
+  source_fingerprint: 3a7b707d21d65be2e1f06ce8f751757aa1be006d1c6ce6847264501642b8a845
+  current_published_scope_count: 3
+  current_published_scope_keys:
+  - knowledge_graph
+  - learner_state
+  - mastery_model
+  current_policy_id: CONSTITUTION_SCOPE_GENERATION_POLICY_V1
+  current_decisionset_id: CONSTITUTION_SCOPE_GENERATION_DECISIONS_2026_04_12_R01
+  partition_signals:
+    total_entry_count: 116
+    logic_scope_count: 28
+    logic_scope_distribution:
+    - logic_scope: analysis
+      entry_count: 1
+      section_distribution:
+        TYPES: 1
+    - logic_scope: analysis_design
+      entry_count: 7
+      section_distribution:
+        CONSTRAINTS: 1
+        EVENTS: 1
+        INVARIANTS: 2
+        RULES: 1
+        TYPES: 2
+    - logic_scope: analysis_runtime_graph
+      entry_count: 1
+      section_distribution:
+        INVARIANTS: 1
+    - logic_scope: deployment
+      entry_count: 7
+      section_distribution:
+        CONSTRAINTS: 1
+        EVENTS: 1
+        INVARIANTS: 1
+        RULES: 2
+        TYPES: 2
+    - logic_scope: design
+      entry_count: 2
+      section_distribution:
+        INVARIANTS: 1
+        TYPES: 1
+    - logic_scope: design_governance
+      entry_count: 1
+      section_distribution:
+        INVARIANTS: 1
+    - logic_scope: design_runtime
+      entry_count: 2
+      section_distribution:
+        ACTIONS: 1
+        RULES: 1
+    - logic_scope: governance
+      entry_count: 4
+      section_distribution:
+        ACTIONS: 1
+        CONSTRAINTS: 2
+        INVARIANTS: 1
+    - logic_scope: initialization
+      entry_count: 1
+      section_distribution:
+        RULES: 1
+    - logic_scope: intercore_reference
+      entry_count: 1
+      section_distribution:
+        TYPES: 1
+    - logic_scope: knowledge_model
+      entry_count: 2
+      section_distribution:
+        INVARIANTS: 1
+        TYPES: 1
+    - logic_scope: patch_architecture
+      entry_count: 1
+      section_distribution:
+        INVARIANTS: 1
+    - logic_scope: patch_governance
+      entry_count: 8
+      section_distribution:
+        CONSTRAINTS: 2
+        EVENTS: 2
+        INVARIANTS: 1
+        RULES: 3
+    - logic_scope: patch_layer
+      entry_count: 5
+      section_distribution:
+        ACTIONS: 3
+        INVARIANTS: 1
+        TYPES: 1
+    - logic_scope: patch_validation
+      entry_count: 5
+      section_distribution:
+        EVENTS: 1
+        INVARIANTS: 2
+        TYPES: 2
+    - logic_scope: runtime
+      entry_count: 2
+      section_distribution:
+        ACTIONS: 2
+    - logic_scope: runtime_architecture
+      entry_count: 3
+      section_distribution:
+        INVARIANTS: 3
+    - logic_scope: runtime_evaluation
+      entry_count: 16
+      section_distribution:
+        EVENTS: 4
+        INVARIANTS: 2
+        PARAMETERS: 1
+        RULES: 4
+        TYPES: 5
+    - logic_scope: runtime_feedback
+      entry_count: 11
+      section_distribution:
+        CONSTRAINTS: 1
+        EVENTS: 1
+        INVARIANTS: 1
+        PARAMETERS: 3
+        RULES: 2
+        TYPES: 3
+    - logic_scope: runtime_governance
+      entry_count: 4
+      section_distribution:
+        ACTIONS: 1
+        EVENTS: 1
+        RULES: 1
+        TYPES: 1
+    - logic_scope: runtime_graph
+      entry_count: 3
+      section_distribution:
+        INVARIANTS: 2
+        RULES: 1
+    - logic_scope: runtime_integrity
+      entry_count: 5
+      section_distribution:
+        CONSTRAINTS: 1
+        EVENTS: 1
+        RULES: 1
+        TYPES: 2
+    - logic_scope: runtime_observability
+      entry_count: 1
+      section_distribution:
+        ACTIONS: 1
+    - logic_scope: runtime_resume
+      entry_count: 2
+      section_distribution:
+        EVENTS: 1
+        RULES: 1
+    - logic_scope: runtime_safety
+      entry_count: 5
+      section_distribution:
+        EVENTS: 2
+        INVARIANTS: 2
+        RULES: 1
+    - logic_scope: runtime_state
+      entry_count: 14
+      section_distribution:
+        EVENTS: 2
+        INVARIANTS: 3
+        RULES: 5
+        TYPES: 4
+    - logic_scope: runtime_transparency
+      entry_count: 1
+      section_distribution:
+        ACTIONS: 1
+    - logic_scope: system
+      entry_count: 1
+      section_distribution:
+        TYPES: 1
+    cross_scope_edges:
+    - from: runtime_state
+      to: runtime_feedback
+      edge_count: 8
+    - from: patch_governance
+      to: patch_layer
+      edge_count: 5
+    - from: patch_layer
+      to: patch_validation
+      edge_count: 5
+    - from: patch_validation
+      to: patch_layer
+      edge_count: 5
+    - from: runtime_evaluation
+      to: intercore_reference
+      edge_count: 5
+    - from: runtime_evaluation
+      to: runtime
+      edge_count: 5
+    - from: knowledge_model
+      to: analysis_design
+      edge_count: 4
+    - from: patch_governance
+      to: intercore_reference
+      edge_count: 4
+    - from: runtime_safety
+      to: intercore_reference
+      edge_count: 4
+    - from: runtime_state
+      to: governance
+      edge_count: 4
+    - from: patch_governance
+      to: patch_validation
+      edge_count: 3
+    - from: runtime_feedback
+      to: runtime_state
+      edge_count: 3
+    - from: analysis_design
+      to: knowledge_model
+      edge_count: 2
+    - from: deployment
+      to: runtime_transparency
+      edge_count: 2
+    - from: design
+      to: knowledge_model
+      edge_count: 2
+    - from: governance
+      to: intercore_reference
+      edge_count: 2
+    - from: patch_architecture
+      to: patch_layer
+      edge_count: 2
+    - from: patch_architecture
+      to: runtime_architecture
+      edge_count: 2
+    - from: patch_governance
+      to: governance
+      edge_count: 2
+    - from: patch_governance
+      to: runtime_feedback
+      edge_count: 2
+    - from: patch_governance
+      to: runtime_state
+      edge_count: 2
+    - from: runtime_architecture
+      to: deployment
+      edge_count: 2
+    - from: runtime_feedback
+      to: design
+      edge_count: 2
+    - from: runtime_graph
+      to: analysis_design
+      edge_count: 2
+    - from: runtime_resume
+      to: intercore_reference
+      edge_count: 2
+    - from: runtime_safety
+      to: governance
+      edge_count: 2
+    - from: runtime_safety
+      to: knowledge_model
+      edge_count: 2
+    - from: runtime_state
+      to: intercore_reference
+      edge_count: 2
+    - from: analysis_design
+      to: analysis_runtime_graph
+      edge_count: 1
+    - from: analysis_design
+      to: runtime_governance
+      edge_count: 1
+    - from: analysis_runtime_graph
+      to: analysis_design
+      edge_count: 1
+    - from: deployment
+      to: intercore_reference
+      edge_count: 1
+    - from: deployment
+      to: runtime_integrity
+      edge_count: 1
+    - from: design
+      to: runtime_feedback
+      edge_count: 1
+    - from: design_governance
+      to: design
+      edge_count: 1
+    - from: design_governance
+      to: knowledge_model
+      edge_count: 1
+    - from: design_runtime
+      to: knowledge_model
+      edge_count: 1
+    - from: governance
+      to: runtime_evaluation
+      edge_count: 1
+    - from: governance
+      to: runtime_graph
+      edge_count: 1
+    - from: patch_layer
+      to: intercore_reference
+      edge_count: 1
+    - from: patch_validation
+      to: intercore_reference
+      edge_count: 1
+    - from: runtime_architecture
+      to: analysis
+      edge_count: 1
+    - from: runtime_architecture
+      to: analysis_design
+      edge_count: 1
+    - from: runtime_architecture
+      to: design
+      edge_count: 1
+    - from: runtime_evaluation
+      to: runtime_feedback
+      edge_count: 1
+    - from: runtime_evaluation
+      to: runtime_graph
+      edge_count: 1
+    - from: runtime_feedback
+      to: runtime_architecture
+      edge_count: 1
+    - from: runtime_governance
+      to: deployment
+      edge_count: 1
+    - from: runtime_graph
+      to: analysis_runtime_graph
+      edge_count: 1
+    - from: runtime_graph
+      to: runtime
+      edge_count: 1
+    - from: runtime_integrity
+      to: deployment
+      edge_count: 1
+    - from: runtime_resume
+      to: runtime
+      edge_count: 1
+    - from: runtime_safety
+      to: analysis_design
+      edge_count: 1
+    - from: runtime_safety
+      to: runtime_evaluation
+      edge_count: 1
+    - from: runtime_state
+      to: runtime
+      edge_count: 1
+    - from: runtime_state
+      to: runtime_observability
+      edge_count: 1
+    candidate_partition_units:
+    - logic_scope: analysis
+      entry_count: 1
+      internal_edge_count: 0
+      cross_scope_outgoing_edge_count: 0
+      cross_scope_incoming_edge_count: 1
+    - logic_scope: analysis_design
+      entry_count: 7
+      internal_edge_count: 6
+      cross_scope_outgoing_edge_count: 4
+      cross_scope_incoming_edge_count: 9
+    - logic_scope: analysis_runtime_graph
+      entry_count: 1
+      internal_edge_count: 0
+      cross_scope_outgoing_edge_count: 1
+      cross_scope_incoming_edge_count: 2
+    - logic_scope: deployment
+      entry_count: 7
+      internal_edge_count: 5
+      cross_scope_outgoing_edge_count: 4
+      cross_scope_incoming_edge_count: 4
+    - logic_scope: design
+      entry_count: 2
+      internal_edge_count: 0
+      cross_scope_outgoing_edge_count: 3
+      cross_scope_incoming_edge_count: 4
+    - logic_scope: design_governance
+      entry_count: 1
+      internal_edge_count: 0
+      cross_scope_outgoing_edge_count: 2
+      cross_scope_incoming_edge_count: 0
+    - logic_scope: design_runtime
+      entry_count: 2
+      internal_edge_count: 1
+      cross_scope_outgoing_edge_count: 1
+      cross_scope_incoming_edge_count: 0
+    - logic_scope: governance
+      entry_count: 4
+      internal_edge_count: 0
+      cross_scope_outgoing_edge_count: 4
+      cross_scope_incoming_edge_count: 8
+    - logic_scope: initialization
+      entry_count: 1
+      internal_edge_count: 0
+      cross_scope_outgoing_edge_count: 0
+      cross_scope_incoming_edge_count: 0
+    - logic_scope: intercore_reference
+      entry_count: 1
+      internal_edge_count: 0
+      cross_scope_outgoing_edge_count: 0
+      cross_scope_incoming_edge_count: 22
+    - logic_scope: knowledge_model
+      entry_count: 2
+      internal_edge_count: 1
+      cross_scope_outgoing_edge_count: 4
+      cross_scope_incoming_edge_count: 8
+    - logic_scope: patch_architecture
+      entry_count: 1
+      internal_edge_count: 0
+      cross_scope_outgoing_edge_count: 4
+      cross_scope_incoming_edge_count: 0
+    - logic_scope: patch_governance
+      entry_count: 8
+      internal_edge_count: 3
+      cross_scope_outgoing_edge_count: 18
+      cross_scope_incoming_edge_count: 0
+    - logic_scope: patch_layer
+      entry_count: 5
+      internal_edge_count: 5
+      cross_scope_outgoing_edge_count: 6
+      cross_scope_incoming_edge_count: 12
+    - logic_scope: patch_validation
+      entry_count: 5
+      internal_edge_count: 3
+      cross_scope_outgoing_edge_count: 6
+      cross_scope_incoming_edge_count: 8
+    - logic_scope: runtime
+      entry_count: 2
+      internal_edge_count: 0
+      cross_scope_outgoing_edge_count: 0
+      cross_scope_incoming_edge_count: 8
+    - logic_scope: runtime_architecture
+      entry_count: 3
+      internal_edge_count: 2
+      cross_scope_outgoing_edge_count: 5
+      cross_scope_incoming_edge_count: 3
+    - logic_scope: runtime_evaluation
+      entry_count: 16
+      internal_edge_count: 28
+      cross_scope_outgoing_edge_count: 12
+      cross_scope_incoming_edge_count: 2
+    - logic_scope: runtime_feedback
+      entry_count: 11
+      internal_edge_count: 8
+      cross_scope_outgoing_edge_count: 6
+      cross_scope_incoming_edge_count: 12
+    - logic_scope: runtime_governance
+      entry_count: 4
+      internal_edge_count: 2
+      cross_scope_outgoing_edge_count: 1
+      cross_scope_incoming_edge_count: 1
+    - logic_scope: runtime_graph
+      entry_count: 3
+      internal_edge_count: 3
+      cross_scope_outgoing_edge_count: 4
+      cross_scope_incoming_edge_count: 2
+    - logic_scope: runtime_integrity
+      entry_count: 5
+      internal_edge_count: 6
+      cross_scope_outgoing_edge_count: 1
+      cross_scope_incoming_edge_count: 1
+    - logic_scope: runtime_observability
+      entry_count: 1
+      internal_edge_count: 0
+      cross_scope_outgoing_edge_count: 0
+      cross_scope_incoming_edge_count: 1
+    - logic_scope: runtime_resume
+      entry_count: 2
+      internal_edge_count: 1
+      cross_scope_outgoing_edge_count: 3
+      cross_scope_incoming_edge_count: 0
+    - logic_scope: runtime_safety
+      entry_count: 5
+      internal_edge_count: 4
+      cross_scope_outgoing_edge_count: 10
+      cross_scope_incoming_edge_count: 0
+    - logic_scope: runtime_state
+      entry_count: 14
+      internal_edge_count: 23
+      cross_scope_outgoing_edge_count: 16
+      cross_scope_incoming_edge_count: 5
+    - logic_scope: runtime_transparency
+      entry_count: 1
+      internal_edge_count: 0
+      cross_scope_outgoing_edge_count: 0
+      cross_scope_incoming_edge_count: 2
+    - logic_scope: system
+      entry_count: 1
+      internal_edge_count: 0
+      cross_scope_outgoing_edge_count: 0
+      cross_scope_incoming_edge_count: 0
+  recommended_scope_count_direction: increase
+  notes:
+  - Le rapport déterministe n'édite pas la partition publiée.
+  - Il sert de base à l'analyse sémantique assistée par IA et à l'arbitrage humain.
