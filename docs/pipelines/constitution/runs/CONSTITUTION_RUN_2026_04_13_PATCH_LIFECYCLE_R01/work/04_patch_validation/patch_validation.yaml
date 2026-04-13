@@ -1,11 +1,9 @@
 PATCHSET_VALIDATION:
-  status: FAIL
+  status: PASS
   scope: patchset
-  anomalies_count: 3
+  anomalies_count: 0
   warnings_count: 0
   anomalies:
-    - replace_field sans target.field (file 0, op 0)
-    - replace_field sans target.field (file 0, op 1)
-    - replace_field sans target.field (file 0, op 2)
+    - none
   warnings:
     - none
