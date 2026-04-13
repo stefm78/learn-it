@@ -30,7 +30,7 @@ run_manifest:
     opened_by: AI
     current_stage: STAGE_04_PATCH_VALIDATION
     last_stage_status: done
-    last_updated: '2026-04-13T17:12:20Z'
+    last_updated: '2026-04-13T17:12:43Z'
     next_stage: STAGE_05_PATCH_APPLICATION
     completed_stages:
     - STAGE_01_CHALLENGE
@@ -79,6 +79,10 @@ run_manifest:
     - stage_id: STAGE_04_PATCH_VALIDATION
       stage_status: done
       recorded_at: '2026-04-13T17:12:20Z'
+      summary: patch_validation.yaml PASS — 0 anomalie, 0 warning
+    - stage_id: STAGE_04_PATCH_VALIDATION
+      stage_status: done
+      recorded_at: '2026-04-13T17:12:43Z'
       summary: patch_validation.yaml PASS — 0 anomalie, 0 warning
   overrides:
     allowed: true

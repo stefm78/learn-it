@@ -65,7 +65,7 @@ run_context:
     impact_bundle: docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_13_PATCH_LIFECYCLE_R01/inputs/impact_bundle.yaml
     integration_gate: docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_13_PATCH_LIFECYCLE_R01/inputs/integration_gate.yaml
   source_fingerprints:
-    run_manifest.yaml: 3dc178612a47df4850839cf3802040710410222a9ac6042303ef115533383f71
+    run_manifest.yaml: 11f7f5f29650d539d6655e32c691a0cbe6ea42a039b707829f2c6891c05ac1fc
     scope_manifest.yaml: 3fd1a243570f57a813cf25c12a9a81414403e654ebcf6ab813bc6c8a662a1656
     impact_bundle.yaml: 80a687e2ca6bcbd53a40883af1a0f965bbbd56c69ebba0b55a68e5a23a197943
     integration_gate.yaml: 28f8ac743bb95f90b65254021115c38765d7eee43958d3bcad47aca81795673d
