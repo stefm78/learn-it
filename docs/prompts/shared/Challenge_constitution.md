@@ -11,13 +11,45 @@ En mode borné, ta mission est de challenger **un sous-ensemble déclaré** sans
 
 # INPUT
 
-Tu reçois :
-- un Core Constitution ;
-- un Core Référentiel ;
-- un Core LINK ;
-- éventuellement une note de focalisation ;
-- éventuellement un `scope_manifest` ;
-- éventuellement un `impact_bundle`.
+## Mode nominal global
+Si aucun `scope_manifest` n'est fourni :
+- lire les Core complets :
+  - `docs/cores/current/constitution.yaml`
+  - `docs/cores/current/referentiel.yaml`
+  - `docs/cores/current/link.yaml`
+- éventuellement une note de focalisation.
+
+## Mode borné (`bounded_local_run`)
+Si un `run_id` est fourni et que les extraits existent dans `runs/<run_id>/inputs/` :
+
+### Surface de lecture primaire (ids-first)
+Lire **en priorité** les deux fichiers d'extraits :
+- `runs/<run_id>/inputs/scope_extract.yaml`
+  → contient uniquement les entrées du périmètre écrivable du scope.
+- `runs/<run_id>/inputs/neighbor_extract.yaml`
+  → contient uniquement les entrées des voisins logiques obligatoires.
+
+Ces fichiers sont des **vues dérivées déterministes** des Core canoniques.
+Les Core canoniques restent la source de vérité. Les extraits ne sont pas une seconde source.
+
+### Fichiers de gouvernance du run
+- `runs/<run_id>/inputs/scope_manifest.yaml` → périmètre modifiable autorisé
+- `runs/<run_id>/inputs/impact_bundle.yaml` → voisinage logique obligatoire
+- `runs/<run_id>/inputs/integration_gate.yaml` → conditions de sortie du run
+
+### Règle de fallback
+Si un ID nécessaire à l'analyse est absent de `scope_extract.yaml` ou `neighbor_extract.yaml` :
+1. Le signaler **explicitement** dans la section `Périmètre de challenge` du rapport :
+   `ID manquant dans l'extrait : <ID> — fallback sur le Core canonique <core_name>`
+2. Consulter le Core canonique concerné uniquement pour cet ID.
+3. Ne **jamais** charger silencieusement les Core complets sans l'énoncer.
+
+### Précondition
+Si `scope_extract.yaml` est absent, ne pas démarrer l'analyse.
+Fournir à l'utilisateur la commande à exécuter :
+```
+python docs/patcher/shared/extract_scope_slice.py --run-id <RUN_ID>
+```
 
 # MODE OPÉRATOIRE
 
@@ -30,6 +62,7 @@ Si un `scope_manifest` est fourni :
 - considérer que le run porte sur un sous-ensemble borné ;
 - traiter le `scope_manifest` comme l'autorité sur le périmètre modifiable ;
 - traiter le `impact_bundle` comme l'autorité sur le voisinage logique à relire ;
+- lire le contenu à analyser **via les extraits ids-first** (voir section INPUT) ;
 - ne jamais recommander implicitement une modification hors scope.
 
 Règle clé :
@@ -37,7 +70,7 @@ Règle clé :
 
 # CADRE ARCHITECTURAL OBLIGATOIRE
 
-Le moteur d'usage doit être lu comme un moteur 100 % local :
+Le moteur d'usage doit être lu comme un moteur 100 % local :
 - règles déterministes ;
 - modèles statistiques légers ;
 - zéro IA continue ;
@@ -132,6 +165,8 @@ Classer les risques :
 - Ne pas faire comme si une faiblesse hors scope pouvait être corrigée immédiatement sans décision d'élargissement.
 - Si un point hors scope compromet fortement la sûreté du sous-ensemble challengé, le signaler comme `needs_scope_extension`.
 - Le `impact_bundle` élargit le devoir de lecture, pas le droit de modifier.
+- En mode `bounded_local_run`, la surface de lecture est **ids-first** : les extraits prévalent sur les Core complets.
+  Un fallback sur un Core complet est autorisé uniquement si un ID est explicitement signalé manquant dans l'extrait.
 
 # OUTPUT
 
@@ -139,10 +174,12 @@ Produire un rapport structuré avec les sections suivantes :
 
 ## Résumé exécutif
 - synthèse courte ;
-- mode utilisé : `global` ou `bounded`.
+- mode utilisé : `global` ou `bounded` ;
+- en mode borné : confirmer si la lecture a été ids-first ou si un fallback a été utilisé (et pourquoi).
 
 ## Périmètre de challenge
-- artefacts lus ;
+- artefacts lus (extraits ou Core complets) ;
+- IDs manquants dans les extraits ayant nécessité un fallback (liste vide si aucun) ;
 - scope déclaré s'il existe ;
 - limites éventuelles de l'analyse.
 
