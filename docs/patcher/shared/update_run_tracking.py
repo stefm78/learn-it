@@ -5,6 +5,7 @@ This script updates:
 - the run_manifest.yaml of a run instance
 - the lightweight runs/index.yaml summary
 - a stage completion record under the run reports directory
+- run_context.yaml (auto-rebuilt via build_run_context.py if present)
 
 Bootstrap scope:
 - pipeline `constitution`
@@ -16,6 +17,8 @@ from __future__ import annotations
 
 import argparse
 import datetime as dt
+import subprocess
+import sys
 from pathlib import Path
 from typing import Any
 
@@ -64,6 +67,11 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--scope-status", default="")
     parser.add_argument("--summary", default="")
     parser.add_argument("--close-run", action="store_true")
+    parser.add_argument(
+        "--skip-rebuild-context",
+        action="store_true",
+        help="Ne pas rebuilder run_context.yaml apres la mise a jour (deconseille).",
+    )
     return parser.parse_args()
 
 
@@ -143,7 +151,9 @@ def update_runs_index(
     run_manifest_data: dict[str, Any],
     run_id: str,
     stage_id: str,
+    stage_status: str,
     run_status: str,
+    next_stage: str,
     scope_status: str,
     close_run: bool,
 ) -> dict[str, Any]:
@@ -164,12 +174,16 @@ def update_runs_index(
     if scope_id.startswith("CONSTITUTION_SCOPE_"):
         scope_key = scope_id.replace("CONSTITUTION_SCOPE_", "").lower()
 
-    updated_entry = {
+    # current_stage dans index.yaml = next_stage si done, sinon stage_id courant
+    # Cela garantit que le launcher affiche le prochain stage actionnable.
+    displayed_stage = next_stage if (stage_status == "done" and next_stage) else stage_id
+
+    updated_entry: dict[str, Any] = {
         "run_id": run_id,
         "scope_id": scope_id,
         "scope_key": scope_key,
         "run_status": run_status,
-        "current_stage": stage_id,
+        "current_stage": displayed_stage,
         "mode": run_manifest.get("mode", "bounded_local_run"),
         "run_manifest_ref": f"docs/pipelines/constitution/runs/{run_id}/run_manifest.yaml",
     }
@@ -221,10 +235,47 @@ def write_stage_record(
     return record_path
 
 
+def rebuild_run_context(repo_root: Path, pipeline_id: str, run_id: str) -> bool:
+    """Rebuild run_context.yaml via build_run_context.py.
+
+    Appelé automatiquement après chaque mise à jour de tracking pour garantir
+    la synchronisation entre run_manifest.yaml / index.yaml et run_context.yaml.
+
+    Retourne True si le rebuild a réussi, False sinon (non bloquant).
+    """
+    build_script = repo_root / "docs" / "patcher" / "shared" / "build_run_context.py"
+    if not build_script.exists():
+        print(
+            f"[update_run_tracking] WARN: build_run_context.py absent à {build_script} — "
+            "run_context.yaml non reconstruit.",
+            file=sys.stderr,
+        )
+        return False
+
+    cmd = [
+        sys.executable,
+        str(build_script),
+        "--pipeline", pipeline_id,
+        "--run-id", run_id,
+        "--repo-root", str(repo_root),
+    ]
+    result = subprocess.run(cmd, capture_output=False, text=True)
+    if result.returncode != 0:
+        print(
+            f"[update_run_tracking] WARN: build_run_context.py a échoué (code {result.returncode}) — "
+            "run_context.yaml potentiellement désynchronisé.",
+            file=sys.stderr,
+        )
+        return False
+    return True
+
+
 def main() -> int:
     args = parse_args()
     repo_root = repo_root_from_script(Path(__file__))
-    run_root, run_manifest_path, runs_index_path, reports_root = resolve_pipeline_paths(repo_root, args.pipeline, args.run_id)
+    run_root, run_manifest_path, runs_index_path, reports_root = resolve_pipeline_paths(
+        repo_root, args.pipeline, args.run_id
+    )
 
     if not run_root.exists():
         raise FileNotFoundError(f"Run root does not exist: {run_root}")
@@ -249,7 +300,9 @@ def main() -> int:
         run_manifest_data=manifest_data,
         run_id=args.run_id,
         stage_id=args.stage_id,
+        stage_status=args.stage_status,
         run_status=args.run_status,
+        next_stage=args.next_stage,
         scope_status=args.scope_status,
         close_run=args.close_run,
     )
@@ -276,6 +329,15 @@ def main() -> int:
     print(f"  run_manifest: {run_manifest_path.relative_to(repo_root)}")
     print(f"  runs_index: {runs_index_path.relative_to(repo_root)}")
     print(f"  stage_record: {record_path.relative_to(repo_root)}")
+
+    # Auto-rebuild run_context.yaml sauf si explicitement désactivé
+    if not args.skip_rebuild_context:
+        print()
+        print("[update_run_tracking] Reconstruction de run_context.yaml...")
+        ok = rebuild_run_context(repo_root, args.pipeline, args.run_id)
+        if ok:
+            print("[update_run_tracking] run_context.yaml synchronisé.")
+
     return 0
 
 
