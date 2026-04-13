@@ -94,7 +94,13 @@ def load_yaml(path: Path) -> dict[str, Any]:
 # ---------------------------------------------------------------------------
 
 def probe_run_context(pipeline_root: Path, run_id: str) -> dict[str, Any]:
-    """Check whether run_context.yaml and extracts are present for a run."""
+    """Check whether run_context.yaml and extracts are present for a run.
+
+    Returns probe metadata AND — si run_context.yaml est present —
+    l'etat de stage courant lu directement depuis run_context.yaml.
+    run_context.yaml est toujours plus a jour que index.yaml car il est
+    reconstruit automatiquement par update_run_tracking.py apres chaque update.
+    """
     inputs_dir = pipeline_root / "runs" / run_id / "inputs"
     run_context_path = inputs_dir / "run_context.yaml"
     scope_extract_path = inputs_dir / "scope_extract.yaml"
@@ -111,13 +117,34 @@ def probe_run_context(pipeline_root: Path, run_id: str) -> dict[str, Any]:
         missing = se.get("scope_extract", {}).get("missing_ids", [])
         scope_extract_complete = len(missing) == 0
 
-    return {
+    probe: dict[str, Any] = {
         "run_context_present": run_context_present,
         "scope_extract_present": scope_extract_present,
         "scope_extract_complete": scope_extract_complete,
         "neighbor_extract_present": neighbor_extract_present,
         "ids_first_ready": run_context_present and scope_extract_present and scope_extract_complete,
     }
+
+    # Si run_context.yaml est present, on lit l'etat de stage depuis lui.
+    # Il est plus fiable qu'index.yaml car update_run_tracking.py le reconstruit
+    # automatiquement et y ecrit next_stage explicitement.
+    if run_context_present:
+        rc = load_yaml(run_context_path).get("run_context", {})
+        last_stage_status = rc.get("last_stage_status", "")
+        current_stage_rc = rc.get("current_stage", "")
+        next_stage_rc = rc.get("next_stage", "")
+
+        # Si le dernier stage est done ET qu'un next_stage est defini,
+        # le stage actionnable est next_stage — pas current_stage.
+        if last_stage_status == "done" and next_stage_rc and next_stage_rc != current_stage_rc:
+            probe["effective_current_stage"] = next_stage_rc
+        else:
+            probe["effective_current_stage"] = current_stage_rc
+
+        probe["run_context_last_stage_status"] = last_stage_status
+        probe["run_context_next_stage"] = next_stage_rc
+
+    return probe
 
 
 # ---------------------------------------------------------------------------
@@ -226,12 +253,22 @@ def discover_constitution(repo_root: Path) -> dict[str, Any]:
     enriched_scopes = sort_scopes_by_maturity(enriched_scopes)
     maturity_summary = build_maturity_summary(enriched_scopes)
 
-    # Probe run_context availability for each active run
+    # Probe run_context availability for each active run.
+    # IMPORTANT: si run_context.yaml est present, probe_run_context() retourne
+    # effective_current_stage qui prend en compte last_stage_status et next_stage.
+    # On surcharge current_stage de index.yaml avec cette valeur plus fiable.
     enriched_runs = []
     for run in active_runs:
         run_id = run.get("run_id", "")
         probe = probe_run_context(pipeline_root, run_id)
-        enriched_runs.append({**run, "ids_first": probe})
+        merged_run = {**run}
+        # Surcharge current_stage depuis run_context.yaml si disponible
+        if "effective_current_stage" in probe and probe["effective_current_stage"]:
+            merged_run["current_stage"] = probe["effective_current_stage"]
+            merged_run["current_stage_source"] = "run_context.yaml"
+        else:
+            merged_run["current_stage_source"] = "index.yaml"
+        enriched_runs.append({**merged_run, "ids_first": probe})
 
     result: dict[str, Any] = {
         "pipeline_id": "constitution",
