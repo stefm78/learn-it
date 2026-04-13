@@ -58,23 +58,69 @@ scope_generation_policy:
         - integration_gate_requires_wider_reread
 
   declared_scopes:
-    - scope_key: learner_state
-      scope_id: CONSTITUTION_SCOPE_LEARNER_STATE
+    - scope_key: deployment_governance
+      scope_id: CONSTITUTION_SCOPE_DEPLOYMENT_GOVERNANCE
       publication_status: published_generated
       target_files:
         - docs/cores/current/constitution.yaml
       target_modules:
-        - learner_state
-        - self_report
-        - conservative_entry_logic
+        - deployment
+        - runtime_architecture
+        - runtime_governance
+        - governance
+        - initialization
+        - system
       neighbor_files:
         - docs/cores/current/referentiel.yaml
         - docs/cores/current/link.yaml
       watchpoints:
-        - Ne pas transformer un seuil référentiel en règle constitutionnelle implicite.
-        - Ne pas déduire une inférence psychologique plus forte que le cadre autorisé.
-        - Vérifier les frontières entre état unknown, détresse, conservatisme et escalade.
-        - Vérifier que les liens au Référentiel restent explicites et non silencieux.
+        - Vérifier que les contraintes d'architecture locale (INV_RUNTIME_FULLY_LOCAL) ne glissent pas vers des règles pédagogiques.
+        - Vérifier que la séparation Constitution/Référentiel reste inviolable et explicitement tracée.
+        - Vérifier que les régimes d'autonomie restent des configurations, pas des règles adaptatives.
+        - Vérifier que les règles de gouvernance top-level (GF-08, gamification) n'empiètent pas sur patch_lifecycle.
+        - Ne pas confondre contraintes constitutionnelles invariantes et paramètres référentiels.
+      maturity:
+        axes:
+          clarity_of_scope: 3
+          internal_coherence: 3
+          inter_scope_boundaries: 3
+          dependency_explicitness: 3
+          bounded_run_executability: 3
+          inter_release_stability: 4
+        score_total: 19
+        level: L3_operational
+        rationale:
+          - Périmètre bien borné sur les contraintes architecturales et de gouvernance invariantes.
+          - Forte stabilité inter-release, ces règles ne varient pas au fil des sessions.
+          - Frontières claires avec learner_state et patch_lifecycle.
+      notes:
+        - >-
+          Scope généré deployment_governance. Couvre l'architecture runtime locale,
+          les régimes d'autonomie, la gouvernance top-level, la séparation
+          Constitution/Référentiel et l'initialisation conservative.
+
+    - scope_key: knowledge_and_design
+      scope_id: CONSTITUTION_SCOPE_KNOWLEDGE_AND_DESIGN
+      publication_status: published_generated
+      target_files:
+        - docs/cores/current/constitution.yaml
+      target_modules:
+        - knowledge_model
+        - analysis
+        - analysis_design
+        - analysis_runtime_graph
+        - design
+        - design_governance
+        - design_runtime
+      neighbor_files:
+        - docs/cores/current/referentiel.yaml
+        - docs/cores/current/link.yaml
+      watchpoints:
+        - Vérifier la frontière entre structure du graphe (topologie, acyclicité) et règles d'évaluation runtime.
+        - Vérifier que INV_EXPLICIT_DEPENDENCY_EDGES_REQUIRED reste associé à ce scope et non à mastery_evaluation.
+        - Vérifier que le contexte authentique est bien une contrainte de design, pas une règle runtime.
+        - Ne pas dériver de règles adaptatives depuis les invariants de structure de graphe.
+        - Vérifier que les règles de misconception restent dans la phase design et ne glissent pas vers learner_state.
       maturity:
         axes:
           clarity_of_scope: 3
@@ -86,31 +132,77 @@ scope_generation_policy:
         score_total: 17
         level: L3_operational
         rationale:
-          - Scope lisible et assez bien borné pour un premier run.
-          - Frontières encore perfectibles vis-à-vis des mécanismes de distress et des dépendances référentielles.
-          - Suffisamment stable et exécutable pour un pilote borné prudent.
+          - Scope couvrant la totalité de la phase Analyse/Design du domaine.
+          - Consolidation de knowledge_model et content_design en un scope cohérent de pré-déploiement.
+          - Frontières à surveiller avec mastery_evaluation sur les règles de propagation graphe.
       notes:
         - >-
-          Scope généré learner_state. Sa structure reste régénérable à partir du
-          canon et des décisions de partition/voisinage.
+          Scope généré knowledge_and_design. Couvre la structure du domaine
+          (graphe, KU, acyclicité, contexte authentique, Bloom), la matrice de
+          feedback et les règles de design pédagogique (misconception, modal,
+          créativité). Phase Analyse/Design pure, aucune exécution runtime.
 
-    - scope_key: mastery_model
-      scope_id: CONSTITUTION_SCOPE_MASTERY_MODEL
+    - scope_key: learner_state
+      scope_id: CONSTITUTION_SCOPE_LEARNER_STATE
       publication_status: published_generated
       target_files:
         - docs/cores/current/constitution.yaml
       target_modules:
-        - mastery_model
+        - runtime_state
+        - runtime_feedback
+        - runtime_observability
+        - runtime_transparency
+        - runtime_resume
+      neighbor_files:
+        - docs/cores/current/referentiel.yaml
+        - docs/cores/current/link.yaml
+      watchpoints:
+        - Ne pas transformer un seuil référentiel en règle constitutionnelle implicite.
+        - Ne pas déduire une inférence psychologique plus forte que le cadre autorisé.
+        - Vérifier les frontières entre état unknown, détresse, conservatisme et escalade.
+        - Vérifier que les liens au Référentiel restent explicites et non silencieux.
+        - Vérifier que runtime_resume reste bien dans ce scope (lien état > lien MSC).
+        - Ne pas confondre les AR comme sources d'état (ce scope) et comme déclencheurs de patch (patch_lifecycle).
+      maturity:
+        axes:
+          clarity_of_scope: 3
+          internal_coherence: 3
+          inter_scope_boundaries: 2
+          dependency_explicitness: 3
+          bounded_run_executability: 3
+          inter_release_stability: 3
+        score_total: 17
+        level: L3_operational
+        rationale:
+          - Périmètre élargi par rapport à l'ancienne version pour couvrir feedback AR et reprise.
+          - Frontières encore perfectibles avec mastery_evaluation et patch_lifecycle.
+          - Suffisamment stable et exécutable pour un pilote borné prudent.
+      notes:
+        - >-
+          Scope généré learner_state (périmètre élargi). Couvre l'état apprenant
+          3 axes, les auto-rapports AR-N1/N2/N3, la détresse, la VC, le scaffolding
+          conservateur, la reprise diagnostique et la transparence apprenant.
+
+    - scope_key: mastery_evaluation
+      scope_id: CONSTITUTION_SCOPE_MASTERY_EVALUATION
+      publication_status: published_generated
+      target_files:
+        - docs/cores/current/constitution.yaml
+      target_modules:
         - runtime_evaluation
-        - transfer
+        - runtime_graph
+        - runtime_integrity
+        - runtime_safety
       neighbor_files:
         - docs/cores/current/referentiel.yaml
         - docs/cores/current/link.yaml
       watchpoints:
         - Ne pas diluer la logique MSC AND strict dans des simplifications de score.
-        - Préserver la séparation entre maîtrise de base et transférabilité.
+        - Préserver la séparation entre maîtrise de base (P+R+A) et transférabilité (T).
         - Vérifier les frontières entre évaluation locale, propagation graphe et dépendances référentielles.
         - Vérifier qu'une composante non calculable reste deferred et ne tombe jamais implicitement à false.
+        - Vérifier que INV_GRAPH_PROPAGATION_ONE_HOP reste dans ce scope et non dans knowledge_and_design.
+        - Ne pas laisser les règles d'intégrité session (SIS, NC_MSC) glisser vers learner_state.
       maturity:
         axes:
           clarity_of_scope: 3
@@ -122,47 +214,53 @@ scope_generation_policy:
         score_total: 18
         level: L3_operational
         rationale:
-          - Scope conceptuellement très cohérent autour de l'évaluation de maîtrise et de transfert.
-          - Dépendances explicites mais frontières à surveiller avec le graphe et les seuils référentiels.
-          - Suffisamment stable pour un run borné prudent.
+          - Scope très cohérent autour du cycle complet d'évaluation de maîtrise.
+          - Intègre intégrité session et sécurité runtime liée à l'évaluation.
+          - Dépendances explicites mais frontières à surveiller avec knowledge_and_design et learner_state.
       notes:
         - >-
-          Scope généré mastery_model. Sa structure reste régénérable à partir du
-          canon et des décisions de partition/voisinage.
+          Scope généré mastery_evaluation (ex mastery_model élargi). Couvre le
+          modèle MSC (P/R/A/T), la propagation graphe, l'intégrité de session,
+          la sécurité runtime liée à l'évaluation et les investigations systémiques.
 
-    - scope_key: knowledge_graph
-      scope_id: CONSTITUTION_SCOPE_KNOWLEDGE_GRAPH
+    - scope_key: patch_lifecycle
+      scope_id: CONSTITUTION_SCOPE_PATCH_LIFECYCLE
       publication_status: published_generated
       target_files:
         - docs/cores/current/constitution.yaml
       target_modules:
-        - knowledge_graph
-        - competency_graph
-        - prerequisite_logic
+        - patch_layer
+        - patch_validation
+        - patch_architecture
+        - patch_governance
       neighbor_files:
         - docs/cores/current/referentiel.yaml
         - docs/cores/current/link.yaml
       watchpoints:
-        - Vérifier la frontière entre structure de graphe et politique pédagogique.
-        - Vérifier que la gestion des inconnues ne force pas une topologie artificielle.
-        - Vérifier que les prérequis restent localement exécutables sans IA continue.
+        - Vérifier que la validation locale reste strictement déterministe (INV_PATCH_LOCAL_VALIDATION_MUST_BE_DETERMINISTIC).
+        - Vérifier que les artefacts patch sont toujours précomputés hors session avant application.
+        - Ne pas laisser les déclencheurs de patch gouvernés glisser vers des mécanismes d'adaptation runtime directe.
+        - Vérifier la frontière entre patch relevance/AR (déclencheurs ici) et l'état qui les génère (learner_state).
+        - Ne pas confondre escalade hors session (patch_lifecycle) et escalade d'état (learner_state).
       maturity:
         axes:
-          clarity_of_scope: 2
+          clarity_of_scope: 3
           internal_coherence: 3
           inter_scope_boundaries: 2
-          dependency_explicitness: 2
+          dependency_explicitness: 3
           bounded_run_executability: 2
-          inter_release_stability: 2
-        score_total: 13
+          inter_release_stability: 3
+        score_total: 16
         level: L2_usable_with_care
         rationale:
-          - Scope structurant et probablement indispensable à terme.
-          - Publié avec prudence pour permettre des runs distincts sur le graphe de compétences.
+          - Scope bien défini conceptuellement mais encore en rodage opérationnel.
+          - Frontières à surveiller avec learner_state sur les déclencheurs AR/VC.
+          - Architecture off-session solide mais exécutabilité bornée encore à valider.
       notes:
         - >-
-          Scope généré knowledge_graph. Sa structure reste régénérable à partir
-          du canon et des décisions de partition/voisinage.
+          Scope généré patch_lifecycle. Couvre le cycle complet de vie des patches :
+          structure, validation déterministe, architecture off-session, déclencheurs
+          gouvernés (VC, AR-réfractaire) et escalade dérive persistante.
 
   serialization_policy:
     stable_sort_required: true
