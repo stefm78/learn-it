@@ -63,6 +63,7 @@ Règle structurante :
 
 - Analyze scope partition: `docs/patcher/shared/analyze_constitution_scope_partition.py`
 - Generate constitution scopes: `docs/patcher/shared/generate_constitution_scopes.py`
+- **Materialize run inputs: `docs/patcher/shared/materialize_run_inputs.py`** ← à exécuter avant STAGE_01_CHALLENGE
 - Patch DSL: `docs/specs/patch-dsl/current.md`
 - Apply patch: `docs/patcher/shared/apply_patch.py`
 - Validate patchset: `docs/patcher/shared/validate_patchset.py`
@@ -164,6 +165,13 @@ Déclare l'identité du run, son `scope_id`, ses chemins d'exécution et la réf
   - any AI semantic review remains advisory until policy/decisions are updated and the scope catalog is regenerated deterministically
 
 ### STAGE_01_CHALLENGE
+
+- Pre-condition (bounded_local_run mode only):
+  - `runs/<run_id>/inputs/scope_manifest.yaml`, `impact_bundle.yaml` and `integration_gate.yaml` must exist before this stage starts.
+  - If they are absent, run the deterministic materialization script first:
+    `python docs/patcher/shared/materialize_run_inputs.py --run-id <run_id>`
+  - The AI must never simulate or assume execution of `materialize_run_inputs.py`.
+  - If the AI cannot execute the script itself, it must provide the exact command and keep the stage non-started until the user confirms execution.
 
 - Inputs:
   - current cores
@@ -427,3 +435,4 @@ Règle opératoire :
 - In bounded mode, no promotion may occur until the `integration_gate` is explicitly cleared
 - In run mode, the run instance is the primary execution unit and its own `work/`, `reports/`, `outputs/` and `archive/` directories are authoritative for the local cycle
 - Any stage that depends on a mandatory deterministic script must not be declared `done` until that script has been actually executed and its expected artifacts have been materially produced
+- In bounded_local_run mode, `materialize_run_inputs.py` must be executed before STAGE_01_CHALLENGE; its execution cannot be simulated or assumed
