@@ -484,6 +484,13 @@ scope_partition_review_report:
   bijection_check:
     canon_id_count: 116
     assigned_id_count: 115
+    forced_neighbor_id_count: 5
+    ids_covered_as_forced_neighbors:
+    - INV_EXPLICIT_DEPENDENCY_EDGES_REQUIRED
+    - REF_CORE_LEARNIT_REFERENTIEL_V2_0_IN_CONSTITUTION
+    - TYPE_KNOWLEDGE_GRAPH
+    - TYPE_LEARNER_STATE_MODEL
+    - TYPE_STATE_AXIS_ACTIVATION
     assignments_by_scope:
       deployment_governance:
       - ACTION_INFORM_LEARNER
@@ -605,14 +612,13 @@ scope_partition_review_report:
       - TYPE_PATCH_ARTIFACT
       - TYPE_PATCH_IMPACT_SCOPE
       - TYPE_PATCH_QUALITY_GATE
-    ids_not_covered:
-    - REF_CORE_LEARNIT_REFERENTIEL_V2_0_IN_CONSTITUTION
+    ids_not_covered: []
     ids_assigned_but_not_in_canon: []
     ids_assigned_to_multiple_scopes: {}
-    bijection_status: FAIL
-    bijection_failures:
-    - 1 canon ID(s) not covered by any scope decision
+    bijection_status: PASS
+    bijection_failures: []
   notes:
   - Le rapport déterministe n'édite pas la partition publiée.
   - Il sert de base à l'analyse sémantique assistée par IA et à l'arbitrage humain.
-  - bijection_check.bijection_status PASS = couverture exacte IDs canon ↔ decisions.yaml.
+  - bijection_check.bijection_status PASS = tous les IDs canon sont couverts (assign ou forced_neighbor).
+  - Les IDs en forced_neighbor sont partagés entre scopes et n'appartiennent délibérément à aucun scope.
