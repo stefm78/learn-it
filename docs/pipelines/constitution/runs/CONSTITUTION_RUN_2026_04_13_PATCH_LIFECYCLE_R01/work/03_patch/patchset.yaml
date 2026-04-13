@@ -26,13 +26,13 @@ PATCH_SET:
         # ─────────────────────────────────────────────────────────────────────
         # C02 — Définition déterministe de impact_scope
         # Cible : TYPE_PATCH_IMPACT_SCOPE (TYPES)
-        # Modification : champ logic.condition et logic.effect pour rendre
-        # explicite que le calcul de impact_scope est structurel et déterministe.
+        # Modification : logic
         # ─────────────────────────────────────────────────────────────────────
         - op: replace_field
-          section: TYPES
-          id: TYPE_PATCH_IMPACT_SCOPE
-          field: logic
+          target:
+            section: TYPES
+            id: TYPE_PATCH_IMPACT_SCOPE
+            field: logic
           value:
             trigger: Validation d'un patch
             condition: >
@@ -51,14 +51,13 @@ PATCH_SET:
         # ─────────────────────────────────────────────────────────────────────
         # C03 — Mécanisme de rollback explicite dans ACTION_ROLLBACK_PATCH
         # Cible : ACTION_ROLLBACK_PATCH (ACTIONS)
-        # Modification : champ logic pour spécifier la méthode (snapshot
-        # pré-application), la condition de détection de partialité et le
-        # périmètre de retour.
+        # Modification : logic
         # ─────────────────────────────────────────────────────────────────────
         - op: replace_field
-          section: ACTIONS
-          id: ACTION_ROLLBACK_PATCH
-          field: logic
+          target:
+            section: ACTIONS
+            id: ACTION_ROLLBACK_PATCH
+            field: logic
           value:
             trigger: Échec ou invalidité d'un patch
             condition: >
@@ -77,14 +76,13 @@ PATCH_SET:
         # ─────────────────────────────────────────────────────────────────────
         # C04 — Extension de l'escalade pour couvrir l'inefficacité de patch
         # Cible : INV_PERSISTENT_DRIFT_REQUIRES_ESCALATION_IF_PATCH_BLOCKED (INVARIANTS)
-        # Modification : champ logic pour ajouter la condition complémentaire
-        # (N patches successifs du même type sans résolution du signal de dérive).
-        # N est déclaré paramètre Référentiel.
+        # Modification : logic
         # ─────────────────────────────────────────────────────────────────────
         - op: replace_field
-          section: INVARIANTS
-          id: INV_PERSISTENT_DRIFT_REQUIRES_ESCALATION_IF_PATCH_BLOCKED
-          field: logic
+          target:
+            section: INVARIANTS
+            id: INV_PERSISTENT_DRIFT_REQUIRES_ESCALATION_IF_PATCH_BLOCKED
+            field: logic
           value:
             trigger: Répétition d'un besoin de correction sur plusieurs cycles
             condition: >
@@ -108,10 +106,6 @@ PATCH_SET:
         # C01 — Sérialisation des patches concurrents
         # Cible : nouvelle entrée RULE_PATCH_SERIALIZATION dans RULES
         # Module : patch_governance
-        # Justification : absence de règle de priorité ou de mutex entre
-        # ACTION_TRIGGER_RELEVANCE_PATCH et ACTION_TRIGGER_AR_SOLLICITATION_PATCH
-        # (et tout autre action de patch future). Une seule action de patch active
-        # par apprenant à un instant donné ; file d'attente FIFO si concurrence.
         # ─────────────────────────────────────────────────────────────────────
         - op: append
           section: RULES
