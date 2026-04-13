@@ -34,7 +34,7 @@ Règle :
 - `docs/pipelines/constitution/scope_catalog/manifest.yaml`
 - `docs/pipelines/constitution/scope_catalog/scope_definitions/*.yaml`
 
-## Script déterministe obligatoire
+## Script déterministe obligatoire — analyse
 
 Script canonique :
 - `docs/patcher/shared/analyze_constitution_scope_partition.py`
@@ -65,9 +65,19 @@ Interdictions :
 - l'IA ne remplace pas l'exécution du script déterministe ;
 - l'IA ne modifie pas directement le catalogue comme source d'autorité.
 
+## Script déterministe obligatoire — régénération
+
+Script canonique :
+- `docs/patcher/shared/generate_constitution_scopes.py`
+
+Commande de référence :
+- `python docs/patcher/shared/generate_constitution_scopes.py --apply --report tmp/constitution_scope_generation_report.yaml`
+
+Le script doit être exécuté après arbitrage humain et mise à jour des fichiers canonisés de policy/decisions. Il produit le nouveau catalogue de scopes de façon déterministe.
+
 ## Sorties attendues
 
-Sortie déterministe obligatoire :
+Sortie déterministe obligatoire — analyse :
 - `docs/pipelines/constitution/reports/scope_partition_review_report.yaml`
 
 Sorties analytiques optionnelles :
@@ -75,25 +85,30 @@ Sorties analytiques optionnelles :
 - `tmp/constitution_scope_generation_policy_candidate.yaml`
 - `tmp/constitution_scope_generation_decisions_candidate.yaml`
 
-Après arbitrage humain et mise à jour des policy/decisions canonisés, la régénération déterministe repasse par :
-- `docs/patcher/shared/generate_constitution_scopes.py`
+Sortie déterministe obligatoire — régénération :
+- `tmp/constitution_scope_generation_report.yaml`
+  (produit par `generate_constitution_scopes.py --apply`)
 
 ## Règles opératoires
 
 1. Le Stage 00 est optionnel.
 2. Le Stage 00 est interdit s'il existe un run actif.
-3. Le script déterministe est obligatoire et doit être réellement exécuté avant toute conclusion de stage.
-4. L'analyse IA n'est qu'un complément d'interprétation sémantique.
-5. Toute évolution gouvernante doit entrer par les fichiers canonisés de `docs/pipelines/constitution/policies/scope_generation/`.
-6. Le catalogue reste un output généré.
-7. Le Stage 00 ne doit jamais être utilisé pour contourner un run en cours ou requalifier rétroactivement son scope.
+3. Le script `analyze_constitution_scope_partition.py` est obligatoire et doit être réellement exécuté avant toute analyse sémantique ou conclusion de stage.
+4. Le Stage 00 ne peut pas être déclaré `done` sans que `scope_partition_review_report.yaml` ait été produit par exécution réelle de `analyze_constitution_scope_partition.py`.
+5. La régénération du catalogue ne peut pas être déclarée accomplie sans exécution réelle de `generate_constitution_scopes.py` ; aucune simulation ou substitution par lecture documentaire n'est autorisée.
+6. Si l'IA ne peut pas exécuter ces scripts elle-même, elle doit fournir les commandes exactes à l'utilisateur et garder le stage non final jusqu'au retour du résultat réel.
+7. L'analyse IA n'est qu'un complément d'interprétation sémantique ; elle ne remplace jamais l'exécution des scripts déterministes.
+8. Toute évolution gouvernante doit entrer par les fichiers canonisés de `docs/pipelines/constitution/policies/scope_generation/`.
+9. Le catalogue reste un output généré.
+10. Le Stage 00 ne doit jamais être utilisé pour contourner un run en cours ou requalifier rétroactivement son scope.
 
 ## Critère de succès
 
 Le Stage 00 est réussi lorsque :
 - aucun run actif n'existe ;
-- le rapport déterministe a été produit ;
+- le rapport déterministe `scope_partition_review_report.yaml` a été produit par exécution réelle du script d'analyse ;
 - l'analyse sémantique a été discutée ;
 - les arbitrages humains nécessaires ont été capturés dans les fichiers canonisés ;
-- le catalogue de scopes a été régénéré de façon déterministe ;
+- le catalogue de scopes a été régénéré de façon déterministe par exécution réelle de `generate_constitution_scopes.py` ;
+- le rapport `constitution_scope_generation_report.yaml` a été produit ;
 - le nouveau partitionnement est traçable et reproductible.
