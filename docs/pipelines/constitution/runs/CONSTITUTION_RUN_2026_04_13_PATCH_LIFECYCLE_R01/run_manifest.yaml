@@ -24,12 +24,13 @@ run_manifest:
     reports_root: runs/CONSTITUTION_RUN_2026_04_13_PATCH_LIFECYCLE_R01/reports
     outputs_root: runs/CONSTITUTION_RUN_2026_04_13_PATCH_LIFECYCLE_R01/outputs
     archive_root: runs/CONSTITUTION_RUN_2026_04_13_PATCH_LIFECYCLE_R01/archive
+  current_stage: STAGE_02_ARBITRAGE
   execution_state:
     opened_at: '2026-04-13T10:58:00Z'
     opened_by: AI
-    current_stage: STAGE_01_CHALLENGE
+    current_stage: STAGE_02_ARBITRAGE
     last_stage_status: done
-    last_updated: '2026-04-13T09:32:03Z'
+    last_updated: '2026-04-13T09:34:00Z'
     next_stage: STAGE_02_ARBITRAGE
     completed_stages:
     - STAGE_01_CHALLENGE
@@ -37,15 +38,18 @@ run_manifest:
     - stage_id: STAGE_01_CHALLENGE
       stage_status: in_progress
       recorded_at: '2026-04-13T09:01:05Z'
-      summary: Ouverture run patch_lifecycle — démarrage STAGE_01_CHALLENGE
+      summary: "Ouverture run patch_lifecycle \u2014 d\u00e9marrage STAGE_01_CHALLENGE"
     - stage_id: STAGE_01_CHALLENGE
       stage_status: done
       recorded_at: '2026-04-13T09:32:03Z'
-      summary: 'STAGE_01_CHALLENGE terminé en mode bounded_local_run ids-first. 6
-        corrections in-scope identifiées (2 critiques : mutex patches concurrents,
-        impact_scope non déterministe), 4 points hors scope signalés. challenge_report_01.md
-        produit.'
-  current_stage: STAGE_01_CHALLENGE
+      summary: "STAGE_01_CHALLENGE termin\u00e9 en mode bounded_local_run ids-first. 6\
+        \ corrections in-scope identifi\u00e9es (2 critiques : mutex patches concurrents,\
+        \ impact_scope non d\u00e9terministe), 4 points hors scope signal\u00e9s. challenge_report_01.md\
+        \ produit."
+    - stage_id: STAGE_01_CHALLENGE
+      stage_status: done
+      recorded_at: '2026-04-13T09:34:00Z'
+      summary: "sync AI \u2014 current_stage avanc\u00e9 vers STAGE_02_ARBITRAGE apr\u00e8s confirmation done & sync."
   overrides:
     allowed: true
     policy: explicit_and_traceable_only
@@ -53,10 +57,9 @@ run_manifest:
     scope_status: confirmed_for_bounded_run
     maturity_level: L2_usable_with_care
     maturity_score: 16
-    last_updated: '2026-04-13T09:32:03Z'
-    last_note: 'STAGE_01_CHALLENGE terminé en mode bounded_local_run ids-first. 6
-      corrections in-scope identifiées (2 critiques : mutex patches concurrents, impact_scope
-      non déterministe), 4 points hors scope signalés. challenge_report_01.md produit.'
+    last_updated: '2026-04-13T09:34:00Z'
+    last_note: "STAGE_01_CHALLENGE done. current_stage -> STAGE_02_ARBITRAGE."
   notes:
   - Run ouvert par IA sur scope patch_lifecycle (L2_usable_with_care, score 16).
-  - source_fingerprint à remplir au démarrage effectif de STAGE_01.
+  - source_fingerprint \u00e0 remplir au d\u00e9marrage effectif de STAGE_01.
+  - STAGE_01_CHALLENGE cl\u00f4tur\u00e9 le 2026-04-13 apr\u00e8s production de challenge_report_01.md.
