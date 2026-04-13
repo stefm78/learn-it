@@ -25,9 +25,10 @@ Fallback rule:
   explicitly signal it and fall back to the full canonical Core file for that ID only.
 
 IDENTIFICATION STRATEGY:
-  Entries are matched by id fields at any nesting level within each Core file's
-  top-level collection keys. The script walks all top-level list/dict structures
-  and collects any entry whose recognized id field matches the target set.
+  Core files use the envelope: CORE: {TYPES: [...], INVARIANTS: [...], RULES: [...], ...}
+  The script detects this envelope and descends into it before walking sections.
+  Each section is either a list of entries (each with an 'id' field) or a dict
+  of entries keyed by their id. Entries are matched against the target ID set.
 
 Integration in pipeline.md:
   Spec and tools section — called after materialize_run_inputs.py, before STAGE_01_CHALLENGE.
@@ -89,6 +90,34 @@ def sha256_file(path: Path) -> str:
 
 
 # ---------------------------------------------------------------------------
+# Core envelope unwrap
+# ---------------------------------------------------------------------------
+
+def unwrap_core_envelope(core_data: Any) -> dict:
+    """Unwrap the canonical Core envelope.
+
+    Core files use the structure:
+        CORE:
+          id: CORE_LEARNIT_CONSTITUTION_V2_0
+          TYPES: [...]
+          INVARIANTS: [...]
+          RULES: [...]
+          ...
+
+    This function returns the inner dict (the CORE value) so that callers
+    can iterate directly over TYPES, INVARIANTS, etc.
+
+    If the structure does not match (flat dict, no CORE key), returns core_data as-is
+    so that the extractor still works on flat Core formats.
+    """
+    if not isinstance(core_data, dict):
+        return core_data
+    if "CORE" in core_data and isinstance(core_data["CORE"], dict):
+        return core_data["CORE"]
+    return core_data
+
+
+# ---------------------------------------------------------------------------
 # Entry extraction
 # ---------------------------------------------------------------------------
 
@@ -110,18 +139,28 @@ def extract_entries_by_ids(
 ) -> tuple[List[Dict[str, Any]], Set[str]]:
     """Walk a Core YAML structure and collect all entries whose ID is in target_ids.
 
+    Handles the canonical Core envelope (CORE: {TYPES: [...], ...}) by unwrapping
+    it before iterating over sections.
+
     Returns:
-        matched   : list of (section_key, entry) dicts with provenance metadata
+        matched   : list of provenance-annotated entry dicts
         found_ids : set of IDs actually found
     """
     matched: List[Dict[str, Any]] = []
     found_ids: Set[str] = set()
 
-    if not isinstance(core_data, dict):
+    # Unwrap canonical CORE envelope
+    sections = unwrap_core_envelope(core_data)
+
+    if not isinstance(sections, dict):
         return matched, found_ids
 
-    for section_key, section_value in core_data.items():
-        # Top-level section is a list of entries
+    for section_key, section_value in sections.items():
+        # Skip scalar metadata fields (id, version, description, ...)
+        if not isinstance(section_value, (list, dict)):
+            continue
+
+        # Section is a list of entries
         if isinstance(section_value, list):
             for entry in section_value:
                 entry_id = _get_entry_id(entry)
@@ -133,7 +172,8 @@ def extract_entries_by_ids(
                         "entry": entry,
                     })
                     found_ids.add(entry_id)
-        # Top-level section is a dict of entries keyed by id
+
+        # Section is a dict of entries keyed by id
         elif isinstance(section_value, dict):
             for key, entry in section_value.items():
                 entry_id = _get_entry_id(entry) or (key if key in target_ids else None)
@@ -155,19 +195,12 @@ def extract_entries_by_ids(
 
 def build_extract(
     run_id: str,
-    extract_type: str,   # 'scope' or 'neighbor'
+    extract_type: str,
     target_ids: List[str],
     core_files: Dict[str, Path],
     scope_manifest_fingerprint: str,
     impact_bundle_fingerprint: str,
 ) -> tuple[Dict[str, Any], Set[str], Set[str]]:
-    """Extract all entries matching target_ids from all provided Core files.
-
-    Returns:
-        artifact        : the YAML artifact dict
-        found_ids       : IDs that were matched in at least one Core
-        missing_ids     : IDs declared but not found in any Core
-    """
     target_set = set(target_ids)
     all_matched: List[Dict[str, Any]] = []
     all_found: Set[str] = set()
@@ -230,7 +263,6 @@ def main() -> int:
     run_root = pipeline_root / "runs" / args.run_id
     inputs_dir = run_root / "inputs"
 
-    # Load inputs
     scope_manifest_path = inputs_dir / "scope_manifest.yaml"
     impact_bundle_path = inputs_dir / "impact_bundle.yaml"
     scope_manifest = load_yaml(scope_manifest_path)
@@ -239,7 +271,6 @@ def main() -> int:
     scope_manifest_fingerprint = sha256_file(scope_manifest_path)
     impact_bundle_fingerprint = sha256_file(impact_bundle_path)
 
-    # Resolve target ID sets
     sm = scope_manifest.get("scope_manifest", {})
     ib = impact_bundle.get("impact_bundle", {})
 
@@ -250,7 +281,6 @@ def main() -> int:
         print("WARNING: scope_manifest.writable_perimeter.ids is empty — scope_extract will be empty",
               file=sys.stderr)
 
-    # Canonical Core files
     cores_root = repo_root / "docs" / "cores" / "current"
     core_files: Dict[str, Path] = {
         "constitution": cores_root / "constitution.yaml",
@@ -262,7 +292,6 @@ def main() -> int:
             print(f"ERROR: canonical Core file not found: {path}", file=sys.stderr)
             return 1
 
-    # Extract scope slice
     print(f"[extract_scope_slice] Extracting scope slice — {len(scope_ids)} target IDs")
     scope_artifact, scope_found, scope_missing = build_extract(
         run_id=args.run_id,
@@ -273,7 +302,6 @@ def main() -> int:
         impact_bundle_fingerprint=impact_bundle_fingerprint,
     )
 
-    # Extract neighbor slice
     print(f"[extract_scope_slice] Extracting neighbor slice — {len(neighbor_ids)} target IDs")
     neighbor_artifact, neighbor_found, neighbor_missing = build_extract(
         run_id=args.run_id,
@@ -284,7 +312,6 @@ def main() -> int:
         impact_bundle_fingerprint=impact_bundle_fingerprint,
     )
 
-    # Write outputs
     inputs_dir.mkdir(parents=True, exist_ok=True)
     scope_extract_path = inputs_dir / "scope_extract.yaml"
     neighbor_extract_path = inputs_dir / "neighbor_extract.yaml"
@@ -295,7 +322,6 @@ def main() -> int:
     print(f"[extract_scope_slice] written: {scope_extract_path.relative_to(repo_root)}")
     print(f"[extract_scope_slice] written: {neighbor_extract_path.relative_to(repo_root)}")
 
-    # Warnings for missing IDs
     if scope_missing:
         print(f"WARNING: {len(scope_missing)} scope IDs not found in any Core: {sorted(scope_missing)}",
               file=sys.stderr)
