@@ -1,0 +1,71 @@
+run_context:
+  schema_version: 0.1
+  generated_by: build_run_context.py
+  note: Fichier synthétique — lire EN PREMIER. Remplace la lecture séquentielle de run_manifest + scope_manifest
+    + impact_bundle + integration_gate. Sources canoniques inchangées.
+  run_id: CONSTITUTION_RUN_2026_04_13_PATCH_LIFECYCLE_R01
+  pipeline_id: constitution
+  mode: bounded_local_run
+  status: active
+  scope_key: patch_lifecycle
+  current_stage: STAGE_02_ARBITRAGE
+  last_stage_status: done
+  next_stage: STAGE_03_PATCH_SYNTHESIS
+  completed_stages:
+  - STAGE_01_CHALLENGE
+  - STAGE_02_ARBITRAGE
+  scope_ids:
+  - ACTION_ESCALATE_PERSISTENT_DRIFT_OFFSESSION
+  - ACTION_LOG_UNCOVERED_CONFLICT
+  - ACTION_ROLLBACK_PATCH
+  - ACTION_TRIGGER_AR_SOLLICITATION_PATCH
+  - ACTION_TRIGGER_RELEVANCE_PATCH
+  - CONSTRAINT_NO_ADAPTIVE_PHILOSOPHY_CHANGE
+  - CONSTRAINT_NO_AUTONOMOUS_PSYCHOLOGICAL_INFERENCE
+  - EVENT_AR_REFRACTORY_PROFILE_DETECTED
+  - EVENT_PATCH_INVALID
+  - EVENT_PERSISTENT_LOW_VC
+  - INV_INVALID_PATCH_REJECTED
+  - INV_NO_PARTIAL_PATCH_STATE
+  - INV_PATCH_ARTIFACTS_MUST_BE_PRECOMPUTED_OFF_SESSION
+  - INV_PATCH_LOCAL_VALIDATION_MUST_BE_DETERMINISTIC
+  - INV_PERSISTENT_DRIFT_REQUIRES_ESCALATION_IF_PATCH_BLOCKED
+  - RULE_AR_REFRACTORY_PROFILE_TRIGGERS_SOLLICITATION_PATCH
+  - RULE_PERSISTENT_DRIFT_BLOCKED_PATCH_ESCALATES_OFFSESSION
+  - RULE_PERSISTENT_LOW_VC_TRIGGERS_RELEVANCE_PATCH
+  - TYPE_PATCH_ARTIFACT
+  - TYPE_PATCH_IMPACT_SCOPE
+  - TYPE_PATCH_QUALITY_GATE
+  scope_ids_count: 21
+  neighbor_ids:
+  - REF_CORE_LEARNIT_REFERENTIEL_V2_0_IN_CONSTITUTION
+  neighbor_ids_count: 1
+  scope_extract:
+    present: true
+    found_ids_count: 21
+    missing_ids_count: 0
+    missing_ids: []
+    ref: runs/CONSTITUTION_RUN_2026_04_13_PATCH_LIFECYCLE_R01/inputs/scope_extract.yaml
+  neighbor_extract:
+    present: true
+    found_ids_count: 1
+    missing_ids_count: 0
+    missing_ids: []
+    ref: runs/CONSTITUTION_RUN_2026_04_13_PATCH_LIFECYCLE_R01/inputs/neighbor_extract.yaml
+  integration_gate:
+    status: open
+    total_checks: 6
+    cleared_checks: 0
+    promotion_blocked: true
+  canonical_refs:
+    run_manifest: docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_13_PATCH_LIFECYCLE_R01/run_manifest.yaml
+    scope_manifest: docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_13_PATCH_LIFECYCLE_R01/inputs/scope_manifest.yaml
+    impact_bundle: docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_13_PATCH_LIFECYCLE_R01/inputs/impact_bundle.yaml
+    integration_gate: docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_13_PATCH_LIFECYCLE_R01/inputs/integration_gate.yaml
+  source_fingerprints:
+    run_manifest.yaml: be6f8215486b33d07c95e735cfaf5ef43ac4ec1fde3d7938923f662f39d135e2
+    scope_manifest.yaml: 3fd1a243570f57a813cf25c12a9a81414403e654ebcf6ab813bc6c8a662a1656
+    impact_bundle.yaml: 80a687e2ca6bcbd53a40883af1a0f965bbbd56c69ebba0b55a68e5a23a197943
+    integration_gate.yaml: 28f8ac743bb95f90b65254021115c38765d7eee43958d3bcad47aca81795673d
+    scope_extract.yaml: 20a88453173eeb344f912f3995812c25190d0fa765c5eab16eabb803e5bc1b72
+    neighbor_extract.yaml: 30393da8d9f08a491c0ff89f1e0c3b99fda59f7c8abe4266095edda9f98e2cec
