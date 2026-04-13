@@ -8,7 +8,7 @@ runs_index:
     scope_id: CONSTITUTION_SCOPE_PATCH_LIFECYCLE
     scope_key: patch_lifecycle
     run_status: active
-    current_stage: STAGE_01_CHALLENGE
+    current_stage: STAGE_02_ARBITRAGE
     mode: bounded_local_run
     run_manifest_ref: docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_13_PATCH_LIFECYCLE_R01/run_manifest.yaml
     scope_status: confirmed_for_bounded_run
@@ -35,5 +35,5 @@ runs_index:
   - If no active run exists for a resolved scope, create a new run.
   - If multiple active runs exist for the same scope, require disambiguation.
   notes:
-  - Index léger destiné au startup des IA sans contexte. Il évite d'avoir à scanner
-    l'ensemble de `runs/` avant de déterminer le bon point d'entrée.
+  - Index l\u00e9ger destin\u00e9 au startup des IA sans contexte. Il \u00e9vite d'avoir \u00e0 scanner
+    l'ensemble de `runs/` avant de d\u00e9terminer le bon point d'entr\u00e9e.
