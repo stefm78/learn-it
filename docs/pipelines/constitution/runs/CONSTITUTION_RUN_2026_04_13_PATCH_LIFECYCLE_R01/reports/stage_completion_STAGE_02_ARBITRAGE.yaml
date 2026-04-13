@@ -7,6 +7,5 @@ stage_completion_record:
   run_status: active
   next_stage: STAGE_03_PATCH_SYNTHESIS
   scope_status: confirmed_for_bounded_run
-  summary: STAGE_02_ARBITRAGE terminé. 4 corrections retenues (C01-C04), 1 reporté
-    (C05), 1 nécessite extension scope (C06), 4 hors périmètre. arbitrage.md produit.
-  recorded_at: '2026-04-13T16:09:10Z'
+  summary: STAGE_02 arbitrage done — passage à STAGE_03
+  recorded_at: '2026-04-13T16:35:35Z'
