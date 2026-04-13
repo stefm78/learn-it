@@ -1,0 +1,101 @@
+RELEASE_PLAN:
+  schema_version: 0.1
+  generated_by: AI_STAGE_07A  # build_release_plan.py requis pour validation déterministe finale
+  run_id: CONSTITUTION_RUN_2026_04_13_PATCH_LIFECYCLE_R01
+  stage: STAGE_07A_RELEASE_CLASSIFICATION
+  date: '2026-04-13'
+  status: PASS
+
+  release_required: true
+  change_depth: minor
+
+  validated_inputs:
+    core_validation:
+      path: docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_13_PATCH_LIFECYCLE_R01/work/06_core_validation/core_validation.yaml
+      status: PASS
+    patch_execution_report:
+      path: docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_13_PATCH_LIFECYCLE_R01/reports/patch_execution_report.yaml
+      status: PASS
+    patched_core:
+      path: docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_13_PATCH_LIFECYCLE_R01/work/05_apply/sandbox/docs/cores/current/constitution.yaml
+      core_id: CORE_LEARNIT_CONSTITUTION_V2_0
+
+  compared_against_current:
+    constitution:
+      current_path: docs/cores/current/constitution.yaml
+      current_core_id: CORE_LEARNIT_CONSTITUTION_V2_0
+      current_version: V2_0_FINAL
+      patched_core_id: CORE_LEARNIT_CONSTITUTION_V2_0
+      patched_version: V2_0_FINAL
+      content_changed: true
+      change_depth: minor
+      changed_fields:
+        - TYPES/TYPE_PATCH_IMPACT_SCOPE.logic (replace_field — précision déterministe de l'impact_scope)
+        - ACTIONS/ACTION_ROLLBACK_PATCH.logic (replace_field — précision opératoire du snapshot pré-application)
+        - INVARIANTS/INV_PERSISTENT_DRIFT_REQUIRES_ESCALATION_IF_PATCH_BLOCKED.logic (replace_field — condition complémentaire boucle-inefficacité)
+        - RULES/RULE_PATCH_SERIALIZATION (append — nouvelle règle, sérialisation patch FIFO)
+    referentiel:
+      current_path: docs/cores/current/referentiel.yaml
+      content_changed: false
+      change_depth: none
+    link:
+      current_path: docs/cores/current/link.yaml
+      content_changed: false
+      change_depth: none
+
+  target_versions:
+    constitution:
+      core_id: CORE_LEARNIT_CONSTITUTION_V2_0
+      version_current: V2_0_FINAL
+      version_target: V2_0_PATCH_LIFECYCLE_R01
+      rationale: >
+        Version interne incrémentée pour tracer la release patch_lifecycle_R01.
+        Le core_id reste stable (pas de rupture de contrat).
+    referentiel:
+      core_id: CORE_LEARNIT_REFERENTIEL_V2_0
+      version_current: unchanged
+      version_target: unchanged
+    link:
+      core_id: CORE_LEARNIT_LINK_V2_0
+      version_current: unchanged
+      version_target: unchanged
+
+  required_renames: []
+
+  required_reference_updates:
+    - description: >
+        Aucune mise à jour de référence inter-Core requise. Le core_id CORE_LEARNIT_CONSTITUTION_V2_0
+        reste stable. REF_CORE_LEARNIT_REFERENTIEL_V2_0_IN_CONSTITUTION inchangé.
+      updates: []
+
+  link_updates:
+    - description: >
+        Aucune mise à jour du LINK requise. Le patch ne modifie aucun binding
+        inter-Core existant ni aucun ID de référence.
+      updates: []
+
+  release_bundle:
+    release_id: CORE_RELEASE_2026_04_13_R01
+    release_path: docs/cores/releases/CORE_RELEASE_2026_04_13_R01/
+    files:
+      - docs/cores/releases/CORE_RELEASE_2026_04_13_R01/constitution.yaml
+      - docs/cores/releases/CORE_RELEASE_2026_04_13_R01/manifest.yaml
+    excluded_unchanged:
+      - referentiel.yaml  # inchangé — non répliqué dans la release
+      - link.yaml         # inchangé — non répliqué dans la release
+    promotion_candidate: true
+    promotion_blocked: true
+    promotion_block_reason: >
+      integration_gate open — 6 checks, 0 cleared.
+      La promotion vers docs/cores/current/ reste bloquée jusqu'à
+      satisfaction explicite des 6 checks de l'integration_gate.
+
+  notes:
+    - "change_depth minor : ajout d'une nouvelle règle (RULE_PATCH_SERIALIZATION) et précisions
+      non cassantes sur 3 champs logic existants."
+    - "Aucun ID renommé, supprimé ou déplacé entre couches."
+    - "Aucune rupture de contrat inter-Core détectée."
+    - "Vérification déterministe obligatoire : exécuter build_release_plan.py et validate_release_plan.py
+      avant toute promotion. La présente classification est produite par l'IA en mode run-aware
+      et constitue une base de travail soumise à validation scriptée."
+    - "seul constitution.yaml est inclus dans la release (referentiel et link inchangés)."

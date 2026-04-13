@@ -1,0 +1,72 @@
+RELEASE_MATERIALIZATION_REPORT:
+  schema_version: 0.1
+  generated_by: AI_STAGE_07B  # materialize_release.py requis pour validation déterministe finale
+  run_id: CONSTITUTION_RUN_2026_04_13_PATCH_LIFECYCLE_R01
+  stage: STAGE_07B_RELEASE_MATERIALIZATION
+  date: '2026-04-13'
+  status: PASS
+
+  release_id: CORE_RELEASE_2026_04_13_R01
+  release_path: docs/cores/releases/CORE_RELEASE_2026_04_13_R01/
+
+  source:
+    patched_constitution: docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_13_PATCH_LIFECYCLE_R01/work/05_apply/sandbox/docs/cores/current/constitution.yaml
+    release_plan: docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_13_PATCH_LIFECYCLE_R01/work/07_release/release_plan.yaml
+
+  files_written:
+    - path: docs/cores/releases/CORE_RELEASE_2026_04_13_R01/constitution.yaml
+      action: copy_and_version
+      version_applied: V2_0_PATCH_LIFECYCLE_R01
+      note: version interne mise à jour uniquement dans le fichier de release
+    - path: docs/cores/releases/CORE_RELEASE_2026_04_13_R01/manifest.yaml
+      action: generated
+
+  transformations_applied:
+    - field: CORE.version
+      old_value: V2_0_FINAL
+      new_value: V2_0_PATCH_LIFECYCLE_R01
+      scope: release_file_only
+      note: docs/cores/current/ non modifié
+
+  unchanged_cores_excluded:
+    - referentiel.yaml
+    - link.yaml
+
+  current_not_modified: true
+
+  promotion_candidate: true
+  promotion_blocked: true
+  promotion_block_reason: >
+    integration_gate open — 6 checks, 0 cleared.
+    Promotion bloquée jusqu'à clearance explicite des checks.
+
+  validation_commands:
+    build_release_plan: >
+      python docs/patcher/shared/build_release_plan.py
+        ./docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_13_PATCH_LIFECYCLE_R01/work/05_apply/sandbox/docs/cores/current
+        ./docs/cores/current
+        ./docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_13_PATCH_LIFECYCLE_R01/work/06_core_validation/core_validation.yaml
+        ./docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_13_PATCH_LIFECYCLE_R01/reports/patch_execution_report.yaml
+        ./docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_13_PATCH_LIFECYCLE_R01/work/07_release/release_plan.yaml
+    validate_release_plan: >
+      python docs/patcher/shared/validate_release_plan.py
+        ./docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_13_PATCH_LIFECYCLE_R01/work/07_release/release_plan.yaml
+        ./docs/specs/core-release/release_plan.schema.yaml
+    materialize_release: >
+      python docs/patcher/shared/materialize_release.py
+        ./docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_13_PATCH_LIFECYCLE_R01/work/07_release/release_plan.yaml
+        ./docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_13_PATCH_LIFECYCLE_R01/work/05_apply/sandbox/docs/cores/current
+        ./docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_13_PATCH_LIFECYCLE_R01/reports/release_materialization_report.yaml
+        ./docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_13_PATCH_LIFECYCLE_R01/outputs/release_candidate_notes.md
+    validate_release_manifest: >
+      python docs/patcher/shared/validate_release_manifest.py
+        ./docs/cores/releases/CORE_RELEASE_2026_04_13_R01/manifest.yaml
+        ./docs/specs/core-release/release_manifest.schema.yaml
+
+  notes:
+    - "Matérialisation produite par l'IA en mode run-aware. Les scripts déterministes
+      (build_release_plan.py, materialize_release.py, validate_release_plan.py,
+      validate_release_manifest.py) doivent être exécutés pour valider et remplacer
+      ce rapport avant déclaration officielle du stage comme done."
+    - "docs/cores/current/ n'a pas été modifié à ce stage."
+    - "La promotion vers current/ reste un acte explicite du STAGE_08."

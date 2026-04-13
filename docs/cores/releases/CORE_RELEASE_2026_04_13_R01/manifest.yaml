@@ -1,0 +1,45 @@
+RELEASE_MANIFEST:
+  schema_version: 0.1
+  release_id: CORE_RELEASE_2026_04_13_R01
+  release_date: '2026-04-13'
+  pipeline_id: constitution
+  run_id: CONSTITUTION_RUN_2026_04_13_PATCH_LIFECYCLE_R01
+  scope_key: patch_lifecycle
+  change_depth: minor
+
+  cores:
+    constitution:
+      file: constitution.yaml
+      core_id: CORE_LEARNIT_CONSTITUTION_V2_0
+      version: V2_0_PATCH_LIFECYCLE_R01
+      patch_id: PATCHSET_CONSTITUTION_PATCH_LIFECYCLE_R01
+      patch_dsl_version: '4.0'
+      source_fingerprint:
+        patched_sandbox: docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_13_PATCH_LIFECYCLE_R01/work/05_apply/sandbox/docs/cores/current/constitution.yaml
+    referentiel:
+      included: false
+      reason: unchanged
+    link:
+      included: false
+      reason: unchanged
+
+  validation:
+    core_validation_status: PASS
+    patch_execution_status: PASS
+    release_plan_status: PASS
+    release_materialization_status: PASS
+
+  promotion:
+    promotion_candidate: true
+    promotion_status: blocked
+    integration_gate_status: open
+    integration_gate_checks_total: 6
+    integration_gate_checks_cleared: 0
+    promotion_block_reason: >
+      integration_gate open — promotion vers docs/cores/current/ bloquée
+      jusqu'à clearance explicite des 6 checks de l'integration_gate du run.
+
+  immutability_note: >
+    Ce manifest et les fichiers de cette release sont immuables.
+    Aucune modification ne doit intervenir dans docs/cores/releases/CORE_RELEASE_2026_04_13_R01/
+    après création. Toute correction requiert une nouvelle release.
