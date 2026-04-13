@@ -1,5 +1,5 @@
 ai_protocol:
-  schema_version: 0.3
+  schema_version: 0.4
   protocol_id: CONSTITUTION_AI_PROTOCOL_V2
   authoritative_for_ai: true
   primary_entrypoint:
@@ -45,6 +45,7 @@ ai_protocol:
       - docs/pipelines/constitution/pipeline.md
       - docs/pipelines/constitution/runs/index.yaml
       - docs/pipelines/constitution/scope_catalog/manifest.yaml
+      - docs/pipelines/constitution/scope_catalog/governance_backlog.yaml
     forbidden_before_entry_decision:
       - any_search
       - compare_commits
@@ -70,6 +71,7 @@ ai_protocol:
         - active_scope_key
         - active_current_stage
         - shortlist_of_other_scope_keys
+        - governance_backlog_open_count   # signaler si entrées open dans le backlog
     stop_after_decision: true
 
   run_id_mode:
@@ -120,11 +122,28 @@ ai_protocol:
       - docs/pipelines/constitution/policies/scope_generation/policy.yaml
       - docs/pipelines/constitution/policies/scope_generation/decisions.yaml
       - docs/pipelines/constitution/scope_catalog/manifest.yaml
+      - docs/pipelines/constitution/scope_catalog/governance_backlog.yaml
     forbidden_if_active_runs: true
     mandatory_script:
       - docs/patcher/shared/analyze_constitution_scope_partition.py
+    mandatory_reads_before_semantic_analysis:
+      - docs/pipelines/constitution/scope_catalog/governance_backlog.yaml
     publication_rule:
       - semantic_review_is_advisory_only_until_policy_and_decisions_are_updated_and_generate_constitution_scopes_py_is_executed
+
+  governance_backlog_rule:
+    backlog_path: docs/pipelines/constitution/scope_catalog/governance_backlog.yaml
+    populated_by: closeout_pipeline_run.py --export-backlog-entries
+    read_mandatory_at:
+      - STAGE_00
+    signal_at_launcher_if_open_entries_for_scope: true
+    stage_00_completion_gate: >
+      Le STAGE_00 ne peut pas être déclaré done si des entrées open n'ont pas été
+      explicitement addressed ou wont_fix avec justification.
+    run_note_rule: >
+      Pendant un run, les notes de gouvernance sont capturées dans arbitrage.md (local run).
+      L'export canonique vers governance_backlog.yaml se fait uniquement en clôture (STAGE_09)
+      via closeout_pipeline_run.py --export-backlog-entries.
 
   deterministic_script_policy:
     mandatory_behavior: true
@@ -152,6 +171,7 @@ ai_protocol:
     - declaring_stage_done_without_required_deterministic_script_evidence
     - opening_run_without_scope_key_at_top_level_of_run_manifest
     - reading_full_core_when_extract_is_available_and_complete
+    - ignoring_open_governance_backlog_entries_at_stage_00
 
   responses:
     single_active_run: "Je vois un run actif: <RUN_ID> sur <SCOPE_KEY>, actuellement sur <CURRENT_STAGE>. On peut soit continuer ce run, soit ouvrir un nouveau run sur un autre scope publié. Recommandation: continuer le run actif."

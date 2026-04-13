@@ -1,0 +1,27 @@
+governance_backlog:
+  schema_version: 0.1
+  description: >
+    Artefact vivant inter-runs. Collecte les décisions reportées, angles morts de scope,
+    IDs orphelins et conflits de policy découverts pendant les runs constitution.
+    Relu obligatoirement au STAGE_00 (révision de partition) et signalé au launcher
+    si des entrées open concernent le scope d'un run en cours d'ouverture.
+    Alimenté en clôture de run (STAGE_09) via closeout_pipeline_run.py --export-backlog-entries.
+  authoritative_path: docs/pipelines/constitution/scope_catalog/governance_backlog.yaml
+  entry_types:
+    scope_gap: Un ID requis par le scope n'est pas couvert — dépendance orpheline.
+    scope_extension_needed: Le scope devrait inclure des IDs actuellement hors périmètre.
+    orphan_id: Un ID existe dans les Core mais n'appartient à aucun scope publié.
+    policy_conflict: Conflit détecté entre une règle du run et une policy canonique.
+    partition_angle_mort: Zone sémantique non couverte par la partition actuelle des scopes.
+  statuses:
+    open: Entrée active — doit être traitée ou explicitement reportée au prochain STAGE_00.
+    addressed: Traitée dans un run ou un STAGE_00 ultérieur (lier au run_id de résolution).
+    wont_fix: Décision explicite de ne pas traiter (justification obligatoire).
+  entries: []
+  notes:
+    - Fichier vivant — ne pas archiver avec les runs.
+    - Les entrées addressed et wont_fix sont conservées pour traçabilité.
+    - La création d'entrées pendant un run est autorisée (annotation dans arbitrage.md),
+      mais l'export canonique vers ce fichier se fait uniquement en clôture (STAGE_09).
+    - Ce fichier est la source de vérité du backlog inter-runs ; les notes dans
+      arbitrage.md et run_manifest.notes sont des copies locales de run.
