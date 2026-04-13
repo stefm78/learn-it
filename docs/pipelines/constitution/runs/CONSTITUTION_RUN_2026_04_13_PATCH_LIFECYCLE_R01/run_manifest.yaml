@@ -28,15 +28,16 @@ run_manifest:
   execution_state:
     opened_at: '2026-04-13T10:58:00Z'
     opened_by: AI
-    current_stage: STAGE_04_PATCH_VALIDATION
+    current_stage: STAGE_05_PATCH_APPLICATION
     last_stage_status: done
-    last_updated: '2026-04-13T17:12:43Z'
-    next_stage: STAGE_05_PATCH_APPLICATION
+    last_updated: '2026-04-13T17:37:06Z'
+    next_stage: STAGE_06_CORE_VALIDATION
     completed_stages:
     - STAGE_01_CHALLENGE
     - STAGE_02_ARBITRAGE
     - STAGE_03_PATCH_SYNTHESIS
     - STAGE_04_PATCH_VALIDATION
+    - STAGE_05_PATCH_APPLICATION
     stage_history:
     - stage_id: STAGE_01_CHALLENGE
       stage_status: in_progress
@@ -84,6 +85,10 @@ run_manifest:
       stage_status: done
       recorded_at: '2026-04-13T17:12:43Z'
       summary: patch_validation.yaml PASS — 0 anomalie, 0 warning
+    - stage_id: STAGE_05_PATCH_APPLICATION
+      stage_status: done
+      recorded_at: '2026-04-13T17:37:06Z'
+      summary: ''
   overrides:
     allowed: true
     policy: explicit_and_traceable_only
