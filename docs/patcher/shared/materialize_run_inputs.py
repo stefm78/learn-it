@@ -14,6 +14,10 @@ Produces (deterministically, no AI required):
 All three files are idempotent: re-running overwrites with the same content
 as long as the scope_definition has not changed.
 
+scope_key resolution order (robustness):
+  1. run_manifest.scope_key          (canonical, top-level field)
+  2. run_manifest.scope_binding.scope_key  (fallback for older manifests)
+
 Integration in pipeline.md:
   Spec and tools section — called before STAGE_01_CHALLENGE.
   Command:
@@ -61,6 +65,26 @@ def dump_yaml(data: Dict[str, Any]) -> str:
 
 def sha256_file(path: Path) -> str:
     return hashlib.sha256(path.read_bytes()).hexdigest()
+
+
+# ---------------------------------------------------------------------------
+# scope_key resolution (robust)
+# ---------------------------------------------------------------------------
+
+def resolve_scope_key(run_meta: Dict[str, Any]) -> str | None:
+    """Resolve scope_key with fallback to scope_binding.scope_key.
+
+    Resolution order:
+      1. run_manifest.scope_key          (canonical top-level field)
+      2. run_manifest.scope_binding.scope_key  (fallback for older manifests)
+    """
+    # 1. canonical top-level
+    scope_key = run_meta.get("scope_key")
+    if scope_key:
+        return scope_key
+    # 2. fallback via scope_binding
+    scope_binding = run_meta.get("scope_binding") or {}
+    return scope_binding.get("scope_key")
 
 
 # ---------------------------------------------------------------------------
@@ -140,7 +164,6 @@ def build_impact_bundle(
     neighbors = sd.get("default_neighbors_to_read", {})
     cross_edges = extract_cross_scope_edges(partition_report, scope_key)
 
-    # Derive neighbor scope keys from cross-scope edges
     neighbor_scopes: List[Dict[str, Any]] = []
     seen: set = set()
     for edge in cross_edges:
@@ -198,7 +221,6 @@ def build_integration_gate(
     watchpoints = sd.get("watchpoints", []) or []
     forbidden_ops = governance.get("default_forbidden_operations", [])
 
-    # Build gate checks from watchpoints
     gate_checks = [
         {
             "check_id": f"WP_{i + 1:02d}",
@@ -210,7 +232,6 @@ def build_integration_gate(
         for i, wp in enumerate(watchpoints)
     ]
 
-    # Add a mandatory forbidden-ops enforcement check
     if forbidden_ops:
         gate_checks.append({
             "check_id": "FORBIDDEN_OPS_ENFORCEMENT",
@@ -255,12 +276,11 @@ def main() -> int:
         description="Materialize deterministic run input files from scope_definition."
     )
     parser.add_argument("--pipeline", default="constitution")
-    parser.add_argument("--run-id", required=True, help="Run ID (e.g. CONSTITUTION_RUN_2026_04_13_DEPLOYMENT_GOVERNANCE_R01)")
+    parser.add_argument("--run-id", required=True)
     parser.add_argument("--repo-root", default=".")
     parser.add_argument(
         "--partition-report",
         default="docs/pipelines/constitution/reports/scope_partition_review_report.yaml",
-        help="Optional partition report for cross-scope edge enrichment of impact_bundle",
     )
     args = parser.parse_args()
 
@@ -273,10 +293,21 @@ def main() -> int:
     run_manifest_path = run_root / "run_manifest.yaml"
     run_manifest = load_yaml(run_manifest_path)
     run_meta = run_manifest.get("run_manifest", {})
-    scope_key = run_meta.get("scope_key")
+
+    # Resolve scope_key with fallback
+    scope_key = resolve_scope_key(run_meta)
     if not scope_key:
-        print(f"ERROR: run_manifest.yaml missing scope_key", file=sys.stderr)
+        print(
+            "ERROR: scope_key not found in run_manifest.yaml.\n"
+            "  Expected: run_manifest.scope_key (canonical)\n"
+            "  Fallback:  run_manifest.scope_binding.scope_key\n"
+            "  Neither field is present or non-empty.",
+            file=sys.stderr,
+        )
         return 1
+
+    scope_key_source = "scope_key" if run_meta.get("scope_key") else "scope_binding.scope_key (fallback)"
+    print(f"[materialize_run_inputs] scope_key resolved from: {scope_key_source} -> {scope_key}")
 
     # Load scope definition
     scope_def_path = pipeline_root / "scope_catalog" / "scope_definitions" / f"{scope_key}.yaml"
@@ -286,9 +317,11 @@ def main() -> int:
     # Load partition report (optional)
     partition_report_path = repo_root / args.partition_report
     partition_report = load_yaml_optional(partition_report_path)
+    if not partition_report:
+        print("[materialize_run_inputs] partition report not found — impact_bundle.neighbor_scopes will be empty")
 
     # Generate the three files
-    scope_manifest = build_scope_manifest(args.run_id, scope_def, scope_def_fingerprint)
+    scope_manifest_data = build_scope_manifest(args.run_id, scope_def, scope_def_fingerprint)
     impact_bundle = build_impact_bundle(args.run_id, scope_def, partition_report, scope_def_fingerprint)
     integration_gate = build_integration_gate(args.run_id, scope_def, scope_def_fingerprint)
 
@@ -297,19 +330,21 @@ def main() -> int:
 
     files_written = []
     for filename, content in [
-        ("scope_manifest.yaml", scope_manifest),
+        ("scope_manifest.yaml", scope_manifest_data),
         ("impact_bundle.yaml", impact_bundle),
         ("integration_gate.yaml", integration_gate),
     ]:
         out_path = inputs_dir / filename
         out_path.write_text(dump_yaml(content), encoding="utf-8")
         files_written.append(str(out_path.relative_to(repo_root)))
+        print(f"[materialize_run_inputs] written: {out_path.relative_to(repo_root)}")
 
     result = {
         "materialize_run_inputs": {
             "status": "DONE",
             "run_id": args.run_id,
             "scope_key": scope_key,
+            "scope_key_source": scope_key_source,
             "scope_definition_fingerprint": scope_def_fingerprint,
             "partition_report_used": bool(partition_report),
             "files_written": files_written,
