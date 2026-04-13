@@ -8,6 +8,10 @@ Preconditions (all checked before any write):
     (warning only in --dry-run mode; blocking in real run)
   - Scope IDs across all runs must be disjoint (no overlapping writable IDs)
 
+Core file structure supported:
+  Nested : CORE: { id: ..., TYPES: [...], INVARIANTS: [...], RULES: [...], ... }
+  Flat   : constitution: [ {id: ...}, ... ]
+
 Output:
   - docs/pipelines/constitution/work/consolidation/constitution.yaml
   - docs/pipelines/constitution/work/consolidation/referentiel.yaml
@@ -139,6 +143,13 @@ def check_scope_disjointness(
 
 CORE_FILES = ["constitution.yaml", "referentiel.yaml", "link.yaml"]
 
+# Sections that contain lists of entries with `id` fields
+# in the nested CORE.<SECTION> structure.
+CORE_SECTION_KEYS = [
+    "TYPES", "INVARIANTS", "RULES", "PARAMETERS", "CONSTRAINTS",
+    "EVENTS", "ACTIONS", "DEPENDENCIES",
+]
+
 
 def find_core_files_in_sandbox(sandbox_root: Path) -> dict[str, Path]:
     """Locate Core files inside a sandbox. Supports both flat and canonical layouts.
@@ -159,12 +170,75 @@ def find_core_files_in_sandbox(sandbox_root: Path) -> dict[str, Path]:
 
 
 # ---------------------------------------------------------------------------
+# Structure detection
+# ---------------------------------------------------------------------------
+
+def _is_nested_core_structure(value: Any) -> bool:
+    """True if value is a dict with section keys (TYPES, INVARIANTS, ...) = nested CORE structure."""
+    return (
+        isinstance(value, dict)
+        and any(k in value for k in CORE_SECTION_KEYS)
+    )
+
+
+def _collect_all_entries(core_dict: dict[str, Any]) -> list[dict[str, Any]]:
+    """Flatten all section entries (with id) from a nested CORE dict."""
+    entries: list[dict[str, Any]] = []
+    for section_key in CORE_SECTION_KEYS:
+        section = core_dict.get(section_key, [])
+        if isinstance(section, list):
+            for entry in section:
+                if isinstance(entry, dict) and "id" in entry:
+                    entries.append(entry)
+    return entries
+
+
+def _rebuild_nested_core(
+    core_dict: dict[str, Any],
+    patched_index: dict[str, dict[str, Any]],
+    new_ids_by_section: dict[str, list[str]],
+) -> dict[str, Any]:
+    """Reconstruct a nested CORE dict from the patched index.
+
+    Preserves top-level scalar fields (id, core_type, authority, version, description).
+    For each section, rebuilds the list in original order, then appends new IDs.
+    """
+    result: dict[str, Any] = {}
+    # Copy scalar/non-section fields first
+    for k, v in core_dict.items():
+        if k not in CORE_SECTION_KEYS:
+            result[k] = v
+    # Rebuild each section
+    for section_key in CORE_SECTION_KEYS:
+        section = core_dict.get(section_key, [])
+        if not isinstance(section, list):
+            result[section_key] = section
+            continue
+        rebuilt: list[dict[str, Any]] = []
+        for entry in section:
+            if isinstance(entry, dict) and "id" in entry:
+                eid = entry["id"]
+                rebuilt.append(patched_index.get(eid, entry))
+            else:
+                rebuilt.append(entry)
+        # Append new IDs added to this section
+        for eid in new_ids_by_section.get(section_key, []):
+            rebuilt.append(patched_index[eid])
+        result[section_key] = rebuilt
+    return result
+
+
+# ---------------------------------------------------------------------------
 # Merge logic
 # ---------------------------------------------------------------------------
 
 def _get_top_level_key(data: dict[str, Any], filename: str) -> str:
-    """Infer the top-level YAML key from the filename (e.g. 'constitution')."""
+    """Infer the top-level YAML key from the filename (e.g. 'CORE' or 'constitution')."""
     stem = Path(filename).stem
+    # Check uppercase variant first (CORE, REFERENTIEL, LINK)
+    stem_upper = stem.upper()
+    if stem_upper in data:
+        return stem_upper
     if stem in data:
         return stem
     keys = list(data.keys())
@@ -179,26 +253,56 @@ def merge_core_files(
 ) -> tuple[dict[str, Any], list[dict[str, Any]]]:
     """Merge N patched Core files into one.
 
+    Supports both:
+    - Nested structure: CORE: { id: ..., TYPES: [...], INVARIANTS: [...], ... }
+    - Flat structure:   constitution: [ {id: ...}, ... ]
+
     Strategy:
     - Start from base (current/) as the reference
     - For each run, overwrite only the IDs that belong to that run's scope
+      (or all IDs if no scope manifest)
     - IDs not in any scope come from base unchanged
 
     Returns (merged_data, merge_log).
     """
     base_data = load_yaml(base_path / filename)
     top_key = _get_top_level_key(base_data, filename)
-    base_entries: list[dict[str, Any]] = base_data.get(top_key, [])
+    top_value = base_data.get(top_key, {})
+
+    nested = _is_nested_core_structure(top_value)
+
+    # Build flat id -> entry index from base
+    if nested:
+        base_entries = _collect_all_entries(top_value)
+    else:
+        base_entries = top_value if isinstance(top_value, list) else []
 
     base_index: dict[str, dict[str, Any]] = {}
     base_order: list[str] = []
-    for entry in base_entries:
-        eid = entry.get("id", "")
-        base_index[eid] = entry
-        base_order.append(eid)
+    # Also track which section each id belongs to (nested only)
+    id_to_section: dict[str, str] = {}
+    if nested:
+        for section_key in CORE_SECTION_KEYS:
+            section = top_value.get(section_key, [])
+            if isinstance(section, list):
+                for entry in section:
+                    if isinstance(entry, dict) and "id" in entry:
+                        eid = entry["id"]
+                        base_index[eid] = entry
+                        base_order.append(eid)
+                        id_to_section[eid] = section_key
+    else:
+        for entry in base_entries:
+            if isinstance(entry, dict):
+                eid = entry.get("id", "")
+                base_index[eid] = entry
+                base_order.append(eid)
 
     patched_index = dict(base_index)
+    # new_ids: for flat structure
     new_ids: list[str] = []
+    # new_ids_by_section: for nested structure
+    new_ids_by_section: dict[str, list[str]] = {k: [] for k in CORE_SECTION_KEYS}
     merge_log: list[dict[str, Any]] = []
 
     for run_id, patched_path in sandbox_files:
@@ -212,15 +316,42 @@ def merge_core_files(
             continue
 
         patched_data = load_yaml(patched_path)
-        patched_entries: list[dict[str, Any]] = patched_data.get(top_key, [])
+        patched_top_key = _get_top_level_key(patched_data, filename)
+        patched_top_value = patched_data.get(patched_top_key, {})
+        patched_nested = _is_nested_core_structure(patched_top_value)
+
+        if patched_nested:
+            patched_entries = _collect_all_entries(patched_top_value)
+            # Build section lookup for patched entries
+            patched_id_to_section: dict[str, str] = {}
+            for section_key in CORE_SECTION_KEYS:
+                section = patched_top_value.get(section_key, [])
+                if isinstance(section, list):
+                    for entry in section:
+                        if isinstance(entry, dict) and "id" in entry:
+                            patched_id_to_section[entry["id"]] = section_key
+        else:
+            patched_entries = patched_top_value if isinstance(patched_top_value, list) else []
+            patched_id_to_section = {}
+
         run_scope_ids = scope_ids_by_run.get(run_id, set())
         applied_ids: list[str] = []
 
         for entry in patched_entries:
+            if not isinstance(entry, dict):
+                continue
             eid = entry.get("id", "")
+            if not eid:
+                continue
             if not run_scope_ids or eid in run_scope_ids:
                 if eid not in patched_index:
-                    new_ids.append(eid)
+                    # New ID: track for append
+                    if nested:
+                        section = patched_id_to_section.get(eid, id_to_section.get(eid, ""))
+                        if section:
+                            new_ids_by_section[section].append(eid)
+                    else:
+                        new_ids.append(eid)
                 patched_index[eid] = entry
                 applied_ids.append(eid)
 
@@ -232,13 +363,18 @@ def merge_core_files(
             "applied_ids": applied_ids,
         })
 
-    merged_entries: list[dict[str, Any]] = []
-    for eid in base_order:
-        merged_entries.append(patched_index[eid])
-    for eid in new_ids:
-        merged_entries.append(patched_index[eid])
+    # Reconstruct output
+    if nested:
+        merged_top = _rebuild_nested_core(top_value, patched_index, new_ids_by_section)
+        merged_data = {top_key: merged_top}
+    else:
+        merged_entries: list[dict[str, Any]] = []
+        for eid in base_order:
+            merged_entries.append(patched_index[eid])
+        for eid in new_ids:
+            merged_entries.append(patched_index[eid])
+        merged_data = {top_key: merged_entries}
 
-    merged_data = {top_key: merged_entries}
     return merged_data, merge_log
 
 
@@ -273,7 +409,7 @@ def build_consolidation_report(
             "output_path": str(output_path),
             "warnings": gate_warnings,
             "note": (
-                "Dry run — no files written."
+                "Dry run \u2014 no files written."
                 if dry_run
                 else "Consolidation applied to work/consolidation/."
             ),
@@ -329,7 +465,7 @@ def main() -> int:
     print(f"Base: {base_path}")
     print(f"Output: {output_path}")
     if args.dry_run:
-        print("DRY RUN — no files will be written.")
+        print("DRY RUN \u2014 no files will be written.")
 
     # --- Precondition checks ---
     sandboxes: dict[str, Path] = {}
@@ -363,7 +499,7 @@ def main() -> int:
     # --- Disjointness check ---
     conflicts = check_scope_disjointness(run_ids, scope_ids_by_run)
     if conflicts:
-        print("\nERROR: Scope overlap detected — consolidation aborted.", file=sys.stderr)
+        print("\nERROR: Scope overlap detected \u2014 consolidation aborted.", file=sys.stderr)
         for c in conflicts:
             print(
                 f"  {c['run_a']} x {c['run_b']}: overlapping IDs: {c['overlapping_ids']}",
@@ -418,7 +554,7 @@ def main() -> int:
         dump_yaml(report, report_path)
         print(f"\nConsolidation report written to {report_path}")
     else:
-        print("\nDry run complete — report:")
+        print("\nDry run complete \u2014 report:")
         print(yaml.safe_dump(report, sort_keys=False, allow_unicode=True))
 
     print("\nStatus: PASS")
