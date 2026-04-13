@@ -1,5 +1,5 @@
 ai_protocol:
-  schema_version: 0.2
+  schema_version: 0.3
   protocol_id: CONSTITUTION_AI_PROTOCOL_V2
   authoritative_for_ai: true
   primary_entrypoint:
@@ -73,14 +73,27 @@ ai_protocol:
     stop_after_decision: true
 
   run_id_mode:
+    # Ordre de lecture optimal (ids-first, contexte minimal):
+    #   1. run_context.yaml        <- fichier synthétique: run_id, stage, scope_ids, neighbor_ids
+    #   2. scope_extract.yaml      <- entrées Core du scope uniquement
+    #   3. neighbor_extract.yaml   <- entrées Core du voisinage uniquement
+    # Les fichiers ci-dessous restent autorisés mais ne sont plus nécessaires
+    # si run_context.yaml est présent et à jour.
+    optimal_read_sequence:
+      - docs/pipelines/constitution/runs/<run_id>/inputs/run_context.yaml
+      - docs/pipelines/constitution/runs/<run_id>/inputs/scope_extract.yaml
+      - docs/pipelines/constitution/runs/<run_id>/inputs/neighbor_extract.yaml
     allowed_reads:
       - docs/pipelines/constitution/AI_PROTOCOL.yaml
       - docs/pipelines/constitution/pipeline.md
       - docs/pipelines/constitution/runs/index.yaml
       - docs/pipelines/constitution/runs/<run_id>/run_manifest.yaml
+      - docs/pipelines/constitution/runs/<run_id>/inputs/run_context.yaml
       - docs/pipelines/constitution/runs/<run_id>/inputs/scope_manifest.yaml
       - docs/pipelines/constitution/runs/<run_id>/inputs/impact_bundle.yaml
       - docs/pipelines/constitution/runs/<run_id>/inputs/integration_gate.yaml
+      - docs/pipelines/constitution/runs/<run_id>/inputs/scope_extract.yaml
+      - docs/pipelines/constitution/runs/<run_id>/inputs/neighbor_extract.yaml
     forbidden_before_run_resolution:
       - any_search
       - compare_commits
@@ -90,7 +103,11 @@ ai_protocol:
       - docs/pipelines/constitution/inputs/*
     if_run_exists: resume_existing_run
     if_run_missing: emit_next_best_action_only
-
+    ids_first_rule: >
+      Si run_context.yaml est présent, l'IA DOIT le lire en premier et utiliser
+      scope_extract.yaml + neighbor_extract.yaml comme source principale des entrées Core.
+      Les Core complets (constitution.yaml, referentiel.yaml, link.yaml) ne doivent être
+      lus que si missing_ids est non vide dans les extraits.
 
   partition_refresh_mode:
     precondition:
@@ -134,6 +151,7 @@ ai_protocol:
     - simulating_required_script_execution
     - declaring_stage_done_without_required_deterministic_script_evidence
     - opening_run_without_scope_key_at_top_level_of_run_manifest
+    - reading_full_core_when_extract_is_available_and_complete
 
   responses:
     single_active_run: "Je vois un run actif: <RUN_ID> sur <SCOPE_KEY>, actuellement sur <CURRENT_STAGE>. On peut soit continuer ce run, soit ouvrir un nouveau run sur un autre scope publié. Recommandation: continuer le run actif."
