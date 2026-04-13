@@ -158,8 +158,43 @@ ai_protocol:
       - stage_05_apply_requires_real_apply_patch_py_execution_before_done
 
   tracking:
-    bootstrap_command_template: "python docs/patcher/shared/update_run_tracking.py --pipeline constitution --run-id <RUN_ID> --stage-id <STAGE_ID> --stage-status in_progress --run-status active --next-stage <STAGE_ID> --scope-status <SCOPE_STATUS> --summary '<ENTRY_DECISION_SUMMARY>'"
-    closeout_command_template: "python docs/patcher/shared/update_run_tracking.py --pipeline constitution --run-id <RUN_ID> --stage-id <STAGE_ID> --stage-status <done|blocked|failed> --run-status <active|blocked|failed|closed> --next-stage <NEXT_STAGE_ID> --scope-status <SCOPE_STATUS> --summary '<STAGE_SUMMARY>'"
+    # Arguments EXACTS de update_run_tracking.py — ne pas abréger ni renommer.
+    # Erreurs connues à éviter absolument :
+    #   --stage         → INVALIDE  (ambigu entre --stage-id et --stage-status)
+    #   --status        → INVALIDE  (n'existe pas)
+    #   --pipeline omis → INVALIDE  (argument obligatoire)
+    #   --run-status omis → INVALIDE (argument obligatoire)
+    required_args:
+      - --pipeline constitution
+      - --run-id <RUN_ID>
+      - --stage-id <STAGE_ID>
+      - --stage-status <done|in_progress|blocked|failed|skipped>
+      - --run-status <bootstrap_open|active|blocked|failed|closed>
+    optional_args:
+      - --next-stage <NEXT_STAGE_ID>
+      - --scope-status <SCOPE_STATUS>
+      - --summary '<SUMMARY>'
+      - --close-run
+    bootstrap_command_template: >-
+      python docs/patcher/shared/update_run_tracking.py
+      --pipeline constitution
+      --run-id <RUN_ID>
+      --stage-id <STAGE_ID>
+      --stage-status in_progress
+      --run-status active
+      --next-stage <STAGE_ID>
+      --scope-status <SCOPE_STATUS>
+      --summary "<ENTRY_DECISION_SUMMARY>"
+    closeout_command_template: >-
+      python docs/patcher/shared/update_run_tracking.py
+      --pipeline constitution
+      --run-id <RUN_ID>
+      --stage-id <STAGE_ID>
+      --stage-status <done|blocked|failed>
+      --run-status <active|blocked|failed|closed>
+      --next-stage <NEXT_STAGE_ID>
+      --scope-status <SCOPE_STATUS>
+      --summary "<STAGE_SUMMARY>"
 
   anti_patterns:
     - deep_read_before_entry_decision
@@ -172,6 +207,7 @@ ai_protocol:
     - opening_run_without_scope_key_at_top_level_of_run_manifest
     - reading_full_core_when_extract_is_available_and_complete
     - ignoring_open_governance_backlog_entries_at_stage_00
+    - using_abbreviated_args_for_update_run_tracking_py  # --stage / --status / omitting --pipeline ou --run-status
 
   responses:
     single_active_run: "Je vois un run actif: <RUN_ID> sur <SCOPE_KEY>, actuellement sur <CURRENT_STAGE>. On peut soit continuer ce run, soit ouvrir un nouveau run sur un autre scope publié. Recommandation: continuer le run actif."
