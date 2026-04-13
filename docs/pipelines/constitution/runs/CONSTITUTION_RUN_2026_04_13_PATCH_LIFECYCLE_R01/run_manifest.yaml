@@ -28,16 +28,17 @@ run_manifest:
   execution_state:
     opened_at: '2026-04-13T10:58:00Z'
     opened_by: AI
-    current_stage: STAGE_05_PATCH_APPLICATION
+    current_stage: STAGE_06_CORE_VALIDATION
     last_stage_status: done
-    last_updated: '2026-04-13T17:37:06Z'
-    next_stage: STAGE_06_CORE_VALIDATION
+    last_updated: '2026-04-13T18:04:09Z'
+    next_stage: STAGE_07_RELEASE_MATERIALIZATION
     completed_stages:
     - STAGE_01_CHALLENGE
     - STAGE_02_ARBITRAGE
     - STAGE_03_PATCH_SYNTHESIS
     - STAGE_04_PATCH_VALIDATION
     - STAGE_05_PATCH_APPLICATION
+    - STAGE_06_CORE_VALIDATION
     stage_history:
     - stage_id: STAGE_01_CHALLENGE
       stage_status: in_progress
@@ -89,15 +90,23 @@ run_manifest:
       stage_status: done
       recorded_at: '2026-04-13T17:37:06Z'
       summary: ''
+    - stage_id: STAGE_06_CORE_VALIDATION
+      stage_status: done
+      recorded_at: '2026-04-13T18:04:09Z'
+      summary: 'STAGE_06 PASS local borné — 12/12 tests Make02CoreValidation. Flag:
+        PARAM_REFERENTIEL_MAX_PATCH_ITERATIONS_BEFORE_ESCALATION absent du Référentiel,
+        à inscrire en integration_gate avant promotion.'
   overrides:
     allowed: true
     policy: explicit_and_traceable_only
   scope_tracking:
-    scope_status: confirmed_for_bounded_run
+    scope_status: in_progress
     maturity_level: L2_usable_with_care
     maturity_score: 16
-    last_updated: '2026-04-13T16:35:35Z'
-    last_note: STAGE_02 arbitrage done — passage à STAGE_03
+    last_updated: '2026-04-13T18:04:09Z'
+    last_note: 'STAGE_06 PASS local borné — 12/12 tests Make02CoreValidation. Flag:
+      PARAM_REFERENTIEL_MAX_PATCH_ITERATIONS_BEFORE_ESCALATION absent du Référentiel,
+      à inscrire en integration_gate avant promotion.'
   notes:
   - Run ouvert par IA sur scope patch_lifecycle (L2_usable_with_care, score 16).
   - source_fingerprint \u00e0 remplir au d\u00e9marrage effectif de STAGE_01.

@@ -8,9 +8,10 @@ runs_index:
     scope_id: CONSTITUTION_SCOPE_PATCH_LIFECYCLE
     scope_key: patch_lifecycle
     run_status: active
-    current_stage: STAGE_06_CORE_VALIDATION
+    current_stage: STAGE_07_RELEASE_MATERIALIZATION
     mode: bounded_local_run
     run_manifest_ref: docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_13_PATCH_LIFECYCLE_R01/run_manifest.yaml
+    scope_status: in_progress
   closed_runs:
   - run_id: CONSTITUTION_RUN_2026_04_11_LEARNER_STATE_R01
     scope_id: CONSTITUTION_SCOPE_LEARNER_STATE
