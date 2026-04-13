@@ -28,15 +28,23 @@ run_manifest:
     opened_at: '2026-04-13T10:58:00Z'
     opened_by: AI
     current_stage: STAGE_01_CHALLENGE
-    last_stage_status: in_progress
-    last_updated: '2026-04-13T09:01:05Z'
-    next_stage: STAGE_01_CHALLENGE
-    completed_stages: []
+    last_stage_status: done
+    last_updated: '2026-04-13T09:32:03Z'
+    next_stage: STAGE_02_ARBITRAGE
+    completed_stages:
+    - STAGE_01_CHALLENGE
     stage_history:
     - stage_id: STAGE_01_CHALLENGE
       stage_status: in_progress
       recorded_at: '2026-04-13T09:01:05Z'
       summary: Ouverture run patch_lifecycle — démarrage STAGE_01_CHALLENGE
+    - stage_id: STAGE_01_CHALLENGE
+      stage_status: done
+      recorded_at: '2026-04-13T09:32:03Z'
+      summary: 'STAGE_01_CHALLENGE terminé en mode bounded_local_run ids-first. 6
+        corrections in-scope identifiées (2 critiques : mutex patches concurrents,
+        impact_scope non déterministe), 4 points hors scope signalés. challenge_report_01.md
+        produit.'
   current_stage: STAGE_01_CHALLENGE
   overrides:
     allowed: true
@@ -45,8 +53,10 @@ run_manifest:
     scope_status: confirmed_for_bounded_run
     maturity_level: L2_usable_with_care
     maturity_score: 16
-    last_updated: '2026-04-13T09:01:05Z'
-    last_note: Ouverture run patch_lifecycle — démarrage STAGE_01_CHALLENGE
+    last_updated: '2026-04-13T09:32:03Z'
+    last_note: 'STAGE_01_CHALLENGE terminé en mode bounded_local_run ids-first. 6
+      corrections in-scope identifiées (2 critiques : mutex patches concurrents, impact_scope
+      non déterministe), 4 points hors scope signalés. challenge_report_01.md produit.'
   notes:
   - Run ouvert par IA sur scope patch_lifecycle (L2_usable_with_care, score 16).
   - source_fingerprint à remplir au démarrage effectif de STAGE_01.

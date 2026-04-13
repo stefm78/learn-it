@@ -3,9 +3,11 @@ stage_completion_record:
   pipeline_id: constitution
   run_id: CONSTITUTION_RUN_2026_04_13_PATCH_LIFECYCLE_R01
   stage_id: STAGE_01_CHALLENGE
-  stage_status: in_progress
+  stage_status: done
   run_status: active
-  next_stage: STAGE_01_CHALLENGE
+  next_stage: STAGE_02_ARBITRAGE
   scope_status: confirmed_for_bounded_run
-  summary: Ouverture run patch_lifecycle — démarrage STAGE_01_CHALLENGE
-  recorded_at: '2026-04-13T09:01:05Z'
+  summary: 'STAGE_01_CHALLENGE terminé en mode bounded_local_run ids-first. 6 corrections
+    in-scope identifiées (2 critiques : mutex patches concurrents, impact_scope non
+    déterministe), 4 points hors scope signalés. challenge_report_01.md produit.'
+  recorded_at: '2026-04-13T09:32:03Z'
