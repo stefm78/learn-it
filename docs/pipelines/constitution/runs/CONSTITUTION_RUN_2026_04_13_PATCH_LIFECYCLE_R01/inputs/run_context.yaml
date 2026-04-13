@@ -8,14 +8,15 @@ run_context:
   mode: bounded_local_run
   status: active
   scope_key: patch_lifecycle
-  current_stage: STAGE_04_PATCH_VALIDATION
+  current_stage: STAGE_05_PATCH_APPLICATION
   last_stage_status: done
-  next_stage: STAGE_05_PATCH_APPLICATION
+  next_stage: STAGE_06_CORE_VALIDATION
   completed_stages:
   - STAGE_01_CHALLENGE
   - STAGE_02_ARBITRAGE
   - STAGE_03_PATCH_SYNTHESIS
   - STAGE_04_PATCH_VALIDATION
+  - STAGE_05_PATCH_APPLICATION
   scope_ids:
   - ACTION_ESCALATE_PERSISTENT_DRIFT_OFFSESSION
   - ACTION_LOG_UNCOVERED_CONFLICT
@@ -59,6 +60,14 @@ run_context:
     total_checks: 6
     cleared_checks: 0
     promotion_blocked: true
+  stage_05_apply:
+    status: done
+    whatif: false
+    patch_execution_report: runs/CONSTITUTION_RUN_2026_04_13_PATCH_LIFECYCLE_R01/reports/patch_execution_report.yaml
+    operations_count: 4
+    errors_count: 0
+    dsl_fix_applied: true
+    dsl_fix_note: C01 append op — section déplacée dans target.section (contrat apply_patch.py v4.0)
   canonical_refs:
     run_manifest: docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_13_PATCH_LIFECYCLE_R01/run_manifest.yaml
     scope_manifest: docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_13_PATCH_LIFECYCLE_R01/inputs/scope_manifest.yaml
