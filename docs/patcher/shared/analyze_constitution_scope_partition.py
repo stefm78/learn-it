@@ -11,6 +11,7 @@ It does not publish a new partition. It only:
 - reports logic.scope distribution and cross-group couplings
 - provides stable candidate partition signals for human + AI review
 - checks bijection between canon IDs and decisions.yaml assignments
+  (IDs covered by force_logical_neighbors are treated as covered, not as gaps)
 """
 
 from __future__ import annotations
@@ -21,7 +22,7 @@ import json
 import sys
 from collections import Counter, defaultdict
 from pathlib import Path
-from typing import Any, Dict, Iterable, List, Tuple
+from typing import Any, Dict, Iterable, List, Set, Tuple
 
 try:
     import yaml
@@ -173,19 +174,42 @@ def recommend_direction(metrics: Dict[str, Any], current_scope_count: int) -> st
     return "keep_or_review_semantics"
 
 
+def collect_neighbor_forced_ids(decisions: Dict[str, Any]) -> Set[str]:
+    """Return the set of IDs covered by approved force_logical_neighbors decisions.
+
+    These IDs deliberately belong to no single scope (shared neighbors).
+    They are semantically covered and must not be reported as bijection gaps.
+    """
+    decisions_root = decisions.get("scope_generation_decisions", {})
+    neighbor_ids: Set[str] = set()
+    for decision in decisions_root.get("decisions", []):
+        if decision.get("status") != "approved":
+            continue
+        if decision.get("decision_type") != "force_logical_neighbors":
+            continue
+        for id_ in decision.get("target_ids", []) or []:
+            neighbor_ids.add(id_)
+    return neighbor_ids
+
+
 def build_bijection_check(
     entries: List[Dict[str, Any]],
     decisions: Dict[str, Any],
 ) -> Dict[str, Any]:
     """Cross-check canon IDs vs decisions.yaml assign_ids_to_scope.
 
+    IDs covered by force_logical_neighbors are treated as semantically covered
+    (shared neighbors, deliberately not owned by any single scope).
+
     Returns a bijection_check dict with:
-    - ids_in_canon
-    - ids_assigned_in_decisions (union across all approved assign_ids_to_scope decisions)
+    - canon_id_count
+    - assigned_id_count (assign_ids_to_scope only)
+    - forced_neighbor_id_count
+    - ids_covered_as_forced_neighbors: IDs in canon covered by force_logical_neighbors
     - assignments_by_scope: {scope_key: [id, ...]}
-    - ids_not_covered: canon IDs absent from decisions
-    - ids_assigned_but_not_in_canon: decision IDs absent from canon
-    - ids_assigned_to_multiple_scopes: {id: [scope_key, ...]}
+    - ids_not_covered: canon IDs absent from both assign and force_logical_neighbors
+    - ids_assigned_but_not_in_canon: assign decision IDs absent from canon
+    - ids_assigned_to_multiple_scopes: {id: [scope_key, ...]} (assign_ids_to_scope only)
     - bijection_status: PASS | FAIL
     - bijection_failures: list of failure reasons
     """
@@ -205,10 +229,8 @@ def build_bijection_check(
         for scope_key in affected_scopes:
             assignments_by_scope[scope_key].extend(target_ids)
 
-    # Deduplicate per scope
     assignments_by_scope = {k: sorted(set(v)) for k, v in assignments_by_scope.items()}
 
-    # All assigned IDs (may contain duplicates across scopes)
     all_assigned: List[str] = []
     for ids in assignments_by_scope.values():
         all_assigned.extend(ids)
@@ -216,7 +238,12 @@ def build_bijection_check(
     assigned_id_counter = Counter(all_assigned)
     assigned_id_set = set(assigned_id_counter.keys())
 
-    ids_not_covered = sorted(canon_id_set - assigned_id_set)
+    # IDs covered by force_logical_neighbors (shared, no single owner)
+    forced_neighbor_ids = collect_neighbor_forced_ids(decisions)
+    ids_covered_as_forced_neighbors = sorted(canon_id_set & forced_neighbor_ids)
+
+    # True gaps: canon IDs neither assigned nor declared as forced neighbors
+    ids_not_covered = sorted(canon_id_set - assigned_id_set - forced_neighbor_ids)
     ids_assigned_but_not_in_canon = sorted(assigned_id_set - canon_id_set)
     ids_assigned_to_multiple_scopes = {
         id_: sorted(
@@ -241,6 +268,8 @@ def build_bijection_check(
     return {
         "canon_id_count": len(canon_ids),
         "assigned_id_count": len(assigned_id_set),
+        "forced_neighbor_id_count": len(ids_covered_as_forced_neighbors),
+        "ids_covered_as_forced_neighbors": ids_covered_as_forced_neighbors,
         "assignments_by_scope": dict(assignments_by_scope),
         "ids_not_covered": ids_not_covered,
         "ids_assigned_but_not_in_canon": ids_assigned_but_not_in_canon,
@@ -315,7 +344,8 @@ def main() -> int:
                 "notes": [
                     "Le rapport déterministe n'édite pas la partition publiée.",
                     "Il sert de base à l'analyse sémantique assistée par IA et à l'arbitrage humain.",
-                    "bijection_check.bijection_status PASS = couverture exacte IDs canon ↔ decisions.yaml.",
+                    "bijection_check.bijection_status PASS = tous les IDs canon sont couverts (assign ou forced_neighbor).",
+                    "Les IDs en forced_neighbor sont partagés entre scopes et n'appartiennent délibérément à aucun scope.",
                 ],
             }
         }
