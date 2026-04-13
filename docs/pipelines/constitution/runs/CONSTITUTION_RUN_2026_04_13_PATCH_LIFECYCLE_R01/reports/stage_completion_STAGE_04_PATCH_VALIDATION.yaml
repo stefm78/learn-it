@@ -1,0 +1,11 @@
+stage_completion_record:
+  schema_version: 0.1
+  pipeline_id: constitution
+  run_id: CONSTITUTION_RUN_2026_04_13_PATCH_LIFECYCLE_R01
+  stage_id: STAGE_04_PATCH_VALIDATION
+  stage_status: done
+  run_status: active
+  next_stage: STAGE_05_PATCH_APPLICATION
+  scope_status: ''
+  summary: patch_validation.yaml PASS — 0 anomalie, 0 warning
+  recorded_at: '2026-04-13T17:12:20Z'
