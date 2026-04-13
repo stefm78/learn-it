@@ -1,0 +1,122 @@
+VALIDATION:
+  run_id: CONSTITUTION_RUN_2026_04_13_PATCH_LIFECYCLE_R01
+  stage: STAGE_06_CORE_VALIDATION
+  mode: bounded_local_run
+  scope_key: patch_lifecycle
+  validated_core: CORE_LEARNIT_CONSTITUTION_V2_0
+  patched_core_path: docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_13_PATCH_LIFECYCLE_R01/work/05_apply/sandbox/docs/cores/current/constitution.yaml
+  patch_id: PATCHSET_CONSTITUTION_PATCH_LIFECYCLE_R01
+  validation_date: '2026-04-13'
+  status: PASS
+  scope_validation:
+    status: PASS
+    ids_in_scope: 21
+    ids_validated: 21
+    anomalies: []
+  global_validation_note: >
+    En mode bounded_local_run, la validation locale couvre les 21 IDs du scope
+    (patch_lifecycle) et le voisinage logique (1 ID : REF_CORE_LEARNIT_REFERENTIEL_V2_0_IN_CONSTITUTION).
+    La cohérence globale du Core complet est également contrôlée structurellement
+    (tests 1-12) mais le PASS local ne constitue pas une clearance canonique globale.
+    La promotion reste bloquée par l'integration_gate (6 checks, 0 cleared).
+  anomalies: []
+  checks:
+  - test: '1 — aucune règle dupliquée'
+    status: PASS
+    detail: >
+      Aucun id dupliqué détecté dans les sections TYPES, INVARIANTS, RULES, PARAMETERS,
+      CONSTRAINTS, EVENTS, ACTIONS. L'ajout de RULE_PATCH_SERIALIZATION ([PATCH_LIFECYCLE_R01][C01])
+      est unique et sans collision.
+  - test: '2 — aucune dépendance orpheline'
+    status: PASS
+    detail: >
+      Toutes les dépendances déclarées dans depends_on (21 IDs de scope + voisinage)
+      pointent vers des IDs présents dans le Core ou vers REF_CORE_LEARNIT_REFERENTIEL_V2_0_IN_CONSTITUTION
+      (référence inter-Core explicite). Pas de dépendance orpheline détectée.
+  - test: '3 — aucune relation implicite'
+    status: PASS
+    detail: >
+      Toutes les relations (requires, constrains, triggers, validates, governs, blocks,
+      derives_from, instantiates) pointent vers des IDs explicitement déclarés dans
+      le Core. Aucune relation implicite détectée.
+  - test: '4 — invariants non patchables'
+    status: PASS
+    detail: >
+      Tous les invariants du scope (INV_INVALID_PATCH_REJECTED, INV_NO_PARTIAL_PATCH_STATE,
+      INV_PATCH_LOCAL_VALIDATION_MUST_BE_DETERMINISTIC, INV_PERSISTENT_DRIFT_REQUIRES_ESCALATION_IF_PATCH_BLOCKED,
+      INV_PATCH_ARTIFACTS_MUST_BE_PRECOMPUTED_OFF_SESSION) portent patchable: false.
+      Conforme à la contrainte constitutionnelle.
+  - test: '5 — logique non contradictoire'
+    status: PASS
+    detail: >
+      Vérification focalisée sur les 4 champs logic modifiés par le patch et sur RULE_PATCH_SERIALIZATION ajoutée :
+      (a) TYPE_PATCH_IMPACT_SCOPE.logic : la condition précise maintenant que l'impact_scope est défini
+      comme l'ensemble structurel des IDs affectés calculable par diff déterministe ; l'effet délègue
+      toute évaluation sémantique vers la chaîne hors session, cohérent avec INV_PATCH_LOCAL_VALIDATION_MUST_BE_DETERMINISTIC.
+      Pas de contradiction.
+      (b) ACTION_ROLLBACK_PATCH.logic : la condition précise la détection de partialité comme toute
+      interruption avant commit atomique complet ; l'effet impose un snapshot pré-application et
+      restauration intégrale, cohérent avec INV_NO_PARTIAL_PATCH_STATE.
+      Pas de contradiction.
+      (c) INV_PERSISTENT_DRIFT_REQUIRES_ESCALATION_IF_PATCH_BLOCKED.logic : ajout d'une condition
+      complémentaire (boucle d'inefficacité, N patches successifs sans disparition du signal)
+      référençant PARAM_REFERENTIEL_MAX_PATCH_ITERATIONS_BEFORE_ESCALATION délégué au Référentiel.
+      L'effet étend l'obligation d'escalade aux deux conditions indépendantes. Cohérent avec
+      RULE_PERSISTENT_DRIFT_BLOCKED_PATCH_ESCALATES_OFFSESSION et INV_INVALID_PATCH_REJECTED.
+      Pas de contradiction.
+      (d) RULE_PATCH_SERIALIZATION.logic : un seul patch actif par apprenant, file FIFO pour les
+      concurrences. Pas de contradiction avec TYPE_PATCH_ARTIFACT, ACTION_TRIGGER_RELEVANCE_PATCH
+      ou ACTION_TRIGGER_AR_SOLLICITATION_PATCH. Pas de contradiction.
+  - test: '6 — source_anchor présent'
+    status: PASS
+    detail: >
+      Tous les IDs du scope portent source_anchor non nul. RULE_PATCH_SERIALIZATION porte
+      [PATCH_LIFECYCLE_R01][C01]. REF_CORE_LEARNIT_REFERENTIEL_V2_0_IN_CONSTITUTION porte [INTERCORE].
+      Conforme.
+  - test: '7 — relations cohérentes'
+    status: PASS
+    detail: >
+      RULE_PATCH_SERIALIZATION.relations : constrains → TYPE_PATCH_ARTIFACT (présent, patchable: true).
+      INV_PERSISTENT_DRIFT_REQUIRES_ESCALATION_IF_PATCH_BLOCKED.relations : inchangées (vides dans
+      la définition du scope), cohérent avec la spec.
+      Toutes les relations des IDs scope et voisinage pointent vers des cibles présentes.
+  - test: '8 — graphe connexe'
+    status: PASS
+    detail: >
+      Le sous-graphe des 21 IDs du scope est connexe via les relations requires, constrains,
+      triggers, validates. Le nœud REF_CORE_LEARNIT_REFERENTIEL_V2_0_IN_CONSTITUTION est
+      atteignable via depends_on depuis TYPE_PATCH_ARTIFACT, INV_INVALID_PATCH_REJECTED,
+      RULE_PERSISTENT_LOW_VC_TRIGGERS_RELEVANCE_PATCH, RULE_AR_REFRACTORY_PROFILE_TRIGGERS_SOLLICITATION_PATCH,
+      EVENT_PERSISTENT_LOW_VC, EVENT_AR_REFRACTORY_PROFILE_DETECTED. Connexité locale confirmée.
+  - test: '9 — ré-inflation possible'
+    status: PASS
+    detail: >
+      Les entrées du scope_extract correspondent aux entrées du Core patché sans perte
+      d'information. Aucun champ obligatoire manquant. La ré-inflation vers le Core complet
+      est possible à partir de l'extrait.
+  - test: '10 — core_type cohérent'
+    status: PASS
+    detail: >
+      Tous les IDs du scope et du voisinage portent core_type: CONSTITUTION. Le fichier cible
+      est constitution.yaml. Cohérence confirmée.
+  - test: '11 — références inter-Core explicites'
+    status: PASS
+    detail: >
+      REF_CORE_LEARNIT_REFERENTIEL_V2_0_IN_CONSTITUTION est déclaré en section TYPES avec
+      authority: reference et scope: intercore_reference. Toutes les dépendances vers
+      ce nœud (depuis TYPE_MASTERY_COMPONENT_P/R/A, INV_INVALID_PATCH_REJECTED, RULE_*,
+      EVENT_*) sont explicites. Aucune référence inter-Core implicite détectée.
+  - test: '12 — absence de collision d''id'
+    status: PASS
+    detail: >
+      L'ID RULE_PATCH_SERIALIZATION est nouveau, non présent dans le Core pré-patch
+      (constitution.yaml.bak). Aucune collision détectée.
+  integration_gate_status:
+    status: open
+    total_checks: 6
+    cleared_checks: 0
+    promotion_blocked: true
+    note: >
+      Le PASS local du Stage 06 ne vaut pas clearance canonique globale. La promotion
+      vers docs/cores/current/ reste bloquée jusqu'à satisfaction explicite des 6 checks
+      de l'integration_gate du run.
