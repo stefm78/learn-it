@@ -10,6 +10,7 @@ It does not publish a new partition. It only:
 - reports current generated scopes
 - reports logic.scope distribution and cross-group couplings
 - provides stable candidate partition signals for human + AI review
+- checks bijection between canon IDs and decisions.yaml assignments
 """
 
 from __future__ import annotations
@@ -172,6 +173,85 @@ def recommend_direction(metrics: Dict[str, Any], current_scope_count: int) -> st
     return "keep_or_review_semantics"
 
 
+def build_bijection_check(
+    entries: List[Dict[str, Any]],
+    decisions: Dict[str, Any],
+) -> Dict[str, Any]:
+    """Cross-check canon IDs vs decisions.yaml assign_ids_to_scope.
+
+    Returns a bijection_check dict with:
+    - ids_in_canon
+    - ids_assigned_in_decisions (union across all approved assign_ids_to_scope decisions)
+    - assignments_by_scope: {scope_key: [id, ...]}
+    - ids_not_covered: canon IDs absent from decisions
+    - ids_assigned_but_not_in_canon: decision IDs absent from canon
+    - ids_assigned_to_multiple_scopes: {id: [scope_key, ...]}
+    - bijection_status: PASS | FAIL
+    - bijection_failures: list of failure reasons
+    """
+    canon_ids: List[str] = sorted({e["id"] for e in entries})
+    canon_id_set = set(canon_ids)
+
+    decisions_root = decisions.get("scope_generation_decisions", {})
+    assignments_by_scope: Dict[str, List[str]] = defaultdict(list)
+
+    for decision in decisions_root.get("decisions", []):
+        if decision.get("status") != "approved":
+            continue
+        if decision.get("decision_type") != "assign_ids_to_scope":
+            continue
+        affected_scopes = decision.get("scope_keys_affected", []) or []
+        target_ids = decision.get("target_ids", []) or []
+        for scope_key in affected_scopes:
+            assignments_by_scope[scope_key].extend(target_ids)
+
+    # Deduplicate per scope
+    assignments_by_scope = {k: sorted(set(v)) for k, v in assignments_by_scope.items()}
+
+    # All assigned IDs (may contain duplicates across scopes)
+    all_assigned: List[str] = []
+    for ids in assignments_by_scope.values():
+        all_assigned.extend(ids)
+
+    assigned_id_counter = Counter(all_assigned)
+    assigned_id_set = set(assigned_id_counter.keys())
+
+    ids_not_covered = sorted(canon_id_set - assigned_id_set)
+    ids_assigned_but_not_in_canon = sorted(assigned_id_set - canon_id_set)
+    ids_assigned_to_multiple_scopes = {
+        id_: sorted(
+            scope_key
+            for scope_key, ids in assignments_by_scope.items()
+            if id_ in ids
+        )
+        for id_, count in assigned_id_counter.items()
+        if count > 1
+    }
+
+    failures: List[str] = []
+    if ids_not_covered:
+        failures.append(f"{len(ids_not_covered)} canon ID(s) not covered by any scope decision")
+    if ids_assigned_but_not_in_canon:
+        failures.append(f"{len(ids_assigned_but_not_in_canon)} decision ID(s) absent from canon")
+    if ids_assigned_to_multiple_scopes:
+        failures.append(f"{len(ids_assigned_to_multiple_scopes)} ID(s) assigned to multiple scopes (collision)")
+
+    bijection_status = "PASS" if not failures else "FAIL"
+
+    return {
+        "canon_id_count": len(canon_ids),
+        "assigned_id_count": len(assigned_id_set),
+        "assignments_by_scope": dict(assignments_by_scope),
+        "ids_not_covered": ids_not_covered,
+        "ids_assigned_but_not_in_canon": ids_assigned_but_not_in_canon,
+        "ids_assigned_to_multiple_scopes": {
+            k: v for k, v in sorted(ids_assigned_to_multiple_scopes.items())
+        },
+        "bijection_status": bijection_status,
+        "bijection_failures": failures,
+    }
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description="Analyze constitution scope partition deterministically.")
     parser.add_argument("--runs-index", default="docs/pipelines/constitution/runs/index.yaml")
@@ -216,6 +296,7 @@ def main() -> int:
     else:
         entries = collect_entries(core)
         metrics = build_partition_metrics(entries)
+        bijection = build_bijection_check(entries, decisions)
         policy_root = policy.get("scope_generation_policy", {})
         decisions_root = decisions.get("scope_generation_decisions", {})
         report = {
@@ -230,9 +311,11 @@ def main() -> int:
                 "current_decisionset_id": decisions_root.get("decisionset_id"),
                 "partition_signals": metrics,
                 "recommended_scope_count_direction": recommend_direction(metrics, current_scope_count),
+                "bijection_check": bijection,
                 "notes": [
                     "Le rapport déterministe n'édite pas la partition publiée.",
                     "Il sert de base à l'analyse sémantique assistée par IA et à l'arbitrage humain.",
+                    "bijection_check.bijection_status PASS = couverture exacte IDs canon ↔ decisions.yaml.",
                 ],
             }
         }
