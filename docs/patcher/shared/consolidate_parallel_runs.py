@@ -1,23 +1,24 @@
 #!/usr/bin/env python3
-"""Consolidate N parallel scoped run sandboxes into a single staging Core set.
+"""Consolidate N parallel scoped run sandboxes into a single work/consolidation/ Core set.
 
 Preconditions (all checked before any write):
-  - All provided run_ids must have a closed sandbox under
+  - All provided run_ids must have a sandbox under
     docs/pipelines/constitution/runs/<run_id>/work/05_apply/sandbox/
-  - All provided run_ids must have integration_gate.yaml with status: cleared
+  - All provided run_ids must have integration_gate.yaml with status: cleared or not_applicable
+    (warning only in --dry-run mode; blocking in real run)
   - Scope IDs across all runs must be disjoint (no overlapping writable IDs)
 
 Output:
-  - docs/cores/staging/constitution.yaml
-  - docs/cores/staging/referentiel.yaml
-  - docs/cores/staging/link.yaml
-  - docs/cores/staging/consolidation_report.yaml
+  - docs/pipelines/constitution/work/consolidation/constitution.yaml
+  - docs/pipelines/constitution/work/consolidation/referentiel.yaml
+  - docs/pipelines/constitution/work/consolidation/link.yaml
+  - docs/pipelines/constitution/work/consolidation/consolidation_report.yaml
 
 Usage:
   python docs/patcher/shared/consolidate_parallel_runs.py \\
     --runs RUN_A RUN_B RUN_C \\
     --base docs/cores/current \\
-    --output docs/cores/staging \\
+    --output docs/pipelines/constitution/work/consolidation \\
     --pipeline constitution \\
     [--dry-run]
 """
@@ -66,23 +67,35 @@ def check_sandbox_exists(pipeline_runs_root: Path, run_id: str) -> Path:
     return sandbox
 
 
-def check_integration_gate_cleared(pipeline_runs_root: Path, run_id: str) -> None:
+def check_integration_gate_cleared(
+    pipeline_runs_root: Path, run_id: str, dry_run: bool = False
+) -> str:
+    """Check integration_gate status.
+
+    Returns the status string.
+    In dry-run mode: non-cleared status emits a WARNING but does not abort.
+    In real mode: non-cleared status raises ValueError (blocking).
+    """
     gate_path = pipeline_runs_root / run_id / "inputs" / "integration_gate.yaml"
     if not gate_path.exists():
         raise FileNotFoundError(
             f"integration_gate.yaml not found for run {run_id}: {gate_path}"
         )
     gate = load_yaml(gate_path)
-    # Accept status: cleared or status: not_applicable
     status = (
         gate.get("integration_gate", {}).get("status")
         or gate.get("status", "")
     )
     if status not in ("cleared", "not_applicable"):
-        raise ValueError(
+        msg = (
             f"integration_gate not cleared for run {run_id}: status='{status}'.\n"
-            f"All integration gates must be explicitly cleared before consolidation."
+            f"All integration gates must be explicitly cleared before real consolidation."
         )
+        if dry_run:
+            print(f"  WARNING (dry-run): {msg}")
+        else:
+            raise ValueError(msg)
+    return status
 
 
 def collect_scope_writable_ids(pipeline_runs_root: Path, run_id: str) -> set[str]:
@@ -91,7 +104,6 @@ def collect_scope_writable_ids(pipeline_runs_root: Path, run_id: str) -> set[str
     if not scope_manifest_path.exists():
         return set()
     sm = load_yaml(scope_manifest_path)
-    # scope_manifest structure: scope_manifest.writable_ids or scope_manifest.scope.writable_ids
     sm_root = sm.get("scope_manifest", sm)
     writable: list[str] = (
         sm_root.get("writable_ids")
@@ -152,10 +164,9 @@ def find_core_files_in_sandbox(sandbox_root: Path) -> dict[str, Path]:
 
 def _get_top_level_key(data: dict[str, Any], filename: str) -> str:
     """Infer the top-level YAML key from the filename (e.g. 'constitution')."""
-    stem = Path(filename).stem  # 'constitution', 'referentiel', 'link'
+    stem = Path(filename).stem
     if stem in data:
         return stem
-    # fallback: first key
     keys = list(data.keys())
     return keys[0] if keys else stem
 
@@ -163,7 +174,7 @@ def _get_top_level_key(data: dict[str, Any], filename: str) -> str:
 def merge_core_files(
     base_path: Path,
     filename: str,
-    sandbox_files: list[tuple[str, Path]],  # [(run_id, patched_path), ...]
+    sandbox_files: list[tuple[str, Path]],
     scope_ids_by_run: dict[str, set[str]],
 ) -> tuple[dict[str, Any], list[dict[str, Any]]]:
     """Merge N patched Core files into one.
@@ -179,7 +190,6 @@ def merge_core_files(
     top_key = _get_top_level_key(base_data, filename)
     base_entries: list[dict[str, Any]] = base_data.get(top_key, [])
 
-    # Build index from base: id -> entry
     base_index: dict[str, dict[str, Any]] = {}
     base_order: list[str] = []
     for entry in base_entries:
@@ -187,9 +197,8 @@ def merge_core_files(
         base_index[eid] = entry
         base_order.append(eid)
 
-    # Apply patches from each run
-    patched_index = dict(base_index)  # start from base
-    new_ids: list[str] = []  # IDs added by patches (not in base)
+    patched_index = dict(base_index)
+    new_ids: list[str] = []
     merge_log: list[dict[str, Any]] = []
 
     for run_id, patched_path in sandbox_files:
@@ -209,8 +218,6 @@ def merge_core_files(
 
         for entry in patched_entries:
             eid = entry.get("id", "")
-            # Only apply if this ID belongs to this run's scope,
-            # OR if scope_ids is empty (no scope manifest = apply all)
             if not run_scope_ids or eid in run_scope_ids:
                 if eid not in patched_index:
                     new_ids.append(eid)
@@ -225,7 +232,6 @@ def merge_core_files(
             "applied_ids": applied_ids,
         })
 
-    # Reconstruct ordered list: base order first, then new IDs
     merged_entries: list[dict[str, Any]] = []
     for eid in base_order:
         merged_entries.append(patched_index[eid])
@@ -247,6 +253,7 @@ def build_consolidation_report(
     conflicts: list[dict[str, Any]],
     output_path: Path,
     dry_run: bool,
+    gate_warnings: list[str],
 ) -> dict[str, Any]:
     report = {
         "consolidation_report": {
@@ -260,17 +267,15 @@ def build_consolidation_report(
                 "conflicts": conflicts,
             },
             "merge_log": [
-                {
-                    "file": fname,
-                    "entries": logs,
-                }
+                {"file": fname, "entries": logs}
                 for fname, logs in merge_logs.items()
             ],
             "output_path": str(output_path),
+            "warnings": gate_warnings,
             "note": (
                 "Dry run — no files written."
                 if dry_run
-                else "Consolidation applied to staging/."
+                else "Consolidation applied to work/consolidation/."
             ),
         }
     }
@@ -283,7 +288,7 @@ def build_consolidation_report(
 
 def main() -> int:
     parser = argparse.ArgumentParser(
-        description="Consolidate N parallel scoped run sandboxes into a single staging Core set."
+        description="Consolidate N parallel scoped run sandboxes into a single work/consolidation/ Core set."
     )
     parser.add_argument(
         "--runs",
@@ -299,8 +304,8 @@ def main() -> int:
     )
     parser.add_argument(
         "--output",
-        default="docs/cores/staging",
-        help="Output staging directory. Default: docs/cores/staging",
+        default="docs/pipelines/constitution/work/consolidation",
+        help="Output directory. Default: docs/pipelines/constitution/work/consolidation",
     )
     parser.add_argument(
         "--pipeline",
@@ -329,6 +334,7 @@ def main() -> int:
     # --- Precondition checks ---
     sandboxes: dict[str, Path] = {}
     scope_ids_by_run: dict[str, set[str]] = {}
+    gate_warnings: list[str] = []
 
     for run_id in run_ids:
         print(f"  Checking run: {run_id}")
@@ -340,7 +346,13 @@ def main() -> int:
             return 1
 
         try:
-            check_integration_gate_cleared(pipeline_runs_root, run_id)
+            gate_status = check_integration_gate_cleared(
+                pipeline_runs_root, run_id, dry_run=args.dry_run
+            )
+            if gate_status not in ("cleared", "not_applicable"):
+                gate_warnings.append(
+                    f"{run_id}: integration_gate status='{gate_status}' (not cleared)"
+                )
         except (FileNotFoundError, ValueError) as e:
             print(f"  ERROR: {e}", file=sys.stderr)
             return 1
@@ -357,9 +369,8 @@ def main() -> int:
                 f"  {c['run_a']} x {c['run_b']}: overlapping IDs: {c['overlapping_ids']}",
                 file=sys.stderr,
             )
-        # Still write report with FAIL status
         report = build_consolidation_report(
-            run_ids, {}, scope_ids_by_run, conflicts, output_path, args.dry_run
+            run_ids, {}, scope_ids_by_run, conflicts, output_path, args.dry_run, gate_warnings
         )
         report_path = output_path / "consolidation_report.yaml"
         if not args.dry_run:
@@ -400,7 +411,7 @@ def main() -> int:
 
     # --- Report ---
     report = build_consolidation_report(
-        run_ids, merge_logs, scope_ids_by_run, conflicts, output_path, args.dry_run
+        run_ids, merge_logs, scope_ids_by_run, conflicts, output_path, args.dry_run, gate_warnings
     )
     report_path = output_path / "consolidation_report.yaml"
     if not args.dry_run:
