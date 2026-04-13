@@ -1,0 +1,34 @@
+status:
+  chantier: J5_PARALLEL_SCOPED_RUNS_AND_CANONICAL_CONSOLIDATION
+  date: '2026-04-13'
+  status: in_vision
+  recorded_by: AI
+  summary: >
+    Décision de conception : plusieurs runs constitution parallèles sur des scopes disjoints
+    produisent chacun une sandbox Core complète patchée. Un STAGE_10_CONSOLIDATE_PARALLEL_RUNS
+    fusionnera ces sandbox en une version canonique unique sous docs/cores/staging/,
+    avant promotion vers current/ via STAGE_07+STAGE_08 standard.
+    La disjonction des scopes (garantie par le scope catalog) rend la fusion déterministe
+    et sans conflit.
+  open_items:
+    - id: J5_01
+      label: Ajouter STAGE_10_CONSOLIDATE_PARALLEL_RUNS dans pipeline.md
+      priority: medium
+      status: pending
+    - id: J5_02
+      label: Créer consolidate_parallel_runs.py dans docs/patcher/shared/
+      priority: medium
+      status: pending
+    - id: J5_03
+      label: Créer docs/cores/staging/ et son manifest
+      priority: low
+      status: pending
+    - id: J5_04
+      label: Adapter STAGE_07 pour lire staging/ quand disponible
+      priority: low
+      status: pending
+  blocking_current_work: false
+  note: >
+    Non bloquant pour les runs courants : STAGE_10 est optionnel quand un seul run
+    est actif (staging = sandbox output directement). L'architecture multi-run
+    complète sera activée progressivement.
