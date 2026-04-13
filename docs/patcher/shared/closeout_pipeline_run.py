@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
+import re
 import shutil
 import sys
 from datetime import datetime, timezone
 from pathlib import Path
-from typing import Any, Dict, List, Tuple
+from typing import Any, Dict, List, Optional, Tuple
 
 import yaml
 
@@ -16,7 +17,159 @@ DEFAULT_ARCHIVE_ROOT = "docs/pipelines/constitution/archive"
 DEFAULT_WORK_ROOT = "docs/pipelines/constitution/work"
 DEFAULT_REPORTS_ROOT = "docs/pipelines/constitution/reports"
 DEFAULT_OUTPUTS_ROOT = "docs/pipelines/constitution/outputs"
+DEFAULT_GOVERNANCE_BACKLOG_PATH = "docs/pipelines/constitution/scope_catalog/governance_backlog.yaml"
 
+# ---------------------------------------------------------------------------
+# Backlog entry type inference from note content
+# ---------------------------------------------------------------------------
+# Pattern: C\d+ — <description>
+# Heuristics to classify the entry type from note text.
+_TYPE_KEYWORDS: List[Tuple[str, str]] = [
+    ("hors scope", "scope_gap"),
+    ("hors p\u00e9rim\u00e8tre", "scope_gap"),
+    ("d\u00e9pendance non couverte", "scope_gap"),
+    ("missing_ids", "scope_gap"),
+    ("\u00e9tendre", "scope_extension_needed"),
+    ("extension", "scope_extension_needed"),
+    ("\u00e9largir", "scope_extension_needed"),
+    ("orphelin", "orphan_id"),
+    ("orphan", "orphan_id"),
+    ("non rattach\u00e9", "orphan_id"),
+    ("conflit", "policy_conflict"),
+    ("contradiction", "policy_conflict"),
+    ("angle mort", "partition_angle_mort"),
+    ("zone non couverte", "partition_angle_mort"),
+]
+
+
+def infer_entry_type(description: str) -> str:
+    low = description.lower()
+    for keyword, entry_type in _TYPE_KEYWORDS:
+        if keyword in low:
+            return entry_type
+    return "scope_gap"  # default fallback
+
+
+# ---------------------------------------------------------------------------
+# Backlog note extraction from arbitrage.md
+# ---------------------------------------------------------------------------
+
+# Matches lines like: **C05** — description
+# or: - C05 — description
+# or: C05 : description
+_NOTE_RE = re.compile(
+    r"(?:\*{1,2})?C(\d{2,3})(?:\*{1,2})?\s*[\u2014\-:]+\s*(.+)",
+    re.IGNORECASE,
+)
+
+
+def extract_backlog_notes_from_arbitrage(
+    arbitrage_path: Path,
+) -> List[Dict[str, str]]:
+    """Extract governance notes (C\u0078\u0078 pattern) from arbitrage.md.
+
+    Returns list of dicts with keys: note_id, description.
+    """
+    if not arbitrage_path.exists():
+        return []
+
+    notes: List[Dict[str, str]] = []
+    seen: set = set()
+    text = arbitrage_path.read_text(encoding="utf-8")
+    for line in text.splitlines():
+        m = _NOTE_RE.search(line)
+        if m:
+            note_id = f"C{m.group(1).zfill(2)}"
+            description = m.group(2).strip().rstrip(".")
+            if note_id not in seen:
+                notes.append({"note_id": note_id, "description": description})
+                seen.add(note_id)
+    return notes
+
+
+# ---------------------------------------------------------------------------
+# Backlog YAML read/write
+# ---------------------------------------------------------------------------
+
+def load_governance_backlog(backlog_path: Path) -> Dict[str, Any]:
+    if not backlog_path.exists():
+        return {
+            "governance_backlog": {
+                "schema_version": "0.1",
+                "entries": [],
+            }
+        }
+    with open(backlog_path, "r", encoding="utf-8") as f:
+        doc = yaml.safe_load(f) or {}
+    if "governance_backlog" not in doc:
+        doc["governance_backlog"] = {"schema_version": "0.1", "entries": []}
+    if "entries" not in doc["governance_backlog"]:
+        doc["governance_backlog"]["entries"] = []
+    return doc
+
+
+def save_governance_backlog(backlog_path: Path, doc: Dict[str, Any]) -> None:
+    backlog_path.parent.mkdir(parents=True, exist_ok=True)
+    with open(backlog_path, "w", encoding="utf-8") as f:
+        yaml.safe_dump(doc, f, allow_unicode=True, sort_keys=False)
+
+
+def build_entry_id(run_id: str, note_id: str) -> str:
+    # e.g. GB_PATCH_LIFECYCLE_R01_C05
+    suffix = run_id.replace("CONSTITUTION_RUN_", "").replace("-", "_")
+    return f"GB_{suffix}_{note_id}"
+
+
+def export_backlog_entries(
+    run_id: str,
+    scope_key: str,
+    arbitrage_path: Path,
+    backlog_path: Path,
+    current_stage: str,
+) -> List[Dict[str, Any]]:
+    """Extract Cxx notes from arbitrage.md and append new entries to governance_backlog.yaml.
+
+    Skips entries whose entry_id already exists (idempotent).
+    Returns the list of newly added entries.
+    """
+    notes = extract_backlog_notes_from_arbitrage(arbitrage_path)
+    if not notes:
+        return []
+
+    doc = load_governance_backlog(backlog_path)
+    entries: List[Dict[str, Any]] = doc["governance_backlog"]["entries"]
+    existing_ids = {e.get("entry_id") for e in entries}
+
+    now = utc_now_iso()
+    added: List[Dict[str, Any]] = []
+    for note in notes:
+        entry_id = build_entry_id(run_id, note["note_id"])
+        if entry_id in existing_ids:
+            continue
+        entry: Dict[str, Any] = {
+            "entry_id": entry_id,
+            "type": infer_entry_type(note["description"]),
+            "status": "open",
+            "source_run_id": run_id,
+            "source_stage": current_stage,
+            "scope_key": scope_key,
+            "note_ref": note["note_id"],
+            "description": note["description"],
+            "recommended_action": "review_at_stage_00",
+            "recorded_at": now,
+        }
+        entries.append(entry)
+        added.append(entry)
+
+    if added:
+        save_governance_backlog(backlog_path, doc)
+
+    return added
+
+
+# ---------------------------------------------------------------------------
+# IO helpers
+# ---------------------------------------------------------------------------
 
 class CloseoutError(Exception):
     pass
@@ -55,6 +208,10 @@ def read_rooted_yaml(path: Path, root_key: str) -> Dict[str, Any]:
 def utc_now_iso() -> str:
     return datetime.now(timezone.utc).replace(microsecond=0).isoformat().replace("+00:00", "Z")
 
+
+# ---------------------------------------------------------------------------
+# Validation
+# ---------------------------------------------------------------------------
 
 def validate_promotion_and_current(
     promotion_report: Dict[str, Any], current_manifest: Dict[str, Any]
@@ -97,6 +254,10 @@ def validate_promotion_and_current(
         "current_cores": current_cores,
     }
 
+
+# ---------------------------------------------------------------------------
+# Archive helpers
+# ---------------------------------------------------------------------------
 
 def copy_tree_if_exists(source: Path, destination: Path) -> List[str]:
     if not source.exists():
@@ -147,6 +308,10 @@ def reset_work_root(work_root: Path) -> bool:
     return True
 
 
+# ---------------------------------------------------------------------------
+# Report / summary builders
+# ---------------------------------------------------------------------------
+
 def build_closeout_report(
     release_id: str,
     source_release_path: str,
@@ -157,8 +322,9 @@ def build_closeout_report(
     work_reset: bool,
     closeout_status: str,
     notes: List[str],
+    backlog_entries_exported: Optional[int] = None,
 ) -> Dict[str, Any]:
-    return {
+    report: Dict[str, Any] = {
         "CLOSEOUT_REPORT": {
             "status": closeout_status,
             "pipeline_id": "constitution",
@@ -174,6 +340,9 @@ def build_closeout_report(
             "notes": notes,
         }
     }
+    if backlog_entries_exported is not None:
+        report["CLOSEOUT_REPORT"]["governance_backlog_entries_exported"] = backlog_entries_exported
+    return report
 
 
 def build_final_summary(
@@ -183,6 +352,7 @@ def build_final_summary(
     current_cores: List[Dict[str, Any]],
     archive_path: str,
     work_reset: bool,
+    backlog_entries_exported: Optional[int] = None,
 ) -> str:
     lines = [
         "# Final run summary — constitution",
@@ -197,10 +367,14 @@ def build_final_summary(
         f"- Archive path: `{archive_path}`",
         f"- Work reset: `{work_reset}`",
         f"- Closed at: `{utc_now_iso()}`",
+    ]
+    if backlog_entries_exported is not None:
+        lines.append(f"- Governance backlog entries exported: `{backlog_entries_exported}`")
+    lines.extend([
         "",
         "## Active cores",
         "",
-    ]
+    ])
 
     for entry in current_cores:
         role = entry.get("role", "unknown")
@@ -227,22 +401,58 @@ def build_final_summary(
     return "\n".join(lines) + "\n"
 
 
+# ---------------------------------------------------------------------------
+# Entry point
+# ---------------------------------------------------------------------------
+
 def main() -> None:
-    if len(sys.argv) < 3:
-        raise SystemExit(
-            "Usage: closeout_pipeline_run.py <promotion_report.yaml> <current_manifest.yaml> [closeout_report.yaml] [final_run_summary.md] [archive_root]"
-        )
-
-    promotion_report_path = Path(sys.argv[1])
-    current_manifest_path = Path(sys.argv[2])
-    closeout_report_path = (
-        Path(sys.argv[3]) if len(sys.argv) >= 4 else Path(DEFAULT_CLOSEOUT_REPORT_PATH)
+    import argparse
+    parser = argparse.ArgumentParser(
+        description="Close out a constitution pipeline run."
     )
-    final_summary_path = (
-        Path(sys.argv[4]) if len(sys.argv) >= 5 else Path(DEFAULT_FINAL_SUMMARY_PATH)
+    parser.add_argument("promotion_report", help="Path to promotion_report.yaml")
+    parser.add_argument("current_manifest", help="Path to current_manifest.yaml (CURRENT_CORESET)")
+    parser.add_argument("--closeout-report", default=DEFAULT_CLOSEOUT_REPORT_PATH)
+    parser.add_argument("--final-summary", default=DEFAULT_FINAL_SUMMARY_PATH)
+    parser.add_argument("--archive-root", default=DEFAULT_ARCHIVE_ROOT)
+    parser.add_argument(
+        "--export-backlog-entries",
+        action="store_true",
+        help=(
+            "Extract governance notes (Cxx pattern) from the run's arbitrage.md "
+            "and append them as open entries to governance_backlog.yaml."
+        ),
     )
-    archive_root = Path(sys.argv[5]) if len(sys.argv) >= 6 else Path(DEFAULT_ARCHIVE_ROOT)
+    parser.add_argument(
+        "--arbitrage-path",
+        default=None,
+        help="Path to arbitrage.md (default: docs/pipelines/constitution/work/arbitrage.md)",
+    )
+    parser.add_argument(
+        "--backlog-path",
+        default=DEFAULT_GOVERNANCE_BACKLOG_PATH,
+        help=f"Path to governance_backlog.yaml (default: {DEFAULT_GOVERNANCE_BACKLOG_PATH})",
+    )
+    parser.add_argument(
+        "--run-id",
+        default=None,
+        help="Run ID for backlog entry source annotation (read from promotion_report if absent)",
+    )
+    parser.add_argument(
+        "--scope-key",
+        default=None,
+        help="Scope key for backlog entry annotation (read from promotion_report if absent)",
+    )
+    parser.add_argument(
+        "--current-stage",
+        default="STAGE_09",
+        help="Current stage label for backlog entry source annotation (default: STAGE_09)",
+    )
+    args = parser.parse_args()
 
+    closeout_report_path = Path(args.closeout_report)
+    final_summary_path = Path(args.final_summary)
+    archive_root = Path(args.archive_root)
     work_root = Path(DEFAULT_WORK_ROOT)
     reports_root = Path(DEFAULT_REPORTS_ROOT)
     outputs_root = Path(DEFAULT_OUTPUTS_ROOT)
@@ -251,16 +461,44 @@ def main() -> None:
     source_release_path = "unknown"
     promotion_mode = "unknown"
     archive_path = "unknown"
+    backlog_entries_exported: Optional[int] = None
 
     try:
-        promotion_report = read_rooted_yaml(promotion_report_path, PROMOTION_REPORT_ROOT)
-        current_manifest = read_rooted_yaml(current_manifest_path, CURRENT_MANIFEST_ROOT)
+        promotion_report = read_rooted_yaml(Path(args.promotion_report), PROMOTION_REPORT_ROOT)
+        current_manifest = read_rooted_yaml(Path(args.current_manifest), CURRENT_MANIFEST_ROOT)
 
         checked = validate_promotion_and_current(promotion_report, current_manifest)
         release_id = checked["release_id"]
         source_release_path = checked["source_release_path"]
         promotion_mode = checked["promotion_mode"]
         current_cores = checked["current_cores"]
+
+        # Resolve run_id / scope_key for backlog annotation
+        run_id_for_backlog = args.run_id or promotion_report.get("run_id") or release_id
+        scope_key_for_backlog = args.scope_key or promotion_report.get("scope_key") or "unknown"
+
+        # --export-backlog-entries : extract Cxx notes from arbitrage.md
+        if args.export_backlog_entries:
+            arbitrage_path = Path(
+                args.arbitrage_path
+                if args.arbitrage_path
+                else f"{DEFAULT_WORK_ROOT}/arbitrage.md"
+            )
+            backlog_path = Path(args.backlog_path)
+            added = export_backlog_entries(
+                run_id=run_id_for_backlog,
+                scope_key=scope_key_for_backlog,
+                arbitrage_path=arbitrage_path,
+                backlog_path=backlog_path,
+                current_stage=args.current_stage,
+            )
+            backlog_entries_exported = len(added)
+            if added:
+                print(f"[backlog] {backlog_entries_exported} entrée(s) exportée(s) vers {args.backlog_path}:")
+                for e in added:
+                    print(f"  + {e['entry_id']} [{e['type']}] — {e['description'][:80]}")
+            else:
+                print("[backlog] Aucune nouvelle entrée à exporter (aucune note Cxx ou déjà présentes).")
 
         archive_root.mkdir(parents=True, exist_ok=True)
 
@@ -280,6 +518,7 @@ def main() -> None:
             work_reset=False,
             closeout_status="PASS",
             notes=preliminary_notes,
+            backlog_entries_exported=backlog_entries_exported,
         )
         preliminary_summary = build_final_summary(
             release_id=release_id,
@@ -288,6 +527,7 @@ def main() -> None:
             current_cores=current_cores,
             archive_path="pending",
             work_reset=False,
+            backlog_entries_exported=backlog_entries_exported,
         )
 
         dump_yaml(closeout_report_path, preliminary_report)
@@ -308,6 +548,11 @@ def main() -> None:
             f"run archivé sous {archive_path}",
             "workspace docs/pipelines/constitution/work/ réinitialisé pour une nouvelle exécution",
         ]
+        if backlog_entries_exported is not None:
+            final_notes.append(
+                f"{backlog_entries_exported} entrée(s) de gouvernance exportée(s) vers governance_backlog.yaml"
+            )
+
         closeout_report = build_closeout_report(
             release_id=release_id,
             source_release_path=source_release_path,
@@ -318,6 +563,7 @@ def main() -> None:
             work_reset=work_reset,
             closeout_status="PASS",
             notes=final_notes,
+            backlog_entries_exported=backlog_entries_exported,
         )
         final_summary = build_final_summary(
             release_id=release_id,
@@ -326,6 +572,7 @@ def main() -> None:
             current_cores=current_cores,
             archive_path=archive_path,
             work_reset=work_reset,
+            backlog_entries_exported=backlog_entries_exported,
         )
 
         dump_yaml(closeout_report_path, closeout_report)
