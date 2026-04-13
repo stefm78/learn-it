@@ -8,6 +8,7 @@ Goals:
 - next best actions
 - actionable continue-run path
 - scope maturity-aware action ranking and gating
+- parallel-runs: N independent slots across all registered pipelines
 
 Maturity model reference:
   docs/transformations/core_modularization/CONSTITUTION_SCOPE_MATURITY_MODEL.md
@@ -50,6 +51,10 @@ MATURITY_LEVELS: list[tuple[str, int, int]] = [
 ]
 MATURITY_MINIMUM_LEVEL = "L2_usable_with_care"  # minimum for recommended runs
 MATURITY_GATED_LEVELS = {"L0_experimental", "L1_fragile"}  # blocked in menu
+
+# Seuil en secondes au-delà duquel un stage in_progress sans update est considéré
+# comme potentiellement bloqué (6 heures).
+_IN_PROGRESS_STALE_THRESHOLD_S = 6 * 3600
 
 
 def maturity_pct(score: int) -> str:
@@ -110,7 +115,6 @@ def probe_run_context(pipeline_root: Path, run_id: str) -> dict[str, Any]:
     scope_extract_present = scope_extract_path.exists()
     neighbor_extract_present = neighbor_extract_path.exists()
 
-    # Check missing_ids in scope_extract
     scope_extract_complete = False
     if scope_extract_present:
         se = load_yaml(scope_extract_path)
@@ -125,17 +129,12 @@ def probe_run_context(pipeline_root: Path, run_id: str) -> dict[str, Any]:
         "ids_first_ready": run_context_present and scope_extract_present and scope_extract_complete,
     }
 
-    # Si run_context.yaml est present, on lit l'etat de stage depuis lui.
-    # Il est plus fiable qu'index.yaml car update_run_tracking.py le reconstruit
-    # automatiquement et y ecrit next_stage explicitement.
     if run_context_present:
         rc = load_yaml(run_context_path).get("run_context", {})
         last_stage_status = rc.get("last_stage_status", "")
         current_stage_rc = rc.get("current_stage", "")
         next_stage_rc = rc.get("next_stage", "")
 
-        # Si le dernier stage est done ET qu'un next_stage est defini,
-        # le stage actionnable est next_stage — pas current_stage.
         if last_stage_status == "done" and next_stage_rc and next_stage_rc != current_stage_rc:
             probe["effective_current_stage"] = next_stage_rc
         else:
@@ -145,6 +144,107 @@ def probe_run_context(pipeline_root: Path, run_id: str) -> dict[str, Any]:
         probe["run_context_next_stage"] = next_stage_rc
 
     return probe
+
+
+# ---------------------------------------------------------------------------
+# Abnormal state detection — bootstrap_command guard
+# ---------------------------------------------------------------------------
+
+def detect_abnormal_state(
+    run: dict[str, Any],
+    probe: dict[str, Any],
+    run_manifest_path: Path,
+) -> dict[str, Any] | None:
+    """Retourne un dict décrivant l'anomalie détectée, ou None si l'état est sain.
+
+    Anomalies détectées :
+    1. run_status bloqué (blocked / failed)
+    2. last_stage_status == in_progress et last_updated trop ancien
+    3. Désynchronisation index.yaml vs run_context.yaml sur current_stage
+    """
+    import datetime as dt
+
+    run_status = run.get("run_status", "")
+    if run_status in ("blocked", "failed"):
+        return {
+            "reason": f"run_status={run_status}",
+            "code": "run_status_abnormal",
+        }
+
+    # Lire execution_state depuis run_manifest si accessible
+    if run_manifest_path.exists():
+        manifest = load_yaml(run_manifest_path)
+        exec_state = manifest.get("run_manifest", {}).get("execution_state", {})
+        last_stage_status = exec_state.get("last_stage_status", "")
+        last_updated_str = exec_state.get("last_updated", "")
+
+        if last_stage_status == "in_progress" and last_updated_str:
+            try:
+                last_updated = dt.datetime.fromisoformat(
+                    last_updated_str.replace("Z", "+00:00")
+                )
+                age_s = (
+                    dt.datetime.now(dt.timezone.utc) - last_updated
+                ).total_seconds()
+                if age_s > _IN_PROGRESS_STALE_THRESHOLD_S:
+                    return {
+                        "reason": f"stage in_progress depuis {int(age_s / 3600)}h sans update",
+                        "code": "in_progress_stale",
+                    }
+            except ValueError:
+                pass
+
+    # Désynchronisation index.yaml vs run_context.yaml
+    index_stage = run.get("current_stage", "")
+    rc_stage = probe.get("effective_current_stage", "")
+    rc_last_status = probe.get("run_context_last_stage_status", "")
+    if (
+        rc_stage
+        and index_stage
+        and rc_stage != index_stage
+        and rc_last_status != "done"  # si done c'est normal, le fix corrige l'index
+    ):
+        return {
+            "reason": f"désynchronisation index ({index_stage}) vs run_context ({rc_stage})",
+            "code": "stage_desync",
+        }
+
+    return None
+
+
+def build_bootstrap_command(
+    pipeline_id: str,
+    run_id: str,
+    stage_id: str,
+    run_status: str,
+    anomaly: dict[str, Any],
+) -> str:
+    """Génère la bootstrap_command uniquement pour corriger un état anormal."""
+    # Pour un run bloqué : reset vers active
+    if anomaly["code"] == "run_status_abnormal":
+        return (
+            f"python docs/patcher/shared/update_run_tracking.py "
+            f"--pipeline {pipeline_id} --run-id {run_id} "
+            f"--stage-id {stage_id} --stage-status in_progress "
+            f"--run-status active "
+            f"--summary \"manual recovery from {anomaly['reason']}\""
+        )
+    # Pour un stage bloqué en vol : reset vers in_progress (idempotent)
+    if anomaly["code"] == "in_progress_stale":
+        return (
+            f"python docs/patcher/shared/update_run_tracking.py "
+            f"--pipeline {pipeline_id} --run-id {run_id} "
+            f"--stage-id {stage_id} --stage-status in_progress "
+            f"--run-status active "
+            f"--summary \"reset stale in_progress — {anomaly['reason']}\""
+        )
+    # Pour une désynchronisation : rebuild run_context
+    if anomaly["code"] == "stage_desync":
+        return (
+            f"python docs/patcher/shared/build_run_context.py "
+            f"--pipeline {pipeline_id} --run-id {run_id}"
+        )
+    return ""
 
 
 # ---------------------------------------------------------------------------
@@ -172,6 +272,8 @@ def discover_pipelines_from_registry(registry_path: Path) -> list[dict[str, str]
             match = re.search(r"`([^`]+)`", stripped)
             if match:
                 current["canonical_state"] = match.group(1)
+        if current and stripped.startswith("- Goal:"):
+            current["goal"] = stripped[len("- Goal:"):].strip()
 
     if current:
         pipelines.append(current)
@@ -183,7 +285,6 @@ def discover_pipelines_from_registry(registry_path: Path) -> list[dict[str, str]
 # ---------------------------------------------------------------------------
 
 def enrich_scope_maturity(scope_record: dict[str, Any]) -> dict[str, Any]:
-    """Return an enriched copy of a scope record with full maturity annotation."""
     raw_maturity = scope_record.get("maturity") or {}
     score = raw_maturity.get("score_total", 0)
     level = raw_maturity.get("level") or maturity_level_from_score(score)
@@ -201,7 +302,6 @@ def enrich_scope_maturity(scope_record: dict[str, Any]) -> dict[str, Any]:
 
 
 def sort_scopes_by_maturity(scopes: list[dict[str, Any]]) -> list[dict[str, Any]]:
-    """Sort scope records by maturity score descending, then alphabetically."""
     return sorted(
         scopes,
         key=lambda s: (-s.get("maturity_score", 0), s.get("scope_key", "")),
@@ -221,7 +321,7 @@ def build_maturity_summary(enriched_scopes: list[dict[str, Any]]) -> dict[str, A
             for lvl, lo, hi in MATURITY_LEVELS
         ],
         "minimum_recommended_level": MATURITY_MINIMUM_LEVEL,
-        "minimum_recommended_pct": maturity_pct(13),  # L2 lower bound
+        "minimum_recommended_pct": maturity_pct(13),
         "scopes_available_count": len(available),
         "scopes_gated_count": len(gated),
         "scopes_ranked": [
@@ -253,16 +353,11 @@ def discover_constitution(repo_root: Path) -> dict[str, Any]:
     enriched_scopes = sort_scopes_by_maturity(enriched_scopes)
     maturity_summary = build_maturity_summary(enriched_scopes)
 
-    # Probe run_context availability for each active run.
-    # IMPORTANT: si run_context.yaml est present, probe_run_context() retourne
-    # effective_current_stage qui prend en compte last_stage_status et next_stage.
-    # On surcharge current_stage de index.yaml avec cette valeur plus fiable.
     enriched_runs = []
     for run in active_runs:
         run_id = run.get("run_id", "")
         probe = probe_run_context(pipeline_root, run_id)
         merged_run = {**run}
-        # Surcharge current_stage depuis run_context.yaml si disponible
         if "effective_current_stage" in probe and probe["effective_current_stage"]:
             merged_run["current_stage"] = probe["effective_current_stage"]
             merged_run["current_stage_source"] = "run_context.yaml"
@@ -313,34 +408,65 @@ def discover_constitution(repo_root: Path) -> dict[str, Any]:
     return result
 
 
-# ---------------------------------------------------------------------------
-# Menu builders
-# ---------------------------------------------------------------------------
+def discover_generic_pipeline(repo_root: Path, pipeline_id: str) -> dict[str, Any]:
+    """Discovery minimale pour les pipelines sans support étendu (release, migration, governance).
 
-def _scope_choice_entry(s: dict[str, Any]) -> dict[str, Any]:
-    """Build a scope entry for the action menu scope_choices list."""
-    entry: dict[str, Any] = {
-        "scope_key": s["scope_key"],
-        "maturity_pct": maturity_pct(s["maturity_score"]),
-        "maturity_level": s["maturity_level"],
-        "available": s["maturity_available_for_run"],
+    Lit uniquement runs/index.yaml si présent, pas de scope catalog.
+    """
+    pipeline_root = repo_root / "docs" / "pipelines" / pipeline_id
+    runs_index = load_yaml(pipeline_root / "runs" / "index.yaml")
+    active_runs = runs_index.get("runs_index", {}).get("active_runs", [])
+
+    enriched_runs = []
+    for run in active_runs:
+        run_id = run.get("run_id", "")
+        probe = probe_run_context(pipeline_root, run_id)
+        merged_run = {**run}
+        if "effective_current_stage" in probe and probe["effective_current_stage"]:
+            merged_run["current_stage"] = probe["effective_current_stage"]
+            merged_run["current_stage_source"] = "run_context.yaml"
+        else:
+            merged_run["current_stage_source"] = "index.yaml"
+        enriched_runs.append({**merged_run, "ids_first": probe})
+
+    recommended_action = "continue_active_run" if active_runs else "open_new_run"
+    result: dict[str, Any] = {
+        "pipeline_id": pipeline_id,
+        "active_runs_count": len(active_runs),
+        "active_runs": enriched_runs,
+        "recommended_action": recommended_action,
+        "published_scopes": [],  # non applicable hors constitution
     }
-    if not s["maturity_available_for_run"]:
-        entry["gate_reason"] = s["maturity_gate_reason"]
-    return entry
+    if active_runs:
+        run = enriched_runs[0]
+        result["recommended_run_id"] = run.get("run_id", "")
+        result["recommended_scope_key"] = run.get("scope_key", "")
+        result["recommended_current_stage"] = run.get("current_stage", "")
+        result["recommended_ids_first"] = run.get("ids_first", {})
+    return result
 
 
-def build_stage_prompt(branch: str, run_id: str, scope_key: str,
-                        current_stage: str, ids_first: dict[str, Any]) -> str:
+# ---------------------------------------------------------------------------
+# Stage prompt builders
+# ---------------------------------------------------------------------------
+
+def build_stage_prompt(
+    branch: str,
+    pipeline_id: str,
+    pipeline_path: str,
+    run_id: str,
+    scope_key: str,
+    current_stage: str,
+    ids_first: dict[str, Any],
+) -> str:
     """Build the stage_prompt for the AI, ids-first if run_context is ready."""
     ids_first_ready = ids_first.get("ids_first_ready", False)
     scope_extract_complete = ids_first.get("scope_extract_complete", False)
 
     if ids_first_ready:
-        # Optimal path: run_context + extracts available, no full Core read needed
         return (
             f"Dans le repo learn-it, sur la branche {branch}, exécute le pipeline "
-            f"docs/pipelines/constitution/pipeline.md au {current_stage} en mode run-aware "
+            f"{pipeline_path} au {current_stage} en mode run-aware "
             f"pour run_id={run_id}. "
             f"ORDRE DE LECTURE IDS-FIRST (obligatoire) : "
             f"1. runs/{run_id}/inputs/run_context.yaml (fichier synthétique — identité run, stage, IDs) ; "
@@ -352,7 +478,6 @@ def build_stage_prompt(branch: str, run_id: str, scope_key: str,
             f"À la fin, donne la commande update_run_tracking.py de clôture du stage."
         )
     elif scope_extract_complete:
-        # Extracts present but run_context missing — regenerate it first
         return (
             f"Dans le repo learn-it, sur la branche {branch}, avant de démarrer {current_stage} "
             f"pour run_id={run_id}, génère d'abord run_context.yaml manquant : "
@@ -362,7 +487,6 @@ def build_stage_prompt(branch: str, run_id: str, scope_key: str,
             f"Ne lis les Core complets que si missing_ids est non vide."
         )
     else:
-        # Extracts absent or incomplete — full materialization needed first
         return (
             f"Dans le repo learn-it, sur la branche {branch}, les extraits ids-first sont absents "
             f"ou incomplets pour run_id={run_id}. "
@@ -374,26 +498,193 @@ def build_stage_prompt(branch: str, run_id: str, scope_key: str,
         )
 
 
-def build_continue_actions(branch: str, state: dict[str, Any]) -> dict[str, Any]:
+def build_open_run_prompt(
+    branch: str,
+    pipeline_id: str,
+    pipeline_path: str,
+    scope_key: str,
+    maturity_pct_str: str,
+    maturity_level: str,
+) -> str:
+    return (
+        f"Dans le repo learn-it, sur la branche {branch}, ouvre un nouveau run "
+        f"sur le pipeline {pipeline_path} pour le scope {scope_key} "
+        f"({maturity_pct_str} — {maturity_level}). "
+        f"Résous uniquement l'ouverture du run selon docs/pipelines/{pipeline_id}/AI_PROTOCOL.yaml. "
+        f"Ne démarre aucun stage avant confirmation."
+    )
+
+
+# ---------------------------------------------------------------------------
+# Parallel slots builder
+# ---------------------------------------------------------------------------
+
+def build_parallel_slots(
+    repo_root: Path,
+    branch: str,
+    pipelines: list[dict[str, str]],
+    pipeline_states: dict[str, dict[str, Any]],
+    n: int,
+) -> dict[str, Any]:
+    """Construit N slots parallèles indépendants, tous pipelines confondus.
+
+    Priorité:
+    1. Runs actifs (continue) — triés par pipeline, puis par maturité scope décroissante
+    2. Scopes sans run actif disponibles (open_new_run) — triés par maturité décroissante
+
+    Chaque slot écrit/lit des fichiers strictement isolés (run_id distinct).
+    bootstrap_command inclus uniquement si anomalie détectée.
+    """
+    slots: list[dict[str, Any]] = []
+    slot_index = 0
+
+    # --- Slots continue (runs actifs) ---
+    for pipeline_info in pipelines:
+        pid = pipeline_info.get("pipeline_id", "")
+        ppath = pipeline_info.get("path", f"docs/pipelines/{pid}/pipeline.md")
+        state = pipeline_states.get(pid, {})
+        active_runs = state.get("active_runs", [])
+
+        pipeline_root = repo_root / "docs" / "pipelines" / pid
+
+        for run in active_runs:
+            if slot_index >= n:
+                break
+            run_id = run.get("run_id", "")
+            scope_key = run.get("scope_key", "")
+            current_stage = run.get("current_stage", "")
+            ids_first = run.get("ids_first", {})
+            run_status = run.get("run_status", "active")
+
+            # Détection anomalie
+            run_manifest_path = pipeline_root / "runs" / run_id / "run_manifest.yaml"
+            probe = ids_first  # déjà calculé dans discover_*
+            anomaly = detect_abnormal_state(run, probe, run_manifest_path)
+
+            slot: dict[str, Any] = {
+                "slot": slot_index + 1,
+                "pipeline_id": pid,
+                "action": "continue",
+                "run_id": run_id,
+                "scope_key": scope_key,
+                "current_stage": current_stage,
+                "current_stage_source": run.get("current_stage_source", "index.yaml"),
+                "ids_first_ready": ids_first.get("ids_first_ready", False),
+                "stage_prompt": build_stage_prompt(
+                    branch, pid, ppath, run_id, scope_key, current_stage, ids_first
+                ),
+            }
+
+            if anomaly:
+                slot["anomaly_detected"] = anomaly["reason"]
+                slot["bootstrap_command"] = build_bootstrap_command(
+                    pid, run_id, current_stage, run_status, anomaly
+                )
+
+            slots.append(slot)
+            slot_index += 1
+
+    # --- Slots open_new_run (scopes disponibles sans run actif) ---
+    if slot_index < n:
+        # Collecter tous les scopes disponibles (maturité >= L2) sans run actif
+        active_run_scope_keys: set[str] = set()
+        for pid, state in pipeline_states.items():
+            for run in state.get("active_runs", []):
+                sk = run.get("scope_key", "")
+                if sk:
+                    active_run_scope_keys.add(f"{pid}:{sk}")
+
+        open_candidates: list[dict[str, Any]] = []
+        for pipeline_info in pipelines:
+            pid = pipeline_info.get("pipeline_id", "")
+            ppath = pipeline_info.get("path", f"docs/pipelines/{pid}/pipeline.md")
+            state = pipeline_states.get(pid, {})
+            for scope in state.get("published_scopes", []):
+                sk = scope.get("scope_key", "")
+                if not scope.get("maturity_available_for_run", False):
+                    continue
+                if f"{pid}:{sk}" in active_run_scope_keys:
+                    continue
+                open_candidates.append({
+                    "pipeline_id": pid,
+                    "pipeline_path": ppath,
+                    "scope_key": sk,
+                    "maturity_score": scope.get("maturity_score", 0),
+                    "maturity_level": scope.get("maturity_level", ""),
+                    "maturity_pct": maturity_pct(scope.get("maturity_score", 0)),
+                })
+
+        # Trier par maturité décroissante
+        open_candidates.sort(key=lambda x: -x["maturity_score"])
+
+        for candidate in open_candidates:
+            if slot_index >= n:
+                break
+            slots.append({
+                "slot": slot_index + 1,
+                "pipeline_id": candidate["pipeline_id"],
+                "action": "open_new_run",
+                "scope_key": candidate["scope_key"],
+                "maturity_level": candidate["maturity_level"],
+                "maturity_pct": candidate["maturity_pct"],
+                "open_run_prompt": build_open_run_prompt(
+                    branch,
+                    candidate["pipeline_id"],
+                    candidate["pipeline_path"],
+                    candidate["scope_key"],
+                    candidate["maturity_pct"],
+                    candidate["maturity_level"],
+                ),
+            })
+            slot_index += 1
+
+    return {
+        "parallel_slots_requested": n,
+        "parallel_slots_available": len(slots),
+        "parallelism_safe": True,  # chaque slot opère sur un run_id distinct
+        "slots": slots,
+    }
+
+
+# ---------------------------------------------------------------------------
+# Legacy single-pipeline menu builders (utilisés si --parallel-runs absent)
+# ---------------------------------------------------------------------------
+
+def _scope_choice_entry(s: dict[str, Any]) -> dict[str, Any]:
+    entry: dict[str, Any] = {
+        "scope_key": s["scope_key"],
+        "maturity_pct": maturity_pct(s["maturity_score"]),
+        "maturity_level": s["maturity_level"],
+        "available": s["maturity_available_for_run"],
+    }
+    if not s["maturity_available_for_run"]:
+        entry["gate_reason"] = s["maturity_gate_reason"]
+    return entry
+
+
+def build_continue_actions(branch: str, state: dict[str, Any], pipeline_path: str) -> dict[str, Any]:
     run_id = state["recommended_run_id"]
     scope_key = state["recommended_scope_key"]
     current_stage = state["recommended_current_stage"]
     ids_first = state.get("recommended_ids_first", {})
     other_scopes = state.get("other_available_scopes", [])
     other_scope_choices = [_scope_choice_entry(s) for s in other_scopes]
+    pipeline_id = state.get("pipeline_id", "constitution")
 
-    bootstrap_command = (
-        f"python docs/patcher/shared/update_run_tracking.py --pipeline constitution --run-id {run_id} "
-        f"--stage-id {current_stage} --stage-status in_progress --run-status active --next-stage {current_stage} "
-        f"--scope-status confirmed_for_bounded_run --summary \""
-        f"Entry decision resolved; resuming existing {scope_key} run at {current_stage}\""
+    stage_prompt = build_stage_prompt(
+        branch, pipeline_id, pipeline_path, run_id, scope_key, current_stage, ids_first
     )
 
-    stage_prompt = build_stage_prompt(branch, run_id, scope_key, current_stage, ids_first)
+    next_best: dict[str, Any] = {
+        "stage_prompt": stage_prompt,
+    }
+
+    # bootstrap_command uniquement si anomalie détectée
+    # (dans le mode legacy, on ne fait pas de détection fine — on l'omet)
 
     return {
         "decision_summary": {
-            "pipeline_id": "constitution",
+            "pipeline_id": pipeline_id,
             "recommended_default": "continue",
             "active_run": run_id,
             "active_scope": scope_key,
@@ -428,10 +719,7 @@ def build_continue_actions(branch: str, state: dict[str, Any]) -> dict[str, Any]
             },
         ],
         "next_best_actions": {
-            "continue": {
-                "bootstrap_command": bootstrap_command,
-                "stage_prompt": stage_prompt,
-            },
+            "continue": next_best,
             "new_run": {
                 "status": "available" if other_scope_choices else "unavailable_now",
                 "scope_choices": other_scope_choices,
@@ -444,15 +732,16 @@ def build_continue_actions(branch: str, state: dict[str, Any]) -> dict[str, Any]
     }
 
 
-def build_open_new_actions(branch: str, state: dict[str, Any]) -> dict[str, Any]:
+def build_open_new_actions(branch: str, state: dict[str, Any], pipeline_path: str) -> dict[str, Any]:
+    pipeline_id = state.get("pipeline_id", "constitution")
     all_scopes = state.get("published_scopes", [])
     scope_choices = [_scope_choice_entry(s) for s in all_scopes]
     available_choices = [c for c in scope_choices if c["available"]]
     gated_choices = [c for c in scope_choices if not c["available"]]
 
     entry_prompt = (
-        f"Dans le repo learn-it, sur la branche {branch}, exécute le pipeline docs/pipelines/constitution/pipeline.md. "
-        f"Pour l'instant, ne résous que l'ouverture d'un nouveau run selon docs/pipelines/constitution/AI_PROTOCOL.yaml. "
+        f"Dans le repo learn-it, sur la branche {branch}, exécute le pipeline {pipeline_path}. "
+        f"Pour l'instant, ne résous que l'ouverture d'un nouveau run selon docs/pipelines/{pipeline_id}/AI_PROTOCOL.yaml. "
         f"Scopes disponibles (triés par maturité décroissante): "
         + ", ".join(
             f"{c['scope_key']} ({c['maturity_pct']} — {c['maturity_level']})"
@@ -463,7 +752,7 @@ def build_open_new_actions(branch: str, state: dict[str, Any]) -> dict[str, Any]
 
     return {
         "decision_summary": {
-            "pipeline_id": "constitution",
+            "pipeline_id": pipeline_id,
             "recommended_default": "new_run",
             "active_run": "",
             "active_scope": "",
@@ -491,10 +780,11 @@ def build_open_new_actions(branch: str, state: dict[str, Any]) -> dict[str, Any]
     }
 
 
-def build_disambiguation_actions(branch: str, state: dict[str, Any]) -> dict[str, Any]:
+def build_disambiguation_actions(branch: str, state: dict[str, Any], pipeline_path: str) -> dict[str, Any]:
+    pipeline_id = state.get("pipeline_id", "constitution")
     return {
         "decision_summary": {
-            "pipeline_id": "constitution",
+            "pipeline_id": pipeline_id,
             "recommended_default": "disambiguate",
             "active_run": "multiple",
             "active_scope": "multiple",
@@ -512,21 +802,21 @@ def build_disambiguation_actions(branch: str, state: dict[str, Any]) -> dict[str
             "disambiguate": {
                 "guidance": "inspect runs/index.yaml only and ask for a short choice among active runs",
                 "entry_prompt": (
-                    f"Dans le repo learn-it, sur la branche {branch}, exécute le pipeline docs/pipelines/constitution/pipeline.md. "
-                    f"Pour l'instant, ne résous que la désambiguïsation des runs actifs selon docs/pipelines/constitution/AI_PROTOCOL.yaml."
+                    f"Dans le repo learn-it, sur la branche {branch}, exécute le pipeline {pipeline_path}. "
+                    f"Pour l'instant, ne résous que la désambiguïsation des runs actifs selon docs/pipelines/{pipeline_id}/AI_PROTOCOL.yaml."
                 ),
             }
         },
     }
 
 
-def build_menu(branch: str, state: dict[str, Any]) -> dict[str, Any]:
+def build_menu(branch: str, state: dict[str, Any], pipeline_path: str) -> dict[str, Any]:
     action = state.get("recommended_action")
     if action == "continue_active_run":
-        return build_continue_actions(branch, state)
+        return build_continue_actions(branch, state, pipeline_path)
     if action == "open_new_run":
-        return build_open_new_actions(branch, state)
-    return build_disambiguation_actions(branch, state)
+        return build_open_new_actions(branch, state, pipeline_path)
+    return build_disambiguation_actions(branch, state, pipeline_path)
 
 
 # ---------------------------------------------------------------------------
@@ -538,6 +828,18 @@ def main() -> int:
     parser.add_argument("--repo-root", default=".")
     parser.add_argument("--pipeline", default="constitution")
     parser.add_argument("--branch", default="feat/core-modularization-bootstrap")
+    parser.add_argument(
+        "--parallel-runs",
+        type=int,
+        default=None,
+        metavar="N",
+        help=(
+            "Génère N slots de prompts parallèles indépendants, tous pipelines confondus. "
+            "Chaque slot opère sur un run_id distinct — pas d'interférence possible. "
+            "Les runs actifs sont proposés en premier (continue), "
+            "puis les meilleurs scopes disponibles (open_new_run)."
+        ),
+    )
     args = parser.parse_args()
 
     repo_root = Path(args.repo_root).resolve()
@@ -547,6 +849,34 @@ def main() -> int:
     print("PIPELINE_REGISTRY_STATE:")
     print(yaml.safe_dump({"pipelines": pipelines}, sort_keys=False, allow_unicode=True).rstrip())
     print()
+
+    # --- Mode parallel-runs : tous pipelines, N slots ---
+    if args.parallel_runs is not None:
+        pipeline_states: dict[str, dict[str, Any]] = {}
+        for pipeline_info in pipelines:
+            pid = pipeline_info.get("pipeline_id", "")
+            if pid == "constitution":
+                pipeline_states[pid] = discover_constitution(repo_root)
+            else:
+                pipeline_states[pid] = discover_generic_pipeline(repo_root, pid)
+
+        parallel = build_parallel_slots(
+            repo_root=repo_root,
+            branch=args.branch,
+            pipelines=pipelines,
+            pipeline_states=pipeline_states,
+            n=args.parallel_runs,
+        )
+
+        print("PIPELINE_PARALLEL_SLOTS:")
+        print(yaml.safe_dump(parallel, sort_keys=False, allow_unicode=True).rstrip())
+        return 0
+
+    # --- Mode legacy : pipeline unique ---
+    pipeline_path = next(
+        (p.get("path", "") for p in pipelines if p.get("pipeline_id") == args.pipeline),
+        f"docs/pipelines/{args.pipeline}/pipeline.md",
+    )
 
     if args.pipeline != "constitution":
         print("PIPELINE_LAUNCH_MENU:")
@@ -558,14 +888,14 @@ def main() -> int:
             "action_menu": [],
             "next_best_actions": {
                 "unsupported": {
-                    "guidance": "extend launcher support for this pipeline",
+                    "guidance": "use --parallel-runs to include all pipelines",
                 }
             }
         }, sort_keys=False, allow_unicode=True).rstrip())
         return 0
 
     state = discover_constitution(repo_root)
-    menu = build_menu(args.branch, state)
+    menu = build_menu(args.branch, state, pipeline_path)
 
     print("PIPELINE_LAUNCHER_STATE:")
     print(yaml.safe_dump(state, sort_keys=False, allow_unicode=True).rstrip())
