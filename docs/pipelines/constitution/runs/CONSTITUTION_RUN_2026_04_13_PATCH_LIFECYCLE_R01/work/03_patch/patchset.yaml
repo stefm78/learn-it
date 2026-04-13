@@ -1,0 +1,150 @@
+PATCH_SET:
+  id: PATCHSET_CONSTITUTION_PATCH_LIFECYCLE_R01
+  patch_dsl_version: "4.0"
+  atomic: true
+  description: |
+    Patch synthétisé au STAGE_03 du run CONSTITUTION_RUN_2026_04_13_PATCH_LIFECYCLE_R01.
+    Scope : patch_lifecycle.
+    Corrections retenues par l'arbitrage (C01, C02, C03, C04) :
+      C01 — Sérialisation des patches concurrents : nouvelle RULE_PATCH_SERIALIZATION dans patch_governance.
+      C02 — Définition déterministe de impact_scope : précision de la logic de TYPE_PATCH_IMPACT_SCOPE.
+      C03 — Mécanisme de rollback explicite : précision de la logic de ACTION_ROLLBACK_PATCH.
+      C04 — Escalade sur inefficacité de patch (boucle relevance) : extension de la logic
+             de INV_PERSISTENT_DRIFT_REQUIRES_ESCALATION_IF_PATCH_BLOCKED.
+    Corrections non retenues dans ce run : C05 (reporté), C06 (nécessite extension scope).
+    Périmètre modifiable : docs/cores/current/constitution.yaml uniquement.
+    Mode : bounded_local_run. Aucune promotion implicite.
+  run_id: CONSTITUTION_RUN_2026_04_13_PATCH_LIFECYCLE_R01
+  scope_key: patch_lifecycle
+  source_anchor: "[PATCH_LIFECYCLE_R01]"
+
+  files:
+    - file: docs/cores/current/constitution.yaml
+      expected_core_id: CORE_LEARNIT_CONSTITUTION_V2_0
+      operations:
+
+        # ─────────────────────────────────────────────────────────────────────
+        # C02 — Définition déterministe de impact_scope
+        # Cible : TYPE_PATCH_IMPACT_SCOPE (TYPES)
+        # Modification : champ logic.condition et logic.effect pour rendre
+        # explicite que le calcul de impact_scope est structurel et déterministe.
+        # ─────────────────────────────────────────────────────────────────────
+        - op: replace_field
+          section: TYPES
+          id: TYPE_PATCH_IMPACT_SCOPE
+          field: logic
+          value:
+            trigger: Validation d'un patch
+            condition: >
+              Impact_scope calculable déterministiquement : l'impact_scope est
+              défini comme l'ensemble structurel des IDs affectés par le patch,
+              calculable par diff déterministe sur les fichiers cibles (aucune
+              évaluation sémantique ou pédagogique n'est autorisée dans ce calcul).
+            effect: >
+              Autorisation de poursuivre la validation locale si et seulement si
+              l'ensemble des IDs affectés est calculable structurellement.
+              Toute évaluation sémantique ou interprétative nécessaire est déplacée
+              dans la chaîne hors session de QA pédagogique, conformément à
+              INV_PATCH_LOCAL_VALIDATION_MUST_BE_DETERMINISTIC.
+            scope: patch_validation
+
+        # ─────────────────────────────────────────────────────────────────────
+        # C03 — Mécanisme de rollback explicite dans ACTION_ROLLBACK_PATCH
+        # Cible : ACTION_ROLLBACK_PATCH (ACTIONS)
+        # Modification : champ logic pour spécifier la méthode (snapshot
+        # pré-application), la condition de détection de partialité et le
+        # périmètre de retour.
+        # ─────────────────────────────────────────────────────────────────────
+        - op: replace_field
+          section: ACTIONS
+          id: ACTION_ROLLBACK_PATCH
+          field: logic
+          value:
+            trigger: Échec ou invalidité d'un patch
+            condition: >
+              Application incomplète ou validation échouée. La partialité est
+              détectée comme toute interruption intervenant avant le commit
+              atomique complet de l'ensemble des opérations du patch.
+            effect: >
+              Retour à l'état identique au snapshot pré-application.
+              Méthode obligatoire : un snapshot de l'état des fichiers cibles
+              doit être capturé avant toute écriture ; en cas de détection de
+              partialité, le snapshot est restauré intégralement.
+              Aucune écriture partielle ne doit subsister après rollback.
+              Le rollback doit être traçable dans le rapport d'exécution.
+            scope: patch_layer
+
+        # ─────────────────────────────────────────────────────────────────────
+        # C04 — Extension de l'escalade pour couvrir l'inefficacité de patch
+        # Cible : INV_PERSISTENT_DRIFT_REQUIRES_ESCALATION_IF_PATCH_BLOCKED (INVARIANTS)
+        # Modification : champ logic pour ajouter la condition complémentaire
+        # (N patches successifs du même type sans résolution du signal de dérive).
+        # N est déclaré paramètre Référentiel.
+        # ─────────────────────────────────────────────────────────────────────
+        - op: replace_field
+          section: INVARIANTS
+          id: INV_PERSISTENT_DRIFT_REQUIRES_ESCALATION_IF_PATCH_BLOCKED
+          field: logic
+          value:
+            trigger: Répétition d'un besoin de correction sur plusieurs cycles
+            condition: >
+              Condition primaire : le signal de dérive persiste alors que le patch
+              requis reste rejeté ou impossible (borne d'escalade atteinte).
+              Condition complémentaire (boucle inefficacité) : N patches successifs
+              du même type ont été appliqués sans disparition du signal de dérive,
+              où N est un paramètre délégué au Référentiel
+              (PARAM_REFERENTIEL_MAX_PATCH_ITERATIONS_BEFORE_ESCALATION).
+              Les deux conditions déclenchent indépendamment l'obligation d'escalade.
+            effect: >
+              Escalade obligatoire hors session vers la chaîne d'analyse/correction.
+              L'escalade s'applique que le patch soit rejeté/impossible (condition
+              primaire) ou que le signal persiste malgré N applications valides
+              successives (condition complémentaire).
+              Aucun maintien implicite dans un état de dérive non traité n'est autorisé
+              dans les deux cas.
+            scope: patch_governance
+
+        # ─────────────────────────────────────────────────────────────────────
+        # C01 — Sérialisation des patches concurrents
+        # Cible : nouvelle entrée RULE_PATCH_SERIALIZATION dans RULES
+        # Module : patch_governance
+        # Justification : absence de règle de priorité ou de mutex entre
+        # ACTION_TRIGGER_RELEVANCE_PATCH et ACTION_TRIGGER_AR_SOLLICITATION_PATCH
+        # (et tout autre action de patch future). Une seule action de patch active
+        # par apprenant à un instant donné ; file d'attente FIFO si concurrence.
+        # ─────────────────────────────────────────────────────────────────────
+        - op: append
+          section: RULES
+          value:
+            id: RULE_PATCH_SERIALIZATION
+            authority: primary
+            core_type: CONSTITUTION
+            source_anchor: "[PATCH_LIFECYCLE_R01][C01]"
+            depends_on:
+              - TYPE_PATCH_ARTIFACT
+              - ACTION_TRIGGER_RELEVANCE_PATCH
+              - ACTION_TRIGGER_AR_SOLLICITATION_PATCH
+            relations:
+              - type: constrains
+                target:
+                  id: TYPE_PATCH_ARTIFACT
+            patchable: false
+            parameterizable: false
+            human_readable: >
+              Un seul patch actif par apprenant à un instant donné ; tout déclenchement
+              concurrent est sérialisé en file d'attente FIFO.
+            logic:
+              trigger: Déclenchement simultané de plusieurs actions de patch
+              condition: >
+                Plusieurs actions de patch (ACTION_TRIGGER_RELEVANCE_PATCH,
+                ACTION_TRIGGER_AR_SOLLICITATION_PATCH ou toute future action
+                TYPE_PATCH_ARTIFACT) sont déclenchées pour le même apprenant
+                avant qu'un patch actif soit terminé (appliqué, rejeté ou rollbacké).
+              effect: >
+                Un seul patch est traité à la fois par apprenant.
+                Les déclenchements concurrents sont placés en file d'attente FIFO.
+                Aucun patch concurrent ne peut démarrer tant que le patch actif
+                n'est pas dans un état terminal (appliqué, rejeté ou rollbacké).
+                L'état apprenant ne peut être modifié que par un seul patch actif
+                à la fois, garantissant le déterminisme de l'état résultant.
+              scope: patch_governance
