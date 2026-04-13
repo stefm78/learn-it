@@ -14,6 +14,10 @@ PATCH_SET:
     Corrections non retenues dans ce run : C05 (reporté), C06 (nécessite extension scope).
     Périmètre modifiable : docs/cores/current/constitution.yaml uniquement.
     Mode : bounded_local_run. Aucune promotion implicite.
+    ---
+    CORRECTIF DSL (2026-04-13) :
+      C01 append — bloc `section` déplacé dans `target.section` conformément au contrat
+      de apply_patch.py v4.0 : op append requiert op["target"]["section"].
   run_id: CONSTITUTION_RUN_2026_04_13_PATCH_LIFECYCLE_R01
   scope_key: patch_lifecycle
   source_anchor: "[PATCH_LIFECYCLE_R01]"
@@ -106,9 +110,11 @@ PATCH_SET:
         # C01 — Sérialisation des patches concurrents
         # Cible : nouvelle entrée RULE_PATCH_SERIALIZATION dans RULES
         # Module : patch_governance
+        # CORRECTIF DSL : section déplacée dans target.section (contrat apply_patch.py v4.0)
         # ─────────────────────────────────────────────────────────────────────
         - op: append
-          section: RULES
+          target:
+            section: RULES
           value:
             id: RULE_PATCH_SERIALIZATION
             authority: primary
