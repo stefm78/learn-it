@@ -43,7 +43,7 @@ Règle structurante :
 ### Mode de maintenance optionnel `partition_refresh`
 - aucun `run_id` actif ne doit exister ;
 - ce mode sert uniquement à réviser le partitionnement sémantique des scopes avant ouverture de nouveaux runs ;
-- l’analyse de partition suit une chaîne mixte : script déterministe obligatoire, puis revue sémantique assistée par IA, puis arbitrage humain ;
+- l'analyse de partition suit une chaîne mixte : script déterministe obligatoire, puis revue sémantique assistée par IA, puis arbitrage humain ;
 - la publication reste déterministe et passe par mise à jour des policy/decisions canonisés puis régénération du catalogue.
 
 ## Canonical resources
@@ -62,6 +62,7 @@ Règle structurante :
 ### Spec and tools
 
 - Analyze scope partition: `docs/patcher/shared/analyze_constitution_scope_partition.py`
+- Generate constitution scopes: `docs/patcher/shared/generate_constitution_scopes.py`
 - Patch DSL: `docs/specs/patch-dsl/current.md`
 - Apply patch: `docs/patcher/shared/apply_patch.py`
 - Validate patchset: `docs/patcher/shared/validate_patchset.py`
@@ -151,11 +152,15 @@ Déclare l'identité du run, son `scope_id`, ses chemins d'exécution et la réf
 - Spec détaillée :
   - `docs/pipelines/constitution/STAGE_00_SCOPE_PARTITION_REVIEW_AND_REGEN.md`
 
-- Rule:
+- Rules:
   - `STAGE_00_SCOPE_PARTITION_REVIEW_AND_REGEN.md` is the canonical specification for Stage 00
   - Stage 00 is optional
   - Stage 00 is forbidden if any run is active in `docs/pipelines/constitution/runs/index.yaml`
   - any deterministic script declared by the Stage 00 specification is mandatory and must be actually executed before the stage can be declared `done`
+  - the AI must never simulate or assume execution of `analyze_constitution_scope_partition.py` or `generate_constitution_scopes.py`
+  - Stage 00 must not be declared `done` without real production of `docs/pipelines/constitution/reports/scope_partition_review_report.yaml` by actual execution of `analyze_constitution_scope_partition.py`
+  - the scope catalog regeneration must not be declared done without actual execution of `generate_constitution_scopes.py --apply` and real production of `tmp/constitution_scope_generation_report.yaml`
+  - if the AI cannot execute the required scripts itself, it must provide the exact commands to the user and keep the stage non-final until real execution feedback is available
   - any AI semantic review remains advisory until policy/decisions are updated and the scope catalog is regenerated deterministically
 
 ### STAGE_01_CHALLENGE
@@ -219,13 +224,13 @@ Déclare l'identité du run, son `scope_id`, ses chemins d'exécution et la réf
 ### STAGE_04_PATCH_VALIDATION
 Objectif :
 - vérifier que le patch synthétisé au Stage 03 est structurellement valide
-- vérifier qu’il reste minimal, cohérent et compatible avec la séparation Constitution / Référentiel / LINK
-- en mode borné, vérifier qu’il n’écrit pas hors du scope déclaré
-- décider s’il est autorisé ou non à passer au Stage 05_APPLY
+- vérifier qu'il reste minimal, cohérent et compatible avec la séparation Constitution / Référentiel / LINK
+- en mode borné, vérifier qu'il n'écrit pas hors du scope déclaré
+- décider s'il est autorisé ou non à passer au Stage 05_APPLY
 
 Inputs :
 - patchset depuis le répertoire résolu de Stage 03
-- contexte d’arbitrage depuis le répertoire résolu de Stage 02
+- contexte d'arbitrage depuis le répertoire résolu de Stage 02
 - optional `run_id`
 - optional resolved `scope_manifest`
 - éventuellement le prompt de revue :
@@ -245,8 +250,8 @@ Vérifications attendues :
 - opérations supportées uniquement
 - cohérence minimale des opérations `rename`, `rewrite_references`, `replace_field`, `replace_text`
 - cohérence du bloc `federation` si des références inter-Core fines sont utilisées
-- absence d’anomalie bloquante dans la structure du patchset
-- en mode borné, absence d’écriture hors du périmètre autorisé ou signalement explicite du dépassement
+- absence d'anomalie bloquante dans la structure du patchset
+- en mode borné, absence d'écriture hors du périmètre autorisé ou signalement explicite du dépassement
 
 Revue logique attendue en complément :
 - patch sûr
@@ -260,10 +265,10 @@ Revue logique attendue en complément :
 
 Interprétation du résultat :
 - si `patch_validation.yaml` retourne `status: PASS`, le patch peut être considéré comme structurellement recevable pour le Stage 05
-- si `patch_validation.yaml` retourne `status: FAIL`, le pipeline s’arrête ici et le patch doit être corrigé dans le répertoire résolu de Stage 03 avant nouvelle validation
-- un `PASS` structurel n’exonère pas d’une revue logique ciblée si le patch modifie des bindings inter-Core sensibles
+- si `patch_validation.yaml` retourne `status: FAIL`, le pipeline s'arrête ici et le patch doit être corrigé dans le répertoire résolu de Stage 03 avant nouvelle validation
+- un `PASS` structurel n'exonère pas d'une revue logique ciblée si le patch modifie des bindings inter-Core sensibles
 - le dry-run du Stage 05 constitue la validation exécutable finale avant apply réel
-- en mode borné, un PASS local ne vaut pas clearance globale d’intégration
+- en mode borné, un PASS local ne vaut pas clearance globale d'intégration
 
 Tools :
 - `docs/patcher/shared/validate_patchset.py`
@@ -276,16 +281,16 @@ Outputs :
 Règle opératoire :
 - `patch_validation.yaml` est la trace canonique de validation automatique du Stage 04
 - `patch_validation_report.md` est une trace de lecture humaine complémentaire, utile si une revue logique explicite est produite
-- aucun passage à l’apply réel du Stage 05 ne doit avoir lieu sans validation `PASS`
-- l’exécution réelle de `docs/patcher/shared/validate_patchset.py` est obligatoire ; la validation structurelle ne peut jamais être simulée, supposée ou remplacée par une simple lecture du patchset
-- le Stage 04 ne peut pas être déclaré `done` tant que `patch_validation.yaml` n’a pas été produit par exécution effective du script de validation sur le patchset cible
-- si l’IA ne peut pas exécuter elle-même le script, elle doit fournir explicitement à l’utilisateur la commande exacte à lancer et ne pas conclure le stage comme entièrement validé avant retour du résultat
+- aucun passage à l'apply réel du Stage 05 ne doit avoir lieu sans validation `PASS`
+- l'exécution réelle de `docs/patcher/shared/validate_patchset.py` est obligatoire ; la validation structurelle ne peut jamais être simulée, supposée ou remplacée par une simple lecture du patchset
+- le Stage 04 ne peut pas être déclaré `done` tant que `patch_validation.yaml` n'a pas été produit par exécution effective du script de validation sur le patchset cible
+- si l'IA ne peut pas exécuter elle-même le script, elle doit fournir explicitement à l'utilisateur la commande exacte à lancer et ne pas conclure le stage comme entièrement validé avant retour du résultat
 - la revue logique humaine ou assistée par IA vient seulement en complément de la validation structurelle automatique, jamais en substitution
 
 ### STAGE_05_APPLY
 Objectif :
 - appliquer le patch validé dans une zone de travail isolée
-- produire une trace d’exécution exploitable
+- produire une trace d'exécution exploitable
 - matérialiser les Core patchés sans modifier directement `docs/cores/current/`
 
 Inputs :
@@ -301,10 +306,10 @@ Précondition :
 
 Principe opératoire :
 - le patchset peut continuer à référencer les chemins canoniques `docs/cores/current/*.yaml`
-- l’application réelle du patch se fait sur une racine sandbox située sous le répertoire résolu `work/05_apply/`
-- la sandbox reproduit la structure canonique du repo pour éviter toute réécriture du patchset d’exécution
+- l'application réelle du patch se fait sur une racine sandbox située sous le répertoire résolu `work/05_apply/`
+- la sandbox reproduit la structure canonique du repo pour éviter toute réécriture du patchset d'exécution
 - `docs/cores/current/` ne doit jamais être modifié directement par ce stage
-- en mode borné, le succès d’apply reste un succès local tant que le `integration_gate` n’est pas clarifié
+- en mode borné, le succès d'apply reste un succès local tant que le `integration_gate` n'est pas clarifié
 
 Commandes de référence layout plat :
 - préparer la racine sandbox :
@@ -327,11 +332,11 @@ Outputs :
 - run mode: `runs/<run_id>/work/05_apply/sandbox/`, `runs/<run_id>/work/05_apply/patched/`, `runs/<run_id>/reports/patch_execution_report.yaml`
 
 Règle opératoire supplémentaire :
-- l’exécution réelle de `docs/patcher/shared/apply_patch.py` en dry-run est obligatoire avant tout apply réel
-- si l’apply réel fait partie du stage courant, son exécution réelle est également obligatoire ; elle ne peut jamais être simulée, supposée ou remplacée par une simple lecture du patchset
-- le Stage 05 ne peut pas être déclaré `done` tant que `reports/patch_execution_report.yaml` n’a pas été produit par exécution effective du script sur la sandbox cible
-- si l’IA ne peut pas exécuter elle-même le script, elle doit fournir explicitement à l’utilisateur les commandes exactes à lancer et ne pas conclure le stage comme entièrement exécuté avant retour du résultat réel
-- aucune matérialisation de `sandbox/` ou `patched/` ne doit être décrite comme faite si elle n’a pas été effectivement produite par l’exécution du script et les copies attendues
+- l'exécution réelle de `docs/patcher/shared/apply_patch.py` en dry-run est obligatoire avant tout apply réel
+- si l'apply réel fait partie du stage courant, son exécution réelle est également obligatoire ; elle ne peut jamais être simulée, supposée ou remplacée par une simple lecture du patchset
+- le Stage 05 ne peut pas être déclaré `done` tant que `reports/patch_execution_report.yaml` n'a pas été produit par exécution effective du script sur la sandbox cible
+- si l'IA ne peut pas exécuter elle-même le script, elle doit fournir explicitement à l'utilisateur les commandes exactes à lancer et ne pas conclure le stage comme entièrement exécuté avant retour du résultat réel
+- aucune matérialisation de `sandbox/` ou `patched/` ne doit être décrite comme faite si elle n'a pas été effectivement produite par l'exécution du script et les copies attendues
 
 ### STAGE_06_CORE_VALIDATION
 
@@ -394,7 +399,7 @@ Préconditions :
 - `docs/cores/current/manifest.yaml` doit pointer vers la release promue par le Stage 08
 
 Principe opératoire :
-- vérifier que la promotion Stage 08 constitue bien l’état actif final du run
+- vérifier que la promotion Stage 08 constitue bien l'état actif final du run
 - produire le closeout report et le final run summary dans le layout résolu
 - archiver une copie complète du run terminé sous le répertoire d'archive résolu
 - considérer l'espace `work/` du run comme transitoire et non comme archive canonique
@@ -405,13 +410,14 @@ Règle opératoire :
 - en layout run, l'archive et le reset s'appliquent au run courant sous `runs/<run_id>/...`
 - le Stage 09 clôture, archive et réinitialise ; il ne recalcule aucun contenu métier
 - si `docs/patcher/shared/closeout_pipeline_run.py` est utilisé comme script canonique de clôture, son exécution réelle est obligatoire avant de déclarer le stage `done`
-- l’IA ne doit jamais simuler une clôture, une archive ou un reset de workspace si les artefacts correspondants n’ont pas été effectivement produits
-- si l’IA ne peut pas exécuter le script de clôture elle-même, elle doit fournir la commande exacte à l’utilisateur et garder le stage non final tant que le résultat réel n’est pas disponible
+- l'IA ne doit jamais simuler une clôture, une archive ou un reset de workspace si les artefacts correspondants n'ont pas été effectivement produits
+- si l'IA ne peut pas exécuter le script de clôture elle-même, elle doit fournir la commande exacte à l'utilisateur et garder le stage non final tant que le résultat réel n'est pas disponible
 
 ## Success criteria
 
 - No stage may be skipped
 - Stage 00 partition review may only run when no active run exists and must never mutate the published partition without deterministic regeneration
+- Stage 00 must not be declared `done` without real production of `scope_partition_review_report.yaml` by actual execution of `analyze_constitution_scope_partition.py` and real production of `tmp/constitution_scope_generation_report.yaml` by actual execution of `generate_constitution_scopes.py --apply`
 - No file in `current/` may be modified directly before explicit promotion
 - Any patch application must occur in a sandbox root under the resolved `work/05_apply/`
 - Any release materialization must write immutable artifacts under `docs/cores/releases/`
