@@ -1,0 +1,36 @@
+startup_entry_decision_record:
+  schema_version: 0.1
+  pipeline_id: constitution
+  branch: feat/core-modularization-bootstrap
+  run_id: CONSTITUTION_RUN_2026_04_13_DEPLOYMENT_GOVERNANCE_R01
+  recorded_at: '2026-04-13'
+
+  input:
+    resolution_context: no_run_id_provided
+    user_request: >-
+      Ouvrir un nouveau run sur le scope deployment_governance.
+      Scopes disponibles (triés par maturité décroissante):
+      deployment_governance (79% — L3_operational),
+      mastery_evaluation (75% — L3_operational),
+      knowledge_and_design (71% — L3_operational),
+      learner_state (71% — L3_operational),
+      patch_lifecycle (67% — L2_usable_with_care).
+
+  startup_resolution:
+    resolution_status: resolved
+    active_runs_detected: []
+    decision: open_new_run
+    selected_scope_key: deployment_governance
+    selected_scope_id: CONSTITUTION_SCOPE_DEPLOYMENT_GOVERNANCE
+    maturity_level: L3_operational
+    maturity_score: 19
+    recommended_action: open_new_run_on_deployment_governance
+    next_best_action: >-
+      Run CONSTITUTION_RUN_2026_04_13_DEPLOYMENT_GOVERNANCE_R01 ouvert.
+      Procéder à la matérialisation des inputs (scope_manifest, impact_bundle, integration_gate)
+      puis démarrer STAGE_01_CHALLENGE.
+
+  notes:
+    - Aucun run actif au moment de l'ouverture (active_runs: [] confirmé dans index.yaml).
+    - deployment_governance est le scope de plus haute maturité (score 19, L3_operational).
+    - learner_state dispose d'un run fermé (R01) sans lien avec ce nouveau run.
