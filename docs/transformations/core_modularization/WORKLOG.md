@@ -109,10 +109,30 @@ Chaque entrée doit rester courte, factuelle, datée, et permettre une reprise s
 - `docs/transformations/core_modularization/templates/integrated_scoped_changeset.template.yaml`
 - `docs/transformations/core_modularization/STATUS_2026_04_12_J3_CANONICAL_RECONSTRUCTION.yaml`
 
-### Prochaines actions utiles
+---
 
-1. Synchroniser les fichiers centraux `STATUS.yaml` et `WORKLOG.md`.
-2. Prototyper sur `learner_state` un premier scope distinguant provenance, cible gouvernée, lecture primaire par IDs et fallback fichiers.
-3. Faire évoluer le `impact_bundle` d'un run pilote vers un plan de lecture minimal ids-first.
-4. Instancier un premier `integrated_scoped_changeset` sur un cas `constitution` borné.
-5. Préparer ensuite un squelette de script déterministe pour le calcul des scopes et/ou la reconstruction canonique.
+## 2026-04-13 — J2 étape 3 : extract_scope_slice.py (ids-first effectif)
+
+- Mode : `human+ai`
+- Livraison de `extract_scope_slice.py` : réduction effective de la surface de lecture en mode `bounded_local_run`.
+- Le script extrait des Core canoniques uniquement les entrées déclarées dans `scope_manifest.writable_perimeter.ids` → `scope_extract.yaml` et `impact_bundle.mandatory_reads.ids` → `neighbor_extract.yaml`.
+- L'IA travaillant sur `STAGE_01_CHALLENGE` doit lire ces deux fichiers au lieu des Core complets.
+- `pipeline.md` mis à jour : `extract_scope_slice.py` enregistré en `Spec and tools`, pré-condition ajoutée dans `STAGE_01_CHALLENGE`.
+
+### Décisions prises
+
+1. `ids-first` est le mode de lecture primaire en mode `bounded_local_run`.
+2. `scope_extract.yaml` et `neighbor_extract.yaml` sont des vues dérivées, pas des secondes sources de vérité.
+3. Le fallback sur les Core complets est explicite et tracé — uniquement si un ID est signalé manquant dans l'extrait.
+4. L'IA ne doit jamais charger les Core complets silencieusement en mode borné.
+
+### Artefacts ajoutés / mis à jour
+
+- `docs/patcher/shared/extract_scope_slice.py` ← nouveau
+- `docs/pipelines/constitution/pipeline.md` ← mis à jour (Spec and tools + pré-condition STAGE_01)
+- `docs/transformations/core_modularization/STATUS_2026_04_13_J2_EXTRACT_SCOPE_SLICE.yaml` ← nouveau
+- `docs/transformations/core_modularization/WORKLOG.md` ← cette entrée
+
+### Prochaine action
+
+- **J2 étape 4** : amender `docs/prompts/shared/Challenge_constitution.md` pour qu'en mode `bounded_local_run` l'IA lise en priorité `inputs/scope_extract.yaml` + `inputs/neighbor_extract.yaml` et ne consulte les Core complets que si un ID est signalé manquant.
