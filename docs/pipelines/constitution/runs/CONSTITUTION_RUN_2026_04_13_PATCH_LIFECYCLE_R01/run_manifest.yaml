@@ -30,26 +30,33 @@ run_manifest:
     opened_by: AI
     current_stage: STAGE_02_ARBITRAGE
     last_stage_status: done
-    last_updated: '2026-04-13T09:34:00Z'
-    next_stage: STAGE_02_ARBITRAGE
+    last_updated: '2026-04-13T16:09:10Z'
+    next_stage: STAGE_03_PATCH_SYNTHESIS
     completed_stages:
     - STAGE_01_CHALLENGE
+    - STAGE_02_ARBITRAGE
     stage_history:
     - stage_id: STAGE_01_CHALLENGE
       stage_status: in_progress
       recorded_at: '2026-04-13T09:01:05Z'
-      summary: "Ouverture run patch_lifecycle \u2014 d\u00e9marrage STAGE_01_CHALLENGE"
+      summary: Ouverture run patch_lifecycle — démarrage STAGE_01_CHALLENGE
     - stage_id: STAGE_01_CHALLENGE
       stage_status: done
       recorded_at: '2026-04-13T09:32:03Z'
-      summary: "STAGE_01_CHALLENGE termin\u00e9 en mode bounded_local_run ids-first. 6\
-        \ corrections in-scope identifi\u00e9es (2 critiques : mutex patches concurrents,\
-        \ impact_scope non d\u00e9terministe), 4 points hors scope signal\u00e9s. challenge_report_01.md\
-        \ produit."
+      summary: 'STAGE_01_CHALLENGE terminé en mode bounded_local_run ids-first. 6
+        corrections in-scope identifiées (2 critiques : mutex patches concurrents,
+        impact_scope non déterministe), 4 points hors scope signalés. challenge_report_01.md
+        produit.'
     - stage_id: STAGE_01_CHALLENGE
       stage_status: done
       recorded_at: '2026-04-13T09:34:00Z'
-      summary: "sync AI \u2014 current_stage avanc\u00e9 vers STAGE_02_ARBITRAGE apr\u00e8s confirmation done & sync."
+      summary: sync AI — current_stage avancé vers STAGE_02_ARBITRAGE après confirmation
+        done & sync.
+    - stage_id: STAGE_02_ARBITRAGE
+      stage_status: done
+      recorded_at: '2026-04-13T16:09:10Z'
+      summary: STAGE_02_ARBITRAGE terminé. 4 corrections retenues (C01-C04), 1 reporté
+        (C05), 1 nécessite extension scope (C06), 4 hors périmètre. arbitrage.md produit.
   overrides:
     allowed: true
     policy: explicit_and_traceable_only
@@ -57,8 +64,9 @@ run_manifest:
     scope_status: confirmed_for_bounded_run
     maturity_level: L2_usable_with_care
     maturity_score: 16
-    last_updated: '2026-04-13T09:34:00Z'
-    last_note: "STAGE_01_CHALLENGE done. current_stage -> STAGE_02_ARBITRAGE."
+    last_updated: '2026-04-13T16:09:10Z'
+    last_note: STAGE_02_ARBITRAGE terminé. 4 corrections retenues (C01-C04), 1 reporté
+      (C05), 1 nécessite extension scope (C06), 4 hors périmètre. arbitrage.md produit.
   notes:
   - Run ouvert par IA sur scope patch_lifecycle (L2_usable_with_care, score 16).
   - source_fingerprint \u00e0 remplir au d\u00e9marrage effectif de STAGE_01.

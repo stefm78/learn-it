@@ -35,5 +35,5 @@ runs_index:
   - If no active run exists for a resolved scope, create a new run.
   - If multiple active runs exist for the same scope, require disambiguation.
   notes:
-  - Index l\u00e9ger destin\u00e9 au startup des IA sans contexte. Il \u00e9vite d'avoir \u00e0 scanner
-    l'ensemble de `runs/` avant de d\u00e9terminer le bon point d'entr\u00e9e.
+  - Index l\u00e9ger destin\u00e9 au startup des IA sans contexte. Il \u00e9vite d'avoir
+    \u00e0 scanner l'ensemble de `runs/` avant de d\u00e9terminer le bon point d'entr\u00e9e.
