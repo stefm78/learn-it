@@ -11,7 +11,6 @@ runs_index:
     current_stage: STAGE_02_ARBITRAGE
     mode: bounded_local_run
     run_manifest_ref: docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_13_PATCH_LIFECYCLE_R01/run_manifest.yaml
-    scope_status: confirmed_for_bounded_run
   closed_runs:
   - run_id: CONSTITUTION_RUN_2026_04_11_LEARNER_STATE_R01
     scope_id: CONSTITUTION_SCOPE_LEARNER_STATE

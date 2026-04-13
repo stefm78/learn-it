@@ -30,7 +30,7 @@ run_manifest:
     opened_by: AI
     current_stage: STAGE_02_ARBITRAGE
     last_stage_status: done
-    last_updated: '2026-04-13T16:35:35Z'
+    last_updated: '2026-04-13T16:50:20Z'
     next_stage: STAGE_03_PATCH_SYNTHESIS
     completed_stages:
     - STAGE_01_CHALLENGE
@@ -61,6 +61,10 @@ run_manifest:
       stage_status: done
       recorded_at: '2026-04-13T16:35:35Z'
       summary: STAGE_02 arbitrage done — passage à STAGE_03
+    - stage_id: STAGE_02_ARBITRAGE
+      stage_status: done
+      recorded_at: '2026-04-13T16:50:20Z'
+      summary: ''
   overrides:
     allowed: true
     policy: explicit_and_traceable_only
