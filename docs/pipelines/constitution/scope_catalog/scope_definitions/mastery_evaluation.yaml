@@ -1,0 +1,99 @@
+scope_definition:
+  schema_version: 0.1
+  scope_id: CONSTITUTION_SCOPE_MASTERY_EVALUATION
+  scope_key: mastery_evaluation
+  status: published_generated
+  provenance:
+    source_pipeline: constitution
+    extraction_mode: deterministic_governed
+    source_artifacts:
+    - docs/cores/current/constitution.yaml
+    - docs/cores/current/referentiel.yaml
+    - docs/cores/current/link.yaml
+    source_fingerprint: d01b62f616afdcb5898451f987f9fb1cda04911510d7edd286fe43f1198ea6fd
+  target:
+    artifact_family: constitution
+    files:
+    - docs/cores/current/constitution.yaml
+    modules:
+    - runtime_evaluation
+    - runtime_graph
+    - runtime_integrity
+    - runtime_safety
+    ids:
+    - ACTION_PLAN_SHORT_DIAGNOSTIC_TASK
+    - CONSTRAINT_NO_BIOMETRICS_OR_OFFSESSION_SURVEILLANCE
+    - EVENT_LOW_SIS
+    - EVENT_MSC_DOWNGRADE
+    - EVENT_MSC_PERCEPTION_DIVERGENCE_DETECTED
+    - EVENT_PROVISIONAL_MASTERY_WINDOW_EXPIRED
+    - EVENT_SYSTEMIC_INVESTIGATION_AUTO_OPENED
+    - EVENT_SYSTEMIC_INVESTIGATION_CLOSED
+    - EVENT_T_EVALUATION_OVERDUE
+    - INV_GRAPH_PROPAGATION_ONE_HOP
+    - INV_MSC_AND_STRICT
+    - INV_REFERENTIEL_VALIDITY_REQUIRED_FOR_DELEGATED_THRESHOLD_EVALUATION
+    - INV_SECONDARY_RETROGRADATION_IS_NEW_EVENT
+    - INV_TRANSFER_SEPARATE_FROM_BASE_MASTERY
+    - PARAM_PROVISIONAL_MASTERY_VERIFICATION_WINDOW
+    - RULE_LOW_SIS_NEVER_AUTO_PENALIZES
+    - RULE_MSC_COMPONENT_NON_CALCULABLE_DEFERS_BASE_MASTERY
+    - RULE_MSC_DOWNGRADE_MARKS_DEPENDENTS
+    - RULE_MSC_PERCEPTION_DIVERGENCE_PROTOCOL
+    - RULE_PROVISIONAL_MASTERY_WINDOW_EXPIRY_SAFE_FALLBACK
+    - RULE_SYSTEMIC_INVESTIGATION_OPEN_CLOSE_WINDOW
+    - RULE_T_EVALUATION_OVERDUE_REQUIRES_SIGNAL_OR_FOLLOWUP
+    - TYPE_MASTERY_COMPONENT_A
+    - TYPE_MASTERY_COMPONENT_P
+    - TYPE_MASTERY_COMPONENT_R
+    - TYPE_MASTERY_COMPONENT_T
+    - TYPE_MASTERY_MODEL
+    - TYPE_NC_MSC
+    - TYPE_SESSION_INTEGRITY_SCORE
+  default_neighbors_to_read:
+    files:
+    - docs/cores/current/referentiel.yaml
+    - docs/cores/current/link.yaml
+    ids:
+    - INV_EXPLICIT_DEPENDENCY_EDGES_REQUIRED
+    - REF_CORE_LEARNIT_REFERENTIEL_V2_0_IN_CONSTITUTION
+    - TYPE_KNOWLEDGE_GRAPH
+    - TYPE_LEARNER_STATE_MODEL
+    - TYPE_STATE_AXIS_ACTIVATION
+  governance:
+    default_allowed_operations:
+    - challenge
+    - arbitrage
+    - patch
+    - local_validation
+    default_forbidden_operations:
+    - direct_current_promotion
+    - silent_out_of_scope_modification
+    - implicit_cross_core_reallocation
+    scope_extension_policy:
+      explicit_decision_required: true
+  watchpoints:
+  - Ne pas diluer la logique MSC AND strict dans des simplifications de score.
+  - Préserver la séparation entre maîtrise de base (P+R+A) et transférabilité (T).
+  - Vérifier les frontières entre évaluation locale, propagation graphe et dépendances référentielles.
+  - Vérifier qu'une composante non calculable reste deferred et ne tombe jamais implicitement à false.
+  - Vérifier que INV_GRAPH_PROPAGATION_ONE_HOP reste dans ce scope et non dans knowledge_and_design.
+  - Ne pas laisser les règles d'intégrité session (SIS, NC_MSC) glisser vers learner_state.
+  maturity:
+    scoring_model_ref: docs/transformations/core_modularization/CONSTITUTION_SCOPE_MATURITY_MODEL.md
+    axes:
+      clarity_of_scope: 3
+      internal_coherence: 4
+      inter_scope_boundaries: 2
+      dependency_explicitness: 3
+      bounded_run_executability: 3
+      inter_release_stability: 3
+    score_total: 18
+    level: L3_operational
+    rationale:
+    - Scope très cohérent autour du cycle complet d'évaluation de maîtrise.
+    - Intègre intégrité session et sécurité runtime liée à l'évaluation.
+    - Dépendances explicites mais frontières à surveiller avec knowledge_and_design et learner_state.
+  notes:
+  - Scope généré mastery_evaluation (ex mastery_model élargi). Couvre le modèle MSC (P/R/A/T), la propagation
+    graphe, l'intégrité de session, la sécurité runtime liée à l'évaluation et les investigations systémiques.

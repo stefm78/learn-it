@@ -1,0 +1,87 @@
+scope_definition:
+  schema_version: 0.1
+  scope_id: CONSTITUTION_SCOPE_DEPLOYMENT_GOVERNANCE
+  scope_key: deployment_governance
+  status: published_generated
+  provenance:
+    source_pipeline: constitution
+    extraction_mode: deterministic_governed
+    source_artifacts:
+    - docs/cores/current/constitution.yaml
+    - docs/cores/current/referentiel.yaml
+    - docs/cores/current/link.yaml
+    source_fingerprint: d01b62f616afdcb5898451f987f9fb1cda04911510d7edd286fe43f1198ea6fd
+  target:
+    artifact_family: constitution
+    files:
+    - docs/cores/current/constitution.yaml
+    modules:
+    - deployment
+    - runtime_architecture
+    - runtime_governance
+    - governance
+    - initialization
+    - system
+    ids:
+    - ACTION_INFORM_LEARNER
+    - CONSTRAINT_NO_ASSISTED_DEPLOYMENT_WITHOUT_TUTORING
+    - CONSTRAINT_NO_CHANGE_TO_AND_LOGIC
+    - CONSTRAINT_NO_CHANGE_TO_GRAPH_PROPAGATION_RULE
+    - EVENT_GAMIFICATION_PROBATION_MAX_DURATION_REACHED
+    - EVENT_GF08_UNCOVERED_CONFLICT
+    - INV_ASSISTED_MODE_REQUIRES_TUTORING
+    - INV_CONSTITUTION_REFERENTIAL_SEPARATION
+    - INV_NO_RUNTIME_CONTENT_GENERATION
+    - INV_RUNTIME_FULLY_LOCAL
+    - INV_RUNTIME_QUALIFICATION_SIGNALS_MUST_BE_EXPLICIT_OR_OFFSESSION
+    - RULE_GAMIFICATION_PROBATION_MUST_CLOSE
+    - RULE_GF08_UNCOVERED_CONFLICT_CONSERVATIVE_RESPONSE
+    - RULE_NO_CALIBRATION_CONSERVATIVE_START
+    - RULE_UNVERIFIED_GAMIFICATION_PROBATION
+    - SYSTEM_LEARNIT
+    - TYPE_AUTONOMY_REGIME
+    - TYPE_HUMAN_CHECKPOINT
+    - TYPE_INTEGRITY_MODES
+  default_neighbors_to_read:
+    files:
+    - docs/cores/current/referentiel.yaml
+    - docs/cores/current/link.yaml
+    ids:
+    - REF_CORE_LEARNIT_REFERENTIEL_V2_0_IN_CONSTITUTION
+  governance:
+    default_allowed_operations:
+    - challenge
+    - arbitrage
+    - patch
+    - local_validation
+    default_forbidden_operations:
+    - direct_current_promotion
+    - silent_out_of_scope_modification
+    - implicit_cross_core_reallocation
+    scope_extension_policy:
+      explicit_decision_required: true
+  watchpoints:
+  - Vérifier que les contraintes d'architecture locale (INV_RUNTIME_FULLY_LOCAL) ne glissent pas vers
+    des règles pédagogiques.
+  - Vérifier que la séparation Constitution/Référentiel reste inviolable et explicitement tracée.
+  - Vérifier que les régimes d'autonomie restent des configurations, pas des règles adaptatives.
+  - Vérifier que les règles de gouvernance top-level (GF-08, gamification) n'empiètent pas sur patch_lifecycle.
+  - Ne pas confondre contraintes constitutionnelles invariantes et paramètres référentiels.
+  maturity:
+    scoring_model_ref: docs/transformations/core_modularization/CONSTITUTION_SCOPE_MATURITY_MODEL.md
+    axes:
+      clarity_of_scope: 3
+      internal_coherence: 3
+      inter_scope_boundaries: 3
+      dependency_explicitness: 3
+      bounded_run_executability: 3
+      inter_release_stability: 4
+    score_total: 19
+    level: L3_operational
+    rationale:
+    - Périmètre bien borné sur les contraintes architecturales et de gouvernance invariantes.
+    - Forte stabilité inter-release, ces règles ne varient pas au fil des sessions.
+    - Frontières claires avec learner_state et patch_lifecycle.
+  notes:
+  - Scope généré deployment_governance. Couvre l'architecture runtime locale, les régimes d'autonomie,
+    la gouvernance top-level, la séparation Constitution/Référentiel et l'initialisation conservative.

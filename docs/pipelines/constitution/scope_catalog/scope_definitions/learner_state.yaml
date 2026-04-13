@@ -16,16 +16,29 @@ scope_definition:
     files:
     - docs/cores/current/constitution.yaml
     modules:
-    - learner_state
-    - self_report
-    - conservative_entry_logic
+    - runtime_state
+    - runtime_feedback
+    - runtime_observability
+    - runtime_transparency
+    - runtime_resume
     ids:
+    - ACTION_APPLY_LIGHT_REVERSIBLE_SCAFFOLDING
+    - ACTION_LOG_AR_PROXY_DISCORDANCE
     - EVENT_ACTIVATION_DISTRESS_PERSISTENCE_ESCALATION
+    - EVENT_CONSERVATIVE_SCAFFOLDING_ESCALATION
+    - EVENT_LONG_INTERRUPTION
+    - INV_AR_N2_SHORT_FORM_REQUIRES_EXPLICIT_PRIORITY
     - INV_CONSERVATIVE_RULE_WITHOUT_AR_N1
+    - INV_DISTRESS_REGIME_PRIORITY_CANNOT_BE_OVERRIDDEN
     - INV_VC_NOT_GENERAL_MOTIVATION_PROXY
+    - PARAM_AR_N1_INTERACTION_BUDGET
+    - PARAM_AR_N2_INTERACTION_BUDGET
+    - PARAM_AR_N3_INTERACTION_BUDGET
     - RULE_ACTIVATION_DISTRESS_PERSISTENCE_ESCALATION_OFFSESSION
     - RULE_AR_N1_OVERRIDES_PROXY
+    - RULE_CONSERVATIVE_SCAFFOLDING_ESCALATION_REQUIRES_OFFSESSION_REVIEW
     - RULE_LEARNER_STATE_AXIS_UNKNOWN_ALLOWED
+    - RULE_LONG_INTERRUPTION_REQUIRES_DIAGNOSTIC_RESUME
     - RULE_MULTI_AXIS_UNKNOWN_OR_UNOBSERVABLE_SAFE_ENTRY
     - RULE_SESSION_INTENTION_NON_BLOCKING
     - TYPE_LEARNER_STATE_MODEL
@@ -40,15 +53,7 @@ scope_definition:
     - docs/cores/current/referentiel.yaml
     - docs/cores/current/link.yaml
     ids:
-    - EVENT_ACTIVATION_DISTRESS_PERSISTENCE_ESCALATION
-    - INV_CONSTITUTION_REFERENTIAL_SEPARATION
-    - INV_NO_RUNTIME_CONTENT_GENERATION
-    - INV_RUNTIME_FULLY_LOCAL
-    - INV_VC_NOT_GENERAL_MOTIVATION_PROXY
     - REF_CORE_LEARNIT_REFERENTIEL_V2_0_IN_CONSTITUTION
-    - RULE_ACTIVATION_DISTRESS_PERSISTENCE_ESCALATION_OFFSESSION
-    - RULE_SESSION_INTENTION_NON_BLOCKING
-    - TYPE_AUTONOMY_REGIME
   governance:
     default_allowed_operations:
     - challenge
@@ -66,6 +71,8 @@ scope_definition:
   - Ne pas déduire une inférence psychologique plus forte que le cadre autorisé.
   - Vérifier les frontières entre état unknown, détresse, conservatisme et escalade.
   - Vérifier que les liens au Référentiel restent explicites et non silencieux.
+  - Vérifier que runtime_resume reste bien dans ce scope (lien état > lien MSC).
+  - Ne pas confondre les AR comme sources d'état (ce scope) et comme déclencheurs de patch (patch_lifecycle).
   maturity:
     scoring_model_ref: docs/transformations/core_modularization/CONSTITUTION_SCOPE_MATURITY_MODEL.md
     axes:
@@ -78,8 +85,9 @@ scope_definition:
     score_total: 17
     level: L3_operational
     rationale:
-    - Scope lisible et assez bien borné pour un premier run.
-    - Frontières encore perfectibles vis-à-vis des mécanismes de distress et des dépendances référentielles.
+    - Périmètre élargi par rapport à l'ancienne version pour couvrir feedback AR et reprise.
+    - Frontières encore perfectibles avec mastery_evaluation et patch_lifecycle.
     - Suffisamment stable et exécutable pour un pilote borné prudent.
   notes:
-  - Scope généré learner_state. Sa structure reste régénérable à partir du canon et des décisions de partition/voisinage.
+  - Scope généré learner_state (périmètre élargi). Couvre l'état apprenant 3 axes, les auto-rapports AR-N1/N2/N3,
+    la détresse, la VC, le scaffolding conservateur, la reprise diagnostique et la transparence apprenant.

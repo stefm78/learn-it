@@ -1,0 +1,89 @@
+scope_definition:
+  schema_version: 0.1
+  scope_id: CONSTITUTION_SCOPE_KNOWLEDGE_AND_DESIGN
+  scope_key: knowledge_and_design
+  status: published_generated
+  provenance:
+    source_pipeline: constitution
+    extraction_mode: deterministic_governed
+    source_artifacts:
+    - docs/cores/current/constitution.yaml
+    - docs/cores/current/referentiel.yaml
+    - docs/cores/current/link.yaml
+    source_fingerprint: d01b62f616afdcb5898451f987f9fb1cda04911510d7edd286fe43f1198ea6fd
+  target:
+    artifact_family: constitution
+    files:
+    - docs/cores/current/constitution.yaml
+    modules:
+    - knowledge_model
+    - analysis
+    - analysis_design
+    - analysis_runtime_graph
+    - design
+    - design_governance
+    - design_runtime
+    ids:
+    - ACTION_PLAN_COGNITIVE_CONFLICT_MISSION
+    - CONSTRAINT_NO_HIGH_BLOOM_WITHOUT_AUTHENTIC_CONTEXT
+    - CONSTRAINT_NO_RUNTIME_FEEDBACK_GENERATION
+    - EVENT_HIGH_BLOOM_WITHOUT_AUTHENTIC_CONTEXT
+    - EVENT_UNCOVERED_ERROR
+    - INV_AUTHENTIC_CONTEXT_REQUIRED_FOR_BLOOM4
+    - INV_CREATIVE_KU_AUTONOMY_REQUIRES_DETERMINISTIC_FEEDBACK_PATH
+    - INV_EXPLICIT_DEPENDENCY_EDGES_REQUIRED
+    - INV_KNOWLEDGE_GRAPH_MUST_BE_ACYCLIC
+    - INV_KU_TYPING_REQUIRED
+    - INV_MISSING_KU_TYPE_FORCES_SAFE_FALLBACK
+    - INV_NO_TEXT_ONLY_FOR_PROCEDURAL_OR_PERCEPTUAL
+    - RULE_MISCONCEPTION_REQUIRES_COGNITIVE_CONFLICT
+    - RULE_NON_EXAM_CONCEPT_KEPT_IN_GRAPH
+    - RULE_UNCOVERED_ERROR_GENERIC_FEEDBACK
+    - TYPE_AUTHENTIC_CONTEXT
+    - TYPE_CORPUS_CONFIDENCE_ICC
+    - TYPE_FEEDBACK_COVERAGE_MATRIX
+    - TYPE_KNOWLEDGE_GRAPH
+    - TYPE_KNOWLEDGE_UNIT
+  default_neighbors_to_read:
+    files:
+    - docs/cores/current/referentiel.yaml
+    - docs/cores/current/link.yaml
+    ids:
+    - REF_CORE_LEARNIT_REFERENTIEL_V2_0_IN_CONSTITUTION
+  governance:
+    default_allowed_operations:
+    - challenge
+    - arbitrage
+    - patch
+    - local_validation
+    default_forbidden_operations:
+    - direct_current_promotion
+    - silent_out_of_scope_modification
+    - implicit_cross_core_reallocation
+    scope_extension_policy:
+      explicit_decision_required: true
+  watchpoints:
+  - Vérifier la frontière entre structure du graphe (topologie, acyclicité) et règles d'évaluation runtime.
+  - Vérifier que INV_EXPLICIT_DEPENDENCY_EDGES_REQUIRED reste associé à ce scope et non à mastery_evaluation.
+  - Vérifier que le contexte authentique est bien une contrainte de design, pas une règle runtime.
+  - Ne pas dériver de règles adaptatives depuis les invariants de structure de graphe.
+  - Vérifier que les règles de misconception restent dans la phase design et ne glissent pas vers learner_state.
+  maturity:
+    scoring_model_ref: docs/transformations/core_modularization/CONSTITUTION_SCOPE_MATURITY_MODEL.md
+    axes:
+      clarity_of_scope: 3
+      internal_coherence: 3
+      inter_scope_boundaries: 2
+      dependency_explicitness: 3
+      bounded_run_executability: 3
+      inter_release_stability: 3
+    score_total: 17
+    level: L3_operational
+    rationale:
+    - Scope couvrant la totalité de la phase Analyse/Design du domaine.
+    - Consolidation de knowledge_model et content_design en un scope cohérent de pré-déploiement.
+    - Frontières à surveiller avec mastery_evaluation sur les règles de propagation graphe.
+  notes:
+  - Scope généré knowledge_and_design. Couvre la structure du domaine (graphe, KU, acyclicité, contexte
+    authentique, Bloom), la matrice de feedback et les règles de design pédagogique (misconception, modal,
+    créativité). Phase Analyse/Design pure, aucune exécution runtime.
