@@ -1,0 +1,24 @@
+neighbor_extract:
+  schema_version: 0.1
+  extract_type: neighbor
+  run_id: CONSTITUTION_RUN_2026_04_13_PATCH_LIFECYCLE_R01
+  source:
+    scope_manifest_fingerprint: 3fd1a243570f57a813cf25c12a9a81414403e654ebcf6ab813bc6c8a662a1656
+    impact_bundle_fingerprint: 80a687e2ca6bcbd53a40883af1a0f965bbbd56c69ebba0b55a68e5a23a197943
+    core_fingerprints:
+      constitution: 2a46d8c6c6ea9c0e632a1ab10a4c003414128af387a3c84998cefd16ecaf0f58
+      referentiel: 218219c4e8f46a2b01a3cff5d13d49435fb6d4bb81eb708d7dacf49c384f89e4
+      link: 5603e19c555c816f80cbf30f84e9f73474a97457cd78e3d1ad89e91259b78a86
+  target_ids:
+  - REF_CORE_LEARNIT_REFERENTIEL_V2_0_IN_CONSTITUTION
+  found_ids: []
+  missing_ids:
+  - REF_CORE_LEARNIT_REFERENTIEL_V2_0_IN_CONSTITUTION
+  entries: []
+  fallback_rule: If missing_ids is non-empty, the AI must explicitly signal each missing ID and fall back
+    to reading the full canonical Core file for that ID only. It must NOT silently ignore missing IDs.
+  notes:
+  - Généré déterministiquement par extract_scope_slice.py depuis les Core canoniques.
+  - Ce fichier est une vue dérivée. Les Core canoniques restent la source de vérité.
+  - En mode bounded_local_run, l'IA doit lire ce fichier en priorité sur les Core complets.
+  - Le champ _source_core indique l'origine canonique de chaque entrée.
