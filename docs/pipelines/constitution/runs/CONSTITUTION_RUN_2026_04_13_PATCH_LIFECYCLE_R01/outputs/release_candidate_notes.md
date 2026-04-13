@@ -1,8 +1,8 @@
-# Release candidate — CORE_RELEASE_2026_04_13_R01
+# Release candidate — CORE_RELEASE_2026_04_13_R02
 
 - release_required: `True`
 - change_depth: `major`
-- release_path: `docs/cores/releases/CORE_RELEASE_2026_04_13_R01/`
+- release_path: `docs/cores/releases/CORE_RELEASE_2026_04_13_R02/`
 
 ## Cores matérialisés
 

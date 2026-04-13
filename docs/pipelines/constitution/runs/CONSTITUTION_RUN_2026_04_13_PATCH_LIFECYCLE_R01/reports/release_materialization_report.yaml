@@ -1,13 +1,13 @@
 RELEASE_MATERIALIZATION_REPORT:
   status: PASS
-  release_id: CORE_RELEASE_2026_04_13_R01
-  release_path: docs/cores/releases/CORE_RELEASE_2026_04_13_R01/
+  release_id: CORE_RELEASE_2026_04_13_R02
+  release_path: docs/cores/releases/CORE_RELEASE_2026_04_13_R02/
   files_written:
-  - docs/cores/releases/CORE_RELEASE_2026_04_13_R01/constitution.yaml
-  - docs/cores/releases/CORE_RELEASE_2026_04_13_R01/referentiel.yaml
-  - docs/cores/releases/CORE_RELEASE_2026_04_13_R01/link.yaml
-  - docs/cores/releases/CORE_RELEASE_2026_04_13_R01/manifest.yaml
+  - docs/cores/releases/CORE_RELEASE_2026_04_13_R02/constitution.yaml
+  - docs/cores/releases/CORE_RELEASE_2026_04_13_R02/referentiel.yaml
+  - docs/cores/releases/CORE_RELEASE_2026_04_13_R02/link.yaml
+  - docs/cores/releases/CORE_RELEASE_2026_04_13_R02/manifest.yaml
   manifest_written: true
   notes:
-  - release matérialisée sous docs/cores/releases/CORE_RELEASE_2026_04_13_R01/
+  - release matérialisée sous docs/cores/releases/CORE_RELEASE_2026_04_13_R02/
   - aucune modification de docs/cores/current/
