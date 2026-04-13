@@ -1,0 +1,26 @@
+startup_entry_decision_record:
+  schema_version: 0.1
+  pipeline_id: constitution
+  branch: feat/core-modularization-bootstrap
+
+  input:
+    resolution_context: no_run_id_provided
+    user_request: >-
+      Exécute le pipeline docs/pipelines/constitution/pipeline.md.
+      Scope sélectionné : patch_lifecycle.
+
+  startup_resolution:
+    resolution_status: resolved
+    active_runs_detected: []
+    decision: open_new_run
+    selected_scope_key: patch_lifecycle
+    run_id_assigned: CONSTITUTION_RUN_2026_04_13_PATCH_LIFECYCLE_R01
+    recommended_action: proceed_to_stage_01_challenge
+    next_best_action: >-
+      Exécuter materialize_run_inputs.py pour CONSTITUTION_RUN_2026_04_13_PATCH_LIFECYCLE_R01
+      avant de démarrer STAGE_01_CHALLENGE.
+
+  notes:
+    - Aucun run actif à l'entrée (deployment_governance abandonné et clos).
+    - Scope patch_lifecycle retenu : L2_usable_with_care, score 16.
+    - Entrée conforme au protocole CONSTITUTION_AI_PROTOCOL_V2, mode entry_gate_zero_search.
