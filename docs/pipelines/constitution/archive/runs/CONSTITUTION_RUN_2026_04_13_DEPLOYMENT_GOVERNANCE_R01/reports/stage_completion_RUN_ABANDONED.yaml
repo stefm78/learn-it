@@ -1,0 +1,12 @@
+stage_completion_record:
+  schema_version: 0.1
+  pipeline_id: constitution
+  run_id: CONSTITUTION_RUN_2026_04_13_DEPLOYMENT_GOVERNANCE_R01
+  stage_id: RUN_ABANDONED
+  stage_status: blocked
+  run_status: closed
+  next_stage: ''
+  scope_status: confirmed_for_bounded_run
+  summary: Extraction des Cores non finalisés
+  previous_stage: STAGE_01_CHALLENGE
+  recorded_at: '2026-04-13T08:54:54Z'
