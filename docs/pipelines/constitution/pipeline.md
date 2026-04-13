@@ -1,7 +1,7 @@
 # PIPELINE — constitution
 
 id: constitution
-version: 1.3
+version: 1.4
 scope: core-governance
 
 ## AI startup note
@@ -15,7 +15,7 @@ En mode multi-runs parallèles, consolider les résultats des runs avant release
 
 ## Operating modes
 
-Le pipeline `constitution` supporte désormais trois régimes opératoires :
+Le pipeline `constitution` supporte désormais quatre régimes opératoires :
 
 ### Mode nominal global
 - aucun `scope_manifest` fourni ;
@@ -38,8 +38,8 @@ Le pipeline `constitution` supporte désormais trois régimes opératoires :
 
 ### Mode consolidation multi-runs (`parallel_consolidation`)
 - plusieurs runs sur scopes disjoints ont été exécutés et clôturés ;
-- STAGE_10_CONSOLIDATE_PARALLEL_RUNS fusionne leurs sandboxes dans `docs/cores/staging/` ;
-- STAGE_07 lit `docs/cores/staging/` au lieu d'un sandbox individuel ;
+- STAGE_06B_CONSOLIDATION fusionne leurs sandboxes dans `work/consolidation/` ;
+- STAGE_07 lit `work/consolidation/` au lieu d'un sandbox individuel ;
 - la promotion reste un acte centralisé et explicite via STAGE_08.
 
 Règle structurante :
@@ -78,7 +78,7 @@ Règle structurante :
 - `Materialize release: docs/patcher/shared/materialize_release.py`
 - `Validate release plan: docs/patcher/shared/validate_release_plan.py`
 - `Closeout pipeline run: docs/patcher/shared/closeout_pipeline_run.py`
-- **Consolidate parallel runs: `docs/patcher/shared/consolidate_parallel_runs.py`** ← STAGE_10 uniquement
+- **Consolidate parallel runs: `docs/patcher/shared/consolidate_parallel_runs.py`** ← STAGE_06B uniquement
 
 ### Core inputs
 
@@ -98,11 +98,11 @@ Run-based bounded-run control inputs:
 - `docs/pipelines/constitution/runs/<run_id>/inputs/impact_bundle.yaml`
 - `docs/pipelines/constitution/runs/<run_id>/inputs/integration_gate.yaml`
 
-Consolidation staging inputs (mode parallel_consolidation uniquement) :
-- `docs/cores/staging/constitution.yaml`
-- `docs/cores/staging/referentiel.yaml`
-- `docs/cores/staging/link.yaml`
-- `docs/cores/staging/consolidation_report.yaml`
+Consolidation work inputs (mode parallel_consolidation uniquement) :
+- `docs/pipelines/constitution/work/consolidation/constitution.yaml`
+- `docs/pipelines/constitution/work/consolidation/referentiel.yaml`
+- `docs/pipelines/constitution/work/consolidation/link.yaml`
+- `docs/pipelines/constitution/work/consolidation/consolidation_report.yaml`
 
 ## Layout resolution
 
@@ -115,9 +115,10 @@ Resolution rules:
 - else the pipeline runs in nominal global mode
 - bounded runs should no longer open new artifacts in the flat historical layout except during explicit transition handling
 
-Staging resolution rule (STAGE_07 only) :
-- if `docs/cores/staging/consolidation_report.yaml` exists and its `status` is `PASS`,
-  STAGE_07 must read Core inputs from `docs/cores/staging/` instead of individual run sandboxes ;
+Consolidation resolution rule (STAGE_07 only) :
+- if `docs/pipelines/constitution/work/consolidation/consolidation_report.yaml` exists
+  and its `consolidation_report.status` is `PASS`,
+  STAGE_07 must read Core inputs from `work/consolidation/` instead of individual run sandboxes ;
 - otherwise STAGE_07 reads from the resolved run sandbox as usual.
 
 ## Staging
@@ -130,6 +131,7 @@ Historical flat layout:
 - work/04_patch_validation: `docs/pipelines/constitution/work/04_patch_validation/`
 - work/05_apply: `docs/pipelines/constitution/work/05_apply/`
 - work/06_core_validation: `docs/pipelines/constitution/work/06_core_validation/`
+- work/consolidation: `docs/pipelines/constitution/work/consolidation/` (mode parallel_consolidation uniquement)
 - work/07_release: `docs/pipelines/constitution/work/07_release/`
 - outputs: `docs/pipelines/constitution/outputs/`
 - reports: `docs/pipelines/constitution/reports/`
@@ -382,6 +384,19 @@ Règle opératoire supplémentaire :
   - flat mode: `work/06_core_validation/core_validation.yaml`, `reports/core_validation_report.md`
   - run mode: `runs/<run_id>/work/06_core_validation/core_validation.yaml`, `runs/<run_id>/reports/core_validation_report.md`
 
+### STAGE_06B_CONSOLIDATION
+- Spec détaillée :
+  - `docs/pipelines/constitution/STAGE_06B_CONSOLIDATION.md`
+
+- Rules:
+  - `STAGE_06B_CONSOLIDATION.md` is the canonical specification for Stage 06B
+  - Stage 06B is **optionnel** si un seul run a été exécuté (STAGE_07 lit le sandbox du run directement)
+  - Stage 06B est **obligatoire** avant STAGE_07 quand deux runs parallèles ou plus sur scopes disjoints ont été complétés
+  - Stage 06B ne peut pas tourner tant qu'un run actif existe dans `runs/index.yaml`
+  - l'exécution réelle de `consolidate_parallel_runs.py` est obligatoire ; la consolidation ne peut pas être simulée ou supposée
+  - si `work/consolidation/consolidation_report.yaml` retourne `status: FAIL`, le pipeline s'arrête et les conflits de scope doivent être résolus avant nouvelle tentative
+  - si l'IA ne peut pas exécuter le script elle-même, elle doit fournir les commandes exactes à l'utilisateur et garder le stage non final jusqu'à retour du résultat réel
+
 ### STAGE_07_RELEASE_MATERIALIZATION
 - Spec détaillée :
   - `docs/pipelines/constitution/STAGE_07_RELEASE_MATERIALIZATION.md`
@@ -389,9 +404,9 @@ Règle opératoire supplémentaire :
 - Rule:
   - `STAGE_07_RELEASE_MATERIALIZATION.md` is the canonical specification for Stage 07
   - in bounded mode, no release materialization may be treated as promotable if the resolved `integration_gate` is not explicitly cleared
-  - **input resolution rule** : if `docs/cores/staging/consolidation_report.yaml` exists and its
-    `consolidation_report.status` is `PASS`, this stage must read Core inputs from
-    `docs/cores/staging/` instead of the individual run sandbox `work/05_apply/patched/` ;
+  - **input resolution rule** : if `docs/pipelines/constitution/work/consolidation/consolidation_report.yaml`
+    exists and its `consolidation_report.status` is `PASS`, this stage must read Core inputs
+    from `work/consolidation/` instead of the individual run sandbox `work/05_apply/patched/` ;
     otherwise the stage reads from the resolved run sandbox as usual
   - any deterministic script declared by the Stage 07 specification is mandatory and must be actually executed before the stage can be declared `done`
   - the AI may comment or challenge the script outputs, but must never replace their execution with a simulated result
@@ -445,19 +460,6 @@ Règle opératoire :
 - l'IA ne doit jamais simuler une clôture, une archive ou un reset de workspace si les artefacts correspondants n'ont pas été effectivement produits
 - si l'IA ne peut pas exécuter le script de clôture elle-même, elle doit fournir la commande exacte à l'utilisateur et garder le stage non final tant que le résultat réel n'est pas disponible
 
-### STAGE_10_CONSOLIDATE_PARALLEL_RUNS
-- Spec détaillée :
-  - `docs/pipelines/constitution/STAGE_10_CONSOLIDATE_PARALLEL_RUNS.md`
-
-- Rules:
-  - `STAGE_10_CONSOLIDATE_PARALLEL_RUNS.md` is the canonical specification for Stage 10
-  - Stage 10 is **optional** when only one run was executed (staging = sandbox output directly)
-  - Stage 10 is **mandatory** before STAGE_07 when two or more parallel runs on disjoint scopes have been completed
-  - Stage 10 must not run while any active run exists in `runs/index.yaml`
-  - the actual execution of `consolidate_parallel_runs.py` is mandatory; consolidation cannot be simulated or assumed
-  - if `docs/cores/staging/consolidation_report.yaml` returns `status: FAIL`, the pipeline stops and scope conflicts must be resolved before retry
-  - if the AI cannot execute the script itself, it must provide the exact commands to the user and keep the stage non-final until real output is available
-
 ## Success criteria
 
 - No stage may be skipped
@@ -473,4 +475,4 @@ Règle opératoire :
 - In run mode, the run instance is the primary execution unit and its own `work/`, `reports/`, `outputs/` and `archive/` directories are authoritative for the local cycle
 - Any stage that depends on a mandatory deterministic script must not be declared `done` until that script has been actually executed and its expected artifacts have been materially produced
 - In bounded_local_run mode, `materialize_run_inputs.py` must be executed before STAGE_01_CHALLENGE; its execution cannot be simulated or assumed
-- In parallel_consolidation mode, `consolidate_parallel_runs.py` must produce `docs/cores/staging/consolidation_report.yaml` with `status: PASS` before STAGE_07 may start
+- In parallel_consolidation mode, `consolidate_parallel_runs.py` must produce `work/consolidation/consolidation_report.yaml` with `status: PASS` before STAGE_07 may start
