@@ -1,0 +1,11 @@
+stage_completion_record:
+  schema_version: 0.1
+  pipeline_id: constitution
+  run_id: CONSTITUTION_RUN_2026_04_13_PATCH_LIFECYCLE_R01
+  stage_id: STAGE_09_CLOSEOUT
+  stage_status: done
+  run_status: closed
+  next_stage: ''
+  scope_status: ''
+  summary: ''
+  recorded_at: '2026-04-14T07:17:26Z'

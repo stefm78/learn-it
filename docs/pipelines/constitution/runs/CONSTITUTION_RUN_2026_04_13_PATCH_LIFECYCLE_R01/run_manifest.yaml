@@ -3,7 +3,7 @@ run_manifest:
   run_id: CONSTITUTION_RUN_2026_04_13_PATCH_LIFECYCLE_R01
   pipeline_id: constitution
   mode: bounded_local_run
-  status: active
+  status: closed
   scope_key: patch_lifecycle
   scope_binding:
     scope_id: CONSTITUTION_SCOPE_PATCH_LIFECYCLE
@@ -28,10 +28,10 @@ run_manifest:
   execution_state:
     opened_at: '2026-04-13T10:58:00Z'
     opened_by: AI
-    current_stage: STAGE_08_PROMOTE_CURRENT
+    current_stage: STAGE_09_CLOSEOUT
     last_stage_status: done
-    last_updated: '2026-04-14T07:08:57Z'
-    next_stage: STAGE_09_CLOSEOUT
+    last_updated: '2026-04-14T07:17:26Z'
+    next_stage: ''
     completed_stages:
     - STAGE_01_CHALLENGE
     - STAGE_02_ARBITRAGE
@@ -41,6 +41,7 @@ run_manifest:
     - STAGE_06_CORE_VALIDATION
     - STAGE_07_RELEASE_MATERIALIZATION
     - STAGE_08_PROMOTE_CURRENT
+    - STAGE_09_CLOSEOUT
     stage_history:
     - stage_id: STAGE_01_CHALLENGE
       stage_status: in_progress
@@ -113,6 +114,10 @@ run_manifest:
     - stage_id: STAGE_08_PROMOTE_CURRENT
       stage_status: done
       recorded_at: '2026-04-14T07:08:57Z'
+      summary: ''
+    - stage_id: STAGE_09_CLOSEOUT
+      stage_status: done
+      recorded_at: '2026-04-14T07:17:26Z'
       summary: ''
   overrides:
     allowed: true
