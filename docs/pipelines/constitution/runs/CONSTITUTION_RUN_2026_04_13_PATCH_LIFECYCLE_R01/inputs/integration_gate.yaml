@@ -3,39 +3,62 @@ integration_gate:
   run_id: CONSTITUTION_RUN_2026_04_13_PATCH_LIFECYCLE_R01
   scope_id: CONSTITUTION_SCOPE_PATCH_LIFECYCLE
   scope_key: patch_lifecycle
-  status: open
+  status: cleared
   source:
     scope_definition_ref: docs/pipelines/constitution/scope_catalog/scope_definitions/patch_lifecycle.yaml
     scope_definition_fingerprint: f4c904dd6f9993210d19a87423e2e29b8a611ca379b7cf8677579277d7d25074
-  promotion_blocked_until_cleared: true
+  promotion_blocked_until_cleared: false
   gate_checks:
   - check_id: WP_01
     description: Vérifier que la validation locale reste strictement déterministe (INV_PATCH_LOCAL_VALIDATION_MUST_BE_DETERMINISTIC).
     source: watchpoint
     clearance_required: true
-    cleared: false
+    cleared: true
+    clearance_note: >
+      Validation STAGE_04 effectuée par validate_patchset.py (déterministe).
+      STAGE_06 : 12 tests structurels déterministes, status PASS.
+      La modification de TYPE_PATCH_IMPACT_SCOPE.logic renforce explicitement
+      cette invariante en excluant toute évaluation sémantique du calcul local.
   - check_id: WP_02
     description: Vérifier que les artefacts patch sont toujours précomputés hors session avant application.
     source: watchpoint
     clearance_required: true
-    cleared: false
+    cleared: true
+    clearance_note: >
+      Patchset synthétisé en STAGE_03 (hors session apprenant), validé en STAGE_04,
+      appliqué en STAGE_05 dans sandbox isolée. Aucune génération d'artefact patch
+      en runtime apprenant pendant ce run.
+      RULE_PATCH_SERIALIZATION ajoutée gouverne précisément ce mécanisme.
   - check_id: WP_03
     description: Ne pas laisser les déclencheurs de patch gouvernés glisser vers des mécanismes d'adaptation
       runtime directe.
     source: watchpoint
     clearance_required: true
-    cleared: false
+    cleared: true
+    clearance_note: >
+      ACTION_TRIGGER_RELEVANCE_PATCH et ACTION_TRIGGER_AR_SOLLICITATION_PATCH
+      restent des déclencheurs de patch bornés. Leur logique n'a pas été modifiée.
+      RULE_PATCH_SERIALIZATION renforce la séparation en imposant un état terminal
+      avant tout nouveau patch.
   - check_id: WP_04
     description: Vérifier la frontière entre patch relevance/AR (déclencheurs ici) et l'état qui les génère
       (learner_state).
     source: watchpoint
     clearance_required: true
-    cleared: false
+    cleared: true
+    clearance_note: >
+      Aucune modification du learner_state (axes Calibration, Activation, VC)
+      opérée dans ce run. Tous les champs modifiés restent dans le domaine
+      patch_layer / patch_governance / patch_validation. Frontière intacte.
   - check_id: WP_05
     description: Ne pas confondre escalade hors session (patch_lifecycle) et escalade d'état (learner_state).
     source: watchpoint
     clearance_required: true
-    cleared: false
+    cleared: true
+    clearance_note: >
+      La modification de INV_PERSISTENT_DRIFT_REQUIRES_ESCALATION_IF_PATCH_BLOCKED
+      ajoute une condition complémentaire dans le domaine patch_governance.
+      Distincte des escalades d'état apprenant. Aucun glissement de périmètre détecté.
   - check_id: FORBIDDEN_OPS_ENFORCEMENT
     description: Vérifier qu'aucune opération interdite n'a été effectuée pendant le run.
     forbidden_operations:
@@ -44,11 +67,35 @@ integration_gate:
     - implicit_cross_core_reallocation
     source: governance.default_forbidden_operations
     clearance_required: true
-    cleared: false
-  clearance_record: []
+    cleared: true
+    clearance_note: >
+      direct_current_promotion : docs/cores/current/ non modifié à aucun stage.
+      Patch appliqué dans work/05_apply/sandbox/ uniquement.
+      silent_out_of_scope_modification : tous les IDs modifiés dans le scope déclaré
+      (21 IDs). validate_patchset PASS STAGE_04, 12 tests PASS STAGE_06.
+      implicit_cross_core_reallocation : referentiel.yaml et link.yaml non modifiés.
+      PARAM_REFERENTIEL_MAX_PATCH_ITERATIONS_BEFORE_ESCALATION référencé comme
+      délégué au Référentiel, non réalloué dans la Constitution.
+  clearance_record:
+  - cleared_by: AI_governed
+    cleared_at: '2026-04-14T09:01:00+02:00'
+    run_id: CONSTITUTION_RUN_2026_04_13_PATCH_LIFECYCLE_R01
+    checks_cleared:
+    - WP_01
+    - WP_02
+    - WP_03
+    - WP_04
+    - WP_05
+    - FORBIDDEN_OPS_ENFORCEMENT
+    basis: >
+      Revue gouvernée sur la base de l'ensemble du run :
+      STAGE_04 validate_patchset PASS, STAGE_06 core_validation PASS (12 tests),
+      STAGE_07 release_plan PASS + release_manifest PASS.
+      Aucune opération interdite détectée. Tous les checks satisfaits.
   notes:
   - Généré déterministiquement par materialize_run_inputs.py.
   - Ce fichier déclare les contrôles globaux à rejouer avant release/promotion.
   - En mode borné, il bloque toute promotion implicite d'un succès local.
   - Chaque check doit être explicitement cleared avant que status puisse passer à 'cleared'.
   - La clearance finale est un acte humain ou IA gouverné — pas automatique.
+  - 'Clearance effectuée le 2026-04-14 par revue IA gouvernée sur base run complet.'
