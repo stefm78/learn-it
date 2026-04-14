@@ -4,82 +4,72 @@ entry_action:
   action_id: OPEN_NEW_RUN
   action_kind: entry_resolution
   authoritative_role: stable_entry_contract
-
-mission: >-
-  Résoudre l'ouverture d'un nouveau run sur un scope publié, sans démarrer de
-  stage et sans sortir du contexte minimal autorisé par le protocole d'entrée.
-
-entry_binding:
-  expected_mode: no_run_id_mode
-  protocol_anchor: docs/pipelines/constitution/AI_PROTOCOL.yaml
-  stop_after_decision: true
-
-allowed_reads:
-  - docs/pipelines/constitution/AI_PROTOCOL.yaml
-  - docs/pipelines/constitution/pipeline.md
-  - docs/pipelines/constitution/runs/index.yaml
-  - docs/pipelines/constitution/scope_catalog/manifest.yaml
-  - docs/pipelines/constitution/scope_catalog/governance_backlog.yaml
-
-forbidden_before_resolution:
-  - any_search
-  - compare_commits
-  - docs/cores/current/constitution.yaml
-  - docs/cores/current/referentiel.yaml
-  - docs/cores/current/link.yaml
-  - docs/prompts/shared/Challenge_constitution.md
-  - docs/prompts/shared/Make04ConstitutionArbitrage.md
-  - docs/pipelines/constitution/inputs/*
-  - docs/pipelines/constitution/work/*
-  - docs/pipelines/constitution/reports/*
-  - docs/pipelines/constitution/archive/*
-  - docs/patcher/shared/*
-  - tmp/*
-
-preconditions:
-  - no_active_run_required_for_recommended_default
-  - scope_key_must_be_published
-  - scope_maturity_must_be_available_for_run
-
-resolution_rules:
-  - confirm no active run from runs/index.yaml
-  - confirm target scope is present in scope_catalog/manifest.yaml
-  - confirm governance_backlog signal if open entries exist
-  - do not invent repo-wide bootstrap mechanics beyond what is explicitly documented
-  - do not start STAGE_01_CHALLENGE
-  - do not emit or apply stage transition commands
-
-forbidden_actions:
-  - direct_write_of_runs_index
-  - direct_write_of_run_manifest
-  - direct_write_of_run_context
-  - implicit_stage_start
-  - archive_read_for_bootstrap_inference
-  - launcher_or_script_read_outside_allowed_reads
-
-required_outputs:
-  decision_payload:
-    - entry_decision
-    - target_scope_key
-    - scope_publication_status
-    - active_runs_count
-    - governance_backlog_signal
-    - open_materialization_status
-  allowed_entry_decision_values:
-    - open_new_run_authorized
-    - open_new_run_blocked
-    - partition_refresh_preferred
-
-stop_condition:
-  - stop once entry decision is resolved
-  - if no explicit open-only deterministic bootstrap is documented in allowed reads, state that material opening is not resolved and stop
-
-response_contract:
-  must_state:
-    - whether opening a new run is authorized
-    - whether material run creation is explicitly documented within the allowed read surface
-    - that no stage has been started
-  must_not_state:
-    - invented_run_id_as_fact
-    - invented_bootstrap_command_as_fact
-    - claimed_script_behavior_not_observed_in_allowed_reads
+  mission: >-
+    Résoudre l'ouverture d'un nouveau run sur un scope publié, sans démarrer de
+    stage et sans sortir du contexte minimal autorisé par le protocole d'entrée.
+  entry_binding:
+    expected_mode: no_run_id_mode
+    protocol_anchor: docs/pipelines/constitution/AI_PROTOCOL.yaml
+    stop_after_decision: true
+  allowed_reads:
+    - docs/pipelines/constitution/AI_PROTOCOL.yaml
+    - docs/pipelines/constitution/pipeline.md
+    - docs/pipelines/constitution/runs/index.yaml
+    - docs/pipelines/constitution/scope_catalog/manifest.yaml
+    - docs/pipelines/constitution/scope_catalog/governance_backlog.yaml
+  forbidden_before_resolution:
+    - any_search
+    - compare_commits
+    - docs/cores/current/constitution.yaml
+    - docs/cores/current/referentiel.yaml
+    - docs/cores/current/link.yaml
+    - docs/prompts/shared/Challenge_constitution.md
+    - docs/prompts/shared/Make04ConstitutionArbitrage.md
+    - docs/pipelines/constitution/inputs/*
+    - docs/pipelines/constitution/work/*
+    - docs/pipelines/constitution/reports/*
+    - docs/pipelines/constitution/archive/*
+    - docs/patcher/shared/*
+    - tmp/*
+  preconditions:
+    - no_active_run_required_for_recommended_default
+    - scope_key_must_be_published
+    - scope_maturity_must_be_available_for_run
+  resolution_rules:
+    - confirm no active run from runs/index.yaml
+    - confirm target scope is present in scope_catalog/manifest.yaml
+    - confirm governance_backlog signal if open entries exist
+    - do not invent repo-wide bootstrap mechanics beyond what is explicitly documented
+    - do not start STAGE_01_CHALLENGE
+    - do not emit or apply stage transition commands
+  forbidden_actions:
+    - direct_write_of_runs_index
+    - direct_write_of_run_manifest
+    - direct_write_of_run_context
+    - implicit_stage_start
+    - archive_read_for_bootstrap_inference
+    - launcher_or_script_read_outside_allowed_reads
+  required_outputs:
+    decision_payload:
+      - entry_decision
+      - target_scope_key
+      - scope_publication_status
+      - active_runs_count
+      - governance_backlog_signal
+      - open_materialization_status
+    allowed_entry_decision_values:
+      - open_new_run_authorized
+      - open_new_run_blocked
+      - partition_refresh_preferred
+  stop_condition:
+    - stop once entry decision is resolved
+    - if no explicit open-only deterministic bootstrap is documented in allowed reads, state that material opening is not resolved and stop
+  response_contract:
+    must_state:
+      - whether opening a new run is authorized
+      - whether material run creation is explicitly documented within the allowed read surface
+      - that no stage has been started
+    must_not_state:
+      - invented_run_id_as_fact
+      - invented_bootstrap_command_as_fact
+      - claimed_script_behavior_not_observed_in_allowed_reads

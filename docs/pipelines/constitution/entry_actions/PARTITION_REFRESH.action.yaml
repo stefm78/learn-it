@@ -4,57 +4,48 @@ entry_action:
   action_id: PARTITION_REFRESH
   action_kind: entry_resolution
   authoritative_role: stable_entry_contract
-
-mission: >-
-  Résoudre le déclenchement du refresh optionnel de partition des scopes,
-  uniquement quand aucun run actif n'est ouvert, sans le confondre avec
-  l'ouverture d'un run métier.
-
-entry_binding:
-  expected_mode: partition_refresh_mode
-  protocol_anchor: docs/pipelines/constitution/AI_PROTOCOL.yaml
-  stop_after_decision: true
-
-allowed_reads:
-  - docs/pipelines/constitution/AI_PROTOCOL.yaml
-  - docs/pipelines/constitution/pipeline.md
-  - docs/pipelines/constitution/runs/index.yaml
-  - docs/pipelines/constitution/STAGE_00_SCOPE_PARTITION_REVIEW_AND_REGEN.md
-  - docs/pipelines/constitution/policies/scope_generation/policy.yaml
-  - docs/pipelines/constitution/policies/scope_generation/decisions.yaml
-  - docs/pipelines/constitution/scope_catalog/manifest.yaml
-  - docs/pipelines/constitution/scope_catalog/governance_backlog.yaml
-
-forbidden_before_resolution:
-  - any_search
-  - compare_commits
-  - docs/cores/current/*
-  - docs/pipelines/constitution/archive/*
-  - tmp/*
-
-preconditions:
-  - no_active_runs_required
-
-resolution_rules:
-  - confirm no active run in runs/index.yaml
-  - read governance backlog before semantic assessment
-  - mandatory deterministic analysis script exists and must not be simulated
-  - do not declare STAGE_00 done at entry time
-
-required_outputs:
-  decision_payload:
-    - entry_decision
-    - active_runs_count
-    - governance_backlog_signal
-    - mandatory_script_requirement
-  allowed_entry_decision_values:
-    - partition_refresh_authorized
-    - partition_refresh_blocked
-
-stop_condition:
-  - stop after partition refresh decision
-
-forbidden_actions:
-  - partition_refresh_if_active_run_exists
-  - simulated_stage_00_script_execution
-  - direct_publication_of_scope_catalog
+  mission: >-
+    Résoudre le déclenchement du refresh optionnel de partition des scopes,
+    uniquement quand aucun run actif n'est ouvert, sans le confondre avec
+    l'ouverture d'un run métier.
+  entry_binding:
+    expected_mode: partition_refresh_mode
+    protocol_anchor: docs/pipelines/constitution/AI_PROTOCOL.yaml
+    stop_after_decision: true
+  allowed_reads:
+    - docs/pipelines/constitution/AI_PROTOCOL.yaml
+    - docs/pipelines/constitution/pipeline.md
+    - docs/pipelines/constitution/runs/index.yaml
+    - docs/pipelines/constitution/STAGE_00_SCOPE_PARTITION_REVIEW_AND_REGEN.md
+    - docs/pipelines/constitution/policies/scope_generation/policy.yaml
+    - docs/pipelines/constitution/policies/scope_generation/decisions.yaml
+    - docs/pipelines/constitution/scope_catalog/manifest.yaml
+    - docs/pipelines/constitution/scope_catalog/governance_backlog.yaml
+  forbidden_before_resolution:
+    - any_search
+    - compare_commits
+    - docs/cores/current/*
+    - docs/pipelines/constitution/archive/*
+    - tmp/*
+  preconditions:
+    - no_active_runs_required
+  resolution_rules:
+    - confirm no active run in runs/index.yaml
+    - read governance backlog before semantic assessment
+    - mandatory deterministic analysis script exists and must not be simulated
+    - do not declare STAGE_00 done at entry time
+  required_outputs:
+    decision_payload:
+      - entry_decision
+      - active_runs_count
+      - governance_backlog_signal
+      - mandatory_script_requirement
+    allowed_entry_decision_values:
+      - partition_refresh_authorized
+      - partition_refresh_blocked
+  stop_condition:
+    - stop after partition refresh decision
+  forbidden_actions:
+    - partition_refresh_if_active_run_exists
+    - simulated_stage_00_script_execution
+    - direct_publication_of_scope_catalog
