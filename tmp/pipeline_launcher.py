@@ -55,15 +55,15 @@ MATURITY_LEVELS: list[tuple[str, int, int]] = [
 MATURITY_MINIMUM_LEVEL = "L2_usable_with_care"  # minimum for recommended runs
 MATURITY_GATED_LEVELS = {"L0_experimental", "L1_fragile"}  # blocked in menu
 
-# Stage order used to determine whether a run reached STAGE_06_CORE_VALIDATION.
-# A run is consolidation-eligible if its current_stage is at or beyond this.
-CONSOLIDATION_ELIGIBLE_STAGES = {
+# Stages at which a run is considered pending promotion (not yet promoted).
+# A run is consolidation-eligible ONLY if its current_stage is in this set.
+# STAGE_08_PROMOTE_CURRENT and beyond are excluded: a run that reached
+# STAGE_08 has already promoted its outputs to docs/cores/current and must
+# not be included in a new consolidation pass.
+CONSOLIDATION_PENDING_STAGES = {
     "STAGE_06_CORE_VALIDATION",
     "STAGE_06B_CONSOLIDATION",
     "STAGE_07_RELEASE_MATERIALIZATION",
-    "STAGE_08_PROMOTE_CURRENT",
-    "STAGE_09_CLOSEOUT_AND_ARCHIVE",
-    "DONE",
 }
 
 # Seuil en secondes au-delà duquel un stage in_progress sans update est considéré
@@ -188,10 +188,11 @@ def detect_consolidation_ready(
 
     Conditions:
     - active_runs is empty
-    - At least one closed run is eligible (reached STAGE_06_CORE_VALIDATION+)
-      and not abandoned
-    - All eligible closed runs have integration_gate status cleared/not_applicable
-      OR at least one has it open (still report, but flag pending_gates)
+    - At least one closed run is pending promotion (current_stage in
+      CONSOLIDATION_PENDING_STAGES — i.e. reached STAGE_06 but has NOT
+      yet run STAGE_08_PROMOTE_CURRENT)
+    - Abandoned runs are excluded
+    - Runs at STAGE_08+ are excluded (they already promoted their outputs)
 
     Returns a consolidation_probe dict, or None if conditions not met.
     """
@@ -204,7 +205,8 @@ def detect_consolidation_ready(
         if closure_mode == "abandoned":
             continue
         current_stage = run.get("current_stage", "")
-        if current_stage not in CONSOLIDATION_ELIGIBLE_STAGES:
+        # Only include runs that are pending promotion, not already promoted.
+        if current_stage not in CONSOLIDATION_PENDING_STAGES:
             continue
         run_id = run.get("run_id", "")
         gate_status = probe_integration_gate(pipeline_root, run_id)
@@ -225,16 +227,28 @@ def detect_consolidation_ready(
     all_gates_cleared = len(pending_gates) == 0
     run_ids = [r["run_id"] for r in eligible_runs]
 
-    # Build consolidation command
-    runs_arg = " ".join(run_ids)
-    consolidation_cmd = (
-        f"python docs/patcher/shared/consolidate_parallel_runs.py "
-        f"--runs {runs_arg} "
-        f"--base docs/cores/current "
-        f"--output docs/pipelines/{pipeline_id}/work/consolidation "
-        f"--pipeline {pipeline_id}"
+    # Determine whether this is a solo-run promote or a true parallel consolidation.
+    is_solo_promote = (
+        len(eligible_runs) == 1
+        and eligible_runs[0]["current_stage"] == "STAGE_07_RELEASE_MATERIALIZATION"
     )
-    consolidation_dry_run_cmd = consolidation_cmd + " --dry-run"
+
+    if is_solo_promote:
+        # Single run already at STAGE_07: no consolidation script needed.
+        # Propose STAGE_08_PROMOTE_CURRENT directly on that run.
+        consolidation_cmd = ""
+        consolidation_dry_run_cmd = ""
+    else:
+        # True parallel consolidation: merge N sandboxes into docs/cores/current.
+        runs_arg = " ".join(run_ids)
+        consolidation_cmd = (
+            f"python docs/patcher/shared/consolidate_parallel_runs.py "
+            f"--runs {runs_arg} "
+            f"--base docs/cores/current "
+            f"--output docs/pipelines/{pipeline_id}/work/consolidation "
+            f"--pipeline {pipeline_id}"
+        )
+        consolidation_dry_run_cmd = consolidation_cmd + " --dry-run"
 
     stage_prompt = _build_consolidation_stage_prompt(
         branch=branch,
@@ -245,6 +259,7 @@ def detect_consolidation_ready(
         pending_gates=pending_gates,
         consolidation_dry_run_cmd=consolidation_dry_run_cmd,
         consolidation_cmd=consolidation_cmd,
+        is_solo_promote=is_solo_promote,
     )
 
     return {
@@ -253,6 +268,7 @@ def detect_consolidation_ready(
         "eligible_runs": eligible_runs,
         "all_integration_gates_cleared": all_gates_cleared,
         "pending_gates": pending_gates,
+        "is_solo_promote": is_solo_promote,
         "consolidation_dry_run_cmd": consolidation_dry_run_cmd,
         "consolidation_cmd": consolidation_cmd,
         "stage_prompt": stage_prompt,
@@ -268,6 +284,7 @@ def _build_consolidation_stage_prompt(
     pending_gates: list[dict[str, Any]],
     consolidation_dry_run_cmd: str,
     consolidation_cmd: str,
+    is_solo_promote: bool = False,
 ) -> str:
     runs_list = ", ".join(run_ids)
 
@@ -281,11 +298,27 @@ def _build_consolidation_stage_prompt(
             f"Pour chaque run concerné, effectue la review des gate_checks dans "
             f"runs/<run_id>/inputs/integration_gate.yaml, marque chaque check "
             f"cleared: true et passe status: cleared. "
-            f"Ensuite seulement, exécute la consolidation réelle. "
+            f"Ensuite seulement, exécute la promotion. "
         )
     else:
         gate_block = "Toutes les integration_gates sont cleared. "
 
+    if is_solo_promote:
+        # Single run at STAGE_07: direct promote, no consolidation script.
+        run_id = run_ids[0]
+        return (
+            f"Dans le repo learn-it, sur la branche {branch}, "
+            f"le run {run_id} du pipeline {pipeline_id} est clos à "
+            f"STAGE_07_RELEASE_MATERIALIZATION (run solo — pas de consolidation parallèle nécessaire). "
+            f"{gate_block}"
+            f"Étape unique — Exécuter STAGE_08_PROMOTE_CURRENT directement sur ce run : "
+            f"lire runs/{run_id}/outputs/ et promouvoir les artefacts vers docs/cores/current/. "
+            f"Mettre à jour runs/{run_id}/run_manifest.yaml (current_stage: STAGE_08_PROMOTE_CURRENT, done). "
+            f"Ne lance pas consolidate_parallel_runs.py (script multi-runs uniquement). "
+            f"Produis uniquement les fichiers sous docs/cores/ et runs/{run_id}/."
+        )
+
+    # True parallel consolidation path.
     return (
         f"Dans le repo learn-it, sur la branche {branch}, "
         f"tous les runs du pipeline {pipeline_id} sont clos. "
@@ -735,6 +768,7 @@ def build_parallel_slots(
             "slot": slot_index + 1,
             "pipeline_id": pid,
             "action": "consolidate",
+            "is_solo_promote": consolidation_probe.get("is_solo_promote", False),
             "eligible_runs": consolidation_probe.get("eligible_runs", []),
             "all_integration_gates_cleared": consolidation_probe.get("all_integration_gates_cleared", False),
             "pending_gates": consolidation_probe.get("pending_gates", []),
@@ -936,22 +970,34 @@ def build_consolidate_actions(state: dict[str, Any]) -> dict[str, Any]:
     """Menu legacy pour le cas consolidate (active_runs == 0, consolidation_probe présent)."""
     pipeline_id = state.get("pipeline_id", "constitution")
     probe = state.get("consolidation_probe", {})
+    is_solo_promote = probe.get("is_solo_promote", False)
+    active_stage = (
+        "STAGE_08_PROMOTE_CURRENT"
+        if is_solo_promote
+        else "STAGE_06B_CONSOLIDATION"
+    )
     return {
         "decision_summary": {
             "pipeline_id": pipeline_id,
             "recommended_default": "consolidate",
             "active_run": "",
             "active_scope": "pipeline-level",
-            "active_stage": "STAGE_06B_CONSOLIDATION",
+            "active_stage": active_stage,
+            "is_solo_promote": is_solo_promote,
             "all_integration_gates_cleared": probe.get("all_integration_gates_cleared", False),
             "eligible_runs_count": probe.get("eligible_runs_count", 0),
         },
         "action_menu": [
             {
                 "key": "consolidate",
-                "label": "Run STAGE_06B consolidation then STAGE_07 and STAGE_08",
+                "label": (
+                    "Run STAGE_08_PROMOTE_CURRENT (solo run)"
+                    if is_solo_promote
+                    else "Run STAGE_06B consolidation then STAGE_07 and STAGE_08"
+                ),
                 "available": True,
                 "recommended": True,
+                "is_solo_promote": is_solo_promote,
                 "eligible_runs": probe.get("eligible_runs", []),
                 "all_gates_cleared": probe.get("all_integration_gates_cleared", False),
                 "pending_gates": probe.get("pending_gates", []),
@@ -965,7 +1011,11 @@ def build_consolidate_actions(state: dict[str, Any]) -> dict[str, Any]:
                 "guidance": (
                     "clear_pending_integration_gates_first"
                     if probe.get("pending_gates")
-                    else "run_dry_run_then_real_consolidation_then_07_then_08"
+                    else (
+                        "run_stage_08_promote_current_directly"
+                        if is_solo_promote
+                        else "run_dry_run_then_real_consolidation_then_07_then_08"
+                    )
                 ),
             }
         },
