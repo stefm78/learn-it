@@ -34,9 +34,9 @@ run_manifest:
   - Premier run instancié à partir du catalogue de scopes constitution. Ce run matérialise
     le pilote learner_state dans le layout cible `runs/<run_id>/...`.
   execution_state:
-    current_stage: STAGE_07_RELEASE_MATERIALIZATION
+    current_stage: RUN_ABANDONED
     last_stage_status: blocked
-    last_updated: '2026-04-12T17:20:32Z'
+    last_updated: '2026-04-14T07:40:18Z'
     next_stage: ''
     completed_stages:
     - STAGE_01_CHALLENGE
@@ -138,11 +138,15 @@ run_manifest:
         to support the real run-aware patched layout, release_plan.yaml was produced
         and validated, but 07B materialization, release creation, promotion, and any
         modification of active cores were intentionally not executed.
+    - stage_id: RUN_ABANDONED
+      stage_status: blocked
+      recorded_at: '2026-04-14T07:40:18Z'
+      summary: Run intentionally closed after 07A test only — 07B never executed,
+        no release materialized, no promotion intended. Scope learner_state to be
+        re-run from scratch if needed.
   scope_tracking:
     scope_status: confirmed_for_bounded_run
-    last_updated: '2026-04-12T17:20:32Z'
-    last_note: Run intentionally closed after successful 07A release classification
-      as a non-finalizing transformation test. build_release_plan.py was corrected
-      to support the real run-aware patched layout, release_plan.yaml was produced
-      and validated, but 07B materialization, release creation, promotion, and any
-      modification of active cores were intentionally not executed.
+    last_updated: '2026-04-14T07:40:18Z'
+    last_note: Run intentionally closed after 07A test only — 07B never executed,
+      no release materialized, no promotion intended. Scope learner_state to be re-run
+      from scratch if needed.
