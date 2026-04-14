@@ -1,0 +1,119 @@
+run_context_runtime_view_schema:
+  schema_version: 0.1
+  pipeline_id: constitution
+  purpose: >-
+    Définir les champs supplémentaires que `run_context.yaml` doit exposer pour
+    servir de task view dérivée exécutable par une IA de stage, sans créer de
+    `*.task.yaml` persistés par run.
+
+principles:
+  - run_context_is_derived_only
+  - no_persisted_per_run_task_capsules
+  - stage_rules_live_in_stage_skills
+  - runtime_binding_lives_in_run_context
+  - deterministic_scripts_must_remain_explicit
+
+required_runtime_fields:
+  - next_executable_stage
+  - task_view
+
+field_spec:
+  next_executable_stage:
+    type: string
+    description: >-
+      Stage effectivement actionnable maintenant. En général dérivé de
+      `execution_state.current_stage`, `last_stage_status` et `next_stage`.
+    examples:
+      - STAGE_01_CHALLENGE
+      - STAGE_08_PROMOTE_CURRENT
+
+  task_view:
+    type: mapping
+    required:
+      - stage_id
+      - skill_ref
+      - stage_kind
+      - closure_level
+      - resolved_inputs
+      - execution_paths
+      - required_scripts_status
+      - forbidden_actions
+      - completion_evidence
+      - allowed_transitions
+    fields:
+      stage_id:
+        type: string
+        description: Stage lié à cette task view.
+      skill_ref:
+        type: string
+        description: Chemin vers le skill générique du stage.
+      stage_kind:
+        type: string
+        allowed_values:
+          - cognitive
+          - procedural
+          - hybrid
+      closure_level:
+        type: string
+        allowed_values:
+          - low
+          - medium
+          - high
+      resolved_inputs:
+        type: list
+        description: >-
+          Liste ordonnée des artefacts à lire pour cette instance de run.
+      execution_paths:
+        type: mapping
+        description: >-
+          Répertoire de travail et chemins de sortie attendus pour le stage.
+        recommended_fields:
+          - work_dir
+          - primary_output
+          - reports_dir
+      required_scripts_status:
+        type: mapping
+        description: >-
+          État dérivé des préconditions ou scripts obligatoires pour ce stage.
+        examples:
+          ids_first_materialized: true
+          scope_extract_present: true
+          neighbor_extract_present: true
+      forbidden_actions:
+        type: list
+        description: Interdits spécifiques résolus pour l'instance.
+      completion_evidence:
+        type: list
+        description: >-
+          Traces minimales attendues pour considérer le stage comme effectivement produit.
+      allowed_transitions:
+        type: mapping
+        description: Transitions autorisées depuis ce stage.
+      compact_execution_prompt:
+        type: string
+        optional: true
+        description: >-
+          Prompt compact dérivé ; utile pour le launcher mais non requis comme source canonique.
+
+constitution_stage_01_binding_target:
+  stage_id: STAGE_01_CHALLENGE
+  skill_ref: docs/pipelines/constitution/stages/STAGE_01_CHALLENGE.skill.yaml
+  resolved_inputs_order:
+    - runs/<run_id>/inputs/run_context.yaml
+    - runs/<run_id>/inputs/scope_extract.yaml
+    - runs/<run_id>/inputs/neighbor_extract.yaml
+    - runs/<run_id>/inputs/scope_manifest.yaml
+    - runs/<run_id>/inputs/impact_bundle.yaml
+    - runs/<run_id>/inputs/integration_gate.yaml
+  execution_paths:
+    work_dir: runs/<run_id>/work/01_challenge/
+    primary_output: runs/<run_id>/work/01_challenge/challenge_report_<id>.md
+    reports_dir: runs/<run_id>/reports/
+  required_scripts_status_keys:
+    - scope_extract_present
+    - neighbor_extract_present
+    - ids_first_ready
+
+migration_note: >-
+  Ce schéma cible précède la modification effective de `build_run_context.py`.
+  Il sert de contrat d'implémentation pour éviter une évolution implicite du runtime.
