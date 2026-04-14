@@ -1,0 +1,35 @@
+# Ready-to-promote note
+
+Source candidate validated on terminal closed run:
+- `tmp/build_run_context_runtime_view_candidate_v2.py`
+
+Recommended promotion target:
+- replace `docs/patcher/shared/build_run_context.py`
+
+Recommended final touch before replacement:
+- bump `run_context.schema_version` from `0.2` to `0.3`
+- optionally update the top-level `note` to mention executable or terminal task view
+
+Suggested command from repo root:
+
+```bash
+cp ./tmp/build_run_context_runtime_view_candidate_v2.py ./docs/patcher/shared/build_run_context.py
+```
+
+Windows PowerShell equivalent:
+
+```powershell
+Copy-Item .\tmp\build_run_context_runtime_view_candidate_v2.py .\docs\patcher\shared\build_run_context.py
+```
+
+Immediate next step after promotion:
+- adapt `tmp/pipeline_launcher.py` to consume:
+  - `run_context.next_executable_stage_canonical`
+  - `run_context.terminal_closed`
+  - `run_context.task_view`
+- if `task_view.status == terminal_closed`, do not propose `continue`
+- if `task_view.status == executable`, prefer `task_view.compact_execution_prompt`
+
+Non-blocking follow-ups:
+- add explicit skills for `STAGE_08_PROMOTE_CURRENT` and `STAGE_09_CLOSEOUT_AND_ARCHIVE`
+- then bind stage-specific script status beyond generic fallback
