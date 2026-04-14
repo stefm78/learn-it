@@ -1,0 +1,39 @@
+CLOSEOUT_REPORT:
+  status: PASS
+  pipeline_id: constitution
+  closed_at: '2026-04-14T07:15:05Z'
+  run_closed: true
+  release_id: CORE_RELEASE_2026_04_13_R02
+  source_release_path: docs/cores/releases/CORE_RELEASE_2026_04_13_R02/
+  promotion_mode: already_current
+  archive_path: docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_13_PATCH_LIFECYCLE_R01/archive/CORE_RELEASE_2026_04_13_R02
+  archived_paths:
+  - docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_13_PATCH_LIFECYCLE_R01/archive/CORE_RELEASE_2026_04_13_R02/work/consolidation
+  - docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_13_PATCH_LIFECYCLE_R01/archive/CORE_RELEASE_2026_04_13_R02/work/consolidation/.gitkeep
+  - docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_13_PATCH_LIFECYCLE_R01/archive/CORE_RELEASE_2026_04_13_R02/work/consolidation/README.md
+  - docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_13_PATCH_LIFECYCLE_R01/archive/CORE_RELEASE_2026_04_13_R02/reports/closeout_report.yaml
+  - docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_13_PATCH_LIFECYCLE_R01/archive/CORE_RELEASE_2026_04_13_R02/reports/core_validation_report.md
+  - docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_13_PATCH_LIFECYCLE_R01/archive/CORE_RELEASE_2026_04_13_R02/reports/patch_execution_report.yaml
+  - docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_13_PATCH_LIFECYCLE_R01/archive/CORE_RELEASE_2026_04_13_R02/reports/promotion_report.yaml
+  - docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_13_PATCH_LIFECYCLE_R01/archive/CORE_RELEASE_2026_04_13_R02/reports/release_materialization_report.yaml
+  - docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_13_PATCH_LIFECYCLE_R01/archive/CORE_RELEASE_2026_04_13_R02/reports/scope_partition_review_report.yaml
+  - docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_13_PATCH_LIFECYCLE_R01/archive/CORE_RELEASE_2026_04_13_R02/outputs/final_run_summary.md
+  - docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_13_PATCH_LIFECYCLE_R01/archive/CORE_RELEASE_2026_04_13_R02/outputs/release_candidate_notes.md
+  work_reset: true
+  active_cores:
+  - role: constitution
+    file: constitution.yaml
+    core_id: CORE_LEARNIT_CONSTITUTION_V3_0
+    version: V3_0_FINAL
+  - role: referentiel
+    file: referentiel.yaml
+    core_id: CORE_LEARNIT_REFERENTIEL_v3.0
+    version: V3_0_FINAL
+  - role: link
+    file: link.yaml
+    core_id: CORE_LINK_LEARNIT_CONSTITUTION_V3_0__REFERENTIEL_v3.0
+    version: V3_0__V3_0_FINAL
+  notes:
+  - run clôturé après promotion active vérifiée
+  - run archivé sous docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_13_PATCH_LIFECYCLE_R01/archive/CORE_RELEASE_2026_04_13_R02
+  - workspace docs/pipelines/constitution/work/ réinitialisé pour une nouvelle exécution

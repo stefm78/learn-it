@@ -1,0 +1,14 @@
+PROMOTION_REPORT:
+  status: PASS
+  release_id: CORE_RELEASE_2026_04_02_R01
+  source_release_path: docs/cores/releases/CORE_RELEASE_2026_04_02_R01/
+  promotion_mode: applied
+  files_promoted:
+  - docs/cores/current/constitution.yaml
+  - docs/cores/current/referentiel.yaml
+  - docs/cores/current/link.yaml
+  - docs/cores/current/manifest.yaml
+  current_manifest_updated: true
+  notes:
+  - release CORE_RELEASE_2026_04_02_R01 promue vers docs/cores/current/
+  - manifest courant dérivé du manifest de la release promue
