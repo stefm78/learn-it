@@ -1,0 +1,52 @@
+entry_action:
+  schema_version: 0.1
+  pipeline_id: constitution
+  action_id: CONTINUE_ACTIVE_RUN
+  action_kind: entry_resolution
+  authoritative_role: stable_entry_contract
+  mission: >-
+    Résoudre la continuation d'un run actif existant, sans ouvrir de nouveau run
+    et sans relire plus large que nécessaire avant sélection du run.
+  entry_binding:
+    expected_mode: no_run_id_mode
+    protocol_anchor: docs/pipelines/constitution/AI_PROTOCOL.yaml
+    stop_after_decision: true
+  allowed_reads:
+    - docs/pipelines/constitution/AI_PROTOCOL.yaml
+    - docs/pipelines/constitution/pipeline.md
+    - docs/pipelines/constitution/runs/index.yaml
+    - docs/pipelines/constitution/scope_catalog/manifest.yaml
+    - docs/pipelines/constitution/scope_catalog/governance_backlog.yaml
+  forbidden_before_resolution:
+    - any_search
+    - compare_commits
+    - docs/cores/current/*
+    - docs/pipelines/constitution/inputs/*
+    - docs/pipelines/constitution/work/*
+    - docs/pipelines/constitution/reports/*
+    - docs/pipelines/constitution/archive/*
+    - docs/patcher/shared/*
+    - tmp/*
+  preconditions:
+    - exactly_one_active_run_recommended
+  resolution_rules:
+    - identify active run from runs/index.yaml only
+    - surface current stage and scope key from index-level state only
+    - do not deep-read run files at entry resolution time
+    - do not open another run implicitly
+  required_outputs:
+    decision_payload:
+      - entry_decision
+      - active_run_id
+      - active_scope_key
+      - active_current_stage
+    allowed_entry_decision_values:
+      - continue_active_run_authorized
+      - continue_active_run_blocked
+      - disambiguation_required
+  stop_condition:
+    - stop once continue-or-not decision is resolved
+  forbidden_actions:
+    - implicit_resume_with_deep_read
+    - direct_transition_to_stage_execution
+    - opening_new_run_without_user_choice
