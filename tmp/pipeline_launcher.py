@@ -194,6 +194,12 @@ def detect_consolidation_ready(
     - Abandoned runs are excluded
     - Runs at STAGE_08+ are excluded (they already promoted their outputs)
 
+    Solo-promote rule:
+    - If exactly 1 eligible run exists (regardless of its current_stage),
+      it is a solo run: no consolidate_parallel_runs.py call is needed.
+      The stage_prompt drives directly to the appropriate next stage
+      (STAGE_07 if at STAGE_06, or STAGE_08 if already at STAGE_07).
+
     Returns a consolidation_probe dict, or None if conditions not met.
     """
     if active_runs:
@@ -227,15 +233,14 @@ def detect_consolidation_ready(
     all_gates_cleared = len(pending_gates) == 0
     run_ids = [r["run_id"] for r in eligible_runs]
 
-    # Determine whether this is a solo-run promote or a true parallel consolidation.
-    is_solo_promote = (
-        len(eligible_runs) == 1
-        and eligible_runs[0]["current_stage"] == "STAGE_07_RELEASE_MATERIALIZATION"
-    )
+    # FIX 1: is_solo_promote triggers for ANY single eligible run,
+    # regardless of current_stage. A solo run must never call
+    # consolidate_parallel_runs.py — that script is for N>=2 sandboxes.
+    is_solo_promote = len(eligible_runs) == 1
 
     if is_solo_promote:
-        # Single run already at STAGE_07: no consolidation script needed.
-        # Propose STAGE_08_PROMOTE_CURRENT directly on that run.
+        # Single run: no consolidation script needed.
+        # stage_prompt will drive to next stage based on current_stage.
         consolidation_cmd = ""
         consolidation_dry_run_cmd = ""
     else:
@@ -304,18 +309,37 @@ def _build_consolidation_stage_prompt(
         gate_block = "Toutes les integration_gates sont cleared. "
 
     if is_solo_promote:
-        # Single run at STAGE_07: direct promote, no consolidation script.
+        # FIX 1: solo path — adapt wording to the actual current_stage of the run.
         run_id = run_ids[0]
+        run_current_stage = eligible_runs[0]["current_stage"] if eligible_runs else ""
+
+        if run_current_stage == "STAGE_07_RELEASE_MATERIALIZATION":
+            # Already at STAGE_07: drive directly to STAGE_08.
+            next_step = (
+                f"Étape unique — Exécuter STAGE_08_PROMOTE_CURRENT directement sur ce run : "
+                f"lire runs/{run_id}/outputs/ et promouvoir les artefacts vers docs/cores/current/. "
+                f"Mettre à jour runs/{run_id}/run_manifest.yaml "
+                f"(current_stage: STAGE_08_PROMOTE_CURRENT, done). "
+                f"Produis uniquement les fichiers sous docs/cores/ et runs/{run_id}/."
+            )
+        else:
+            # At STAGE_06 or STAGE_06B: drive to STAGE_07 then STAGE_08.
+            next_step = (
+                f"Étape 1 — Exécuter STAGE_07_RELEASE_MATERIALIZATION sur ce run : "
+                f"lire runs/{run_id}/outputs/ et matérialiser les release notes. "
+                f"Étape 2 — Enchaîner STAGE_08_PROMOTE_CURRENT : "
+                f"promouvoir les artefacts vers docs/cores/current/. "
+                f"Mettre à jour runs/{run_id}/run_manifest.yaml à chaque étape. "
+                f"Produis uniquement les fichiers sous docs/cores/ et runs/{run_id}/."
+            )
+
         return (
             f"Dans le repo learn-it, sur la branche {branch}, "
             f"le run {run_id} du pipeline {pipeline_id} est clos à "
-            f"STAGE_07_RELEASE_MATERIALIZATION (run solo — pas de consolidation parallèle nécessaire). "
+            f"{run_current_stage} (run solo — pas de consolidation parallèle nécessaire). "
             f"{gate_block}"
-            f"Étape unique — Exécuter STAGE_08_PROMOTE_CURRENT directement sur ce run : "
-            f"lire runs/{run_id}/outputs/ et promouvoir les artefacts vers docs/cores/current/. "
-            f"Mettre à jour runs/{run_id}/run_manifest.yaml (current_stage: STAGE_08_PROMOTE_CURRENT, done). "
             f"Ne lance pas consolidate_parallel_runs.py (script multi-runs uniquement). "
-            f"Produis uniquement les fichiers sous docs/cores/ et runs/{run_id}/."
+            f"{next_step}"
         )
 
     # True parallel consolidation path.
@@ -746,11 +770,18 @@ def build_parallel_slots(
     2. Runs actifs (continue) — triés par pipeline, puis par maturité scope décroissante
     3. Scopes sans run actif disponibles (open_new_run) — triés par maturité décroissante
 
+    FIX 2: open_new_run candidates from a pipeline with a consolidation_probe
+    are now allowed for slots 2-N (once slot 1 consolidation is assigned).
+    They are flagged parallel_with_consolidation: true so the AI knows to run
+    them independently and not touch the consolidation pipeline's outputs.
+
     Chaque slot écrit/lit des fichiers strictement isolés (run_id distinct).
     bootstrap_command inclus uniquement si anomalie détectée.
     """
     slots: list[dict[str, Any]] = []
     slot_index = 0
+    # Track which pipelines have had their consolidation slot assigned.
+    pipelines_with_consolidation_slot: set[str] = set()
 
     # --- Slot consolidation-ready (prioritaire, pipeline-level) ---
     for pipeline_info in pipelines:
@@ -776,6 +807,7 @@ def build_parallel_slots(
             "consolidation_cmd": consolidation_probe.get("consolidation_cmd", ""),
             "stage_prompt": consolidation_probe.get("stage_prompt", ""),
         })
+        pipelines_with_consolidation_slot.add(pid)
         slot_index += 1
 
     # --- Slots continue (runs actifs) ---
@@ -838,8 +870,14 @@ def build_parallel_slots(
             pid = pipeline_info.get("pipeline_id", "")
             ppath = pipeline_info.get("path", f"docs/pipelines/{pid}/pipeline.md")
             state = pipeline_states.get(pid, {})
-            # Ne pas proposer open_new_run si consolidation en attente
-            if state.get("consolidation_probe") and state.get("active_runs_count", 0) == 0:
+            # FIX 2: only block open_new_run if the consolidation slot for this
+            # pipeline has NOT yet been assigned (slot_index == 0 at that point).
+            # Once the consolidation slot is taken, remaining slots may propose
+            # open_new_run on other scopes of the same pipeline — they are
+            # independent and write to a distinct new run_id.
+            has_consolidation_slot = pid in pipelines_with_consolidation_slot
+            if state.get("consolidation_probe") and not has_consolidation_slot:
+                # Consolidation not yet slotted for this pipeline: skip open_new_run.
                 continue
             for scope in state.get("published_scopes", []):
                 sk = scope.get("scope_key", "")
@@ -847,21 +885,27 @@ def build_parallel_slots(
                     continue
                 if f"{pid}:{sk}" in active_run_scope_keys:
                     continue
-                open_candidates.append({
+                candidate: dict[str, Any] = {
                     "pipeline_id": pid,
                     "pipeline_path": ppath,
                     "scope_key": sk,
                     "maturity_score": scope.get("maturity_score", 0),
                     "maturity_level": scope.get("maturity_level", ""),
                     "maturity_pct": maturity_pct(scope.get("maturity_score", 0)),
-                })
+                }
+                if has_consolidation_slot:
+                    # Flag: this open_new_run is parallel to an ongoing consolidation.
+                    # The AI must open the new run in a distinct run_id and must
+                    # NOT touch docs/cores/current until consolidation completes.
+                    candidate["parallel_with_consolidation"] = True
+                open_candidates.append(candidate)
 
         open_candidates.sort(key=lambda x: -x["maturity_score"])
 
         for candidate in open_candidates:
             if slot_index >= n:
                 break
-            slots.append({
+            slot_entry: dict[str, Any] = {
                 "slot": slot_index + 1,
                 "pipeline_id": candidate["pipeline_id"],
                 "action": "open_new_run",
@@ -876,7 +920,15 @@ def build_parallel_slots(
                     candidate["maturity_pct"],
                     candidate["maturity_level"],
                 ),
-            })
+            }
+            if candidate.get("parallel_with_consolidation"):
+                slot_entry["parallel_with_consolidation"] = True
+                slot_entry["isolation_note"] = (
+                    "Ce run s'exécute en parallèle d'une consolidation en cours sur ce pipeline. "
+                    "Il doit produire ses livrables uniquement sous runs/<new_run_id>/. "
+                    "Ne pas toucher docs/cores/current avant que la consolidation soit terminée."
+                )
+            slots.append(slot_entry)
             slot_index += 1
 
     return {
