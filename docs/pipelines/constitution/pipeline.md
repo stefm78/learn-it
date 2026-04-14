@@ -7,6 +7,7 @@ scope: core-governance
 ## AI startup note
 
 For AI startup and run resolution, use `docs/pipelines/constitution/AI_PROTOCOL.yaml` as the authoritative entrypoint.
+In no-run-id entry mode, the canonical sequence is: `OPEN_NEW_RUN.action.yaml` for entry decision, then `MATERIALIZE_NEW_RUN.action.yaml` for deterministic run materialization, then stop before `STAGE_01_CHALLENGE` unless explicit continuation is requested.
 
 ## Goal
 
@@ -166,6 +167,25 @@ En mode borné, il bloque toute promotion implicite d'un succès local.
 
 ### `run_manifest`
 Déclare l'identité du run, son `scope_id`, ses chemins d'exécution et la référence vers la scope definition source.
+
+## Canonical entry actions
+
+When the user does not provide a `run_id`, entry is resolved through two distinct canonical actions:
+
+- `docs/pipelines/constitution/entry_actions/OPEN_NEW_RUN.action.yaml`
+  - resolves whether opening a new run is authorized
+  - must stop after the entry decision
+  - must not write tracking files directly
+
+- `docs/pipelines/constitution/entry_actions/MATERIALIZE_NEW_RUN.action.yaml`
+  - materially opens the run through deterministic tracking
+  - materially generates run inputs via `materialize_run_inputs.py`
+  - must stop before `STAGE_01_CHALLENGE`
+
+Structured rule:
+- no-run-id startup must not jump directly from entry decision to STAGE_01
+- run tracking materialization and input materialization are separate mandatory bootstrap acts
+- STAGE_01_CHALLENGE may start only after the run has been materially opened and its inputs materially generated
 
 ## Stages
 

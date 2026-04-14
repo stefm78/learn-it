@@ -6,6 +6,15 @@ ai_protocol:
     - docs/pipelines/constitution/AI_PROTOCOL.yaml
     - docs/pipelines/constitution/pipeline.md
 
+  entry_actions:
+    decision_action_ref: docs/pipelines/constitution/entry_actions/OPEN_NEW_RUN.action.yaml
+    materialization_action_ref: docs/pipelines/constitution/entry_actions/MATERIALIZE_NEW_RUN.action.yaml
+    sequencing_rule: >-
+      En no_run_id_mode, l'ouverture d'un nouveau run suit deux actes canoniques distincts :
+      d'abord OPEN_NEW_RUN pour résoudre la décision d'entrée sans écriture de tracking,
+      puis MATERIALIZE_NEW_RUN pour matérialiser le run via update_run_tracking.py et
+      materialize_run_inputs.py, sans démarrer STAGE_01_CHALLENGE.
+
   state_chain:
     - docs/pipelines/constitution/runs/index.yaml
     - docs/pipelines/constitution/runs/<run_id>/run_manifest.yaml
