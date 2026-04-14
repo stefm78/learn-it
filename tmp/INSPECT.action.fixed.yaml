@@ -1,0 +1,43 @@
+entry_action:
+  schema_version: 0.1
+  pipeline_id: constitution
+  action_id: INSPECT
+  action_kind: entry_resolution
+  authoritative_role: stable_entry_contract
+  mission: >-
+    Inspecter l'état d'entrée ou d'un run déjà identifié sans engager de poursuite
+    d'exécution, sans ouvrir de nouveau run et sans lancer de stage.
+  entry_binding:
+    expected_modes:
+      - no_run_id_mode
+      - run_id_mode
+    protocol_anchor: docs/pipelines/constitution/AI_PROTOCOL.yaml
+    stop_after_decision: true
+  allowed_reads:
+    - docs/pipelines/constitution/AI_PROTOCOL.yaml
+    - docs/pipelines/constitution/pipeline.md
+    - docs/pipelines/constitution/runs/index.yaml
+    - docs/pipelines/constitution/runs/<run_id>/run_manifest.yaml
+    - docs/pipelines/constitution/runs/<run_id>/inputs/run_context.yaml
+  forbidden_before_resolution:
+    - any_search
+    - compare_commits
+    - docs/cores/current/*
+    - docs/pipelines/constitution/archive/*
+    - docs/patcher/shared/*
+    - tmp/*
+  resolution_rules:
+    - if run_id is not provided, inspection remains index-level only
+    - if run_id is provided and run_context exists, read run_context first
+    - inspection must not imply stage start or state change
+  required_outputs:
+    decision_payload:
+      - inspection_target
+      - current_status_summary
+      - next_best_action_optional
+  stop_condition:
+    - stop after inspection summary
+  forbidden_actions:
+    - implicit_resume
+    - implicit_open_new_run
+    - direct_tracking_update
