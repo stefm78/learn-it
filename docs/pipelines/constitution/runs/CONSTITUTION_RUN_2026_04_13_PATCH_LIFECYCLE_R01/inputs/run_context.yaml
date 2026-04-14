@@ -63,31 +63,15 @@ run_context:
     total_checks: 6
     cleared_checks: 6
     promotion_blocked: false
-  release:
-    release_id: CORE_RELEASE_2026_04_13_R01
-    release_path: docs/cores/releases/CORE_RELEASE_2026_04_13_R01/
-    change_depth: minor
-    release_required: true
-    promotion_candidate: true
-    promotion_blocked: false
-    manifest_validation: PASS
-    release_plan_validation: PASS
-  promotion:
-    release_id: CORE_RELEASE_2026_04_13_R02
-    promotion_mode: already_current
-    promotion_report_status: PASS
-    current_manifest_updated: false
-    note: La release CORE_RELEASE_2026_04_13_R01 était déjà intégrée dans current/
-      via CORE_RELEASE_2026_04_13_R02 (release consolidante). Promotion idempotente confirmée.
   canonical_refs:
     run_manifest: docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_13_PATCH_LIFECYCLE_R01/run_manifest.yaml
     scope_manifest: docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_13_PATCH_LIFECYCLE_R01/inputs/scope_manifest.yaml
     impact_bundle: docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_13_PATCH_LIFECYCLE_R01/inputs/impact_bundle.yaml
     integration_gate: docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_13_PATCH_LIFECYCLE_R01/inputs/integration_gate.yaml
   source_fingerprints:
-    run_manifest.yaml: 8b173c9ffcc3021b2d5394ba722f15f5fc885b0a84791240fd081c3be1deee23
+    run_manifest.yaml: 9583750b6133760117bec702e4f9c7b933880f3db3b7f9a77d1f2578656ef75d
     scope_manifest.yaml: 3fd1a243570f57a813cf25c12a9a81414403e654ebcf6ab813bc6c8a662a1656
     impact_bundle.yaml: 80a687e2ca6bcbd53a40883af1a0f965bbbd56c69ebba0b55a68e5a23a197943
-    integration_gate.yaml: 28f8ac743bb95f90b65254021115c38765d7eee43958d3bcad47aca81795673d
+    integration_gate.yaml: 3500f648a0637ea707fecc72588cf3c8fa4b2d84e59179ffcde02a2bd269a54c
     scope_extract.yaml: 20a88453173eeb344f912f3995812c25190d0fa765c5eab16eabb803e5bc1b72
     neighbor_extract.yaml: 30393da8d9f08a491c0ff89f1e0c3b99fda59f7c8abe4266095edda9f98e2cec

@@ -28,10 +28,10 @@ run_manifest:
   execution_state:
     opened_at: '2026-04-13T10:58:00Z'
     opened_by: AI
-    current_stage: STAGE_07_RELEASE_MATERIALIZATION
+    current_stage: STAGE_08_PROMOTE_CURRENT
     last_stage_status: done
-    last_updated: '2026-04-13T18:31:04Z'
-    next_stage: STAGE_08_PROMOTE_CURRENT
+    last_updated: '2026-04-14T07:08:57Z'
+    next_stage: STAGE_09_CLOSEOUT
     completed_stages:
     - STAGE_01_CHALLENGE
     - STAGE_02_ARBITRAGE
@@ -40,6 +40,7 @@ run_manifest:
     - STAGE_05_PATCH_APPLICATION
     - STAGE_06_CORE_VALIDATION
     - STAGE_07_RELEASE_MATERIALIZATION
+    - STAGE_08_PROMOTE_CURRENT
     stage_history:
     - stage_id: STAGE_01_CHALLENGE
       stage_status: in_progress
@@ -100,6 +101,18 @@ run_manifest:
     - stage_id: STAGE_07_RELEASE_MATERIALIZATION
       stage_status: done
       recorded_at: '2026-04-13T18:31:04Z'
+      summary: ''
+    - stage_id: STAGE_08_PROMOTE_CURRENT
+      stage_status: done
+      recorded_at: '2026-04-14T07:07:54Z'
+      summary: ''
+    - stage_id: STAGE_08_PROMOTE_CURRENT
+      stage_status: done
+      recorded_at: '2026-04-14T07:08:01Z'
+      summary: ''
+    - stage_id: STAGE_08_PROMOTE_CURRENT
+      stage_status: done
+      recorded_at: '2026-04-14T07:08:57Z'
       summary: ''
   overrides:
     allowed: true

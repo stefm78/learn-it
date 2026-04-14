@@ -2,13 +2,13 @@ runs_index:
   schema_version: 0.1
   pipeline_id: constitution
   status: active
-  last_updated: '2026-04-13'
+  last_updated: '2026-04-14'
   active_runs:
   - run_id: CONSTITUTION_RUN_2026_04_13_PATCH_LIFECYCLE_R01
     scope_id: CONSTITUTION_SCOPE_PATCH_LIFECYCLE
     scope_key: patch_lifecycle
     run_status: active
-    current_stage: STAGE_08_PROMOTE_CURRENT
+    current_stage: STAGE_09_CLOSEOUT
     mode: bounded_local_run
     run_manifest_ref: docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_13_PATCH_LIFECYCLE_R01/run_manifest.yaml
   closed_runs:
