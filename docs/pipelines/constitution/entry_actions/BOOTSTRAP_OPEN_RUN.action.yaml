@@ -1,0 +1,60 @@
+entry_action:
+  schema_version: 0.1
+  pipeline_id: constitution
+  action_id: BOOTSTRAP_OPEN_RUN
+  action_kind: entry_materialization
+  authoritative_role: stable_entry_contract
+  mission: >-
+    Matérialiser un run autorisé en créant le run de façon canonique et déterministe,
+    sans démarrer encore STAGE_01_CHALLENGE. Cette action prend le relais après
+    OPEN_NEW_RUN lorsque la décision d'entrée est autorisée.
+  entry_binding:
+    expected_mode: bootstrap_open_mode
+    protocol_anchor: docs/pipelines/constitution/AI_PROTOCOL.yaml
+    stop_after_decision: false
+  allowed_reads:
+    - docs/pipelines/constitution/AI_PROTOCOL.yaml
+    - docs/pipelines/constitution/pipeline.md
+    - docs/pipelines/constitution/runs/index.yaml
+    - docs/pipelines/constitution/scope_catalog/manifest.yaml
+    - docs/pipelines/constitution/scope_catalog/governance_backlog.yaml
+    - docs/patcher/shared/update_run_tracking.py
+    - docs/patcher/shared/materialize_run_inputs.py
+    - docs/patcher/shared/build_run_context.py
+  forbidden_before_resolution:
+    - any_search
+    - compare_commits
+    - docs/cores/current/*
+    - docs/pipelines/constitution/archive/*
+    - tmp/*
+  preconditions:
+    - open_new_run_authorized_required
+    - no_active_run_required
+    - target_scope_key_must_be_published
+  resolution_rules:
+    - determine the next run_id deterministically from runs/index.yaml
+    - use only canonical deterministic scripts for run tracking and input materialization
+    - do not write runs/index.yaml directly
+    - do not write runs/<run_id>/run_manifest.yaml directly
+    - do not mark STAGE_01_CHALLENGE in_progress during bootstrap_open
+    - stop after the run exists, inputs are materialized, and run_context is built
+  required_outputs:
+    decision_payload:
+      - bootstrap_decision
+      - run_id
+      - bootstrap_commands
+      - materialization_status
+      - run_context_status
+    allowed_entry_decision_values:
+      - bootstrap_open_ready
+      - bootstrap_open_blocked
+  stop_condition:
+    - stop once the run is materially opened and ready for later stage execution
+  response_contract:
+    must_state:
+      - the chosen run_id
+      - the exact deterministic commands used or to be used
+      - that STAGE_01_CHALLENGE has not yet been started
+    must_not_state:
+      - direct file push of tracking artifacts
+      - implicit stage start
