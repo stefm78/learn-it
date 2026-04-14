@@ -8,9 +8,9 @@ run_context:
   mode: bounded_local_run
   status: active
   scope_key: patch_lifecycle
-  current_stage: STAGE_07_RELEASE_MATERIALIZATION
+  current_stage: STAGE_08_PROMOTE_CURRENT
   last_stage_status: done
-  next_stage: STAGE_08_PROMOTE_CURRENT
+  next_stage: STAGE_09_CLOSEOUT
   completed_stages:
   - STAGE_01_CHALLENGE
   - STAGE_02_ARBITRAGE
@@ -19,6 +19,7 @@ run_context:
   - STAGE_05_PATCH_APPLICATION
   - STAGE_06_CORE_VALIDATION
   - STAGE_07_RELEASE_MATERIALIZATION
+  - STAGE_08_PROMOTE_CURRENT
   scope_ids:
   - ACTION_ESCALATE_PERSISTENT_DRIFT_OFFSESSION
   - ACTION_LOG_UNCOVERED_CONFLICT
@@ -58,10 +59,26 @@ run_context:
     missing_ids: []
     ref: runs/CONSTITUTION_RUN_2026_04_13_PATCH_LIFECYCLE_R01/inputs/neighbor_extract.yaml
   integration_gate:
-    status: open
+    status: cleared
     total_checks: 6
-    cleared_checks: 0
-    promotion_blocked: true
+    cleared_checks: 6
+    promotion_blocked: false
+  release:
+    release_id: CORE_RELEASE_2026_04_13_R01
+    release_path: docs/cores/releases/CORE_RELEASE_2026_04_13_R01/
+    change_depth: minor
+    release_required: true
+    promotion_candidate: true
+    promotion_blocked: false
+    manifest_validation: PASS
+    release_plan_validation: PASS
+  promotion:
+    release_id: CORE_RELEASE_2026_04_13_R02
+    promotion_mode: already_current
+    promotion_report_status: PASS
+    current_manifest_updated: false
+    note: La release CORE_RELEASE_2026_04_13_R01 était déjà intégrée dans current/
+      via CORE_RELEASE_2026_04_13_R02 (release consolidante). Promotion idempotente confirmée.
   canonical_refs:
     run_manifest: docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_13_PATCH_LIFECYCLE_R01/run_manifest.yaml
     scope_manifest: docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_13_PATCH_LIFECYCLE_R01/inputs/scope_manifest.yaml
