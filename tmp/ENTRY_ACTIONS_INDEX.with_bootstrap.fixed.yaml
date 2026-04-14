@@ -1,0 +1,21 @@
+entry_actions_index:
+  schema_version: 0.1
+  pipeline_id: constitution
+  purpose: >-
+    Index canonique des contrats d'actions d'entrée consommables par le launcher.
+  entry_actions:
+    - action_id: OPEN_NEW_RUN
+      ref: docs/pipelines/constitution/entry_actions/OPEN_NEW_RUN.action.yaml
+    - action_id: BOOTSTRAP_OPEN_RUN
+      ref: docs/pipelines/constitution/entry_actions/BOOTSTRAP_OPEN_RUN.action.yaml
+    - action_id: CONTINUE_ACTIVE_RUN
+      ref: docs/pipelines/constitution/entry_actions/CONTINUE_ACTIVE_RUN.action.yaml
+    - action_id: DISAMBIGUATE
+      ref: docs/pipelines/constitution/entry_actions/DISAMBIGUATE.action.yaml
+    - action_id: INSPECT
+      ref: docs/pipelines/constitution/entry_actions/INSPECT.action.yaml
+    - action_id: PARTITION_REFRESH
+      ref: docs/pipelines/constitution/entry_actions/PARTITION_REFRESH.action.yaml
+  launcher_rule: >-
+    Le launcher choisit l'action d'entrée adaptée au contexte, puis charge le
+    contrat correspondant et ne fait que résoudre les paramètres d'instance.
