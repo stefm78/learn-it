@@ -1,5 +1,5 @@
 ai_protocol:
-  schema_version: 0.4
+  schema_version: 0.5
   protocol_id: CONSTITUTION_AI_PROTOCOL_V2
   authoritative_for_ai: true
   primary_entrypoint:
@@ -37,6 +37,48 @@ ai_protocol:
       Les scripts (materialize_run_inputs.py, pipeline_launcher.py) lisent
       exclusivement run_manifest.scope_key en source primaire.
       scope_binding.scope_key est conservé comme fallback de robustesse uniquement.
+
+  # ---------------------------------------------------------------------------
+  # RÈGLE CRITIQUE : fichiers de tracking interdits en écriture directe par l'IA
+  # ---------------------------------------------------------------------------
+  forbidden_direct_writes:
+    description: >
+      L'IA ne doit JAMAIS pousser directement les fichiers de tracking d'un run.
+      Ces fichiers sont produits EXCLUSIVEMENT par les scripts déterministes dédiés.
+      Un push direct bypass la logique interne, casse la cohérence entre fichiers
+      canoniques, et compromet la traçabilité déterministe du pipeline.
+    forbidden_files:
+      - pattern: "runs/<run_id>/inputs/run_context.yaml"
+        owner_script: "docs/patcher/shared/build_run_context.py"
+        reason: >
+          run_context.yaml est reconstruit déterministiquement par build_run_context.py
+          à partir de run_manifest.yaml, scope_extract.yaml et neighbor_extract.yaml.
+          Un push manuel produit un fichier incohérent avec les sources canoniques.
+      - pattern: "runs/<run_id>/run_manifest.yaml"
+        owner_script: "docs/patcher/shared/update_run_tracking.py"
+        reason: >
+          run_manifest.yaml est mis à jour exclusivement par update_run_tracking.py.
+          Toute modification directe bypass l'audit trail et les validations du script.
+      - pattern: "runs/<run_id>/run_tracking.yaml"
+        owner_script: "docs/patcher/shared/update_run_tracking.py"
+        reason: >
+          run_tracking.yaml est produit et maintenu exclusivement par update_run_tracking.py.
+      - pattern: "runs/index.yaml"
+        owner_script: "docs/patcher/shared/update_run_tracking.py"
+        reason: >
+          index.yaml est mis à jour par update_run_tracking.py (--close-run notamment).
+          Un push direct casse la synchronisation avec run_manifest.
+    recovery_procedure: >
+      Si l'IA a pushé directement un de ces fichiers par erreur :
+      1. Signaler immédiatement à l'humain.
+      2. Exécuter update_run_tracking.py avec les bons paramètres — cela écrase
+         la version incorrecte par la version déterministe.
+      3. Exécuter build_run_context.py pour reconstruire run_context.yaml.
+      Le push manuel est alors neutralisé par la version canonique.
+    enforcement: >
+      Cette règle est une obligation absolue, pas une recommandation.
+      Elle s'applique même si l'IA juge que le contenu qu'elle produirait
+      serait identique au résultat du script.
 
   no_run_id_mode:
     mode: entry_gate_zero_search
@@ -152,10 +194,12 @@ ai_protocol:
       - the_ai_must_never_simulate_or_assume_execution_of_a_required_script
       - if_the_ai_cannot_execute_the_script_itself_it_must_provide_the_exact_command_to_the_user_and_keep_the_stage_status_non_final_until_real_execution_feedback_is_available
       - logical_review_or_document_reading_may_complement_a_required_script_execution_but_must_never_replace_it
+      - the_ai_must_never_directly_push_files_owned_by_a_deterministic_script_see_forbidden_direct_writes
     examples:
       - stage_01_challenge_requires_materialize_run_inputs_py_execution_before_start_in_bounded_mode
       - stage_04_patch_validation_requires_validate_patchset_py_execution_before_done
       - stage_05_apply_requires_real_apply_patch_py_execution_before_done
+      - run_tracking_update_requires_update_run_tracking_py_not_direct_file_push
 
   tracking:
     # Arguments EXACTS de update_run_tracking.py — ne pas abréger ni renommer.
@@ -208,6 +252,10 @@ ai_protocol:
     - reading_full_core_when_extract_is_available_and_complete
     - ignoring_open_governance_backlog_entries_at_stage_00
     - using_abbreviated_args_for_update_run_tracking_py  # --stage / --status / omitting --pipeline ou --run-status
+    - direct_push_of_run_context_yaml_bypassing_build_run_context_py
+    - direct_push_of_run_manifest_yaml_bypassing_update_run_tracking_py
+    - direct_push_of_run_tracking_yaml_bypassing_update_run_tracking_py
+    - direct_push_of_index_yaml_bypassing_update_run_tracking_py
 
   responses:
     single_active_run: "Je vois un run actif: <RUN_ID> sur <SCOPE_KEY>, actuellement sur <CURRENT_STAGE>. On peut soit continuer ce run, soit ouvrir un nouveau run sur un autre scope publié. Recommandation: continuer le run actif."
