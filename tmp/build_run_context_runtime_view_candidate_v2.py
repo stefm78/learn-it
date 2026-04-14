@@ -35,6 +35,24 @@ try:
 except ImportError as exc:  # pragma: no cover
     raise SystemExit("PyYAML is required.") from exc
 
+STAGE_ALIASES = {
+    "STAGE_05_PATCH_APPLICATION": "STAGE_05_APPLY",
+    "STAGE_09_CLOSEOUT": "STAGE_09_CLOSEOUT_AND_ARCHIVE",
+}
+
+TERMINAL_CLOSED_STAGES = {
+    "STAGE_09_CLOSEOUT",
+    "STAGE_09_CLOSEOUT_AND_ARCHIVE",
+    "RUN_ABANDONED",
+}
+
+
+def canonical_stage_id(stage_id: str) -> str:
+    return STAGE_ALIASES.get(stage_id, stage_id)
+
+
+def is_terminal_closed_run(run_status: str, stage_id: str, last_stage_status: str) -> bool:
+    return run_status == "closed" and stage_id in TERMINAL_CLOSED_STAGES and last_stage_status == "done"
 
 def load_yaml(path: Path) -> Dict[str, Any]:
     if not path.exists():
@@ -81,14 +99,18 @@ def display_path(path: Path, repo_root: Path) -> str:
         return str(path.resolve())
 
 
-def derive_next_executable_stage(exec_state: Dict[str, Any], fallback_current_stage: str) -> str:
-    current_stage = exec_state.get("current_stage") or fallback_current_stage
+def derive_next_executable_stage(exec_state: Dict[str, Any], fallback_current_stage: str, run_status: str) -> tuple[str, str, bool]:
+    raw_current_stage = exec_state.get("current_stage") or fallback_current_stage
     last_stage_status = exec_state.get("last_stage_status", "unknown")
-    next_stage = exec_state.get("next_stage", "")
-    if last_stage_status == "done" and next_stage and next_stage != current_stage:
-        return next_stage
-    return current_stage
+    raw_next_stage = exec_state.get("next_stage", "")
 
+    raw_actionable = raw_current_stage
+    if last_stage_status == "done" and raw_next_stage and raw_next_stage != raw_current_stage:
+        raw_actionable = raw_next_stage
+
+    terminal_closed = is_terminal_closed_run(run_status, raw_actionable, last_stage_status)
+    canonical_actionable = canonical_stage_id(raw_actionable)
+    return raw_actionable, canonical_actionable, terminal_closed
 
 def stage_num(stage_id: str) -> str:
     if stage_id.startswith("STAGE_") and len(stage_id) >= 8:
@@ -216,55 +238,73 @@ def build_task_view(
     pipeline_id: str,
     run_id: str,
     mode: str,
-    next_executable_stage: str,
+    raw_stage_id: str,
+    canonical_stage: str,
+    terminal_closed: bool,
     scope_extract_status: Dict[str, Any],
     neighbor_extract_status: Dict[str, Any],
 ) -> Dict[str, Any]:
     pipeline_model = load_pipeline_model(repo_root, pipeline_id)
-    stage_spec = find_stage_spec(pipeline_model, next_executable_stage)
+    stage_spec = find_stage_spec(pipeline_model, canonical_stage)
     skill_ref = stage_spec.get(
         "primary_skill_ref",
-        f"docs/pipelines/{pipeline_id}/stages/{next_executable_stage}.skill.yaml",
+        f"docs/pipelines/{pipeline_id}/stages/{canonical_stage}.skill.yaml",
     )
     skill = load_stage_skill(repo_root, skill_ref)
 
-    resolved_inputs = resolved_stage_inputs(skill, run_id, mode, next_executable_stage)
+    resolved_inputs = resolved_stage_inputs(skill, run_id, mode, canonical_stage)
     stage_kind = skill.get("stage_kind", "hybrid")
     closure_level = skill.get("closure_level", "medium")
 
     expected_outputs = skill.get("expected_outputs", {}) or {}
     mode_outputs = expected_outputs.get(mode, {}) if isinstance(expected_outputs, dict) else {}
-    primary_output = mode_outputs.get("report_path_pattern") or default_primary_output(run_id, next_executable_stage)
+    primary_output = (
+        mode_outputs.get("report_path_pattern")
+        or default_primary_output(run_id, canonical_stage)
+    )
 
-    return {
-        "stage_id": next_executable_stage,
+    task_view = {
+        "status": "terminal_closed" if terminal_closed else "executable",
+        "raw_stage_id": raw_stage_id,
+        "stage_id": canonical_stage,
         "skill_ref": skill_ref,
         "stage_kind": stage_kind,
         "closure_level": closure_level,
         "resolved_inputs": resolved_inputs,
         "execution_paths": {
-            "work_dir": default_work_dir(run_id, next_executable_stage),
+            "work_dir": default_work_dir(run_id, canonical_stage),
             "primary_output": substitute_run_id(primary_output, run_id),
             "reports_dir": f"runs/{run_id}/reports/",
         },
         "required_scripts_status": derive_required_scripts_status(
-            next_executable_stage,
+            canonical_stage,
             mode,
             scope_extract_status,
             neighbor_extract_status,
         ),
         "forbidden_actions": skill.get("forbidden_actions", []),
         "completion_evidence": skill.get("completion_evidence", {}).get("required", []),
-        "allowed_transitions": skill.get("allowed_transitions", stage_spec.get("transitions", {})),
+        "allowed_transitions": skill.get(
+            "allowed_transitions",
+            stage_spec.get("transitions", {}),
+        ),
         "compact_execution_prompt": derive_compact_execution_prompt(
             pipeline_id,
             run_id,
-            next_executable_stage,
+            canonical_stage,
             mode,
             skill_ref,
             resolved_inputs,
         ),
     }
+
+    if terminal_closed:
+        task_view["terminal_note"] = (
+            "Run closed on a terminal stage. This task view is informative only "
+            "and should not be treated as a next executable action."
+        )
+
+    return task_view
 
 
 def build_run_context(
@@ -289,7 +329,11 @@ def build_run_context(
     last_stage_status = exec_state.get("last_stage_status", "unknown")
     next_stage = exec_state.get("next_stage", current_stage)
     completed_stages: List[str] = exec_state.get("completed_stages", []) or []
-    next_executable_stage = derive_next_executable_stage(exec_state, current_stage)
+    raw_next_executable_stage, canonical_next_executable_stage, terminal_closed = derive_next_executable_stage(
+        exec_state,
+        current_stage,
+        rm.get("status", "active"),
+    )
 
     scope_ids: List[str] = sm.get("writable_perimeter", {}).get("ids", [])
     neighbor_ids: List[str] = ib.get("mandatory_reads", {}).get("ids", [])
@@ -345,11 +389,13 @@ def build_run_context(
         pipeline_id=pipeline_id,
         run_id=run_id,
         mode=mode,
-        next_executable_stage=next_executable_stage,
+        raw_stage_id=raw_next_executable_stage,
+        canonical_stage=canonical_next_executable_stage,
+        terminal_closed=terminal_closed,
         scope_extract_status=scope_extract_status,
         neighbor_extract_status=neighbor_extract_status,
     )
-
+    
     return {
         "run_context": {
             "schema_version": 0.2,
@@ -365,10 +411,15 @@ def build_run_context(
             "status": rm.get("status", "active"),
             "scope_key": rm.get("scope_key"),
             "current_stage": current_stage,
+            "current_stage_canonical": canonical_stage_id(current_stage),
             "last_stage_status": last_stage_status,
             "next_stage": next_stage,
-            "next_executable_stage": next_executable_stage,
+            "next_stage_canonical": canonical_stage_id(next_stage) if next_stage else "",
+            "next_executable_stage": raw_next_executable_stage,
+            "next_executable_stage_canonical": canonical_next_executable_stage,
+            "terminal_closed": terminal_closed,
             "completed_stages": completed_stages,
+            "completed_stages_canonical": [canonical_stage_id(s) for s in completed_stages],
             "scope_ids": sorted(scope_ids),
             "scope_ids_count": len(scope_ids),
             "neighbor_ids": sorted(neighbor_ids),
