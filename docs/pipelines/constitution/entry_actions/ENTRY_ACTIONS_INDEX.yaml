@@ -6,6 +6,8 @@ entry_actions_index:
   entry_actions:
     - action_id: OPEN_NEW_RUN
       ref: docs/pipelines/constitution/entry_actions/OPEN_NEW_RUN.action.yaml
+    - action_id: BOOTSTRAP_OPEN_RUN
+      ref: docs/pipelines/constitution/entry_actions/BOOTSTRAP_OPEN_RUN.action.yaml
     - action_id: CONTINUE_ACTIVE_RUN
       ref: docs/pipelines/constitution/entry_actions/CONTINUE_ACTIVE_RUN.action.yaml
     - action_id: DISAMBIGUATE
