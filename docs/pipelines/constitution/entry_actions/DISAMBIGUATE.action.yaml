@@ -1,0 +1,48 @@
+entry_action:
+  schema_version: 0.1
+  pipeline_id: constitution
+  action_id: DISAMBIGUATE
+  action_kind: entry_resolution
+  authoritative_role: stable_entry_contract
+
+mission: >-
+  Résoudre une situation où plusieurs runs actifs existent, en produisant une
+  courte shortlist et sans engager de lecture profonde ni d'exécution.
+
+entry_binding:
+  expected_mode: no_run_id_mode
+  protocol_anchor: docs/pipelines/constitution/AI_PROTOCOL.yaml
+  stop_after_decision: true
+
+allowed_reads:
+  - docs/pipelines/constitution/AI_PROTOCOL.yaml
+  - docs/pipelines/constitution/pipeline.md
+  - docs/pipelines/constitution/runs/index.yaml
+
+forbidden_before_resolution:
+  - any_search
+  - compare_commits
+  - docs/cores/current/*
+  - docs/pipelines/constitution/runs/<run_id>/*
+  - docs/pipelines/constitution/archive/*
+  - docs/patcher/shared/*
+  - tmp/*
+
+resolution_rules:
+  - identify all active runs from runs/index.yaml
+  - produce only a short choice-oriented summary
+  - do not inspect internal run files before the user or orchestrator chooses one run
+
+required_outputs:
+  decision_payload:
+    - entry_decision
+    - active_runs_shortlist
+  allowed_entry_decision_values:
+    - disambiguation_required
+
+stop_condition:
+  - stop after producing the shortlist and decision
+
+forbidden_actions:
+  - arbitrary_run_selection
+  - deep_read_of_any_run_before_choice
