@@ -1,0 +1,146 @@
+pipeline_model:
+  schema_version: 0.1
+  pipeline_id: constitution
+  authoritative_role: minimal_state_machine
+  purpose: >-
+    Décrire le graphe minimal des stages, transitions et points de contrôle du
+    pipeline constitution, sans dupliquer la logique détaillée des skills ni
+    l'état des runs.
+
+execution_units:
+  run_unit: bounded_local_run
+  promotion_unit: pipeline_level_or_single_run
+  derived_runtime_view: runs/<run_id>/inputs/run_context.yaml
+
+operating_modes:
+  - id: nominal_global
+    description: Pipeline complet sans run_id ni scope borné.
+  - id: bounded_transition
+    description: Mode historique transitoire avec inputs plats.
+  - id: bounded_local_run
+    description: Run borné matérialisé sous runs/<run_id>/.
+  - id: parallel_consolidation
+    description: Consolidation de plusieurs runs clos avant release/promotion.
+  - id: partition_refresh
+    description: Maintenance optionnelle du catalogue de scopes sans run actif.
+
+stages:
+  - stage_id: STAGE_00_SCOPE_PARTITION_REVIEW_AND_REGEN
+    optional: true
+    orchestration_scope: pipeline
+    requires_no_active_run: true
+    primary_skill_ref: docs/pipelines/constitution/stages/STAGE_00_SCOPE_PARTITION_REVIEW_AND_REGEN.skill.yaml
+    deterministic_scripts_required:
+      - docs/patcher/shared/analyze_constitution_scope_partition.py
+      - docs/patcher/shared/generate_constitution_scopes.py
+    transitions:
+      on_done:
+        - ENTRY_RESOLUTION
+  - stage_id: STAGE_01_CHALLENGE
+    optional: false
+    orchestration_scope: run
+    primary_skill_ref: docs/pipelines/constitution/stages/STAGE_01_CHALLENGE.skill.yaml
+    deterministic_scripts_required: []
+    transitions:
+      on_done:
+        - STAGE_02_ARBITRAGE
+  - stage_id: STAGE_02_ARBITRAGE
+    optional: false
+    orchestration_scope: run
+    transitions:
+      on_done:
+        - STAGE_03_PATCH_SYNTHESIS
+  - stage_id: STAGE_03_PATCH_SYNTHESIS
+    optional: false
+    orchestration_scope: run
+    transitions:
+      on_done:
+        - STAGE_04_PATCH_VALIDATION
+  - stage_id: STAGE_04_PATCH_VALIDATION
+    optional: false
+    orchestration_scope: run
+    deterministic_scripts_required:
+      - docs/patcher/shared/validate_patchset.py
+    transitions:
+      on_done:
+        - STAGE_05_APPLY
+      on_failed:
+        - STAGE_03_PATCH_SYNTHESIS
+  - stage_id: STAGE_05_APPLY
+    optional: false
+    orchestration_scope: run
+    deterministic_scripts_required:
+      - docs/patcher/shared/apply_patch.py
+    transitions:
+      on_done:
+        - STAGE_06_CORE_VALIDATION
+  - stage_id: STAGE_06_CORE_VALIDATION
+    optional: false
+    orchestration_scope: run
+    transitions:
+      on_done:
+        - STAGE_07_RELEASE_MATERIALIZATION
+        - STAGE_06B_CONSOLIDATION
+  - stage_id: STAGE_06B_CONSOLIDATION
+    optional: true
+    orchestration_scope: pipeline
+    requires_no_active_run: true
+    deterministic_scripts_required:
+      - docs/patcher/shared/consolidate_parallel_runs.py
+    transitions:
+      on_done:
+        - STAGE_07_RELEASE_MATERIALIZATION
+  - stage_id: STAGE_07_RELEASE_MATERIALIZATION
+    optional: false
+    orchestration_scope: run_or_pipeline
+    deterministic_scripts_required:
+      - docs/patcher/shared/build_release_plan.py
+      - docs/patcher/shared/validate_release_plan.py
+      - docs/patcher/shared/materialize_release.py
+      - docs/patcher/shared/validate_release_manifest.py
+    transitions:
+      on_done:
+        - STAGE_08_PROMOTE_CURRENT
+  - stage_id: STAGE_08_PROMOTE_CURRENT
+    optional: false
+    orchestration_scope: pipeline_or_single_run
+    deterministic_scripts_required:
+      - docs/patcher/shared/promote_current.py
+      - docs/patcher/shared/validate_current_manifest.py
+      - docs/patcher/shared/validate_promotion_report.py
+    transitions:
+      on_done:
+        - STAGE_09_CLOSEOUT_AND_ARCHIVE
+  - stage_id: STAGE_09_CLOSEOUT_AND_ARCHIVE
+    optional: false
+    orchestration_scope: run
+    deterministic_scripts_required:
+      - docs/patcher/shared/closeout_pipeline_run.py
+    transitions:
+      on_done:
+        - ENTRY_RESOLUTION
+
+runtime_contract:
+  next_executable_stage_rule: >-
+    Le prochain stage actionnable est dérivé depuis run_manifest.execution_state
+    puis exposé dans run_context.yaml ; il ne doit pas être réinterprété librement
+    par l'IA.
+  skill_resolution_rule: >-
+    Chaque stage runtime doit référencer un skill générique de stage ; le skill
+    porte les règles stables, le run_context porte la résolution d'instance.
+  no_persisted_task_capsules: true
+
+external_orchestration:
+  launcher_candidate: tmp/pipeline_launcher.py
+  responsibilities:
+    - resolve entry action at low context
+    - choose run / pipeline / orchestration path
+    - detect anomalies and consolidation-ready states
+    - consume run_context first when present
+
+migration_status:
+  status: bootstrap_started
+  note: >-
+    Fichier posé comme base de migration. Les références de skill sont
+    progressivement matérialisées ; pipeline.md reste encore la source
+    opératoire historique tant que la chaîne complète n'est pas validée.
