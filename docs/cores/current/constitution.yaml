@@ -1,13 +1,13 @@
 CORE:
-  id: CORE_LEARNIT_CONSTITUTION_V2_0
+  id: CORE_LEARNIT_CONSTITUTION_V3_0
   core_type: CONSTITUTION
   authority: primary
-  version: V2_0_FINAL
-  description: Core canonique final de la Constitution Learn-it V2_0. Naming normalisé,
+  version: V3_0_FINAL
+  description: Core canonique final de la Constitution Learn-it V3_0. Naming normalisé,
     fermeture locale assurée, références inter-Core explicites matérialisées pour
     fédération avec le Référentiel.
   TYPES:
-  - id: REF_CORE_LEARNIT_REFERENTIEL_V2_0_IN_CONSTITUTION
+  - id: REF_CORE_LEARNIT_REFERENTIEL_V3_0_IN_CONSTITUTION
     authority: reference
     core_type: CONSTITUTION
     source_anchor: '[INTERCORE]'
@@ -15,7 +15,7 @@ CORE:
     relations: []
     patchable: false
     parameterizable: false
-    human_readable: Référence explicite vers le Core Référentiel Learn-it V2.0.
+    human_readable: Référence explicite vers le Core Référentiel Learn-it V3.0.
     logic:
       trigger: null
       condition: null
@@ -119,7 +119,7 @@ CORE:
     core_type: CONSTITUTION
     source_anchor: '[S20]'
     depends_on:
-    - REF_CORE_LEARNIT_REFERENTIEL_V2_0_IN_CONSTITUTION
+    - REF_CORE_LEARNIT_REFERENTIEL_V3_0_IN_CONSTITUTION
     relations: []
     patchable: false
     parameterizable: true
@@ -134,7 +134,7 @@ CORE:
     core_type: CONSTITUTION
     source_anchor: '[S5][S20]'
     depends_on:
-    - REF_CORE_LEARNIT_REFERENTIEL_V2_0_IN_CONSTITUTION
+    - REF_CORE_LEARNIT_REFERENTIEL_V3_0_IN_CONSTITUTION
     relations: []
     patchable: false
     parameterizable: true
@@ -149,7 +149,7 @@ CORE:
     core_type: CONSTITUTION
     source_anchor: '[S8][S20]'
     depends_on:
-    - REF_CORE_LEARNIT_REFERENTIEL_V2_0_IN_CONSTITUTION
+    - REF_CORE_LEARNIT_REFERENTIEL_V3_0_IN_CONSTITUTION
     relations: []
     patchable: false
     parameterizable: true
@@ -312,11 +312,11 @@ CORE:
   - id: TYPE_PATCH_ARTIFACT
     authority: primary
     core_type: CONSTITUTION
-    source_anchor: '[S14][PATCH_V2_0]'
+    source_anchor: '[S14][PATCH_V3_0]'
     depends_on:
     - TYPE_PATCH_IMPACT_SCOPE
     - TYPE_PATCH_QUALITY_GATE
-    - REF_CORE_LEARNIT_REFERENTIEL_V2_0_IN_CONSTITUTION
+    - REF_CORE_LEARNIT_REFERENTIEL_V3_0_IN_CONSTITUTION
     relations:
     - type: requires
       target:
@@ -347,9 +347,19 @@ CORE:
     parameterizable: false
     human_readable: Attribut obligatoire de tout patch.
     logic:
-      trigger: Validation d’un patch
-      condition: Impact_scope calculable.
-      effect: Autorisation de poursuivre la validation locale.
+      trigger: Validation d'un patch
+      condition: 'Impact_scope calculable déterministiquement : l''impact_scope est
+        défini comme l''ensemble structurel des IDs affectés par le patch, calculable
+        par diff déterministe sur les fichiers cibles (aucune évaluation sémantique
+        ou pédagogique n''est autorisée dans ce calcul).
+
+        '
+      effect: 'Autorisation de poursuivre la validation locale si et seulement si
+        l''ensemble des IDs affectés est calculable structurellement. Toute évaluation
+        sémantique ou interprétative nécessaire est déplacée dans la chaîne hors session
+        de QA pédagogique, conformément à INV_PATCH_LOCAL_VALIDATION_MUST_BE_DETERMINISTIC.
+
+        '
       scope: patch_validation
   - id: TYPE_PATCH_QUALITY_GATE
     authority: primary
@@ -575,7 +585,7 @@ CORE:
     source_anchor: '[S14][S20]'
     depends_on:
     - TYPE_PATCH_IMPACT_SCOPE
-    - REF_CORE_LEARNIT_REFERENTIEL_V2_0_IN_CONSTITUTION
+    - REF_CORE_LEARNIT_REFERENTIEL_V3_0_IN_CONSTITUTION
     relations: []
     patchable: false
     parameterizable: false
@@ -657,11 +667,11 @@ CORE:
     core_type: CONSTITUTION
     source_anchor: '[S1]'
     depends_on:
-    - REF_CORE_LEARNIT_REFERENTIEL_V2_0_IN_CONSTITUTION
+    - REF_CORE_LEARNIT_REFERENTIEL_V3_0_IN_CONSTITUTION
     relations:
     - type: governs
       target:
-        id: REF_CORE_LEARNIT_REFERENTIEL_V2_0_IN_CONSTITUTION
+        id: REF_CORE_LEARNIT_REFERENTIEL_V3_0_IN_CONSTITUTION
     patchable: false
     parameterizable: false
     human_readable: Séparation inviolable Constitution/Référentiel.
@@ -719,7 +729,7 @@ CORE:
   - id: INV_KNOWLEDGE_GRAPH_MUST_BE_ACYCLIC
     authority: primary
     core_type: CONSTITUTION
-    source_anchor: '[S4][S18][PATCH_V2_0]'
+    source_anchor: '[S4][S18][PATCH_V3_0]'
     depends_on:
     - TYPE_KNOWLEDGE_GRAPH
     - TYPE_KNOWLEDGE_UNIT
@@ -740,7 +750,7 @@ CORE:
   - id: INV_SECONDARY_RETROGRADATION_IS_NEW_EVENT
     authority: primary
     core_type: CONSTITUTION
-    source_anchor: '[S17c][PATCH_V2_0]'
+    source_anchor: '[S17c][PATCH_V3_0]'
     depends_on:
     - INV_GRAPH_PROPAGATION_ONE_HOP
     - TYPE_KNOWLEDGE_GRAPH
@@ -762,7 +772,7 @@ CORE:
   - id: INV_PATCH_LOCAL_VALIDATION_MUST_BE_DETERMINISTIC
     authority: primary
     core_type: CONSTITUTION
-    source_anchor: '[S14][PATCH_V2_0]'
+    source_anchor: '[S14][PATCH_V3_0]'
     depends_on:
     - TYPE_PATCH_ARTIFACT
     - TYPE_PATCH_IMPACT_SCOPE
@@ -785,7 +795,7 @@ CORE:
   - id: INV_MISSING_KU_TYPE_FORCES_SAFE_FALLBACK
     authority: primary
     core_type: CONSTITUTION
-    source_anchor: '[S12][S14][PATCH_V2_0]'
+    source_anchor: '[S12][S14][PATCH_V3_0]'
     depends_on:
     - TYPE_KNOWLEDGE_UNIT
     - INV_KU_TYPING_REQUIRED
@@ -806,7 +816,7 @@ CORE:
   - id: INV_AR_N2_SHORT_FORM_REQUIRES_EXPLICIT_PRIORITY
     authority: primary
     core_type: CONSTITUTION
-    source_anchor: '[S11][PATCH_V2_0]'
+    source_anchor: '[S11][PATCH_V3_0]'
     depends_on:
     - TYPE_SELF_REPORT_AR_N2
     - TYPE_STATE_AXIS_VALUE_COST
@@ -827,7 +837,7 @@ CORE:
   - id: INV_PERSISTENT_DRIFT_REQUIRES_ESCALATION_IF_PATCH_BLOCKED
     authority: primary
     core_type: CONSTITUTION
-    source_anchor: '[S14][PATCH_V2_0]'
+    source_anchor: '[S14][PATCH_V3_0]'
     depends_on:
     - TYPE_PATCH_ARTIFACT
     - INV_INVALID_PATCH_REJECTED
@@ -837,15 +847,27 @@ CORE:
     human_readable: Une dérive persistante non corrigeable par patch localement valide
       doit être escaladée.
     logic:
-      trigger: Répétition d’un besoin de correction sur plusieurs cycles
-      condition: Le signal de dérive persiste alors que le patch requis reste rejeté
-        ou impossible.
-      effect: Escalade obligatoire hors session vers la chaîne d’analyse/correction.
+      trigger: Répétition d'un besoin de correction sur plusieurs cycles
+      condition: 'Condition primaire : le signal de dérive persiste alors que le patch
+        requis reste rejeté ou impossible (borne d''escalade atteinte). Condition
+        complémentaire (boucle inefficacité) : N patches successifs du même type ont
+        été appliqués sans disparition du signal de dérive, où N est un paramètre
+        délégué au Référentiel (PARAM_REFERENTIEL_MAX_PATCH_ITERATIONS_BEFORE_ESCALATION).
+        Les deux conditions déclenchent indépendamment l''obligation d''escalade.
+
+        '
+      effect: 'Escalade obligatoire hors session vers la chaîne d''analyse/correction.
+        L''escalade s''applique que le patch soit rejeté/impossible (condition primaire)
+        ou que le signal persiste malgré N applications valides successives (condition
+        complémentaire). Aucun maintien implicite dans un état de dérive non traité
+        n''est autorisé dans les deux cas.
+
+        '
       scope: patch_governance
   - id: INV_PATCH_ARTIFACTS_MUST_BE_PRECOMPUTED_OFF_SESSION
     authority: primary
     core_type: CONSTITUTION
-    source_anchor: '[S13][S14][PATCH_V2_0]'
+    source_anchor: '[S13][S14][PATCH_V3_0]'
     depends_on:
     - TYPE_PATCH_ARTIFACT
     - INV_RUNTIME_FULLY_LOCAL
@@ -867,7 +889,7 @@ CORE:
   - id: INV_CREATIVE_KU_AUTONOMY_REQUIRES_DETERMINISTIC_FEEDBACK_PATH
     authority: primary
     core_type: CONSTITUTION
-    source_anchor: '[S12][S17][PATCH_V2_0]'
+    source_anchor: '[S12][S17][PATCH_V3_0]'
     depends_on:
     - TYPE_KNOWLEDGE_UNIT
     - TYPE_FEEDBACK_COVERAGE_MATRIX
@@ -887,7 +909,7 @@ CORE:
     core_type: CONSTITUTION
     source_anchor: '[ARBITRAGE_2026_04_01][REF-FAILSAFE-01]'
     depends_on:
-    - REF_CORE_LEARNIT_REFERENTIEL_V2_0_IN_CONSTITUTION
+    - REF_CORE_LEARNIT_REFERENTIEL_V3_0_IN_CONSTITUTION
     relations:
     - type: constrains
       target:
@@ -999,7 +1021,7 @@ CORE:
     core_type: CONSTITUTION
     source_anchor: '[S5]'
     depends_on:
-    - REF_CORE_LEARNIT_REFERENTIEL_V2_0_IN_CONSTITUTION
+    - REF_CORE_LEARNIT_REFERENTIEL_V3_0_IN_CONSTITUTION
     relations:
     - type: triggers
       target:
@@ -1058,7 +1080,7 @@ CORE:
     source_anchor: '[S17d]'
     depends_on:
     - TYPE_STATE_AXIS_VALUE_COST
-    - REF_CORE_LEARNIT_REFERENTIEL_V2_0_IN_CONSTITUTION
+    - REF_CORE_LEARNIT_REFERENTIEL_V3_0_IN_CONSTITUTION
     relations:
     - type: triggers
       target:
@@ -1079,7 +1101,7 @@ CORE:
     source_anchor: '[S7]'
     depends_on:
     - TYPE_SELF_REPORT_AR_N1
-    - REF_CORE_LEARNIT_REFERENTIEL_V2_0_IN_CONSTITUTION
+    - REF_CORE_LEARNIT_REFERENTIEL_V3_0_IN_CONSTITUTION
     relations:
     - type: triggers
       target:
@@ -1175,7 +1197,7 @@ CORE:
   - id: RULE_LEARNER_STATE_AXIS_UNKNOWN_ALLOWED
     authority: primary
     core_type: CONSTITUTION
-    source_anchor: '[S7][S11][PATCH_V2_0__STAGE03]'
+    source_anchor: '[S7][S11][PATCH_V3_0__STAGE03]'
     depends_on:
     - TYPE_LEARNER_STATE_MODEL
     - TYPE_STATE_AXIS_ACTIVATION
@@ -1207,7 +1229,7 @@ CORE:
     source_anchor: '[ARBITRAGE_2026_04_01][DIVMSC-01]'
     depends_on:
     - EVENT_MSC_PERCEPTION_DIVERGENCE_DETECTED
-    - REF_CORE_LEARNIT_REFERENTIEL_V2_0_IN_CONSTITUTION
+    - REF_CORE_LEARNIT_REFERENTIEL_V3_0_IN_CONSTITUTION
     relations:
     - type: triggers
       target:
@@ -1324,7 +1346,7 @@ CORE:
     - EVENT_SYSTEMIC_INVESTIGATION_AUTO_OPENED
     - EVENT_SYSTEMIC_INVESTIGATION_CLOSED
     - ACTION_ESCALATE_PERSISTENT_DRIFT_OFFSESSION
-    - REF_CORE_LEARNIT_REFERENTIEL_V2_0_IN_CONSTITUTION::PARAM_REFERENTIEL_SYSTEMIC_INVESTIGATION_MAX_WINDOW_SESSIONS
+    - REF_CORE_LEARNIT_REFERENTIEL_V3_0_IN_CONSTITUTION::PARAM_REFERENTIEL_SYSTEMIC_INVESTIGATION_MAX_WINDOW_SESSIONS
     relations:
     - type: triggers
       target:
@@ -1425,6 +1447,39 @@ CORE:
       effect: Sortie explicite du mode probatoire par validation, suspension ou retrait
         ; l’apprenant est informé si un changement visible intervient.
       scope: deployment
+  - id: RULE_PATCH_SERIALIZATION
+    authority: primary
+    core_type: CONSTITUTION
+    source_anchor: '[PATCH_LIFECYCLE_R01][C01]'
+    depends_on:
+    - TYPE_PATCH_ARTIFACT
+    - ACTION_TRIGGER_RELEVANCE_PATCH
+    - ACTION_TRIGGER_AR_SOLLICITATION_PATCH
+    relations:
+    - type: constrains
+      target:
+        id: TYPE_PATCH_ARTIFACT
+    patchable: false
+    parameterizable: false
+    human_readable: 'Un seul patch actif par apprenant à un instant donné ; tout déclenchement
+      concurrent est sérialisé en file d''attente FIFO.
+
+      '
+    logic:
+      trigger: Déclenchement simultané de plusieurs actions de patch
+      condition: 'Plusieurs actions de patch (ACTION_TRIGGER_RELEVANCE_PATCH, ACTION_TRIGGER_AR_SOLLICITATION_PATCH
+        ou toute future action TYPE_PATCH_ARTIFACT) sont déclenchées pour le même
+        apprenant avant qu''un patch actif soit terminé (appliqué, rejeté ou rollbacké).
+
+        '
+      effect: 'Un seul patch est traité à la fois par apprenant. Les déclenchements
+        concurrents sont placés en file d''attente FIFO. Aucun patch concurrent ne
+        peut démarrer tant que le patch actif n''est pas dans un état terminal (appliqué,
+        rejeté ou rollbacké). L''état apprenant ne peut être modifié que par un seul
+        patch actif à la fois, garantissant le déterminisme de l''état résultant.
+
+        '
+      scope: patch_governance
   PARAMETERS:
   - id: PARAM_PROVISIONAL_MASTERY_VERIFICATION_WINDOW
     authority: primary
@@ -1665,7 +1720,7 @@ CORE:
     source_anchor: '[S7][S17d]'
     depends_on:
     - TYPE_STATE_AXIS_VALUE_COST
-    - REF_CORE_LEARNIT_REFERENTIEL_V2_0_IN_CONSTITUTION
+    - REF_CORE_LEARNIT_REFERENTIEL_V3_0_IN_CONSTITUTION
     relations:
     - type: triggers
       target:
@@ -1684,7 +1739,7 @@ CORE:
     source_anchor: '[S7]'
     depends_on:
     - TYPE_SELF_REPORT_AR_N1
-    - REF_CORE_LEARNIT_REFERENTIEL_V2_0_IN_CONSTITUTION
+    - REF_CORE_LEARNIT_REFERENTIEL_V3_0_IN_CONSTITUTION
     relations:
     - type: triggers
       target:
@@ -1702,7 +1757,7 @@ CORE:
     core_type: CONSTITUTION
     source_anchor: '[S5]'
     depends_on:
-    - REF_CORE_LEARNIT_REFERENTIEL_V2_0_IN_CONSTITUTION
+    - REF_CORE_LEARNIT_REFERENTIEL_V3_0_IN_CONSTITUTION
     relations:
     - type: triggers
       target:
@@ -1790,7 +1845,7 @@ CORE:
     depends_on:
     - TYPE_MASTERY_MODEL
     - TYPE_SELF_REPORT_AR_N1
-    - REF_CORE_LEARNIT_REFERENTIEL_V2_0_IN_CONSTITUTION
+    - REF_CORE_LEARNIT_REFERENTIEL_V3_0_IN_CONSTITUTION
     relations:
     - type: triggers
       target:
@@ -1842,7 +1897,7 @@ CORE:
     source_anchor: '[ARBITRAGE_2026_04_01][CONS-ESC-01]'
     depends_on:
     - INV_CONSERVATIVE_RULE_WITHOUT_AR_N1
-    - REF_CORE_LEARNIT_REFERENTIEL_V2_0_IN_CONSTITUTION::PARAM_REFERENTIEL_CONSERVATIVE_SCAFFOLDING_ESCALATION_SESSIONS
+    - REF_CORE_LEARNIT_REFERENTIEL_V3_0_IN_CONSTITUTION::PARAM_REFERENTIEL_CONSERVATIVE_SCAFFOLDING_ESCALATION_SESSIONS
     relations:
     - type: triggers
       target:
@@ -1863,8 +1918,8 @@ CORE:
     core_type: CONSTITUTION
     source_anchor: '[ARBITRAGE_2026_04_01][SYST-OPEN-01]'
     depends_on:
-    - REF_CORE_LEARNIT_REFERENTIEL_V2_0_IN_CONSTITUTION::PARAM_REFERENTIEL_SYSTEMIC_INVESTIGATION_TRIGGER_CONDITIONS
-    - REF_CORE_LEARNIT_REFERENTIEL_V2_0_IN_CONSTITUTION::PARAM_REFERENTIEL_SYSTEMIC_INVESTIGATION_SESSION_THRESHOLD
+    - REF_CORE_LEARNIT_REFERENTIEL_V3_0_IN_CONSTITUTION::PARAM_REFERENTIEL_SYSTEMIC_INVESTIGATION_TRIGGER_CONDITIONS
+    - REF_CORE_LEARNIT_REFERENTIEL_V3_0_IN_CONSTITUTION::PARAM_REFERENTIEL_SYSTEMIC_INVESTIGATION_SESSION_THRESHOLD
     relations:
     - type: triggers
       target:
@@ -1903,7 +1958,7 @@ CORE:
     source_anchor: '[ARBITRAGE_2026_04_01][DISTRESS-01]'
     depends_on:
     - TYPE_STATE_AXIS_ACTIVATION
-    - REF_CORE_LEARNIT_REFERENTIEL_V2_0_IN_CONSTITUTION::PARAM_REFERENTIEL_ACTIVATION_DISTRESS_PERSISTENCE_SESSIONS
+    - REF_CORE_LEARNIT_REFERENTIEL_V3_0_IN_CONSTITUTION::PARAM_REFERENTIEL_ACTIVATION_DISTRESS_PERSISTENCE_SESSIONS
     relations:
     - type: triggers
       target:
@@ -1944,7 +1999,7 @@ CORE:
     source_anchor: '[ARBITRAGE_2026_04_01][GAM-PROB-01]'
     depends_on:
     - RULE_UNVERIFIED_GAMIFICATION_PROBATION
-    - REF_CORE_LEARNIT_REFERENTIEL_V2_0_IN_CONSTITUTION::PARAM_REFERENTIEL_GAMIFICATION_PROBATION_MAX_SESSIONS
+    - REF_CORE_LEARNIT_REFERENTIEL_V3_0_IN_CONSTITUTION::PARAM_REFERENTIEL_GAMIFICATION_PROBATION_MAX_SESSIONS
     relations:
     - type: triggers
       target:
@@ -2031,9 +2086,19 @@ CORE:
     parameterizable: false
     human_readable: Rollback automatique.
     logic:
-      trigger: Échec ou invalidité d’un patch
-      condition: Application incomplète ou validation échouée.
-      effect: Retour à l’état antérieur.
+      trigger: Échec ou invalidité d'un patch
+      condition: 'Application incomplète ou validation échouée. La partialité est
+        détectée comme toute interruption intervenant avant le commit atomique complet
+        de l''ensemble des opérations du patch.
+
+        '
+      effect: 'Retour à l''état identique au snapshot pré-application. Méthode obligatoire
+        : un snapshot de l''état des fichiers cibles doit être capturé avant toute
+        écriture ; en cas de détection de partialité, le snapshot est restauré intégralement.
+        Aucune écriture partielle ne doit subsister après rollback. Le rollback doit
+        être traçable dans le rapport d''exécution.
+
+        '
       scope: patch_layer
   - id: ACTION_LOG_AR_PROXY_DISCORDANCE
     authority: primary
