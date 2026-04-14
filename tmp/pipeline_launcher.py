@@ -9,6 +9,8 @@ Goals:
 - actionable continue-run path
 - scope maturity-aware action ranking and gating
 - parallel-runs: N independent slots across all registered pipelines
+- consolidation-ready detection: when all runs are closed and eligible,
+  automatically propose STAGE_06B → STAGE_07 → STAGE_08 slot.
 
 Maturity model reference:
   docs/transformations/core_modularization/CONSTITUTION_SCOPE_MATURITY_MODEL.md
@@ -36,6 +38,7 @@ from typing import Any
 
 import yaml
 
+
 # ---------------------------------------------------------------------------
 # Maturity model constants (mirror of CONSTITUTION_SCOPE_MATURITY_MODEL.md)
 # ---------------------------------------------------------------------------
@@ -51,6 +54,17 @@ MATURITY_LEVELS: list[tuple[str, int, int]] = [
 ]
 MATURITY_MINIMUM_LEVEL = "L2_usable_with_care"  # minimum for recommended runs
 MATURITY_GATED_LEVELS = {"L0_experimental", "L1_fragile"}  # blocked in menu
+
+# Stage order used to determine whether a run reached STAGE_06_CORE_VALIDATION.
+# A run is consolidation-eligible if its current_stage is at or beyond this.
+CONSOLIDATION_ELIGIBLE_STAGES = {
+    "STAGE_06_CORE_VALIDATION",
+    "STAGE_06B_CONSOLIDATION",
+    "STAGE_07_RELEASE_MATERIALIZATION",
+    "STAGE_08_PROMOTE_CURRENT",
+    "STAGE_09_CLOSEOUT_AND_ARCHIVE",
+    "DONE",
+}
 
 # Seuil en secondes au-delà duquel un stage in_progress sans update est considéré
 # comme potentiellement bloqué (6 heures).
@@ -147,6 +161,147 @@ def probe_run_context(pipeline_root: Path, run_id: str) -> dict[str, Any]:
 
 
 # ---------------------------------------------------------------------------
+# Consolidation-ready detection
+# ---------------------------------------------------------------------------
+
+def probe_integration_gate(pipeline_root: Path, run_id: str) -> str:
+    """Read integration_gate status for a run. Returns status string or 'missing'."""
+    gate_path = pipeline_root / "runs" / run_id / "inputs" / "integration_gate.yaml"
+    if not gate_path.exists():
+        return "missing"
+    gate = load_yaml(gate_path)
+    status = (
+        gate.get("integration_gate", {}).get("status")
+        or gate.get("status", "missing")
+    )
+    return status or "missing"
+
+
+def detect_consolidation_ready(
+    pipeline_root: Path,
+    active_runs: list[dict[str, Any]],
+    closed_runs: list[dict[str, Any]],
+    branch: str,
+    pipeline_id: str,
+) -> dict[str, Any] | None:
+    """Detect whether the pipeline is in consolidation-ready state.
+
+    Conditions:
+    - active_runs is empty
+    - At least one closed run is eligible (reached STAGE_06_CORE_VALIDATION+)
+      and not abandoned
+    - All eligible closed runs have integration_gate status cleared/not_applicable
+      OR at least one has it open (still report, but flag pending_gates)
+
+    Returns a consolidation_probe dict, or None if conditions not met.
+    """
+    if active_runs:
+        return None
+
+    eligible_runs: list[dict[str, Any]] = []
+    for run in closed_runs:
+        closure_mode = run.get("closure_mode", "")
+        if closure_mode == "abandoned":
+            continue
+        current_stage = run.get("current_stage", "")
+        if current_stage not in CONSOLIDATION_ELIGIBLE_STAGES:
+            continue
+        run_id = run.get("run_id", "")
+        gate_status = probe_integration_gate(pipeline_root, run_id)
+        eligible_runs.append({
+            "run_id": run_id,
+            "scope_key": run.get("scope_key", ""),
+            "current_stage": current_stage,
+            "integration_gate_status": gate_status,
+        })
+
+    if not eligible_runs:
+        return None
+
+    pending_gates = [
+        r for r in eligible_runs
+        if r["integration_gate_status"] not in ("cleared", "not_applicable")
+    ]
+    all_gates_cleared = len(pending_gates) == 0
+    run_ids = [r["run_id"] for r in eligible_runs]
+
+    # Build consolidation command
+    runs_arg = " ".join(run_ids)
+    consolidation_cmd = (
+        f"python docs/patcher/shared/consolidate_parallel_runs.py "
+        f"--runs {runs_arg} "
+        f"--base docs/cores/current "
+        f"--output docs/pipelines/{pipeline_id}/work/consolidation "
+        f"--pipeline {pipeline_id}"
+    )
+    consolidation_dry_run_cmd = consolidation_cmd + " --dry-run"
+
+    stage_prompt = _build_consolidation_stage_prompt(
+        branch=branch,
+        pipeline_id=pipeline_id,
+        run_ids=run_ids,
+        eligible_runs=eligible_runs,
+        all_gates_cleared=all_gates_cleared,
+        pending_gates=pending_gates,
+        consolidation_dry_run_cmd=consolidation_dry_run_cmd,
+        consolidation_cmd=consolidation_cmd,
+    )
+
+    return {
+        "consolidation_ready": True,
+        "eligible_runs_count": len(eligible_runs),
+        "eligible_runs": eligible_runs,
+        "all_integration_gates_cleared": all_gates_cleared,
+        "pending_gates": pending_gates,
+        "consolidation_dry_run_cmd": consolidation_dry_run_cmd,
+        "consolidation_cmd": consolidation_cmd,
+        "stage_prompt": stage_prompt,
+    }
+
+
+def _build_consolidation_stage_prompt(
+    branch: str,
+    pipeline_id: str,
+    run_ids: list[str],
+    eligible_runs: list[dict[str, Any]],
+    all_gates_cleared: bool,
+    pending_gates: list[dict[str, Any]],
+    consolidation_dry_run_cmd: str,
+    consolidation_cmd: str,
+) -> str:
+    runs_list = ", ".join(run_ids)
+
+    if not all_gates_cleared:
+        pending_list = ", ".join(
+            f"{r['run_id']} (gate={r['integration_gate_status']})"
+            for r in pending_gates
+        )
+        gate_block = (
+            f"ATTENTION : {len(pending_gates)} integration_gate(s) non cleared : {pending_list}. "
+            f"Pour chaque run concerné, effectue la review des gate_checks dans "
+            f"runs/<run_id>/inputs/integration_gate.yaml, marque chaque check "
+            f"cleared: true et passe status: cleared. "
+            f"Ensuite seulement, exécute la consolidation réelle. "
+        )
+    else:
+        gate_block = "Toutes les integration_gates sont cleared. "
+
+    return (
+        f"Dans le repo learn-it, sur la branche {branch}, "
+        f"tous les runs du pipeline {pipeline_id} sont clos. "
+        f"Runs éligibles à la consolidation : {runs_list}. "
+        f"{gate_block}"
+        f"Étape 1 — Dry-run obligatoire : {consolidation_dry_run_cmd} "
+        f"Étape 2 — Si dry-run PASS, consolidation réelle : {consolidation_cmd} "
+        f"Étape 3 — Enchaîner STAGE_07_RELEASE_MATERIALIZATION sur work/consolidation/. "
+        f"Étape 4 — Enchaîner STAGE_08_PROMOTE_CURRENT. "
+        f"Ne saute aucune étape. Ne simule pas la consolidation. "
+        f"Produis uniquement les fichiers sous docs/pipelines/{pipeline_id}/work/consolidation/ "
+        f"et docs/cores/."
+    )
+
+
+# ---------------------------------------------------------------------------
 # Abnormal state detection — bootstrap_command guard
 # ---------------------------------------------------------------------------
 
@@ -180,11 +335,12 @@ def detect_abnormal_state(
 
         if last_stage_status == "in_progress" and last_updated_str:
             try:
-                last_updated = dt.datetime.fromisoformat(
+                import datetime as dt2
+                last_updated = dt2.datetime.fromisoformat(
                     last_updated_str.replace("Z", "+00:00")
                 )
                 age_s = (
-                    dt.datetime.now(dt.timezone.utc) - last_updated
+                    dt2.datetime.now(dt2.timezone.utc) - last_updated
                 ).total_seconds()
                 if age_s > _IN_PROGRESS_STALE_THRESHOLD_S:
                     return {
@@ -346,7 +502,9 @@ def discover_constitution(repo_root: Path) -> dict[str, Any]:
     scope_catalog = load_yaml(pipeline_root / "scope_catalog" / "manifest.yaml")
     ai_protocol = load_yaml(pipeline_root / "AI_PROTOCOL.yaml")
 
-    active_runs = runs_index.get("runs_index", {}).get("active_runs", [])
+    index_data = runs_index.get("runs_index", {})
+    active_runs = index_data.get("active_runs", [])
+    closed_runs = index_data.get("closed_runs", [])
     published_scopes_raw = scope_catalog.get("scope_catalog", {}).get("published_scopes", [])
 
     enriched_scopes = [enrich_scope_maturity(s) for s in published_scopes_raw]
@@ -365,16 +523,38 @@ def discover_constitution(repo_root: Path) -> dict[str, Any]:
             merged_run["current_stage_source"] = "index.yaml"
         enriched_runs.append({**merged_run, "ids_first": probe})
 
+    # --- Consolidation-ready detection ---
+    consolidation_probe = detect_consolidation_ready(
+        pipeline_root=pipeline_root,
+        active_runs=active_runs,
+        closed_runs=closed_runs,
+        branch="feat/core-modularization-bootstrap",
+        pipeline_id="constitution",
+    )
+
     result: dict[str, Any] = {
         "pipeline_id": "constitution",
         "ai_protocol_present": bool(ai_protocol),
         "active_runs_count": len(active_runs),
         "active_runs": enriched_runs,
+        "closed_runs_count": len(closed_runs),
         "published_scopes": enriched_scopes,
         "maturity_summary": maturity_summary,
     }
 
-    if len(active_runs) == 1:
+    if consolidation_probe:
+        result["consolidation_probe"] = consolidation_probe
+
+    if consolidation_probe and len(active_runs) == 0:
+        # Consolidation takes priority over open_new_run when all runs are closed
+        result.update(
+            {
+                "recommended_action": "consolidate",
+                "other_available_scopes": enriched_scopes,
+                "can_open_new_run_on_other_scope_now": False,  # consolidate first
+            }
+        )
+    elif len(active_runs) == 1:
         run = enriched_runs[0]
         other_scopes = [s for s in enriched_scopes if s.get("scope_key") != run.get("scope_key")]
         result.update(
@@ -529,14 +709,40 @@ def build_parallel_slots(
     """Construit N slots parallèles indépendants, tous pipelines confondus.
 
     Priorité:
-    1. Runs actifs (continue) — triés par pipeline, puis par maturité scope décroissante
-    2. Scopes sans run actif disponibles (open_new_run) — triés par maturité décroissante
+    1. Consolidation-ready (pipeline-level) — passe avant tout
+    2. Runs actifs (continue) — triés par pipeline, puis par maturité scope décroissante
+    3. Scopes sans run actif disponibles (open_new_run) — triés par maturité décroissante
 
     Chaque slot écrit/lit des fichiers strictement isolés (run_id distinct).
     bootstrap_command inclus uniquement si anomalie détectée.
     """
     slots: list[dict[str, Any]] = []
     slot_index = 0
+
+    # --- Slot consolidation-ready (prioritaire, pipeline-level) ---
+    for pipeline_info in pipelines:
+        if slot_index >= n:
+            break
+        pid = pipeline_info.get("pipeline_id", "")
+        state = pipeline_states.get(pid, {})
+        consolidation_probe = state.get("consolidation_probe")
+        if not consolidation_probe:
+            continue
+        if state.get("active_runs_count", 0) > 0:
+            continue  # runs still active — don't propose consolidation yet
+
+        slots.append({
+            "slot": slot_index + 1,
+            "pipeline_id": pid,
+            "action": "consolidate",
+            "eligible_runs": consolidation_probe.get("eligible_runs", []),
+            "all_integration_gates_cleared": consolidation_probe.get("all_integration_gates_cleared", False),
+            "pending_gates": consolidation_probe.get("pending_gates", []),
+            "consolidation_dry_run_cmd": consolidation_probe.get("consolidation_dry_run_cmd", ""),
+            "consolidation_cmd": consolidation_probe.get("consolidation_cmd", ""),
+            "stage_prompt": consolidation_probe.get("stage_prompt", ""),
+        })
+        slot_index += 1
 
     # --- Slots continue (runs actifs) ---
     for pipeline_info in pipelines:
@@ -586,7 +792,6 @@ def build_parallel_slots(
 
     # --- Slots open_new_run (scopes disponibles sans run actif) ---
     if slot_index < n:
-        # Collecter tous les scopes disponibles (maturité >= L2) sans run actif
         active_run_scope_keys: set[str] = set()
         for pid, state in pipeline_states.items():
             for run in state.get("active_runs", []):
@@ -599,6 +804,9 @@ def build_parallel_slots(
             pid = pipeline_info.get("pipeline_id", "")
             ppath = pipeline_info.get("path", f"docs/pipelines/{pid}/pipeline.md")
             state = pipeline_states.get(pid, {})
+            # Ne pas proposer open_new_run si consolidation en attente
+            if state.get("consolidation_probe") and state.get("active_runs_count", 0) == 0:
+                continue
             for scope in state.get("published_scopes", []):
                 sk = scope.get("scope_key", "")
                 if not scope.get("maturity_available_for_run", False):
@@ -614,7 +822,6 @@ def build_parallel_slots(
                     "maturity_pct": maturity_pct(scope.get("maturity_score", 0)),
                 })
 
-        # Trier par maturité décroissante
         open_candidates.sort(key=lambda x: -x["maturity_score"])
 
         for candidate in open_candidates:
@@ -641,7 +848,7 @@ def build_parallel_slots(
     return {
         "parallel_slots_requested": n,
         "parallel_slots_available": len(slots),
-        "parallelism_safe": True,  # chaque slot opère sur un run_id distinct
+        "parallelism_safe": True,
         "slots": slots,
     }
 
@@ -674,13 +881,6 @@ def build_continue_actions(branch: str, state: dict[str, Any], pipeline_path: st
     stage_prompt = build_stage_prompt(
         branch, pipeline_id, pipeline_path, run_id, scope_key, current_stage, ids_first
     )
-
-    next_best: dict[str, Any] = {
-        "stage_prompt": stage_prompt,
-    }
-
-    # bootstrap_command uniquement si anomalie détectée
-    # (dans le mode legacy, on ne fait pas de détection fine — on l'omet)
 
     return {
         "decision_summary": {
@@ -719,7 +919,7 @@ def build_continue_actions(branch: str, state: dict[str, Any], pipeline_path: st
             },
         ],
         "next_best_actions": {
-            "continue": next_best,
+            "continue": {"stage_prompt": stage_prompt},
             "new_run": {
                 "status": "available" if other_scope_choices else "unavailable_now",
                 "scope_choices": other_scope_choices,
@@ -728,6 +928,46 @@ def build_continue_actions(branch: str, state: dict[str, Any], pipeline_path: st
             "inspect": {
                 "guidance": f"Read docs/pipelines/constitution/runs/{run_id}/run_manifest.yaml and recent stage_completion records only.",
             },
+        },
+    }
+
+
+def build_consolidate_actions(state: dict[str, Any]) -> dict[str, Any]:
+    """Menu legacy pour le cas consolidate (active_runs == 0, consolidation_probe présent)."""
+    pipeline_id = state.get("pipeline_id", "constitution")
+    probe = state.get("consolidation_probe", {})
+    return {
+        "decision_summary": {
+            "pipeline_id": pipeline_id,
+            "recommended_default": "consolidate",
+            "active_run": "",
+            "active_scope": "pipeline-level",
+            "active_stage": "STAGE_06B_CONSOLIDATION",
+            "all_integration_gates_cleared": probe.get("all_integration_gates_cleared", False),
+            "eligible_runs_count": probe.get("eligible_runs_count", 0),
+        },
+        "action_menu": [
+            {
+                "key": "consolidate",
+                "label": "Run STAGE_06B consolidation then STAGE_07 and STAGE_08",
+                "available": True,
+                "recommended": True,
+                "eligible_runs": probe.get("eligible_runs", []),
+                "all_gates_cleared": probe.get("all_integration_gates_cleared", False),
+                "pending_gates": probe.get("pending_gates", []),
+            }
+        ],
+        "next_best_actions": {
+            "consolidate": {
+                "consolidation_dry_run_cmd": probe.get("consolidation_dry_run_cmd", ""),
+                "consolidation_cmd": probe.get("consolidation_cmd", ""),
+                "stage_prompt": probe.get("stage_prompt", ""),
+                "guidance": (
+                    "clear_pending_integration_gates_first"
+                    if probe.get("pending_gates")
+                    else "run_dry_run_then_real_consolidation_then_07_then_08"
+                ),
+            }
         },
     }
 
@@ -802,7 +1042,7 @@ def build_disambiguation_actions(branch: str, state: dict[str, Any], pipeline_pa
             "disambiguate": {
                 "guidance": "inspect runs/index.yaml only and ask for a short choice among active runs",
                 "entry_prompt": (
-                    f"Dans le repo learn-it, sur la branche {branch}, exécute le pipeline {pipeline_path}. "
+                    f"Dans le repo learn-it, sur la branche {branch}, exécute le pipeline. "
                     f"Pour l'instant, ne résous que la désambiguïsation des runs actifs selon docs/pipelines/{pipeline_id}/AI_PROTOCOL.yaml."
                 ),
             }
@@ -812,6 +1052,8 @@ def build_disambiguation_actions(branch: str, state: dict[str, Any], pipeline_pa
 
 def build_menu(branch: str, state: dict[str, Any], pipeline_path: str) -> dict[str, Any]:
     action = state.get("recommended_action")
+    if action == "consolidate":
+        return build_consolidate_actions(state)
     if action == "continue_active_run":
         return build_continue_actions(branch, state, pipeline_path)
     if action == "open_new_run":
