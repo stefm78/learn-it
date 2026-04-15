@@ -1,0 +1,121 @@
+entry_action:
+  schema_version: 0.1
+  pipeline_id: constitution
+  action_id: MATERIALIZE_NEW_RUN
+  action_kind: entry_materialization
+  authoritative_role: stable_entry_contract
+  mission: >-
+    Matérialiser l'ouverture d'un nouveau run déjà autorisé pour un scope publié,
+    sans démarrer STAGE_01_CHALLENGE, en utilisant exclusivement les scripts
+    déterministes propriétaires des fichiers de tracking et des inputs du run.
+
+  entry_binding:
+    expected_mode: no_run_id_mode
+    protocol_anchor: docs/pipelines/constitution/AI_PROTOCOL.yaml
+    requires_prior_decision: open_new_run_authorized
+    stop_after_materialization: true
+
+  allowed_reads:
+    - docs/pipelines/constitution/AI_PROTOCOL.yaml
+    - docs/pipelines/constitution/pipeline.md
+    - docs/pipelines/constitution/runs/index.yaml
+    - docs/pipelines/constitution/scope_catalog/manifest.yaml
+    - docs/pipelines/constitution/scope_catalog/governance_backlog.yaml
+    - docs/patcher/shared/update_run_tracking.py
+    - docs/patcher/shared/materialize_run_inputs.py
+    - docs/patcher/shared/build_run_context.py
+
+  forbidden_before_resolution:
+    - any_search
+    - compare_commits
+    - docs/cores/current/constitution.yaml
+    - docs/cores/current/referentiel.yaml
+    - docs/cores/current/link.yaml
+    - docs/prompts/shared/Challenge_constitution.md
+    - docs/prompts/shared/Make04ConstitutionArbitrage.md
+    - docs/pipelines/constitution/inputs/*
+    - docs/pipelines/constitution/work/*
+    - docs/pipelines/constitution/reports/*
+    - docs/pipelines/constitution/archive/*
+    - tmp/*
+
+  preconditions:
+    - prior_entry_decision_must_equal_open_new_run_authorized
+    - no_active_run_required
+    - scope_key_must_be_published
+    - scope_maturity_must_be_available_for_run
+
+  canonical_defaults:
+    run_id_pattern: CONSTITUTION_RUN_<YYYY_MM_DD>_<SCOPE_KEY_UPPER>_RNN
+    initial_stage_id: RUN_BOOTSTRAP
+    initial_stage_status: in_progress
+    initial_run_status: bootstrap_open
+    next_best_action_on_success: CONTINUE_ACTIVE_RUN
+
+  resolution_rules:
+    - derive run_id using the documented canonical convention only
+    - use update_run_tracking.py for tracking materialization
+    - do not write runs/index.yaml directly
+    - do not write runs/<run_id>/run_manifest.yaml directly
+    - do not write runs/<run_id>/run_tracking.yaml directly
+    - after tracking materialization, execute materialize_run_inputs.py --run-id <RUN_ID>
+    - after input materialization, execute build_run_context.py for <RUN_ID>
+    - confirm that scope_manifest.yaml, impact_bundle.yaml, integration_gate.yaml and run_context.yaml are materially produced before declaring run readiness
+    - do not start STAGE_01_CHALLENGE
+    - do not emit or apply stage transition commands beyond RUN_BOOTSTRAP materialization
+    - if a required script cannot be executed, emit the exact command and stop non-final
+
+  deterministic_commands:
+    tracking_bootstrap_command_template: >-
+      python docs/patcher/shared/update_run_tracking.py
+      --pipeline constitution
+      --run-id <RUN_ID>
+      --stage-id RUN_BOOTSTRAP
+      --stage-status in_progress
+      --run-status bootstrap_open
+      --next-stage STAGE_01_CHALLENGE
+      --scope-status confirmed_for_bounded_run
+      --summary "Entry authorized; run materially opened for <SCOPE_KEY>; awaiting Stage 01 confirmation."
+    input_materialization_command_template: >-
+      python docs/patcher/shared/materialize_run_inputs.py
+      --run-id <RUN_ID>
+    run_context_build_command_template: >-
+      python docs/patcher/shared/build_run_context.py
+      --pipeline constitution
+      --run-id <RUN_ID>
+
+  required_outputs:
+    materialization_payload:
+      - entry_decision
+      - run_id
+      - target_scope_key
+      - scope_publication_status
+      - active_runs_count
+      - governance_backlog_signal
+      - tracking_materialization_status
+      - input_materialization_status
+      - run_context_status
+      - current_stage
+      - next_best_action
+      - next_best_action_reason
+    allowed_entry_decision_values:
+      - run_materialized
+      - run_materialization_blocked
+      - run_materialization_pending_user_execution
+
+  stop_condition:
+    - stop once tracking, input materialization and run_context build status are resolved
+    - stop before STAGE_01_CHALLENGE starts
+
+  response_contract:
+    must_state:
+      - whether the run was materially opened
+      - whether run inputs were materially generated
+      - whether run_context.yaml was materially generated
+      - the exact run_id if materially observed
+      - that no stage has been started
+      - the next canonical action after successful materialization
+    must_not_state:
+      - invented_run_id_as_fact
+      - simulated_script_execution_as_fact
+      - claimed_stage_start_as_fact
