@@ -60,6 +60,10 @@ entry_action:
       - governance_backlog_signal
       - open_materialization_status
       - next_best_action
+      - next_action_contract_ref
+      - run_id_pattern
+      - canonical_scripts
+      - stop_after_materialization
       - next_best_action_reason
     allowed_entry_decision_values:
       - open_new_run_authorized
