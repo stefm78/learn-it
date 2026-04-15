@@ -12,8 +12,8 @@ ai_protocol:
     sequencing_rule: >-
       En no_run_id_mode, l'ouverture d'un nouveau run suit deux actes canoniques distincts :
       d'abord OPEN_NEW_RUN pour résoudre la décision d'entrée sans écriture de tracking,
-      puis MATERIALIZE_NEW_RUN pour matérialiser le run via update_run_tracking.py et
-      materialize_run_inputs.py, sans démarrer STAGE_01_CHALLENGE.
+      puis MATERIALIZE_NEW_RUN pour matérialiser le run via update_run_tracking.py,
+      materialize_run_inputs.py et build_run_context.py, sans démarrer STAGE_01_CHALLENGE.
 
   state_chain:
     - docs/pipelines/constitution/runs/index.yaml
@@ -31,7 +31,7 @@ ai_protocol:
       - pipeline_id
       - mode
       - status
-      - scope_key        # OBLIGATOIRE à la racine — requis par materialize_run_inputs.py et pipeline_launcher.py
+      - scope_key
       - scope_binding
       - source_state
       - materialized_inputs
@@ -47,9 +47,6 @@ ai_protocol:
       exclusivement run_manifest.scope_key en source primaire.
       scope_binding.scope_key est conservé comme fallback de robustesse uniquement.
 
-  # ---------------------------------------------------------------------------
-  # RÈGLE CRITIQUE : fichiers de tracking interdits en écriture directe par l'IA
-  # ---------------------------------------------------------------------------
   forbidden_direct_writes:
     description: >
       L'IA ne doit JAMAIS pousser directement les fichiers de tracking d'un run.
@@ -60,14 +57,11 @@ ai_protocol:
       - pattern: "runs/<run_id>/inputs/run_context.yaml"
         owner_script: "docs/patcher/shared/build_run_context.py"
         reason: >
-          run_context.yaml est reconstruit déterministiquement par build_run_context.py
-          à partir de run_manifest.yaml, scope_extract.yaml et neighbor_extract.yaml.
-          Un push manuel produit un fichier incohérent avec les sources canoniques.
+          run_context.yaml est reconstruit déterministiquement par build_run_context.py.
       - pattern: "runs/<run_id>/run_manifest.yaml"
         owner_script: "docs/patcher/shared/update_run_tracking.py"
         reason: >
           run_manifest.yaml est mis à jour exclusivement par update_run_tracking.py.
-          Toute modification directe bypass l'audit trail et les validations du script.
       - pattern: "runs/<run_id>/run_tracking.yaml"
         owner_script: "docs/patcher/shared/update_run_tracking.py"
         reason: >
@@ -75,19 +69,14 @@ ai_protocol:
       - pattern: "runs/index.yaml"
         owner_script: "docs/patcher/shared/update_run_tracking.py"
         reason: >
-          index.yaml est mis à jour par update_run_tracking.py (--close-run notamment).
-          Un push direct casse la synchronisation avec run_manifest.
+          index.yaml est mis à jour par update_run_tracking.py.
     recovery_procedure: >
       Si l'IA a pushé directement un de ces fichiers par erreur :
       1. Signaler immédiatement à l'humain.
-      2. Exécuter update_run_tracking.py avec les bons paramètres — cela écrase
-         la version incorrecte par la version déterministe.
+      2. Exécuter update_run_tracking.py avec les bons paramètres.
       3. Exécuter build_run_context.py pour reconstruire run_context.yaml.
-      Le push manuel est alors neutralisé par la version canonique.
     enforcement: >
       Cette règle est une obligation absolue, pas une recommandation.
-      Elle s'applique même si l'IA juge que le contenu qu'elle produirait
-      serait identique au résultat du script.
 
   no_run_id_mode:
     mode: entry_gate_zero_search
@@ -122,16 +111,16 @@ ai_protocol:
         - active_scope_key
         - active_current_stage
         - shortlist_of_other_scope_keys
-        - governance_backlog_open_count   # signaler si entrées open dans le backlog
+        - governance_backlog_open_count
+        - next_best_action
+        - next_best_action_reason
+    next_step_policy:
+      after_open_new_run_authorized: MATERIALIZE_NEW_RUN
+      after_partition_refresh_preferred: PARTITION_REFRESH
+      after_single_active_run_preferred: CONTINUE_ACTIVE_RUN
     stop_after_decision: true
 
   run_id_mode:
-    # Ordre de lecture optimal (ids-first, contexte minimal):
-    #   1. run_context.yaml        <- fichier synthétique: run_id, stage, scope_ids, neighbor_ids
-    #   2. scope_extract.yaml      <- entrées Core du scope uniquement
-    #   3. neighbor_extract.yaml   <- entrées Core du voisinage uniquement
-    # Les fichiers ci-dessous restent autorisés mais ne sont plus nécessaires
-    # si run_context.yaml est présent et à jour.
     optimal_read_sequence:
       - docs/pipelines/constitution/runs/<run_id>/inputs/run_context.yaml
       - docs/pipelines/constitution/runs/<run_id>/inputs/scope_extract.yaml
@@ -156,11 +145,9 @@ ai_protocol:
       - docs/pipelines/constitution/inputs/*
     if_run_exists: resume_existing_run
     if_run_missing: emit_next_best_action_only
-    ids_first_rule: >
+    ids_first_rule: >-
       Si run_context.yaml est présent, l'IA DOIT le lire en premier et utiliser
       scope_extract.yaml + neighbor_extract.yaml comme source principale des entrées Core.
-      Les Core complets (constitution.yaml, referentiel.yaml, link.yaml) ne doivent être
-      lus que si missing_ids est non vide dans les extraits.
 
   partition_refresh_mode:
     precondition:
@@ -182,20 +169,6 @@ ai_protocol:
     publication_rule:
       - semantic_review_is_advisory_only_until_policy_and_decisions_are_updated_and_generate_constitution_scopes_py_is_executed
 
-  governance_backlog_rule:
-    backlog_path: docs/pipelines/constitution/scope_catalog/governance_backlog.yaml
-    populated_by: closeout_pipeline_run.py --export-backlog-entries
-    read_mandatory_at:
-      - STAGE_00
-    signal_at_launcher_if_open_entries_for_scope: true
-    stage_00_completion_gate: >
-      Le STAGE_00 ne peut pas être déclaré done si des entrées open n'ont pas été
-      explicitement addressed ou wont_fix avec justification.
-    run_note_rule: >
-      Pendant un run, les notes de gouvernance sont capturées dans arbitrage.md (local run).
-      L'export canonique vers governance_backlog.yaml se fait uniquement en clôture (STAGE_09)
-      via closeout_pipeline_run.py --export-backlog-entries.
-
   deterministic_script_policy:
     mandatory_behavior: true
     rules:
@@ -204,19 +177,8 @@ ai_protocol:
       - if_the_ai_cannot_execute_the_script_itself_it_must_provide_the_exact_command_to_the_user_and_keep_the_stage_status_non_final_until_real_execution_feedback_is_available
       - logical_review_or_document_reading_may_complement_a_required_script_execution_but_must_never_replace_it
       - the_ai_must_never_directly_push_files_owned_by_a_deterministic_script_see_forbidden_direct_writes
-    examples:
-      - stage_01_challenge_requires_materialize_run_inputs_py_execution_before_start_in_bounded_mode
-      - stage_04_patch_validation_requires_validate_patchset_py_execution_before_done
-      - stage_05_apply_requires_real_apply_patch_py_execution_before_done
-      - run_tracking_update_requires_update_run_tracking_py_not_direct_file_push
 
   tracking:
-    # Arguments EXACTS de update_run_tracking.py — ne pas abréger ni renommer.
-    # Erreurs connues à éviter absolument :
-    #   --stage         → INVALIDE  (ambigu entre --stage-id et --stage-status)
-    #   --status        → INVALIDE  (n'existe pas)
-    #   --pipeline omis → INVALIDE  (argument obligatoire)
-    #   --run-status omis → INVALIDE (argument obligatoire)
     required_args:
       - --pipeline constitution
       - --run-id <RUN_ID>
@@ -228,45 +190,14 @@ ai_protocol:
       - --scope-status <SCOPE_STATUS>
       - --summary '<SUMMARY>'
       - --close-run
-    bootstrap_command_template: >-
-      python docs/patcher/shared/update_run_tracking.py
-      --pipeline constitution
-      --run-id <RUN_ID>
-      --stage-id <STAGE_ID>
-      --stage-status in_progress
-      --run-status active
-      --next-stage <STAGE_ID>
-      --scope-status <SCOPE_STATUS>
-      --summary "<ENTRY_DECISION_SUMMARY>"
-    closeout_command_template: >-
-      python docs/patcher/shared/update_run_tracking.py
-      --pipeline constitution
-      --run-id <RUN_ID>
-      --stage-id <STAGE_ID>
-      --stage-status <done|blocked|failed>
-      --run-status <active|blocked|failed|closed>
-      --next-stage <NEXT_STAGE_ID>
-      --scope-status <SCOPE_STATUS>
-      --summary "<STAGE_SUMMARY>"
 
   anti_patterns:
     - deep_read_before_entry_decision
     - repo_wide_search_for_entry_resolution
     - compare_commits_for_entry_resolution
-    - reading_flat_layout_when_run_layout_exists
     - implicit_resume_when_user_did_not_provide_run_id
     - simulating_required_script_execution
-    - declaring_stage_done_without_required_deterministic_script_evidence
-    - opening_run_without_scope_key_at_top_level_of_run_manifest
-    - reading_full_core_when_extract_is_available_and_complete
-    - ignoring_open_governance_backlog_entries_at_stage_00
-    - using_abbreviated_args_for_update_run_tracking_py  # --stage / --status / omitting --pipeline ou --run-status
     - direct_push_of_run_context_yaml_bypassing_build_run_context_py
     - direct_push_of_run_manifest_yaml_bypassing_update_run_tracking_py
     - direct_push_of_run_tracking_yaml_bypassing_update_run_tracking_py
     - direct_push_of_index_yaml_bypassing_update_run_tracking_py
-
-  responses:
-    single_active_run: "Je vois un run actif: <RUN_ID> sur <SCOPE_KEY>, actuellement sur <CURRENT_STAGE>. On peut soit continuer ce run, soit ouvrir un nouveau run sur un autre scope publié. Recommandation: continuer le run actif."
-    no_active_run: "Aucun run actif n'est ouvert. On peut soit ouvrir un nouveau run à partir d'un scope publié, soit lancer un refresh optionnel du partitionnement des scopes avant d'ouvrir de nouveaux runs."
-    ambiguous: "emit_short_next_best_action_only"
