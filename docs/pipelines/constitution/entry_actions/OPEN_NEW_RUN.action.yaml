@@ -42,6 +42,8 @@ entry_action:
     - do not invent repo-wide bootstrap mechanics beyond what is explicitly documented
     - do not start STAGE_01_CHALLENGE
     - do not emit or apply stage transition commands
+    - when entry_decision is open_new_run_authorized, emit next_best_action = MATERIALIZE_NEW_RUN
+    - when entry_decision is partition_refresh_preferred, emit next_best_action = PARTITION_REFRESH
   forbidden_actions:
     - direct_write_of_runs_index
     - direct_write_of_run_manifest
@@ -57,6 +59,8 @@ entry_action:
       - active_runs_count
       - governance_backlog_signal
       - open_materialization_status
+      - next_best_action
+      - next_best_action_reason
     allowed_entry_decision_values:
       - open_new_run_authorized
       - open_new_run_blocked
