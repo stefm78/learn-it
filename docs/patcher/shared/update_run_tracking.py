@@ -19,6 +19,12 @@ Bootstrap creation:
 - Pass --scope-key and --scope-id together with --bootstrap-create to seed
   scope_binding and the top-level scope_key field so that materialize_run_inputs.py
   can resolve the scope without a manual patch step.
+
+Changes in v2:
+- bootstrap passthrough for runs/index.yaml current_stage:
+  when stage_id is in BOOTSTRAP_PASSTHROUGH_STAGES and next_stage is provided,
+  displayed_stage is advanced to next_stage immediately (without waiting for
+  stage_status == 'done'). Aligns index.yaml with build_run_context.py v3 logic.
 """
 
 from __future__ import annotations
@@ -31,6 +37,13 @@ from pathlib import Path
 from typing import Any
 
 import yaml
+
+# Pseudo-stages de bootstrap sans skill.yaml propre : transparents vers next_stage
+# dans index.yaml, sans attendre stage_status == "done".
+# Doit rester synchronisé avec BOOTSTRAP_PASSTHROUGH_STAGES de build_run_context.py.
+BOOTSTRAP_PASSTHROUGH_STAGES = {
+    "RUN_BOOTSTRAP",
+}
 
 
 def utc_now_iso() -> str:
@@ -291,9 +304,13 @@ def update_runs_index(
     if not scope_key and scope_id.startswith("CONSTITUTION_SCOPE_"):
         scope_key = scope_id.replace("CONSTITUTION_SCOPE_", "").lower()
 
-    # current_stage dans index.yaml = next_stage si done, sinon stage_id courant
-    # Cela garantit que le launcher affiche le prochain stage actionnable.
-    displayed_stage = next_stage if (stage_status == "done" and next_stage) else stage_id
+    # current_stage dans index.yaml = next_stage si :
+    #   - stage_status == "done" et next_stage fourni (avancement normal), OU
+    #   - stage_id est un bootstrap passthrough et next_stage fourni (avancement immédiat
+    #     sans attendre "done", symétrique avec build_run_context.py BOOTSTRAP_PASSTHROUGH_STAGES).
+    is_bootstrap_passthrough = stage_id in BOOTSTRAP_PASSTHROUGH_STAGES and bool(next_stage)
+    is_normal_advance = stage_status == "done" and bool(next_stage)
+    displayed_stage = next_stage if (is_normal_advance or is_bootstrap_passthrough) else stage_id
 
     updated_entry: dict[str, Any] = {
         "run_id": run_id,
