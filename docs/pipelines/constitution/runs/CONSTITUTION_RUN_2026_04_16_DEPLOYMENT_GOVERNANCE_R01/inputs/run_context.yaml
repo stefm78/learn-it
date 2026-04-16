@@ -14,8 +14,8 @@ run_context:
   last_stage_status: in_progress
   next_stage: STAGE_01_CHALLENGE
   next_stage_canonical: STAGE_01_CHALLENGE
-  next_executable_stage: RUN_BOOTSTRAP
-  next_executable_stage_canonical: RUN_BOOTSTRAP
+  next_executable_stage: STAGE_01_CHALLENGE
+  next_executable_stage_canonical: STAGE_01_CHALLENGE
   terminal_closed: false
   completed_stages: []
   completed_stages_canonical: []
@@ -64,31 +64,33 @@ run_context:
     integration_gate.yaml: 8e3a00f87c5358fdb0d5f73645bc0031915a5e8473902c5727680c724b6ca8bb
   task_view:
     status: executable
-    raw_stage_id: RUN_BOOTSTRAP
-    stage_id: RUN_BOOTSTRAP
-    skill_ref: docs/pipelines/constitution/stages/RUN_BOOTSTRAP.skill.yaml
-    stage_kind: hybrid
+    raw_stage_id: STAGE_01_CHALLENGE
+    stage_id: STAGE_01_CHALLENGE
+    skill_ref: docs/pipelines/constitution/stages/STAGE_01_CHALLENGE.skill.yaml
+    stage_kind: cognitive
     closure_level: medium
     resolved_inputs:
     - runs/CONSTITUTION_RUN_2026_04_16_DEPLOYMENT_GOVERNANCE_R01/inputs/run_context.yaml
+    - runs/CONSTITUTION_RUN_2026_04_16_DEPLOYMENT_GOVERNANCE_R01/inputs/scope_extract.yaml
+    - runs/CONSTITUTION_RUN_2026_04_16_DEPLOYMENT_GOVERNANCE_R01/inputs/neighbor_extract.yaml
     - runs/CONSTITUTION_RUN_2026_04_16_DEPLOYMENT_GOVERNANCE_R01/inputs/scope_manifest.yaml
     - runs/CONSTITUTION_RUN_2026_04_16_DEPLOYMENT_GOVERNANCE_R01/inputs/impact_bundle.yaml
     - runs/CONSTITUTION_RUN_2026_04_16_DEPLOYMENT_GOVERNANCE_R01/inputs/integration_gate.yaml
     execution_paths:
-      work_dir: runs/CONSTITUTION_RUN_2026_04_16_DEPLOYMENT_GOVERNANCE_R01/work/XX_stage/
-      primary_output: runs/CONSTITUTION_RUN_2026_04_16_DEPLOYMENT_GOVERNANCE_R01/outputs/RUN_BOOTSTRAP.out
+      work_dir: runs/CONSTITUTION_RUN_2026_04_16_DEPLOYMENT_GOVERNANCE_R01/work/01_challenge/
+      primary_output: runs/CONSTITUTION_RUN_2026_04_16_DEPLOYMENT_GOVERNANCE_R01/work/01_challenge/challenge_report_<id>.md
       reports_dir: runs/CONSTITUTION_RUN_2026_04_16_DEPLOYMENT_GOVERNANCE_R01/reports/
     required_scripts_status:
       scope_extract_present: false
       neighbor_extract_present: false
       ids_first_ready: false
-      note: generic runtime status — stage-specific script status not yet bound
     forbidden_actions: []
     completion_evidence: []
     allowed_transitions: {}
-    compact_execution_prompt: Dans le repo learn-it, exécute RUN_BOOTSTRAP du pipeline constitution pour
-      run_id=CONSTITUTION_RUN_2026_04_16_DEPLOYMENT_GOVERNANCE_R01 en mode bounded_local_run. Lis d'abord
-      runs/CONSTITUTION_RUN_2026_04_16_DEPLOYMENT_GOVERNANCE_R01/inputs/run_context.yaml, runs/CONSTITUTION_RUN_2026_04_16_DEPLOYMENT_GOVERNANCE_R01/inputs/scope_manifest.yaml,
+    compact_execution_prompt: Dans le repo learn-it, exécute STAGE_01_CHALLENGE du pipeline constitution
+      pour run_id=CONSTITUTION_RUN_2026_04_16_DEPLOYMENT_GOVERNANCE_R01 en mode bounded_local_run. Lis
+      d'abord runs/CONSTITUTION_RUN_2026_04_16_DEPLOYMENT_GOVERNANCE_R01/inputs/run_context.yaml, runs/CONSTITUTION_RUN_2026_04_16_DEPLOYMENT_GOVERNANCE_R01/inputs/scope_extract.yaml,
+      runs/CONSTITUTION_RUN_2026_04_16_DEPLOYMENT_GOVERNANCE_R01/inputs/neighbor_extract.yaml, runs/CONSTITUTION_RUN_2026_04_16_DEPLOYMENT_GOVERNANCE_R01/inputs/scope_manifest.yaml,
       runs/CONSTITUTION_RUN_2026_04_16_DEPLOYMENT_GOVERNANCE_R01/inputs/impact_bundle.yaml, runs/CONSTITUTION_RUN_2026_04_16_DEPLOYMENT_GOVERNANCE_R01/inputs/integration_gate.yaml.
-      Applique le contrat stable défini dans docs/pipelines/constitution/stages/RUN_BOOTSTRAP.skill.yaml.
+      Applique le contrat stable défini dans docs/pipelines/constitution/stages/STAGE_01_CHALLENGE.skill.yaml.
       Ne produis que les livrables du stage courant et ne simule aucun script requis.
