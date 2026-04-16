@@ -1,0 +1,183 @@
+stage_skill:
+  schema_version: 0.1
+  pipeline_id: constitution
+  stage_id: RUN_BOOTSTRAP
+  skill_id: run_bootstrap_readiness_checker
+  stage_kind: hybrid
+  closure_level: medium
+  authoritative_role: stable_stage_contract
+
+mission: >-
+  Vérifier que le run est matériellement complet et prêt à entrer en STAGE_01_CHALLENGE.
+  Ce stage ne produit pas d'analyse de contenu. Il produit exclusivement un readiness report
+  déclarant si toutes les préconditions ids-first sont satisfaites, et une décision canonique
+  de transition ou de blocage. Il ne démarre pas STAGE_01_CHALLENGE — il émet la confirmation
+  que le run peut continuer, ou signale les actions correctives requises.
+
+runtime_binding:
+  expected_mode_values:
+    - bounded_local_run
+  expected_status_values:
+    - bootstrap_open
+  expected_current_stage: RUN_BOOTSTRAP
+  run_context_role: >-
+    run_context.yaml doit être lu en premier. Il expose next_executable_stage,
+    les chemins d'entrée résolus, le statut ids-first et l'integration_gate.
+    Si run_context.yaml est absent ou corrompu, le stage est immédiatement bloqué
+    et doit émettre la commande build_run_context.py avant toute autre action.
+
+primary_reads:
+  bounded_local_run:
+    - runs/<run_id>/inputs/run_context.yaml
+    - runs/<run_id>/inputs/scope_manifest.yaml
+    - runs/<run_id>/inputs/impact_bundle.yaml
+    - runs/<run_id>/inputs/integration_gate.yaml
+
+optional_reads:
+  - runs/<run_id>/inputs/scope_extract.yaml
+  - runs/<run_id>/inputs/neighbor_extract.yaml
+
+forbidden_reads:
+  - docs/cores/current/constitution.yaml
+  - docs/cores/current/referentiel.yaml
+  - docs/cores/current/link.yaml
+  - docs/prompts/shared/Challenge_constitution.md
+  - docs/prompts/shared/Make04ConstitutionArbitrage.md
+  - docs/pipelines/constitution/archive/*
+  - docs/patcher/shared/*
+  - tmp/*
+
+readiness_checks:
+  mandatory:
+    - id: RC01
+      label: run_context_present
+      check: runs/<run_id>/inputs/run_context.yaml existe et est parseable
+      blocking: true
+    - id: RC02
+      label: scope_manifest_present
+      check: runs/<run_id>/inputs/scope_manifest.yaml existe
+      blocking: true
+    - id: RC03
+      label: impact_bundle_present
+      check: runs/<run_id>/inputs/impact_bundle.yaml existe
+      blocking: true
+    - id: RC04
+      label: integration_gate_present
+      check: runs/<run_id>/inputs/integration_gate.yaml existe
+      blocking: true
+    - id: RC05
+      label: run_status_coherent
+      check: run_context.status == bootstrap_open ET current_stage == RUN_BOOTSTRAP
+      blocking: true
+    - id: RC06
+      label: next_executable_stage_declared
+      check: run_context.next_executable_stage est non vide
+      blocking: true
+  advisory:
+    - id: RA01
+      label: scope_extract_present
+      check: runs/<run_id>/inputs/scope_extract.yaml existe
+      blocking: false
+      note: >-
+        Si absent, STAGE_01_CHALLENGE devra exécuter extract_scope_slice.py avant
+        de démarrer. Le run reste ready mais ids-first n'est pas satisfait immédiatement.
+    - id: RA02
+      label: neighbor_extract_present
+      check: runs/<run_id>/inputs/neighbor_extract.yaml existe
+      blocking: false
+      note: >-
+        Si absent, STAGE_01_CHALLENGE devra lire les Core complets en fallback
+        pour les neighbor_ids déclarés dans run_context.
+    - id: RA03
+      label: integration_gate_checks_status
+      check: integration_gate.total_checks > 0
+      blocking: false
+      note: >-
+        Signaler le nombre de checks cleared vs total pour visibilité.
+        promotion_blocked: true est attendu à ce stade — ce n'est pas un blocage bootstrap.
+
+decision_rules:
+  - if all mandatory checks pass: emit ready_for_stage_01
+  - if any mandatory check fails: emit blocked_pending_inputs
+  - advisory checks never block the decision but must be reported in the readiness report
+  - the stage must not start STAGE_01_CHALLENGE — it emits the decision and stops
+
+required_scripts:
+  preconditions_only:
+    - docs/patcher/shared/materialize_run_inputs.py
+    - docs/patcher/shared/build_run_context.py
+  corrective_if_blocked:
+    - id: S01
+      condition: RC01 fails (run_context.yaml absent)
+      command_template: >-
+        python docs/patcher/shared/build_run_context.py
+        --pipeline constitution
+        --run-id <RUN_ID>
+    - id: S02
+      condition: RC02, RC03 or RC04 fail (inputs absent)
+      command_template: >-
+        python docs/patcher/shared/materialize_run_inputs.py
+        --run-id <RUN_ID>
+  note: >-
+    Ce stage ne simule jamais l'exécution de ces scripts. Si une précondition
+    échoue, il émet la commande corrective exacte et maintient le statut non-final
+    jusqu'à confirmation d'exécution réelle.
+
+required_output_sections:
+  - readiness_checks_summary
+  - advisory_signals
+  - ids_first_status
+  - integration_gate_signal
+  - bootstrap_decision
+
+expected_outputs:
+  bounded_local_run:
+    report_path_pattern: runs/<run_id>/outputs/RUN_BOOTSTRAP.out
+
+completion_evidence:
+  required:
+    - all_mandatory_readiness_checks_evaluated
+    - bootstrap_decision_emitted
+    - advisory_signals_reported
+    - corrective_commands_emitted_if_blocked
+  not_sufficient:
+    - informal_chat_summary_only
+    - assumed_scripts_executed_without_confirmation
+
+bootstrap_decision_values:
+  - ready_for_stage_01
+  - blocked_pending_inputs
+
+allowed_transitions:
+  on_ready_for_stage_01:
+    next_action: CONTINUE_ACTIVE_RUN
+    next_stage: STAGE_01_CHALLENGE
+    tracking_command_template: >-
+      python docs/patcher/shared/update_run_tracking.py
+      --pipeline constitution
+      --run-id <RUN_ID>
+      --stage-id RUN_BOOTSTRAP
+      --stage-status done
+      --run-status active
+      --next-stage STAGE_01_CHALLENGE
+      --summary "Bootstrap readiness confirmed; all mandatory checks passed; run ready for Stage 01."
+  on_blocked_pending_inputs:
+    next_action: emit_corrective_commands_and_stop
+    note: >-
+      Émettre les commandes correctives exactes. Ne pas avancer.
+      Le statut du stage reste in_progress jusqu'à confirmation d'exécution réelle.
+
+forbidden_actions:
+  - implicit_stage_01_start
+  - simulated_required_script_execution
+  - direct_push_of_run_context_yaml
+  - direct_push_of_run_manifest_yaml
+  - content_analysis_of_core_documents
+  - scope_extract_generation_without_script
+
+migration_note: >-
+  Premier skill de type hybrid pour le pipeline constitution.
+  Ce stage est purement infrastructurel — il ne produit aucune analyse Core.
+  Il consolide en contrat YAML machine-readable les règles de bootstrap
+  implicites dans AI_PROTOCOL.yaml, MATERIALIZE_NEW_RUN.action.yaml et pipeline.md,
+  sans remplacer ces fichiers comme source opérationnelle unique.
