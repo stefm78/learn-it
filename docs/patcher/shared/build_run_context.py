@@ -9,6 +9,13 @@ Changes in v2:
 - resolve output path against repo_root before relative display
 - graceful fallback when displayed path cannot be relativized
 
+Changes in v3:
+- introduce BOOTSTRAP_PASSTHROUGH_STAGES: pseudo-stages with no skill.yaml
+  of their own (e.g. RUN_BOOTSTRAP) are immediately transparent to their
+  next_stage in derive_next_executable_stage(), regardless of
+  last_stage_status. This prevents the task_view from referencing a
+  non-existent RUN_BOOTSTRAP.skill.yaml during the bootstrap_open phase.
+
 Intent:
 - keep run_manifest + inputs as canonical state
 - keep run_context.yaml derived-only
@@ -44,6 +51,12 @@ TERMINAL_CLOSED_STAGES = {
     "STAGE_09_CLOSEOUT",
     "STAGE_09_CLOSEOUT_AND_ARCHIVE",
     "RUN_ABANDONED",
+}
+
+# Pseudo-stages de bootstrap sans skill.yaml propre : toujours transparents
+# vers next_stage, quel que soit last_stage_status.
+BOOTSTRAP_PASSTHROUGH_STAGES = {
+    "RUN_BOOTSTRAP",
 }
 
 
@@ -106,6 +119,10 @@ def derive_next_executable_stage(exec_state: Dict[str, Any], fallback_current_st
 
     raw_actionable = raw_current_stage
     if last_stage_status == "done" and raw_next_stage and raw_next_stage != raw_current_stage:
+        raw_actionable = raw_next_stage
+    # Passthrough : pseudo-stages bootstrap sans skill → pointer vers next_stage
+    # immédiatement, sans attendre last_stage_status == "done".
+    elif raw_current_stage in BOOTSTRAP_PASSTHROUGH_STAGES and raw_next_stage:
         raw_actionable = raw_next_stage
 
     terminal_closed = is_terminal_closed_run(run_status, raw_actionable, last_stage_status)
@@ -395,7 +412,7 @@ def build_run_context(
         scope_extract_status=scope_extract_status,
         neighbor_extract_status=neighbor_extract_status,
     )
-    
+
     return {
         "run_context": {
             "schema_version": 0.2,
