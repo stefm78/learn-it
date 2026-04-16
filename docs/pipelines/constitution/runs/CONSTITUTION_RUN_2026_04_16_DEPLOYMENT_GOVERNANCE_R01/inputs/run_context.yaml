@@ -1,0 +1,94 @@
+run_context:
+  schema_version: 0.2
+  generated_by: build_run_context_runtime_view_candidate_v2.py
+  note: Fichier synthétique — lire EN PREMIER. Remplace la lecture séquentielle de run_manifest + scope_manifest
+    + impact_bundle + integration_gate et expose une task view dérivée pour le stage exécutable. Sources
+    canoniques inchangées.
+  run_id: CONSTITUTION_RUN_2026_04_16_DEPLOYMENT_GOVERNANCE_R01
+  pipeline_id: constitution
+  mode: bounded_local_run
+  status: bootstrap_open
+  scope_key: deployment_governance
+  current_stage: RUN_BOOTSTRAP
+  current_stage_canonical: RUN_BOOTSTRAP
+  last_stage_status: in_progress
+  next_stage: STAGE_01_CHALLENGE
+  next_stage_canonical: STAGE_01_CHALLENGE
+  next_executable_stage: RUN_BOOTSTRAP
+  next_executable_stage_canonical: RUN_BOOTSTRAP
+  terminal_closed: false
+  completed_stages: []
+  completed_stages_canonical: []
+  scope_ids:
+  - ACTION_INFORM_LEARNER
+  - CONSTRAINT_NO_ASSISTED_DEPLOYMENT_WITHOUT_TUTORING
+  - CONSTRAINT_NO_CHANGE_TO_AND_LOGIC
+  - CONSTRAINT_NO_CHANGE_TO_GRAPH_PROPAGATION_RULE
+  - EVENT_GAMIFICATION_PROBATION_MAX_DURATION_REACHED
+  - EVENT_GF08_UNCOVERED_CONFLICT
+  - INV_ASSISTED_MODE_REQUIRES_TUTORING
+  - INV_CONSTITUTION_REFERENTIAL_SEPARATION
+  - INV_NO_RUNTIME_CONTENT_GENERATION
+  - INV_RUNTIME_FULLY_LOCAL
+  - INV_RUNTIME_QUALIFICATION_SIGNALS_MUST_BE_EXPLICIT_OR_OFFSESSION
+  - RULE_GAMIFICATION_PROBATION_MUST_CLOSE
+  - RULE_GF08_UNCOVERED_CONFLICT_CONSERVATIVE_RESPONSE
+  - RULE_NO_CALIBRATION_CONSERVATIVE_START
+  - RULE_UNVERIFIED_GAMIFICATION_PROBATION
+  - SYSTEM_LEARNIT
+  - TYPE_AUTONOMY_REGIME
+  - TYPE_HUMAN_CHECKPOINT
+  - TYPE_INTEGRITY_MODES
+  scope_ids_count: 19
+  neighbor_ids:
+  - REF_CORE_LEARNIT_REFERENTIEL_V2_0_IN_CONSTITUTION
+  neighbor_ids_count: 1
+  scope_extract:
+    present: false
+  neighbor_extract:
+    present: false
+  integration_gate:
+    status: open
+    total_checks: 6
+    cleared_checks: 0
+    promotion_blocked: true
+  canonical_refs:
+    run_manifest: docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_16_DEPLOYMENT_GOVERNANCE_R01/run_manifest.yaml
+    scope_manifest: docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_16_DEPLOYMENT_GOVERNANCE_R01/inputs/scope_manifest.yaml
+    impact_bundle: docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_16_DEPLOYMENT_GOVERNANCE_R01/inputs/impact_bundle.yaml
+    integration_gate: docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_16_DEPLOYMENT_GOVERNANCE_R01/inputs/integration_gate.yaml
+  source_fingerprints:
+    run_manifest.yaml: af3dc23c8402973c60b5c51a1906370869d06ed8a9a6925ea549668694cd306a
+    scope_manifest.yaml: e49256274979b7e08a7e28a7c3bf852a803a762364f10ce5ac6daed6d6313965
+    impact_bundle.yaml: 518b7758c05278f45b57b106ab97164622071df3dc05e29663c6cf461a39aa71
+    integration_gate.yaml: 8e3a00f87c5358fdb0d5f73645bc0031915a5e8473902c5727680c724b6ca8bb
+  task_view:
+    status: executable
+    raw_stage_id: RUN_BOOTSTRAP
+    stage_id: RUN_BOOTSTRAP
+    skill_ref: docs/pipelines/constitution/stages/RUN_BOOTSTRAP.skill.yaml
+    stage_kind: hybrid
+    closure_level: medium
+    resolved_inputs:
+    - runs/CONSTITUTION_RUN_2026_04_16_DEPLOYMENT_GOVERNANCE_R01/inputs/run_context.yaml
+    - runs/CONSTITUTION_RUN_2026_04_16_DEPLOYMENT_GOVERNANCE_R01/inputs/scope_manifest.yaml
+    - runs/CONSTITUTION_RUN_2026_04_16_DEPLOYMENT_GOVERNANCE_R01/inputs/impact_bundle.yaml
+    - runs/CONSTITUTION_RUN_2026_04_16_DEPLOYMENT_GOVERNANCE_R01/inputs/integration_gate.yaml
+    execution_paths:
+      work_dir: runs/CONSTITUTION_RUN_2026_04_16_DEPLOYMENT_GOVERNANCE_R01/work/XX_stage/
+      primary_output: runs/CONSTITUTION_RUN_2026_04_16_DEPLOYMENT_GOVERNANCE_R01/outputs/RUN_BOOTSTRAP.out
+      reports_dir: runs/CONSTITUTION_RUN_2026_04_16_DEPLOYMENT_GOVERNANCE_R01/reports/
+    required_scripts_status:
+      scope_extract_present: false
+      neighbor_extract_present: false
+      ids_first_ready: false
+      note: generic runtime status — stage-specific script status not yet bound
+    forbidden_actions: []
+    completion_evidence: []
+    allowed_transitions: {}
+    compact_execution_prompt: Dans le repo learn-it, exécute RUN_BOOTSTRAP du pipeline constitution pour
+      run_id=CONSTITUTION_RUN_2026_04_16_DEPLOYMENT_GOVERNANCE_R01 en mode bounded_local_run. Lis d'abord
+      runs/CONSTITUTION_RUN_2026_04_16_DEPLOYMENT_GOVERNANCE_R01/inputs/run_context.yaml, runs/CONSTITUTION_RUN_2026_04_16_DEPLOYMENT_GOVERNANCE_R01/inputs/scope_manifest.yaml,
+      runs/CONSTITUTION_RUN_2026_04_16_DEPLOYMENT_GOVERNANCE_R01/inputs/impact_bundle.yaml, runs/CONSTITUTION_RUN_2026_04_16_DEPLOYMENT_GOVERNANCE_R01/inputs/integration_gate.yaml.
+      Applique le contrat stable défini dans docs/pipelines/constitution/stages/RUN_BOOTSTRAP.skill.yaml.
+      Ne produis que les livrables du stage courant et ne simule aucun script requis.

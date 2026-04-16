@@ -1,0 +1,54 @@
+scope_manifest:
+  schema_version: 0.1
+  run_id: CONSTITUTION_RUN_2026_04_16_DEPLOYMENT_GOVERNANCE_R01
+  scope_id: CONSTITUTION_SCOPE_DEPLOYMENT_GOVERNANCE
+  scope_key: deployment_governance
+  source:
+    scope_definition_ref: docs/pipelines/constitution/scope_catalog/scope_definitions/deployment_governance.yaml
+    scope_definition_fingerprint: 884d826a0910fee831e38d1d722857bd2c13b1b47b6b01e2c4349963d0f68a1e
+  writable_perimeter:
+    files:
+    - docs/cores/current/constitution.yaml
+    modules:
+    - deployment
+    - runtime_architecture
+    - runtime_governance
+    - governance
+    - initialization
+    - system
+    ids:
+    - ACTION_INFORM_LEARNER
+    - CONSTRAINT_NO_ASSISTED_DEPLOYMENT_WITHOUT_TUTORING
+    - CONSTRAINT_NO_CHANGE_TO_AND_LOGIC
+    - CONSTRAINT_NO_CHANGE_TO_GRAPH_PROPAGATION_RULE
+    - EVENT_GAMIFICATION_PROBATION_MAX_DURATION_REACHED
+    - EVENT_GF08_UNCOVERED_CONFLICT
+    - INV_ASSISTED_MODE_REQUIRES_TUTORING
+    - INV_CONSTITUTION_REFERENTIAL_SEPARATION
+    - INV_NO_RUNTIME_CONTENT_GENERATION
+    - INV_RUNTIME_FULLY_LOCAL
+    - INV_RUNTIME_QUALIFICATION_SIGNALS_MUST_BE_EXPLICIT_OR_OFFSESSION
+    - RULE_GAMIFICATION_PROBATION_MUST_CLOSE
+    - RULE_GF08_UNCOVERED_CONFLICT_CONSERVATIVE_RESPONSE
+    - RULE_NO_CALIBRATION_CONSERVATIVE_START
+    - RULE_UNVERIFIED_GAMIFICATION_PROBATION
+    - SYSTEM_LEARNIT
+    - TYPE_AUTONOMY_REGIME
+    - TYPE_HUMAN_CHECKPOINT
+    - TYPE_INTEGRITY_MODES
+  governance:
+    allowed_operations:
+    - challenge
+    - arbitrage
+    - patch
+    - local_validation
+    forbidden_operations:
+    - direct_current_promotion
+    - silent_out_of_scope_modification
+    - implicit_cross_core_reallocation
+    scope_extension_policy:
+      explicit_decision_required: true
+  notes:
+  - Généré déterministiquement par materialize_run_inputs.py depuis la scope_definition.
+  - Ce fichier déclare le périmètre modifiable autorisé du run.
+  - Tout ce qui n'est pas dans writable_perimeter.ids ne peut pas être modifié implicitement.
