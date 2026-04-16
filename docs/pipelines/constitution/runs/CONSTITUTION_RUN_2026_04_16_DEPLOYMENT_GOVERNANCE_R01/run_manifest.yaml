@@ -3,7 +3,7 @@ run_manifest:
   pipeline_id: constitution
   run_id: CONSTITUTION_RUN_2026_04_16_DEPLOYMENT_GOVERNANCE_R01
   mode: bounded_local_run
-  status: bootstrap_open
+  status: active
   scope_key: deployment_governance
   scope_binding:
     scope_id: CONSTITUTION_SCOPE_DEPLOYMENT_GOVERNANCE
@@ -11,16 +11,22 @@ run_manifest:
     scope_definition_ref: docs/pipelines/constitution/scope_catalog/scope_definitions/deployment_governance.yaml
   execution_state:
     current_stage: RUN_BOOTSTRAP
-    last_stage_status: in_progress
-    last_updated: '2026-04-16T13:46:19Z'
+    last_stage_status: done
+    last_updated: '2026-04-16T21:36:07Z'
     next_stage: STAGE_01_CHALLENGE
-    completed_stages: []
+    completed_stages:
+    - RUN_BOOTSTRAP
     stage_history:
     - stage_id: RUN_BOOTSTRAP
       stage_status: in_progress
       recorded_at: '2026-04-16T13:46:19Z'
       summary: Entry authorized; run materially opened for deployment_governance;
         awaiting Stage 01 confirmation.
+    - stage_id: RUN_BOOTSTRAP
+      stage_status: done
+      recorded_at: '2026-04-16T21:36:07Z'
+      summary: Bootstrap readiness confirmed; all mandatory checks passed; run ready
+        for Stage 01.
   scope_tracking:
     scope_status: confirmed_for_bounded_run
     last_updated: '2026-04-16T13:46:19Z'
