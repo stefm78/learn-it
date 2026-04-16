@@ -51,6 +51,7 @@ entry_action:
     - implicit_stage_start
     - archive_read_for_bootstrap_inference
     - launcher_or_script_read_outside_allowed_reads
+    - auto_chain_to_next_action_without_confirmation
   required_outputs:
     decision_payload:
       - entry_decision
@@ -71,6 +72,8 @@ entry_action:
       - partition_refresh_preferred
   stop_condition:
     - stop once entry decision is resolved
+      AND next_best_action has been proposed to human
+      AND human confirmation has been explicitly awaited
     - if no explicit open-only deterministic bootstrap is documented in allowed reads, state that material opening is not resolved and stop
   response_contract:
     must_state:
@@ -81,3 +84,13 @@ entry_action:
       - invented_run_id_as_fact
       - invented_bootstrap_command_as_fact
       - claimed_script_behavior_not_observed_in_allowed_reads
+    post_decision_behavior:
+      when: entry_decision == open_new_run_authorized
+      must_do:
+        - emit next_best_action clearly as a proposed action
+        - state the next action contract ref explicitly
+        - await explicit human confirmation before proceeding
+        - do not self-trigger MATERIALIZE_NEW_RUN without confirmation
+      must_not_do:
+        - auto_chain_to_next_action_contract
+        - assume_confirmation_from_silence
