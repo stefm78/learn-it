@@ -12,6 +12,26 @@ mission: >-
   en mode global ou borné, sans correction silencieuse hors scope et avec une
   lecture ids-first prioritaire quand les extraits sont présents.
 
+model_requirements:
+  reasoning_level: advanced
+  justification: >-
+    Ce stage exige une analyse critique multi-axes de documents de gouvernance
+    complexes et interdépendants. Il requiert la détection d'incohérences logiques
+    subtiles, d'états moteur non définis, de dépendances IA implicites et de
+    scénarios adversariaux. Un modèle avec capacité de raisonnement approfondi
+    (ex : o3, claude-opus, gemini-pro thinking) est fortement recommandé.
+    Un modèle standard produira une analyse superficielle insuffisante pour
+    alimenter une décision d'arbitrage fiable.
+  recommended_models:
+    - o3
+    - claude-opus-4
+    - gemini-2.5-pro
+  minimum_acceptable: tout modèle avec extended thinking ou chain-of-thought activable
+  warning: >-
+    ⚠️ NE PAS exécuter ce stage avec un modèle standard sans capacité de
+    raisonnement avancé. La qualité du challenge_report conditionne directement
+    la fiabilité de tout le pipeline aval (arbitrage, patch, release).
+
 runtime_binding:
   expected_mode_values:
     - nominal_global
@@ -110,6 +130,34 @@ completion_evidence:
   not_sufficient:
     - informal_chat_summary_only
 
+human_actions_required:
+  description: >-
+    L'IA produit le challenge_report et s'arrête. L'humain valide le rapport
+    avant de poursuivre vers STAGE_02_ARBITRAGE.
+  on_done:
+    step: 1
+    label: Mettre à jour le tracking et confirmer la transition vers STAGE_02
+    mandatory: true
+    command: >-
+      python docs/patcher/shared/update_run_tracking.py
+      --pipeline constitution
+      --run-id <RUN_ID>
+      --stage-id STAGE_01_CHALLENGE
+      --stage-status done
+      --run-status active
+      --next-stage STAGE_02_ARBITRAGE
+      --summary "Challenge report produced; ready for arbitrage."
+    next_step: >-
+      Relancer l'IA avec :
+      "Continue le run <RUN_ID> — STAGE_01 est done, démarre STAGE_02_ARBITRAGE."
+  on_blocked:
+    step: 1
+    label: Exécuter les scripts de précondition manquants
+    mandatory: true
+    note: >-
+      L'IA aura émis la commande exacte (extract_scope_slice.py ou
+      materialize_run_inputs.py). L'exécuter, puis relancer l'IA sur ce stage.
+
 allowed_transitions:
   on_done:
     - STAGE_02_ARBITRAGE
@@ -117,7 +165,7 @@ allowed_transitions:
     - materialize_or_extract_inputs_first
 
 migration_note: >-
-  Skill pilote initial. Il consolide en YAML machine-readable les règles déjà
-  exprimées dans `Challenge_constitution.md`, `AI_PROTOCOL.yaml` et
-  `pipeline.md`, sans encore remplacer ces fichiers comme source opérationnelle
-  unique.
+  Skill pilote initial — mise à jour pour ajouter model_requirements et
+  human_actions_required, en cohérence avec le pattern établi sur RUN_BOOTSTRAP.
+  Consolide en YAML machine-readable les règles déjà exprimées dans
+  `Challenge_constitution.md`, `AI_PROTOCOL.yaml` et `pipeline.md`.
