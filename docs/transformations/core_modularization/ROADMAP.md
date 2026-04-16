@@ -88,6 +88,44 @@ Choisir un premier sous-ensemble réel, puis exécuter :
 
 ---
 
+## Pipeline Launcher — concept structurant
+
+Le launcher est un helper de pré-résolution qui déplace la complexité hors du prompt utilisateur
+et hors du contexte profond de l'IA, vers un petit outil déterministe.
+
+### Intention
+
+- Connaître les pipelines publiés via `docs/registry/` ;
+- Découvrir les runs actifs ;
+- Proposer une suite intelligente avec peu de contexte ;
+- Générer un prompt de lancement court et déterministe ;
+- Garder toujours la possibilité de continuer un run existant ou d'en ouvrir un nouveau.
+
+### Comportement attendu
+
+1. Lister les pipelines connus.
+2. Pour un pipeline donné, lire un état léger : index des runs, catalogue des scopes, stage courant du run actif.
+3. Produire une décision d'entrée : `continue_active_run`, `open_new_run` ou `disambiguate`.
+4. Proposer des choix par défaut intelligents :
+   - run unique actif → recommander sa reprise ;
+   - autres scopes publiés → proposer d'ouvrir un nouveau run ;
+   - plusieurs runs actifs → proposer une shortlist.
+5. Générer soit un prompt court pour une IA, soit une commande de bootstrap pour matérialiser le choix.
+
+### Découpage minimal
+
+- **Étape A — discovery** : lire `docs/registry/pipelines.md`, `AI_PROTOCOL.yaml`, `runs/index.yaml`, `scope_catalog/manifest.yaml`.
+- **Étape B — recommendation** : produire `pipeline_id`, `active_runs_count`, `recommended_action`, `other_available_scopes`, `next_best_actions`.
+- **Étape C — prompt build** : produire un prompt court selon le cas (continuer, ouvrir, désambiguïser).
+
+### Périmètre
+
+- Commencer par `constitution`, puis étendre à `platform_factory`.
+- Le launcher reste dans `tmp/` tant qu'il n'est pas stabilisé.
+- **Il ne doit pas devenir un chantier principal concurrent.**
+
+---
+
 ## Garde-fous
 
 1. **Ne pas multiplier les pipelines sans nécessité.**
@@ -107,7 +145,7 @@ Choisir un premier sous-ensemble réel, puis exécuter :
 
 ---
 
-## Définition du “strict nécessaire”
+## Définition du "strict nécessaire"
 
 Pour cette transformation, le strict nécessaire n'est pas une refonte totale.
 C'est l'ensemble minimal permettant de sécuriser la suite :

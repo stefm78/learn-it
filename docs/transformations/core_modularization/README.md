@@ -3,7 +3,7 @@
 ## Objet
 
 Ce répertoire porte le pilotage minimal de la transformation visant à :
-- rendre les artefacts canonique plus maniables sans diminuer la rigueur ;
+- rendre les artefacts canoniques plus maniables sans diminuer la rigueur ;
 - introduire un régime **sources modulaires -> bundle canonique compilé -> projections dérivées validées** ;
 - faire évoluer les pipelines `constitution` et `platform_factory` pour qu'ils puissent traiter des **sous-ensembles bornés** ;
 - préparer un mode de travail plus parallèle entre IA, sans perdre la cohérence canonique globale.
@@ -29,9 +29,17 @@ Ce répertoire doit suffire à comprendre :
 
 ## Artefacts de pilotage
 
-- `ROADMAP.md` : vision d'ensemble, phases, livrables, critères de sortie.
-- `STATUS.yaml` : état machine-readable du chantier.
-- `WORKLOG.md` : journal append-only de continuité/handover.
+| Fichier | Rôle |
+|---|---|
+| `ROADMAP.md` | Vision d'ensemble, phases, livrables, critères de sortie, concepts structurants. |
+| `STATUS.yaml` | État machine-readable du chantier — **source unique de vérité sur l'avancement**. |
+| `WORKLOG.md` | Journal append-only de continuité/handover. |
+| `CONSTITUTION_SCOPES_AND_RUNS_MODEL.md` | Modèle de référence scopes + runs. |
+| `CONSTITUTION_SCOPE_MATURITY_MODEL.md` | Modèle de maturité des scopes. |
+| `PILOT_01_CONSTITUTION_LEARNER_STATE.md` | Premier pilote borné (learner_state). |
+| `J1_*` à `J5_*` | Journaux de transformation (append-only par jalon). |
+| `policies/` | Politiques de génération des scopes. |
+| `templates/` | Templates de contrats (scope, changeset, etc.). |
 
 ## Principes de transformation
 
@@ -47,6 +55,13 @@ Ce répertoire doit suffire à comprendre :
 À chaque étape significative, mettre à jour :
 - `STATUS.yaml` pour l'état courant ;
 - `WORKLOG.md` avec une entrée datée, concise et factuelle.
+
+**Règle de gouvernance documentaire — à respecter impérativement :**
+> `STATUS.yaml` est le seul fichier de statut vivant de ce répertoire.
+> Il est mis à jour **in-place** à chaque étape significative.
+> **Aucun fichier `STATUS_*` daté ne doit être créé** : les snapshots intermédiaires
+> n'ont pas de valeur opérationnelle et fragmentent le pilotage.
+> L'historique chronologique appartient à `WORKLOG.md` (append-only), pas à des fichiers STATUS ad hoc.
 
 Ne pas disperser l'état du chantier dans des messages ad hoc ou des notes non référencées.
 
@@ -65,7 +80,4 @@ Il pose seulement le socle minimal de pilotage pour rendre la transformation :
 
 ## Prochaine cible immédiate
 
-Première itération attendue après ce bootstrap :
-- définir le **modèle cible minimal** des sources modulaires ;
-- définir les **artefacts de scope** nécessaires aux pipelines (`scope_manifest`, `impact_bundle`, `integration_gate`) ;
-- décider le **niveau minimal de changement** à apporter d'abord au pipeline `constitution` avant d'étendre à `platform_factory`.
+Voir `STATUS.yaml` → section `immediate_next_step`.
