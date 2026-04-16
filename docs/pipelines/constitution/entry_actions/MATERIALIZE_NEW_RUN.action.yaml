@@ -55,6 +55,7 @@ entry_action:
   resolution_rules:
     - derive run_id using the documented canonical convention only
     - pass --bootstrap-create to update_run_tracking.py to atomically create run directory and minimal run_manifest.yaml if absent
+    - pass --skip-rebuild-context to update_run_tracking.py during bootstrap — inputs do not exist yet at step ① and build_run_context.py would fail; run_context.yaml is built explicitly at step ③ after materialize_run_inputs.py has produced the required inputs
     - use update_run_tracking.py for tracking materialization
     - do not write runs/index.yaml directly
     - do not write runs/<run_id>/run_manifest.yaml directly
@@ -77,11 +78,12 @@ entry_action:
       --next-stage STAGE_01_CHALLENGE
       --scope-status confirmed_for_bounded_run
       --bootstrap-create
+      --skip-rebuild-context
       --summary "Entry authorized; run materially opened for <SCOPE_KEY>; awaiting Stage 01 confirmation."
     input_materialization_command_template: >-
       python docs/patcher/shared/materialize_run_inputs.py
       --run-id <RUN_ID>
-    run_context_build_command_template: >-
+    run_context_build_command_template: >-\
       python docs/patcher/shared/build_run_context.py
       --pipeline constitution
       --run-id <RUN_ID>
