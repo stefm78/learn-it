@@ -1,3 +1,6 @@
+# Pipeline Constitution — Flowchart
+
+```mermaid
 flowchart TD
     START([▶ Invocation pipeline]):::start
 
@@ -74,3 +77,4 @@ flowchart TD
     classDef decision fill:#d62828,color:#fff,stroke:#9b1b1b
     classDef human fill:#f4a261,color:#222,stroke:#e76f51,stroke-width:2px
     classDef output fill:#2a9d8f,color:#fff,stroke:#1a7066
+```
