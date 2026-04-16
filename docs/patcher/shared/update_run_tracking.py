@@ -11,6 +11,11 @@ Bootstrap scope:
 - pipeline `constitution`
 
 The script is intentionally conservative and deterministic.
+
+Bootstrap creation:
+- Pass --bootstrap-create to atomically create the run directory and a minimal
+  run_manifest.yaml when opening a brand-new run (RUN_BOOTSTRAP).
+  Without this flag the script raises FileNotFoundError if the run_root is absent.
 """
 
 from __future__ import annotations
@@ -72,6 +77,15 @@ def parse_args() -> argparse.Namespace:
         action="store_true",
         help="Ne pas rebuilder run_context.yaml apres la mise a jour (deconseille).",
     )
+    parser.add_argument(
+        "--bootstrap-create",
+        action="store_true",
+        help=(
+            "Créer le répertoire du run et un run_manifest.yaml minimal si absents. "
+            "À utiliser uniquement lors de l'ouverture initiale d'un run (RUN_BOOTSTRAP). "
+            "Ignoré si le run_root existe déjà."
+        ),
+    )
     return parser.parse_args()
 
 
@@ -90,6 +104,63 @@ def resolve_pipeline_paths(repo_root: Path, pipeline_id: str, run_id: str) -> tu
     runs_index = pipeline_root / "runs" / "index.yaml"
     reports_root = run_root / "reports"
     return run_root, run_manifest, runs_index, reports_root
+
+
+def bootstrap_run_structure(
+    run_root: Path,
+    run_manifest_path: Path,
+    reports_root: Path,
+    *,
+    pipeline_id: str,
+    run_id: str,
+) -> None:
+    """Créer la structure minimale d'un run si elle n'existe pas encore.
+
+    Appelé uniquement quand --bootstrap-create est passé et que run_root est absent.
+    Produit :
+      - runs/<run_id>/                      (répertoire du run)
+      - runs/<run_id>/reports/              (répertoire des rapports)
+      - runs/<run_id>/run_manifest.yaml     (manifest minimal, sera enrichi par update_run_manifest)
+
+    Le scope_binding est intentionnellement vide : update_run_manifest ne l'exploite pas.
+    Il sera renseigné par materialize_run_inputs.py qui lit scope_catalog/manifest.yaml.
+    """
+    run_root.mkdir(parents=True, exist_ok=True)
+    reports_root.mkdir(parents=True, exist_ok=True)
+
+    if not run_manifest_path.exists():
+        minimal_manifest: dict[str, Any] = {
+            "run_manifest": {
+                "schema_version": 0.1,
+                "pipeline_id": pipeline_id,
+                "run_id": run_id,
+                "mode": "bounded_local_run",
+                "status": "bootstrap_open",
+                "scope_binding": {
+                    "scope_id": "",
+                    "scope_key": "",
+                    "scope_definition_ref": "",
+                },
+                "execution_state": {
+                    "current_stage": "",
+                    "last_stage_status": "",
+                    "last_updated": "",
+                    "next_stage": "",
+                    "completed_stages": [],
+                    "stage_history": [],
+                },
+                "scope_tracking": {
+                    "scope_status": "",
+                    "last_updated": "",
+                    "last_note": "",
+                },
+                "notes": [],
+            }
+        }
+        dump_yaml(run_manifest_path, minimal_manifest)
+        print(f"[update_run_tracking] bootstrap: run structure created at {run_root}")
+    else:
+        print("[update_run_tracking] bootstrap: run_manifest.yaml already exists — skipping creation")
 
 
 def update_run_manifest(
@@ -278,7 +349,17 @@ def main() -> int:
     )
 
     if not run_root.exists():
-        raise FileNotFoundError(f"Run root does not exist: {run_root}")
+        if args.bootstrap_create:
+            bootstrap_run_structure(
+                run_root, run_manifest_path, reports_root,
+                pipeline_id=args.pipeline,
+                run_id=args.run_id,
+            )
+        else:
+            raise FileNotFoundError(
+                f"Run root does not exist: {run_root}\n"
+                f"  Pour créer un nouveau run, ajouter --bootstrap-create."
+            )
 
     manifest_data = load_yaml(run_manifest_path)
     index_data = load_yaml(runs_index_path)
