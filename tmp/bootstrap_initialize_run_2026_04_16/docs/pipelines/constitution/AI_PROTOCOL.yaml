@@ -1,0 +1,206 @@
+ai_protocol:
+  schema_version: 0.5
+  protocol_id: CONSTITUTION_AI_PROTOCOL_V2
+  authoritative_for_ai: true
+  primary_entrypoint:
+    - docs/pipelines/constitution/AI_PROTOCOL.yaml
+    - docs/pipelines/constitution/pipeline.md
+
+  entry_actions:
+    decision_action_ref: docs/pipelines/constitution/entry_actions/OPEN_NEW_RUN.action.yaml
+    materialization_action_ref: docs/pipelines/constitution/entry_actions/MATERIALIZE_NEW_RUN.action.yaml
+    sequencing_rule: >-
+      En no_run_id_mode, l'ouverture d'un nouveau run suit deux actes canoniques distincts :
+      d'abord OPEN_NEW_RUN pour résoudre la décision d'entrée sans écriture de tracking,
+      puis MATERIALIZE_NEW_RUN pour matérialiser le run via initialize_run.py,
+      update_run_tracking.py, materialize_run_inputs.py et build_run_context.py,
+      sans démarrer STAGE_01_CHALLENGE.
+
+  state_chain:
+    - docs/pipelines/constitution/runs/index.yaml
+    - docs/pipelines/constitution/runs/<run_id>/run_manifest.yaml
+    - docs/pipelines/constitution/runs/<run_id>/inputs/scope_manifest.yaml
+    - docs/pipelines/constitution/runs/<run_id>/inputs/impact_bundle.yaml
+    - docs/pipelines/constitution/runs/<run_id>/inputs/integration_gate.yaml
+
+  run_manifest_schema:
+    description: >
+      Structure canonique obligatoire du run_manifest.yaml.
+      Tout run ouvert par l'IA doit produire ces champs exactement.
+    required_top_level_fields:
+      - run_id
+      - pipeline_id
+      - mode
+      - status
+      - scope_key
+      - scope_binding
+      - source_state
+      - materialized_inputs
+      - execution_paths
+      - current_stage
+      - overrides
+      - execution_state
+      - scope_tracking
+    scope_key_rule: >-
+      scope_key DOIT être présent au niveau run_manifest.scope_key (racine du bloc).
+      Il DOIT aussi être dupliqué dans scope_binding.scope_key.
+      Les scripts (materialize_run_inputs.py, pipeline_launcher.py) lisent
+      exclusivement run_manifest.scope_key en source primaire.
+      scope_binding.scope_key est conservé comme fallback de robustesse uniquement.
+
+  forbidden_direct_writes:
+    description: >-
+      L'IA ne doit JAMAIS pousser directement les fichiers de tracking d'un run.
+      Ces fichiers sont produits EXCLUSIVEMENT par les scripts déterministes dédiés.
+      Un push direct bypass la logique interne, casse la cohérence entre fichiers
+      canoniques, et compromet la traçabilité déterministe du pipeline.
+    forbidden_files:
+      - pattern: "runs/<run_id>/inputs/run_context.yaml"
+        owner_script: "docs/patcher/shared/build_run_context.py"
+        reason: >-
+          run_context.yaml est reconstruit déterministiquement par build_run_context.py.
+      - pattern: "runs/<run_id>/run_manifest.yaml"
+        owner_script: "docs/patcher/shared/initialize_run.py + docs/patcher/shared/update_run_tracking.py"
+        reason: >-
+          run_manifest.yaml est créé exclusivement par initialize_run.py lors du bootstrap,
+          puis mis à jour exclusivement par update_run_tracking.py.
+      - pattern: "runs/<run_id>/run_tracking.yaml"
+        owner_script: "docs/patcher/shared/update_run_tracking.py"
+        reason: >-
+          run_tracking.yaml est produit et maintenu exclusivement par update_run_tracking.py.
+      - pattern: "runs/index.yaml"
+        owner_script: "docs/patcher/shared/update_run_tracking.py"
+        reason: >-
+          index.yaml est mis à jour par update_run_tracking.py.
+    recovery_procedure: >-
+      Si l'IA a pushé directement un de ces fichiers par erreur :
+      1. Signaler immédiatement à l'humain.
+      2. Si le run n'existe pas encore matériellement, exécuter initialize_run.py avec les bons paramètres.
+      3. Exécuter update_run_tracking.py avec les bons paramètres.
+      4. Exécuter build_run_context.py pour reconstruire run_context.yaml.
+    enforcement: >-
+      Cette règle est une obligation absolue, pas une recommandation.
+
+  no_run_id_mode:
+    mode: entry_gate_zero_search
+    allowed_reads:
+      - docs/pipelines/constitution/AI_PROTOCOL.yaml
+      - docs/pipelines/constitution/pipeline.md
+      - docs/pipelines/constitution/runs/index.yaml
+      - docs/pipelines/constitution/scope_catalog/manifest.yaml
+      - docs/pipelines/constitution/scope_catalog/governance_backlog.yaml
+    forbidden_before_entry_decision:
+      - any_search
+      - compare_commits
+      - docs/cores/current/constitution.yaml
+      - docs/cores/current/referentiel.yaml
+      - docs/cores/current/link.yaml
+      - docs/prompts/shared/Challenge_constitution.md
+      - docs/prompts/shared/Make04ConstitutionArbitrage.md
+      - docs/pipelines/constitution/inputs/*
+      - docs/pipelines/constitution/work/*
+      - docs/pipelines/constitution/reports/*
+    decision_algorithm:
+      if_active_runs_count_eq_0: propose_create_new_run_or_partition_refresh
+      if_active_runs_count_eq_1: ask_continue_existing_or_open_new_on_other_scope
+      if_active_runs_count_gt_1: ask_disambiguation_with_shortlist
+    decision_output_requirements:
+      must_offer:
+        - continue_active_run
+        - open_new_run
+        - review_scope_partition_if_no_active_run
+      should_include_if_available:
+        - active_run_id
+        - active_scope_key
+        - active_current_stage
+        - shortlist_of_other_scope_keys
+        - governance_backlog_open_count
+        - next_best_action
+        - next_best_action_reason
+    next_step_policy:
+      after_open_new_run_authorized: MATERIALIZE_NEW_RUN
+      after_partition_refresh_preferred: PARTITION_REFRESH
+      after_single_active_run_preferred: CONTINUE_ACTIVE_RUN
+    stop_after_decision: true
+
+  run_id_mode:
+    optimal_read_sequence:
+      - docs/pipelines/constitution/runs/<run_id>/inputs/run_context.yaml
+      - docs/pipelines/constitution/runs/<run_id>/inputs/scope_extract.yaml
+      - docs/pipelines/constitution/runs/<run_id>/inputs/neighbor_extract.yaml
+    allowed_reads:
+      - docs/pipelines/constitution/AI_PROTOCOL.yaml
+      - docs/pipelines/constitution/pipeline.md
+      - docs/pipelines/constitution/runs/index.yaml
+      - docs/pipelines/constitution/runs/<run_id>/run_manifest.yaml
+      - docs/pipelines/constitution/runs/<run_id>/inputs/run_context.yaml
+      - docs/pipelines/constitution/runs/<run_id>/inputs/scope_manifest.yaml
+      - docs/pipelines/constitution/runs/<run_id>/inputs/impact_bundle.yaml
+      - docs/pipelines/constitution/runs/<run_id>/inputs/integration_gate.yaml
+      - docs/pipelines/constitution/runs/<run_id>/inputs/scope_extract.yaml
+      - docs/pipelines/constitution/runs/<run_id>/inputs/neighbor_extract.yaml
+    forbidden_before_run_resolution:
+      - any_search
+      - compare_commits
+      - docs/cores/current/constitution.yaml
+      - docs/cores/current/referentiel.yaml
+      - docs/cores/current/link.yaml
+      - docs/pipelines/constitution/inputs/*
+    if_run_exists: resume_existing_run
+    if_run_missing: emit_next_best_action_only
+    ids_first_rule: >-
+      Si run_context.yaml est présent, l'IA DOIT le lire en premier et utiliser
+      scope_extract.yaml + neighbor_extract.yaml comme source principale des entrées Core.
+
+  partition_refresh_mode:
+    precondition:
+      no_active_runs_required: true
+    allowed_reads:
+      - docs/pipelines/constitution/AI_PROTOCOL.yaml
+      - docs/pipelines/constitution/pipeline.md
+      - docs/pipelines/constitution/runs/index.yaml
+      - docs/pipelines/constitution/STAGE_00_SCOPE_PARTITION_REVIEW_AND_REGEN.md
+      - docs/pipelines/constitution/policies/scope_generation/policy.yaml
+      - docs/pipelines/constitution/policies/scope_generation/decisions.yaml
+      - docs/pipelines/constitution/scope_catalog/manifest.yaml
+      - docs/pipelines/constitution/scope_catalog/governance_backlog.yaml
+    forbidden_if_active_runs: true
+    mandatory_script:
+      - docs/patcher/shared/analyze_constitution_scope_partition.py
+    mandatory_reads_before_semantic_analysis:
+      - docs/pipelines/constitution/scope_catalog/governance_backlog.yaml
+    publication_rule:
+      - semantic_review_is_advisory_only_until_policy_and_decisions_are_UPDATED_and_generate_constitution_scopes_py_is_executed
+
+  deterministic_script_policy:
+    mandatory_behavior: true
+    rules:
+      - any_stage_that_declares_a_deterministic_validation_or_execution_script_as_required_must_not_be_considered_complete_until_that_script_has_been_actually_executed
+      - the_ai_must_never_simulate_or_assume_execution_of_a_required_script
+      - if_the_ai_cannot_execute_the_script_itself_it_must_provide_the_exact_command_to_the_user_and_keep_THE_stage_status_non_final_until_real_execution_feedback_is_available
+      - logical_review_or_document_reading_may_complement_a_required_script_execution_but_must_never_replace_it
+      - the_ai_must_never_directly_push_files_owned_by_a_deterministic_script_see_forbidden_direct_writes
+
+  tracking:
+    required_args:
+      - --pipeline constitution
+      - --run-id <RUN_ID>
+      - --stage-id <STAGE_ID>
+      - --stage-status <done|in_progress|blocked|failed|skipped>
+      - --run-status <bootstrap_open|active|blocked|failed|closed>
+    optional_args:
+      - --next-stage <NEXT_STAGE_ID>
+      - --scope-status <SCOPE_STATUS>
+      - --summary '<SUMMARY>'
+      - --close-run
+
+  anti_patterns:
+    - deep_read_before_entry_decision
+    - repo_wide_search_for_entry_resolution
+    - compare_commits_for_entry_resolution
+    - implicit_resume_when_user_did_not_provide_run_id
+    - simulating_required_script_execution
+    - direct_push_of_run_context_yaml_bypassing_build_run_context_py
+    - direct_push_of_run_manifest_yaml_bypassing_initialize_run_py_or_update_run_tracking_py
+    - direct_push_of_run_tracking_yaml_bypassing_update_run_tracking_py
+    - direct_push_of_index_yaml_bypassing_update_run_tracking_py
