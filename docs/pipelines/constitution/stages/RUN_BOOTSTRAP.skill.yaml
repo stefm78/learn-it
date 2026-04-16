@@ -123,12 +123,49 @@ required_scripts:
     échoue, il émet la commande corrective exacte et maintient le statut non-final
     jusqu'à confirmation d'exécution réelle.
 
+human_actions_required:
+  description: >-
+    L'IA émet le readiness report et la décision, puis s'arrête.
+    L'humain est seul responsable de l'exécution des commandes ci-dessous.
+    Aucune transition de stage n'est valide sans exécution réelle confirmée.
+  on_ready_for_stage_01:
+    step: 1
+    label: Clôturer le stage RUN_BOOTSTRAP et activer le run
+    mandatory: true
+    command: >-
+      python docs/patcher/shared/update_run_tracking.py
+      --pipeline constitution
+      --run-id <RUN_ID>
+      --stage-id RUN_BOOTSTRAP
+      --stage-status done
+      --run-status active
+      --next-stage STAGE_01_CHALLENGE
+      --summary "Bootstrap readiness confirmed; all mandatory checks passed; run ready for Stage 01."
+    expected_effect: >-
+      run_manifest.yaml : status passe à active, current_stage passe à STAGE_01_CHALLENGE,
+      RUN_BOOTSTRAP apparaît dans completed_stages.
+      run_context.yaml sera reconstruit automatiquement si --skip-rebuild-context n'est pas passé.
+    next_step: >-
+      Après exécution confirmée, relancer l'IA avec :
+      "Continue le run <RUN_ID> — RUN_BOOTSTRAP est done, démarre STAGE_01_CHALLENGE."
+  on_blocked_pending_inputs:
+    step: 1
+    label: Exécuter les commandes correctives émises par l'IA
+    mandatory: true
+    note: >-
+      L'IA aura émis les commandes exactes à exécuter (S01 ou S02 selon le check en échec).
+      Les exécuter dans l'ordre indiqué, puis relancer l'IA sur ce même stage.
+    next_step: >-
+      Après exécution confirmée, relancer l'IA avec :
+      "Reprends RUN_BOOTSTRAP pour <RUN_ID> — les scripts correctifs ont été exécutés."
+
 required_output_sections:
   - readiness_checks_summary
   - advisory_signals
   - ids_first_status
   - integration_gate_signal
   - bootstrap_decision
+  - human_actions_to_execute
 
 expected_outputs:
   bounded_local_run:
@@ -139,10 +176,12 @@ completion_evidence:
     - all_mandatory_readiness_checks_evaluated
     - bootstrap_decision_emitted
     - advisory_signals_reported
+    - human_actions_explicitly_stated_in_output
     - corrective_commands_emitted_if_blocked
   not_sufficient:
     - informal_chat_summary_only
     - assumed_scripts_executed_without_confirmation
+    - human_actions_omitted_from_output
 
 bootstrap_decision_values:
   - ready_for_stage_01
@@ -152,15 +191,7 @@ allowed_transitions:
   on_ready_for_stage_01:
     next_action: CONTINUE_ACTIVE_RUN
     next_stage: STAGE_01_CHALLENGE
-    tracking_command_template: >-
-      python docs/patcher/shared/update_run_tracking.py
-      --pipeline constitution
-      --run-id <RUN_ID>
-      --stage-id RUN_BOOTSTRAP
-      --stage-status done
-      --run-status active
-      --next-stage STAGE_01_CHALLENGE
-      --summary "Bootstrap readiness confirmed; all mandatory checks passed; run ready for Stage 01."
+    precondition: human must confirm update_run_tracking.py execution before transition is valid
   on_blocked_pending_inputs:
     next_action: emit_corrective_commands_and_stop
     note: >-
@@ -174,6 +205,7 @@ forbidden_actions:
   - direct_push_of_run_manifest_yaml
   - content_analysis_of_core_documents
   - scope_extract_generation_without_script
+  - omitting_human_actions_from_output
 
 migration_note: >-
   Premier skill de type hybrid pour le pipeline constitution.
