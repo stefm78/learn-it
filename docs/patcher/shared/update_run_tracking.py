@@ -16,6 +16,9 @@ Bootstrap creation:
 - Pass --bootstrap-create to atomically create the run directory and a minimal
   run_manifest.yaml when opening a brand-new run (RUN_BOOTSTRAP).
   Without this flag the script raises FileNotFoundError if the run_root is absent.
+- Pass --scope-key and --scope-id together with --bootstrap-create to seed
+  scope_binding and the top-level scope_key field so that materialize_run_inputs.py
+  can resolve the scope without a manual patch step.
 """
 
 from __future__ import annotations
@@ -86,6 +89,25 @@ def parse_args() -> argparse.Namespace:
             "Ignoré si le run_root existe déjà."
         ),
     )
+    parser.add_argument(
+        "--scope-key",
+        default="",
+        help=(
+            "Scope key à injecter dans scope_binding et scope_key top-level lors du --bootstrap-create "
+            "(ex: deployment_governance). Requis pour que materialize_run_inputs.py puisse résoudre "
+            "le scope sans patch manuel. Ignoré si --bootstrap-create est absent."
+        ),
+    )
+    parser.add_argument(
+        "--scope-id",
+        default="",
+        help=(
+            "Scope ID complet à injecter dans scope_binding.scope_id lors du --bootstrap-create "
+            "(ex: CONSTITUTION_SCOPE_DEPLOYMENT_GOVERNANCE). "
+            "Déduit automatiquement depuis --scope-key si absent. "
+            "Ignoré si --bootstrap-create est absent."
+        ),
+    )
     return parser.parse_args()
 
 
@@ -106,6 +128,18 @@ def resolve_pipeline_paths(repo_root: Path, pipeline_id: str, run_id: str) -> tu
     return run_root, run_manifest, runs_index, reports_root
 
 
+def derive_scope_id_from_key(scope_key: str) -> str:
+    """Dérive le scope_id canonique depuis scope_key.
+
+    Ex: deployment_governance -> CONSTITUTION_SCOPE_DEPLOYMENT_GOVERNANCE
+    """
+    return f"CONSTITUTION_SCOPE_{scope_key.upper()}"
+
+
+def derive_scope_definition_ref(pipeline_id: str, scope_key: str) -> str:
+    return f"docs/pipelines/{pipeline_id}/scope_catalog/scope_definitions/{scope_key}.yaml"
+
+
 def bootstrap_run_structure(
     run_root: Path,
     run_manifest_path: Path,
@@ -113,6 +147,8 @@ def bootstrap_run_structure(
     *,
     pipeline_id: str,
     run_id: str,
+    scope_key: str = "",
+    scope_id: str = "",
 ) -> None:
     """Créer la structure minimale d'un run si elle n'existe pas encore.
 
@@ -122,13 +158,18 @@ def bootstrap_run_structure(
       - runs/<run_id>/reports/              (répertoire des rapports)
       - runs/<run_id>/run_manifest.yaml     (manifest minimal, sera enrichi par update_run_manifest)
 
-    Le scope_binding est intentionnellement vide : update_run_manifest ne l'exploite pas.
-    Il sera renseigné par materialize_run_inputs.py qui lit scope_catalog/manifest.yaml.
+    Si scope_key est fourni, scope_binding et scope_key top-level sont renseignés
+    immédiatement pour que materialize_run_inputs.py puisse résoudre le scope
+    sans patch manuel ultérieur.
     """
     run_root.mkdir(parents=True, exist_ok=True)
     reports_root.mkdir(parents=True, exist_ok=True)
 
     if not run_manifest_path.exists():
+        resolved_scope_key = scope_key or ""
+        resolved_scope_id = scope_id or (derive_scope_id_from_key(scope_key) if scope_key else "")
+        resolved_scope_def_ref = derive_scope_definition_ref(pipeline_id, scope_key) if scope_key else ""
+
         minimal_manifest: dict[str, Any] = {
             "run_manifest": {
                 "schema_version": 0.1,
@@ -136,10 +177,11 @@ def bootstrap_run_structure(
                 "run_id": run_id,
                 "mode": "bounded_local_run",
                 "status": "bootstrap_open",
+                "scope_key": resolved_scope_key,
                 "scope_binding": {
-                    "scope_id": "",
-                    "scope_key": "",
-                    "scope_definition_ref": "",
+                    "scope_id": resolved_scope_id,
+                    "scope_key": resolved_scope_key,
+                    "scope_definition_ref": resolved_scope_def_ref,
                 },
                 "execution_state": {
                     "current_stage": "",
@@ -159,6 +201,9 @@ def bootstrap_run_structure(
         }
         dump_yaml(run_manifest_path, minimal_manifest)
         print(f"[update_run_tracking] bootstrap: run structure created at {run_root}")
+        if resolved_scope_key:
+            print(f"[update_run_tracking] bootstrap: scope_key seeded: {resolved_scope_key}")
+            print(f"[update_run_tracking] bootstrap: scope_id seeded:  {resolved_scope_id}")
     else:
         print("[update_run_tracking] bootstrap: run_manifest.yaml already exists — skipping creation")
 
@@ -241,8 +286,9 @@ def update_runs_index(
     run_manifest = ensure_mapping(run_manifest_data, "run_manifest")
     scope_binding = ensure_mapping(run_manifest, "scope_binding")
     scope_id = scope_binding.get("scope_id", "")
-    scope_key = ""
-    if scope_id.startswith("CONSTITUTION_SCOPE_"):
+    # Prefer top-level scope_key; fall back to derivation from scope_id
+    scope_key = run_manifest.get("scope_key", "")
+    if not scope_key and scope_id.startswith("CONSTITUTION_SCOPE_"):
         scope_key = scope_id.replace("CONSTITUTION_SCOPE_", "").lower()
 
     # current_stage dans index.yaml = next_stage si done, sinon stage_id courant
@@ -354,6 +400,8 @@ def main() -> int:
                 run_root, run_manifest_path, reports_root,
                 pipeline_id=args.pipeline,
                 run_id=args.run_id,
+                scope_key=args.scope_key,
+                scope_id=args.scope_id,
             )
         else:
             raise FileNotFoundError(
