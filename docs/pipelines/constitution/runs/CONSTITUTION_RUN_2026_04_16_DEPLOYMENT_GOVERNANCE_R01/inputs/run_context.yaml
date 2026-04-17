@@ -46,9 +46,18 @@ run_context:
   - REF_CORE_LEARNIT_REFERENTIEL_V2_0_IN_CONSTITUTION
   neighbor_ids_count: 1
   scope_extract:
-    present: false
+    present: true
+    found_ids_count: 19
+    missing_ids_count: 0
+    missing_ids: []
+    ref: runs/CONSTITUTION_RUN_2026_04_16_DEPLOYMENT_GOVERNANCE_R01/inputs/scope_extract.yaml
   neighbor_extract:
-    present: false
+    present: true
+    found_ids_count: 0
+    missing_ids_count: 1
+    missing_ids:
+    - REF_CORE_LEARNIT_REFERENTIEL_V2_0_IN_CONSTITUTION
+    ref: runs/CONSTITUTION_RUN_2026_04_16_DEPLOYMENT_GOVERNANCE_R01/inputs/neighbor_extract.yaml
   integration_gate:
     status: open
     total_checks: 6
@@ -64,6 +73,8 @@ run_context:
     scope_manifest.yaml: e49256274979b7e08a7e28a7c3bf852a803a762364f10ce5ac6daed6d6313965
     impact_bundle.yaml: 518b7758c05278f45b57b106ab97164622071df3dc05e29663c6cf461a39aa71
     integration_gate.yaml: 8e3a00f87c5358fdb0d5f73645bc0031915a5e8473902c5727680c724b6ca8bb
+    scope_extract.yaml: fdb600e97de5f775a6166e7c86fd28d3ef3f8db8149bf8adb00f3bdb32459625
+    neighbor_extract.yaml: 20e902c09ace22a61188a38ab1b5c0a2fd978287f10a101db549a6e007eb030b
   task_view:
     status: executable
     raw_stage_id: STAGE_01_CHALLENGE
@@ -83,9 +94,9 @@ run_context:
       primary_output: runs/CONSTITUTION_RUN_2026_04_16_DEPLOYMENT_GOVERNANCE_R01/work/01_challenge/challenge_report_<id>.md
       reports_dir: runs/CONSTITUTION_RUN_2026_04_16_DEPLOYMENT_GOVERNANCE_R01/reports/
     required_scripts_status:
-      scope_extract_present: false
-      neighbor_extract_present: false
-      ids_first_ready: false
+      scope_extract_present: true
+      neighbor_extract_present: true
+      ids_first_ready: true
     forbidden_actions: []
     completion_evidence: []
     allowed_transitions: {}
