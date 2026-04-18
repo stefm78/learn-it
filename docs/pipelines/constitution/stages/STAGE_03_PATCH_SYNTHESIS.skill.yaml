@@ -94,7 +94,10 @@ required_scripts:
   note: >-
     Ce stage est purement cognitif. Il ne simule aucun script déterministe.
     La validation formelle du patchset est réservée à STAGE_04_PATCH_VALIDATION
-    via validate_patchset.py.
+    via validate_patchset.py. Si le stage se termine correctement, l'IA doit
+    demander explicitement à l'humain d'exécuter update_run_tracking.py ;
+    l'IA ne doit pas exécuter elle-même cette transition de tracking dans le
+    cadre du livrable STAGE_03.
 
 patch_rules:
   constraints:
@@ -177,6 +180,10 @@ human_actions_required:
     humaine sémantique préalable du patchset. Après écriture du YAML, une
     trace de transition peut être enregistrée, puis la validation déterministe
     obligatoire est rejouée en STAGE_04 via validate_patchset.py.
+    L'IA doit afficher explicitement la commande update_run_tracking.py à
+    l'humain et s'arrêter après cette demande. Elle ne doit ni exécuter
+    elle-même le script de tracking, ni présenter la transition comme déjà
+    effectuée tant que l'humain n'a pas confirmé l'exécution.
   on_done:
     step: 1
     label: Tracer STAGE_03 done et passer à STAGE_04_PATCH_VALIDATION
@@ -193,9 +200,15 @@ human_actions_required:
     expected_effect: >-
       run_manifest.yaml : current_stage passe à STAGE_04_PATCH_VALIDATION,
       STAGE_03_PATCH_SYNTHESIS apparaît dans completed_stages.
+    assistant_behavior: >-
+      Après production du patchset, l'IA doit demander explicitement à l'humain
+      d'exécuter cette commande, puis s'arrêter. Elle ne doit pas exécuter ou
+      simuler elle-même update_run_tracking.py, ni faire avancer le tracking du
+      run par un autre moyen dans le cadre de STAGE_03.
     next_step: >-
       Enchaîner sur STAGE_04_PATCH_VALIDATION, où validate_patchset.py doit être
-      exécuté réellement selon le contrat du stage suivant.
+      exécuté réellement selon le contrat du stage suivant, uniquement après
+      confirmation humaine de la transition de tracking.
   on_revision_needed:
     step: 1
     label: Fournir des notes de révision sur le patchset
@@ -224,6 +237,8 @@ forbidden_actions:
   - patch_without_traceability_to_arbitrage
   - prose_before_or_after_patchset_when_patch_file_is_produced
   - omitting_human_actions_from_output
+  - self_executed_run_tracking_transition
+  - presenting_tracking_as_done_without_human_confirmation
   - global_repository_search_without_current_stage_requirement
   - branch_compare_without_current_stage_requirement
   - reading_other_stage_skills_without_current_stage_requirement
