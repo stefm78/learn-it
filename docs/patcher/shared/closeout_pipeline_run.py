@@ -18,9 +18,10 @@ DEFAULT_WORK_ROOT = "docs/pipelines/constitution/work"
 DEFAULT_REPORTS_ROOT = "docs/pipelines/constitution/reports"
 DEFAULT_OUTPUTS_ROOT = "docs/pipelines/constitution/outputs"
 DEFAULT_GOVERNANCE_BACKLOG_PATH = "docs/pipelines/constitution/scope_catalog/governance_backlog.yaml"
+_GOVERNANCE_BACKLOG_CANDIDATES_ROOT = "governance_backlog_candidates"
 
 # ---------------------------------------------------------------------------
-# Backlog entry type inference from note content
+# Backlog entry type inference from note content (legacy fallback)
 # ---------------------------------------------------------------------------
 # Pattern: C\d+ — <description>
 # Heuristics to classify the entry type from note text.
@@ -51,10 +52,10 @@ def infer_entry_type(description: str) -> str:
 
 
 # ---------------------------------------------------------------------------
-# Backlog note extraction from arbitrage.md
+# Backlog note extraction from arbitrage report
 # ---------------------------------------------------------------------------
 
-# Matches lines like: **C05** — description
+# Legacy fallback matches lines like: **C05** — description
 # or: - C05 — description
 # or: C05 : description
 _NOTE_RE = re.compile(
@@ -62,12 +63,45 @@ _NOTE_RE = re.compile(
     re.IGNORECASE,
 )
 
+# Preferred structured block:
+# ```yaml
+# governance_backlog_candidates:
+#   - candidate_id: ...
+#     backlog_entry_type: ...
+#     ...
+# ```
+_YAML_FENCE_RE = re.compile(r"```yaml\s*(.*?)\s*```", re.IGNORECASE | re.DOTALL)
+
+
+def extract_structured_backlog_candidates(arbitrage_path: Path) -> List[Dict[str, Any]]:
+    if not arbitrage_path.exists():
+        return []
+
+    text = arbitrage_path.read_text(encoding="utf-8")
+    candidates: List[Dict[str, Any]] = []
+    for match in _YAML_FENCE_RE.finditer(text):
+        block = match.group(1)
+        try:
+            parsed = yaml.safe_load(block) or {}
+        except Exception:
+            continue
+        if not isinstance(parsed, dict):
+            continue
+        raw_candidates = parsed.get(_GOVERNANCE_BACKLOG_CANDIDATES_ROOT)
+        if not isinstance(raw_candidates, list):
+            continue
+        for candidate in raw_candidates:
+            if isinstance(candidate, dict):
+                candidates.append(candidate)
+    return candidates
+
 
 def extract_backlog_notes_from_arbitrage(
     arbitrage_path: Path,
 ) -> List[Dict[str, str]]:
-    """Extract governance notes (C\u0078\u0078 pattern) from arbitrage.md.
+    """Extract governance notes (Cxx pattern) from arbitrage report.
 
+    Legacy fallback kept for backward compatibility.
     Returns list of dicts with keys: note_id, description.
     """
     if not arbitrage_path.exists():
@@ -114,10 +148,45 @@ def save_governance_backlog(backlog_path: Path, doc: Dict[str, Any]) -> None:
         yaml.safe_dump(doc, f, allow_unicode=True, sort_keys=False)
 
 
-def build_entry_id(run_id: str, note_id: str) -> str:
-    # e.g. GB_PATCH_LIFECYCLE_R01_C05
-    suffix = run_id.replace("CONSTITUTION_RUN_", "").replace("-", "_")
-    return f"GB_{suffix}_{note_id}"
+def build_entry_id(run_id: str, suffix: str) -> str:
+    normalized_run_id = run_id.replace("CONSTITUTION_RUN_", "").replace("-", "_")
+    normalized_suffix = re.sub(r"[^A-Za-z0-9_]+", "_", suffix).strip("_")
+    return f"GB_{normalized_run_id}_{normalized_suffix}"
+
+
+def normalize_scope_keys(value: Any, fallback_scope_key: str) -> List[str]:
+    if isinstance(value, list):
+        keys = [str(v).strip() for v in value if str(v).strip()]
+        return keys or [fallback_scope_key]
+    if isinstance(value, str) and value.strip():
+        return [value.strip()]
+    return [fallback_scope_key]
+
+
+def normalize_candidate_entry(
+    candidate: Dict[str, Any],
+    run_id: str,
+    fallback_scope_key: str,
+    current_stage: str,
+) -> Dict[str, Any]:
+    candidate_id = str(candidate.get("candidate_id") or "CANDIDATE").strip()
+    entry_id = build_entry_id(run_id, candidate_id)
+    return {
+        "entry_id": entry_id,
+        "type": str(candidate.get("backlog_entry_type") or "scope_gap"),
+        "status": "open",
+        "source_run_id": run_id,
+        "source_stage": current_stage,
+        "scope_key": fallback_scope_key,
+        "related_scope_keys": normalize_scope_keys(candidate.get("related_scope_keys"), fallback_scope_key),
+        "candidate_id": candidate_id,
+        "source_finding_id": str(candidate.get("source_finding_id") or "unknown"),
+        "title": str(candidate.get("title") or candidate_id),
+        "description": str(candidate.get("rationale") or candidate.get("title") or candidate_id),
+        "recommended_action": str(candidate.get("recommended_stage00_action") or "review_at_stage_00"),
+        "candidate_status": str(candidate.get("candidate_status") or "candidate_open"),
+        "recorded_at": utc_now_iso(),
+    }
 
 
 def export_backlog_entries(
@@ -127,39 +196,57 @@ def export_backlog_entries(
     backlog_path: Path,
     current_stage: str,
 ) -> List[Dict[str, Any]]:
-    """Extract Cxx notes from arbitrage.md and append new entries to governance_backlog.yaml.
+    """Export governance backlog entries from arbitrage report.
+
+    Preferred mode: extract a structured YAML fenced block rooted at
+    governance_backlog_candidates.
+    Legacy fallback: extract Cxx notes and infer entry types heuristically.
 
     Skips entries whose entry_id already exists (idempotent).
     Returns the list of newly added entries.
     """
-    notes = extract_backlog_notes_from_arbitrage(arbitrage_path)
-    if not notes:
+    structured_candidates = extract_structured_backlog_candidates(arbitrage_path)
+    legacy_notes = extract_backlog_notes_from_arbitrage(arbitrage_path) if not structured_candidates else []
+    if not structured_candidates and not legacy_notes:
         return []
 
     doc = load_governance_backlog(backlog_path)
     entries: List[Dict[str, Any]] = doc["governance_backlog"]["entries"]
     existing_ids = {e.get("entry_id") for e in entries}
 
-    now = utc_now_iso()
     added: List[Dict[str, Any]] = []
-    for note in notes:
-        entry_id = build_entry_id(run_id, note["note_id"])
-        if entry_id in existing_ids:
-            continue
-        entry: Dict[str, Any] = {
-            "entry_id": entry_id,
-            "type": infer_entry_type(note["description"]),
-            "status": "open",
-            "source_run_id": run_id,
-            "source_stage": current_stage,
-            "scope_key": scope_key,
-            "note_ref": note["note_id"],
-            "description": note["description"],
-            "recommended_action": "review_at_stage_00",
-            "recorded_at": now,
-        }
-        entries.append(entry)
-        added.append(entry)
+
+    if structured_candidates:
+        for candidate in structured_candidates:
+            entry = normalize_candidate_entry(
+                candidate=candidate,
+                run_id=run_id,
+                fallback_scope_key=scope_key,
+                current_stage=current_stage,
+            )
+            if entry["entry_id"] in existing_ids:
+                continue
+            entries.append(entry)
+            added.append(entry)
+    else:
+        for note in legacy_notes:
+            entry_id = build_entry_id(run_id, note["note_id"])
+            if entry_id in existing_ids:
+                continue
+            entry: Dict[str, Any] = {
+                "entry_id": entry_id,
+                "type": infer_entry_type(note["description"]),
+                "status": "open",
+                "source_run_id": run_id,
+                "source_stage": current_stage,
+                "scope_key": scope_key,
+                "note_ref": note["note_id"],
+                "description": note["description"],
+                "recommended_action": "review_at_stage_00",
+                "recorded_at": utc_now_iso(),
+            }
+            entries.append(entry)
+            added.append(entry)
 
     if added:
         save_governance_backlog(backlog_path, doc)
@@ -419,14 +506,15 @@ def main() -> None:
         "--export-backlog-entries",
         action="store_true",
         help=(
-            "Extract governance notes (Cxx pattern) from the run's arbitrage.md "
-            "and append them as open entries to governance_backlog.yaml."
+            "Export governance backlog entries from the run's arbitrage report. "
+            "Preferred input: a structured YAML fenced block rooted at governance_backlog_candidates. "
+            "Legacy fallback: Cxx notes."
         ),
     )
     parser.add_argument(
         "--arbitrage-path",
         default=None,
-        help="Path to arbitrage.md (default: docs/pipelines/constitution/work/arbitrage.md)",
+        help="Path to arbitrage report (default: docs/pipelines/constitution/work/arbitrage.md)",
     )
     parser.add_argument(
         "--backlog-path",
@@ -477,7 +565,7 @@ def main() -> None:
         run_id_for_backlog = args.run_id or promotion_report.get("run_id") or release_id
         scope_key_for_backlog = args.scope_key or promotion_report.get("scope_key") or "unknown"
 
-        # --export-backlog-entries : extract Cxx notes from arbitrage.md
+        # --export-backlog-entries : extract entries from arbitrage report
         if args.export_backlog_entries:
             arbitrage_path = Path(
                 args.arbitrage_path
@@ -496,9 +584,10 @@ def main() -> None:
             if added:
                 print(f"[backlog] {backlog_entries_exported} entrée(s) exportée(s) vers {args.backlog_path}:")
                 for e in added:
-                    print(f"  + {e['entry_id']} [{e['type']}] — {e['description'][:80]}")
+                    title = e.get("title") or e.get("description") or e.get("entry_id")
+                    print(f"  + {e['entry_id']} [{e['type']}] — {str(title)[:80]}")
             else:
-                print("[backlog] Aucune nouvelle entrée à exporter (aucune note Cxx ou déjà présentes).")
+                print("[backlog] Aucune nouvelle entrée à exporter (aucun candidat structuré, aucune note legacy, ou déjà présentes).")
 
         archive_root.mkdir(parents=True, exist_ok=True)
 
