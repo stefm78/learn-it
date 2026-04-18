@@ -1,0 +1,153 @@
+stage_skill:
+  schema_version: 0.1
+  pipeline_id: constitution
+  stage_id: STAGE_06B_CONSOLIDATION
+  skill_id: parallel_run_consolidation_supervisor
+  stage_kind: hybrid
+  closure_level: high
+  authoritative_role: stable_stage_contract
+
+mission: >-
+  Superviser la consolidation pipeline-level de plusieurs runs clos et validés,
+  en fusionnant leurs sandboxes dans un workspace unique avant matérialisation
+  de release. Ce stage exige l'exécution réelle de consolidate_parallel_runs.py,
+  d'abord en dry-run puis en run réel, puis une revue IA du rapport de consolidation.
+
+model_requirements:
+  reasoning_level: advanced
+  justification: >-
+    Ce stage arbitre un espace pipeline-level multi-runs. Le modèle doit lire
+    un rapport de consolidation réel, vérifier la disjonction des scopes,
+    l'état des integration_gates et la propreté du workspace consolidé avant
+    de laisser repartir la chaîne vers STAGE_07.
+  recommended_models:
+    - o3
+    - claude-opus-4
+    - gemini-2.5-pro
+  minimum_acceptable: tout modèle avec extended thinking ou chain-of-thought activable
+
+runtime_binding:
+  expected_mode_values:
+    - parallel_consolidation
+  pipeline_level_role: >-
+    Ce stage opère au niveau pipeline. Il ne dépend pas d'un run unique mais
+    d'un ensemble de runs clos explicitement éligibles à consolidation.
+  execution_evidence_role: >-
+    consolidate_parallel_runs.py doit être réellement exécuté en dry-run puis
+    en run réel. L'IA ne doit jamais simuler cette exécution.
+
+primary_reads:
+  parallel_consolidation:
+    - docs/pipelines/constitution/runs/index.yaml
+    - docs/pipelines/constitution/work/consolidation/
+    - docs/patcher/shared/consolidate_parallel_runs.py
+
+required_scripts:
+  mandatory_consolidation:
+    - docs/patcher/shared/consolidate_parallel_runs.py
+  note: >-
+    La consolidation doit être exécutée réellement avec dry-run préalable.
+    Si l'IA ne peut pas exécuter le script elle-même, elle doit émettre les
+    commandes exactes, déclarer le stage BLOCKED, et attendre les artefacts.
+
+script_execution_contract:
+  required_before_pass_or_fail:
+    - consolidation_dry_run_executed_for_real
+    - consolidation_real_run_executed_for_real
+    - consolidation_report_materialized
+  blocked_if_missing_evidence: true
+  blocked_status_value: BLOCKED
+  pass_requires:
+    - dry_run_passed
+    - real_run_passed
+    - no_blocking_scope_overlap
+    - no_blocking_gate_issue
+  fail_requires:
+    - dry_run_failed
+    - or_real_run_failed
+    - or_blocking_conflict_detected_after_real_execution
+
+deterministic_command_templates:
+  parallel_consolidation:
+    dry_run: >-
+      python docs/patcher/shared/consolidate_parallel_runs.py
+      --runs <RUN_ID_1> <RUN_ID_2>
+      --base docs/cores/current
+      --output docs/pipelines/constitution/work/consolidation
+      --pipeline constitution
+      --dry-run
+    real_run: >-
+      python docs/patcher/shared/consolidate_parallel_runs.py
+      --runs <RUN_ID_1> <RUN_ID_2>
+      --base docs/cores/current
+      --output docs/pipelines/constitution/work/consolidation
+      --pipeline constitution
+
+required_output_sections:
+  - execution_evidence
+  - participating_runs_summary
+  - scope_disjointness_summary
+  - consolidation_workspace_summary
+  - follow_up_actions
+  - human_actions_to_execute
+
+expected_outputs:
+  parallel_consolidation:
+    report_path_pattern: docs/pipelines/constitution/work/consolidation/consolidation_report.yaml
+
+completion_evidence:
+  required:
+    - consolidation_commands_emitted_or_executed
+    - real_execution_evidence_declared
+    - consolidation_report_materialized
+    - final_status_is_pass_fail_or_blocked
+    - human_actions_explicitly_stated_in_output
+  not_sufficient:
+    - informal_chat_summary_only
+    - consolidation_reasoning_without_script_evidence
+    - pass_without_materialized_consolidation_artifacts
+    - simulated_script_execution
+
+status_values:
+  - PASS
+  - FAIL
+  - BLOCKED
+
+human_actions_required:
+  description: >-
+    Si les commandes n'ont pas été exécutées réellement, l'humain doit lancer
+    le dry-run puis la consolidation réelle, puis relancer l'IA sur ce stage.
+    Une fois la consolidation validée, la chaîne repart vers STAGE_07.
+  on_blocked:
+    step: 1
+    label: Exécuter le dry-run puis la consolidation réelle et relancer ce stage
+    mandatory: true
+  on_pass:
+    step: 1
+    label: Poursuivre vers STAGE_07_RELEASE_MATERIALIZATION
+    mandatory: true
+    note: >-
+      Le workspace docs/pipelines/constitution/work/consolidation devient la
+      source de vérité pour STAGE_07.
+  on_fail:
+    step: 1
+    label: Corriger les conflits ou gates avant nouvelle tentative
+    mandatory: true
+
+allowed_transitions:
+  on_pass:
+    next_stage: STAGE_07_RELEASE_MATERIALIZATION
+  on_fail:
+    next_stage: STAGE_06_CORE_VALIDATION
+  on_blocked:
+    next_action: execute_consolidation_and_retry_same_stage
+
+forbidden_actions:
+  - simulated_consolidation_execution
+  - pass_without_real_execution_evidence
+  - direct_release_materialization_without_consolidation
+  - omitting_human_actions_from_output
+
+migration_note: >-
+  Premier skill STAGE_06B pour le pipeline constitution.
+  Consolide en YAML machine-readable les règles de consolidation multi-runs.
