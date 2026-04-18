@@ -60,6 +60,7 @@ stages:
   - stage_id: STAGE_04_PATCH_VALIDATION
     optional: false
     orchestration_scope: run
+    primary_skill_ref: docs/pipelines/constitution/stages/STAGE_04_PATCH_VALIDATION.skill.yaml
     deterministic_scripts_required:
       - docs/patcher/shared/validate_patchset.py
     transitions:
