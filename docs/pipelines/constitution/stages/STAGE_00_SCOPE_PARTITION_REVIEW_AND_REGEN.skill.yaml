@@ -100,6 +100,17 @@ human_actions_required:
     step: 1
     label: Exécuter le script d'analyse puis relancer ce stage
     mandatory: true
+    command: >-
+      python docs/patcher/shared/analyze_constitution_scope_partition.py
+      --runs-index docs/pipelines/constitution/runs/index.yaml
+      --constitution docs/cores/current/constitution.yaml
+      --scope-catalog docs/pipelines/constitution/scope_catalog/manifest.yaml
+      --scope-policy docs/pipelines/constitution/policies/scope_generation/policy.yaml
+      --scope-decisions docs/pipelines/constitution/policies/scope_generation/decisions.yaml
+      --report docs/pipelines/constitution/reports/scope_partition_review_report.yaml
+    next_step: >-
+      Relancer l'IA avec :
+      "Reprends STAGE_00_SCOPE_PARTITION_REVIEW_AND_REGEN — scope_partition_review_report.yaml est présent."
   on_ready_for_human_arbitration:
     step: 1
     label: Arbitrer puis régénérer le catalogue de scopes
@@ -107,6 +118,12 @@ human_actions_required:
     note: >-
       Après arbitrage humain et modification réelle des fichiers policy/decisions,
       exécuter generate_constitution_scopes.py pour republier le catalogue.
+    command: >-
+      python docs/patcher/shared/generate_constitution_scopes.py
+      --policy docs/pipelines/constitution/policies/scope_generation/policy.yaml
+      --decisions docs/pipelines/constitution/policies/scope_generation/decisions.yaml
+      --report docs/pipelines/constitution/reports/scope_generation_report.yaml
+      --apply
 
 allowed_transitions:
   on_ready_for_human_arbitration:
