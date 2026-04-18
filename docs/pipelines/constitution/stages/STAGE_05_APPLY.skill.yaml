@@ -51,9 +51,9 @@ runtime_binding:
 
 primary_reads:
   bounded_local_run:
-    - runs/<run_id>/inputs/run_context.yaml
-    - runs/<run_id>/work/03_patch/patchset.yaml
-    - runs/<run_id>/work/04_patch_validation/patch_validation.yaml
+    - docs/pipelines/constitution/runs/<run_id>/inputs/run_context.yaml
+    - docs/pipelines/constitution/runs/<run_id>/work/03_patch/patchset.yaml
+    - docs/pipelines/constitution/runs/<run_id>/work/04_patch_validation/patch_validation.yaml
     - docs/prompts/shared/Make08PatchExecutionReview.md
   nominal_global:
     - docs/pipelines/constitution/work/03_patch/patchset.yaml
@@ -91,8 +91,8 @@ script_execution_contract:
 
 execution_paths:
   bounded_local_run:
-    sandbox_root: runs/<run_id>/work/05_apply/sandbox/
-    execution_report: runs/<run_id>/reports/patch_execution_report.yaml
+    sandbox_root: docs/pipelines/constitution/runs/<run_id>/work/05_apply/sandbox/
+    execution_report: docs/pipelines/constitution/runs/<run_id>/reports/patch_execution_report.yaml
   nominal_global:
     sandbox_root: docs/pipelines/constitution/work/05_apply/sandbox/
     execution_report: docs/pipelines/constitution/reports/patch_execution_report.yaml
@@ -104,10 +104,10 @@ deterministic_command_templates:
   bounded_local_run:
     apply_patch: >-
       python docs/patcher/shared/apply_patch.py
-      --patch runs/<run_id>/work/03_patch/patchset.yaml
+      --patch docs/pipelines/constitution/runs/<run_id>/work/03_patch/patchset.yaml
       --base docs/cores/current
-      --output-dir runs/<run_id>/work/05_apply/sandbox
-      --report runs/<run_id>/reports/patch_execution_report.yaml
+      --output-dir docs/pipelines/constitution/runs/<run_id>/work/05_apply/sandbox
+      --report docs/pipelines/constitution/runs/<run_id>/reports/patch_execution_report.yaml
   nominal_global:
     apply_patch: >-
       python docs/patcher/shared/apply_patch.py
@@ -150,7 +150,7 @@ required_output_sections:
 
 expected_outputs:
   bounded_local_run:
-    report_path_pattern: runs/<run_id>/reports/patch_execution_report.yaml
+    report_path_pattern: docs/pipelines/constitution/runs/<run_id>/reports/patch_execution_report.yaml
   nominal_global:
     report_path_pattern: docs/pipelines/constitution/reports/patch_execution_report.yaml
   bounded_transition:
