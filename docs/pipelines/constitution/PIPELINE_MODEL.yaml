@@ -10,7 +10,7 @@ pipeline_model:
 execution_units:
   run_unit: bounded_local_run
   promotion_unit: pipeline_level_or_single_run
-  derived_runtime_view: runs/<run_id>/inputs/run_context.yaml
+  derived_runtime_view: docs/pipelines/constitution/runs/<run_id>/inputs/run_context.yaml
 
 operating_modes:
   - id: nominal_global
@@ -18,7 +18,7 @@ operating_modes:
   - id: bounded_transition
     description: Mode historique transitoire avec inputs plats.
   - id: bounded_local_run
-    description: Run borné matérialisé sous runs/<run_id>/.
+    description: Run borné matérialisé sous docs/pipelines/constitution/runs/<run_id>/.
   - id: parallel_consolidation
     description: Consolidation de plusieurs runs clos avant release/promotion.
   - id: partition_refresh
@@ -90,6 +90,7 @@ stages:
     optional: true
     orchestration_scope: pipeline
     requires_no_active_run: true
+    primary_skill_ref: docs/pipelines/constitution/stages/STAGE_06B_CONSOLIDATION.skill.yaml
     deterministic_scripts_required:
       - docs/patcher/shared/consolidate_parallel_runs.py
     transitions:
