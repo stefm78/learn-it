@@ -1,14 +1,178 @@
 PATCH_SET:
-  id: CONSTITUTION_RUN_2026_04_16_DEPLOYMENT_GOVERNANCE_R01_STAGE_03_PATCHSET
+  id: PATCHSET_CONSTITUTION_RUN_2026_04_16_DEPLOYMENT_GOVERNANCE_R01_STAGE_03
   patch_dsl_version: "4.0"
   atomic: true
   description: >-
-    Bounded Stage 03 patch synthesis for run CONSTITUTION_RUN_2026_04_16_DEPLOYMENT_GOVERNANCE_R01.
-    Minimal in-scope patch on constitution.yaml only. Synthesizes the three in-scope
-    corrections authorized by the validated STAGE_02 arbitrage for deployment_governance:
-    runtime-boundary clarification, Constitution/Référentiel authority-boundary clarification,
-    and top-level governance isolation for GF-08 and gamification probation. The stale
-    inter-Core input anomaly raised as R4 remains note-only and is not patched in this run.
+    Patchset minimal de STAGE_03_PATCH_SYNTHESIS pour le run
+    CONSTITUTION_RUN_2026_04_16_DEPLOYMENT_GOVERNANCE_R01.
+    Traduit l'arbitrage canonique du run en corrections locales bornées sur
+    constitution.yaml, sans modification inter-Core ni extension de scope.
+  patch_scope:
+    run_id: CONSTITUTION_RUN_2026_04_16_DEPLOYMENT_GOVERNANCE_R01
+    pipeline_id: constitution
+    stage_id: STAGE_03_PATCH_SYNTHESIS
+    mode: bounded_local_run
+    writable_files:
+      - docs/cores/current/constitution.yaml
+    writable_ids:
+      - INV_RUNTIME_FULLY_LOCAL
+      - INV_NO_RUNTIME_CONTENT_GENERATION
+      - INV_RUNTIME_QUALIFICATION_SIGNALS_MUST_BE_EXPLICIT_OR_OFFSESSION
+      - INV_CONSTITUTION_REFERENTIAL_SEPARATION
+      - TYPE_AUTONOMY_REGIME
+      - CONSTRAINT_NO_CHANGE_TO_AND_LOGIC
+      - CONSTRAINT_NO_CHANGE_TO_GRAPH_PROPAGATION_RULE
+      - RULE_GF08_UNCOVERED_CONFLICT_CONSERVATIVE_RESPONSE
+      - RULE_UNVERIFIED_GAMIFICATION_PROBATION
+      - RULE_GAMIFICATION_PROBATION_MUST_CLOSE
+      - EVENT_GF08_UNCOVERED_CONFLICT
+      - EVENT_GAMIFICATION_PROBATION_MAX_DURATION_REACHED
+      - ACTION_INFORM_LEARNER
+    non_patchable_now:
+      - challenge_finding_id: R4
+        decision: necessite_extension_scope
+        reason: >-
+          Décalage entre l'ancre voisine matérialisée dans les inputs du run
+          (V2.0) et l'ancre inter-Core canonique courante (V3.0) ; sujet de
+          génération d'inputs / partition, non patchable localement dans ce run.
+  arbitrage_to_patch_mapping:
+    - challenge_finding_id: R1
+      decision: corriger_maintenant
+      scope_status: in_scope
+      gate_checks:
+        - WP_01
+      operations:
+        - file: docs/cores/current/constitution.yaml
+          op: replace_field
+          target:
+            section: INVARIANTS
+            id: INV_RUNTIME_FULLY_LOCAL
+            field: logic.effect
+        - file: docs/cores/current/constitution.yaml
+          op: replace_field
+          target:
+            section: INVARIANTS
+            id: INV_NO_RUNTIME_CONTENT_GENERATION
+            field: logic.effect
+        - file: docs/cores/current/constitution.yaml
+          op: replace_field
+          target:
+            section: INVARIANTS
+            id: INV_RUNTIME_QUALIFICATION_SIGNALS_MUST_BE_EXPLICIT_OR_OFFSESSION
+            field: logic.effect
+    - challenge_finding_id: R2
+      decision: corriger_maintenant
+      scope_status: in_scope
+      gate_checks:
+        - WP_02
+        - WP_03
+        - WP_05
+      operations:
+        - file: docs/cores/current/constitution.yaml
+          op: replace_field
+          target:
+            section: TYPES
+            id: TYPE_AUTONOMY_REGIME
+            field: logic.effect
+        - file: docs/cores/current/constitution.yaml
+          op: replace_field
+          target:
+            section: INVARIANTS
+            id: INV_CONSTITUTION_REFERENTIAL_SEPARATION
+            field: logic.effect
+        - file: docs/cores/current/constitution.yaml
+          op: no_change
+          target:
+            section: CONSTRAINTS
+            id: CONSTRAINT_NO_CHANGE_TO_AND_LOGIC
+          reason: >-
+            La contrainte est déjà explicite et conforme ; aucun patch local
+            supplémentaire requis dans ce run.
+        - file: docs/cores/current/constitution.yaml
+          op: no_change
+          target:
+            section: CONSTRAINTS
+            id: CONSTRAINT_NO_CHANGE_TO_GRAPH_PROPAGATION_RULE
+          reason: >-
+            La contrainte est déjà explicite et conforme ; aucun patch local
+            supplémentaire requis dans ce run.
+    - challenge_finding_id: R3
+      decision: corriger_maintenant
+      scope_status: in_scope
+      gate_checks:
+        - WP_04
+      operations:
+        - file: docs/cores/current/constitution.yaml
+          op: replace_field
+          target:
+            section: RULES
+            id: RULE_GF08_UNCOVERED_CONFLICT_CONSERVATIVE_RESPONSE
+            field: logic.effect
+        - file: docs/cores/current/constitution.yaml
+          op: replace_field
+          target:
+            section: RULES
+            id: RULE_GAMIFICATION_PROBATION_MUST_CLOSE
+            field: logic.effect
+        - file: docs/cores/current/constitution.yaml
+          op: no_change
+          target:
+            section: RULES
+            id: RULE_UNVERIFIED_GAMIFICATION_PROBATION
+          reason: >-
+            Le rôle de mise en mode probatoire est déjà borné ; la clarification
+            requise porte sur la frontière avec patch/promotion, couverte par les
+            règles GF-08 et de clôture explicite.
+    - challenge_finding_id: R4
+      decision: necessite_extension_scope
+      scope_status: needs_scope_extension
+      gate_checks:
+        - WP_02
+        - FORBIDDEN_OPS_ENFORCEMENT
+      operations:
+        - file: docs/cores/current/constitution.yaml
+          op: no_change
+          target:
+            section: TYPES
+            id: REF_CORE_LEARNIT_REFERENTIEL_V3_0_IN_CONSTITUTION
+          reason: >-
+            Aucun patch local dans ce run : l'ancre canonique V3.0 est déjà en
+            place côté Constitution ; l'anomalie réside dans les inputs bornés du run.
+        - file: docs/cores/current/constitution.yaml
+          op: note
+          value:
+            id: NOTE_R4_SCOPE_EXTENSION_REQUIRED
+            challenge_finding_id: R4
+            classification: scope_gap
+            message: >-
+              Rejouer la génération de partition / scope catalog / inputs bornés
+              pour aligner impact_bundle et neighbor_extract sur
+              REF_CORE_LEARNIT_REFERENTIEL_V3_0_IN_CONSTITUTION.
+  fallback_reads_used_if_any:
+    used: true
+    rationale: >-
+      neighbor_extract.yaml signale l'ID manquant
+      REF_CORE_LEARNIT_REFERENTIEL_V2_0_IN_CONSTITUTION ; le fallback autorisé a
+      été utilisé pour localiser l'ancre canonique courante et qualifier R4 comme
+      anomalie d'inputs plutôt que comme correction locale de contenu.
+    files:
+      - docs/cores/current/constitution.yaml
+      - docs/cores/current/referentiel.yaml
+  human_actions_to_execute:
+    on_done:
+      mandatory: true
+      command: >-
+        python docs/patcher/shared/update_run_tracking.py
+        --pipeline constitution
+        --run-id CONSTITUTION_RUN_2026_04_16_DEPLOYMENT_GOVERNANCE_R01
+        --stage-id STAGE_03_PATCH_SYNTHESIS
+        --stage-status done
+        --run-status active
+        --next-stage STAGE_04_PATCH_VALIDATION
+        --summary "Patchset synthesized; ready for deterministic validation."
+      next_step: >-
+        Exécuter ensuite STAGE_04_PATCH_VALIDATION, qui rejoue réellement
+        validate_patchset.py selon le contrat du stage suivant.
   files:
     - file: docs/cores/current/constitution.yaml
       expected_core_id: CORE_LEARNIT_CONSTITUTION_V3_0
@@ -16,126 +180,102 @@ PATCH_SET:
         - op: replace_field
           target:
             section: INVARIANTS
-            id: INV_RUNTIME_QUALIFICATION_SIGNALS_MUST_BE_EXPLICIT_OR_OFFSESSION
-            field: human_readable
+            id: INV_RUNTIME_FULLY_LOCAL
+            field: logic.effect
           value: >-
-            Les signaux comme misconception, ICC ou contexte authentique doivent provenir
-            d’artefacts hors session ou d’entrées explicites ; cette exigence borne
-            l’architecture runtime locale et ne fonde ni qualification pédagogique autonome
-            ni adaptation interprétative implicite.
+            Aucun appel réseau temps réel n’est autorisé. Cette contrainte borne
+            l’architecture d’exécution locale uniquement et ne vaut jamais règle
+            pédagogique autonome, ni base d’inférence adaptative implicite.
+        - op: replace_field
+          target:
+            section: INVARIANTS
+            id: INV_NO_RUNTIME_CONTENT_GENERATION
+            field: logic.effect
+          value: >-
+            Le moteur sélectionne uniquement des artefacts préexistants. Cette
+            contrainte borne le runtime et n’autorise aucune logique pédagogique
+            implicite par génération, réécriture ou interprétation autonome du contenu.
         - op: replace_field
           target:
             section: INVARIANTS
             id: INV_RUNTIME_QUALIFICATION_SIGNALS_MUST_BE_EXPLICIT_OR_OFFSESSION
             field: logic.effect
           value: >-
-            Interdiction ; seuls les artefacts précomputés hors session ou les indicateurs
-            explicites déterministes sont autorisés en usage local. Cette contrainte borne
-            le runtime local et ne vaut ni règle pédagogique autonome ni autorisation
-            d’inférence adaptative implicite.
-        - op: replace_field
-          target:
-            section: INVARIANTS
-            id: INV_CONSTITUTION_REFERENTIAL_SEPARATION
-            field: human_readable
-          value: >-
-            Séparation inviolable Constitution/Référentiel ; les régimes d’autonomie
-            restent des configurations gouvernées et les invariants structurels ne sont
-            pas délégués.
-        - op: replace_field
-          target:
-            section: INVARIANTS
-            id: INV_CONSTITUTION_REFERENTIAL_SEPARATION
-            field: logic.effect
-          value: >-
-            La Constitution fixe le quoi/pourquoi et les interdits structurels ; le
-            Référentiel borne le combien/comment. Les régimes d’autonomie demeurent
-            des configurations gouvernées et ne peuvent devenir des règles adaptatives
-            implicites. La logique AND du MSC et la propagation graphe à un saut restent
-            hors délégation.
-        - op: replace_field
-          target:
-            section: TYPES
-            id: TYPE_AUTONOMY_REGIME
-            field: human_readable
-          value: >-
-            Configurations gouvernées des niveaux d’autonomie moteur : autonome, hybride
-            recommandé, hybride bloquant, assisté.
+            Interdiction ; seuls les artefacts précomputés hors session ou les
+            indicateurs explicites déterministes sont autorisés en usage local.
+            Cette exigence borne la qualification des signaux de runtime et ne vaut
+            pas règle pédagogique autonome ni adaptation interprétative implicite.
         - op: replace_field
           target:
             section: TYPES
             id: TYPE_AUTONOMY_REGIME
             field: logic.effect
           value: >-
-            Régime d’autonomie applicable comme configuration gouvernée du déploiement ;
-            aucune règle adaptative implicite n’est introduite par ce typage.
+            Régime d’autonomie applicable comme configuration de déploiement gouvernée.
+            Ce régime ne constitue jamais une règle adaptative implicite et n’autorise
+            ni dérive décisionnelle autonome ni réallocation silencieuse entre Core.
         - op: replace_field
           target:
-            section: RULES
-            id: RULE_GF08_UNCOVERED_CONFLICT_CONSERVATIVE_RESPONSE
-            field: human_readable
+            section: INVARIANTS
+            id: INV_CONSTITUTION_REFERENTIAL_SEPARATION
+            field: logic.effect
           value: >-
-            Un conflit GF-08 non couvert reçoit une réponse conservatrice de gouvernance,
-            sans effet implicite de patch ou de promotion.
+            La Constitution fixe le quoi/pourquoi ; le Référentiel borne le
+            combien/comment. Aucun patch local ne peut transformer cette frontière
+            d’autorité, ni confondre invariant constitutionnel et paramètre référentiel.
+        - op: no_change
+          target:
+            section: CONSTRAINTS
+            id: CONSTRAINT_NO_CHANGE_TO_AND_LOGIC
+          reason: >-
+            Déjà explicite et conforme à l'arbitrage R2 ; aucune modification locale
+            requise dans ce patchset.
+        - op: no_change
+          target:
+            section: CONSTRAINTS
+            id: CONSTRAINT_NO_CHANGE_TO_GRAPH_PROPAGATION_RULE
+          reason: >-
+            Déjà explicite et conforme à l'arbitrage R2 ; aucune modification locale
+            requise dans ce patchset.
         - op: replace_field
           target:
             section: RULES
             id: RULE_GF08_UNCOVERED_CONFLICT_CONSERVATIVE_RESPONSE
             field: logic.effect
           value: >-
-            Réponse conservatrice + log pour futur patch. Cette réponse n’emporte ni
-            patch implicite, ni validation de promotion, ni autorisation de changement
-            structurel.
-        - op: replace_field
-          target:
-            section: RULES
-            id: RULE_GAMIFICATION_PROBATION_MUST_CLOSE
-            field: human_readable
-          value: >-
-            Une probation gamification doit se clôturer explicitement par validation,
-            suspension ou retrait, sans valoir mécanisme implicite de patch.
+            Réponse conservatrice + log pour futur patch. Cette règle n’autorise
+            jamais un patch implicite, une promotion implicite, ni un changement
+            structurel ou inter-Core silencieux.
         - op: replace_field
           target:
             section: RULES
             id: RULE_GAMIFICATION_PROBATION_MUST_CLOSE
             field: logic.effect
           value: >-
-            Sortie explicite du mode probatoire par validation, suspension ou retrait ;
-            l’apprenant est informé si un changement visible intervient. Cette clôture
-            n’emporte ni patch implicite, ni validation de promotion, ni réallocation
-            structurelle inter-Core.
+            Sortie explicite du mode probatoire par validation, suspension ou retrait
+            ; l’apprenant est informé si un changement visible intervient. Cette
+            clôture explicite ne vaut ni validation de patch, ni promotion, ni
+            autorisation de changement structurel implicite.
+        - op: no_change
+          target:
+            section: RULES
+            id: RULE_UNVERIFIED_GAMIFICATION_PROBATION
+          reason: >-
+            Le placement en mode probatoire est déjà explicite ; la frontière avec
+            patch/promotion est clarifiée par les règles corrigées sans élargir le patch.
+        - op: no_change
+          target:
+            section: TYPES
+            id: REF_CORE_LEARNIT_REFERENTIEL_V3_0_IN_CONSTITUTION
+          reason: >-
+            Aucun patch local pour R4 : la référence canonique courante est déjà
+            correcte dans la Constitution ; l'écart est dans les inputs du run.
         - op: note
-          text: >-
-            patch_scope: bounded_local_run / scope_key=deployment_governance / writable
-            file limited to docs/cores/current/constitution.yaml / patched findings limited
-            to the three in-scope corrections authorized by the validated STAGE_02 arbitrage.
-        - op: note
-          text: >-
-            arbitrage_to_patch_mapping: authoritative STAGE_02 mapping used here is
-            R1(runtime boundary) -> INV_RUNTIME_QUALIFICATION_SIGNALS_MUST_BE_EXPLICIT_OR_OFFSESSION;
-            R2(authority boundary) -> INV_CONSTITUTION_REFERENTIAL_SEPARATION +
-            TYPE_AUTONOMY_REGIME; R3(top-level governance isolation) ->
-            RULE_GF08_UNCOVERED_CONFLICT_CONSERVATIVE_RESPONSE +
-            RULE_GAMIFICATION_PROBATION_MUST_CLOSE; R4(stale inter-Core run input) ->
-            note only / no patch now.
-        - op: note
-          text: >-
-            fallback_reads_used_if_any: mandatory reads performed on docs/cores/current/referentiel.yaml
-            and docs/cores/current/link.yaml per impact_bundle. Fallback triggered for
-            missing neighbor REF_CORE_LEARNIT_REFERENTIEL_V2_0_IN_CONSTITUTION and resolved
-            against the canonical Constitution/Referentiel pair, confirming a stale run-input
-            anomaly rather than a local content absence. Challenge and arbitrage outputs
-            were both read directly in this execution.
-        - op: note
-          text: >-
-            human_actions_to_execute: human reviews this patchset for minimality and
-            strict alignment with the validated STAGE_02 arbitrage, then may execute
-            update_run_tracking.py for STAGE_03_PATCH_SYNTHESIS only after explicit approval.
-            STAGE_04 deterministic patch validation remains mandatory and has not been
-            executed or simulated here.
-        - op: note
-          text: >-
-            traceability_alignment: STAGE_01 challenge and STAGE_02 arbitrage do not
-            preserve the same R1-R3 wording; this patch follows the validated STAGE_02
-            clustering recorded in work/02_arbitrage/arbitrage.md and keeps R4 outside
-            local patch scope.
+          value:
+            id: NOTE_R4_SCOPE_EXTENSION_REQUIRED
+            challenge_finding_id: R4
+            classification: scope_gap
+            message: >-
+              Sujet à traiter hors de ce patch local par réalignement de la
+              génération des inputs bornés sur l'ancre
+              REF_CORE_LEARNIT_REFERENTIEL_V3_0_IN_CONSTITUTION.
