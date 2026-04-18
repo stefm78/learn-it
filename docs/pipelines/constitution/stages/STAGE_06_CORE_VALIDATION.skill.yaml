@@ -51,11 +51,11 @@ runtime_binding:
 
 primary_reads:
   bounded_local_run:
-    - runs/<run_id>/inputs/run_context.yaml
-    - runs/<run_id>/reports/patch_execution_report.yaml
-    - runs/<run_id>/work/05_apply/sandbox/docs/cores/current/constitution.yaml
-    - runs/<run_id>/work/05_apply/sandbox/docs/cores/current/referentiel.yaml
-    - runs/<run_id>/work/05_apply/sandbox/docs/cores/current/link.yaml
+    - docs/pipelines/constitution/runs/<run_id>/inputs/run_context.yaml
+    - docs/pipelines/constitution/runs/<run_id>/reports/patch_execution_report.yaml
+    - docs/pipelines/constitution/runs/<run_id>/work/05_apply/sandbox/docs/cores/current/constitution.yaml
+    - docs/pipelines/constitution/runs/<run_id>/work/05_apply/sandbox/docs/cores/current/referentiel.yaml
+    - docs/pipelines/constitution/runs/<run_id>/work/05_apply/sandbox/docs/cores/current/link.yaml
     - docs/prompts/shared/Make02CoreValidation.md
   nominal_global:
     - docs/pipelines/constitution/reports/patch_execution_report.yaml
@@ -138,7 +138,7 @@ required_output_sections:
 
 expected_outputs:
   bounded_local_run:
-    report_path_pattern: runs/<run_id>/work/06_core_validation/core_validation.yaml
+    report_path_pattern: docs/pipelines/constitution/runs/<run_id>/work/06_core_validation/core_validation.yaml
   nominal_global:
     report_path_pattern: docs/pipelines/constitution/work/06_core_validation/core_validation.yaml
   bounded_transition:
