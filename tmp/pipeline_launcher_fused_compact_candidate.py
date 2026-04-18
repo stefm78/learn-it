@@ -229,6 +229,16 @@ def probe_run_context(pipeline_root: Path, run_id: str) -> dict[str, Any]:
     return probe
 
 
+def ensure_prompt_mentions_branch(prompt: str, branch: str) -> str:
+    branch_marker = f"sur la branche {branch}"
+    if branch_marker in prompt:
+        return prompt
+    repo_prefix = "Dans le repo learn-it,"
+    if prompt.startswith(repo_prefix):
+        return prompt.replace(repo_prefix, f"{repo_prefix} sur la branche {branch},", 1)
+    return f"Dans le repo learn-it, sur la branche {branch}, {prompt}"
+
+
 def build_stage_prompt(
     branch: str,
     pipeline_id: str,
@@ -250,7 +260,7 @@ def build_stage_prompt(
             f"Ne propose pas de continue. Inspecte uniquement run_context.yaml, run_manifest.yaml et les reports si besoin."
         )
     if compact_execution_prompt and task_view_status == "executable":
-        return compact_execution_prompt
+        return ensure_prompt_mentions_branch(compact_execution_prompt, branch)
     if ids_first_ready:
         return (
             f"Dans le repo learn-it, sur la branche {branch}, exécute le pipeline {pipeline_path} au {current_stage} en mode run-aware "
@@ -330,7 +340,7 @@ def detect_consolidation_ready(
         runs_arg = " ".join(run_ids)
         consolidation_cmd = (
             f"python docs/patcher/shared/consolidate_parallel_runs.py "
-            f"--runs {runs_arg} --base docs/cores/current "
+            f"--runs {run_ids} --base docs/cores/current "
             f"--output docs/pipelines/{pipeline_id}/work/consolidation --pipeline {pipeline_id}"
         )
         consolidation_dry_run_cmd = consolidation_cmd + " --dry-run"
