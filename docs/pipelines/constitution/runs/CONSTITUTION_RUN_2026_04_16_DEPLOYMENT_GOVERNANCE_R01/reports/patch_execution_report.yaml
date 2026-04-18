@@ -1,0 +1,26 @@
+PATCH_EXECUTION_REPORT:
+  patch_id: PATCHSET_CONSTITUTION_RUN_2026_04_16_DEPLOYMENT_GOVERNANCE_R01_STAGE_03
+  patch_dsl_version: '4.0'
+  atomic: true
+  whatif: false
+  status: PASS
+  files:
+  - file: docs/cores/current/constitution.yaml
+    expected_core_id: CORE_LEARNIT_CONSTITUTION_V3_0
+    actual_core_id: CORE_LEARNIT_CONSTITUTION_V3_0
+    operations:
+    - replace_field INVARIANTS/INV_RUNTIME_FULLY_LOCAL.logic.effect
+    - replace_field INVARIANTS/INV_NO_RUNTIME_CONTENT_GENERATION.logic.effect
+    - replace_field INVARIANTS/INV_RUNTIME_QUALIFICATION_SIGNALS_MUST_BE_EXPLICIT_OR_OFFSESSION.logic.effect
+    - replace_field TYPES/TYPE_AUTONOMY_REGIME.logic.effect
+    - replace_field INVARIANTS/INV_CONSTITUTION_REFERENTIAL_SEPARATION.logic.effect
+    - no_change Déjà explicite et conforme à l'arbitrage R2 ; aucune modification locale requise dans ce patchset.
+    - no_change Déjà explicite et conforme à l'arbitrage R2 ; aucune modification locale requise dans ce patchset.
+    - replace_field RULES/RULE_GF08_UNCOVERED_CONFLICT_CONSERVATIVE_RESPONSE.logic.effect
+    - replace_field RULES/RULE_GAMIFICATION_PROBATION_MUST_CLOSE.logic.effect
+    - no_change Le placement en mode probatoire est déjà explicite ; la frontière avec patch/promotion est clarifiée par les règles corrigées sans élargir le patch.
+    - 'no_change Aucun patch local pour R4 : la référence canonique courante est déjà correcte dans la Constitution ; l''écart est dans les inputs du run.'
+    - note NOTE_R4_SCOPE_EXTENSION_REQUIRED
+    text_replacements: 0
+  errors: []
+  federation: {}
