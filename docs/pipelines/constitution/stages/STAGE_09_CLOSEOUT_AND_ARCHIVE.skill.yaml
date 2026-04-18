@@ -41,6 +41,11 @@ runtime_binding:
     final_run_summary.md et archive de run) restent les sources de vérité du
     stage. L'IA ne doit pas inventer de flags CLI inexistants ni réécrire un
     artefact brut produit par script.
+  tracking_closure_rule: >-
+    Le closeout scripté ne ferme pas à lui seul le tracking du run. Après un
+    PASS du stage, l'humain doit exécuter update_run_tracking.py pour passer le
+    run à status=closed et vider next_stage. Le stage n'est complètement
+    convergent qu'une fois cette fermeture de tracking effectuée.
 
 primary_reads:
   bounded_local_run:
@@ -87,6 +92,15 @@ deterministic_command_templates:
       docs/cores/current/manifest.yaml
       --closeout-report docs/pipelines/constitution/runs/<run_id>/reports/closeout_report.yaml
       --final-summary docs/pipelines/constitution/runs/<run_id>/outputs/final_run_summary.md
+    close_tracking: >-
+      python docs/patcher/shared/update_run_tracking.py
+      --pipeline constitution
+      --run-id <RUN_ID>
+      --stage-id STAGE_09_CLOSEOUT_AND_ARCHIVE
+      --stage-status done
+      --run-status closed
+      --summary "Run closeout completed with archive and final summary; pipeline run is closed."
+      --close-run
   nominal_global:
     closeout: >-
       python docs/patcher/shared/closeout_pipeline_run.py
@@ -146,18 +160,28 @@ human_actions_required:
   description: >-
     Si le script n'a pas été exécuté réellement, l'humain doit lancer la
     commande émise puis relancer l'IA sur ce stage. Une fois la clôture validée,
-    le run peut être considéré terminé.
+    le tracking du run doit encore être fermé explicitement via
+    update_run_tracking.py.
   on_blocked:
     step: 1
     label: Exécuter le closeout puis relancer ce stage
     mandatory: true
   on_pass:
     step: 1
-    label: Le run est clôturé
+    label: Fermer explicitement le tracking du run
     mandatory: true
+    command: >-
+      python docs/patcher/shared/update_run_tracking.py
+      --pipeline constitution
+      --run-id <RUN_ID>
+      --stage-id STAGE_09_CLOSEOUT_AND_ARCHIVE
+      --stage-status done
+      --run-status closed
+      --summary "Run closeout completed with archive and final summary; pipeline run is closed."
+      --close-run
     note: >-
-      Aucun stage supplémentaire n'est requis. Le prochain point d'entrée
-      redevient la résolution d'entrée du pipeline.
+      Aucun stage supplémentaire n'est requis après cette fermeture de tracking.
+      Le prochain point d'entrée redevient la résolution d'entrée du pipeline.
   on_fail:
     step: 1
     label: Corriger les anomalies finales avant nouvelle tentative
@@ -166,6 +190,7 @@ human_actions_required:
 allowed_transitions:
   on_pass:
     next_stage: ENTRY_RESOLUTION
+    precondition: human must confirm update_run_tracking.py execution
   on_fail:
     next_stage: STAGE_08_PROMOTE_CURRENT
   on_blocked:
