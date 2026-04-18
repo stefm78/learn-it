@@ -5,74 +5,14 @@ PATCH_SET:
   description: >-
     Bounded Stage 03 patch synthesis for run CONSTITUTION_RUN_2026_04_16_DEPLOYMENT_GOVERNANCE_R01.
     Minimal in-scope patch on constitution.yaml only. Synthesizes the three in-scope
-    corrections authorized by Stage 02 for deployment_governance: explicit bounded closure
-    of gamification probation, constitution-level qualification of tutoring infrastructure
-    required by assisted mode, and clarification that behavioral proxies cannot qualify
-    governance signals by themselves. The inter-Core identifier ambiguity initially raised
-    as R4 is not patched now and remains outside the writable perimeter of this run.
+    corrections authorized by the validated STAGE_02 arbitrage for deployment_governance:
+    runtime-boundary clarification, Constitution/Référentiel authority-boundary clarification,
+    and top-level governance isolation for GF-08 and gamification probation. The stale
+    inter-Core input anomaly raised as R4 remains note-only and is not patched in this run.
   files:
     - file: docs/cores/current/constitution.yaml
       expected_core_id: CORE_LEARNIT_CONSTITUTION_V3_0
       operations:
-        - op: replace_field
-          target:
-            section: RULES
-            id: RULE_GAMIFICATION_PROBATION_MUST_CLOSE
-            field: human_readable
-          value: >-
-            Une probation gamification doit se clôturer dans une fenêtre référentielle
-            finie, pré-déclarée, puis déboucher explicitement sur validation, suspension
-            ou retrait de la mécanique.
-        - op: replace_field
-          target:
-            section: RULES
-            id: RULE_GAMIFICATION_PROBATION_MUST_CLOSE
-            field: logic.effect
-          value: >-
-            Sortie explicite du mode probatoire par validation, suspension ou retrait ;
-            l’apprenant est informé si un changement visible intervient. Aucune prolongation
-            implicite ou indéfinie de la probation n’est autorisée au-delà de la fenêtre
-            référentielle finie pré-déclarée.
-        - op: replace_field
-          target:
-            section: EVENTS
-            id: EVENT_GAMIFICATION_PROBATION_MAX_DURATION_REACHED
-            field: logic.condition
-          value: >-
-            Le nombre maximal de sessions probatoires, fini, pré-déclaré et défini
-            référentiellement, est atteint sans validation explicite.
-        - op: replace_field
-          target:
-            section: INVARIANTS
-            id: INV_ASSISTED_MODE_REQUIRES_TUTORING
-            field: human_readable
-          value: >-
-            Le mode Assisté exige une infrastructure tutorale identifiée, disponible et
-            traçable pour le suivi effectif de l’apprenant.
-        - op: replace_field
-          target:
-            section: INVARIANTS
-            id: INV_ASSISTED_MODE_REQUIRES_TUTORING
-            field: logic.condition
-          value: >-
-            Infrastructure tutorale absente, non identifiée, indisponible ou dépourvue
-            de traçabilité minimale pour le suivi effectif de l’apprenant.
-        - op: replace_field
-          target:
-            section: CONSTRAINTS
-            id: CONSTRAINT_NO_ASSISTED_DEPLOYMENT_WITHOUT_TUTORING
-            field: human_readable
-          value: >-
-            Pas de déploiement Assisté sans infrastructure tutorale identifiée, disponible
-            et traçable.
-        - op: replace_field
-          target:
-            section: CONSTRAINTS
-            id: CONSTRAINT_NO_ASSISTED_DEPLOYMENT_WITHOUT_TUTORING
-            field: logic.condition
-          value: >-
-            Infrastructure tutorale absente, non identifiée, indisponible ou insuffisamment
-            traçable au moment du déploiement Assisté.
         - op: replace_field
           target:
             section: INVARIANTS
@@ -80,9 +20,9 @@ PATCH_SET:
             field: human_readable
           value: >-
             Les signaux comme misconception, ICC ou contexte authentique doivent provenir
-            d’artefacts hors session ou d’entrées explicites ; des proxys comportementaux
-            peuvent servir d’indices opérationnels bornés mais ne qualifient jamais seuls
-            un signal de gouvernance.
+            d’artefacts hors session ou d’entrées explicites ; cette exigence borne
+            l’architecture runtime locale et ne fonde ni qualification pédagogique autonome
+            ni adaptation interprétative implicite.
         - op: replace_field
           target:
             section: INVARIANTS
@@ -90,32 +30,112 @@ PATCH_SET:
             field: logic.effect
           value: >-
             Interdiction ; seuls les artefacts précomputés hors session ou les indicateurs
-            explicites déterministes sont autorisés en usage local. Les proxys comportementaux
-            ne peuvent ni remplacer ni qualifier seuls un signal de gouvernance nécessitant
-            interprétation sémantique ou jugement IA.
+            explicites déterministes sont autorisés en usage local. Cette contrainte borne
+            le runtime local et ne vaut ni règle pédagogique autonome ni autorisation
+            d’inférence adaptative implicite.
+        - op: replace_field
+          target:
+            section: INVARIANTS
+            id: INV_CONSTITUTION_REFERENTIAL_SEPARATION
+            field: human_readable
+          value: >-
+            Séparation inviolable Constitution/Référentiel ; les régimes d’autonomie
+            restent des configurations gouvernées et les invariants structurels ne sont
+            pas délégués.
+        - op: replace_field
+          target:
+            section: INVARIANTS
+            id: INV_CONSTITUTION_REFERENTIAL_SEPARATION
+            field: logic.effect
+          value: >-
+            La Constitution fixe le quoi/pourquoi et les interdits structurels ; le
+            Référentiel borne le combien/comment. Les régimes d’autonomie demeurent
+            des configurations gouvernées et ne peuvent devenir des règles adaptatives
+            implicites. La logique AND du MSC et la propagation graphe à un saut restent
+            hors délégation.
+        - op: replace_field
+          target:
+            section: TYPES
+            id: TYPE_AUTONOMY_REGIME
+            field: human_readable
+          value: >-
+            Configurations gouvernées des niveaux d’autonomie moteur : autonome, hybride
+            recommandé, hybride bloquant, assisté.
+        - op: replace_field
+          target:
+            section: TYPES
+            id: TYPE_AUTONOMY_REGIME
+            field: logic.effect
+          value: >-
+            Régime d’autonomie applicable comme configuration gouvernée du déploiement ;
+            aucune règle adaptative implicite n’est introduite par ce typage.
+        - op: replace_field
+          target:
+            section: RULES
+            id: RULE_GF08_UNCOVERED_CONFLICT_CONSERVATIVE_RESPONSE
+            field: human_readable
+          value: >-
+            Un conflit GF-08 non couvert reçoit une réponse conservatrice de gouvernance,
+            sans effet implicite de patch ou de promotion.
+        - op: replace_field
+          target:
+            section: RULES
+            id: RULE_GF08_UNCOVERED_CONFLICT_CONSERVATIVE_RESPONSE
+            field: logic.effect
+          value: >-
+            Réponse conservatrice + log pour futur patch. Cette réponse n’emporte ni
+            patch implicite, ni validation de promotion, ni autorisation de changement
+            structurel.
+        - op: replace_field
+          target:
+            section: RULES
+            id: RULE_GAMIFICATION_PROBATION_MUST_CLOSE
+            field: human_readable
+          value: >-
+            Une probation gamification doit se clôturer explicitement par validation,
+            suspension ou retrait, sans valoir mécanisme implicite de patch.
+        - op: replace_field
+          target:
+            section: RULES
+            id: RULE_GAMIFICATION_PROBATION_MUST_CLOSE
+            field: logic.effect
+          value: >-
+            Sortie explicite du mode probatoire par validation, suspension ou retrait ;
+            l’apprenant est informé si un changement visible intervient. Cette clôture
+            n’emporte ni patch implicite, ni validation de promotion, ni réallocation
+            structurelle inter-Core.
         - op: note
           text: >-
-            patch_scope: bounded_local_run / scope_key=deployment_governance / writable file
-            limited to docs/cores/current/constitution.yaml / patched findings limited to R1,
-            R2 and R3 in_scope items from the current run.
+            patch_scope: bounded_local_run / scope_key=deployment_governance / writable
+            file limited to docs/cores/current/constitution.yaml / patched findings limited
+            to the three in-scope corrections authorized by the validated STAGE_02 arbitrage.
         - op: note
           text: >-
-            arbitrage_to_patch_mapping: R1 -> explicit bounded closure wording on
-            RULE_GAMIFICATION_PROBATION_MUST_CLOSE and EVENT_GAMIFICATION_PROBATION_MAX_DURATION_REACHED;
-            R2 -> tutoring infrastructure qualification on INV_ASSISTED_MODE_REQUIRES_TUTORING
-            and CONSTRAINT_NO_ASSISTED_DEPLOYMENT_WITHOUT_TUTORING; R3 -> clarification that
-            behavioral proxies cannot qualify governance signals on
-            INV_RUNTIME_QUALIFICATION_SIGNALS_MUST_BE_EXPLICIT_OR_OFFSESSION; R4 -> no_change,
-            needs_scope_extension, not patched now.
+            arbitrage_to_patch_mapping: authoritative STAGE_02 mapping used here is
+            R1(runtime boundary) -> INV_RUNTIME_QUALIFICATION_SIGNALS_MUST_BE_EXPLICIT_OR_OFFSESSION;
+            R2(authority boundary) -> INV_CONSTITUTION_REFERENTIAL_SEPARATION +
+            TYPE_AUTONOMY_REGIME; R3(top-level governance isolation) ->
+            RULE_GF08_UNCOVERED_CONFLICT_CONSERVATIVE_RESPONSE +
+            RULE_GAMIFICATION_PROBATION_MUST_CLOSE; R4(stale inter-Core run input) ->
+            note only / no patch now.
         - op: note
           text: >-
-            fallback_reads_used_if_any: docs/cores/current/constitution.yaml was read to localize
-            exact patch targets. No additional writable surface was opened. The run stage completion
-            summary for STAGE_02 was used as authoritative confirmation that exactly three in-scope
-            corrections were authorized and one point was deferred as needs_scope_extension.
+            fallback_reads_used_if_any: mandatory reads performed on docs/cores/current/referentiel.yaml
+            and docs/cores/current/link.yaml per impact_bundle. Fallback triggered for
+            missing neighbor REF_CORE_LEARNIT_REFERENTIEL_V2_0_IN_CONSTITUTION and resolved
+            against the canonical Constitution/Referentiel pair, confirming a stale run-input
+            anomaly rather than a local content absence. Challenge and arbitrage outputs
+            were both read directly in this execution.
         - op: note
           text: >-
-            human_actions_to_execute: human review the present patchset for minimality and strict
-            alignment with Stage 02 decisions, then execute update_run_tracking.py for
-            STAGE_03_PATCH_SYNTHESIS only after explicit approval; Stage 04 deterministic validation
-            remains mandatory and has not been executed or simulated here.
+            human_actions_to_execute: human reviews this patchset for minimality and
+            strict alignment with the validated STAGE_02 arbitrage, then may execute
+            update_run_tracking.py for STAGE_03_PATCH_SYNTHESIS only after explicit approval.
+            STAGE_04 deterministic patch validation remains mandatory and has not been
+            executed or simulated here.
+        - op: note
+          text: >-
+            traceability_alignment: STAGE_01 challenge and STAGE_02 arbitrage do not
+            preserve the same R1-R3 wording; this patch follows the validated STAGE_02
+            clustering recorded in work/02_arbitrage/arbitrage.md and keeps R4 outside
+            local patch scope.
