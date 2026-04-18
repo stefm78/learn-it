@@ -283,7 +283,7 @@ human_actions_required:
       Si une ambiguïté matérielle subsiste, l'humain doit choisir explicitement
       entre les options proposées dans l'arbitrage_report ou fournir une note
       d'arbitrage complémentaire. Tant que cette décision n'est pas fournie,
-      STAGE_03_PATCH_SYNTHYSIS ne doit pas démarrer pour les points concernés.
+      STAGE_03_PATCH_SYNTHESIS ne doit pas démarrer pour les points concernés.
     next_step: >-
       Relancer l'IA avec :
       "Révise l'arbitrage du run <RUN_ID> — décision humaine sur ambiguïtés : <tes notes>."
