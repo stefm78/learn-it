@@ -262,12 +262,10 @@ def build_stage_prompt(
         )
     if compact_execution_prompt and task_view_status == "executable":
         compact_execution_prompt = compact_execution_prompt.replace(
-            f"runs/{run_id}/", f"{run_root}/"
-        )
-        compact_execution_prompt = compact_execution_prompt.replace(
             "runs/<run_id>/", f"{run_root}/"
         )
         return ensure_prompt_mentions_branch(compact_execution_prompt, branch)
+
     if ids_first_ready:
         return (
             f"Dans le repo learn-it, sur la branche {branch}, exécute le pipeline {pipeline_path} au {current_stage} en mode run-aware "
