@@ -265,6 +265,24 @@ def build_target_core_id(current_core_id: str, current_version: str, target_vers
 
 
 
+def normalize_link_id_token(version: str, current_token: str) -> str:
+    raw = version.replace("_FINAL", "")
+    match = re.fullmatch(r"V(\d+)_(\d+)", raw)
+    if not match:
+        raise ReleasePlanError(f"version LINK non supportée: {version}")
+    major = match.group(1)
+    minor = match.group(2)
+
+    if current_token.startswith("v") and "." in current_token:
+        return f"v{major}.{minor}"
+    if current_token.startswith("V") and "." in current_token:
+        return f"V{major}.{minor}"
+    if current_token.startswith("v"):
+        return f"v{major}_{minor}"
+    return f"V{major}_{minor}"
+
+
+
 def compute_link_targets(
     current_doc: Dict[str, Any],
     constitution_target_version: str,
@@ -274,18 +292,33 @@ def compute_link_targets(
     current_core_id = str(core.get("id", ""))
     current_version = str(core.get("version", ""))
 
-    current_constitution_token = re.search(r"CONSTITUTION_(V\d+_\d+)", current_core_id)
-    current_referentiel_token = re.search(r"REFERENTIEL_(V\d+_\d+)", current_core_id)
+    current_constitution_token = re.search(r"CONSTITUTION_([Vv]\d+(?:_\d+|\.\d+))", current_core_id)
+    current_referentiel_token = re.search(r"REFERENTIEL_([Vv]\d+(?:_\d+|\.\d+))", current_core_id)
     if not current_constitution_token or not current_referentiel_token:
         raise ReleasePlanError(f"core_id LINK non supporté: {current_core_id}")
 
-    constitution_token = constitution_target_version.replace("_FINAL", "")
-    referentiel_token = referentiel_target_version.replace("_FINAL", "")
-    target_core_id = current_core_id
-    target_core_id = re.sub(r"CONSTITUTION_V\d+_\d+", f"CONSTITUTION_{constitution_token}", target_core_id)
-    target_core_id = re.sub(r"REFERENTIEL_V\d+_\d+", f"REFERENTIEL_{referentiel_token}", target_core_id)
+    constitution_token = normalize_link_id_token(
+        constitution_target_version,
+        current_constitution_token.group(1),
+    )
+    referentiel_token = normalize_link_id_token(
+        referentiel_target_version,
+        current_referentiel_token.group(1),
+    )
 
-    target_version = f"{constitution_token}__{referentiel_token}_FINAL"
+    target_core_id = current_core_id
+    target_core_id = re.sub(
+        r"CONSTITUTION_[Vv]\d+(?:_\d+|\.\d+)",
+        f"CONSTITUTION_{constitution_token}",
+        target_core_id,
+    )
+    target_core_id = re.sub(
+        r"REFERENTIEL_[Vv]\d+(?:_\d+|\.\d+)",
+        f"REFERENTIEL_{referentiel_token}",
+        target_core_id,
+    )
+
+    target_version = f"{constitution_target_version.replace('_FINAL', '')}__{referentiel_target_version.replace('_FINAL', '')}_FINAL"
     if current_version == target_version and current_core_id == target_core_id:
         return current_core_id, current_version
     return target_core_id, target_version
