@@ -340,7 +340,7 @@ def detect_consolidation_ready(
         runs_arg = " ".join(run_ids)
         consolidation_cmd = (
             f"python docs/patcher/shared/consolidate_parallel_runs.py "
-            f"--runs {run_ids} --base docs/cores/current "
+            f"--runs {runs_arg} --base docs/cores/current "
             f"--output docs/pipelines/{pipeline_id}/work/consolidation --pipeline {pipeline_id}"
         )
         consolidation_dry_run_cmd = consolidation_cmd + " --dry-run"
@@ -652,7 +652,7 @@ def discover_generic_pipeline(repo_root: Path, pipeline_id: str) -> dict[str, An
         merged_run["task_view_status"] = probe.get("task_view_status", "")
         merged_run["terminal_closed"] = probe.get("terminal_closed", False)
         merged_run["compact_execution_prompt"] = probe.get("compact_execution_prompt", "")
-        enriched_runs.append({**merged_run, "ids_first": probe})
+        enriched_runs.append({**mergedRun, "ids_first": probe})
 
     executable_active_runs = [r for r in enriched_runs if r.get("task_view_status") != "terminal_closed"]
     recommended_action = "CONTINUE_ACTIVE_RUN" if executable_active_runs else "OPEN_NEW_RUN"
