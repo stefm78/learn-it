@@ -110,6 +110,7 @@ stages:
   - stage_id: STAGE_08_PROMOTE_CURRENT
     optional: false
     orchestration_scope: pipeline_or_single_run
+    primary_skill_ref: docs/pipelines/constitution/stages/STAGE_08_PROMOTE_CURRENT.skill.yaml
     deterministic_scripts_required:
       - docs/patcher/shared/promote_current.py
       - docs/patcher/shared/validate_current_manifest.py
