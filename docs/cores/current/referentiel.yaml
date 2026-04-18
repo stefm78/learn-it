@@ -7,7 +7,7 @@ CORE:
     fermeture locale assurée, références inter-Core explicites matérialisées pour
     fédération avec la Constitution.
   TYPES:
-  - id: REF_CORE_LEARNIT_CONSTITUTION_V3_0_IN_REFERENTIEL
+  - id: REF_CORE_LEARNIT_CONSTITUTION_V4_0_IN_REFERENTIEL
     authority: reference
     core_type: REFERENTIEL
     source_anchor: '[INTERCORE]'
@@ -26,7 +26,7 @@ CORE:
     core_type: REFERENTIEL
     source_anchor: '[S1]'
     depends_on:
-    - REF_CORE_LEARNIT_CONSTITUTION_V3_0_IN_REFERENTIEL
+    - REF_CORE_LEARNIT_CONSTITUTION_V4_0_IN_REFERENTIEL
     relations:
     - type: governs
       target:
@@ -50,7 +50,7 @@ CORE:
     core_type: REFERENTIEL
     source_anchor: '[S3]'
     depends_on:
-    - REF_CORE_LEARNIT_CONSTITUTION_V3_0_IN_REFERENTIEL
+    - REF_CORE_LEARNIT_CONSTITUTION_V4_0_IN_REFERENTIEL
     relations:
     - type: instantiates
       target:
@@ -68,7 +68,7 @@ CORE:
     core_type: REFERENTIEL
     source_anchor: '[S3]'
     depends_on:
-    - REF_CORE_LEARNIT_CONSTITUTION_V3_0_IN_REFERENTIEL
+    - REF_CORE_LEARNIT_CONSTITUTION_V4_0_IN_REFERENTIEL
     relations:
     - type: governs
       target:
@@ -89,7 +89,7 @@ CORE:
     core_type: REFERENTIEL
     source_anchor: '[S3]'
     depends_on:
-    - REF_CORE_LEARNIT_CONSTITUTION_V3_0_IN_REFERENTIEL
+    - REF_CORE_LEARNIT_CONSTITUTION_V4_0_IN_REFERENTIEL
     relations:
     - type: governs
       target:
@@ -107,7 +107,7 @@ CORE:
     core_type: REFERENTIEL
     source_anchor: '[S3]'
     depends_on:
-    - REF_CORE_LEARNIT_CONSTITUTION_V3_0_IN_REFERENTIEL
+    - REF_CORE_LEARNIT_CONSTITUTION_V4_0_IN_REFERENTIEL
     relations:
     - type: validates
       target:
@@ -129,7 +129,7 @@ CORE:
     core_type: REFERENTIEL
     source_anchor: '[S3][S16]'
     depends_on:
-    - REF_CORE_LEARNIT_CONSTITUTION_V3_0_IN_REFERENTIEL
+    - REF_CORE_LEARNIT_CONSTITUTION_V4_0_IN_REFERENTIEL
     relations:
     - type: governs
       target:
@@ -150,7 +150,7 @@ CORE:
     core_type: REFERENTIEL
     source_anchor: '[S3]'
     depends_on:
-    - REF_CORE_LEARNIT_CONSTITUTION_V3_0_IN_REFERENTIEL
+    - REF_CORE_LEARNIT_CONSTITUTION_V4_0_IN_REFERENTIEL
     relations:
     - type: governs
       target:
@@ -168,7 +168,7 @@ CORE:
     core_type: REFERENTIEL
     source_anchor: '[S4][S18]'
     depends_on:
-    - REF_CORE_LEARNIT_CONSTITUTION_V3_0_IN_REFERENTIEL
+    - REF_CORE_LEARNIT_CONSTITUTION_V4_0_IN_REFERENTIEL
     relations:
     - type: validates
       target:
@@ -186,7 +186,7 @@ CORE:
     core_type: REFERENTIEL
     source_anchor: '[tables]'
     depends_on:
-    - REF_CORE_LEARNIT_CONSTITUTION_V3_0_IN_REFERENTIEL
+    - REF_CORE_LEARNIT_CONSTITUTION_V4_0_IN_REFERENTIEL
     relations:
     - type: governs
       target:
@@ -204,7 +204,7 @@ CORE:
     core_type: REFERENTIEL
     source_anchor: '[tables][S6]'
     depends_on:
-    - REF_CORE_LEARNIT_CONSTITUTION_V3_0_IN_REFERENTIEL
+    - REF_CORE_LEARNIT_CONSTITUTION_V4_0_IN_REFERENTIEL
     relations:
     - type: constrains
       target:
@@ -222,7 +222,7 @@ CORE:
     core_type: REFERENTIEL
     source_anchor: '[S16]'
     depends_on:
-    - REF_CORE_LEARNIT_CONSTITUTION_V3_0_IN_REFERENTIEL
+    - REF_CORE_LEARNIT_CONSTITUTION_V4_0_IN_REFERENTIEL
     relations:
     - type: governs
       target:
@@ -240,7 +240,7 @@ CORE:
     core_type: REFERENTIEL
     source_anchor: '[S17]'
     depends_on:
-    - REF_CORE_LEARNIT_CONSTITUTION_V3_0_IN_REFERENTIEL
+    - REF_CORE_LEARNIT_CONSTITUTION_V4_0_IN_REFERENTIEL
     relations:
     - type: governs
       target:
@@ -258,11 +258,11 @@ CORE:
     core_type: REFERENTIEL
     source_anchor: '[S19]'
     depends_on:
-    - REF_CORE_LEARNIT_CONSTITUTION_V3_0_IN_REFERENTIEL
+    - REF_CORE_LEARNIT_CONSTITUTION_V4_0_IN_REFERENTIEL
     relations:
     - type: derives_from
       target:
-        id: REF_CORE_LEARNIT_CONSTITUTION_V3_0_IN_REFERENTIEL
+        id: REF_CORE_LEARNIT_CONSTITUTION_V4_0_IN_REFERENTIEL
     patchable: false
     parameterizable: false
     human_readable: Note opérationnelle rappelant que la profondeur 1 saut est constitutionnelle.
@@ -296,7 +296,7 @@ CORE:
     core_type: REFERENTIEL
     source_anchor: '[S3][PATCH_v3.0]'
     depends_on:
-    - REF_CORE_LEARNIT_CONSTITUTION_V3_0_IN_REFERENTIEL
+    - REF_CORE_LEARNIT_CONSTITUTION_V4_0_IN_REFERENTIEL
     relations:
     - type: governs
       target:
@@ -315,7 +315,7 @@ CORE:
     core_type: REFERENTIEL
     source_anchor: '[S2]'
     depends_on:
-    - REF_CORE_LEARNIT_CONSTITUTION_V3_0_IN_REFERENTIEL
+    - REF_CORE_LEARNIT_CONSTITUTION_V4_0_IN_REFERENTIEL
     relations:
     - type: constrains
       target:
@@ -333,7 +333,7 @@ CORE:
     core_type: REFERENTIEL
     source_anchor: '[S19]'
     depends_on:
-    - REF_CORE_LEARNIT_CONSTITUTION_V3_0_IN_REFERENTIEL
+    - REF_CORE_LEARNIT_CONSTITUTION_V4_0_IN_REFERENTIEL
     relations:
     - type: constrains
       target:
@@ -351,7 +351,7 @@ CORE:
     core_type: REFERENTIEL
     source_anchor: '[tables][S6]'
     depends_on:
-    - REF_CORE_LEARNIT_CONSTITUTION_V3_0_IN_REFERENTIEL
+    - REF_CORE_LEARNIT_CONSTITUTION_V4_0_IN_REFERENTIEL
     relations: []
     patchable: false
     parameterizable: false
@@ -618,7 +618,7 @@ CORE:
     core_type: REFERENTIEL
     source_anchor: '[S2][PATCH_v3.0]'
     depends_on:
-    - REF_CORE_LEARNIT_CONSTITUTION_V3_0_IN_REFERENTIEL
+    - REF_CORE_LEARNIT_CONSTITUTION_V4_0_IN_REFERENTIEL
     relations: []
     patchable: true
     parameterizable: true
@@ -636,7 +636,7 @@ CORE:
     core_type: REFERENTIEL
     source_anchor: '[S3][PATCH_v3.0]'
     depends_on:
-    - REF_CORE_LEARNIT_CONSTITUTION_V3_0_IN_REFERENTIEL
+    - REF_CORE_LEARNIT_CONSTITUTION_V4_0_IN_REFERENTIEL
     relations: []
     patchable: true
     parameterizable: true
@@ -689,7 +689,7 @@ CORE:
     core_type: REFERENTIEL
     source_anchor: '[PATCH_v3.0]'
     depends_on:
-    - REF_CORE_LEARNIT_CONSTITUTION_V3_0_IN_REFERENTIEL
+    - REF_CORE_LEARNIT_CONSTITUTION_V4_0_IN_REFERENTIEL
     relations: []
     patchable: true
     parameterizable: true
