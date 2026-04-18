@@ -47,6 +47,7 @@ stages:
   - stage_id: STAGE_02_ARBITRAGE
     optional: false
     orchestration_scope: run
+    primary_skill_ref: docs/pipelines/constitution/stages/STAGE_02_ARBITRAGE.skill.yaml
     transitions:
       on_done:
         - STAGE_03_PATCH_SYNTHESIS
@@ -71,6 +72,7 @@ stages:
   - stage_id: STAGE_05_APPLY
     optional: false
     orchestration_scope: run
+    primary_skill_ref: docs/pipelines/constitution/stages/STAGE_05_APPLY.skill.yaml
     deterministic_scripts_required:
       - docs/patcher/shared/apply_patch.py
     transitions:
