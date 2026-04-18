@@ -253,33 +253,40 @@ def build_stage_prompt(
     terminal_closed = ids_first.get("terminal_closed", False)
     ids_first_ready = ids_first.get("ids_first_ready", False)
     scope_extract_complete = ids_first.get("scope_extract_complete", False)
+    run_root = f"docs/pipelines/{pipeline_id}/runs/{run_id}"
 
     if terminal_closed or task_view_status == "terminal_closed":
         return (
             f"Le run {run_id} du pipeline {pipeline_id} est fermé sur un stage terminal ({current_stage}). "
-            f"Ne propose pas de continue. Inspecte uniquement run_context.yaml, run_manifest.yaml et les reports si besoin."
+            f"Ne propose pas de continue. Inspecte uniquement {run_root}/inputs/run_context.yaml, {run_root}/run_manifest.yaml et les reports si besoin."
         )
     if compact_execution_prompt and task_view_status == "executable":
+        compact_execution_prompt = compact_execution_prompt.replace(
+            f"runs/{run_id}/", f"{run_root}/"
+        )
+        compact_execution_prompt = compact_execution_prompt.replace(
+            "runs/<run_id>/", f"{run_root}/"
+        )
         return ensure_prompt_mentions_branch(compact_execution_prompt, branch)
     if ids_first_ready:
         return (
             f"Dans le repo learn-it, sur la branche {branch}, exécute le pipeline {pipeline_path} au {current_stage} en mode run-aware "
             f"pour run_id={run_id}. ORDRE DE LECTURE IDS-FIRST (obligatoire) : "
-            f"1. runs/{run_id}/inputs/run_context.yaml ; 2. runs/{run_id}/inputs/scope_extract.yaml ; 3. runs/{run_id}/inputs/neighbor_extract.yaml. "
-            f"Ne lis les Core complets QUE si missing_ids est non vide dans les extraits. Produis le livrable du stage uniquement sous runs/{run_id}/... "
+            f"1. {run_root}/inputs/run_context.yaml ; 2. {run_root}/inputs/scope_extract.yaml ; 3. {run_root}/inputs/neighbor_extract.yaml. "
+            f"Ne lis les Core complets QUE si missing_ids est non vide dans les extraits. Produis le livrable du stage uniquement sous {run_root}/... "
             f"À la fin, donne la commande update_run_tracking.py de clôture du stage."
         )
     if scope_extract_complete:
         return (
             f"Dans le repo learn-it, sur la branche {branch}, avant de démarrer {current_stage} pour run_id={run_id}, génère d'abord run_context.yaml manquant : "
             f"python docs/patcher/shared/build_run_context.py --run-id {run_id} Ensuite applique l'ordre de lecture ids-first : "
-            f"run_context.yaml → scope_extract.yaml → neighbor_extract.yaml. Ne lis les Core complets que si missing_ids est non vide."
+            f"{run_root}/inputs/run_context.yaml → {run_root}/inputs/scope_extract.yaml → {run_root}/inputs/neighbor_extract.yaml. Ne lis les Core complets que si missing_ids est non vide."
         )
     return (
         f"Dans le repo learn-it, sur la branche {branch}, les extraits ids-first sont absents ou incomplets pour run_id={run_id}. "
         f"Exécute d'abord la séquence de matérialisation complète : 1. python docs/patcher/shared/materialize_run_inputs.py --run-id {run_id} ; "
         f"2. python docs/patcher/shared/extract_scope_slice.py --run-id {run_id} ; 3. python docs/patcher/shared/build_run_context.py --run-id {run_id} ; "
-        f"Puis démarre {current_stage} en mode ids-first."
+        f"Puis démarre {current_stage} en mode ids-first avec lecture sous {run_root}/inputs/."
     )
 
 
@@ -388,7 +395,7 @@ def _build_consolidation_stage_prompt(
         )
         gate_block = (
             f"ATTENTION : {len(pending_gates)} integration_gate(s) non cleared : {pending_list}. "
-            f"Pour chaque run concerné, effectue la review des gate_checks dans runs/<run_id>/inputs/integration_gate.yaml, "
+            f"Pour chaque run concerné, effectue la review des gate_checks dans docs/pipelines/{pipeline_id}/runs/<run_id>/inputs/integration_gate.yaml, "
             f"marque chaque check cleared: true et passe status: cleared. Ensuite seulement, exécute la promotion. "
         )
     else:
@@ -396,19 +403,20 @@ def _build_consolidation_stage_prompt(
 
     if is_solo_promote:
         run_id = run_ids[0]
+        run_root = f"docs/pipelines/{pipeline_id}/runs/{run_id}"
         run_current_stage = eligible_runs[0]["current_stage"] if eligible_runs else ""
         if run_current_stage == "STAGE_07_RELEASE_MATERIALIZATION":
             next_step = (
                 f"Étape unique — Exécuter STAGE_08_PROMOTE_CURRENT directement sur ce run : "
-                f"lire runs/{run_id}/outputs/ et promouvoir les artefacts vers docs/cores/current/. "
-                f"Mettre à jour runs/{run_id}/run_manifest.yaml (current_stage: STAGE_08_PROMOTE_CURRENT, done). "
-                f"Produis uniquement les fichiers sous docs/cores/ et runs/{run_id}/."
+                f"lire {run_root}/outputs/ et promouvoir les artefacts vers docs/cores/current/. "
+                f"Mettre à jour {run_root}/run_manifest.yaml (current_stage: STAGE_08_PROMOTE_CURRENT, done). "
+                f"Produis uniquement les fichiers sous docs/cores/ et {run_root}/."
             )
         else:
             next_step = (
-                f"Étape 1 — Exécuter STAGE_07_RELEASE_MATERIALIZATION sur ce run : lire runs/{run_id}/outputs/ et matérialiser les release notes. "
+                f"Étape 1 — Exécuter STAGE_07_RELEASE_MATERIALIZATION sur ce run : lire {run_root}/outputs/ et matérialiser les release notes. "
                 f"Étape 2 — Enchaîner STAGE_08_PROMOTE_CURRENT : promouvoir les artefacts vers docs/cores/current/. "
-                f"Mettre à jour runs/{run_id}/run_manifest.yaml à chaque étape. Produis uniquement les fichiers sous docs/cores/ et runs/{run_id}/."
+                f"Mettre à jour {run_root}/run_manifest.yaml à chaque étape. Produis uniquement les fichiers sous docs/cores/ et {run_root}/."
             )
         return (
             f"Dans le repo learn-it, sur la branche {branch}, le run {run_id} du pipeline {pipeline_id} est clos à {run_current_stage} "
@@ -421,7 +429,7 @@ def _build_consolidation_stage_prompt(
         f"Runs éligibles à la consolidation : {runs_list}. {gate_block}"
         f"Étape 1 — Dry-run obligatoire : {consolidation_dry_run_cmd} "
         f"Étape 2 — Si dry-run PASS, consolidation réelle : {consolidation_cmd} "
-        f"Étape 3 — Enchaîner STAGE_07_RELEASE_MATERIALIZATION sur work/consolidation/. "
+        f"Étape 3 — Enchaîner STAGE_07_RELEASE_MATERIALIZATION sur docs/pipelines/{pipeline_id}/work/consolidation/. "
         f"Étape 4 — Enchaîner STAGE_08_PROMOTE_CURRENT. Ne saute aucune étape. Ne simule pas la consolidation. "
         f"Produis uniquement les fichiers sous docs/pipelines/{pipeline_id}/work/consolidation/ et docs/cores/."
     )
@@ -645,14 +653,14 @@ def discover_generic_pipeline(repo_root: Path, pipeline_id: str) -> dict[str, An
         probe = probe_run_context(pipeline_root, run_id)
         merged_run = {**run}
         if probe.get("effective_current_stage"):
-            merged_run["current_stage"] = probe["effective_current_STAGE"]
+            merged_run["current_stage"] = probe.get("effective_current_stage", "")
             merged_run["current_stage_source"] = "run_context.yaml"
         else:
             merged_run["current_stage_source"] = "index.yaml"
         merged_run["task_view_status"] = probe.get("task_view_status", "")
         merged_run["terminal_closed"] = probe.get("terminal_closed", False)
         merged_run["compact_execution_prompt"] = probe.get("compact_execution_prompt", "")
-        enriched_runs.append({**mergedRun, "ids_first": probe})
+        enriched_runs.append({**merged_run, "ids_first": probe})
 
     executable_active_runs = [r for r in enriched_runs if r.get("task_view_status") != "terminal_closed"]
     recommended_action = "CONTINUE_ACTIVE_RUN" if executable_active_runs else "OPEN_NEW_RUN"
@@ -1065,9 +1073,9 @@ def build_parallel_slots(
             if candidate.get("parallel_with_consolidation"):
                 slot_entry["parallel_with_consolidation"] = True
                 slot_entry["isolation_note"] = (
-                    "Ce run s'exécute en parallèle d'une consolidation en cours sur ce pipeline. "
-                    "Il doit produire ses livrables uniquement sous runs/<new_run_id>/. "
-                    "Ne pas toucher docs/cores/current avant que la consolidation soit terminée."
+                    f"Ce run s'exécute en parallèle d'une consolidation en cours sur ce pipeline. "
+                    f"Il doit produire ses livrables uniquement sous docs/pipelines/{candidate['pipeline_id']}/runs/<new_run_id>/. "
+                    f"Ne pas toucher docs/cores/current avant que la consolidation soit terminée."
                 )
             slots.append(slot_entry)
             slot_index += 1
