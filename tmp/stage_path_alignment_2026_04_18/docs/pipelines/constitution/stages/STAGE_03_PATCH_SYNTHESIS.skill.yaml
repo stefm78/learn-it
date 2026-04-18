@@ -1,0 +1,225 @@
+stage_skill:
+  schema_version: 0.1
+  pipeline_id: constitution
+  stage_id: STAGE_03_PATCH_SYNTHESIS
+  skill_id: bounded_core_patch_synthesizer
+  stage_kind: cognitive
+  closure_level: high
+  authoritative_role: stable_stage_contract
+
+mission: >-
+  Transformer l'arbitrage validé en un patch YAML canonique minimal,
+  directement exploitable par STAGE_04_PATCH_VALIDATION.
+  Ce stage ne valide pas le patch par script, ne l'applique pas,
+  et ne réécrit jamais directement les Core.
+  Il produit exclusivement un patchset structuré et traçable,
+  aligné sur le DSL de patch courant.
+
+model_requirements:
+  reasoning_level: advanced
+  justification: >-
+    La synthèse de patch exige de traduire des décisions d'arbitrage en
+    opérations YAML minimales, localisables et testables, sans dérive hors
+    scope ni invention structurelle. Le modèle doit raisonner à la fois sur
+    la gouvernance des Core, la granularité du DSL, la traçabilité des
+    opérations et la frontière entre ce qui est patchable maintenant et ce
+    qui doit rester en note. Un raisonnement superficiel produit typiquement
+    des patchs trop larges, non localisables, non minimaux ou non applicables.
+  recommended_models:
+    - o3
+    - claude-opus-4
+    - gemini-2.5-pro
+  minimum_acceptable: tout modèle avec extended thinking ou chain-of-thought activable
+  warning: >-
+    ⚠️ NE PAS exécuter ce stage avec un modèle standard sans raisonnement
+    approfondi. La qualité du patchset conditionne directement la validation,
+    l'application et la sûreté de la release.
+
+runtime_binding:
+  expected_mode_values:
+    - nominal_global
+    - bounded_local_run
+    - bounded_transition
+  run_context_role: >-
+    run_context.yaml doit être lu en premier pour résoudre le mode,
+    les chemins d'entrée et l'état de préparation du run.
+    Il ne remplace pas les sources canoniques.
+  arbitrage_role: >-
+    L'arbitrage validé fait autorité sur ce qui doit être patché maintenant,
+    reporté, rejeté ou laissé hors périmètre.
+    Le stage ne requalifie pas silencieusement les décisions d'arbitrage.
+
+primary_reads:
+  bounded_local_run:
+    - docs/pipelines/constitution/runs/<run_id>/inputs/run_context.yaml
+    - docs/pipelines/constitution/runs/<run_id>/inputs/scope_manifest.yaml
+    - docs/pipelines/constitution/runs/<run_id>/inputs/impact_bundle.yaml
+    - docs/pipelines/constitution/runs/<run_id>/work/02_arbitrage/arbitrage_report_*.md
+    - docs/specs/patch-dsl/current.md
+    - docs/prompts/shared/Make05CorePatch.md
+  nominal_global:
+    - docs/pipelines/constitution/work/02_arbitrage/arbitrage_report_*.md
+    - docs/specs/patch-dsl/current.md
+    - docs/prompts/shared/Make05CorePatch.md
+    - docs/cores/current/constitution.yaml
+    - docs/cores/current/referentiel.yaml
+    - docs/cores/current/link.yaml
+  bounded_transition:
+    - docs/pipelines/constitution/inputs/scope_manifest.yaml
+    - docs/pipelines/constitution/inputs/impact_bundle.yaml
+    - docs/pipelines/constitution/work/02_arbitrage/arbitrage_report_*.md
+    - docs/specs/patch-dsl/current.md
+    - docs/prompts/shared/Make05CorePatch.md
+
+fallback_reads:
+  rule: >-
+    En mode bounded_local_run, lecture des Core complets autorisée uniquement
+    si l'arbitrage_report ne permet pas de localiser proprement une cible,
+    ou si un ID/objet nécessaire est explicitement déclaré manquant ou ambigu.
+    Toute telle lecture supplémentaire doit être déclarée dans l'output.
+  fallback_targets:
+    - docs/cores/current/constitution.yaml
+    - docs/cores/current/referentiel.yaml
+    - docs/cores/current/link.yaml
+
+required_scripts:
+  none: true
+  note: >-
+    Ce stage est purement cognitif. Il ne simule aucun script déterministe.
+    La validation formelle du patchset est réservée à STAGE_04_PATCH_VALIDATION
+    via validate_patchset.py.
+
+patch_rules:
+  constraints:
+    - patch_must_be_minimal
+    - only_arbitrated_in_scope_items_can_be_patched_now
+    - no_silent_scope_extension
+    - unpatchable_items_must_be_note_or_no_change
+    - every_operation_must_target_a_localizable_object_or_field
+    - no_direct_core_rewrite
+    - no_validation_claim_without_stage_04
+    - no_apply_claim_without_stage_05
+  dsl_alignment:
+    required_root_key: PATCH_SET
+    must_follow_spec: docs/specs/patch-dsl/current.md
+    must_follow_prompt_contract: docs/prompts/shared/Make05CorePatch.md
+  allowed_operation_families:
+    - assert
+    - append
+    - replace
+    - remove
+    - rename
+    - replace_field
+    - append_field_list
+    - remove_field_list_item
+    - move
+    - ensure_exists
+    - ensure_absent
+    - assert_meta
+    - replace_meta_field
+    - rewrite_references
+    - replace_text
+    - no_change
+    - note
+
+scope_rules:
+  statuses:
+    - in_scope
+    - out_of_scope_but_relevant
+    - needs_scope_extension
+  constraints:
+    - no_patch_for_out_of_scope_items
+    - impact_bundle_extends_reading_not_write_permissions
+    - if_arbitrage_says_reporter_then_no_patch_now
+    - if_arbitrage_says_rejeter_then_no_patch_now
+    - if_arbitrage_says_necessite_extension_scope_then_note_only
+
+required_output_sections:
+  - patch_scope
+  - arbitrage_to_patch_mapping
+  - fallback_reads_used_if_any
+  - human_actions_to_execute
+
+expected_outputs:
+  bounded_local_run:
+    report_path_pattern: docs/pipelines/constitution/runs/<run_id>/work/03_patch/patchset.yaml
+  nominal_global:
+    report_path_pattern: docs/pipelines/constitution/work/03_patch/patchset.yaml
+  bounded_transition:
+    report_path_pattern: docs/pipelines/constitution/work/03_patch/patchset.yaml
+
+completion_evidence:
+  required:
+    - patchset_yaml_written
+    - patchset_is_single_root_patch_set
+    - every_patched_item_traces_back_to_arbitrage
+    - unpatchable_items_explicitly_note_or_no_change
+    - fallback_reads_declared_if_any
+    - human_actions_explicitly_stated_in_output
+  not_sufficient:
+    - informal_chat_summary_only
+    - prose_instead_of_patchset_yaml
+    - patchset_without_traceability_to_arbitrage
+    - direct_core_edits
+    - validation_claims_without_stage_04
+
+human_actions_required:
+  description: >-
+    L'IA produit le patchset.yaml et s'arrête. L'humain relit le patch,
+    vérifie sa minimalité et sa pertinence, puis confirme la transition vers
+    STAGE_04_PATCH_VALIDATION. Aucune validation formelle n'est réputée faite
+    tant que validate_patchset.py n'a pas été exécuté réellement au stage suivant.
+  on_done:
+    step: 1
+    label: Valider le patchset et mettre à jour le tracking
+    mandatory: true
+    command: >-
+      python docs/patcher/shared/update_run_tracking.py
+      --pipeline constitution
+      --run-id <RUN_ID>
+      --stage-id STAGE_03_PATCH_SYNTHESIS
+      --stage-status done
+      --run-status active
+      --next-stage STAGE_04_PATCH_VALIDATION
+      --summary "Patchset synthesized and reviewed; ready for deterministic validation."
+    expected_effect: >-
+      run_manifest.yaml : current_stage passe à STAGE_04_PATCH_VALIDATION,
+      STAGE_03_PATCH_SYNTHESIS apparaît dans completed_stages.
+    next_step: >-
+      Relancer l'IA avec :
+      "Continue le run <RUN_ID> — STAGE_03 est done, démarre STAGE_04_PATCH_VALIDATION."
+  on_revision_needed:
+    step: 1
+    label: Fournir des notes de révision sur le patchset
+    mandatory: false
+    note: >-
+      Si le patch est trop large, ambigu, ou ne respecte pas strictement
+      l'arbitrage, relancer l'IA avec :
+      "Révise le patchset du run <RUN_ID> — notes : <tes notes>."
+      Ne pas exécuter update_run_tracking.py tant que le patchset n'est pas validé humainement.
+
+allowed_transitions:
+  on_done:
+    next_stage: STAGE_04_PATCH_VALIDATION
+    precondition: human must confirm update_run_tracking.py execution
+  on_revision_needed:
+    next_action: ai_revises_patchset
+    note: Le statut reste in_progress jusqu'à validation humaine explicite.
+
+forbidden_actions:
+  - direct_core_document_rewrite
+  - simulated_validate_patchset_execution
+  - simulated_apply_patch_execution
+  - silent_scope_extension
+  - patching_rejected_or_reported_items_now
+  - patch_without_traceability_to_arbitrage
+  - prose_before_or_after_patchset_when_patch_file_is_produced
+  - omitting_human_actions_from_output
+
+migration_note: >-
+  Premier skill STAGE_03 pour le pipeline constitution.
+  Consolide en YAML machine-readable les règles exprimées dans
+  Make05CorePatch.md, AI_PROTOCOL.yaml, PIPELINE_MODEL.yaml et pipeline.md.
+  Introduit le pattern model_requirements, runtime_binding,
+  completion_evidence et human_actions_required dans la continuité de
+  RUN_BOOTSTRAP, STAGE_01_CHALLENGE et STAGE_02_ARBITRAGE.
