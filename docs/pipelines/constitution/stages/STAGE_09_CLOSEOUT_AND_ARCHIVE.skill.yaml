@@ -36,6 +36,11 @@ runtime_binding:
   execution_evidence_role: >-
     closeout_pipeline_run.py doit être réellement exécuté. L'IA ne doit jamais
     simuler la clôture matérielle du run.
+  artifact_ownership_rule: >-
+    Les artefacts bruts produits par script (closeout_report.yaml,
+    final_run_summary.md et archive de run) restent les sources de vérité du
+    stage. L'IA ne doit pas inventer de flags CLI inexistants ni réécrire un
+    artefact brut produit par script.
 
 primary_reads:
   bounded_local_run:
@@ -55,11 +60,16 @@ required_scripts:
   note: >-
     Si l'IA ne peut pas exécuter le script elle-même, elle doit émettre la
     commande exacte, déclarer le stage BLOCKED, et attendre les artefacts.
+    L'interface réelle actuelle est :
+    closeout_pipeline_run.py <promotion_report.yaml> <current_manifest.yaml> [options]
+    Le script ne supporte pas les flags --pipeline ou --run-id décrits dans les
+    versions antérieures du skill.
 
 script_execution_contract:
   required_before_pass_or_fail:
     - closeout_pipeline_run_executed_for_real
     - closeout_report_materialized
+    - final_run_summary_materialized
   blocked_if_missing_evidence: true
   blocked_status_value: BLOCKED
   pass_requires:
@@ -73,16 +83,24 @@ deterministic_command_templates:
   bounded_local_run:
     closeout: >-
       python docs/patcher/shared/closeout_pipeline_run.py
-      --pipeline constitution
-      --run-id <RUN_ID>
+      docs/pipelines/constitution/runs/<run_id>/reports/promotion_report.yaml
+      docs/cores/current/manifest.yaml
+      --closeout-report docs/pipelines/constitution/runs/<run_id>/reports/closeout_report.yaml
+      --final-summary docs/pipelines/constitution/runs/<run_id>/outputs/final_run_summary.md
   nominal_global:
     closeout: >-
       python docs/patcher/shared/closeout_pipeline_run.py
-      --pipeline constitution
+      docs/pipelines/constitution/reports/promotion_report.yaml
+      docs/cores/current/manifest.yaml
+      --closeout-report docs/pipelines/constitution/reports/closeout_report.yaml
+      --final-summary docs/pipelines/constitution/outputs/final_run_summary.md
   bounded_transition:
     closeout: >-
       python docs/patcher/shared/closeout_pipeline_run.py
-      --pipeline constitution
+      docs/pipelines/constitution/reports/promotion_report.yaml
+      docs/cores/current/manifest.yaml
+      --closeout-report docs/pipelines/constitution/reports/closeout_report.yaml
+      --final-summary docs/pipelines/constitution/outputs/final_run_summary.md
 
 required_output_sections:
   - execution_evidence
@@ -93,17 +111,24 @@ required_output_sections:
 
 expected_outputs:
   bounded_local_run:
-    report_path_pattern: docs/pipelines/constitution/runs/<run_id>/reports/closeout_report.yaml
+    primary_output_path_pattern: docs/pipelines/constitution/runs/<run_id>/reports/closeout_report.yaml
+    required_raw_artifacts:
+      - docs/pipelines/constitution/runs/<run_id>/outputs/final_run_summary.md
   nominal_global:
-    report_path_pattern: docs/pipelines/constitution/reports/closeout_report.yaml
+    primary_output_path_pattern: docs/pipelines/constitution/reports/closeout_report.yaml
+    required_raw_artifacts:
+      - docs/pipelines/constitution/outputs/final_run_summary.md
   bounded_transition:
-    report_path_pattern: docs/pipelines/constitution/reports/closeout_report.yaml
+    primary_output_path_pattern: docs/pipelines/constitution/reports/closeout_report.yaml
+    required_raw_artifacts:
+      - docs/pipelines/constitution/outputs/final_run_summary.md
 
 completion_evidence:
   required:
     - closeout_command_emitted_or_executed
     - real_execution_evidence_declared
     - closeout_report_materialized
+    - final_run_summary_materialized
     - final_status_is_pass_fail_or_blocked
     - human_actions_explicitly_stated_in_output
   not_sufficient:
@@ -151,6 +176,7 @@ forbidden_actions:
   - pass_without_real_execution_evidence
   - reopening_pipeline_state_silently
   - omitting_human_actions_from_output
+  - using_nonexistent_closeout_cli_flags
 
 migration_note: >-
   Premier skill STAGE_09 pour le pipeline constitution.
