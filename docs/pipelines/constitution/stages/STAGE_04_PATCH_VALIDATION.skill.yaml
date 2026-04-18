@@ -47,6 +47,12 @@ runtime_binding:
     La validation structurelle automatique fait autorité sur les contrôles DSL.
     L'IA ne peut jamais simuler, supposer ou reformuler son exécution comme
     acquise si la preuve réelle n'est pas matérialisée dans l'output attendu.
+  artifact_separation_rule: >-
+    Le fichier patch_validation.yaml est réservé à la sortie brute du script
+    validate_patchset.py. L'IA ne doit jamais l'écraser, le reformater ni le
+    remplacer par sa propre synthèse. La revue logique complémentaire de l'IA
+    peut être restituée dans le chat et n'appelle pas d'artefact supplémentaire
+    par défaut.
 
 primary_reads:
   bounded_local_run:
@@ -129,6 +135,7 @@ logical_review_rules:
     - bounded_run_must_not_write_outside_scope
     - no_silent_inclusion_of_hors_perimetre_or_scope_extension_items
     - dry_run_or_script_result_must_be_treated_as_executable_evidence
+    - preserve_raw_script_output_in_patch_validation_yaml
 
 required_output_sections:
   - execution_evidence
@@ -141,10 +148,19 @@ required_output_sections:
 expected_outputs:
   bounded_local_run:
     report_path_pattern: docs/pipelines/constitution/runs/<run_id>/work/04_patch_validation/patch_validation.yaml
+    note: >-
+      Ce chemin désigne la sortie brute du script obligatoire. Aucun artefact
+      IA supplémentaire n'est requis par défaut pour conclure le stage.
   nominal_global:
     report_path_pattern: docs/pipelines/constitution/work/04_patch_validation/patch_validation.yaml
+    note: >-
+      Ce chemin désigne la sortie brute du script obligatoire. Aucun artefact
+      IA supplémentaire n'est requis par défaut pour conclure le stage.
   bounded_transition:
     report_path_pattern: docs/pipelines/constitution/work/04_patch_validation/patch_validation.yaml
+    note: >-
+      Ce chemin désigne la sortie brute du script obligatoire. Aucun artefact
+      IA supplémentaire n'est requis par défaut pour conclure le stage.
 
 completion_evidence:
   required:
@@ -159,6 +175,7 @@ completion_evidence:
     - logical_review_without_script_evidence
     - pass_without_validate_patchset_execution
     - simulated_script_execution
+    - ai_rewrite_of_patch_validation_yaml
 
 status_values:
   - PASS
@@ -228,6 +245,7 @@ forbidden_actions:
   - apply_claim_or_apply_execution
   - silent_scope_extension
   - omitting_human_actions_from_output
+  - overwriting_patch_validation_yaml_with_ai_review
 
 migration_note: >-
   Premier skill STAGE_04 pour le pipeline constitution.
