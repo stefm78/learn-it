@@ -149,6 +149,15 @@ ai_protocol:
       Si run_context.yaml est présent, l'IA DOIT le lire en premier et utiliser
       scope_extract.yaml + neighbor_extract.yaml comme source principale des entrées Core.
 
+  resource_resolution_policy:
+    on_declared_resource_unavailable:
+      default_action: stop_and_ask_human
+      forbidden_without_human_decision:
+        - any_search
+        - compare_commits
+        - search_branches
+        - fetch_url_navigation
+
   partition_refresh_mode:
     precondition:
       no_active_runs_required: true
