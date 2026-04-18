@@ -7,5 +7,5 @@ stage_completion_record:
   run_status: active
   next_stage: STAGE_03_PATCH_SYNTHESIS
   scope_status: ''
-  summary: 'Arbitrage validé : 3 corrections in_scope autorisées, R4 reporté en needs_scope_extension.'
-  recorded_at: '2026-04-18T10:55:53Z'
+  summary: Arbitrage report validated; decisions ready for patch synthesis.
+  recorded_at: '2026-04-18T16:56:53Z'

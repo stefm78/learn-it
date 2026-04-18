@@ -10,10 +10,10 @@ run_manifest:
     scope_key: deployment_governance
     scope_definition_ref: docs/pipelines/constitution/scope_catalog/scope_definitions/deployment_governance.yaml
   execution_state:
-    current_stage: STAGE_01_CHALLENGE
+    current_stage: STAGE_02_ARBITRAGE
     last_stage_status: done
-    last_updated: '2026-04-18T13:57:30Z'
-    next_stage: STAGE_02_ARBITRAGE
+    last_updated: '2026-04-18T16:56:53Z'
+    next_stage: STAGE_03_PATCH_SYNTHESIS
     completed_stages:
     - RUN_BOOTSTRAP
     - STAGE_01_CHALLENGE
@@ -42,6 +42,10 @@ run_manifest:
       stage_status: done
       recorded_at: '2026-04-18T13:57:30Z'
       summary: Challenge report produced; ready for arbitrage.
+    - stage_id: STAGE_02_ARBITRAGE
+      stage_status: done
+      recorded_at: '2026-04-18T16:56:53Z'
+      summary: Arbitrage report validated; decisions ready for patch synthesis.
   scope_tracking:
     scope_status: confirmed_for_bounded_run
     last_updated: '2026-04-16T13:46:19Z'
