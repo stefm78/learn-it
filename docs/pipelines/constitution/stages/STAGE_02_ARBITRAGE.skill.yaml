@@ -188,6 +188,7 @@ governance_backlog_binding:
     - policy_conflict
     - partition_angle_mort
   required_fields_per_backlog_candidate:
+    - candidate_id
     - backlog_entry_type
     - title
     - related_scope_keys
@@ -199,6 +200,29 @@ governance_backlog_binding:
   candidate_status_values:
     - candidate_open
     - candidate_needs_human_review
+  serialization_format:
+    section_name: governance_backlog_candidates
+    encoding: yaml_fenced_block
+    root_key: governance_backlog_candidates
+    example: |-
+      ```yaml
+      governance_backlog_candidates:
+        - candidate_id: GBC_R4_SCOPE_REF_V3_ALIGNMENT
+          backlog_entry_type: scope_extension_needed
+          title: Aligner la référence inter-Core Constitution → Référentiel v3.0
+          related_scope_keys:
+            - deployment_governance
+          originating_run_id: CONSTITUTION_RUN_2026_04_16_DEPLOYMENT_GOVERNANCE_R01
+          source_finding_id: R4
+          rationale: >-
+            La référence inter-Core actuelle pointe vers un identifiant V2.0 alors que
+            le Core référentiel courant est v3.0 ; la remise en cohérence dépasse le
+            patch local du run et doit être rejouée lors d'une révision de partition.
+          recommended_stage00_action: >-
+            Réévaluer la policy/decisions de scope generation pour canoniser la bonne
+            ancre inter-Core et régénérer le scope catalog si nécessaire.
+          candidate_status: candidate_open
+      ```
 
 gate_effect_values:
   - helps_clear
@@ -237,6 +261,7 @@ completion_evidence:
     - human_notes_integrated_if_provided
     - ambiguities_explicitly_flagged_if_any
     - governance_backlog_candidates_declared_if_needed
+    - governance_backlog_candidates_serialized_in_yaml_block_if_present
   not_sufficient:
     - informal_chat_summary_only
     - findings_without_decision
