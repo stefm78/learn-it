@@ -21,7 +21,7 @@ governance_backlog:
   notes:
     - Fichier vivant — ne pas archiver avec les runs.
     - Les entrées addressed et wont_fix sont conservées pour traçabilité.
-    - La création d'entrées pendant un run est autorisée (annotation dans arbitrage.md),
+    - La création d'entrées pendant un run est autorisée (annotation dans le rapport d'arbitrage du run),
       mais l'export canonique vers ce fichier se fait uniquement en clôture (STAGE_09).
     - Ce fichier est la source de vérité du backlog inter-runs ; les notes dans
-      arbitrage.md et run_manifest.notes sont des copies locales de run.
+      l'arbitrage_report et run_manifest.notes sont des copies locales de run.
