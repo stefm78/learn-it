@@ -1,0 +1,157 @@
+stage_skill:
+  schema_version: 0.1
+  pipeline_id: constitution
+  stage_id: STAGE_09_CLOSEOUT_AND_ARCHIVE
+  skill_id: run_closeout_supervisor
+  stage_kind: hybrid
+  closure_level: high
+  authoritative_role: stable_stage_contract
+
+mission: >-
+  Superviser la clôture finale du run après promotion validée, avec
+  exécution réelle du script de closeout et vérification de la cohérence
+  des artefacts finaux. Ce stage termine le run et archive son état
+  opératoire sans réécrire les Core métier eux-mêmes.
+
+model_requirements:
+  reasoning_level: advanced
+  justification: >-
+    Ce stage clôt un run déjà promu. Le modèle doit vérifier que les artefacts
+    de promotion sont cohérents, que le closeout scripté a bien été exécuté,
+    et que le run est prêt à sortir proprement du cycle actif sans ambiguïté.
+  recommended_models:
+    - o3
+    - claude-opus-4
+    - gemini-2.5-pro
+  minimum_acceptable: tout modèle avec extended thinking ou chain-of-thought activable
+
+runtime_binding:
+  expected_mode_values:
+    - bounded_local_run
+    - nominal_global
+    - bounded_transition
+  run_context_role: >-
+    En mode bounded_local_run, run_context.yaml doit être lu en premier.
+    Il ne remplace pas la preuve d'exécution réelle du closeout.
+  execution_evidence_role: >-
+    closeout_pipeline_run.py doit être réellement exécuté. L'IA ne doit jamais
+    simuler la clôture matérielle du run.
+
+primary_reads:
+  bounded_local_run:
+    - docs/pipelines/constitution/runs/<run_id>/inputs/run_context.yaml
+    - docs/pipelines/constitution/runs/<run_id>/reports/promotion_report.yaml
+    - docs/cores/current/manifest.yaml
+  nominal_global:
+    - docs/pipelines/constitution/reports/promotion_report.yaml
+    - docs/cores/current/manifest.yaml
+  bounded_transition:
+    - docs/pipelines/constitution/reports/promotion_report.yaml
+    - docs/cores/current/manifest.yaml
+
+required_scripts:
+  mandatory_closeout:
+    - docs/patcher/shared/closeout_pipeline_run.py
+  note: >-
+    Si l'IA ne peut pas exécuter le script elle-même, elle doit émettre la
+    commande exacte, déclarer le stage BLOCKED, et attendre les artefacts.
+
+script_execution_contract:
+  required_before_pass_or_fail:
+    - closeout_pipeline_run_executed_for_real
+    - closeout_report_materialized
+  blocked_if_missing_evidence: true
+  blocked_status_value: BLOCKED
+  pass_requires:
+    - closeout_chain_passed
+    - no_blocking_final_consistency_issue
+  fail_requires:
+    - closeout_script_failed
+    - or_blocking_final_consistency_issue_after_real_execution
+
+deterministic_command_templates:
+  bounded_local_run:
+    closeout: >-
+      python docs/patcher/shared/closeout_pipeline_run.py
+      --pipeline constitution
+      --run-id <RUN_ID>
+  nominal_global:
+    closeout: >-
+      python docs/patcher/shared/closeout_pipeline_run.py
+      --pipeline constitution
+  bounded_transition:
+    closeout: >-
+      python docs/patcher/shared/closeout_pipeline_run.py
+      --pipeline constitution
+
+required_output_sections:
+  - execution_evidence
+  - closeout_summary
+  - final_consistency_findings
+  - follow_up_actions
+  - human_actions_to_execute
+
+expected_outputs:
+  bounded_local_run:
+    report_path_pattern: docs/pipelines/constitution/runs/<run_id>/reports/closeout_report.yaml
+  nominal_global:
+    report_path_pattern: docs/pipelines/constitution/reports/closeout_report.yaml
+  bounded_transition:
+    report_path_pattern: docs/pipelines/constitution/reports/closeout_report.yaml
+
+completion_evidence:
+  required:
+    - closeout_command_emitted_or_executed
+    - real_execution_evidence_declared
+    - closeout_report_materialized
+    - final_status_is_pass_fail_or_blocked
+    - human_actions_explicitly_stated_in_output
+  not_sufficient:
+    - informal_chat_summary_only
+    - closeout_reasoning_without_script_evidence
+    - pass_without_materialized_closeout_artifacts
+    - simulated_script_execution
+
+status_values:
+  - PASS
+  - FAIL
+  - BLOCKED
+
+human_actions_required:
+  description: >-
+    Si le script n'a pas été exécuté réellement, l'humain doit lancer la
+    commande émise puis relancer l'IA sur ce stage. Une fois la clôture validée,
+    le run peut être considéré terminé.
+  on_blocked:
+    step: 1
+    label: Exécuter le closeout puis relancer ce stage
+    mandatory: true
+  on_pass:
+    step: 1
+    label: Le run est clôturé
+    mandatory: true
+    note: >-
+      Aucun stage supplémentaire n'est requis. Le prochain point d'entrée
+      redevient la résolution d'entrée du pipeline.
+  on_fail:
+    step: 1
+    label: Corriger les anomalies finales avant nouvelle tentative
+    mandatory: true
+
+allowed_transitions:
+  on_pass:
+    next_stage: ENTRY_RESOLUTION
+  on_fail:
+    next_stage: STAGE_08_PROMOTE_CURRENT
+  on_blocked:
+    next_action: execute_closeout_and_retry_same_stage
+
+forbidden_actions:
+  - simulated_closeout_execution
+  - pass_without_real_execution_evidence
+  - reopening_pipeline_state_silently
+  - omitting_human_actions_from_output
+
+migration_note: >-
+  Premier skill STAGE_09 pour le pipeline constitution.
+  Consolide en YAML machine-readable les règles de closeout final du run.
