@@ -1,0 +1,218 @@
+stage_skill:
+  schema_version: 0.1
+  pipeline_id: constitution
+  stage_id: STAGE_07_RELEASE_MATERIALIZATION
+  skill_id: core_release_materialization_supervisor
+  stage_kind: hybrid
+  closure_level: high
+  authoritative_role: stable_stage_contract
+
+mission: >-
+  Superviser la préparation matérielle de la release des Core validés,
+  à partir soit d'un run, soit d'un workspace de consolidation.
+  Ce stage ne promeut pas current. Il exige l'exécution réelle des scripts
+  de release puis une revue IA de cohérence du résultat.
+
+model_requirements:
+  reasoning_level: advanced
+  justification: >-
+    Ce stage combine plusieurs artefacts déterministes de release avec une
+    revue logique de cohérence inter-Core. Le modèle doit interpréter un
+    release_plan réel et un release manifest réel avant toute conclusion.
+  recommended_models:
+    - o3
+    - claude-opus-4
+    - gemini-2.5-pro
+  minimum_acceptable: tout modèle avec extended thinking ou chain-of-thought activable
+
+runtime_binding:
+  expected_mode_values:
+    - bounded_local_run
+    - parallel_consolidation
+    - nominal_global
+    - bounded_transition
+  run_context_role: >-
+    En mode bounded_local_run, run_context.yaml doit être lu en premier.
+    En mode consolidation, le workspace pipeline-level fait autorité.
+  execution_evidence_role: >-
+    build_release_plan.py, validate_release_plan.py, materialize_release.py et
+    validate_release_manifest.py doivent être réellement exécutés.
+
+primary_reads:
+  bounded_local_run:
+    - docs/pipelines/constitution/runs/<run_id>/inputs/run_context.yaml
+    - docs/pipelines/constitution/runs/<run_id>/work/06_core_validation/core_validation.yaml
+    - docs/pipelines/constitution/runs/<run_id>/work/05_apply/sandbox/docs/cores/current/constitution.yaml
+    - docs/pipelines/constitution/runs/<run_id>/work/05_apply/sandbox/docs/cores/current/referentiel.yaml
+    - docs/pipelines/constitution/runs/<run_id>/work/05_apply/sandbox/docs/cores/current/link.yaml
+    - docs/prompts/shared/Make07CoreRelease.md
+  parallel_consolidation:
+    - docs/pipelines/constitution/work/consolidation/
+    - docs/prompts/shared/Make07CoreRelease.md
+  nominal_global:
+    - docs/pipelines/constitution/work/06_core_validation/core_validation.yaml
+    - docs/pipelines/constitution/work/05_apply/sandbox/docs/cores/current/constitution.yaml
+    - docs/pipelines/constitution/work/05_apply/sandbox/docs/cores/current/referentiel.yaml
+    - docs/pipelines/constitution/work/05_apply/sandbox/docs/cores/current/link.yaml
+    - docs/prompts/shared/Make07CoreRelease.md
+  bounded_transition:
+    - docs/pipelines/constitution/work/06_core_validation/core_validation.yaml
+    - docs/pipelines/constitution/work/05_apply/sandbox/docs/cores/current/constitution.yaml
+    - docs/pipelines/constitution/work/05_apply/sandbox/docs/cores/current/referentiel.yaml
+    - docs/pipelines/constitution/work/05_apply/sandbox/docs/cores/current/link.yaml
+    - docs/prompts/shared/Make07CoreRelease.md
+
+required_scripts:
+  mandatory_release_chain:
+    - docs/patcher/shared/build_release_plan.py
+    - docs/patcher/shared/validate_release_plan.py
+    - docs/patcher/shared/materialize_release.py
+    - docs/patcher/shared/validate_release_manifest.py
+  note: >-
+    Si l'IA ne peut pas exécuter les scripts elle-même, elle doit émettre les
+    commandes exactes, déclarer le stage BLOCKED, et attendre les artefacts.
+
+script_execution_contract:
+  required_before_pass_or_fail:
+    - build_release_plan_executed_for_real
+    - validate_release_plan_executed_for_real
+    - materialize_release_executed_for_real
+    - validate_release_manifest_executed_for_real
+    - release_plan_yaml_materialized
+    - release_manifest_yaml_materialized
+  blocked_if_missing_evidence: true
+  blocked_status_value: BLOCKED
+  pass_requires:
+    - release_chain_all_passed
+    - no_blocking_release_coherence_issue
+  fail_requires:
+    - any_release_script_failed
+    - or_blocking_release_coherence_issue_after_real_execution
+
+execution_paths:
+  bounded_local_run:
+    release_work_dir: docs/pipelines/constitution/runs/<run_id>/work/07_release/
+    release_reports_dir: docs/pipelines/constitution/runs/<run_id>/reports/
+  parallel_consolidation:
+    release_work_dir: docs/pipelines/constitution/work/consolidation/
+    release_reports_dir: docs/pipelines/constitution/reports/
+  nominal_global:
+    release_work_dir: docs/pipelines/constitution/work/07_release/
+    release_reports_dir: docs/pipelines/constitution/reports/
+  bounded_transition:
+    release_work_dir: docs/pipelines/constitution/work/07_release/
+    release_reports_dir: docs/pipelines/constitution/reports/
+
+deterministic_command_templates:
+  bounded_local_run:
+    build_release_plan: >-
+      python docs/patcher/shared/build_release_plan.py
+      --pipeline constitution
+      --run-id <RUN_ID>
+    validate_release_plan: >-
+      python docs/patcher/shared/validate_release_plan.py
+      --plan docs/pipelines/constitution/runs/<run_id>/work/07_release/release_plan.yaml
+    materialize_release: >-
+      python docs/patcher/shared/materialize_release.py
+      --plan docs/pipelines/constitution/runs/<run_id>/work/07_release/release_plan.yaml
+    validate_release_manifest: >-
+      python docs/patcher/shared/validate_release_manifest.py
+      --manifest docs/cores/releases/<release_id>/manifest.yaml
+  parallel_consolidation:
+    build_release_plan: >-
+      python docs/patcher/shared/build_release_plan.py
+      --pipeline constitution
+      --workspace docs/pipelines/constitution/work/consolidation
+    validate_release_plan: >-
+      python docs/patcher/shared/validate_release_plan.py
+      --plan docs/pipelines/constitution/work/consolidation/release_plan.yaml
+    materialize_release: >-
+      python docs/patcher/shared/materialize_release.py
+      --plan docs/pipelines/constitution/work/consolidation/release_plan.yaml
+    validate_release_manifest: >-
+      python docs/patcher/shared/validate_release_manifest.py
+      --manifest docs/cores/releases/<release_id>/manifest.yaml
+
+required_output_sections:
+  - execution_evidence
+  - release_plan_summary
+  - materialized_release_summary
+  - coherence_findings
+  - follow_up_actions
+  - human_actions_to_execute
+
+expected_outputs:
+  bounded_local_run:
+    report_path_pattern: docs/pipelines/constitution/runs/<run_id>/work/07_release/release_plan.yaml
+  parallel_consolidation:
+    report_path_pattern: docs/pipelines/constitution/work/consolidation/release_plan.yaml
+  nominal_global:
+    report_path_pattern: docs/pipelines/constitution/work/07_release/release_plan.yaml
+  bounded_transition:
+    report_path_pattern: docs/pipelines/constitution/work/07_release/release_plan.yaml
+
+completion_evidence:
+  required:
+    - release_commands_emitted_or_executed
+    - real_execution_evidence_declared
+    - release_plan_materialized
+    - release_manifest_materialized
+    - final_status_is_pass_fail_or_blocked
+    - human_actions_explicitly_stated_in_output
+  not_sufficient:
+    - informal_chat_summary_only
+    - release_reasoning_without_script_evidence
+    - pass_without_materialized_release_artifacts
+    - simulated_script_execution
+
+status_values:
+  - PASS
+  - FAIL
+  - BLOCKED
+
+human_actions_required:
+  description: >-
+    Si les scripts n'ont pas été exécutés réellement, l'humain doit lancer les
+    commandes émises puis relancer l'IA sur ce stage. Une fois la release
+    matérialisée et validée, l'humain peut poursuivre vers STAGE_08.
+  on_blocked:
+    step: 1
+    label: Exécuter la chaîne de release puis relancer ce stage
+    mandatory: true
+  on_pass:
+    step: 1
+    label: Mettre à jour le tracking et poursuivre vers STAGE_08_PROMOTE_CURRENT
+    mandatory: true
+    command: >-
+      python docs/patcher/shared/update_run_tracking.py
+      --pipeline constitution
+      --run-id <RUN_ID>
+      --stage-id STAGE_07_RELEASE_MATERIALIZATION
+      --stage-status done
+      --run-status active
+      --next-stage STAGE_08_PROMOTE_CURRENT
+      --summary "Release materialization completed with validated artifacts; ready for promote current."
+  on_fail:
+    step: 1
+    label: Corriger les anomalies de release avant reprise
+    mandatory: true
+
+allowed_transitions:
+  on_pass:
+    next_stage: STAGE_08_PROMOTE_CURRENT
+    precondition: human must confirm update_run_tracking.py execution
+  on_fail:
+    next_stage: STAGE_06_CORE_VALIDATION_or_STAGE_06B_CONSOLIDATION
+  on_blocked:
+    next_action: execute_release_chain_and_retry_same_stage
+
+forbidden_actions:
+  - simulated_release_chain_execution
+  - pass_without_real_execution_evidence
+  - direct_current_promotion
+  - current_alias_update_without_stage_08
+  - omitting_human_actions_from_output
+
+migration_note: >-
+  Premier skill STAGE_07 pour le pipeline constitution.
+  Consolide en YAML machine-readable les règles de release du pipeline.
