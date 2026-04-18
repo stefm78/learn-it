@@ -122,6 +122,23 @@ human_actions_required:
     step: 1
     label: Exécuter le dry-run puis la consolidation réelle et relancer ce stage
     mandatory: true
+    commands:
+      - >-
+        python docs/patcher/shared/consolidate_parallel_runs.py
+        --runs <RUN_ID_1> <RUN_ID_2>
+        --base docs/cores/current
+        --output docs/pipelines/constitution/work/consolidation
+        --pipeline constitution
+        --dry-run
+      - >-
+        python docs/patcher/shared/consolidate_parallel_runs.py
+        --runs <RUN_ID_1> <RUN_ID_2>
+        --base docs/cores/current
+        --output docs/pipelines/constitution/work/consolidation
+        --pipeline constitution
+    next_step: >-
+      Relancer l'IA avec :
+      "Reprends STAGE_06B_CONSOLIDATION — dry-run et consolidation réelle ont été exécutés, consolidation_report.yaml est présent."
   on_pass:
     step: 1
     label: Poursuivre vers STAGE_07_RELEASE_MATERIALIZATION
@@ -129,6 +146,9 @@ human_actions_required:
     note: >-
       Le workspace docs/pipelines/constitution/work/consolidation devient la
       source de vérité pour STAGE_07.
+    next_step: >-
+      Relancer l'IA avec :
+      "Continue le pipeline constitution — STAGE_06B est validé, démarre STAGE_07_RELEASE_MATERIALIZATION sur docs/pipelines/constitution/work/consolidation/."
   on_fail:
     step: 1
     label: Corriger les conflits ou gates avant nouvelle tentative
