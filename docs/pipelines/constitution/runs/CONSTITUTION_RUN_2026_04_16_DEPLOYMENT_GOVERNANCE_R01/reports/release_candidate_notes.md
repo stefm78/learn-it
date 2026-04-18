@@ -1,0 +1,23 @@
+# Release candidate — CORE_RELEASE_2026_04_18_R01
+
+- release_required: `True`
+- change_depth: `major`
+- release_path: `docs/cores/releases/CORE_RELEASE_2026_04_18_R01/`
+
+## Cores matérialisés
+
+- `constitution` → `CORE_LEARNIT_CONSTITUTION_V4_0` / `V4_0_FINAL`
+- `referentiel` → `CORE_LEARNIT_REFERENTIEL_V4_0` / `V4_0_FINAL`
+- `link` → `CORE_LINK_LEARNIT_CONSTITUTION_V4_0__REFERENTIEL_V4_0` / `V4_0__V4_0_FINAL`
+
+## Notes
+
+- constitution: change_depth=major, identical_content=false, added=0, removed=0, modified=7
+- referentiel: change_depth=none, identical_content=true, added=0, removed=0, modified=0
+- link: change_depth=minor, identical_content=true, added=0, removed=0, modified=1
+- aggregate_change_depth=major
+- release_required=true
+
+## Statut
+
+Release matérialisée sans modification de `docs/cores/current/`.
