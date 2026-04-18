@@ -113,8 +113,8 @@ def semantic_version_aliases(version: str) -> List[str]:
     return sorted(aliases, key=len, reverse=True)
 
 
-def build_editorial_replacements(target_versions: Dict[str, Any]) -> List[Tuple[str, str, None]]:
-    replacements: List[Tuple[str, str, None]] = []
+def build_editorial_replacements(target_versions: Dict[str, Any]) -> List[Tuple[str, str, str | None]]:
+    replacements: List[Tuple[str, str, str | None]] = []
     seen = set()
     for role, entry in target_versions.items():
         if not isinstance(entry, dict):
@@ -124,18 +124,18 @@ def build_editorial_replacements(target_versions: Dict[str, Any]) -> List[Tuple[
         current_core_id = entry.get("current_core_id")
         target_core_id = entry.get("target_core_id")
         if isinstance(current_core_id, str) and isinstance(target_core_id, str) and current_core_id != target_core_id:
-            key = (current_core_id, target_core_id)
+            key = (role, current_core_id, target_core_id)
             if key not in seen:
                 seen.add(key)
-                replacements.append((current_core_id, target_core_id, None))
+                replacements.append((current_core_id, target_core_id, role))
         if isinstance(current_version, str) and isinstance(target_version, str) and current_version != target_version:
             current_aliases = semantic_version_aliases(current_version)
             target_aliases = semantic_version_aliases(target_version)
             for old_alias, new_alias in zip(current_aliases, target_aliases):
-                key = (old_alias, new_alias)
+                key = (role, old_alias, new_alias)
                 if old_alias != new_alias and key not in seen:
                     seen.add(key)
-                    replacements.append((old_alias, new_alias, None))
+                    replacements.append((old_alias, new_alias, role))
     return replacements
 
 

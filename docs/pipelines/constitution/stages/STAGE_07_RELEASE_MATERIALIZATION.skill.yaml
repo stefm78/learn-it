@@ -91,7 +91,10 @@ script_execution_contract:
     - materialize_release_executed_for_real
     - validate_release_manifest_executed_for_real
     - release_plan_yaml_materialized
+    - release_plan_validation_yaml_materialized
+    - release_materialization_report_yaml_materialized
     - release_manifest_yaml_materialized
+    - release_manifest_validation_yaml_materialized
   blocked_if_missing_evidence: true
   blocked_status_value: BLOCKED
   pass_requires:
@@ -231,26 +234,46 @@ required_output_sections:
 
 expected_outputs:
   bounded_local_run:
-    report_path_pattern: docs/pipelines/constitution/runs/<run_id>/work/07_release/release_plan.yaml
+    primary_output_path_pattern: docs/pipelines/constitution/runs/<run_id>/work/07_release/release_plan.yaml
+    required_raw_artifacts:
+      - docs/pipelines/constitution/runs/<run_id>/reports/release_plan_validation.yaml
+      - docs/pipelines/constitution/runs/<run_id>/reports/release_materialization_report.yaml
+      - docs/pipelines/constitution/runs/<run_id>/reports/release_manifest_validation.yaml
   parallel_consolidation:
-    report_path_pattern: docs/pipelines/constitution/work/consolidation/release_plan.yaml
+    primary_output_path_pattern: docs/pipelines/constitution/work/consolidation/release_plan.yaml
+    required_raw_artifacts:
+      - docs/pipelines/constitution/reports/release_plan_validation.yaml
+      - docs/pipelines/constitution/reports/release_materialization_report.yaml
+      - docs/pipelines/constitution/reports/release_manifest_validation.yaml
   nominal_global:
-    report_path_pattern: docs/pipelines/constitution/work/07_release/release_plan.yaml
+    primary_output_path_pattern: docs/pipelines/constitution/work/07_release/release_plan.yaml
+    required_raw_artifacts:
+      - docs/pipelines/constitution/reports/release_plan_validation.yaml
+      - docs/pipelines/constitution/reports/release_materialization_report.yaml
+      - docs/pipelines/constitution/reports/release_manifest_validation.yaml
   bounded_transition:
-    report_path_pattern: docs/pipelines/constitution/work/07_release/release_plan.yaml
+    primary_output_path_pattern: docs/pipelines/constitution/work/07_release/release_plan.yaml
+    required_raw_artifacts:
+      - docs/pipelines/constitution/reports/release_plan_validation.yaml
+      - docs/pipelines/constitution/reports/release_materialization_report.yaml
+      - docs/pipelines/constitution/reports/release_manifest_validation.yaml
 
 completion_evidence:
   required:
     - release_commands_emitted_or_executed
     - real_execution_evidence_declared
     - release_plan_materialized
+    - release_plan_validation_materialized
+    - release_materialization_report_materialized
     - release_manifest_materialized
+    - release_manifest_validation_materialized
     - final_status_is_pass_fail_or_blocked
     - human_actions_explicitly_stated_in_output
   not_sufficient:
     - informal_chat_summary_only
     - release_reasoning_without_script_evidence
     - pass_without_materialized_release_artifacts
+    - pass_without_release_manifest_validation_yaml
     - simulated_script_execution
 
 status_values:
