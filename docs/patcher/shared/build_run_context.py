@@ -53,8 +53,6 @@ TERMINAL_CLOSED_STAGES = {
     "RUN_ABANDONED",
 }
 
-# Pseudo-stages de bootstrap sans skill.yaml propre : toujours transparents
-# vers next_stage, quel que soit last_stage_status.
 BOOTSTRAP_PASSTHROUGH_STAGES = {
     "RUN_BOOTSTRAP",
 }
@@ -66,6 +64,7 @@ def canonical_stage_id(stage_id: str) -> str:
 
 def is_terminal_closed_run(run_status: str, stage_id: str, last_stage_status: str) -> bool:
     return run_status == "closed" and stage_id in TERMINAL_CLOSED_STAGES and last_stage_status == "done"
+
 
 def load_yaml(path: Path) -> Dict[str, Any]:
     if not path.exists():
@@ -112,6 +111,10 @@ def display_path(path: Path, repo_root: Path) -> str:
         return str(path.resolve())
 
 
+def run_repo_root(pipeline_id: str, run_id: str) -> str:
+    return f"docs/pipelines/{pipeline_id}/runs/{run_id}"
+
+
 def derive_next_executable_stage(exec_state: Dict[str, Any], fallback_current_stage: str, run_status: str) -> tuple[str, str, bool]:
     raw_current_stage = exec_state.get("current_stage") or fallback_current_stage
     last_stage_status = exec_state.get("last_stage_status", "unknown")
@@ -120,8 +123,6 @@ def derive_next_executable_stage(exec_state: Dict[str, Any], fallback_current_st
     raw_actionable = raw_current_stage
     if last_stage_status == "done" and raw_next_stage and raw_next_stage != raw_current_stage:
         raw_actionable = raw_next_stage
-    # Passthrough : pseudo-stages bootstrap sans skill → pointer vers next_stage
-    # immédiatement, sans attendre last_stage_status == "done".
     elif raw_current_stage in BOOTSTRAP_PASSTHROUGH_STAGES and raw_next_stage:
         raw_actionable = raw_next_stage
 
@@ -129,13 +130,14 @@ def derive_next_executable_stage(exec_state: Dict[str, Any], fallback_current_st
     canonical_actionable = canonical_stage_id(raw_actionable)
     return raw_actionable, canonical_actionable, terminal_closed
 
+
 def stage_num(stage_id: str) -> str:
     if stage_id.startswith("STAGE_") and len(stage_id) >= 8:
         return stage_id[6:8]
     return "XX"
 
 
-def default_work_dir(run_id: str, stage_id: str) -> str:
+def default_work_dir(pipeline_id: str, run_id: str, stage_id: str) -> str:
     mapping = {
         "00": "00_scope_partition",
         "01": "01_challenge",
@@ -149,23 +151,24 @@ def default_work_dir(run_id: str, stage_id: str) -> str:
         "09": "09_closeout",
     }
     suffix = mapping.get(stage_num(stage_id), f"{stage_num(stage_id)}_stage")
-    return f"runs/{run_id}/work/{suffix}/"
+    return f"{run_repo_root(pipeline_id, run_id)}/work/{suffix}/"
 
 
-def default_primary_output(run_id: str, stage_id: str) -> str:
+def default_primary_output(pipeline_id: str, run_id: str, stage_id: str) -> str:
+    base = run_repo_root(pipeline_id, run_id)
     num = stage_num(stage_id)
     mapping = {
-        "01": f"runs/{run_id}/work/01_challenge/challenge_report_<id>.md",
-        "02": f"runs/{run_id}/work/02_arbitrage/arbitrage.md",
-        "03": f"runs/{run_id}/work/03_patch/patchset.yaml",
-        "04": f"runs/{run_id}/work/04_patch_validation/patch_validation.yaml",
-        "05": f"runs/{run_id}/reports/patch_execution_report.yaml",
-        "06": f"runs/{run_id}/work/06_core_validation/core_validation.yaml",
-        "07": f"runs/{run_id}/work/07_release/release_plan.yaml",
-        "08": f"runs/{run_id}/reports/promotion_report.yaml",
-        "09": f"runs/{run_id}/reports/closeout_report.yaml",
+        "01": f"{base}/work/01_challenge/challenge_report_<id>.md",
+        "02": f"{base}/work/02_arbitrage/arbitrage.md",
+        "03": f"{base}/work/03_patch/patchset.yaml",
+        "04": f"{base}/work/04_patch_validation/patch_validation.yaml",
+        "05": f"{base}/reports/patch_execution_report.yaml",
+        "06": f"{base}/work/06_core_validation/core_validation.yaml",
+        "07": f"{base}/work/07_release/release_plan.yaml",
+        "08": f"{base}/reports/promotion_report.yaml",
+        "09": f"{base}/reports/closeout_report.yaml",
     }
-    return mapping.get(num, f"runs/{run_id}/outputs/{stage_id}.out")
+    return mapping.get(num, f"{base}/outputs/{stage_id}.out")
 
 
 def load_pipeline_model(repo_root: Path, pipeline_id: str) -> Dict[str, Any]:
@@ -189,6 +192,7 @@ def find_stage_spec(pipeline_model: Dict[str, Any], stage_id: str) -> Dict[str, 
 
 def resolved_stage_inputs(
     skill: Dict[str, Any],
+    pipeline_id: str,
     run_id: str,
     mode: str,
     stage_id: str,
@@ -198,16 +202,18 @@ def resolved_stage_inputs(
     if stage_inputs:
         return substitute_run_id(stage_inputs, run_id)
 
-    base = [
-        f"runs/{run_id}/inputs/run_context.yaml",
-        f"runs/{run_id}/inputs/scope_manifest.yaml",
-        f"runs/{run_id}/inputs/impact_bundle.yaml",
-        f"runs/{run_id}/inputs/integration_gate.yaml",
+    base = run_repo_root(pipeline_id, run_id)
+    inputs_base = f"{base}/inputs"
+    result = [
+        f"{inputs_base}/run_context.yaml",
+        f"{inputs_base}/scope_manifest.yaml",
+        f"{inputs_base}/impact_bundle.yaml",
+        f"{inputs_base}/integration_gate.yaml",
     ]
     if stage_id == "STAGE_01_CHALLENGE":
-        base.insert(1, f"runs/{run_id}/inputs/scope_extract.yaml")
-        base.insert(2, f"runs/{run_id}/inputs/neighbor_extract.yaml")
-    return base
+        result.insert(1, f"{inputs_base}/scope_extract.yaml")
+        result.insert(2, f"{inputs_base}/neighbor_extract.yaml")
+    return result
 
 
 def derive_required_scripts_status(
@@ -269,16 +275,13 @@ def build_task_view(
     )
     skill = load_stage_skill(repo_root, skill_ref)
 
-    resolved_inputs = resolved_stage_inputs(skill, run_id, mode, canonical_stage)
+    resolved_inputs = resolved_stage_inputs(skill, pipeline_id, run_id, mode, canonical_stage)
     stage_kind = skill.get("stage_kind", "hybrid")
     closure_level = skill.get("closure_level", "medium")
 
     expected_outputs = skill.get("expected_outputs", {}) or {}
     mode_outputs = expected_outputs.get(mode, {}) if isinstance(expected_outputs, dict) else {}
-    primary_output = (
-        mode_outputs.get("report_path_pattern")
-        or default_primary_output(run_id, canonical_stage)
-    )
+    primary_output = mode_outputs.get("report_path_pattern") or default_primary_output(pipeline_id, run_id, canonical_stage)
 
     task_view = {
         "status": "terminal_closed" if terminal_closed else "executable",
@@ -289,9 +292,9 @@ def build_task_view(
         "closure_level": closure_level,
         "resolved_inputs": resolved_inputs,
         "execution_paths": {
-            "work_dir": default_work_dir(run_id, canonical_stage),
+            "work_dir": default_work_dir(pipeline_id, run_id, canonical_stage),
             "primary_output": substitute_run_id(primary_output, run_id),
-            "reports_dir": f"runs/{run_id}/reports/",
+            "reports_dir": f"{run_repo_root(pipeline_id, run_id)}/reports/",
         },
         "required_scripts_status": derive_required_scripts_status(
             canonical_stage,
@@ -366,6 +369,7 @@ def build_run_context(
 
     scope_extract_status: Dict[str, Any] = {"present": False}
     neighbor_extract_status: Dict[str, Any] = {"present": False}
+    run_base = run_repo_root(pipeline_id, run_id)
 
     if scope_extract is not None:
         se = scope_extract.get("scope_extract", {})
@@ -374,7 +378,7 @@ def build_run_context(
             "found_ids_count": len(se.get("found_ids", [])),
             "missing_ids_count": len(se.get("missing_ids", [])),
             "missing_ids": se.get("missing_ids", []),
-            "ref": f"runs/{run_id}/inputs/scope_extract.yaml",
+            "ref": f"{run_base}/inputs/scope_extract.yaml",
         }
 
     if neighbor_extract is not None:
@@ -384,7 +388,7 @@ def build_run_context(
             "found_ids_count": len(ne.get("found_ids", [])),
             "missing_ids_count": len(ne.get("missing_ids", [])),
             "missing_ids": ne.get("missing_ids", []),
-            "ref": f"runs/{run_id}/inputs/neighbor_extract.yaml",
+            "ref": f"{run_base}/inputs/neighbor_extract.yaml",
         }
 
     fingerprints: Dict[str, str] = {}
