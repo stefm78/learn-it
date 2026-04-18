@@ -14,10 +14,10 @@ flowchart TD
     PS1 --> IA0["IA : synthèse backlog + analyse sémantique\nà partir du rapport déterministe"]:::skill
     IA0 --> PH1{🧑 Humain\nclarification ou arbitrage\nsur la partition ?}:::human
     PH1 -->|Oui| IA0
-    PH1 -->|Décision validée| POL["🧑 Humain met à jour\npolicy.yaml / decisions.yaml\net résout le backlog"]:::script
-POL["🧑 Humain met à jour\npolicy.yaml / decisions.yaml\n+ governance_backlog.yaml"]:::script
+    PH1 -->|Décision validée| POL["🧑 Humain met à jour\npolicy.yaml / decisions.yaml\n+ governance_backlog.yaml"]:::script
+    POL --> PS2["🧪 Script déterministe\ngenerate_constitution_scopes.py"]:::script
     PS2 --> ZPART([✅ Partition republiée]):::stop
-
+    
     %% ─── ENTRY : NO RUN_ID ───
     OPEN --> H1{🧑 Humain\nconfirme ouverture ?}:::human
     H1 -->|Non| ABORT([⛔ Arrêt]):::stop
