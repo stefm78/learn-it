@@ -1,0 +1,233 @@
+stage_skill:
+  schema_version: 0.1
+  pipeline_id: constitution
+  stage_id: STAGE_04_PATCH_VALIDATION
+  skill_id: bounded_patch_dsl_validator
+  stage_kind: hybrid
+  closure_level: high
+  authoritative_role: stable_stage_contract
+
+mission: >-
+  Vérifier qu'un patchset issu de STAGE_03_PATCH_SYNTHESIS est structurellement
+  valide, sûr, minimal et compatible avec le périmètre du run avant toute
+  application. Ce stage ne modifie pas les Core et n'applique pas le patch.
+  Il doit articuler une validation structurelle déterministe obligatoire via
+  validate_patchset.py avec une revue logique complémentaire par l'IA.
+
+model_requirements:
+  reasoning_level: advanced
+  justification: >-
+    Ce stage combine une preuve déterministe exécutable et une revue logique
+    de gouvernance. Le modèle doit interpréter un résultat de script réel,
+    qualifier les anomalies, distinguer les défauts bloquants des warnings,
+    et décider s'il faut revenir vers STAGE_03_PATCH_SYNTHESIS. Un raisonnement
+    faible conduit souvent à confondre validation structurelle, revue logique
+    et décision de transition.
+  recommended_models:
+    - o3
+    - claude-opus-4
+    - gemini-2.5-pro
+  minimum_acceptable: tout modèle avec extended thinking ou chain-of-thought activable
+  warning: >-
+    ⚠️ NE PAS exécuter ce stage avec un modèle standard. Ce stage ne peut pas
+    conclure correctement sans interprétation rigoureuse du résultat réel de
+    validate_patchset.py et sans séparation stricte entre preuve scriptée et
+    analyse complémentaire.
+
+runtime_binding:
+  expected_mode_values:
+    - nominal_global
+    - bounded_local_run
+    - bounded_transition
+  run_context_role: >-
+    run_context.yaml doit être lu en premier pour résoudre le mode, les chemins
+    du run et les contraintes de périmètre. Il ne remplace pas les sources
+    canoniques ni la preuve d'exécution du script obligatoire.
+  execution_evidence_role: >-
+    La validation structurelle automatique fait autorité sur les contrôles DSL.
+    L'IA ne peut jamais simuler, supposer ou reformuler son exécution comme
+    acquise si la preuve réelle n'est pas matérialisée dans l'output attendu.
+
+primary_reads:
+  bounded_local_run:
+    - runs/<run_id>/inputs/run_context.yaml
+    - runs/<run_id>/inputs/scope_manifest.yaml
+    - runs/<run_id>/inputs/impact_bundle.yaml
+    - runs/<run_id>/work/03_patch/patchset.yaml
+    - docs/prompts/shared/Make06PatchValidation.md
+    - docs/specs/patch-dsl/current.md
+  nominal_global:
+    - docs/pipelines/constitution/work/03_patch/patchset.yaml
+    - docs/prompts/shared/Make06PatchValidation.md
+    - docs/specs/patch-dsl/current.md
+    - docs/cores/current/constitution.yaml
+    - docs/cores/current/referentiel.yaml
+    - docs/cores/current/link.yaml
+  bounded_transition:
+    - docs/pipelines/constitution/inputs/scope_manifest.yaml
+    - docs/pipelines/constitution/inputs/impact_bundle.yaml
+    - docs/pipelines/constitution/work/03_patch/patchset.yaml
+    - docs/prompts/shared/Make06PatchValidation.md
+    - docs/specs/patch-dsl/current.md
+
+required_scripts:
+  mandatory_validation:
+    - docs/patcher/shared/validate_patchset.py
+  note: >-
+    La validation structurelle automatique est obligatoire avant toute
+    conclusion de stage. Elle doit être réellement exécutée. Si l'IA ne peut
+    pas exécuter elle-même le script, elle doit émettre la commande exacte,
+    déclarer le stage BLOCKED, et attendre la preuve matérielle du résultat.
+
+script_execution_contract:
+  required_before_pass_or_fail:
+    - validate_patchset.py_executed_for_real
+    - patch_validation_yaml_materialized
+  blocked_if_missing_evidence: true
+  blocked_status_value: BLOCKED
+  pass_requires:
+    - structural_validation_pass
+    - no_blocking_logical_issue
+  fail_requires:
+    - structural_validation_fail_or_blocking_logical_issue_after_real_execution
+
+deterministic_command_templates:
+  bounded_local_run:
+    validate_patchset: >-
+      python docs/patcher/shared/validate_patchset.py
+      --patch runs/<run_id>/work/03_patch/patchset.yaml
+      --output runs/<run_id>/work/04_patch_validation/patch_validation.yaml
+  nominal_global:
+    validate_patchset: >-
+      python docs/patcher/shared/validate_patchset.py
+      --patch docs/pipelines/constitution/work/03_patch/patchset.yaml
+      --output docs/pipelines/constitution/work/04_patch_validation/patch_validation.yaml
+  bounded_transition:
+    validate_patchset: >-
+      python docs/patcher/shared/validate_patchset.py
+      --patch docs/pipelines/constitution/work/03_patch/patchset.yaml
+      --output docs/pipelines/constitution/work/04_patch_validation/patch_validation.yaml
+
+analysis_axes:
+  - structural_dsl_conformance
+  - scope_and_perimeter_compliance
+  - minimality
+  - governance_safety
+  - reference_integrity
+  - apply_readiness
+
+logical_review_rules:
+  constraints:
+    - do_not_replace_real_script_result_with_reasoning
+    - no_pass_without_execution_evidence
+    - no_apply_claim_in_stage_04
+    - no_core_rewrite
+    - bounded_run_must_not_write_outside_scope
+    - no_silent_inclusion_of_hors_perimetre_or_scope_extension_items
+    - dry_run_or_script_result_must_be_treated_as_executable_evidence
+
+required_output_sections:
+  - execution_evidence
+  - structural_validation_summary
+  - logical_review_summary
+  - anomalies_and_warnings
+  - corrections_required_if_any
+  - human_actions_to_execute
+
+expected_outputs:
+  bounded_local_run:
+    report_path_pattern: runs/<run_id>/work/04_patch_validation/patch_validation.yaml
+  nominal_global:
+    report_path_pattern: docs/pipelines/constitution/work/04_patch_validation/patch_validation.yaml
+  bounded_transition:
+    report_path_pattern: docs/pipelines/constitution/work/04_patch_validation/patch_validation.yaml
+
+completion_evidence:
+  required:
+    - validate_patchset_command_emitted_or_executed
+    - real_execution_evidence_declared
+    - patch_validation_yaml_written_or_confirmed_missing
+    - final_status_is_pass_fail_or_blocked
+    - blocking_issues_and_corrections_explicit_if_any
+    - human_actions_explicitly_stated_in_output
+  not_sufficient:
+    - informal_chat_summary_only
+    - logical_review_without_script_evidence
+    - pass_without_validate_patchset_execution
+    - simulated_script_execution
+
+status_values:
+  - PASS
+  - FAIL
+  - BLOCKED
+
+human_actions_required:
+  description: >-
+    L'IA ne doit pas simuler validate_patchset.py. Si le script n'a pas été
+    exécuté réellement, l'humain doit lancer la commande émise puis relancer
+    l'IA sur ce stage. Une fois la validation réelle obtenue, l'humain décide
+    soit de poursuivre vers STAGE_05_APPLY, soit de revenir à STAGE_03 pour
+    correction du patchset.
+  on_blocked:
+    step: 1
+    label: Exécuter validate_patchset.py puis relancer ce stage
+    mandatory: true
+    note: >-
+      Exécuter la commande exacte émise par l'IA pour matérialiser
+      patch_validation.yaml, puis relancer l'IA avec :
+      "Reprends STAGE_04_PATCH_VALIDATION pour <RUN_ID> — validate_patchset.py a été exécuté et patch_validation.yaml est présent."
+  on_pass:
+    step: 1
+    label: Mettre à jour le tracking et poursuivre vers STAGE_05_APPLY
+    mandatory: true
+    command: >-
+      python docs/patcher/shared/update_run_tracking.py
+      --pipeline constitution
+      --run-id <RUN_ID>
+      --stage-id STAGE_04_PATCH_VALIDATION
+      --stage-status done
+      --run-status active
+      --next-stage STAGE_05_APPLY
+      --summary "Patch validation passed with real execution evidence; ready for apply."
+    expected_effect: >-
+      run_manifest.yaml : current_stage passe à STAGE_05_APPLY,
+      STAGE_04_PATCH_VALIDATION apparaît dans completed_stages.
+    next_step: >-
+      Relancer l'IA avec :
+      "Continue le run <RUN_ID> — STAGE_04 est done, démarre STAGE_05_APPLY."
+  on_fail:
+    step: 1
+    label: Revenir à STAGE_03_PATCH_SYNTHESIS pour correction
+    mandatory: true
+    note: >-
+      Corriger le patchset à partir des anomalies/corrections identifiées,
+      puis relancer l'IA sur STAGE_03_PATCH_SYNTHESIS avec les notes utiles.
+      Ne pas exécuter update_run_tracking.py vers STAGE_05 tant que le patch
+      n'a pas été revalidé.
+
+allowed_transitions:
+  on_pass:
+    next_stage: STAGE_05_APPLY
+    precondition: human must confirm update_run_tracking.py execution
+  on_fail:
+    next_stage: STAGE_03_PATCH_SYNTHESIS
+    precondition: patchset must be revised before revalidation
+  on_blocked:
+    next_action: execute_validate_patchset_and_retry_same_stage
+    note: Le stage reste in_progress tant que la preuve réelle manque.
+
+forbidden_actions:
+  - simulated_validate_patchset_execution
+  - pass_without_real_execution_evidence
+  - substituting_logical_review_for_script_validation
+  - direct_core_rewrite
+  - apply_claim_or_apply_execution
+  - silent_scope_extension
+  - omitting_human_actions_from_output
+
+migration_note: >-
+  Premier skill STAGE_04 pour le pipeline constitution.
+  Consolide en YAML machine-readable les règles exprimées dans
+  Make06PatchValidation.md, PIPELINE_MODEL.yaml et pipeline.md.
+  Introduit un pattern hybrid explicite : script déterministe obligatoire,
+  preuve d'exécution matérielle, puis revue logique complémentaire par l'IA.
