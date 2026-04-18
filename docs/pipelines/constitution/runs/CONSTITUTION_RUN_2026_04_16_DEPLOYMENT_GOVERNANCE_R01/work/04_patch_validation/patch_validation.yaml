@@ -1,9 +1,96 @@
-PATCHSET_VALIDATION:
+PATCH_VALIDATION:
+  schema_version: 0.1
+  pipeline_id: constitution
+  stage_id: STAGE_04_PATCH_VALIDATION
+  run_id: CONSTITUTION_RUN_2026_04_16_DEPLOYMENT_GOVERNANCE_R01
+  mode: bounded_local_run
   status: PASS
-  scope: patchset
-  anomalies_count: 0
-  warnings_count: 0
-  anomalies:
-    - none
-  warnings:
-    - none
+  execution_evidence:
+    validate_patchset_command_emitted_or_executed: executed_for_real
+    real_execution_evidence_declared: true
+    validate_patchset_executed: true
+    patch_validation_yaml_present: true
+    validator_output_ref: docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_16_DEPLOYMENT_GOVERNANCE_R01/work/04_patch_validation/patch_validation.yaml
+    validator_output_summary:
+      status: PASS
+      anomalies_count: 0
+      warnings_count: 0
+    command_used: >-
+      python docs/patcher/shared/validate_patchset.py
+      docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_16_DEPLOYMENT_GOVERNANCE_R01/work/03_patch/patchset.yaml
+      > docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_16_DEPLOYMENT_GOVERNANCE_R01/work/04_patch_validation/patch_validation.yaml
+    note: >-
+      La preuve réelle d'exécution du validateur structurel est présente et le
+      résultat retourné est PASS sans anomalies ni warnings.
+  structural_validation_summary:
+    status: PASS
+    source_of_truth: docs/patcher/shared/validate_patchset.py
+    anomalies_count: 0
+    warnings_count: 0
+    conclusion: >-
+      Le patchset est structurellement conforme au DSL validé par le script
+      obligatoire du stage 04.
+  logical_review_summary:
+    status: PASS
+    structural_dsl_conformance:
+      conclusion: >-
+        Confirmée par la validation déterministe réelle.
+    scope_and_perimeter_compliance:
+      conclusion: >-
+        Le patch écrit exclusivement dans docs/cores/current/constitution.yaml,
+        seul fichier autorisé par le writable_perimeter du run.
+    minimality:
+      conclusion: >-
+        Le patch reste borné aux trois corrections arbitrées R1-R3 et maintient
+        R4 en no_change/note-only, sans glissement silencieux hors scope.
+    governance_safety:
+      conclusion: >-
+        Aucune écriture n'est déclarée vers referentiel.yaml ou link.yaml ; le
+        patch renforce des frontières de gouvernance sans réallocation inter-Core.
+    reference_integrity:
+      conclusion: >-
+        Aucun usage de référence inter-Core fine supplémentaire n'est introduit
+        par le patch courant ; l'anomalie R4 reste explicitement reportée hors
+        patch local.
+    apply_readiness:
+      status: ready_for_stage_05_apply
+      note: >-
+        Le patchset est prêt pour STAGE_05_APPLY, sous réserve de la transition
+        de tracking effectuée explicitement par l'humain.
+  anomalies_and_warnings:
+    anomalies:
+      - none
+    warnings:
+      - code: R4_REMAINS_BACKLOG_ITEM
+        severity: non_blocking
+        message: >-
+          L'anomalie de matérialisation d'inputs liée à
+          REF_CORE_LEARNIT_REFERENTIEL_V2_0_IN_CONSTITUTION reste à traiter via
+          backlog/stage amont, mais elle n'invalide pas le patch local validé.
+  corrections_required_if_any:
+    required_now:
+      - none
+    if_future_revision_needed:
+      - step: 1
+        type: return_to_stage_03_if_patch_changes
+        action: >-
+          Toute modification future du patchset devra repasser par
+          STAGE_03_PATCH_SYNTHESIS puis une nouvelle validation réelle en STAGE_04.
+  human_actions_to_execute:
+    on_pass:
+      mandatory: true
+      command: >-
+        python docs/patcher/shared/update_run_tracking.py
+        --pipeline constitution
+        --run-id CONSTITUTION_RUN_2026_04_16_DEPLOYMENT_GOVERNANCE_R01
+        --stage-id STAGE_04_PATCH_VALIDATION
+        --stage-status done
+        --run-status active
+        --next-stage STAGE_05_APPLY
+        --summary "Patch validation passed with real execution evidence; ready for apply."
+      next_step: >-
+        Relancer ensuite l'IA avec :
+        "Continue le run CONSTITUTION_RUN_2026_04_16_DEPLOYMENT_GOVERNANCE_R01 — STAGE_04 est done, démarre STAGE_05_APPLY."
+      note: >-
+        Le tracking ne doit pas être avancé implicitement ; la transition vers
+        STAGE_05_APPLY reste une action opératoire explicite côté humain.
