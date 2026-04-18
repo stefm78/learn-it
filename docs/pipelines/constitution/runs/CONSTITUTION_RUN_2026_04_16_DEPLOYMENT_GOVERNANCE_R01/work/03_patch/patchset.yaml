@@ -1,0 +1,121 @@
+PATCH_SET:
+  id: CONSTITUTION_RUN_2026_04_16_DEPLOYMENT_GOVERNANCE_R01_STAGE_03_PATCHSET
+  patch_dsl_version: "4.0"
+  atomic: true
+  description: >-
+    Bounded Stage 03 patch synthesis for run CONSTITUTION_RUN_2026_04_16_DEPLOYMENT_GOVERNANCE_R01.
+    Minimal in-scope patch on constitution.yaml only. Synthesizes the three in-scope
+    corrections authorized by Stage 02 for deployment_governance: explicit bounded closure
+    of gamification probation, constitution-level qualification of tutoring infrastructure
+    required by assisted mode, and clarification that behavioral proxies cannot qualify
+    governance signals by themselves. The inter-Core identifier ambiguity initially raised
+    as R4 is not patched now and remains outside the writable perimeter of this run.
+  files:
+    - file: docs/cores/current/constitution.yaml
+      expected_core_id: CORE_LEARNIT_CONSTITUTION_V3_0
+      operations:
+        - op: replace_field
+          target:
+            section: RULES
+            id: RULE_GAMIFICATION_PROBATION_MUST_CLOSE
+            field: human_readable
+          value: >-
+            Une probation gamification doit se clôturer dans une fenêtre référentielle
+            finie, pré-déclarée, puis déboucher explicitement sur validation, suspension
+            ou retrait de la mécanique.
+        - op: replace_field
+          target:
+            section: RULES
+            id: RULE_GAMIFICATION_PROBATION_MUST_CLOSE
+            field: logic.effect
+          value: >-
+            Sortie explicite du mode probatoire par validation, suspension ou retrait ;
+            l’apprenant est informé si un changement visible intervient. Aucune prolongation
+            implicite ou indéfinie de la probation n’est autorisée au-delà de la fenêtre
+            référentielle finie pré-déclarée.
+        - op: replace_field
+          target:
+            section: EVENTS
+            id: EVENT_GAMIFICATION_PROBATION_MAX_DURATION_REACHED
+            field: logic.condition
+          value: >-
+            Le nombre maximal de sessions probatoires, fini, pré-déclaré et défini
+            référentiellement, est atteint sans validation explicite.
+        - op: replace_field
+          target:
+            section: INVARIANTS
+            id: INV_ASSISTED_MODE_REQUIRES_TUTORING
+            field: human_readable
+          value: >-
+            Le mode Assisté exige une infrastructure tutorale identifiée, disponible et
+            traçable pour le suivi effectif de l’apprenant.
+        - op: replace_field
+          target:
+            section: INVARIANTS
+            id: INV_ASSISTED_MODE_REQUIRES_TUTORING
+            field: logic.condition
+          value: >-
+            Infrastructure tutorale absente, non identifiée, indisponible ou dépourvue
+            de traçabilité minimale pour le suivi effectif de l’apprenant.
+        - op: replace_field
+          target:
+            section: CONSTRAINTS
+            id: CONSTRAINT_NO_ASSISTED_DEPLOYMENT_WITHOUT_TUTORING
+            field: human_readable
+          value: >-
+            Pas de déploiement Assisté sans infrastructure tutorale identifiée, disponible
+            et traçable.
+        - op: replace_field
+          target:
+            section: CONSTRAINTS
+            id: CONSTRAINT_NO_ASSISTED_DEPLOYMENT_WITHOUT_TUTORING
+            field: logic.condition
+          value: >-
+            Infrastructure tutorale absente, non identifiée, indisponible ou insuffisamment
+            traçable au moment du déploiement Assisté.
+        - op: replace_field
+          target:
+            section: INVARIANTS
+            id: INV_RUNTIME_QUALIFICATION_SIGNALS_MUST_BE_EXPLICIT_OR_OFFSESSION
+            field: human_readable
+          value: >-
+            Les signaux comme misconception, ICC ou contexte authentique doivent provenir
+            d’artefacts hors session ou d’entrées explicites ; des proxys comportementaux
+            peuvent servir d’indices opérationnels bornés mais ne qualifient jamais seuls
+            un signal de gouvernance.
+        - op: replace_field
+          target:
+            section: INVARIANTS
+            id: INV_RUNTIME_QUALIFICATION_SIGNALS_MUST_BE_EXPLICIT_OR_OFFSESSION
+            field: logic.effect
+          value: >-
+            Interdiction ; seuls les artefacts précomputés hors session ou les indicateurs
+            explicites déterministes sont autorisés en usage local. Les proxys comportementaux
+            ne peuvent ni remplacer ni qualifier seuls un signal de gouvernance nécessitant
+            interprétation sémantique ou jugement IA.
+        - op: note
+          text: >-
+            patch_scope: bounded_local_run / scope_key=deployment_governance / writable file
+            limited to docs/cores/current/constitution.yaml / patched findings limited to R1,
+            R2 and R3 in_scope items from the current run.
+        - op: note
+          text: >-
+            arbitrage_to_patch_mapping: R1 -> explicit bounded closure wording on
+            RULE_GAMIFICATION_PROBATION_MUST_CLOSE and EVENT_GAMIFICATION_PROBATION_MAX_DURATION_REACHED;
+            R2 -> tutoring infrastructure qualification on INV_ASSISTED_MODE_REQUIRES_TUTORING
+            and CONSTRAINT_NO_ASSISTED_DEPLOYMENT_WITHOUT_TUTORING; R3 -> clarification that
+            behavioral proxies cannot qualify governance signals on
+            INV_RUNTIME_QUALIFICATION_SIGNALS_MUST_BE_EXPLICIT_OR_OFFSESSION; R4 -> no_change,
+            needs_scope_extension, not patched now.
+        - op: note
+          text: >-
+            fallback_reads_used_if_any: docs/cores/current/constitution.yaml was read to localize
+            exact patch targets. No additional writable surface was opened. The run stage completion
+            summary for STAGE_02 was used as authoritative confirmation that exactly three in-scope
+            corrections were authorized and one point was deferred as needs_scope_extension.
+        - op: note
+          text: >-
+            human_actions_to_execute: human review the present patchset for minimality and strict
+            alignment with Stage 02 decisions, then execute update_run_tracking.py for
+            STAGE_03_PATCH_SYNTHESIS only after explicit approval; Stage 04 deterministic validation
+            remains mandatory and has not been executed or simulated here.
