@@ -1,0 +1,126 @@
+stage_skill:
+  schema_version: 0.1
+  pipeline_id: constitution
+  stage_id: STAGE_00_SCOPE_PARTITION_REVIEW_AND_REGEN
+  skill_id: scope_partition_review_supervisor
+  stage_kind: hybrid
+  closure_level: high
+  authoritative_role: stable_stage_contract
+
+mission: >-
+  Superviser la revue de partition sémantique du canon constitution avant toute
+  ouverture de nouveau run, à partir d'un rapport déterministe de partition puis
+  d'une analyse IA limitée aux changements minimaux de policy/decisions.
+  Ce stage ne publie jamais directement un nouveau scope catalog.
+
+model_requirements:
+  reasoning_level: advanced
+  justification: >-
+    Ce stage exige une lecture sémantique de la partition actuelle, mais sous
+    forte contrainte déterministe. Le modèle doit distinguer ce qui relève du
+    script d'analyse, de l'arbitrage humain, et de la policy canonisée, sans
+    réécrire directement le catalogue publié.
+  recommended_models:
+    - o3
+    - claude-opus-4
+    - gemini-2.5-pro
+  minimum_acceptable: tout modèle avec extended thinking ou chain-of-thought activable
+
+runtime_binding:
+  expected_mode_values:
+    - partition_refresh
+  no_active_run_required: true
+  execution_evidence_role: >-
+    analyze_constitution_scope_partition.py est obligatoire avant toute revue
+    IA. generate_constitution_scopes.py n'intervient qu'après arbitrage humain
+    et modification canonisée de policy/decisions.
+
+primary_reads:
+  partition_refresh:
+    - docs/pipelines/constitution/runs/index.yaml
+    - docs/prompts/shared/Make00ConstitutionScopePartitionReview.md
+    - docs/pipelines/constitution/policies/scope_generation/policy.yaml
+    - docs/pipelines/constitution/policies/scope_generation/decisions.yaml
+    - docs/pipelines/constitution/scope_catalog/manifest.yaml
+
+required_scripts:
+  mandatory_analysis:
+    - docs/patcher/shared/analyze_constitution_scope_partition.py
+  deterministic_publication_after_human_arbitration:
+    - docs/patcher/shared/generate_constitution_scopes.py
+  note: >-
+    Le script d'analyse est obligatoire avant la revue IA. La régénération du
+    catalogue n'est autorisée qu'après arbitrage humain et mise à jour réelle
+    des fichiers canonisés de policy/decisions.
+
+script_execution_contract:
+  required_before_semantic_review:
+    - analyze_constitution_scope_partition_executed_for_real
+    - scope_partition_review_report_materialized
+  blocked_if_missing_evidence: true
+  blocked_status_value: BLOCKED
+
+required_output_sections:
+  - execution_evidence
+  - partition_assessment
+  - recommended_scope_count_direction
+  - semantic_grouping_notes
+  - required_human_arbitrations
+  - policy_changes_to_make
+  - decision_changes_to_make
+  - human_actions_to_execute
+
+expected_outputs:
+  partition_refresh:
+    report_path_pattern: docs/pipelines/constitution/reports/scope_partition_review_report.yaml
+
+completion_evidence:
+  required:
+    - analysis_command_emitted_or_executed
+    - real_execution_evidence_declared
+    - scope_partition_review_report_materialized
+    - final_status_is_ready_or_blocked
+    - human_actions_explicitly_stated_in_output
+  not_sufficient:
+    - informal_chat_summary_only
+    - semantic_review_without_script_evidence
+    - simulated_script_execution
+    - direct_catalog_publication
+
+status_values:
+  - READY_FOR_HUMAN_ARBITRATION
+  - BLOCKED
+
+human_actions_required:
+  description: >-
+    L'IA n'exécute pas la publication du catalogue. L'humain doit lancer le
+    script d'analyse si nécessaire, arbitrer les changements, modifier policy
+    et decisions, puis lancer generate_constitution_scopes.py.
+  on_blocked:
+    step: 1
+    label: Exécuter le script d'analyse puis relancer ce stage
+    mandatory: true
+  on_ready_for_human_arbitration:
+    step: 1
+    label: Arbitrer puis régénérer le catalogue de scopes
+    mandatory: true
+    note: >-
+      Après arbitrage humain et modification réelle des fichiers policy/decisions,
+      exécuter generate_constitution_scopes.py pour republier le catalogue.
+
+allowed_transitions:
+  on_ready_for_human_arbitration:
+    next_stage: ENTRY_RESOLUTION
+  on_blocked:
+    next_action: execute_partition_analysis_and_retry_same_stage
+
+forbidden_actions:
+  - simulated_partition_analysis_execution
+  - direct_scope_catalog_publication_by_ai
+  - direct_manual_edit_of_generated_scope_definitions_as_authoritative_source
+  - omitting_human_actions_from_output
+
+migration_note: >-
+  Premier skill STAGE_00 pour le pipeline constitution.
+  Consolide en YAML machine-readable les règles de partition_refresh et de
+  régénération gouvernée du catalogue de scopes.
