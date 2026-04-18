@@ -17,7 +17,7 @@ flowchart TD
     PH1 -->|Décision validée| POL["🧑 Humain met à jour\npolicy.yaml / decisions.yaml\n+ governance_backlog.yaml"]:::script
     POL --> PS2["🧪 Script déterministe\ngenerate_constitution_scopes.py"]:::script
     PS2 --> ZPART([✅ Partition republiée]):::stop
-    
+
     %% ─── ENTRY : NO RUN_ID ───
     OPEN --> H1{🧑 Humain\nconfirme ouverture ?}:::human
     H1 -->|Non| ABORT([⛔ Arrêt]):::stop
@@ -41,15 +41,16 @@ flowchart TD
     S02 --> H2{🧑 Humain\nvalidation, clarification\nou arbitrage complémentaire ?}:::human
     H2 -->|Clarification requise| S02
     H2 -->|Révision demandée| S02
-    H2 -->|Validé| T02["🧑 Humain exécute\nupdate_run_tracking.py\n→ STAGE_03_PATCH_SYNTHESIS"]:::script
+    H2 -->|Validé| R2[("📄 arbitrage_report_<id>.md\nwork/02_arbitrage/")]:::output
+    R2 --> T02["🧑 Humain exécute\nupdate_run_tracking.py\n→ STAGE_03_PATCH_SYNTHESIS"]:::script
     T02 --> S03
 
     %% ─── STAGE 03 ───
     S03["STAGE_03_PATCH_SYNTHESIS\nIA produit patchset.yaml"]:::skill
     S03 --> H3{🧑 Humain\nvalide ou demande révision ?}:::human
     H3 -->|Révision demandée| S03
-    H3 -->|Validé| R2[("📄 patchset.yaml\nwork/03_patch/")]:::output
-    R2 --> T03["🧑 Humain exécute\nupdate_run_tracking.py\n→ STAGE_04_PATCH_VALIDATION"]:::script
+    H3 -->|Validé| R3[("📄 patchset.yaml\nwork/03_patch/")]:::output
+    R3 --> T03["🧑 Humain exécute\nupdate_run_tracking.py\n→ STAGE_04_PATCH_VALIDATION"]:::script
     T03 --> S04
 
     %% ─── STAGE 04 ───
@@ -71,10 +72,11 @@ flowchart TD
     D05 -->|PASS| R5[("📄 patch_execution_report.yaml\nreports/ + sandbox/")]:::output
     R5 --> T05["🧑 Humain exécute\nupdate_run_tracking.py\n→ STAGE_06_CORE_VALIDATION"]:::script
     T05 --> S06
-    
+
     %% ─── STAGE 06 ───
     S06["STAGE_06_CORE_VALIDATION\nIA produit core_validation.yaml"]:::skill
-    S06 --> H6{🧑 Humain\nchoisit la suite}:::human
+    S06 --> R6[("📄 core_validation.yaml\nwork/06_core_validation/")]:::output
+    R6 --> H6{🧑 Humain\nchoisit la suite}:::human
     H6 -->|FAIL / correction amont| S03
     H6 -->|PASS + consolidation requise| C06B["🧪 Script déterministe\nconsolidate_parallel_runs.py"]:::script
     H6 -->|PASS + release directe| T06["🧑 Humain exécute\nupdate_run_tracking.py\n→ STAGE_07_RELEASE_MATERIALIZATION"]:::script
@@ -84,28 +86,31 @@ flowchart TD
     %% ─── STAGE 07 ───
     S07["STAGE_07_RELEASE_MATERIALIZATION\nIA supervise la release"]:::skill
     S07 --> D07{Chaîne de release\nréellement exécutée ?}:::decision
-    D07 -->|Non / BLOCKED| R07["🧑 Humain exécute\nbuild_release_plan.py\nvalidate_release_plan.py\nmaterialize_release.py\nvalidate_release_manifest.py"]:::script
-    R07 --> S07
+    D07 -->|Non / BLOCKED| B07["🧑 Humain exécute\nbuild_release_plan.py\nvalidate_release_plan.py\nmaterialize_release.py\nvalidate_release_manifest.py"]:::script
+    B07 --> S07
     D07 -->|FAIL| S06
-    D07 -->|PASS| T07["🧑 Humain exécute\nupdate_run_tracking.py\n→ STAGE_08_PROMOTE_CURRENT"]:::script
+    D07 -->|PASS| R7[("📄 release_plan.yaml\nwork/07_release/\n+ release manifest")]:::output
+    R7 --> T07["🧑 Humain exécute\nupdate_run_tracking.py\n→ STAGE_08_PROMOTE_CURRENT"]:::script
     T07 --> S08
 
     %% ─── STAGE 08 ───
     S08["STAGE_08_PROMOTE_CURRENT\nIA supervise la promotion current"]:::skill
     S08 --> D08{Chaîne de promotion\nréellement exécutée ?}:::decision
-    D08 -->|Non / BLOCKED| R08["🧑 Humain exécute\npromote_current.py\nvalidate_current_manifest.py\nvalidate_promotion_report.py"]:::script
-    R08 --> S08
+    D08 -->|Non / BLOCKED| B08["🧑 Humain exécute\npromote_current.py\nvalidate_current_manifest.py\nvalidate_promotion_report.py"]:::script
+    B08 --> S08
     D08 -->|FAIL| S07
-    D08 -->|PASS| T08["🧑 Humain exécute\nupdate_run_tracking.py\n→ STAGE_09_CLOSEOUT_AND_ARCHIVE"]:::script
+    D08 -->|PASS| R8[("📄 promotion_report.yaml\n+ current/manifest.yaml")]:::output
+    R8 --> T08["🧑 Humain exécute\nupdate_run_tracking.py\n→ STAGE_09_CLOSEOUT_AND_ARCHIVE"]:::script
     T08 --> S09
 
     %% ─── STAGE 09 ───
     S09["STAGE_09_CLOSEOUT_AND_ARCHIVE\nIA supervise la clôture"]:::skill
-    S09 --> D09{Closeout réellement\nexécuté ?}:::decision
-    D09 -->|Non / BLOCKED| R09["🧑 Humain exécute\ncloseout_pipeline_run.py"]:::script
-    R09 --> S09
+    S09 --> D09{closeout_pipeline_run.py\nréellement exécuté ?}:::decision
+    D09 -->|Non / BLOCKED| B09["🧑 Humain exécute\ncloseout_pipeline_run.py"]:::script
+    B09 --> S09
     D09 -->|FAIL| S08
-    D09 -->|PASS| OK([✅ Run clos]):::stop
+    D09 -->|PASS| R9[("📄 closeout_report.yaml")]:::output
+    R9 --> OK([✅ Run clos]):::stop
 
     %% ─── STYLES ───
     classDef start fill:#2d6a4f,color:#fff,stroke:#1b4332
