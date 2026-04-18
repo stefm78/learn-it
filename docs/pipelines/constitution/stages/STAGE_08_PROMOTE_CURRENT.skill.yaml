@@ -39,23 +39,32 @@ runtime_binding:
   execution_evidence_role: >-
     promote_current.py, validate_current_manifest.py et
     validate_promotion_report.py doivent être réellement exécutés.
+  artifact_ownership_rule: >-
+    Les artefacts bruts produits par script (promotion_report.yaml,
+    docs/cores/current/manifest.yaml et validations associées) restent les
+    sources de vérité du stage. L'IA ne doit pas inventer de flags CLI
+    inexistants ni réécrire un artefact brut produit par script.
 
 primary_reads:
   bounded_local_run:
     - docs/pipelines/constitution/runs/<run_id>/inputs/run_context.yaml
     - docs/pipelines/constitution/runs/<run_id>/work/07_release/release_plan.yaml
+    - docs/pipelines/constitution/runs/<run_id>/reports/release_materialization_report.yaml
     - docs/prompts/shared/Make07CoreRelease.md
     - docs/cores/releases/
   parallel_consolidation:
     - docs/pipelines/constitution/work/consolidation/release_plan.yaml
+    - docs/pipelines/constitution/reports/release_materialization_report.yaml
     - docs/prompts/shared/Make07CoreRelease.md
     - docs/cores/releases/
   nominal_global:
     - docs/pipelines/constitution/work/07_release/release_plan.yaml
+    - docs/pipelines/constitution/reports/release_materialization_report.yaml
     - docs/prompts/shared/Make07CoreRelease.md
     - docs/cores/releases/
   bounded_transition:
     - docs/pipelines/constitution/work/07_release/release_plan.yaml
+    - docs/pipelines/constitution/reports/release_materialization_report.yaml
     - docs/prompts/shared/Make07CoreRelease.md
     - docs/cores/releases/
 
@@ -67,6 +76,12 @@ required_scripts:
   note: >-
     Si l'IA ne peut pas exécuter les scripts elle-même, elle doit émettre les
     commandes exactes, déclarer le stage BLOCKED, et attendre les artefacts.
+    Les interfaces réelles actuelles sont positionnelles :
+    - promote_current.py <release_plan.yaml> <release_materialization_report.yaml> [promotion_report.yaml]
+    - validate_current_manifest.py <current_manifest.yaml> [schema.yaml]
+    - validate_promotion_report.py <promotion_report.yaml> [schema.yaml]
+    Aucune de ces commandes ne supporte les flags --pipeline, --run-id,
+    --manifest ou --report décrits dans les versions antérieures du skill.
 
 script_execution_contract:
   required_before_pass_or_fail:
@@ -75,6 +90,8 @@ script_execution_contract:
     - validate_promotion_report_executed_for_real
     - current_manifest_materialized
     - promotion_report_materialized
+    - current_manifest_validation_materialized
+    - promotion_report_validation_materialized
   blocked_if_missing_evidence: true
   blocked_status_value: BLOCKED
   pass_requires:
@@ -88,25 +105,59 @@ deterministic_command_templates:
   bounded_local_run:
     promote_current: >-
       python docs/patcher/shared/promote_current.py
-      --pipeline constitution
-      --run-id <RUN_ID>
+      docs/pipelines/constitution/runs/<run_id>/work/07_release/release_plan.yaml
+      docs/pipelines/constitution/runs/<run_id>/reports/release_materialization_report.yaml
+      docs/pipelines/constitution/runs/<run_id>/reports/promotion_report.yaml
     validate_current_manifest: >-
       python docs/patcher/shared/validate_current_manifest.py
-      --manifest docs/cores/current/manifest.yaml
+      docs/cores/current/manifest.yaml
+      > docs/pipelines/constitution/runs/<run_id>/reports/current_manifest_validation.yaml
     validate_promotion_report: >-
       python docs/patcher/shared/validate_promotion_report.py
-      --report docs/pipelines/constitution/runs/<run_id>/reports/promotion_report.yaml
+      docs/pipelines/constitution/runs/<run_id>/reports/promotion_report.yaml
+      > docs/pipelines/constitution/runs/<run_id>/reports/promotion_report_validation.yaml
   parallel_consolidation:
     promote_current: >-
       python docs/patcher/shared/promote_current.py
-      --pipeline constitution
-      --workspace docs/pipelines/constitution/work/consolidation
+      docs/pipelines/constitution/work/consolidation/release_plan.yaml
+      docs/pipelines/constitution/reports/release_materialization_report.yaml
+      docs/pipelines/constitution/reports/promotion_report.yaml
     validate_current_manifest: >-
       python docs/patcher/shared/validate_current_manifest.py
-      --manifest docs/cores/current/manifest.yaml
+      docs/cores/current/manifest.yaml
+      > docs/pipelines/constitution/reports/current_manifest_validation.yaml
     validate_promotion_report: >-
       python docs/patcher/shared/validate_promotion_report.py
-      --report docs/pipelines/constitution/reports/promotion_report.yaml
+      docs/pipelines/constitution/reports/promotion_report.yaml
+      > docs/pipelines/constitution/reports/promotion_report_validation.yaml
+  nominal_global:
+    promote_current: >-
+      python docs/patcher/shared/promote_current.py
+      docs/pipelines/constitution/work/07_release/release_plan.yaml
+      docs/pipelines/constitution/reports/release_materialization_report.yaml
+      docs/pipelines/constitution/reports/promotion_report.yaml
+    validate_current_manifest: >-
+      python docs/patcher/shared/validate_current_manifest.py
+      docs/cores/current/manifest.yaml
+      > docs/pipelines/constitution/reports/current_manifest_validation.yaml
+    validate_promotion_report: >-
+      python docs/patcher/shared/validate_promotion_report.py
+      docs/pipelines/constitution/reports/promotion_report.yaml
+      > docs/pipelines/constitution/reports/promotion_report_validation.yaml
+  bounded_transition:
+    promote_current: >-
+      python docs/patcher/shared/promote_current.py
+      docs/pipelines/constitution/work/07_release/release_plan.yaml
+      docs/pipelines/constitution/reports/release_materialization_report.yaml
+      docs/pipelines/constitution/reports/promotion_report.yaml
+    validate_current_manifest: >-
+      python docs/patcher/shared/validate_current_manifest.py
+      docs/cores/current/manifest.yaml
+      > docs/pipelines/constitution/reports/current_manifest_validation.yaml
+    validate_promotion_report: >-
+      python docs/patcher/shared/validate_promotion_report.py
+      docs/pipelines/constitution/reports/promotion_report.yaml
+      > docs/pipelines/constitution/reports/promotion_report_validation.yaml
 
 required_output_sections:
   - execution_evidence
@@ -118,13 +169,25 @@ required_output_sections:
 
 expected_outputs:
   bounded_local_run:
-    report_path_pattern: docs/pipelines/constitution/runs/<run_id>/reports/promotion_report.yaml
+    primary_output_path_pattern: docs/pipelines/constitution/runs/<run_id>/reports/promotion_report.yaml
+    required_raw_artifacts:
+      - docs/pipelines/constitution/runs/<run_id>/reports/current_manifest_validation.yaml
+      - docs/pipelines/constitution/runs/<run_id>/reports/promotion_report_validation.yaml
   parallel_consolidation:
-    report_path_pattern: docs/pipelines/constitution/reports/promotion_report.yaml
+    primary_output_path_pattern: docs/pipelines/constitution/reports/promotion_report.yaml
+    required_raw_artifacts:
+      - docs/pipelines/constitution/reports/current_manifest_validation.yaml
+      - docs/pipelines/constitution/reports/promotion_report_validation.yaml
   nominal_global:
-    report_path_pattern: docs/pipelines/constitution/reports/promotion_report.yaml
+    primary_output_path_pattern: docs/pipelines/constitution/reports/promotion_report.yaml
+    required_raw_artifacts:
+      - docs/pipelines/constitution/reports/current_manifest_validation.yaml
+      - docs/pipelines/constitution/reports/promotion_report_validation.yaml
   bounded_transition:
-    report_path_pattern: docs/pipelines/constitution/reports/promotion_report.yaml
+    primary_output_path_pattern: docs/pipelines/constitution/reports/promotion_report.yaml
+    required_raw_artifacts:
+      - docs/pipelines/constitution/reports/current_manifest_validation.yaml
+      - docs/pipelines/constitution/reports/promotion_report_validation.yaml
 
 completion_evidence:
   required:
@@ -132,12 +195,15 @@ completion_evidence:
     - real_execution_evidence_declared
     - current_manifest_materialized
     - promotion_report_materialized
+    - current_manifest_validation_materialized
+    - promotion_report_validation_materialized
     - final_status_is_pass_fail_or_blocked
     - human_actions_explicitly_stated_in_output
   not_sufficient:
     - informal_chat_summary_only
     - promotion_reasoning_without_script_evidence
     - pass_without_materialized_current_artifacts
+    - pass_without_validation_artifacts
     - simulated_script_execution
 
 status_values:
@@ -186,6 +252,7 @@ forbidden_actions:
   - pass_without_real_execution_evidence
   - direct_closeout_without_stage_09
   - omitting_human_actions_from_output
+  - using_nonexistent_promotion_cli_flags
 
 migration_note: >-
   Premier skill STAGE_08 pour le pipeline constitution.
