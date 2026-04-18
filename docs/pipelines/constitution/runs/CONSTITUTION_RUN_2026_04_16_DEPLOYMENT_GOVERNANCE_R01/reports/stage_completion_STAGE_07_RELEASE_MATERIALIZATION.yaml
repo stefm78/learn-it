@@ -1,0 +1,12 @@
+stage_completion_record:
+  schema_version: 0.1
+  pipeline_id: constitution
+  run_id: CONSTITUTION_RUN_2026_04_16_DEPLOYMENT_GOVERNANCE_R01
+  stage_id: STAGE_07_RELEASE_MATERIALIZATION
+  stage_status: done
+  run_status: active
+  next_stage: STAGE_08_PROMOTE_CURRENT
+  scope_status: ''
+  summary: Release materialization completed with validated artifacts; ready for promote
+    current.
+  recorded_at: '2026-04-18T22:46:25Z'
