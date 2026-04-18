@@ -55,16 +55,43 @@ primary_reads:
     - docs/pipelines/constitution/runs/<run_id>/inputs/run_context.yaml
     - docs/pipelines/constitution/runs/<run_id>/inputs/scope_manifest.yaml
     - docs/pipelines/constitution/runs/<run_id>/inputs/impact_bundle.yaml
-    - docs/pipelines/constitution/runs/<run_id>/work/01_challenge/challenge_report_*.md
+    - docs/pipelines/constitution/runs/<run_id>/inputs/integration_gate.yaml
+    - docs/pipelines/constitution/runs/<run_id>/work/01_challenge/challenge_report*.md
   nominal_global:
-    - docs/pipelines/constitution/work/01_challenge/challenge_report_*.md
+    - docs/pipelines/constitution/work/01_challenge/challenge_report.md
     - docs/cores/current/constitution.yaml
     - docs/cores/current/referentiel.yaml
     - docs/cores/current/link.yaml
   bounded_transition:
     - docs/pipelines/constitution/inputs/scope_manifest.yaml
     - docs/pipelines/constitution/inputs/impact_bundle.yaml
-    - docs/pipelines/constitution/work/01_challenge/challenge_report_*.md
+    - docs/pipelines/constitution/work/01_challenge/challenge_report.md
+
+challenge_report_resolution:
+  rule: >-
+    En bounded_local_run, s'il existe un unique challenge_report*.md dans
+    work/01_challenge, STAGE_02 doit l'utiliser comme source principale.
+    S'il en existe plusieurs, ils doivent tous être consolidés.
+  requirements:
+    - no_primary_challenge_report_omitted
+    - naming_may_be_scope_specific_not_only_numeric
+    - challenge_report_declared_arbitrages_must_be_consumed
+
+supporting_reads_if_declared_by_challenge:
+  bounded_local_run:
+    - docs/pipelines/constitution/runs/<run_id>/inputs/scope_extract.yaml
+    - docs/pipelines/constitution/runs/<run_id>/inputs/neighbor_extract.yaml
+    - docs/pipelines/constitution/runs/<run_id>/inputs/integration_gate.yaml
+
+fallback_reads:
+  rule: >-
+    Si le challenge_report déclare un fallback ciblé sur un ID manquant
+    ou un voisin absent, STAGE_02 doit reprendre explicitement cette lecture
+    de fallback avant arbitrage.
+  fallback_targets:
+    - docs/cores/current/constitution.yaml
+    - docs/cores/current/referentiel.yaml
+    - docs/cores/current/link.yaml
 
 forbidden_reads_before_resolution:
   - docs/prompts/shared/Make05CorePatch.md
@@ -84,12 +111,30 @@ analysis_axes:
   - compatibilite_pipeline
   - minimalite_et_tracabilite
 
+challenge_to_arbitrage_binding:
+  rule: >-
+    STAGE_02 doit reprendre explicitement tous les risques prioritaires,
+    findings majeurs et arbitrages ouverts déclarés par le challenge_report.
+    Aucun risque majeur du challenge ne peut être omis.
+  required_fields_per_finding:
+    - challenge_finding_id
+    - challenge_scope_status
+    - arbitrage_decision
+    - arbitrage_justification
+    - patch_readiness
+
 decision_values:
   - corriger_maintenant
   - reporter
   - rejeter
   - hors_perimetre
   - necessite_extension_scope
+
+patch_readiness_values:
+  - ready_for_local_patch
+  - decision_only_no_patch_yet
+  - blocked_by_scope_extension
+  - blocked_by_missing_human_decision
 
 scope_rules:
   statuses:
@@ -104,6 +149,36 @@ scope_rules:
     - no_patch_yaml_generation
     - no_core_rewrite
 
+ambiguity_resolution:
+  rule: >-
+    Si plusieurs décisions restent raisonnablement possibles après lecture
+    complète du challenge_report et de la surface autorisée, STAGE_02 ne doit
+    pas trancher silencieusement. Il doit expliciter l'ambiguïté, proposer
+    l'option par défaut la plus conservatrice, et demander une validation
+    ou un arbitrage humain avant tout passage à STAGE_03 sur les points concernés.
+  required_outputs:
+    - ambiguity_declared_per_finding_if_any
+    - options_presented_if_material
+    - conservative_default_identified
+    - human_decision_required_flag_if_needed
+  default_behavior:
+    unresolved_material_ambiguity: blocked_by_missing_human_decision
+
+integration_gate_binding:
+  rule: >-
+    Lorsque le run fournit un integration_gate.yaml, chaque finding significatif
+    doit indiquer s'il contribue à lever, préserver ou laisser ouvert un ou plusieurs
+    gate_checks.
+  required_fields_per_significant_finding:
+    - related_gate_checks
+    - gate_effect
+
+gate_effect_values:
+  - helps_clear
+  - no_effect
+  - keeps_open
+  - requires_human_clearance
+
 required_output_sections:
   - executive_summary
   - scope_analysed
@@ -111,6 +186,8 @@ required_output_sections:
   - consolidated_points
   - decisions_for_patch
   - decisions_not_retained
+  - deferred_or_blocked_decisions
+  - ambiguities_requiring_human_decision
 
 expected_outputs:
   bounded_local_run:
@@ -125,9 +202,12 @@ completion_evidence:
     - arbitrage_report_written
     - all_challenge_reports_considered
     - every_significant_finding_has_explicit_decision
+    - every_priority_risk_from_challenge_has_explicit_decision
+    - every_arbitrage_request_from_challenge_is_resolved
     - decisions_for_patch_section_present
     - scope_status_declared_per_finding
     - human_notes_integrated_if_provided
+    - ambiguities_explicitly_flagged_if_any
   not_sufficient:
     - informal_chat_summary_only
     - findings_without_decision
@@ -166,6 +246,18 @@ human_actions_required:
       Si des décisions sont incorrectes ou incomplètes, relancer l'IA avec :
       "Révise l'arbitrage du run <RUN_ID> — notes : <tes notes>."
       Ne pas exécuter update_run_tracking.py tant que l'arbitrage n'est pas validé.
+  on_human_arbitration_needed:
+    step: 1
+    label: Arbitrer les points ambigus avant patch synthesis
+    mandatory: true
+    note: >-
+      Si une ambiguïté matérielle subsiste, l'humain doit choisir explicitement
+      entre les options proposées dans l'arbitrage_report ou fournir une note
+      d'arbitrage complémentaire. Tant que cette décision n'est pas fournie,
+      STAGE_03_PATCH_SYNTHESIS ne doit pas démarrer pour les points concernés.
+    next_step: >-
+      Relancer l'IA avec :
+      "Révise l'arbitrage du run <RUN_ID> — décision humaine sur ambiguïtés : <tes notes>."
 
 allowed_transitions:
   on_done:
