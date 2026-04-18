@@ -29,8 +29,12 @@ flowchart TD
     CONT --> S01
     CONT0 --> S01
     S01["STAGE_01_CHALLENGE\nIA produit challenge_report*.md"]:::skill
-    S01 --> R1[("📄 challenge_report*.md\nwork/01_challenge/")]:::output
-    R1 --> S02
+    S01 --> D01{Préconditions ids-first\nréellement disponibles ?}:::decision
+    D01 -->|Non / BLOCKED| B01["🧑 Humain exécute\nmaterialize_run_inputs.py\nou extract_scope_slice.py\nou build_run_context.py"]:::script
+    B01 --> S01
+    D01 -->|Oui| R1[("📄 challenge_report*.md\nwork/01_challenge/")]:::output
+    R1 --> T01["🧑 Humain exécute\nupdate_run_tracking.py\n→ STAGE_02_ARBITRAGE"]:::script
+    T01 --> S02
 
     %% ─── STAGE 02 ───
     S02["STAGE_02_ARBITRAGE\nIA produit arbitrage_report_<id>.md"]:::skill
@@ -42,20 +46,32 @@ flowchart TD
 
     %% ─── STAGE 03 ───
     S03["STAGE_03_PATCH_SYNTHESIS\nIA produit patchset.yaml"]:::skill
-    S03 --> R2[("📄 patchset.yaml\nwork/03_patch/")]:::output
-    R2 --> V04
+    S03 --> H3{🧑 Humain\nvalide ou demande révision ?}:::human
+    H3 -->|Révision demandée| S03
+    H3 -->|Validé| R2[("📄 patchset.yaml\nwork/03_patch/")]:::output
+    R2 --> T03["🧑 Humain exécute\nupdate_run_tracking.py\n→ STAGE_04_PATCH_VALIDATION"]:::script
+    T03 --> S04
 
     %% ─── STAGE 04 ───
-    V04["🧪 Script déterministe\nvalidate_patchset.py"]:::script
-    V04 --> D04{Patch valide ?}:::decision
-    D04 -->|Non| H4{🧑 Humain / IA\ncorrection requise}:::human
-    H4 --> S03
-    D04 -->|Oui| A05
+    S04["STAGE_04_PATCH_VALIDATION\nIA supervise la validation patch"]:::skill
+    S04 --> D04{validate_patchset.py\nréellement exécuté ?}:::decision
+    D04 -->|Non / BLOCKED| B04["🧑 Humain exécute\nvalidate_patchset.py"]:::script
+    B04 --> S04
+    D04 -->|FAIL| S03
+    D04 -->|PASS| R4[("📄 patch_validation.yaml\nwork/04_patch_validation/")]:::output
+    R4 --> T04["🧑 Humain exécute\nupdate_run_tracking.py\n→ STAGE_05_APPLY"]:::script
+    T04 --> S05
 
     %% ─── STAGE 05 ───
-    A05["🧪 Script déterministe\napply_patch.py"]:::script
-    A05 --> S06
-
+    S05["STAGE_05_APPLY\nIA supervise l'application du patch"]:::skill
+    S05 --> D05{apply_patch.py\nréellement exécuté ?}:::decision
+    D05 -->|Non / BLOCKED| B05["🧑 Humain exécute\napply_patch.py"]:::script
+    B05 --> S05
+    D05 -->|FAIL| S03
+    D05 -->|PASS| R5[("📄 patch_execution_report.yaml\nreports/ + sandbox/")]:::output
+    R5 --> T05["🧑 Humain exécute\nupdate_run_tracking.py\n→ STAGE_06_CORE_VALIDATION"]:::script
+    T05 --> S06
+    
     %% ─── STAGE 06 ───
     S06["STAGE_06_CORE_VALIDATION\nIA produit core_validation.yaml"]:::skill
     S06 --> H6{🧑 Humain\nchoisit la suite}:::human
