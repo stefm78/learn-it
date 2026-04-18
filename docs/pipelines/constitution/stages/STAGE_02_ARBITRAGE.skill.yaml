@@ -58,14 +58,14 @@ primary_reads:
     - docs/pipelines/constitution/runs/<run_id>/inputs/integration_gate.yaml
     - docs/pipelines/constitution/runs/<run_id>/work/01_challenge/challenge_report*.md
   nominal_global:
-    - docs/pipelines/constitution/work/01_challenge/challenge_report.md
+    - docs/pipelines/constitution/work/01_challenge/challenge_report*.md
     - docs/cores/current/constitution.yaml
     - docs/cores/current/referentiel.yaml
     - docs/cores/current/link.yaml
   bounded_transition:
     - docs/pipelines/constitution/inputs/scope_manifest.yaml
     - docs/pipelines/constitution/inputs/impact_bundle.yaml
-    - docs/pipelines/constitution/work/01_challenge/challenge_report.md
+    - docs/pipelines/constitution/work/01_challenge/challenge_report*.md
 
 challenge_report_resolution:
   rule: >-
@@ -173,6 +173,33 @@ integration_gate_binding:
     - related_gate_checks
     - gate_effect
 
+governance_backlog_binding:
+  rule: >-
+    Lorsqu'un finding reçoit la décision necessite_extension_scope, ou révèle
+    un scope_gap, un orphan_id, un policy_conflict ou un partition_angle_mort,
+    STAGE_02 doit créer une trace locale de backlog candidate dans l'arbitrage_report.
+    Cette trace locale sert d'entrée à relire en STAGE_09 pour export canonique
+    vers docs/pipelines/constitution/scope_catalog/governance_backlog.yaml.
+    STAGE_02 ne modifie jamais directement governance_backlog.yaml.
+  candidate_entry_types:
+    - scope_extension_needed
+    - scope_gap
+    - orphan_id
+    - policy_conflict
+    - partition_angle_mort
+  required_fields_per_backlog_candidate:
+    - backlog_entry_type
+    - title
+    - related_scope_keys
+    - originating_run_id
+    - source_finding_id
+    - rationale
+    - recommended_stage00_action
+    - candidate_status
+  candidate_status_values:
+    - candidate_open
+    - candidate_needs_human_review
+
 gate_effect_values:
   - helps_clear
   - no_effect
@@ -186,6 +213,7 @@ required_output_sections:
   - consolidated_points
   - decisions_for_patch
   - decisions_not_retained
+  - governance_backlog_candidates
   - deferred_or_blocked_decisions
   - ambiguities_requiring_human_decision
 
@@ -208,6 +236,7 @@ completion_evidence:
     - scope_status_declared_per_finding
     - human_notes_integrated_if_provided
     - ambiguities_explicitly_flagged_if_any
+    - governance_backlog_candidates_declared_if_needed
   not_sufficient:
     - informal_chat_summary_only
     - findings_without_decision
@@ -254,10 +283,19 @@ human_actions_required:
       Si une ambiguïté matérielle subsiste, l'humain doit choisir explicitement
       entre les options proposées dans l'arbitrage_report ou fournir une note
       d'arbitrage complémentaire. Tant que cette décision n'est pas fournie,
-      STAGE_03_PATCH_SYNTHESIS ne doit pas démarrer pour les points concernés.
+      STAGE_03_PATCH_SYNTHYSIS ne doit pas démarrer pour les points concernés.
     next_step: >-
       Relancer l'IA avec :
       "Révise l'arbitrage du run <RUN_ID> — décision humaine sur ambiguïtés : <tes notes>."
+  on_scope_extension_candidates_present:
+    step: 1
+    label: Préserver les candidats backlog pour export en clôture
+    mandatory: true
+    note: >-
+      Si l'arbitrage_report contient une section governance_backlog_candidates,
+      ces candidats doivent être conservés jusqu'au STAGE_09 afin d'être exportés
+      canoniquement vers governance_backlog.yaml. STAGE_02 ne met jamais à jour
+      governance_backlog.yaml directement.
 
 allowed_transitions:
   on_done:
@@ -278,6 +316,7 @@ forbidden_actions:
   - simulated_script_execution
   - omitting_human_actions_from_output
   - overriding_human_notes_silently
+  - direct_write_to_governance_backlog_during_stage_02
 
 migration_note: >-
   Premier skill STAGE_02 pour le pipeline constitution.
