@@ -1,0 +1,192 @@
+stage_skill:
+  schema_version: 0.1
+  pipeline_id: constitution
+  stage_id: STAGE_02_ARBITRAGE
+  skill_id: bounded_governance_arbitrator
+  stage_kind: cognitive
+  closure_level: high
+  authoritative_role: stable_stage_contract
+
+mission: >-
+  Transformer un ou plusieurs challenge_reports en une décision d'arbitrage
+  structurée et traçable, exploitable par STAGE_03_PATCH_SYNTHESIS.
+  Ce stage ne produit pas de patch YAML et ne réécrit pas les Core.
+  Il décide — pour chaque constat — de corriger maintenant, reporter,
+  rejeter ou signaler un besoin d'extension de scope.
+  En mode borné, il distingue explicitement ce qui est in_scope,
+  out_of_scope_but_relevant, et needs_scope_extension.
+
+model_requirements:
+  reasoning_level: advanced
+  justification: >-
+    L'arbitrage exige un jugement structuré sur des constats complexes et
+    potentiellement contradictoires issus du challenge. Il faut évaluer la
+    gravité, l'impact, la compatibilité pipeline et la minimalité de chaque
+    décision. Un raisonnement superficiel produira des décisions incohérentes
+    ou trop larges qui bloqueront ou dégraderont la synthèse de patch.
+    Un modèle avec capacité de raisonnement approfondi est obligatoire.
+  recommended_models:
+    - o3
+    - claude-opus-4
+    - gemini-2.5-pro
+  minimum_acceptable: tout modèle avec extended thinking ou chain-of-thought activable
+  warning: >-
+    ⚠️ NE PAS exécuter ce stage avec un modèle standard. La qualité de
+    l'arbitrage conditionne directement la précision et la sécurité du patch
+    produit en STAGE_03. Une décision mal qualifiée peut introduire une
+    correction hors scope ou omettre un risque critique.
+
+runtime_binding:
+  expected_mode_values:
+    - nominal_global
+    - bounded_local_run
+    - bounded_transition
+  run_context_role: >-
+    run_context.yaml doit être lu en premier pour résoudre le mode,
+    les chemins d'entrée et l'état ids-first.
+    Il ne remplace pas les sources canoniques.
+  human_notes_role: >-
+    Les éventuelles notes humaines d'arbitrage transmises dans le prompt
+    ont autorité sur les décisions IA en cas de conflit.
+    Elles doivent être explicitement intégrées et tracées dans l'output.
+
+primary_reads:
+  bounded_local_run:
+    - docs/pipelines/constitution/runs/<run_id>/inputs/run_context.yaml
+    - docs/pipelines/constitution/runs/<run_id>/inputs/scope_manifest.yaml
+    - docs/pipelines/constitution/runs/<run_id>/inputs/impact_bundle.yaml
+    - docs/pipelines/constitution/runs/<run_id>/work/01_challenge/challenge_report_*.md
+  nominal_global:
+    - docs/pipelines/constitution/work/01_challenge/challenge_report_*.md
+    - docs/cores/current/constitution.yaml
+    - docs/cores/current/referentiel.yaml
+    - docs/cores/current/link.yaml
+  bounded_transition:
+    - docs/pipelines/constitution/inputs/scope_manifest.yaml
+    - docs/pipelines/constitution/inputs/impact_bundle.yaml
+    - docs/pipelines/constitution/work/01_challenge/challenge_report_*.md
+
+forbidden_reads_before_resolution:
+  - docs/prompts/shared/Make05CorePatch.md
+  - docs/pipelines/constitution/archive/*
+  - tmp/*
+
+required_scripts:
+  none: true
+  note: >-
+    Ce stage est purement cognitif. Aucun script déterministe n'est requis.
+    L'IA ne simule aucune exécution de script.
+
+analysis_axes:
+  - consolidation_des_constats
+  - qualification_des_ecarts
+  - decision_arbitrage
+  - compatibilite_pipeline
+  - minimalite_et_tracabilite
+
+decision_values:
+  - corriger_maintenant
+  - reporter
+  - rejeter
+  - hors_perimetre
+  - necessite_extension_scope
+
+scope_rules:
+  statuses:
+    - in_scope
+    - out_of_scope_but_relevant
+    - needs_scope_extension
+  constraints:
+    - no_silent_out_of_scope_correction
+    - impact_bundle_extends_reading_not_write_permissions
+    - human_notes_override_ai_decision_if_conflict
+    - all_significant_findings_must_have_explicit_decision
+    - no_patch_yaml_generation
+    - no_core_rewrite
+
+required_output_sections:
+  - executive_summary
+  - scope_analysed
+  - detailed_arbitrage_by_finding
+  - consolidated_points
+  - decisions_for_patch
+  - decisions_not_retained
+
+expected_outputs:
+  bounded_local_run:
+    report_path_pattern: docs/pipelines/constitution/runs/<run_id>/work/02_arbitrage/arbitrage_report_<id>.md
+  nominal_global:
+    report_path_pattern: docs/pipelines/constitution/work/02_arbitrage/arbitrage_report_<id>.md
+  bounded_transition:
+    report_path_pattern: docs/pipelines/constitution/work/02_arbitrage/arbitrage_report_<id>.md
+
+completion_evidence:
+  required:
+    - arbitrage_report_written
+    - all_challenge_reports_considered
+    - every_significant_finding_has_explicit_decision
+    - decisions_for_patch_section_present
+    - scope_status_declared_per_finding
+    - human_notes_integrated_if_provided
+  not_sufficient:
+    - informal_chat_summary_only
+    - findings_without_decision
+    - patch_yaml_produced
+
+human_actions_required:
+  description: >-
+    L'IA produit l'arbitrage_report et s'arrête. L'humain relit et valide
+    les décisions avant de poursuivre vers STAGE_03_PATCH_SYNTHESIS.
+    Il peut transmettre des notes correctives à l'IA pour révision avant
+    de confirmer la transition.
+  on_done:
+    step: 1
+    label: Valider l'arbitrage et mettre à jour le tracking
+    mandatory: true
+    command: >-
+      python docs/patcher/shared/update_run_tracking.py
+      --pipeline constitution
+      --run-id <RUN_ID>
+      --stage-id STAGE_02_ARBITRAGE
+      --stage-status done
+      --run-status active
+      --next-stage STAGE_03_PATCH_SYNTHESIS
+      --summary "Arbitrage report validated; decisions ready for patch synthesis."
+    expected_effect: >-
+      run_manifest.yaml : current_stage passe à STAGE_03_PATCH_SYNTHESIS,
+      STAGE_02_ARBITRAGE apparaît dans completed_stages.
+    next_step: >-
+      Relancer l'IA avec :
+      "Continue le run <RUN_ID> — STAGE_02 est done, démarre STAGE_03_PATCH_SYNTHESIS."
+  on_revision_needed:
+    step: 1
+    label: Transmettre les notes de révision à l'IA
+    mandatory: false
+    note: >-
+      Si des décisions sont incorrectes ou incomplètes, relancer l'IA avec :
+      "Révise l'arbitrage du run <RUN_ID> — notes : <tes notes>."
+      Ne pas exécuter update_run_tracking.py tant que l'arbitrage n'est pas validé.
+
+allowed_transitions:
+  on_done:
+    next_stage: STAGE_03_PATCH_SYNTHESIS
+    precondition: human must confirm update_run_tracking.py execution
+  on_revision_needed:
+    next_action: ai_revises_arbitrage_report
+    note: Le statut reste in_progress jusqu'à validation humaine explicite.
+
+forbidden_actions:
+  - patch_yaml_generation
+  - core_document_rewrite
+  - silent_out_of_scope_decision
+  - finding_without_explicit_decision
+  - simulated_script_execution
+  - omitting_human_actions_from_output
+  - overriding_human_notes_silently
+
+migration_note: >-
+  Premier skill STAGE_02 pour le pipeline constitution.
+  Consolide en YAML machine-readable les règles exprimées dans
+  `Make04ConstitutionArbitrage.md`, `AI_PROTOCOL.yaml` et `pipeline.md`.
+  Introduit le pattern model_requirements et human_actions_required
+  en cohérence avec RUN_BOOTSTRAP.skill.yaml et STAGE_01_CHALLENGE.skill.yaml.
