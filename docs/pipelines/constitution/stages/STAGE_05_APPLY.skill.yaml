@@ -48,6 +48,17 @@ runtime_binding:
     Le rapport réel d'exécution du patcher fait autorité sur ce qui a été
     effectivement appliqué. L'IA ne doit jamais simuler apply_patch.py ni
     présenter une application comme acquise sans preuve matérielle.
+  sandbox_preparation_rule: >-
+    Si la sandbox attendue n'existe pas encore ou si l'arborescence minimale
+    à patcher n'y est pas matérialisée, l'IA doit fournir à l'humain les
+    commandes Git Bash exactes pour préparer cette sandbox avant l'exécution
+    de apply_patch.py. L'IA ne doit pas supposer la sandbox prête sans preuve.
+  materialization_rule: >-
+    Si une matérialisation intermédiaire est nécessaire (création de dossiers,
+    copie de l'arborescence cible, nettoyage/recréation de la sandbox,
+    préparation du chemin de report), l'IA doit fournir explicitement les
+    commandes Git Bash à exécuter. Elle ne doit pas inventer une option de
+    script inexistante pour remplacer cette matérialisation.
 
 primary_reads:
   bounded_local_run:
@@ -72,6 +83,9 @@ required_scripts:
     réellement exécutée. Si l'IA ne peut pas lancer le script elle-même, elle
     doit émettre la commande exacte, déclarer le stage bloqué, et attendre la
     matérialisation du patch_execution_report avant toute conclusion finale.
+    L'interface réelle actuelle de apply_patch.py est :
+    apply_patch.py <patchfile> <rootpath> <whatif:true|false> [report_path].
+    Elle ne supporte pas de flags --patch, --base, --output-dir ou --report.
 
 script_execution_contract:
   required_before_pass_or_fail:
@@ -102,26 +116,38 @@ execution_paths:
 
 deterministic_command_templates:
   bounded_local_run:
+    prepare_sandbox_note: >-
+      L'IA doit fournir les commandes Git Bash exactes pour créer/nettoyer la
+      sandbox et y matérialiser l'arborescence minimale attendue, de sorte que
+      sandbox_root/docs/cores/current/... existe avant apply_patch.py.
     apply_patch: >-
       python docs/patcher/shared/apply_patch.py
-      --patch docs/pipelines/constitution/runs/<run_id>/work/03_patch/patchset.yaml
-      --base docs/cores/current
-      --output-dir docs/pipelines/constitution/runs/<run_id>/work/05_apply/sandbox
-      --report docs/pipelines/constitution/runs/<run_id>/reports/patch_execution_report.yaml
+      docs/pipelines/constitution/runs/<run_id>/work/03_patch/patchset.yaml
+      docs/pipelines/constitution/runs/<run_id>/work/05_apply/sandbox
+      false
+      docs/pipelines/constitution/runs/<run_id>/reports/patch_execution_report.yaml
   nominal_global:
+    prepare_sandbox_note: >-
+      L'IA doit fournir les commandes Git Bash exactes pour créer/nettoyer la
+      sandbox et y matérialiser l'arborescence minimale attendue, de sorte que
+      sandbox_root/docs/cores/current/... existe avant apply_patch.py.
     apply_patch: >-
       python docs/patcher/shared/apply_patch.py
-      --patch docs/pipelines/constitution/work/03_patch/patchset.yaml
-      --base docs/cores/current
-      --output-dir docs/pipelines/constitution/work/05_apply/sandbox
-      --report docs/pipelines/constitution/reports/patch_execution_report.yaml
+      docs/pipelines/constitution/work/03_patch/patchset.yaml
+      docs/pipelines/constitution/work/05_apply/sandbox
+      false
+      docs/pipelines/constitution/reports/patch_execution_report.yaml
   bounded_transition:
+    prepare_sandbox_note: >-
+      L'IA doit fournir les commandes Git Bash exactes pour créer/nettoyer la
+      sandbox et y matérialiser l'arborescence minimale attendue, de sorte que
+      sandbox_root/docs/cores/current/... existe avant apply_patch.py.
     apply_patch: >-
       python docs/patcher/shared/apply_patch.py
-      --patch docs/pipelines/constitution/work/03_patch/patchset.yaml
-      --base docs/cores/current
-      --output-dir docs/pipelines/constitution/work/05_apply/sandbox
-      --report docs/pipelines/constitution/reports/patch_execution_report.yaml
+      docs/pipelines/constitution/work/03_patch/patchset.yaml
+      docs/pipelines/constitution/work/05_apply/sandbox
+      false
+      docs/pipelines/constitution/reports/patch_execution_report.yaml
 
 analysis_axes:
   - execution_status
@@ -139,6 +165,7 @@ logical_review_rules:
     - no_write_to_docs_cores_current
     - bounded_run_must_stay_within_sandbox_and_allowed_outputs
     - patch_execution_review_must_follow_real_report
+    - no_fake_cli_flags_for_apply_patch
 
 required_output_sections:
   - execution_evidence
@@ -185,11 +212,13 @@ human_actions_required:
     pour corriger le patchset ou la validation.
   on_blocked:
     step: 1
-    label: Exécuter apply_patch.py puis relancer ce stage
+    label: Préparer la sandbox, exécuter apply_patch.py puis relancer ce stage
     mandatory: true
     note: >-
-      Exécuter la commande exacte émise par l'IA pour matérialiser la sandbox
-      et patch_execution_report.yaml, puis relancer l'IA avec :
+      Si la sandbox n'est pas prête, l'IA doit d'abord fournir les commandes
+      Git Bash de préparation et de matérialisation. Exécuter ensuite la
+      commande apply_patch.py exacte émise par l'IA pour matérialiser la
+      sandbox patchée et patch_execution_report.yaml, puis relancer l'IA avec :
       "Reprends STAGE_05_APPLY pour <RUN_ID> — apply_patch.py a été exécuté et le patch_execution_report est présent."
   on_pass:
     step: 1
@@ -228,7 +257,7 @@ allowed_transitions:
     next_stage: STAGE_03_PATCH_SYNTHESIS_or_STAGE_04_PATCH_VALIDATION
     precondition: blocking issue must be corrected upstream before retry
   on_blocked:
-    next_action: execute_apply_patch_and_retry_same_stage
+    next_action: prepare_sandbox_execute_apply_patch_and_retry_same_stage
     note: Le stage reste in_progress tant que la preuve réelle manque.
 
 forbidden_actions:
@@ -238,6 +267,7 @@ forbidden_actions:
   - substituting_reasoning_for_execution_evidence
   - promotion_claim_or_release_claim
   - omitting_human_actions_from_output
+  - using_nonexistent_apply_patch_flags
 
 migration_note: >-
   Premier skill STAGE_05 pour le pipeline constitution.
