@@ -37,6 +37,11 @@ runtime_binding:
   execution_evidence_role: >-
     build_release_plan.py, validate_release_plan.py, materialize_release.py et
     validate_release_manifest.py doivent être réellement exécutés.
+  artifact_ownership_rule: >-
+    Les artefacts bruts produits par script (release_plan.yaml, validations,
+    release_materialization_report, manifest.yaml) restent les sources de vérité
+    du stage. L'IA ne doit pas inventer de flags CLI inexistants ni écraser un
+    artefact brut produit par script.
 
 primary_reads:
   bounded_local_run:
@@ -71,6 +76,13 @@ required_scripts:
   note: >-
     Si l'IA ne peut pas exécuter les scripts elle-même, elle doit émettre les
     commandes exactes, déclarer le stage BLOCKED, et attendre les artefacts.
+    Les interfaces réelles actuelles sont positionnelles :
+    - build_release_plan.py <patched_dir> <current_dir> <core_validation.yaml> <patch_execution_report.yaml> <output_release_plan.yaml>
+    - validate_release_plan.py <release_plan.yaml> [schema.yaml]
+    - materialize_release.py <release_plan.yaml> <patched_dir> [report.yaml] [release_candidate_notes.md]
+    - validate_release_manifest.py <manifest.yaml> [schema.yaml]
+    Aucune de ces commandes ne supporte les flags --pipeline, --run-id,
+    --plan ou --manifest décrits dans les versions antérieures du skill.
 
 script_execution_contract:
   required_before_pass_or_fail:
@@ -105,33 +117,109 @@ execution_paths:
 
 deterministic_command_templates:
   bounded_local_run:
+    prepare_release_workspace: >-
+      mkdir -p docs/pipelines/constitution/runs/<run_id>/work/07_release
+      && mkdir -p docs/pipelines/constitution/runs/<run_id>/reports
     build_release_plan: >-
       python docs/patcher/shared/build_release_plan.py
-      --pipeline constitution
-      --run-id <RUN_ID>
+      docs/pipelines/constitution/runs/<run_id>/work/05_apply/sandbox
+      .
+      docs/pipelines/constitution/runs/<run_id>/work/06_core_validation/core_validation.yaml
+      docs/pipelines/constitution/runs/<run_id>/reports/patch_execution_report.yaml
+      docs/pipelines/constitution/runs/<run_id>/work/07_release/release_plan.yaml
     validate_release_plan: >-
       python docs/patcher/shared/validate_release_plan.py
-      --plan docs/pipelines/constitution/runs/<run_id>/work/07_release/release_plan.yaml
+      docs/pipelines/constitution/runs/<run_id>/work/07_release/release_plan.yaml
+      > docs/pipelines/constitution/runs/<run_id>/reports/release_plan_validation.yaml
     materialize_release: >-
       python docs/patcher/shared/materialize_release.py
-      --plan docs/pipelines/constitution/runs/<run_id>/work/07_release/release_plan.yaml
+      docs/pipelines/constitution/runs/<run_id>/work/07_release/release_plan.yaml
+      docs/pipelines/constitution/runs/<run_id>/work/05_apply/sandbox/docs/cores/current
+      docs/pipelines/constitution/runs/<run_id>/reports/release_materialization_report.yaml
+      docs/pipelines/constitution/runs/<run_id>/reports/release_candidate_notes.md
+    resolve_manifest_path_note: >-
+      Après build_release_plan.py, l'IA peut demander à l'humain d'extraire le
+      release_path réel depuis release_plan.yaml avant validate_release_manifest.py,
+      car <release_id> n'est connu qu'après matérialisation du plan.
     validate_release_manifest: >-
       python docs/patcher/shared/validate_release_manifest.py
-      --manifest docs/cores/releases/<release_id>/manifest.yaml
+      docs/cores/releases/<release_id>/manifest.yaml
+      > docs/pipelines/constitution/runs/<run_id>/reports/release_manifest_validation.yaml
   parallel_consolidation:
+    prepare_release_workspace: >-
+      mkdir -p docs/pipelines/constitution/work/consolidation
+      && mkdir -p docs/pipelines/constitution/reports
     build_release_plan: >-
       python docs/patcher/shared/build_release_plan.py
-      --pipeline constitution
-      --workspace docs/pipelines/constitution/work/consolidation
+      docs/pipelines/constitution/work/consolidation
+      .
+      docs/pipelines/constitution/work/06_core_validation/core_validation.yaml
+      docs/pipelines/constitution/reports/patch_execution_report.yaml
+      docs/pipelines/constitution/work/consolidation/release_plan.yaml
     validate_release_plan: >-
       python docs/patcher/shared/validate_release_plan.py
-      --plan docs/pipelines/constitution/work/consolidation/release_plan.yaml
+      docs/pipelines/constitution/work/consolidation/release_plan.yaml
+      > docs/pipelines/constitution/reports/release_plan_validation.yaml
     materialize_release: >-
       python docs/patcher/shared/materialize_release.py
-      --plan docs/pipelines/constitution/work/consolidation/release_plan.yaml
+      docs/pipelines/constitution/work/consolidation/release_plan.yaml
+      docs/pipelines/constitution/work/05_apply/sandbox/docs/cores/current
+      docs/pipelines/constitution/reports/release_materialization_report.yaml
+      docs/pipelines/constitution/reports/release_candidate_notes.md
     validate_release_manifest: >-
       python docs/patcher/shared/validate_release_manifest.py
-      --manifest docs/cores/releases/<release_id>/manifest.yaml
+      docs/cores/releases/<release_id>/manifest.yaml
+      > docs/pipelines/constitution/reports/release_manifest_validation.yaml
+  nominal_global:
+    prepare_release_workspace: >-
+      mkdir -p docs/pipelines/constitution/work/07_release
+      && mkdir -p docs/pipelines/constitution/reports
+    build_release_plan: >-
+      python docs/patcher/shared/build_release_plan.py
+      docs/pipelines/constitution/work/05_apply/sandbox
+      .
+      docs/pipelines/constitution/work/06_core_validation/core_validation.yaml
+      docs/pipelines/constitution/reports/patch_execution_report.yaml
+      docs/pipelines/constitution/work/07_release/release_plan.yaml
+    validate_release_plan: >-
+      python docs/patcher/shared/validate_release_plan.py
+      docs/pipelines/constitution/work/07_release/release_plan.yaml
+      > docs/pipelines/constitution/reports/release_plan_validation.yaml
+    materialize_release: >-
+      python docs/patcher/shared/materialize_release.py
+      docs/pipelines/constitution/work/07_release/release_plan.yaml
+      docs/pipelines/constitution/work/05_apply/sandbox/docs/cores/current
+      docs/pipelines/constitution/reports/release_materialization_report.yaml
+      docs/pipelines/constitution/reports/release_candidate_notes.md
+    validate_release_manifest: >-
+      python docs/patcher/shared/validate_release_manifest.py
+      docs/cores/releases/<release_id>/manifest.yaml
+      > docs/pipelines/constitution/reports/release_manifest_validation.yaml
+  bounded_transition:
+    prepare_release_workspace: >-
+      mkdir -p docs/pipelines/constitution/work/07_release
+      && mkdir -p docs/pipelines/constitution/reports
+    build_release_plan: >-
+      python docs/patcher/shared/build_release_plan.py
+      docs/pipelines/constitution/work/05_apply/sandbox
+      .
+      docs/pipelines/constitution/work/06_core_validation/core_validation.yaml
+      docs/pipelines/constitution/reports/patch_execution_report.yaml
+      docs/pipelines/constitution/work/07_release/release_plan.yaml
+    validate_release_plan: >-
+      python docs/patcher/shared/validate_release_plan.py
+      docs/pipelines/constitution/work/07_release/release_plan.yaml
+      > docs/pipelines/constitution/reports/release_plan_validation.yaml
+    materialize_release: >-
+      python docs/patcher/shared/materialize_release.py
+      docs/pipelines/constitution/work/07_release/release_plan.yaml
+      docs/pipelines/constitution/work/05_apply/sandbox/docs/cores/current
+      docs/pipelines/constitution/reports/release_materialization_report.yaml
+      docs/pipelines/constitution/reports/release_candidate_notes.md
+    validate_release_manifest: >-
+      python docs/patcher/shared/validate_release_manifest.py
+      docs/cores/releases/<release_id>/manifest.yaml
+      > docs/pipelines/constitution/reports/release_manifest_validation.yaml
 
 required_output_sections:
   - execution_evidence
@@ -179,6 +267,11 @@ human_actions_required:
     step: 1
     label: Exécuter la chaîne de release puis relancer ce stage
     mandatory: true
+    note: >-
+      Si le workspace de release n'existe pas encore, l'IA doit fournir d'abord
+      les commandes Git Bash exactes de préparation. Si <release_id> n'est pas
+      encore connu, l'IA doit demander explicitement l'extraction du release_path
+      depuis release_plan.yaml avant validate_release_manifest.py.
   on_pass:
     step: 1
     label: Mettre à jour le tracking et poursuivre vers STAGE_08_PROMOTE_CURRENT
@@ -212,6 +305,7 @@ forbidden_actions:
   - direct_current_promotion
   - current_alias_update_without_stage_08
   - omitting_human_actions_from_output
+  - using_nonexistent_release_cli_flags
 
 migration_note: >-
   Premier skill STAGE_07 pour le pipeline constitution.
