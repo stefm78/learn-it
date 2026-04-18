@@ -1,0 +1,247 @@
+stage_skill:
+  schema_version: 0.1
+  pipeline_id: constitution
+  stage_id: STAGE_05_APPLY
+  skill_id: bounded_patch_applicator_supervisor
+  stage_kind: hybrid
+  closure_level: high
+  authoritative_role: stable_stage_contract
+
+mission: >-
+  Appliquer le patch validé dans une zone de travail contrôlée, produire la
+  preuve matérielle d'exécution du patcher et analyser le résultat obtenu
+  avant de poursuivre vers STAGE_06_CORE_VALIDATION. Ce stage n'écrit jamais
+  directement dans docs/cores/current et ne réalise aucune promotion implicite.
+  Il supervise une exécution déterministe obligatoire puis une revue IA du
+  rapport d'exécution.
+
+model_requirements:
+  reasoning_level: advanced
+  justification: >-
+    Ce stage exige d'interpréter correctement un rapport d'exécution réel du
+    patcher, de vérifier que l'application est bien confinée à la sandbox
+    attendue, d'identifier les anomalies résiduelles et de décider si le run
+    peut passer à la validation Core. Le modèle doit maintenir une séparation
+    stricte entre exécution scriptée, état des fichiers produits et jugement
+    complémentaire sur la propreté de l'application.
+  recommended_models:
+    - o3
+    - claude-opus-4
+    - gemini-2.5-pro
+  minimum_acceptable: tout modèle avec extended thinking ou chain-of-thought activable
+  warning: >-
+    ⚠️ NE PAS exécuter ce stage avec un modèle standard. Une lecture trop
+    superficielle du patch_execution_report peut laisser passer une application
+    incomplète, une écriture hors sandbox ou une anomalie bloquante avant la
+    validation des Core patchés.
+
+runtime_binding:
+  expected_mode_values:
+    - bounded_local_run
+    - nominal_global
+    - bounded_transition
+  run_context_role: >-
+    run_context.yaml doit être lu en premier pour résoudre le mode, le run et
+    les chemins attendus. Il ne remplace ni la preuve d'exécution réelle du
+    patcher ni le report produit par apply_patch.py.
+  execution_evidence_role: >-
+    Le rapport réel d'exécution du patcher fait autorité sur ce qui a été
+    effectivement appliqué. L'IA ne doit jamais simuler apply_patch.py ni
+    présenter une application comme acquise sans preuve matérielle.
+
+primary_reads:
+  bounded_local_run:
+    - runs/<run_id>/inputs/run_context.yaml
+    - runs/<run_id>/work/03_patch/patchset.yaml
+    - runs/<run_id>/work/04_patch_validation/patch_validation.yaml
+    - docs/prompts/shared/Make08PatchExecutionReview.md
+  nominal_global:
+    - docs/pipelines/constitution/work/03_patch/patchset.yaml
+    - docs/pipelines/constitution/work/04_patch_validation/patch_validation.yaml
+    - docs/prompts/shared/Make08PatchExecutionReview.md
+  bounded_transition:
+    - docs/pipelines/constitution/work/03_patch/patchset.yaml
+    - docs/pipelines/constitution/work/04_patch_validation/patch_validation.yaml
+    - docs/prompts/shared/Make08PatchExecutionReview.md
+
+required_scripts:
+  mandatory_apply:
+    - docs/patcher/shared/apply_patch.py
+  note: >-
+    L'application du patch est un acte déterministe obligatoire. Elle doit être
+    réellement exécutée. Si l'IA ne peut pas lancer le script elle-même, elle
+    doit émettre la commande exacte, déclarer le stage bloqué, et attendre la
+    matérialisation du patch_execution_report avant toute conclusion finale.
+
+script_execution_contract:
+  required_before_pass_or_fail:
+    - apply_patch.py_executed_for_real
+    - patch_execution_report_materialized
+    - sandbox_or_output_tree_materialized
+  blocked_if_missing_evidence: true
+  blocked_status_value: BLOCKED
+  pass_requires:
+    - patch_validation_status_is_pass
+    - apply_execution_completed
+    - no_blocking_execution_issue
+    - no_write_outside_expected_workspace
+  fail_requires:
+    - apply_execution_failed
+    - or_blocking_execution_issue_detected_after_real_execution
+
+execution_paths:
+  bounded_local_run:
+    sandbox_root: runs/<run_id>/work/05_apply/sandbox/
+    execution_report: runs/<run_id>/reports/patch_execution_report.yaml
+  nominal_global:
+    sandbox_root: docs/pipelines/constitution/work/05_apply/sandbox/
+    execution_report: docs/pipelines/constitution/reports/patch_execution_report.yaml
+  bounded_transition:
+    sandbox_root: docs/pipelines/constitution/work/05_apply/sandbox/
+    execution_report: docs/pipelines/constitution/reports/patch_execution_report.yaml
+
+deterministic_command_templates:
+  bounded_local_run:
+    apply_patch: >-
+      python docs/patcher/shared/apply_patch.py
+      --patch runs/<run_id>/work/03_patch/patchset.yaml
+      --base docs/cores/current
+      --output-dir runs/<run_id>/work/05_apply/sandbox
+      --report runs/<run_id>/reports/patch_execution_report.yaml
+  nominal_global:
+    apply_patch: >-
+      python docs/patcher/shared/apply_patch.py
+      --patch docs/pipelines/constitution/work/03_patch/patchset.yaml
+      --base docs/cores/current
+      --output-dir docs/pipelines/constitution/work/05_apply/sandbox
+      --report docs/pipelines/constitution/reports/patch_execution_report.yaml
+  bounded_transition:
+    apply_patch: >-
+      python docs/patcher/shared/apply_patch.py
+      --patch docs/pipelines/constitution/work/03_patch/patchset.yaml
+      --base docs/cores/current
+      --output-dir docs/pipelines/constitution/work/05_apply/sandbox
+      --report docs/pipelines/constitution/reports/patch_execution_report.yaml
+
+analysis_axes:
+  - execution_status
+  - touched_files_and_scope
+  - residual_anomalies
+  - reference_rewrites
+  - text_replacements_and_side_effects
+  - readiness_for_core_validation
+
+logical_review_rules:
+  constraints:
+    - do_not_replace_real_apply_execution_with_reasoning
+    - no_pass_without_execution_evidence
+    - no_promotion_claim_in_stage_05
+    - no_write_to_docs_cores_current
+    - bounded_run_must_stay_within_sandbox_and_allowed_outputs
+    - patch_execution_review_must_follow_real_report
+
+required_output_sections:
+  - execution_evidence
+  - execution_summary
+  - touched_files_summary
+  - residual_findings
+  - follow_up_actions
+  - human_actions_to_execute
+
+expected_outputs:
+  bounded_local_run:
+    report_path_pattern: runs/<run_id>/reports/patch_execution_report.yaml
+  nominal_global:
+    report_path_pattern: docs/pipelines/constitution/reports/patch_execution_report.yaml
+  bounded_transition:
+    report_path_pattern: docs/pipelines/constitution/reports/patch_execution_report.yaml
+
+completion_evidence:
+  required:
+    - apply_patch_command_emitted_or_executed
+    - real_execution_evidence_declared
+    - patch_execution_report_written_or_confirmed_missing
+    - final_status_is_pass_fail_or_blocked
+    - touched_files_or_execution_summary_reported
+    - human_actions_explicitly_stated_in_output
+  not_sufficient:
+    - informal_chat_summary_only
+    - logical_review_without_apply_evidence
+    - pass_without_apply_patch_execution
+    - simulated_script_execution
+    - write_claims_on_current_without_proof
+
+status_values:
+  - PASS
+  - FAIL
+  - BLOCKED
+
+human_actions_required:
+  description: >-
+    L'IA ne doit pas simuler apply_patch.py. Si le script n'a pas été exécuté
+    réellement, l'humain doit lancer la commande émise puis relancer l'IA sur
+    ce stage. Une fois l'application réelle obtenue et relue, l'humain décide
+    soit de poursuivre vers STAGE_06_CORE_VALIDATION, soit de revenir en amont
+    pour corriger le patchset ou la validation.
+  on_blocked:
+    step: 1
+    label: Exécuter apply_patch.py puis relancer ce stage
+    mandatory: true
+    note: >-
+      Exécuter la commande exacte émise par l'IA pour matérialiser la sandbox
+      et patch_execution_report.yaml, puis relancer l'IA avec :
+      "Reprends STAGE_05_APPLY pour <RUN_ID> — apply_patch.py a été exécuté et le patch_execution_report est présent."
+  on_pass:
+    step: 1
+    label: Mettre à jour le tracking et poursuivre vers STAGE_06_CORE_VALIDATION
+    mandatory: true
+    command: >-
+      python docs/patcher/shared/update_run_tracking.py
+      --pipeline constitution
+      --run-id <RUN_ID>
+      --stage-id STAGE_05_APPLY
+      --stage-status done
+      --run-status active
+      --next-stage STAGE_06_CORE_VALIDATION
+      --summary "Patch applied in sandbox with real execution evidence; ready for core validation."
+    expected_effect: >-
+      run_manifest.yaml : current_stage passe à STAGE_06_CORE_VALIDATION,
+      STAGE_05_APPLY apparaît dans completed_stages.
+    next_step: >-
+      Relancer l'IA avec :
+      "Continue le run <RUN_ID> — STAGE_05 est done, démarre STAGE_06_CORE_VALIDATION."
+  on_fail:
+    step: 1
+    label: Corriger les anomalies avant nouvelle tentative
+    mandatory: true
+    note: >-
+      Si l'application échoue ou révèle une anomalie bloquante, corriger en
+      amont le patchset ou la validation puis relancer le stage approprié.
+      Ne pas exécuter update_run_tracking.py vers STAGE_06 tant que l'application
+      n'est pas proprement rejouée et revue.
+
+allowed_transitions:
+  on_pass:
+    next_stage: STAGE_06_CORE_VALIDATION
+    precondition: human must confirm update_run_tracking.py execution
+  on_fail:
+    next_stage: STAGE_03_PATCH_SYNTHESIS_or_STAGE_04_PATCH_VALIDATION
+    precondition: blocking issue must be corrected upstream before retry
+  on_blocked:
+    next_action: execute_apply_patch_and_retry_same_stage
+    note: Le stage reste in_progress tant que la preuve réelle manque.
+
+forbidden_actions:
+  - simulated_apply_patch_execution
+  - pass_without_real_execution_evidence
+  - direct_write_to_docs_cores_current
+  - substituting_reasoning_for_execution_evidence
+  - promotion_claim_or_release_claim
+  - omitting_human_actions_from_output
+
+migration_note: >-
+  Premier skill STAGE_05 pour le pipeline constitution.
+  Consolide en YAML machine-readable les règles exprimées dans
+  pipeline.md, PIPELINE_MODEL.yaml et Make08PatchExecutionReview.md.
+  Introduit un pattern hybrid explicite : application déterministe obligatoire,
+  preuve d'exécution matérielle, puis revue IA du patch_execution_report.
