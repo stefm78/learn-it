@@ -53,6 +53,7 @@ stages:
   - stage_id: STAGE_03_PATCH_SYNTHESIS
     optional: false
     orchestration_scope: run
+    primary_skill_ref: docs/pipelines/constitution/stages/STAGE_03_PATCH_SYNTHESIS.skill.yaml
     transitions:
       on_done:
         - STAGE_04_PATCH_VALIDATION
