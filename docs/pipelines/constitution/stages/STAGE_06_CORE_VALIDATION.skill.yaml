@@ -1,0 +1,225 @@
+stage_skill:
+  schema_version: 0.1
+  pipeline_id: constitution
+  stage_id: STAGE_06_CORE_VALIDATION
+  skill_id: bounded_core_logical_validator
+  stage_kind: cognitive
+  closure_level: high
+  authoritative_role: stable_stage_contract
+
+mission: >-
+  Vérifier que les Core patchés dans la sandbox issue de STAGE_05_APPLY sont
+  structurellement valides, logiquement cohérents et prêts soit pour la
+  matérialisation de release du run, soit pour une consolidation multi-runs
+  lorsqu'elle est requise. Ce stage ne promeut rien, ne réécrit pas current,
+  et n'exécute aucun script déterministe obligatoire. Il produit une décision
+  explicite de validation et d'orientation aval.
+
+model_requirements:
+  reasoning_level: advanced
+  justification: >-
+    Ce stage exige une lecture logique fine des Core patchés, en tenant compte
+    des invariants, dépendances, relations inter-Core, collisions d'identifiants,
+    cohérence de graphe et compatibilité avec le périmètre du run. Le modèle doit
+    en outre décider si le run peut aller directement vers STAGE_07 ou s'il doit
+    attendre une STAGE_06B_CONSOLIDATION dans un contexte multi-runs. Un modèle
+    faible risque de confondre validation locale de sandbox et cohérence globale
+    suffisante pour release.
+  recommended_models:
+    - o3
+    - claude-opus-4
+    - gemini-2.5-pro
+  minimum_acceptable: tout modèle avec extended thinking ou chain-of-thought activable
+  warning: >-
+    ⚠️ NE PAS exécuter ce stage avec un modèle standard. La qualité de cette
+    validation conditionne directement la sécurité de la release et la décision
+    de consolidation éventuelle.
+
+runtime_binding:
+  expected_mode_values:
+    - bounded_local_run
+    - nominal_global
+    - bounded_transition
+  run_context_role: >-
+    run_context.yaml doit être lu en premier pour résoudre le run, le contexte
+    d'exécution, le périmètre et l'état du pipeline. Il ne remplace pas les Core
+    patchés présents dans la sandbox ni les reports du run.
+  apply_evidence_role: >-
+    patch_execution_report.yaml fait autorité sur ce qui a effectivement été
+    appliqué dans la sandbox. La validation Core ne doit porter que sur l'état
+    réellement matérialisé par STAGE_05_APPLY.
+
+primary_reads:
+  bounded_local_run:
+    - runs/<run_id>/inputs/run_context.yaml
+    - runs/<run_id>/reports/patch_execution_report.yaml
+    - runs/<run_id>/work/05_apply/sandbox/docs/cores/current/constitution.yaml
+    - runs/<run_id>/work/05_apply/sandbox/docs/cores/current/referentiel.yaml
+    - runs/<run_id>/work/05_apply/sandbox/docs/cores/current/link.yaml
+    - docs/prompts/shared/Make02CoreValidation.md
+  nominal_global:
+    - docs/pipelines/constitution/reports/patch_execution_report.yaml
+    - docs/pipelines/constitution/work/05_apply/sandbox/docs/cores/current/constitution.yaml
+    - docs/pipelines/constitution/work/05_apply/sandbox/docs/cores/current/referentiel.yaml
+    - docs/pipelines/constitution/work/05_apply/sandbox/docs/cores/current/link.yaml
+    - docs/prompts/shared/Make02CoreValidation.md
+  bounded_transition:
+    - docs/pipelines/constitution/reports/patch_execution_report.yaml
+    - docs/pipelines/constitution/work/05_apply/sandbox/docs/cores/current/constitution.yaml
+    - docs/pipelines/constitution/work/05_apply/sandbox/docs/cores/current/referentiel.yaml
+    - docs/pipelines/constitution/work/05_apply/sandbox/docs/cores/current/link.yaml
+    - docs/prompts/shared/Make02CoreValidation.md
+
+fallback_reads:
+  rule: >-
+    Les Core canoniques sous docs/cores/current peuvent être lus uniquement si
+    nécessaire pour comparer l'état patché à l'état de base, qualifier une
+    régression potentielle ou évaluer le besoin de consolidation. Toute lecture
+    de fallback doit être explicitement déclarée dans l'output.
+  fallback_targets:
+    - docs/cores/current/constitution.yaml
+    - docs/cores/current/referentiel.yaml
+    - docs/cores/current/link.yaml
+
+required_scripts:
+  none: true
+  note: >-
+    Ce stage est cognitif. Il ne simule aucun script déterministe. La release,
+    la promotion et la consolidation éventuelle appartiennent aux stages aval.
+
+analysis_axes:
+  - duplicate_rules_and_id_collisions
+  - orphan_dependencies
+  - implicit_relations
+  - invariant_integrity
+  - logical_consistency
+  - source_anchor_completeness
+  - relation_coherence
+  - graph_connectivity
+  - reinflation_readiness
+  - core_type_alignment
+  - inter_core_reference_clarity
+  - bounded_run_release_readiness
+
+validation_rules:
+  constraints:
+    - validate_only_real_sandbox_state
+    - no_promotion_claim
+    - no_current_rewrite
+    - no_silent_consolidation_bypass_when_required
+    - every_blocking_issue_must_be_explicit
+    - pass_requires_no_blocking_logical_issue
+  statuses:
+    - PASS
+    - FAIL
+  downstream_decisions:
+    - direct_release_materialization
+    - requires_parallel_consolidation
+    - return_upstream_for_correction
+
+consolidation_decision_rules:
+  direct_release_materialization_when:
+    - run_validation_status_is_pass
+    - no_multi_run_consolidation_needed_or_detected
+  requires_parallel_consolidation_when:
+    - run_validation_status_is_pass
+    - context_indicates_multiple_closed_runs_must_be_merged_before_release
+  return_upstream_for_correction_when:
+    - validation_status_is_fail
+    - blocking_anomalies_detected
+
+required_output_sections:
+  - validation_scope
+  - logical_validation_summary
+  - anomalies_and_corrections
+  - fallback_reads_used_if_any
+  - downstream_decision
+  - human_actions_to_execute
+
+expected_outputs:
+  bounded_local_run:
+    report_path_pattern: runs/<run_id>/work/06_core_validation/core_validation.yaml
+  nominal_global:
+    report_path_pattern: docs/pipelines/constitution/work/06_core_validation/core_validation.yaml
+  bounded_transition:
+    report_path_pattern: docs/pipelines/constitution/work/06_core_validation/core_validation.yaml
+
+completion_evidence:
+  required:
+    - sandbox_cores_read
+    - validation_status_emitted
+    - every_blocking_issue_explicitly_listed_if_any
+    - downstream_decision_emitted
+    - fallback_reads_declared_if_any
+    - human_actions_explicitly_stated_in_output
+  not_sufficient:
+    - informal_chat_summary_only
+    - pass_without_reading_sandbox_cores
+    - ambiguous_downstream_decision
+    - implicit_release_or_promotion_claim
+
+human_actions_required:
+  description: >-
+    L'IA produit core_validation.yaml et s'arrête. L'humain décide ensuite de
+    poursuivre soit vers STAGE_07_RELEASE_MATERIALIZATION, soit vers
+    STAGE_06B_CONSOLIDATION si le contexte multi-runs l'exige, soit de revenir
+    en amont pour correction si la validation échoue.
+  on_pass_direct_release:
+    step: 1
+    label: Mettre à jour le tracking vers STAGE_07_RELEASE_MATERIALIZATION
+    mandatory: true
+    command: >-
+      python docs/patcher/shared/update_run_tracking.py
+      --pipeline constitution
+      --run-id <RUN_ID>
+      --stage-id STAGE_06_CORE_VALIDATION
+      --stage-status done
+      --run-status active
+      --next-stage STAGE_07_RELEASE_MATERIALIZATION
+      --summary "Core validation passed; run ready for release materialization."
+    expected_effect: >-
+      run_manifest.yaml : current_stage passe à STAGE_07_RELEASE_MATERIALIZATION,
+      STAGE_06_CORE_VALIDATION apparaît dans completed_stages.
+    next_step: >-
+      Relancer l'IA avec :
+      "Continue le run <RUN_ID> — STAGE_06 est done, démarre STAGE_07_RELEASE_MATERIALIZATION."
+  on_pass_requires_consolidation:
+    step: 1
+    label: Clore le run validé en attente de consolidation pipeline-level
+    mandatory: true
+    note: >-
+      Mettre à jour le tracking du run selon la stratégie retenue dans le pipeline,
+      puis lancer la séquence pipeline-level de STAGE_06B_CONSOLIDATION.
+      La formulation exacte dépend du mécanisme opératoire retenu pour les runs clos.
+  on_fail:
+    step: 1
+    label: Corriger les anomalies avant reprise amont
+    mandatory: true
+    note: >-
+      En cas d'échec, corriger le patchset, la validation patch-level ou l'application
+      selon la nature des anomalies, puis relancer le stage amont approprié.
+
+allowed_transitions:
+  on_pass_direct_release:
+    next_stage: STAGE_07_RELEASE_MATERIALIZATION
+    precondition: human must confirm update_run_tracking.py execution
+  on_pass_requires_consolidation:
+    next_stage: STAGE_06B_CONSOLIDATION
+    precondition: pipeline-level consolidation path must be explicitly chosen
+  on_fail:
+    next_stage: STAGE_03_PATCH_SYNTHESIS_or_STAGE_04_PATCH_VALIDATION_or_STAGE_05_APPLY
+    precondition: blocking issue must be corrected upstream before retry
+
+forbidden_actions:
+  - direct_promotion_claim
+  - direct_write_to_docs_cores_current
+  - simulated_release_materialization
+  - silent_consolidation_bypass
+  - omitting_human_actions_from_output
+
+migration_note: >-
+  Premier skill STAGE_06 pour le pipeline constitution.
+  Consolide en YAML machine-readable les règles exprimées dans
+  Make02CoreValidation.md, PIPELINE_MODEL.yaml et pipeline.md.
+  Introduit la décision aval explicite entre release directe, consolidation
+  parallèle et retour amont pour correction.
