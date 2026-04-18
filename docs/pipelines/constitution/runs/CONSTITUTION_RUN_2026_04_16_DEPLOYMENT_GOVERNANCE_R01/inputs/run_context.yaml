@@ -9,22 +9,24 @@ run_context:
   mode: bounded_local_run
   status: active
   scope_key: deployment_governance
-  current_stage: STAGE_02_ARBITRAGE
-  current_stage_canonical: STAGE_02_ARBITRAGE
+  current_stage: STAGE_03_PATCH_SYNTHESIS
+  current_stage_canonical: STAGE_03_PATCH_SYNTHESIS
   last_stage_status: done
-  next_stage: STAGE_03_PATCH_SYNTHESIS
-  next_stage_canonical: STAGE_03_PATCH_SYNTHESIS
-  next_executable_stage: STAGE_03_PATCH_SYNTHESIS
-  next_executable_stage_canonical: STAGE_03_PATCH_SYNTHESIS
+  next_stage: STAGE_04_PATCH_VALIDATION
+  next_stage_canonical: STAGE_04_PATCH_VALIDATION
+  next_executable_stage: STAGE_04_PATCH_VALIDATION
+  next_executable_stage_canonical: STAGE_04_PATCH_VALIDATION
   terminal_closed: false
   completed_stages:
   - RUN_BOOTSTRAP
   - STAGE_01_CHALLENGE
   - STAGE_02_ARBITRAGE
+  - STAGE_03_PATCH_SYNTHESIS
   completed_stages_canonical:
   - RUN_BOOTSTRAP
   - STAGE_01_CHALLENGE
   - STAGE_02_ARBITRAGE
+  - STAGE_03_PATCH_SYNTHESIS
   scope_ids:
   - ACTION_INFORM_LEARNER
   - CONSTRAINT_NO_ASSISTED_DEPLOYMENT_WITHOUT_TUTORING
@@ -73,7 +75,7 @@ run_context:
     impact_bundle: docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_16_DEPLOYMENT_GOVERNANCE_R01/inputs/impact_bundle.yaml
     integration_gate: docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_16_DEPLOYMENT_GOVERNANCE_R01/inputs/integration_gate.yaml
   source_fingerprints:
-    run_manifest.yaml: c0d9f4a1288dea0a9decc633133dba279e7c8d048c81adcebd75668019458a2c
+    run_manifest.yaml: 1489d68baf5135b84670dd83d3d686987eb3caafb98067e87b88326bad203337
     scope_manifest.yaml: e49256274979b7e08a7e28a7c3bf852a803a762364f10ce5ac6daed6d6313965
     impact_bundle.yaml: 518b7758c05278f45b57b106ab97164622071df3dc05e29663c6cf461a39aa71
     integration_gate.yaml: 8e3a00f87c5358fdb0d5f73645bc0031915a5e8473902c5727680c724b6ca8bb
@@ -81,10 +83,10 @@ run_context:
     neighbor_extract.yaml: 20e902c09ace22a61188a38ab1b5c0a2fd978287f10a101db549a6e007eb030b
   task_view:
     status: executable
-    raw_stage_id: STAGE_03_PATCH_SYNTHESIS
-    stage_id: STAGE_03_PATCH_SYNTHESIS
-    skill_ref: docs/pipelines/constitution/stages/STAGE_03_PATCH_SYNTHESIS.skill.yaml
-    stage_kind: cognitive
+    raw_stage_id: STAGE_04_PATCH_VALIDATION
+    stage_id: STAGE_04_PATCH_VALIDATION
+    skill_ref: docs/pipelines/constitution/stages/STAGE_04_PATCH_VALIDATION.skill.yaml
+    stage_kind: hybrid
     closure_level: high
     resolved_inputs:
     - docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_16_DEPLOYMENT_GOVERNANCE_R01/inputs/run_context.yaml
@@ -92,8 +94,8 @@ run_context:
     - docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_16_DEPLOYMENT_GOVERNANCE_R01/inputs/impact_bundle.yaml
     - docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_16_DEPLOYMENT_GOVERNANCE_R01/inputs/integration_gate.yaml
     execution_paths:
-      work_dir: docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_16_DEPLOYMENT_GOVERNANCE_R01/work/03_patch/
-      primary_output: docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_16_DEPLOYMENT_GOVERNANCE_R01/work/03_patch/patchset.yaml
+      work_dir: docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_16_DEPLOYMENT_GOVERNANCE_R01/work/04_patch_validation/
+      primary_output: docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_16_DEPLOYMENT_GOVERNANCE_R01/work/04_patch_validation/patch_validation.yaml
       reports_dir: docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_16_DEPLOYMENT_GOVERNANCE_R01/reports/
     required_scripts_status:
       scope_extract_present: true
@@ -103,11 +105,11 @@ run_context:
     forbidden_actions: []
     completion_evidence: []
     allowed_transitions: {}
-    compact_execution_prompt: Dans le repo learn-it, exécute STAGE_03_PATCH_SYNTHESIS du pipeline constitution
+    compact_execution_prompt: Dans le repo learn-it, exécute STAGE_04_PATCH_VALIDATION du pipeline constitution
       pour run_id=CONSTITUTION_RUN_2026_04_16_DEPLOYMENT_GOVERNANCE_R01 en mode bounded_local_run. Lis
       d'abord docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_16_DEPLOYMENT_GOVERNANCE_R01/inputs/run_context.yaml,
       docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_16_DEPLOYMENT_GOVERNANCE_R01/inputs/scope_manifest.yaml,
       docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_16_DEPLOYMENT_GOVERNANCE_R01/inputs/impact_bundle.yaml,
       docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_16_DEPLOYMENT_GOVERNANCE_R01/inputs/integration_gate.yaml.
-      Applique le contrat stable défini dans docs/pipelines/constitution/stages/STAGE_03_PATCH_SYNTHESIS.skill.yaml.
+      Applique le contrat stable défini dans docs/pipelines/constitution/stages/STAGE_04_PATCH_VALIDATION.skill.yaml.
       Ne produis que les livrables du stage courant et ne simule aucun script requis.
