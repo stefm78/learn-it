@@ -9,18 +9,20 @@ run_context:
   mode: bounded_local_run
   status: active
   scope_key: deployment_governance
-  current_stage: RUN_BOOTSTRAP
-  current_stage_canonical: RUN_BOOTSTRAP
+  current_stage: STAGE_01_CHALLENGE
+  current_stage_canonical: STAGE_01_CHALLENGE
   last_stage_status: done
-  next_stage: STAGE_01_CHALLENGE
-  next_stage_canonical: STAGE_01_CHALLENGE
-  next_executable_stage: STAGE_01_CHALLENGE
-  next_executable_stage_canonical: STAGE_01_CHALLENGE
+  next_stage: STAGE_02_ARBITRAGE
+  next_stage_canonical: STAGE_02_ARBITRAGE
+  next_executable_stage: STAGE_02_ARBITRAGE
+  next_executable_stage_canonical: STAGE_02_ARBITRAGE
   terminal_closed: false
   completed_stages:
   - RUN_BOOTSTRAP
+  - STAGE_01_CHALLENGE
   completed_stages_canonical:
   - RUN_BOOTSTRAP
+  - STAGE_01_CHALLENGE
   scope_ids:
   - ACTION_INFORM_LEARNER
   - CONSTRAINT_NO_ASSISTED_DEPLOYMENT_WITHOUT_TUTORING
@@ -69,7 +71,7 @@ run_context:
     impact_bundle: docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_16_DEPLOYMENT_GOVERNANCE_R01/inputs/impact_bundle.yaml
     integration_gate: docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_16_DEPLOYMENT_GOVERNANCE_R01/inputs/integration_gate.yaml
   source_fingerprints:
-    run_manifest.yaml: e97e4096fdc9b8dfce7559365ceba55ac26c5f9d59e8e4856804717a73453d85
+    run_manifest.yaml: 2af01a7bcd2955a4d780825255cb2ae8006595ca5ed6b06b054e37113bd8921f
     scope_manifest.yaml: e49256274979b7e08a7e28a7c3bf852a803a762364f10ce5ac6daed6d6313965
     impact_bundle.yaml: 518b7758c05278f45b57b106ab97164622071df3dc05e29663c6cf461a39aa71
     integration_gate.yaml: 8e3a00f87c5358fdb0d5f73645bc0031915a5e8473902c5727680c724b6ca8bb
@@ -77,33 +79,31 @@ run_context:
     neighbor_extract.yaml: 20e902c09ace22a61188a38ab1b5c0a2fd978287f10a101db549a6e007eb030b
   task_view:
     status: executable
-    raw_stage_id: STAGE_01_CHALLENGE
-    stage_id: STAGE_01_CHALLENGE
-    skill_ref: docs/pipelines/constitution/stages/STAGE_01_CHALLENGE.skill.yaml
+    raw_stage_id: STAGE_02_ARBITRAGE
+    stage_id: STAGE_02_ARBITRAGE
+    skill_ref: docs/pipelines/constitution/stages/STAGE_02_ARBITRAGE.skill.yaml
     stage_kind: cognitive
-    closure_level: medium
+    closure_level: high
     resolved_inputs:
     - runs/CONSTITUTION_RUN_2026_04_16_DEPLOYMENT_GOVERNANCE_R01/inputs/run_context.yaml
-    - runs/CONSTITUTION_RUN_2026_04_16_DEPLOYMENT_GOVERNANCE_R01/inputs/scope_extract.yaml
-    - runs/CONSTITUTION_RUN_2026_04_16_DEPLOYMENT_GOVERNANCE_R01/inputs/neighbor_extract.yaml
     - runs/CONSTITUTION_RUN_2026_04_16_DEPLOYMENT_GOVERNANCE_R01/inputs/scope_manifest.yaml
     - runs/CONSTITUTION_RUN_2026_04_16_DEPLOYMENT_GOVERNANCE_R01/inputs/impact_bundle.yaml
     - runs/CONSTITUTION_RUN_2026_04_16_DEPLOYMENT_GOVERNANCE_R01/inputs/integration_gate.yaml
     execution_paths:
-      work_dir: runs/CONSTITUTION_RUN_2026_04_16_DEPLOYMENT_GOVERNANCE_R01/work/01_challenge/
-      primary_output: runs/CONSTITUTION_RUN_2026_04_16_DEPLOYMENT_GOVERNANCE_R01/work/01_challenge/challenge_report_<id>.md
+      work_dir: runs/CONSTITUTION_RUN_2026_04_16_DEPLOYMENT_GOVERNANCE_R01/work/02_arbitrage/
+      primary_output: runs/CONSTITUTION_RUN_2026_04_16_DEPLOYMENT_GOVERNANCE_R01/work/02_arbitrage/arbitrage.md
       reports_dir: runs/CONSTITUTION_RUN_2026_04_16_DEPLOYMENT_GOVERNANCE_R01/reports/
     required_scripts_status:
       scope_extract_present: true
       neighbor_extract_present: true
       ids_first_ready: true
+      note: generic runtime status — stage-specific script status not yet bound
     forbidden_actions: []
     completion_evidence: []
     allowed_transitions: {}
-    compact_execution_prompt: Dans le repo learn-it, exécute STAGE_01_CHALLENGE du pipeline constitution
+    compact_execution_prompt: Dans le repo learn-it, exécute STAGE_02_ARBITRAGE du pipeline constitution
       pour run_id=CONSTITUTION_RUN_2026_04_16_DEPLOYMENT_GOVERNANCE_R01 en mode bounded_local_run. Lis
-      d'abord runs/CONSTITUTION_RUN_2026_04_16_DEPLOYMENT_GOVERNANCE_R01/inputs/run_context.yaml, runs/CONSTITUTION_RUN_2026_04_16_DEPLOYMENT_GOVERNANCE_R01/inputs/scope_extract.yaml,
-      runs/CONSTITUTION_RUN_2026_04_16_DEPLOYMENT_GOVERNANCE_R01/inputs/neighbor_extract.yaml, runs/CONSTITUTION_RUN_2026_04_16_DEPLOYMENT_GOVERNANCE_R01/inputs/scope_manifest.yaml,
+      d'abord runs/CONSTITUTION_RUN_2026_04_16_DEPLOYMENT_GOVERNANCE_R01/inputs/run_context.yaml, runs/CONSTITUTION_RUN_2026_04_16_DEPLOYMENT_GOVERNANCE_R01/inputs/scope_manifest.yaml,
       runs/CONSTITUTION_RUN_2026_04_16_DEPLOYMENT_GOVERNANCE_R01/inputs/impact_bundle.yaml, runs/CONSTITUTION_RUN_2026_04_16_DEPLOYMENT_GOVERNANCE_R01/inputs/integration_gate.yaml.
-      Applique le contrat stable défini dans docs/pipelines/constitution/stages/STAGE_01_CHALLENGE.skill.yaml.
+      Applique le contrat stable défini dans docs/pipelines/constitution/stages/STAGE_02_ARBITRAGE.skill.yaml.
       Ne produis que les livrables du stage courant et ne simule aucun script requis.
