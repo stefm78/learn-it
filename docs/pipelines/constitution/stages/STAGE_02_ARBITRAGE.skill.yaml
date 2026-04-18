@@ -52,10 +52,10 @@ runtime_binding:
 
 primary_reads:
   bounded_local_run:
-    - runs/<run_id>/inputs/run_context.yaml
-    - runs/<run_id>/inputs/scope_manifest.yaml
-    - runs/<run_id>/inputs/impact_bundle.yaml
-    - runs/<run_id>/work/01_challenge/challenge_report_*.md
+    - docs/pipelines/constitution/runs/<run_id>/inputs/run_context.yaml
+    - docs/pipelines/constitution/runs/<run_id>/inputs/scope_manifest.yaml
+    - docs/pipelines/constitution/runs/<run_id>/inputs/impact_bundle.yaml
+    - docs/pipelines/constitution/runs/<run_id>/work/01_challenge/challenge_report_*.md
   nominal_global:
     - docs/pipelines/constitution/work/01_challenge/challenge_report_*.md
     - docs/cores/current/constitution.yaml
@@ -114,7 +114,7 @@ required_output_sections:
 
 expected_outputs:
   bounded_local_run:
-    report_path_pattern: runs/<run_id>/work/02_arbitrage/arbitrage_report_<id>.md
+    report_path_pattern: docs/pipelines/constitution/runs/<run_id>/work/02_arbitrage/arbitrage_report_<id>.md
   nominal_global:
     report_path_pattern: docs/pipelines/constitution/work/02_arbitrage/arbitrage_report_<id>.md
   bounded_transition:

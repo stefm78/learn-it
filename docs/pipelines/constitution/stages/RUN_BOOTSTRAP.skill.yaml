@@ -28,14 +28,14 @@ runtime_binding:
 
 primary_reads:
   bounded_local_run:
-    - runs/<run_id>/inputs/run_context.yaml
-    - runs/<run_id>/inputs/scope_manifest.yaml
-    - runs/<run_id>/inputs/impact_bundle.yaml
-    - runs/<run_id>/inputs/integration_gate.yaml
+    - docs/pipelines/constitution/runs/<run_id>/inputs/run_context.yaml
+    - docs/pipelines/constitution/runs/<run_id>/inputs/scope_manifest.yaml
+    - docs/pipelines/constitution/runs/<run_id>/inputs/impact_bundle.yaml
+    - docs/pipelines/constitution/runs/<run_id>/inputs/integration_gate.yaml
 
 optional_reads:
-  - runs/<run_id>/inputs/scope_extract.yaml
-  - runs/<run_id>/inputs/neighbor_extract.yaml
+  - docs/pipelines/constitution/runs/<run_id>/inputs/scope_extract.yaml
+  - docs/pipelines/constitution/runs/<run_id>/inputs/neighbor_extract.yaml
 
 forbidden_reads:
   - docs/cores/current/constitution.yaml
@@ -51,19 +51,19 @@ readiness_checks:
   mandatory:
     - id: RC01
       label: run_context_present
-      check: runs/<run_id>/inputs/run_context.yaml existe et est parseable
+      check: docs/pipelines/constitution/runs/<run_id>/inputs/run_context.yaml existe et est parseable
       blocking: true
     - id: RC02
       label: scope_manifest_present
-      check: runs/<run_id>/inputs/scope_manifest.yaml existe
+      check: docs/pipelines/constitution/runs/<run_id>/inputs/scope_manifest.yaml existe
       blocking: true
     - id: RC03
       label: impact_bundle_present
-      check: runs/<run_id>/inputs/impact_bundle.yaml existe
+      check: docs/pipelines/constitution/runs/<run_id>/inputs/impact_bundle.yaml existe
       blocking: true
     - id: RC04
       label: integration_gate_present
-      check: runs/<run_id>/inputs/integration_gate.yaml existe
+      check: docs/pipelines/constitution/runs/<run_id>/inputs/integration_gate.yaml existe
       blocking: true
     - id: RC05
       label: run_status_coherent
@@ -76,14 +76,14 @@ readiness_checks:
   advisory:
     - id: RA01
       label: scope_extract_present
-      check: runs/<run_id>/inputs/scope_extract.yaml existe
+      check: docs/pipelines/constitution/runs/<run_id>/inputs/scope_extract.yaml existe
       blocking: false
       note: >-
         Si absent, STAGE_01_CHALLENGE devra exécuter extract_scope_slice.py avant
         de démarrer. Le run reste ready mais ids-first n'est pas satisfait immédiatement.
     - id: RA02
       label: neighbor_extract_present
-      check: runs/<run_id>/inputs/neighbor_extract.yaml existe
+      check: docs/pipelines/constitution/runs/<run_id>/inputs/neighbor_extract.yaml existe
       blocking: false
       note: >-
         Si absent, STAGE_01_CHALLENGE devra lire les Core complets en fallback
@@ -169,7 +169,7 @@ required_output_sections:
 
 expected_outputs:
   bounded_local_run:
-    report_path_pattern: runs/<run_id>/outputs/RUN_BOOTSTRAP.out
+    report_path_pattern: docs/pipelines/constitution/runs/<run_id>/outputs/RUN_BOOTSTRAP.out
 
 completion_evidence:
   required:

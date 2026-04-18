@@ -50,10 +50,10 @@ runtime_binding:
 
 primary_reads:
   bounded_local_run:
-    - runs/<run_id>/inputs/run_context.yaml
-    - runs/<run_id>/inputs/scope_manifest.yaml
-    - runs/<run_id>/inputs/impact_bundle.yaml
-    - runs/<run_id>/work/03_patch/patchset.yaml
+    - docs/pipelines/constitution/runs/<run_id>/inputs/run_context.yaml
+    - docs/pipelines/constitution/runs/<run_id>/inputs/scope_manifest.yaml
+    - docs/pipelines/constitution/runs/<run_id>/inputs/impact_bundle.yaml
+    - docs/pipelines/constitution/runs/<run_id>/work/03_patch/patchset.yaml
     - docs/prompts/shared/Make06PatchValidation.md
     - docs/specs/patch-dsl/current.md
   nominal_global:
@@ -95,8 +95,8 @@ deterministic_command_templates:
   bounded_local_run:
     validate_patchset: >-
       python docs/patcher/shared/validate_patchset.py
-      --patch runs/<run_id>/work/03_patch/patchset.yaml
-      --output runs/<run_id>/work/04_patch_validation/patch_validation.yaml
+      --patch docs/pipelines/constitution/runs/<run_id>/work/03_patch/patchset.yaml
+      --output docs/pipelines/constitution/runs/<run_id>/work/04_patch_validation/patch_validation.yaml
   nominal_global:
     validate_patchset: >-
       python docs/patcher/shared/validate_patchset.py
@@ -136,7 +136,7 @@ required_output_sections:
 
 expected_outputs:
   bounded_local_run:
-    report_path_pattern: runs/<run_id>/work/04_patch_validation/patch_validation.yaml
+    report_path_pattern: docs/pipelines/constitution/runs/<run_id>/work/04_patch_validation/patch_validation.yaml
   nominal_global:
     report_path_pattern: docs/pipelines/constitution/work/04_patch_validation/patch_validation.yaml
   bounded_transition:
