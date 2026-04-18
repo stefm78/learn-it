@@ -1,0 +1,187 @@
+stage_skill:
+  schema_version: 0.1
+  pipeline_id: constitution
+  stage_id: STAGE_01_CHALLENGE
+  skill_id: bounded_core_challenger
+  stage_kind: cognitive
+  closure_level: medium
+  authoritative_role: stable_stage_contract
+
+mission: >-
+  Challenger la Constitution, le Référentiel et le LINK comme système cohérent,
+  en mode global ou borné, sans correction silencieuse hors scope et avec une
+  lecture ids-first prioritaire quand les extraits sont présents.
+
+model_requirements:
+  reasoning_level: advanced
+  justification: >-
+    Ce stage exige une analyse critique multi-axes de documents de gouvernance
+    complexes et interdépendants. Il requiert la détection d'incohérences logiques
+    subtiles, d'états moteur non définis, de dépendances IA implicites et de
+    scénarios adversariaux. Un modèle avec capacité de raisonnement approfondi
+    (ex : o3, claude-opus, gemini-pro thinking) est fortement recommandé.
+    Un modèle standard produira une analyse superficielle insuffisante pour
+    alimenter une décision d'arbitrage fiable.
+  recommended_models:
+    - o3
+    - claude-opus-4
+    - gemini-2.5-pro
+  minimum_acceptable: tout modèle avec extended thinking ou chain-of-thought activable
+  warning: >-
+    ⚠️ NE PAS exécuter ce stage avec un modèle standard sans capacité de
+    raisonnement avancé. La qualité du challenge_report conditionne directement
+    la fiabilité de tout le pipeline aval (arbitrage, patch, release).
+
+runtime_binding:
+  expected_mode_values:
+    - nominal_global
+    - bounded_transition
+    - bounded_local_run
+  run_context_role: >-
+    `run_context.yaml` doit être lu en premier comme vue runtime dérivée.
+    Il résout le stage exécutable, les chemins d'entrée et l'état de préparation
+    ids-first ; il ne remplace pas les sources canoniques.
+
+primary_reads:
+  bounded_local_run:
+    - docs/pipelines/constitution/runs/<run_id>/inputs/run_context.yaml
+    - docs/pipelines/constitution/runs/<run_id>/inputs/scope_extract.yaml
+    - docs/pipelines/constitution/runs/<run_id>/inputs/neighbor_extract.yaml
+    - docs/pipelines/constitution/runs/<run_id>/inputs/scope_manifest.yaml
+    - docs/pipelines/constitution/runs/<run_id>/inputs/impact_bundle.yaml
+    - docs/pipelines/constitution/runs/<run_id>/inputs/integration_gate.yaml
+  nominal_global:
+    - docs/cores/current/constitution.yaml
+    - docs/cores/current/referentiel.yaml
+    - docs/cores/current/link.yaml
+  bounded_transition:
+    - docs/pipelines/constitution/inputs/scope_manifest.yaml
+    - docs/pipelines/constitution/inputs/impact_bundle.yaml
+    - docs/cores/current/constitution.yaml
+    - docs/cores/current/referentiel.yaml
+    - docs/cores/current/link.yaml
+
+fallback_reads:
+  rule: >-
+    En mode `bounded_local_run`, fallback sur les Core complets autorisé
+    uniquement si un ID nécessaire est explicitement signalé manquant dans
+    `scope_extract.yaml` ou `neighbor_extract.yaml`.
+  fallback_targets:
+    - docs/cores/current/constitution.yaml
+    - docs/cores/current/referentiel.yaml
+    - docs/cores/current/link.yaml
+
+required_scripts:
+  preconditions_only:
+    - docs/patcher/shared/materialize_run_inputs.py
+    - docs/patcher/shared/extract_scope_slice.py
+    - docs/patcher/shared/build_run_context.py
+  note: >-
+    Le stage ne simule jamais l'exécution de ces scripts. Si les préconditions
+    ids-first ne sont pas remplies, il doit demander leur exécution réelle avant
+    de poursuivre.
+
+analysis_axes:
+  - internal_coherence
+  - theoretical_soundness
+  - undefined_engine_states
+  - implicit_ai_dependencies
+  - governance
+  - adversarial_scenarios
+  - risk_prioritization
+
+required_output_sections:
+  - executive_summary
+  - challenge_scope
+  - detailed_analysis_by_axis
+  - priority_risks
+  - corrections_to_arbitrate_before_patch
+  - human_actions_to_execute
+
+scope_rules:
+  statuses:
+    - in_scope
+    - out_of_scope_but_relevant
+    - needs_scope_extension
+  constraints:
+    - no_silent_out_of_scope_fix
+    - impact_bundle_extends_reading_not_write_permissions
+    - explicit_fallback_if_missing_id
+
+forbidden_actions:
+  - implicit_full_core_read_in_bounded_local_run
+  - silent_out_of_scope_recommendation_as_current_fix
+  - patch_yaml_generation_in_stage_01
+  - simulated_required_script_execution
+  - omitting_human_actions_from_output
+
+expected_outputs:
+  bounded_local_run:
+    report_path_pattern: docs/pipelines/constitution/runs/<run_id>/work/01_challenge/challenge_report_<id>.md
+  nominal_global:
+    report_path_pattern: docs/pipelines/constitution/work/01_challenge/challenge_report_<id>.md
+  bounded_transition:
+    report_path_pattern: docs/pipelines/constitution/work/01_challenge/challenge_report_<id>.md
+
+completion_evidence:
+  required:
+    - challenge_report_written
+    - read_surface_declared
+    - fallback_ids_declared_if_any
+    - scope_status_declared_for_major_findings
+    - human_actions_explicitly_stated_in_output
+  not_sufficient:
+    - informal_chat_summary_only
+    - human_actions_omitted_from_output
+
+human_actions_required:
+  description: >-
+    L'IA produit le challenge_report et s'arrête. L'humain valide le rapport
+    avant de poursuivre vers STAGE_02_ARBITRAGE.
+    Aucune transition de stage n'est valide sans exécution réelle confirmée.
+  on_done:
+    step: 1
+    label: Mettre à jour le tracking et confirmer la transition vers STAGE_02
+    mandatory: true
+    command: >-
+      python docs/patcher/shared/update_run_tracking.py
+      --pipeline constitution
+      --run-id <RUN_ID>
+      --stage-id STAGE_01_CHALLENGE
+      --stage-status done
+      --run-status active
+      --next-stage STAGE_02_ARBITRAGE
+      --summary "Challenge report produced; ready for arbitrage."
+    expected_effect: >-
+      run_manifest.yaml : current_stage passe à STAGE_02_ARBITRAGE,
+      STAGE_01_CHALLENGE apparaît dans completed_stages.
+      run_context.yaml sera reconstruit automatiquement si --skip-rebuild-context n'est pas passé.
+    next_step: >-
+      Après exécution confirmée, relancer l'IA avec :
+      "Continue le run <RUN_ID> — STAGE_01 est done, démarre STAGE_02_ARBITRAGE."
+  on_blocked:
+    step: 1
+    label: Exécuter les scripts de précondition manquants
+    mandatory: true
+    note: >-
+      L'IA aura émis la commande exacte (extract_scope_slice.py ou
+      materialize_run_inputs.py). L'exécuter, puis relancer l'IA sur ce stage.
+    next_step: >-
+      Après exécution confirmée, relancer l'IA avec :
+      "Reprends STAGE_01_CHALLENGE pour <RUN_ID> — les scripts correctifs ont été exécutés."
+
+allowed_transitions:
+  on_done:
+    - STAGE_02_ARBITRAGE
+  on_blocked:
+    - materialize_or_extract_inputs_first
+
+migration_note: >-
+  Skill pilote initial — mise à jour pour ajouter model_requirements et
+  human_actions_required, en cohérence avec le pattern établi sur RUN_BOOTSTRAP.
+  Consolide en YAML machine-readable les règles déjà exprimées dans
+  `Challenge_constitution.md`, `AI_PROTOCOL.yaml` et `pipeline.md`.
+  Fix (2026-04-18): alignement completion_evidence et forbidden_actions sur
+  RUN_BOOTSTRAP — ajout de human_actions_explicitly_stated_in_output,
+  omitting_human_actions_from_output et human_actions_to_execute dans
+  required_output_sections.
