@@ -78,6 +78,10 @@ required_scripts:
     conclusion de stage. Elle doit être réellement exécutée. Si l'IA ne peut
     pas exécuter elle-même le script, elle doit émettre la commande exacte,
     déclarer le stage BLOCKED, et attendre la preuve matérielle du résultat.
+    L'interface réelle actuelle de validate_patchset.py prend un unique
+    argument positionnel <patchset.yaml> et écrit son rapport sur stdout ;
+    la matérialisation de patch_validation.yaml doit donc être faite par
+    redirection shell explicite.
 
 script_execution_contract:
   required_before_pass_or_fail:
@@ -95,18 +99,18 @@ deterministic_command_templates:
   bounded_local_run:
     validate_patchset: >-
       python docs/patcher/shared/validate_patchset.py
-      --patch docs/pipelines/constitution/runs/<run_id>/work/03_patch/patchset.yaml
-      --output docs/pipelines/constitution/runs/<run_id>/work/04_patch_validation/patch_validation.yaml
+      docs/pipelines/constitution/runs/<run_id>/work/03_patch/patchset.yaml
+      > docs/pipelines/constitution/runs/<run_id>/work/04_patch_validation/patch_validation.yaml
   nominal_global:
     validate_patchset: >-
       python docs/patcher/shared/validate_patchset.py
-      --patch docs/pipelines/constitution/work/03_patch/patchset.yaml
-      --output docs/pipelines/constitution/work/04_patch_validation/patch_validation.yaml
+      docs/pipelines/constitution/work/03_patch/patchset.yaml
+      > docs/pipelines/constitution/work/04_patch_validation/patch_validation.yaml
   bounded_transition:
     validate_patchset: >-
       python docs/patcher/shared/validate_patchset.py
-      --patch docs/pipelines/constitution/work/03_patch/patchset.yaml
-      --output docs/pipelines/constitution/work/04_patch_validation/patch_validation.yaml
+      docs/pipelines/constitution/work/03_patch/patchset.yaml
+      > docs/pipelines/constitution/work/04_patch_validation/patch_validation.yaml
 
 analysis_axes:
   - structural_dsl_conformance
