@@ -48,17 +48,21 @@ runtime_binding:
     L'arbitrage validé fait autorité sur ce qui doit être patché maintenant,
     reporté, rejeté ou laissé hors périmètre.
     Le stage ne requalifie pas silencieusement les décisions d'arbitrage.
+  upstream_authority_rule: >-
+    En STAGE_03, seul l'arbitrage_report canonique du run courant fait autorité
+    comme source amont validée. En cas d'absence, arrêter le stage et signaler
+    le prérequis manquant au lieu d'explorer des sources alternatives.
 
 primary_reads:
   bounded_local_run:
     - docs/pipelines/constitution/runs/<run_id>/inputs/run_context.yaml
     - docs/pipelines/constitution/runs/<run_id>/inputs/scope_manifest.yaml
     - docs/pipelines/constitution/runs/<run_id>/inputs/impact_bundle.yaml
-    - docs/pipelines/constitution/runs/<run_id>/work/02_arbitrage/arbitrage_report_*.md
+    - docs/pipelines/constitution/runs/<run_id>/work/02_arbitrage/arbitrage*.md
     - docs/specs/patch-dsl/current.md
     - docs/prompts/shared/Make05CorePatch.md
   nominal_global:
-    - docs/pipelines/constitution/work/02_arbitrage/arbitrage_report_*.md
+    - docs/pipelines/constitution/work/02_arbitrage/arbitrage*.md
     - docs/specs/patch-dsl/current.md
     - docs/prompts/shared/Make05CorePatch.md
     - docs/cores/current/constitution.yaml
@@ -67,13 +71,16 @@ primary_reads:
   bounded_transition:
     - docs/pipelines/constitution/inputs/scope_manifest.yaml
     - docs/pipelines/constitution/inputs/impact_bundle.yaml
-    - docs/pipelines/constitution/work/02_arbitrage/arbitrage_report_*.md
+    - docs/pipelines/constitution/work/02_arbitrage/arbitrage*.md
     - docs/specs/patch-dsl/current.md
     - docs/prompts/shared/Make05CorePatch.md
 
 fallback_reads:
   rule: >-
-    En mode bounded_local_run, lecture des Core complets autorisée uniquement
+    Si l'artefact canonique d'arbitrage attendu est absent, le stage doit
+    s'arrêter et signaler le prérequis manquant au lieu d'explorer d'autres
+    sources amont.
+    En mode bounded_local_run, si autorisation obtenue, lecture des Core complets autorisée uniquement
     si l'arbitrage_report ne permet pas de localiser proprement une cible,
     ou si un ID/objet nécessaire est explicitement déclaré manquant ou ambigu.
     Toute telle lecture supplémentaire doit être déclarée dans l'output.
@@ -215,6 +222,9 @@ forbidden_actions:
   - patch_without_traceability_to_arbitrage
   - prose_before_or_after_patchset_when_patch_file_is_produced
   - omitting_human_actions_from_output
+  - global_repository_search_without_current_stage_requirement
+  - branch_compare_without_current_stage_requirement
+  - reading_other_stage_skills_without_current_stage_requirement
 
 migration_note: >-
   Premier skill STAGE_03 pour le pipeline constitution.
