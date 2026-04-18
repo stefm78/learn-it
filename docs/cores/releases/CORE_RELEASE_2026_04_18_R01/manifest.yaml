@@ -13,12 +13,12 @@ RELEASE_MANIFEST:
     version: V4_0_FINAL
   - role: referentiel
     file: referentiel.yaml
-    core_id: CORE_LEARNIT_REFERENTIEL_V4_0
-    version: V4_0_FINAL
+    core_id: CORE_LEARNIT_REFERENTIEL_v3.0
+    version: V3_0_FINAL
   - role: link
     file: link.yaml
-    core_id: CORE_LINK_LEARNIT_CONSTITUTION_V4_0__REFERENTIEL_V4_0
-    version: V4_0__V4_0_FINAL
+    core_id: CORE_LINK_LEARNIT_CONSTITUTION_V4_0__REFERENTIEL_v3.0
+    version: V4_0__V3_0_FINAL
   provenance:
     release_plan: docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_16_DEPLOYMENT_GOVERNANCE_R01/work/07_release/release_plan.yaml
     core_validation: docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_16_DEPLOYMENT_GOVERNANCE_R01/work/06_core_validation/core_validation.yaml

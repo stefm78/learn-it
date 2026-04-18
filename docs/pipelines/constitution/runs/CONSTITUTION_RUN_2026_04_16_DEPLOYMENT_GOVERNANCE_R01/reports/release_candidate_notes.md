@@ -7,8 +7,8 @@
 ## Cores matérialisés
 
 - `constitution` → `CORE_LEARNIT_CONSTITUTION_V4_0` / `V4_0_FINAL`
-- `referentiel` → `CORE_LEARNIT_REFERENTIEL_V4_0` / `V4_0_FINAL`
-- `link` → `CORE_LINK_LEARNIT_CONSTITUTION_V4_0__REFERENTIEL_V4_0` / `V4_0__V4_0_FINAL`
+- `referentiel` → `CORE_LEARNIT_REFERENTIEL_v3.0` / `V3_0_FINAL`
+- `link` → `CORE_LINK_LEARNIT_CONSTITUTION_V4_0__REFERENTIEL_v3.0` / `V4_0__V3_0_FINAL`
 
 ## Notes
 

@@ -1,9 +1,9 @@
 CORE:
-  id: CORE_LEARNIT_REFERENTIEL_V4_0
+  id: CORE_LEARNIT_REFERENTIEL_v3.0
   core_type: REFERENTIEL
   authority: primary
-  version: V4_0_FINAL
-  description: Core canonique final du Référentiel Learn-it V4.0. Naming normalisé,
+  version: V3_0_FINAL
+  description: Core canonique final du Référentiel Learn-it V3.0. Naming normalisé,
     fermeture locale assurée, références inter-Core explicites matérialisées pour
     fédération avec la Constitution.
   TYPES:
@@ -15,7 +15,7 @@ CORE:
     relations: []
     patchable: false
     parameterizable: false
-    human_readable: Référence explicite vers le Core Constitution Learn-it V4_0.
+    human_readable: Référence explicite vers le Core Constitution Learn-it v3.0.
     logic:
       trigger: null
       condition: null
@@ -274,7 +274,7 @@ CORE:
   - id: TYPE_REFERENTIEL_MINIMAL_BEHAVIORAL_PROXY_SET
     authority: primary
     core_type: REFERENTIEL
-    source_anchor: '[S3][PATCH_V4_0]'
+    source_anchor: '[S3][PATCH_v3.0]'
     depends_on:
     - TYPE_REFERENTIEL_SIGNAL_CONFIDENCE_HIERARCHY
     relations:
@@ -294,7 +294,7 @@ CORE:
   - id: TYPE_REFERENTIEL_AR_N3_CONFIGURATION
     authority: primary
     core_type: REFERENTIEL
-    source_anchor: '[S3][PATCH_V4_0]'
+    source_anchor: '[S3][PATCH_v3.0]'
     depends_on:
     - REF_CORE_LEARNIT_CONSTITUTION_V4_0_IN_REFERENTIEL
     relations:
@@ -616,7 +616,7 @@ CORE:
   - id: RULE_REFERENTIEL_CURRENT_RETROGRADATION_VS_POSTMASTERY_REVOCATION
     authority: primary
     core_type: REFERENTIEL
-    source_anchor: '[S2][PATCH_V4_0]'
+    source_anchor: '[S2][PATCH_v3.0]'
     depends_on:
     - REF_CORE_LEARNIT_CONSTITUTION_V4_0_IN_REFERENTIEL
     relations: []
@@ -634,7 +634,7 @@ CORE:
   - id: RULE_REFERENTIEL_INTERLEAVING_CONTENT_REQUIRES_A
     authority: primary
     core_type: REFERENTIEL
-    source_anchor: '[S3][PATCH_V4_0]'
+    source_anchor: '[S3][PATCH_v3.0]'
     depends_on:
     - REF_CORE_LEARNIT_CONSTITUTION_V4_0_IN_REFERENTIEL
     relations: []
@@ -651,7 +651,7 @@ CORE:
   - id: RULE_REFERENTIEL_SECONDARY_RETROGRADATION_DEFERRED_REENTRY
     authority: primary
     core_type: REFERENTIEL
-    source_anchor: '[S19][PATCH_V4_0]'
+    source_anchor: '[S19][PATCH_v3.0]'
     depends_on:
     - TYPE_REFERENTIEL_GRAPH_PROPAGATION_OPERATIONAL_NOTE
     relations: []
@@ -668,7 +668,7 @@ CORE:
   - id: RULE_REFERENTIEL_LOW_AR_CALIBRATION_TEMPORARILY_REWEIGHTS_SIGNALS
     authority: primary
     core_type: REFERENTIEL
-    source_anchor: '[S3][PATCH_V4_0]'
+    source_anchor: '[S3][PATCH_v3.0]'
     depends_on:
     - TYPE_REFERENTIEL_AR_N3_CONFIGURATION
     - TYPE_REFERENTIEL_SIGNAL_CONFIDENCE_HIERARCHY
@@ -687,7 +687,7 @@ CORE:
   - id: RULE_REFERENTIEL_SYSTEMIC_INVESTIGATION_RUNTIME_BEHAVIOR
     authority: primary
     core_type: REFERENTIEL
-    source_anchor: '[PATCH_V4_0]'
+    source_anchor: '[PATCH_v3.0]'
     depends_on:
     - REF_CORE_LEARNIT_CONSTITUTION_V4_0_IN_REFERENTIEL
     relations: []
@@ -704,7 +704,7 @@ CORE:
   - id: RULE_REFERENTIEL_VC_UNOBSERVABLE_DISABLING
     authority: primary
     core_type: REFERENTIEL
-    source_anchor: '[S16][PATCH_V4_0]'
+    source_anchor: '[S16][PATCH_v3.0]'
     depends_on:
     - TYPE_REFERENTIEL_VC_PARAMETER_BLOCK
     - CONSTRAINT_REFERENTIEL_NO_BEHAVIORAL_PROXY_FOR_VC
@@ -1325,7 +1325,7 @@ CORE:
   - id: PARAM_REFERENTIEL_PROXY_MIN_WEIGHT
     authority: primary
     core_type: REFERENTIEL
-    source_anchor: '[S3][PATCH_V4_0]'
+    source_anchor: '[S3][PATCH_v3.0]'
     depends_on: []
     relations: []
     patchable: false
@@ -1339,7 +1339,7 @@ CORE:
   - id: PARAM_REFERENTIEL_AR_N3_FREQUENCY_REFERENCE
     authority: primary
     core_type: REFERENTIEL
-    source_anchor: '[S3][PATCH_V4_0]'
+    source_anchor: '[S3][PATCH_v3.0]'
     depends_on: []
     relations: []
     patchable: true
@@ -1353,7 +1353,7 @@ CORE:
   - id: PARAM_REFERENTIEL_PROPAGATION_CHECK_MAX_DELAY_SESSIONS
     authority: primary
     core_type: REFERENTIEL
-    source_anchor: '[S19][PATCH_V4_0]'
+    source_anchor: '[S19][PATCH_v3.0]'
     depends_on: []
     relations: []
     patchable: false
@@ -1591,7 +1591,7 @@ CORE:
   - id: CONSTRAINT_REFERENTIEL_LOCAL_VERIFICATION_REQUIRED_BEFORE_PATCH_APPLY
     authority: primary
     core_type: REFERENTIEL
-    source_anchor: '[S6][PATCH_V4_0]'
+    source_anchor: '[S6][PATCH_v3.0]'
     depends_on:
     - TYPE_REFERENTIEL_PATCH_SCOPE_TABLE
     relations:
