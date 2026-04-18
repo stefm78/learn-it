@@ -266,6 +266,9 @@ allowed_transitions:
   on_revision_needed:
     next_action: ai_revises_arbitrage_report
     note: Le statut reste in_progress jusqu'à validation humaine explicite.
+  on_human_arbitration_needed:
+    next_action: human_arbitrates_then_ai_revises
+    note: Aucun passage à STAGE_03 tant qu'une ambiguïté matérielle reste non arbitrée.
 
 forbidden_actions:
   - patch_yaml_generation
