@@ -98,6 +98,7 @@ stages:
   - stage_id: STAGE_07_RELEASE_MATERIALIZATION
     optional: false
     orchestration_scope: run_or_pipeline
+    primary_skill_ref: docs/pipelines/constitution/stages/STAGE_07_RELEASE_MATERIALIZATION.skill.yaml
     deterministic_scripts_required:
       - docs/patcher/shared/build_release_plan.py
       - docs/patcher/shared/validate_release_plan.py
