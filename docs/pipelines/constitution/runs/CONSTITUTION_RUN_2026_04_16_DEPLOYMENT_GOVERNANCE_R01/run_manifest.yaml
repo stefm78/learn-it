@@ -19,6 +19,7 @@ run_manifest:
     - STAGE_01_CHALLENGE
     - STAGE_02_ARBITRAGE
     - STAGE_03_PATCH_SYNTHESIS
+    - STAGE_03_PATCH_SYNTHESIS
     stage_history:
     - stage_id: RUN_BOOTSTRAP
       stage_status: in_progress
