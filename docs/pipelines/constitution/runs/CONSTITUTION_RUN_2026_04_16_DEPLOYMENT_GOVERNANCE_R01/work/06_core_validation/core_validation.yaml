@@ -1,0 +1,124 @@
+CORE_VALIDATION:
+  schema_version: 0.1
+  pipeline_id: constitution
+  stage_id: STAGE_06_CORE_VALIDATION
+  run_id: CONSTITUTION_RUN_2026_04_16_DEPLOYMENT_GOVERNANCE_R01
+  mode: bounded_local_run
+  validation_scope:
+    sandbox_cores_read:
+      - docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_16_DEPLOYMENT_GOVERNANCE_R01/work/05_apply/sandbox/docs/cores/current/constitution.yaml
+      - docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_16_DEPLOYMENT_GOVERNANCE_R01/work/05_apply/sandbox/docs/cores/current/referentiel.yaml
+      - docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_16_DEPLOYMENT_GOVERNANCE_R01/work/05_apply/sandbox/docs/cores/current/link.yaml
+    apply_evidence_ref: docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_16_DEPLOYMENT_GOVERNANCE_R01/reports/patch_execution_report.yaml
+    bounded_scope_key: deployment_governance
+    touched_files_from_apply:
+      - docs/cores/current/constitution.yaml
+  logical_validation_summary:
+    status: PASS
+    duplicate_rules_and_id_collisions:
+      status: PASS
+      note: >-
+        Aucun doublon d'identifiant ni collision visible induite par le patch dans
+        les Core sandbox lus ; le report d'application confirme une exécution propre.
+    orphan_dependencies:
+      status: PASS
+      note: >-
+        Les dépendances du Core patché restent résolubles dans l'ensemble sandbox
+        Constitution/Référentiel/LINK, notamment vers
+        REF_CORE_LEARNIT_REFERENTIEL_V3_0_IN_CONSTITUTION.
+    implicit_relations:
+      status: PASS
+      note: >-
+        Aucune relation implicite nouvelle n'est introduite par le patch ; les
+        frontières d'autorité renforcées restent portées par des champs logiques
+        localisés sur des objets déjà existants.
+    invariant_integrity:
+      status: PASS
+      note: >-
+        Les invariants modifiés restent non patchables au sens structurel et ne
+        changent ni leur autorité, ni leur rôle constitutionnel.
+    logical_consistency:
+      status: PASS
+      note: >-
+        Les clarifications apportées sur runtime local, séparation Constitution/
+        Référentiel et gouvernance GF-08/gamification restent cohérentes entre elles
+        et ne contredisent pas les autres objets lus dans la sandbox.
+    source_anchor_completeness:
+      status: PASS
+      note: >-
+        Les objets patchés conservent leurs source_anchor existants ; aucun objet
+        nouveau sans ancre n'a été ajouté par le patch courant.
+    relation_coherence:
+      status: PASS
+      note: >-
+        Les relations inter-objets et inter-Core existantes restent cohérentes.
+        Aucun rewrite de référence n'était requis par ce patch.
+    graph_connectivity:
+      status: PASS
+      note: >-
+        Le LINK sandbox reste fermé et explicite entre Constitution v3.0 et
+        Référentiel v3.0 ; le patch local n'a pas rompu la connectivité logique.
+    reinflation_readiness:
+      status: PASS
+      note: >-
+        Les Core patchés restent réinflationnables dans le layout canonique :
+        types, invariants, rules, events et actions demeurent lisibles et fermés.
+    core_type_alignment:
+      status: PASS
+      note: >-
+        Les core_type des trois fichiers sandbox sont alignés avec leurs fichiers
+        cibles : CONSTITUTION, REFERENTIEL, LINK.
+    inter_core_reference_clarity:
+      status: PASS
+      note: >-
+        Les références inter-Core pertinentes sont explicites et alignées sur la
+        version V3.0. Le décalage V2.0 observé en input run reste un sujet amont,
+        non une ambiguïté introduite dans la sandbox patchée.
+    bounded_run_release_readiness:
+      status: PASS
+      note: >-
+        Le run borné est prêt pour une matérialisation de release locale du run ;
+        aucune consolidation parallèle n'est détectée comme requise à partir des
+        artefacts lus dans ce contexte.
+  anomalies_and_corrections:
+    anomalies:
+      - none
+    corrections:
+      - none
+    non_blocking_notes:
+      - code: INPUT_TRACKING_DUPLICATION_VISIBLE
+        note: >-
+          run_context expose STAGE_03_PATCH_SYNTHESIS deux fois dans completed_stages.
+          Ce point relève du tracking runtime, sans impact bloquant sur la cohérence
+          des Core sandbox validés à ce stage.
+      - code: R4_SCOPE_GAP_REMAINS_UPSTREAM
+        note: >-
+          Le sujet R4 reste un backlog amont de génération d'inputs bornés et ne
+          compromet pas la validité logique des Core patchés présents en sandbox.
+  fallback_reads_used_if_any:
+    used: false
+    files: []
+    note: >-
+      Aucun fallback vers docs/cores/current n'a été nécessaire pour conclure la
+      validation logique de la sandbox patchée.
+  downstream_decision:
+    decision: direct_release_materialization
+    rationale: >-
+      La validation logique est PASS, aucun problème bloquant n'est détecté dans
+      les Core sandbox lus, et aucun besoin explicite de consolidation multi-runs
+      n'est établi par le contexte courant du run.
+  human_actions_to_execute:
+    on_pass_direct_release:
+      mandatory: true
+      command: >-
+        python docs/patcher/shared/update_run_tracking.py
+        --pipeline constitution
+        --run-id CONSTITUTION_RUN_2026_04_16_DEPLOYMENT_GOVERNANCE_R01
+        --stage-id STAGE_06_CORE_VALIDATION
+        --stage-status done
+        --run-status active
+        --next-stage STAGE_07_RELEASE_MATERIALIZATION
+        --summary "Core validation passed; run ready for release materialization."
+      next_step: >-
+        Relancer ensuite l'IA avec :
+        "Continue le run CONSTITUTION_RUN_2026_04_16_DEPLOYMENT_GOVERNANCE_R01 — STAGE_06 est done, démarre STAGE_07_RELEASE_MATERIALIZATION."
