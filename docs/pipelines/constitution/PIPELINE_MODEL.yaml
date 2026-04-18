@@ -79,6 +79,7 @@ stages:
   - stage_id: STAGE_06_CORE_VALIDATION
     optional: false
     orchestration_scope: run
+    primary_skill_ref: docs/pipelines/constitution/stages/STAGE_06_CORE_VALIDATION.skill.yaml
     transitions:
       on_done:
         - STAGE_07_RELEASE_MATERIALIZATION
