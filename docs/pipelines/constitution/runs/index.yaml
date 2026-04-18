@@ -8,7 +8,7 @@ runs_index:
     scope_id: CONSTITUTION_SCOPE_DEPLOYMENT_GOVERNANCE
     scope_key: deployment_governance
     run_status: active
-    current_stage: STAGE_08_PROMOTE_CURRENT
+    current_stage: STAGE_09_CLOSEOUT_AND_ARCHIVE
     mode: bounded_local_run
     run_manifest_ref: docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_16_DEPLOYMENT_GOVERNANCE_R01/run_manifest.yaml
   closed_runs:

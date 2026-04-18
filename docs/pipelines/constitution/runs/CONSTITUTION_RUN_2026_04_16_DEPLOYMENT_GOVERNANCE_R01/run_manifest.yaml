@@ -10,10 +10,10 @@ run_manifest:
     scope_key: deployment_governance
     scope_definition_ref: docs/pipelines/constitution/scope_catalog/scope_definitions/deployment_governance.yaml
   execution_state:
-    current_stage: STAGE_07_RELEASE_MATERIALIZATION
+    current_stage: STAGE_08_PROMOTE_CURRENT
     last_stage_status: done
-    last_updated: '2026-04-18T22:52:41Z'
-    next_stage: STAGE_08_PROMOTE_CURRENT
+    last_updated: '2026-04-18T22:58:35Z'
+    next_stage: STAGE_09_CLOSEOUT_AND_ARCHIVE
     completed_stages:
     - RUN_BOOTSTRAP
     - STAGE_01_CHALLENGE
@@ -24,6 +24,7 @@ run_manifest:
     - STAGE_05_APPLY
     - STAGE_06_CORE_VALIDATION
     - STAGE_07_RELEASE_MATERIALIZATION
+    - STAGE_08_PROMOTE_CURRENT
     stage_history:
     - stage_id: RUN_BOOTSTRAP
       stage_status: in_progress
@@ -84,6 +85,11 @@ run_manifest:
       recorded_at: '2026-04-18T22:52:41Z'
       summary: Release materialization completed with validated artifacts; ready for
         promote current.
+    - stage_id: STAGE_08_PROMOTE_CURRENT
+      stage_status: done
+      recorded_at: '2026-04-18T22:58:35Z'
+      summary: Promotion to current completed with validated manifests; ready for
+        closeout.
   scope_tracking:
     scope_status: confirmed_for_bounded_run
     last_updated: '2026-04-16T13:46:19Z'

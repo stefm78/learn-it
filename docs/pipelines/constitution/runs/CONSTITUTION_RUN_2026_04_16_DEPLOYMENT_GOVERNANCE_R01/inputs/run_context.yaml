@@ -9,13 +9,13 @@ run_context:
   mode: bounded_local_run
   status: active
   scope_key: deployment_governance
-  current_stage: STAGE_07_RELEASE_MATERIALIZATION
-  current_stage_canonical: STAGE_07_RELEASE_MATERIALIZATION
+  current_stage: STAGE_08_PROMOTE_CURRENT
+  current_stage_canonical: STAGE_08_PROMOTE_CURRENT
   last_stage_status: done
-  next_stage: STAGE_08_PROMOTE_CURRENT
-  next_stage_canonical: STAGE_08_PROMOTE_CURRENT
-  next_executable_stage: STAGE_08_PROMOTE_CURRENT
-  next_executable_stage_canonical: STAGE_08_PROMOTE_CURRENT
+  next_stage: STAGE_09_CLOSEOUT_AND_ARCHIVE
+  next_stage_canonical: STAGE_09_CLOSEOUT_AND_ARCHIVE
+  next_executable_stage: STAGE_09_CLOSEOUT_AND_ARCHIVE
+  next_executable_stage_canonical: STAGE_09_CLOSEOUT_AND_ARCHIVE
   terminal_closed: false
   completed_stages:
   - RUN_BOOTSTRAP
@@ -27,6 +27,7 @@ run_context:
   - STAGE_05_APPLY
   - STAGE_06_CORE_VALIDATION
   - STAGE_07_RELEASE_MATERIALIZATION
+  - STAGE_08_PROMOTE_CURRENT
   completed_stages_canonical:
   - RUN_BOOTSTRAP
   - STAGE_01_CHALLENGE
@@ -37,6 +38,7 @@ run_context:
   - STAGE_05_APPLY
   - STAGE_06_CORE_VALIDATION
   - STAGE_07_RELEASE_MATERIALIZATION
+  - STAGE_08_PROMOTE_CURRENT
   scope_ids:
   - ACTION_INFORM_LEARNER
   - CONSTRAINT_NO_ASSISTED_DEPLOYMENT_WITHOUT_TUTORING
@@ -85,7 +87,7 @@ run_context:
     impact_bundle: docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_16_DEPLOYMENT_GOVERNANCE_R01/inputs/impact_bundle.yaml
     integration_gate: docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_16_DEPLOYMENT_GOVERNANCE_R01/inputs/integration_gate.yaml
   source_fingerprints:
-    run_manifest.yaml: 4d1e3d24936cc584d550762201c02aae05db5abbd0fd5a0d0a4dfc41caab4857
+    run_manifest.yaml: adc4451c26e5eafb3f6deef4a9fb3853b618a83bbaf339eff95a26ec64329afb
     scope_manifest.yaml: e49256274979b7e08a7e28a7c3bf852a803a762364f10ce5ac6daed6d6313965
     impact_bundle.yaml: 518b7758c05278f45b57b106ab97164622071df3dc05e29663c6cf461a39aa71
     integration_gate.yaml: 8e3a00f87c5358fdb0d5f73645bc0031915a5e8473902c5727680c724b6ca8bb
@@ -93,9 +95,9 @@ run_context:
     neighbor_extract.yaml: 20e902c09ace22a61188a38ab1b5c0a2fd978287f10a101db549a6e007eb030b
   task_view:
     status: executable
-    raw_stage_id: STAGE_08_PROMOTE_CURRENT
-    stage_id: STAGE_08_PROMOTE_CURRENT
-    skill_ref: docs/pipelines/constitution/stages/STAGE_08_PROMOTE_CURRENT.skill.yaml
+    raw_stage_id: STAGE_09_CLOSEOUT_AND_ARCHIVE
+    stage_id: STAGE_09_CLOSEOUT_AND_ARCHIVE
+    skill_ref: docs/pipelines/constitution/stages/STAGE_09_CLOSEOUT_AND_ARCHIVE.skill.yaml
     stage_kind: hybrid
     closure_level: high
     resolved_inputs:
@@ -104,8 +106,8 @@ run_context:
     - docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_16_DEPLOYMENT_GOVERNANCE_R01/inputs/impact_bundle.yaml
     - docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_16_DEPLOYMENT_GOVERNANCE_R01/inputs/integration_gate.yaml
     execution_paths:
-      work_dir: docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_16_DEPLOYMENT_GOVERNANCE_R01/work/08_promote/
-      primary_output: docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_16_DEPLOYMENT_GOVERNANCE_R01/reports/promotion_report.yaml
+      work_dir: docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_16_DEPLOYMENT_GOVERNANCE_R01/work/09_closeout/
+      primary_output: docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_16_DEPLOYMENT_GOVERNANCE_R01/reports/closeout_report.yaml
       reports_dir: docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_16_DEPLOYMENT_GOVERNANCE_R01/reports/
     required_scripts_status:
       scope_extract_present: true
@@ -115,11 +117,11 @@ run_context:
     forbidden_actions: []
     completion_evidence: []
     allowed_transitions: {}
-    compact_execution_prompt: Dans le repo learn-it, exécute STAGE_08_PROMOTE_CURRENT du pipeline constitution
-      pour run_id=CONSTITUTION_RUN_2026_04_16_DEPLOYMENT_GOVERNANCE_R01 en mode bounded_local_run. Lis
-      d'abord docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_16_DEPLOYMENT_GOVERNANCE_R01/inputs/run_context.yaml,
+    compact_execution_prompt: Dans le repo learn-it, exécute STAGE_09_CLOSEOUT_AND_ARCHIVE du pipeline
+      constitution pour run_id=CONSTITUTION_RUN_2026_04_16_DEPLOYMENT_GOVERNANCE_R01 en mode bounded_local_run.
+      Lis d'abord docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_16_DEPLOYMENT_GOVERNANCE_R01/inputs/run_context.yaml,
       docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_16_DEPLOYMENT_GOVERNANCE_R01/inputs/scope_manifest.yaml,
       docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_16_DEPLOYMENT_GOVERNANCE_R01/inputs/impact_bundle.yaml,
       docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_16_DEPLOYMENT_GOVERNANCE_R01/inputs/integration_gate.yaml.
-      Applique le contrat stable défini dans docs/pipelines/constitution/stages/STAGE_08_PROMOTE_CURRENT.skill.yaml.
+      Applique le contrat stable défini dans docs/pipelines/constitution/stages/STAGE_09_CLOSEOUT_AND_ARCHIVE.skill.yaml.
       Ne produis que les livrables du stage courant et ne simule aucun script requis.
