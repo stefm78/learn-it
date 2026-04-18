@@ -1,0 +1,70 @@
+RELEASE_PLAN:
+  status: PASS
+  release_required: true
+  change_depth: major
+  validated_inputs:
+    core_validation: docs\pipelines\constitution\runs\CONSTITUTION_RUN_2026_04_16_DEPLOYMENT_GOVERNANCE_R01\work\06_core_validation\core_validation.yaml
+    patch_execution_report: docs\pipelines\constitution\runs\CONSTITUTION_RUN_2026_04_16_DEPLOYMENT_GOVERNANCE_R01\reports\patch_execution_report.yaml
+    patched_cores:
+      constitution: docs\pipelines\constitution\runs\CONSTITUTION_RUN_2026_04_16_DEPLOYMENT_GOVERNANCE_R01\work\05_apply\sandbox\docs\cores\current\constitution.yaml
+      referentiel: docs\pipelines\constitution\runs\CONSTITUTION_RUN_2026_04_16_DEPLOYMENT_GOVERNANCE_R01\work\05_apply\sandbox\docs\cores\current\referentiel.yaml
+      link: docs\pipelines\constitution\runs\CONSTITUTION_RUN_2026_04_16_DEPLOYMENT_GOVERNANCE_R01\work\05_apply\sandbox\docs\cores\current\link.yaml
+  compared_against_current:
+    constitution: docs\cores\current\constitution.yaml
+    referentiel: docs\cores\current\referentiel.yaml
+    link: docs\cores\current\link.yaml
+  target_versions:
+    constitution:
+      current_core_id: CORE_LEARNIT_CONSTITUTION_V3_0
+      current_version: V3_0_FINAL
+      target_core_id: CORE_LEARNIT_CONSTITUTION_V4_0
+      target_version: V4_0_FINAL
+    referentiel:
+      current_core_id: CORE_LEARNIT_REFERENTIEL_v3.0
+      current_version: V3_0_FINAL
+      target_core_id: CORE_LEARNIT_REFERENTIEL_v3.0
+      target_version: V3_0_FINAL
+    link:
+      current_core_id: CORE_LINK_LEARNIT_CONSTITUTION_V3_0__REFERENTIEL_v3.0
+      current_version: V3_0__V3_0_FINAL
+      target_core_id: CORE_LINK_LEARNIT_CONSTITUTION_V4_0__REFERENTIEL_v3.0
+      target_version: V4_0__V3_0_FINAL
+  required_renames:
+  - file_role: constitution
+    from: CORE_LEARNIT_CONSTITUTION_V3_0
+    to: CORE_LEARNIT_CONSTITUTION_V4_0
+  - file_role: link
+    from: CORE_LINK_LEARNIT_CONSTITUTION_V3_0__REFERENTIEL_v3.0
+    to: CORE_LINK_LEARNIT_CONSTITUTION_V4_0__REFERENTIEL_v3.0
+  required_reference_updates:
+  - file_role: constitution
+    from: CORE_LEARNIT_CONSTITUTION_V3_0
+    to: CORE_LEARNIT_CONSTITUTION_V4_0
+  - file_role: constitution
+    from: V3_0
+    to: V4_0
+  - file_role: link
+    from: CORE_LINK_LEARNIT_CONSTITUTION_V3_0__REFERENTIEL_v3.0
+    to: CORE_LINK_LEARNIT_CONSTITUTION_V4_0__REFERENTIEL_v3.0
+  - file_role: link
+    from: V3_0__V3_0
+    to: V4_0__V3_0
+  - file_role: referentiel
+    from: CORE_LEARNIT_CONSTITUTION_V3_0
+    to: CORE_LEARNIT_CONSTITUTION_V4_0
+  - file_role: link
+    from: CORE_LEARNIT_CONSTITUTION_V3_0
+    to: CORE_LEARNIT_CONSTITUTION_V4_0
+  link_updates:
+  - link_target_versions_realigned_with_constitution_and_referentiel
+  release_bundle:
+    release_id: CORE_RELEASE_2026_04_18_R01
+    release_path: docs/cores/releases/CORE_RELEASE_2026_04_18_R01/
+    promotion_candidate: true
+  notes:
+  - 'constitution: change_depth=major, identical_content=false, added=0, removed=0,
+    modified=7'
+  - 'referentiel: change_depth=none, identical_content=true, added=0, removed=0, modified=0'
+  - 'link: change_depth=minor, identical_content=true, added=0, removed=0, modified=1'
+  - aggregate_change_depth=major
+  - release_required=true
