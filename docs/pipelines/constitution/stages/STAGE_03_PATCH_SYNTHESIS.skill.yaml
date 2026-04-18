@@ -172,13 +172,14 @@ completion_evidence:
 
 human_actions_required:
   description: >-
-    L'IA produit le patchset.yaml et s'arrête. L'humain relit le patch,
-    vérifie sa minimalité et sa pertinence, puis confirme la transition vers
-    STAGE_04_PATCH_VALIDATION. Aucune validation formelle n'est réputée faite
-    tant que validate_patchset.py n'a pas été exécuté réellement au stage suivant.
+    L'IA produit le patchset.yaml et s'arrête. La traduction de l'arbitrage
+    validé en YAML relève de l'IA à ce stage et n'appelle pas une validation
+    humaine sémantique préalable du patchset. Après écriture du YAML, une
+    trace de transition peut être enregistrée, puis la validation déterministe
+    obligatoire est rejouée en STAGE_04 via validate_patchset.py.
   on_done:
     step: 1
-    label: Valider le patchset et mettre à jour le tracking
+    label: Tracer STAGE_03 done et passer à STAGE_04_PATCH_VALIDATION
     mandatory: true
     command: >-
       python docs/patcher/shared/update_run_tracking.py
@@ -188,30 +189,31 @@ human_actions_required:
       --stage-status done
       --run-status active
       --next-stage STAGE_04_PATCH_VALIDATION
-      --summary "Patchset synthesized and reviewed; ready for deterministic validation."
+      --summary "Patchset synthesized; ready for deterministic validation."
     expected_effect: >-
       run_manifest.yaml : current_stage passe à STAGE_04_PATCH_VALIDATION,
       STAGE_03_PATCH_SYNTHESIS apparaît dans completed_stages.
     next_step: >-
-      Relancer l'IA avec :
-      "Continue le run <RUN_ID> — STAGE_03 est done, démarre STAGE_04_PATCH_VALIDATION."
+      Enchaîner sur STAGE_04_PATCH_VALIDATION, où validate_patchset.py doit être
+      exécuté réellement selon le contrat du stage suivant.
   on_revision_needed:
     step: 1
     label: Fournir des notes de révision sur le patchset
     mandatory: false
     note: >-
-      Si le patch est trop large, ambigu, ou ne respecte pas strictement
-      l'arbitrage, relancer l'IA avec :
+      Si le patch est manifestement trop large, ambigu, ou ne respecte pas
+      strictement l'arbitrage, relancer l'IA avec :
       "Révise le patchset du run <RUN_ID> — notes : <tes notes>."
-      Ne pas exécuter update_run_tracking.py tant que le patchset n'est pas validé humainement.
+      Ne pas exécuter update_run_tracking.py tant que la révision demandée
+      n'est pas intégrée.
 
 allowed_transitions:
   on_done:
     next_stage: STAGE_04_PATCH_VALIDATION
-    precondition: human must confirm update_run_tracking.py execution
+    precondition: patchset.yaml written and tracking updated to STAGE_04_PATCH_VALIDATION
   on_revision_needed:
     next_action: ai_revises_patchset
-    note: Le statut reste in_progress jusqu'à validation humaine explicite.
+    note: Le statut reste in_progress jusqu'à intégration de la révision demandée.
 
 forbidden_actions:
   - direct_core_document_rewrite
