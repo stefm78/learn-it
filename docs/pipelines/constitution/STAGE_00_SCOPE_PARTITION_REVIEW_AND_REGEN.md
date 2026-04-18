@@ -71,6 +71,35 @@ Avant toute analyse sémantique de la partition, l'IA DOIT :
 Interdiction : l'IA ne peut pas déclarer le STAGE_00 terminé si des entrées `open` n'ont pas
 été explicitement traitées (addressed) ou reportées avec justification (wont_fix ou report décidé).
 
+## Format attendu en provenance des runs
+
+Les runs qui identifient des ajustements de scope à rejouer plus tard doivent produire dans leur
+rapport d'arbitrage une section `governance_backlog_candidates` sérialisée dans un bloc YAML
+fencé, par exemple :
+
+```yaml
+governance_backlog_candidates:
+  - candidate_id: GBC_R4_SCOPE_REF_V3_ALIGNMENT
+    backlog_entry_type: scope_extension_needed
+    title: Aligner la référence inter-Core Constitution → Référentiel v3.0
+    related_scope_keys:
+      - deployment_governance
+    originating_run_id: CONSTITUTION_RUN_2026_04_16_DEPLOYMENT_GOVERNANCE_R01
+    source_finding_id: R4
+    rationale: >-
+      La référence inter-Core actuelle pointe vers un identifiant V2.0 alors que
+      le Core référentiel courant est v3.0 ; la remise en cohérence dépasse le
+      patch local du run et doit être rejouée lors d'une révision de partition.
+    recommended_stage00_action: >-
+      Réévaluer la policy/decisions de scope generation pour canoniser la bonne
+      ancre inter-Core et régénérer le scope catalog si nécessaire.
+    candidate_status: candidate_open
+```
+
+Le backlog canonique `governance_backlog.yaml` est alimenté en STAGE_09 par export depuis ce
+bloc structuré. Le format legacy par notes `Cxx` peut rester accepté transitoirement, mais le
+format YAML ci-dessus devient le format canonique à privilégier.
+
 ## Analyse IA complémentaire
 
 Prompt recommandé :
