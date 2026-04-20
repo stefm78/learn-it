@@ -205,8 +205,12 @@ def normalize_run_relative_pattern(pattern: str, pipeline_id: str, run_id: str) 
         if normalized.startswith(prefix):
             normalized = normalized[len(prefix) :]
             break
-    return normalized.strip()
 
+    # Les placeholders skill comme <id> doivent être traités comme des globs,
+    # pas comme des chemins littéraux.
+    normalized = re.sub(r"<[^/<>]+>", "*", normalized)
+
+    return normalized.strip()
 
 def normalize_token(value: str) -> str:
     return re.sub(r"[^a-z0-9]+", "_", value.strip().lower()).strip("_")
@@ -259,11 +263,10 @@ def derive_restart_stage_from_transition(
 
 
 def execution_path_required_by_contract(path_key: str, required_tokens: List[str]) -> Optional[str]:
-    key_fragments = split_token_fragments(path_key)
     normalized_key = normalize_token(path_key)
 
     candidate_fragments: Set[str] = {normalized_key}
-    for fragment in key_fragments:
+    for fragment in split_token_fragments(path_key):
         candidate_fragments.add(fragment)
 
     for suffix in PATH_KEY_SUFFIXES:
@@ -275,18 +278,31 @@ def execution_path_required_by_contract(path_key: str, required_tokens: List[str
 
     for required_token in required_tokens:
         normalized_required = normalize_token(required_token)
+
+        # On ne dérive un execution_path comme preuve que si le contrat parle
+        # explicitement de matérialisation. Les tokens *_executed_for_real ne
+        # doivent pas suffire à justifier un dossier structurel.
+        if "materialized" not in normalized_required:
+            continue
+
         required_fragments = split_token_fragments(required_token)
 
         for fragment in candidate_fragments:
             if not fragment:
                 continue
-            if fragment in normalized_required:
+
+            # Matching plus strict : on évite les collisions trop larges sur
+            # "release", "report", etc.
+            if fragment == normalized_required:
                 return required_token
             if fragment in required_fragments:
                 return required_token
+            if normalized_required.startswith(fragment + "_"):
+                return required_token
+            if normalized_required.endswith("_" + fragment):
+                return required_token
 
     return None
-
 
 def derive_stage_contract(
     *,
