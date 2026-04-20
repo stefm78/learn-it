@@ -3,17 +3,17 @@ run_manifest:
   pipeline_id: constitution
   run_id: CONSTITUTION_RUN_2026_04_16_DEPLOYMENT_GOVERNANCE_R01
   mode: bounded_local_run
-  status: active
+  status: closed
   scope_key: deployment_governance
   scope_binding:
     scope_id: CONSTITUTION_SCOPE_DEPLOYMENT_GOVERNANCE
     scope_key: deployment_governance
     scope_definition_ref: docs/pipelines/constitution/scope_catalog/scope_definitions/deployment_governance.yaml
   execution_state:
-    current_stage: STAGE_08_PROMOTE_CURRENT
+    current_stage: STAGE_09_CLOSEOUT_AND_ARCHIVE
     last_stage_status: done
-    last_updated: '2026-04-18T22:58:35Z'
-    next_stage: STAGE_09_CLOSEOUT_AND_ARCHIVE
+    last_updated: '2026-04-18T23:01:58Z'
+    next_stage: ''
     completed_stages:
     - RUN_BOOTSTRAP
     - STAGE_01_CHALLENGE
@@ -25,6 +25,7 @@ run_manifest:
     - STAGE_06_CORE_VALIDATION
     - STAGE_07_RELEASE_MATERIALIZATION
     - STAGE_08_PROMOTE_CURRENT
+    - STAGE_09_CLOSEOUT_AND_ARCHIVE
     stage_history:
     - stage_id: RUN_BOOTSTRAP
       stage_status: in_progress
@@ -90,6 +91,11 @@ run_manifest:
       recorded_at: '2026-04-18T22:58:35Z'
       summary: Promotion to current completed with validated manifests; ready for
         closeout.
+    - stage_id: STAGE_09_CLOSEOUT_AND_ARCHIVE
+      stage_status: done
+      recorded_at: '2026-04-18T23:01:58Z'
+      summary: Run closeout completed with archive and final summary; pipeline run
+        is closed.
   scope_tracking:
     scope_status: confirmed_for_bounded_run
     last_updated: '2026-04-16T13:46:19Z'

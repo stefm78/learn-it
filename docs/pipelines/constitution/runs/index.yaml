@@ -3,14 +3,7 @@ runs_index:
   pipeline_id: constitution
   status: active
   last_updated: '2026-04-18'
-  active_runs:
-  - run_id: CONSTITUTION_RUN_2026_04_16_DEPLOYMENT_GOVERNANCE_R01
-    scope_id: CONSTITUTION_SCOPE_DEPLOYMENT_GOVERNANCE
-    scope_key: deployment_governance
-    run_status: active
-    current_stage: STAGE_09_CLOSEOUT_AND_ARCHIVE
-    mode: bounded_local_run
-    run_manifest_ref: docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_16_DEPLOYMENT_GOVERNANCE_R01/run_manifest.yaml
+  active_runs: []
   closed_runs:
   - run_id: CONSTITUTION_RUN_2026_04_13_DEPLOYMENT_GOVERNANCE_R01
     scope_id: CONSTITUTION_SCOPE_DEPLOYMENT_GOVERNANCE
@@ -37,6 +30,13 @@ runs_index:
     scope_status: confirmed_for_bounded_run
     closure_mode: abandoned
     archived_at: '2026-04-14T07:40:18Z'
+  - run_id: CONSTITUTION_RUN_2026_04_16_DEPLOYMENT_GOVERNANCE_R01
+    scope_id: CONSTITUTION_SCOPE_DEPLOYMENT_GOVERNANCE
+    scope_key: deployment_governance
+    run_status: closed
+    current_stage: STAGE_09_CLOSEOUT_AND_ARCHIVE
+    mode: bounded_local_run
+    run_manifest_ref: docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_16_DEPLOYMENT_GOVERNANCE_R01/run_manifest.yaml
   resolution_hints:
   - If a single active run exists for a resolved scope, prefer resume.
   - If no active run exists for a resolved scope, create a new run.
