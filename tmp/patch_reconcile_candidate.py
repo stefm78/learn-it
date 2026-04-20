@@ -2,7 +2,6 @@
 from __future__ import annotations
 
 from pathlib import Path
-import re
 
 
 TARGET = Path("docs/patcher/shared/reconcile_run.py")
@@ -29,12 +28,14 @@ def parse_args() -> argparse.Namespace:
 '''
 
 
-NEW_COMPACT_HELPERS = '''
+NEW_COMPACT_HELPER = '''
 def build_compact_reconciliation_payload(payload: Dict[str, Any]) -> Dict[str, Any]:
     repaired_artifacts = payload.get("repaired_artifacts", [])
     invalidated_downstream_stage_set = payload.get("invalidated_downstream_stage_set", [])
 
-    would_change_material_state = bool(repaired_artifacts or invalidated_downstream_stage_set)
+    would_change_material_state = bool(
+        repaired_artifacts or invalidated_downstream_stage_set
+    )
 
     compact_payload = {
         "status": payload.get("status", ""),
@@ -59,64 +60,7 @@ def build_compact_reconciliation_payload(payload: Dict[str, Any]) -> Dict[str, A
 '''
 
 
-def replace_function(source: str, func_name: str, new_block: str) -> str:
-    pattern = rf"def {func_name}\\(.*?(?=^def |^if __name__ == |\\Z)"
-    updated, count = re.subn(pattern, new_block.strip() + "\\n\\n", source, flags=re.S | re.M)
-    if count != 1:
-        raise RuntimeError(f"Unable to replace function {func_name}: count={count}")
-    return updated
-
-
-def insert_helper_before_main(source: str, helper_block: str) -> str:
-    marker = "\\ndef main() -> int:\\n"
-    if helper_block.strip() in source:
-        return source
-    if marker not in source:
-        raise RuntimeError("main() marker not found")
-    return source.replace(marker, "\\n\\n" + helper_block.strip() + "\\n\\n\\ndef main() -> int:\\n", 1)
-
-
-def replace_result_print_block(source: str) -> str:
-    old = '''
-    result = {
-        "reconcile_run": {
-            "status": "DONE",
-            "apply": args.apply,
-            "pipeline_id": args.pipeline,
-            "run_id": args.run_id,
-            "mode": mode,
-            "reconciliation_status": reconciliation_status,
-            "trusted_prefix_end_stage": trusted_prefix[-1] if trusted_prefix else "",
-            "restart_stage": restart_stage or "",
-            "restart_stage_reason": restart_stage_reason,
-            "restart_stage_policy_source": restart_stage_policy_source,
-            "claimed_done_stages": claimed_done,
-            "trusted_prefix": trusted_prefix,
-            "evidence_derivation_mode": (
-                "skill_expected_outputs_plus_required_execution_paths_with_fallback"
-            ),
-            "missing_evidence_by_stage": stage_missing_map,
-            "repaired_artifacts": repaired_artifacts,
-            "repair_commands": repair_commands,
-            "invalidated_downstream_stage_set": invalidated_stages,
-            "removed_artifacts": removed_artifacts,
-            "stage_contract_summary": stage_contract_summary,
-            "run_status_after_reconciliation": final_manifest.get("status", ""),
-            "current_stage_after_reconciliation": final_exec_state.get("current_stage", ""),
-            "next_stage_after_reconciliation": final_exec_state.get("next_stage", ""),
-            "run_context_rebuild": run_context_command,
-            "next_best_action": "CONTINUE_ACTIVE_RUN" if restart_stage else "INSPECT",
-            "next_best_action_reason": (
-                f"Run repositioned on {restart_stage}."
-                if restart_stage
-                else "Run is fully reconciled and does not require stage restart."
-            ),
-        }
-    }
-
-    print(json.dumps(result, indent=2, ensure_ascii=False))
-'''
-    new = '''
+NEW_RESULT_BLOCK = '''
     full_result = {
         "reconcile_run": {
             "status": "DONE",
@@ -161,9 +105,74 @@ def replace_result_print_block(source: str) -> str:
 
     print(json.dumps(result, indent=2, ensure_ascii=False))
 '''
-    if old not in source:
-        raise RuntimeError("Result print block not found")
-    return source.replace(old, new, 1)
+
+
+def replace_top_level_function(source: str, func_name: str, new_block: str) -> str:
+    lines = source.splitlines(keepends=True)
+
+    start = None
+    for i, line in enumerate(lines):
+        if line.startswith(f"def {func_name}("):
+            start = i
+            break
+    if start is None:
+        raise RuntimeError(f"Function not found: {func_name}")
+
+    end = None
+    for i in range(start + 1, len(lines)):
+        line = lines[i]
+        if line.startswith("def ") or line.startswith('if __name__ == "__main__":'):
+            end = i
+            break
+    if end is None:
+        end = len(lines)
+
+    replacement = new_block.strip("\n").splitlines(keepends=True)
+    replacement = [line if line.endswith("\n") else line + "\n" for line in replacement]
+    replacement.append("\n")
+
+    new_lines = lines[:start] + replacement + lines[end:]
+    return "".join(new_lines)
+
+
+def insert_helper_before_main(source: str, helper_block: str) -> str:
+    marker = "def main() -> int:\n"
+    idx = source.find(marker)
+    if idx == -1:
+        raise RuntimeError("main() marker not found")
+
+    if helper_block.strip() in source:
+        return source
+
+    helper_text = helper_block.strip("\n") + "\n\n"
+    return source[:idx] + helper_text + source[idx:]
+
+
+def replace_result_block(source: str, new_block: str) -> str:
+    lines = source.splitlines(keepends=True)
+
+    start = None
+    for i, line in enumerate(lines):
+        if line == '    result = {\n':
+            start = i
+            break
+    if start is None:
+        raise RuntimeError("Result block start not found")
+
+    end = None
+    for i in range(start, len(lines)):
+        if lines[i] == '    print(json.dumps(result, indent=2, ensure_ascii=False))\n':
+            end = i + 1
+            break
+    if end is None:
+        raise RuntimeError("Result block end not found")
+
+    replacement = new_block.strip("\n").splitlines(keepends=True)
+    replacement = [line if line.endswith("\n") else line + "\n" for line in replacement]
+    replacement.append("\n")
+
+    new_lines = lines[:start] + replacement + lines[end:]
+    return "".join(new_lines)
 
 
 def main() -> None:
@@ -171,9 +180,10 @@ def main() -> None:
         raise FileNotFoundError(f"Missing target file: {TARGET}")
 
     text = TARGET.read_text(encoding="utf-8")
-    text = replace_function(text, "parse_args", NEW_PARSE_ARGS)
-    text = insert_helper_before_main(text, NEW_COMPACT_HELPERS)
-    text = replace_result_print_block(text)
+
+    text = replace_top_level_function(text, "parse_args", NEW_PARSE_ARGS)
+    text = insert_helper_before_main(text, NEW_COMPACT_HELPER)
+    text = replace_result_block(text, NEW_RESULT_BLOCK)
 
     TARGET.write_text(text, encoding="utf-8")
     print(f"Patched: {TARGET}")

@@ -144,8 +144,13 @@ def parse_args() -> argparse.Namespace:
         action="store_true",
         help="Apply the reconciliation plan materially.",
     )
+    parser.add_argument(
+        "--output-mode",
+        choices=("full", "compact"),
+        default="full",
+        help="Select reconciliation payload verbosity.",
+    )
     return parser.parse_args()
-
 
 def run_script(cmd: List[str], *, apply: bool, cwd: Path) -> Dict[str, Any]:
     if not apply:
@@ -776,6 +781,35 @@ def summarize_stage_contract(contract: Dict[str, Any]) -> Dict[str, Any]:
     }
 
 
+def build_compact_reconciliation_payload(payload: Dict[str, Any]) -> Dict[str, Any]:
+    repaired_artifacts = payload.get("repaired_artifacts", [])
+    invalidated_downstream_stage_set = payload.get("invalidated_downstream_stage_set", [])
+
+    would_change_material_state = bool(
+        repaired_artifacts or invalidated_downstream_stage_set
+    )
+
+    compact_payload = {
+        "status": payload.get("status", ""),
+        "apply": payload.get("apply", False),
+        "pipeline_id": payload.get("pipeline_id", ""),
+        "run_id": payload.get("run_id", ""),
+        "mode": payload.get("mode", ""),
+        "reconciliation_status": payload.get("reconciliation_status", ""),
+        "trusted_prefix_end_stage": payload.get("trusted_prefix_end_stage", ""),
+        "restart_stage": payload.get("restart_stage", ""),
+        "repaired_artifacts": repaired_artifacts,
+        "invalidated_downstream_stage_set": invalidated_downstream_stage_set,
+        "run_status_after_reconciliation": payload.get("run_status_after_reconciliation", ""),
+        "current_stage_after_reconciliation": payload.get("current_stage_after_reconciliation", ""),
+        "next_stage_after_reconciliation": payload.get("next_stage_after_reconciliation", ""),
+        "next_best_action": payload.get("next_best_action", ""),
+        "next_best_action_reason": payload.get("next_best_action_reason", ""),
+        "would_change_material_state": would_change_material_state,
+    }
+
+    return {"reconcile_run": compact_payload}
+
 def main() -> int:
     args = parse_args()
     if args.pipeline != "constitution":
@@ -957,7 +991,7 @@ def main() -> int:
     final_manifest = manifest_data.get("run_manifest", {})
     final_exec_state = final_manifest.get("execution_state", {})
 
-    result = {
+    full_result = {
         "reconcile_run": {
             "status": "DONE",
             "apply": args.apply,
@@ -993,7 +1027,14 @@ def main() -> int:
         }
     }
 
+    result = (
+        build_compact_reconciliation_payload(full_result["reconcile_run"])
+        if args.output_mode == "compact"
+        else full_result
+    )
+
     print(json.dumps(result, indent=2, ensure_ascii=False))
+
     return 0
 
 
