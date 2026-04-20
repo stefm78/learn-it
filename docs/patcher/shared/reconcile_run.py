@@ -1,29 +1,27 @@
 #!/usr/bin/env python3
 """
-Reconcile a constitution run from its run_id.
+Contract-aware reconciliation candidate for constitution runs.
 
-Scope of this initial version:
+Intended use:
+- save as tmp/reconcile_run_contract_upgrade_candidate.py
+- compare with docs/patcher/shared/reconcile_run.py
+- optionally replace the central script after review
+
+Scope:
 - pipeline: constitution
 - mode: bounded_local_run only
-- purpose: restore a run to an executable state without replaying business stages
-
-Principles:
-- compute the longest trusted prefix of stages that is still materially justified
-- repair only derivable artifacts via their owner scripts
-- truncate downstream state that is no longer justifiable
-- rebuild run_context.yaml after applied reconciliation
-- do not create an audit layer or a persistent drift report
 """
 
 from __future__ import annotations
 
 import argparse
 import json
+import re
 import shutil
 import subprocess
 import sys
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any, Dict, List, Optional, Set, Tuple
 
 import yaml
 
@@ -94,6 +92,9 @@ DERIVABLE_CONTEXT = [
     "inputs/run_context.yaml",
 ]
 
+STAGE_ID_TOKEN_RE = re.compile(r"STAGE_[0-9]{2}(?:_[A-Z0-9]+)+")
+PATH_KEY_SUFFIXES = ("_root", "_dir", "_path")
+
 
 class ReconciliationError(Exception):
     pass
@@ -133,10 +134,6 @@ def dump_yaml(path: Path, data: Dict[str, Any]) -> None:
     )
 
 
-def repo_root_from_script(script_path: Path) -> Path:
-    return script_path.resolve().parents[3]
-
-
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="Reconcile a constitution run.")
     parser.add_argument("--pipeline", required=True)
@@ -152,12 +149,24 @@ def parse_args() -> argparse.Namespace:
 
 def run_script(cmd: List[str], *, apply: bool, cwd: Path) -> Dict[str, Any]:
     if not apply:
-        return {"planned": True, "applied": False, "command": " ".join(cmd), "returncode": None}
+        return {
+            "planned": True,
+            "applied": False,
+            "command": " ".join(cmd),
+            "returncode": None,
+        }
 
     result = subprocess.run(cmd, cwd=str(cwd), capture_output=False, text=True)
     if result.returncode != 0:
-        raise ReconciliationError(f"Command failed ({result.returncode}): {' '.join(cmd)}")
-    return {"planned": True, "applied": True, "command": " ".join(cmd), "returncode": result.returncode}
+        raise ReconciliationError(
+            f"Command failed ({result.returncode}): {' '.join(cmd)}"
+        )
+    return {
+        "planned": True,
+        "applied": True,
+        "command": " ".join(cmd),
+        "returncode": result.returncode,
+    }
 
 
 def stage_index(stage_id: str) -> int:
@@ -176,7 +185,14 @@ def matches_any_glob(base: Path, pattern: str) -> bool:
 
 
 def stage_skill_path(repo_root: Path, pipeline_id: str, stage_id: str) -> Path:
-    return repo_root / "docs" / "pipelines" / pipeline_id / "stages" / f"{stage_id}.skill.yaml"
+    return (
+        repo_root
+        / "docs"
+        / "pipelines"
+        / pipeline_id
+        / "stages"
+        / f"{stage_id}.skill.yaml"
+    )
 
 
 def normalize_run_relative_pattern(pattern: str, pipeline_id: str, run_id: str) -> str:
@@ -184,22 +200,132 @@ def normalize_run_relative_pattern(pattern: str, pipeline_id: str, run_id: str) 
         f"docs/pipelines/{pipeline_id}/runs/<run_id>/",
         f"docs/pipelines/{pipeline_id}/runs/{run_id}/",
     ]
+    normalized = pattern.strip()
     for prefix in prefixes:
-        if pattern.startswith(prefix):
-            return pattern[len(prefix):]
-    return pattern
+        if normalized.startswith(prefix):
+            normalized = normalized[len(prefix) :]
+            break
+
+    # Les placeholders skill comme <id> doivent être traités comme des globs,
+    # pas comme des chemins littéraux.
+    normalized = re.sub(r"<[^/<>]+>", "*", normalized)
+
+    return normalized.strip()
+
+def normalize_token(value: str) -> str:
+    return re.sub(r"[^a-z0-9]+", "_", value.strip().lower()).strip("_")
 
 
-def derive_stage_evidence_patterns(
+def split_token_fragments(value: str) -> List[str]:
+    normalized = normalize_token(value)
+    return [fragment for fragment in normalized.split("_") if fragment]
+
+
+def extract_stage_ids_from_text(value: str) -> List[str]:
+    stages: List[str] = []
+    seen: Set[str] = set()
+    for token in STAGE_ID_TOKEN_RE.findall(value or ""):
+        stage_id = canonical_stage_id(token.rstrip("_"))
+        if stage_id in STAGE_ORDER and stage_id not in seen:
+            stages.append(stage_id)
+            seen.add(stage_id)
+    return stages
+
+
+def derive_restart_stage_from_transition(
+    *,
+    stage_id: str,
+    transition_block: Any,
+    fallback_stage: str,
+) -> Tuple[str, List[str], str]:
+    if not isinstance(transition_block, dict):
+        return fallback_stage, [], "default_fallback_stage"
+
+    transition_values = [
+        str(transition_block.get("next_stage", "")),
+        str(transition_block.get("next_action", "")),
+        str(transition_block.get("precondition", "")),
+        str(transition_block.get("note", "")),
+    ]
+    transition_text = " ".join(part for part in transition_values if part).strip()
+    normalized_text = normalize_token(transition_text)
+
+    if "retry_same_stage" in normalized_text or "same_stage" in normalized_text:
+        return stage_id, [stage_id], "transition_retry_same_stage"
+
+    candidates = extract_stage_ids_from_text(transition_text)
+    if len(candidates) == 1:
+        return candidates[0], candidates, "transition_single_stage"
+    if len(candidates) > 1:
+        return fallback_stage, candidates, "transition_ambiguous_fallback_stage"
+
+    return fallback_stage, [], "default_fallback_stage"
+
+
+def execution_path_required_by_contract(path_key: str, required_tokens: List[str]) -> Optional[str]:
+    normalized_key = normalize_token(path_key)
+
+    def trim_suffixes(value: str) -> str:
+        trimmed = value
+        for suffix in PATH_KEY_SUFFIXES:
+            if trimmed.endswith(suffix):
+                trimmed = trimmed[: -len(suffix)]
+                break
+        return trimmed.strip("_")
+
+    base_key = trim_suffixes(normalized_key)
+
+    # Aliases explicites pour les cas réellement voulus par les skills actuels.
+    explicit_aliases = {
+        "sandbox_root": {
+            "sandbox_or_output_tree_materialized",
+            "sandbox_root_materialized",
+            "sandbox_materialized",
+        },
+        "execution_report": {
+            "patch_execution_report_materialized",
+            "execution_report_materialized",
+        },
+    }
+
+    allowed_tokens = {normalize_token(token) for token in explicit_aliases.get(normalized_key, set())}
+
+    for required_token in required_tokens:
+        normalized_required = normalize_token(required_token)
+
+        # On ne dérive un execution_path comme preuve que pour un token de
+        # matérialisation explicite, jamais pour un simple *_executed_for_real.
+        if "materialized" not in normalized_required:
+            continue
+
+        # 1) Cas explicitement autorisés.
+        if normalized_required in allowed_tokens:
+            return required_token
+
+        # 2) Fallback conservateur :
+        #    on n'accepte que des correspondances quasi exactes sur le nom du
+        #    chemin déclaré, après retrait du suffixe _root/_dir/_path.
+        if base_key:
+            if normalized_required == f"{base_key}_materialized":
+                return required_token
+            if normalized_required.startswith(f"{base_key}_") and normalized_required.endswith("_materialized"):
+                return required_token
+            if normalized_required.endswith(f"_{base_key}_materialized"):
+                return required_token
+
+    return None
+
+def derive_stage_contract(
     *,
     repo_root: Path,
     pipeline_id: str,
     run_id: str,
     stage_id: str,
     mode: str,
-) -> List[str]:
+) -> Dict[str, Any]:
     skill_path = stage_skill_path(repo_root, pipeline_id, stage_id)
     skill_data = load_yaml_optional(skill_path)
+
     expected_outputs = skill_data.get("expected_outputs", {})
     if not isinstance(expected_outputs, dict):
         expected_outputs = {}
@@ -208,32 +334,154 @@ def derive_stage_evidence_patterns(
     if not isinstance(mode_outputs, dict):
         mode_outputs = {}
 
+    script_execution_contract = skill_data.get("script_execution_contract", {})
+    if not isinstance(script_execution_contract, dict):
+        script_execution_contract = {}
+
+    required_before_pass_or_fail = script_execution_contract.get(
+        "required_before_pass_or_fail", []
+    )
+    if not isinstance(required_before_pass_or_fail, list):
+        required_before_pass_or_fail = []
+
+    execution_paths = skill_data.get("execution_paths", {})
+    if not isinstance(execution_paths, dict):
+        execution_paths = {}
+
+    mode_execution_paths = execution_paths.get(mode, {})
+    if not isinstance(mode_execution_paths, dict):
+        mode_execution_paths = {}
+
+    evidence_items: List[Dict[str, Any]] = []
     derived_patterns: List[str] = []
 
     for key in ("report_path_pattern", "primary_output_path_pattern"):
         value = mode_outputs.get(key)
         if isinstance(value, str) and value.strip():
-            derived_patterns.append(value.strip())
+            normalized_pattern = normalize_run_relative_pattern(value, pipeline_id, run_id)
+            if normalized_pattern:
+                evidence_items.append(
+                    {
+                        "source": "expected_outputs",
+                        "key": key,
+                        "pattern": normalized_pattern,
+                    }
+                )
+                derived_patterns.append(normalized_pattern)
 
     raw_artifacts = mode_outputs.get("required_raw_artifacts", [])
     if isinstance(raw_artifacts, list):
         for value in raw_artifacts:
             if isinstance(value, str) and value.strip():
-                derived_patterns.append(value.strip())
+                normalized_pattern = normalize_run_relative_pattern(value, pipeline_id, run_id)
+                if normalized_pattern:
+                    evidence_items.append(
+                        {
+                            "source": "expected_outputs",
+                            "key": "required_raw_artifacts",
+                            "pattern": normalized_pattern,
+                        }
+                    )
+                    derived_patterns.append(normalized_pattern)
 
-    normalized: List[str] = []
-    for pattern in derived_patterns:
-        normalized_pattern = normalize_run_relative_pattern(pattern, pipeline_id, run_id)
-        if normalized_pattern:
-            normalized.append(normalized_pattern)
+    for path_key, raw_path in mode_execution_paths.items():
+        if not isinstance(raw_path, str) or not raw_path.strip():
+            continue
 
-    if normalized:
-        return sorted(set(normalized))
+        matched_token = execution_path_required_by_contract(
+            path_key, required_before_pass_or_fail
+        )
+        if not matched_token:
+            continue
 
-    return STAGE_EVIDENCE_FALLBACK.get(stage_id, [])
+        normalized_pattern = normalize_run_relative_pattern(raw_path, pipeline_id, run_id)
+        if not normalized_pattern:
+            continue
+
+        evidence_items.append(
+            {
+                "source": "execution_paths",
+                "key": path_key,
+                "pattern": normalized_pattern,
+                "required_by_contract_token": matched_token,
+            }
+        )
+        derived_patterns.append(normalized_pattern)
+
+    normalized_patterns = sorted(set(derived_patterns))
+    evidence_derivation_source = "skill_contract"
+
+    if not normalized_patterns:
+        normalized_patterns = STAGE_EVIDENCE_FALLBACK.get(stage_id, [])
+        evidence_items = [
+            {
+                "source": "fallback",
+                "key": "stage_evidence_fallback",
+                "pattern": pattern,
+            }
+            for pattern in normalized_patterns
+        ]
+        evidence_derivation_source = "fallback"
+
+    allowed_transitions = skill_data.get("allowed_transitions", {})
+    if not isinstance(allowed_transitions, dict):
+        allowed_transitions = {}
+
+    blocked_transition = allowed_transitions.get("on_blocked", {})
+    fail_transition = allowed_transitions.get("on_fail", {})
+
+    blocked_restart_stage, blocked_candidates, blocked_policy_source = (
+        derive_restart_stage_from_transition(
+            stage_id=stage_id,
+            transition_block=blocked_transition,
+            fallback_stage=stage_id,
+        )
+    )
+    fail_restart_stage, fail_candidates, fail_policy_source = (
+        derive_restart_stage_from_transition(
+            stage_id=stage_id,
+            transition_block=fail_transition,
+            fallback_stage=stage_id,
+        )
+    )
+
+    if script_execution_contract.get("blocked_if_missing_evidence") is True:
+        missing_evidence_restart_stage = blocked_restart_stage
+        missing_evidence_candidates = blocked_candidates
+        missing_evidence_policy_source = (
+            f"blocked_if_missing_evidence::{blocked_policy_source}"
+        )
+    else:
+        missing_evidence_restart_stage = stage_id
+        missing_evidence_candidates = [stage_id]
+        missing_evidence_policy_source = "default_same_stage_no_blocked_if_missing_evidence"
+
+    return {
+        "stage_id": stage_id,
+        "skill_path": str(skill_path),
+        "evidence_patterns": normalized_patterns,
+        "evidence_items": evidence_items,
+        "evidence_derivation_source": evidence_derivation_source,
+        "blocked_if_missing_evidence": script_execution_contract.get(
+            "blocked_if_missing_evidence", False
+        )
+        is True,
+        "missing_evidence_restart_stage": missing_evidence_restart_stage,
+        "missing_evidence_restart_stage_candidates": missing_evidence_candidates,
+        "missing_evidence_policy_source": missing_evidence_policy_source,
+        "blocked_restart_stage": blocked_restart_stage,
+        "blocked_restart_stage_candidates": blocked_candidates,
+        "blocked_policy_source": blocked_policy_source,
+        "fail_restart_stage": fail_restart_stage,
+        "fail_restart_stage_candidates": fail_candidates,
+        "fail_policy_source": fail_policy_source,
+    }
 
 
-def stage_evidence_status(run_root: Path, evidence_patterns: List[str]) -> Tuple[bool, List[str]]:
+def stage_evidence_status(
+    run_root: Path,
+    evidence_patterns: List[str],
+) -> Tuple[bool, List[str]]:
     missing: List[str] = []
     for pattern in evidence_patterns:
         if "*" in pattern or "?" in pattern or "[" in pattern:
@@ -251,15 +499,16 @@ def derive_claimed_done_stages(run_manifest_root: Dict[str, Any]) -> List[str]:
     if not isinstance(completed, list):
         completed = []
 
-    normalized = []
-    seen = set()
+    normalized: List[str] = []
+    seen: Set[str] = set()
+
     for stage in completed:
         if not isinstance(stage, str):
             continue
-        c = canonical_stage_id(stage)
-        if c in STAGE_ORDER and c not in seen:
-            normalized.append(c)
-            seen.add(c)
+        c_stage = canonical_stage_id(stage)
+        if c_stage in STAGE_ORDER and c_stage not in seen:
+            normalized.append(c_stage)
+            seen.add(c_stage)
 
     current_stage = canonical_stage_id(str(exec_state.get("current_stage", "")))
     last_stage_status = str(exec_state.get("last_stage_status", ""))
@@ -298,8 +547,10 @@ def repair_derivable_inputs(
         cmd = [
             sys.executable,
             str(repo_root / "docs" / "patcher" / "shared" / "materialize_run_inputs.py"),
-            "--pipeline", pipeline_id,
-            "--run-id", run_id,
+            "--pipeline",
+            pipeline_id,
+            "--run-id",
+            run_id,
         ]
         commands.append(run_script(cmd, apply=apply, cwd=repo_root))
         repaired.extend(missing_inputs)
@@ -309,8 +560,10 @@ def repair_derivable_inputs(
         cmd = [
             sys.executable,
             str(repo_root / "docs" / "patcher" / "shared" / "extract_scope_slice.py"),
-            "--pipeline", pipeline_id,
-            "--run-id", run_id,
+            "--pipeline",
+            pipeline_id,
+            "--run-id",
+            run_id,
         ]
         commands.append(run_script(cmd, apply=apply, cwd=repo_root))
         repaired.extend(missing_extracts)
@@ -320,9 +573,12 @@ def repair_derivable_inputs(
         cmd = [
             sys.executable,
             str(repo_root / "docs" / "patcher" / "shared" / "build_run_context.py"),
-            "--pipeline", pipeline_id,
-            "--run-id", run_id,
-            "--repo-root", str(repo_root),
+            "--pipeline",
+            pipeline_id,
+            "--run-id",
+            run_id,
+            "--repo-root",
+            str(repo_root),
         ]
         commands.append(run_script(cmd, apply=apply, cwd=repo_root))
         repaired.extend(missing_context)
@@ -351,17 +607,25 @@ def invalidate_downstream_artifacts(
     run_root: Path,
     invalidated_stages: List[str],
     apply: bool,
+    stage_contract_cache: Dict[str, Dict[str, Any]],
 ) -> List[str]:
     removed: List[str] = []
 
+    def get_stage_contract(stage_id: str) -> Dict[str, Any]:
+        if stage_id not in stage_contract_cache:
+            stage_contract_cache[stage_id] = derive_stage_contract(
+                repo_root=repo_root,
+                pipeline_id=pipeline_id,
+                run_id=run_id,
+                stage_id=stage_id,
+                mode=mode,
+            )
+        return stage_contract_cache[stage_id]
+
     for stage in invalidated_stages:
-        evidence_patterns = derive_stage_evidence_patterns(
-            repo_root=repo_root,
-            pipeline_id=pipeline_id,
-            run_id=run_id,
-            stage_id=stage,
-            mode=mode,
-        )
+        stage_contract = get_stage_contract(stage)
+        evidence_patterns = stage_contract["evidence_patterns"]
+
         for pattern in evidence_patterns:
             if "*" in pattern or "?" in pattern or "[" in pattern:
                 for match in run_root.glob(pattern):
@@ -411,7 +675,8 @@ def rewrite_manifest_for_reconciliation(
     stage_history = exec_state.get("stage_history", [])
     if isinstance(stage_history, list):
         exec_state["stage_history"] = [
-            item for item in stage_history
+            item
+            for item in stage_history
             if isinstance(item, dict)
             and canonical_stage_id(str(item.get("stage_id", ""))) in trusted_prefix
         ]
@@ -479,11 +744,36 @@ def rebuild_run_context(
     cmd = [
         sys.executable,
         str(repo_root / "docs" / "patcher" / "shared" / "build_run_context.py"),
-        "--pipeline", pipeline_id,
-        "--run-id", run_id,
-        "--repo-root", str(repo_root),
+        "--pipeline",
+        pipeline_id,
+        "--run-id",
+        run_id,
+        "--repo-root",
+        str(repo_root),
     ]
     return run_script(cmd, apply=apply, cwd=repo_root)
+
+
+def summarize_stage_contract(contract: Dict[str, Any]) -> Dict[str, Any]:
+    return {
+        "evidence_patterns": contract.get("evidence_patterns", []),
+        "evidence_items": contract.get("evidence_items", []),
+        "evidence_derivation_source": contract.get("evidence_derivation_source", ""),
+        "blocked_if_missing_evidence": contract.get("blocked_if_missing_evidence", False),
+        "missing_evidence_restart_stage": contract.get(
+            "missing_evidence_restart_stage", ""
+        ),
+        "missing_evidence_policy_source": contract.get(
+            "missing_evidence_policy_source", ""
+        ),
+        "blocked_restart_stage": contract.get("blocked_restart_stage", ""),
+        "blocked_policy_source": contract.get("blocked_policy_source", ""),
+        "fail_restart_stage": contract.get("fail_restart_stage", ""),
+        "fail_policy_source": contract.get("fail_policy_source", ""),
+        "fail_restart_stage_candidates": contract.get(
+            "fail_restart_stage_candidates", []
+        ),
+    }
 
 
 def main() -> int:
@@ -510,7 +800,7 @@ def main() -> int:
     if mode != "bounded_local_run":
         raise SystemExit(
             f"Unsupported mode for this initial version: {mode!r}. "
-            "This first implementation supports bounded_local_run only."
+            "This implementation supports bounded_local_run only."
         )
 
     repaired_artifacts, repair_commands = repair_derivable_inputs(
@@ -521,52 +811,89 @@ def main() -> int:
         apply=args.apply,
     )
 
-    # Reload after potential repairs
     manifest_data = load_yaml(run_manifest_path)
     run_manifest_root = manifest_data.get("run_manifest", {})
+    exec_state = run_manifest_root.get("execution_state", {})
 
     claimed_done = derive_claimed_done_stages(run_manifest_root)
     claimed_prefix = contiguous_claimed_prefix(claimed_done)
 
+    current_stage = canonical_stage_id(str(exec_state.get("current_stage", "")))
+    last_stage_status = str(exec_state.get("last_stage_status", ""))
+    next_stage = (
+        canonical_stage_id(str(exec_state.get("next_stage", "")))
+        if exec_state.get("next_stage")
+        else ""
+    )
+
+    stage_contract_cache: Dict[str, Dict[str, Any]] = {}
+
+    def get_stage_contract(stage_id: str) -> Dict[str, Any]:
+        if stage_id not in stage_contract_cache:
+            stage_contract_cache[stage_id] = derive_stage_contract(
+                repo_root=repo_root,
+                pipeline_id=args.pipeline,
+                run_id=args.run_id,
+                stage_id=stage_id,
+                mode=mode,
+            )
+        return stage_contract_cache[stage_id]
+
     trusted_prefix: List[str] = []
     stage_missing_map: Dict[str, List[str]] = {}
     first_non_trusted_stage: Optional[str] = None
+    restart_stage: Optional[str] = None
+    restart_stage_reason = ""
+    restart_stage_policy_source = ""
 
     for stage in claimed_prefix:
-        evidence_patterns = derive_stage_evidence_patterns(
-            repo_root=repo_root,
-            pipeline_id=args.pipeline,
-            run_id=args.run_id,
-            stage_id=stage,
-            mode=mode,
-        )
-        ok, missing = stage_evidence_status(run_root, evidence_patterns)
+        stage_contract = get_stage_contract(stage)
+        ok, missing = stage_evidence_status(run_root, stage_contract["evidence_patterns"])
         if ok:
             trusted_prefix.append(stage)
         else:
             first_non_trusted_stage = stage
             stage_missing_map[stage] = missing
+            restart_stage = stage_contract["missing_evidence_restart_stage"]
+            restart_stage_reason = f"missing_evidence_in_{stage}"
+            restart_stage_policy_source = stage_contract["missing_evidence_policy_source"]
             break
 
-    exec_state = run_manifest_root.get("execution_state", {})
-    current_stage = canonical_stage_id(str(exec_state.get("current_stage", "")))
-    last_stage_status = str(exec_state.get("last_stage_status", ""))
-    next_stage = canonical_stage_id(str(exec_state.get("next_stage", ""))) if exec_state.get("next_stage") else ""
-
-    if first_non_trusted_stage:
-        restart_stage = first_non_trusted_stage
-    elif current_stage in STAGE_ORDER and last_stage_status in {"in_progress", "blocked", "failed"}:
-        restart_stage = current_stage
-    elif next_stage in STAGE_ORDER:
-        restart_stage = next_stage
-    elif trusted_prefix:
-        restart_stage = next_stage_after(trusted_prefix[-1])
-    else:
-        restart_stage = "STAGE_01_CHALLENGE"
+    if first_non_trusted_stage is None:
+        if current_stage in STAGE_ORDER and last_stage_status == "blocked":
+            current_contract = get_stage_contract(current_stage)
+            restart_stage = current_contract["blocked_restart_stage"]
+            restart_stage_reason = f"current_stage_blocked_{current_stage}"
+            restart_stage_policy_source = current_contract["blocked_policy_source"]
+        elif current_stage in STAGE_ORDER and last_stage_status == "failed":
+            current_contract = get_stage_contract(current_stage)
+            restart_stage = current_contract["fail_restart_stage"]
+            restart_stage_reason = f"current_stage_failed_{current_stage}"
+            restart_stage_policy_source = current_contract["fail_policy_source"]
+        elif current_stage in STAGE_ORDER and last_stage_status == "in_progress":
+            restart_stage = current_stage
+            restart_stage_reason = f"current_stage_in_progress_{current_stage}"
+            restart_stage_policy_source = "current_stage_in_progress"
+        elif next_stage in STAGE_ORDER:
+            restart_stage = next_stage
+            restart_stage_reason = f"manifest_next_stage_{next_stage}"
+            restart_stage_policy_source = "manifest_next_stage"
+        elif trusted_prefix:
+            restart_stage = next_stage_after(trusted_prefix[-1])
+            restart_stage_reason = (
+                f"next_stage_after_trusted_prefix_{trusted_prefix[-1]}"
+                if restart_stage
+                else "trusted_prefix_complete"
+            )
+            restart_stage_policy_source = "trusted_prefix_successor"
+        else:
+            restart_stage = "STAGE_01_CHALLENGE"
+            restart_stage_reason = "no_trusted_stage_default_entry"
+            restart_stage_policy_source = "default_entry"
 
     if trusted_prefix and trusted_prefix[-1] == "STAGE_09_CLOSEOUT_AND_ARCHIVE" and restart_stage is None:
-        reconciliation_status = "run_reconciled_without_truncation"
         invalidated_stages: List[str] = []
+        reconciliation_status = "run_reconciled_without_truncation"
     else:
         invalidated_stages = []
         if restart_stage in STAGE_ORDER:
@@ -576,9 +903,12 @@ def main() -> int:
                     invalidated_stages.append(stage)
             if current_stage in STAGE_ORDER and stage_index(current_stage) >= restart_idx:
                 invalidated_stages.append(current_stage)
+
         invalidated_stages = sorted(set(invalidated_stages), key=stage_index)
         reconciliation_status = (
-            "run_truncated_to_restart_stage" if invalidated_stages else "run_reconciled_without_truncation"
+            "run_truncated_to_restart_stage"
+            if invalidated_stages
+            else "run_reconciled_without_truncation"
         )
 
     removed_artifacts = invalidate_downstream_artifacts(
@@ -589,6 +919,7 @@ def main() -> int:
         run_root=run_root,
         invalidated_stages=invalidated_stages,
         apply=args.apply,
+        stage_contract_cache=stage_contract_cache,
     )
 
     manifest_data = rewrite_manifest_for_reconciliation(
@@ -613,6 +944,16 @@ def main() -> int:
         apply=args.apply,
     )
 
+    inspected_stages = list(claimed_done)
+    if current_stage in STAGE_ORDER and current_stage not in inspected_stages:
+        inspected_stages.append(current_stage)
+    inspected_stages = sorted(inspected_stages, key=stage_index)
+
+    stage_contract_summary = {
+        stage: summarize_stage_contract(get_stage_contract(stage))
+        for stage in inspected_stages
+    }
+
     final_manifest = manifest_data.get("run_manifest", {})
     final_exec_state = final_manifest.get("execution_state", {})
 
@@ -626,21 +967,27 @@ def main() -> int:
             "reconciliation_status": reconciliation_status,
             "trusted_prefix_end_stage": trusted_prefix[-1] if trusted_prefix else "",
             "restart_stage": restart_stage or "",
+            "restart_stage_reason": restart_stage_reason,
+            "restart_stage_policy_source": restart_stage_policy_source,
             "claimed_done_stages": claimed_done,
             "trusted_prefix": trusted_prefix,
-            "evidence_derivation_mode": "skill_expected_outputs_with_fallback",
+            "evidence_derivation_mode": (
+                "skill_expected_outputs_plus_required_execution_paths_with_fallback"
+            ),
             "missing_evidence_by_stage": stage_missing_map,
             "repaired_artifacts": repaired_artifacts,
             "repair_commands": repair_commands,
             "invalidated_downstream_stage_set": invalidated_stages,
             "removed_artifacts": removed_artifacts,
+            "stage_contract_summary": stage_contract_summary,
             "run_status_after_reconciliation": final_manifest.get("status", ""),
             "current_stage_after_reconciliation": final_exec_state.get("current_stage", ""),
             "next_stage_after_reconciliation": final_exec_state.get("next_stage", ""),
             "run_context_rebuild": run_context_command,
             "next_best_action": "CONTINUE_ACTIVE_RUN" if restart_stage else "INSPECT",
             "next_best_action_reason": (
-                f"Run repositioned on {restart_stage}." if restart_stage
+                f"Run repositioned on {restart_stage}."
+                if restart_stage
                 else "Run is fully reconciled and does not require stage restart."
             ),
         }

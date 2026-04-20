@@ -1,24 +1,26 @@
 run_context:
   schema_version: 0.2
-  generated_by: build_run_context_runtime_view_candidate_v2.py
-  note: Fichier synthétique — lire EN PREMIER. Remplace la lecture séquentielle de run_manifest + scope_manifest
-    + impact_bundle + integration_gate et expose une task view dérivée pour le stage exécutable. Sources
-    canoniques inchangées.
+  generated_by: docs/patcher/shared/build_run_context.py
+  note: Fichier synthétique — pour un run déjà identifié, lire EN PREMIER. Remplace la lecture séquentielle
+    de run_manifest + scope_manifest + impact_bundle + integration_gate et expose une task view dérivée
+    pour le stage exécutable. Sources canoniques inchangées.
   run_id: CONSTITUTION_RUN_2026_04_20_DEPLOYMENT_GOVERNANCE_R01
   pipeline_id: constitution
   mode: bounded_local_run
-  status: bootstrap_open
+  status: active
   scope_key: deployment_governance
-  current_stage: RUN_BOOTSTRAP
-  current_stage_canonical: RUN_BOOTSTRAP
-  last_stage_status: in_progress
-  next_stage: STAGE_01_CHALLENGE
-  next_stage_canonical: STAGE_01_CHALLENGE
-  next_executable_stage: STAGE_01_CHALLENGE
-  next_executable_stage_canonical: STAGE_01_CHALLENGE
+  current_stage: STAGE_01_CHALLENGE
+  current_stage_canonical: STAGE_01_CHALLENGE
+  last_stage_status: done
+  next_stage: STAGE_02_ARBITRAGE
+  next_stage_canonical: STAGE_02_ARBITRAGE
+  next_executable_stage: STAGE_02_ARBITRAGE
+  next_executable_stage_canonical: STAGE_02_ARBITRAGE
   terminal_closed: false
-  completed_stages: []
-  completed_stages_canonical: []
+  completed_stages:
+  - STAGE_01_CHALLENGE
+  completed_stages_canonical:
+  - STAGE_01_CHALLENGE
   scope_ids:
   - ACTION_INFORM_LEARNER
   - CONSTRAINT_NO_ASSISTED_DEPLOYMENT_WITHOUT_TUTORING
@@ -67,7 +69,7 @@ run_context:
     impact_bundle: docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_20_DEPLOYMENT_GOVERNANCE_R01/inputs/impact_bundle.yaml
     integration_gate: docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_20_DEPLOYMENT_GOVERNANCE_R01/inputs/integration_gate.yaml
   source_fingerprints:
-    run_manifest.yaml: bdb73452c539e24512cddace4c61177abd9ed38e52b88bcc486e4f028ce87811
+    run_manifest.yaml: 1b3453a03bdfbbdb09120481d38f1c1fccf1271c1731e28bd3d4081721ca7446
     scope_manifest.yaml: 0e63198d118c98286c0a4ca8c42af3f36d52498cde677fde82f4ab0e8854fabd
     impact_bundle.yaml: 32f94b25e01f970ad7188d237e739f75a6a1d54415126a9a1a81aff1809f2038
     integration_gate.yaml: e6f75188625e1f408e41a68882b3fb20366d167ae8e80ae70d0d65b16b70e6fb
@@ -75,36 +77,33 @@ run_context:
     neighbor_extract.yaml: 7730cf3b792e5cb82e580d2a34d46e335847940441faa24a67c04a46f777f34f
   task_view:
     status: executable
-    raw_stage_id: STAGE_01_CHALLENGE
-    stage_id: STAGE_01_CHALLENGE
-    skill_ref: docs/pipelines/constitution/stages/STAGE_01_CHALLENGE.skill.yaml
+    raw_stage_id: STAGE_02_ARBITRAGE
+    stage_id: STAGE_02_ARBITRAGE
+    skill_ref: docs/pipelines/constitution/stages/STAGE_02_ARBITRAGE.skill.yaml
     stage_kind: cognitive
-    closure_level: medium
+    closure_level: high
     resolved_inputs:
     - docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_20_DEPLOYMENT_GOVERNANCE_R01/inputs/run_context.yaml
-    - docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_20_DEPLOYMENT_GOVERNANCE_R01/inputs/scope_extract.yaml
-    - docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_20_DEPLOYMENT_GOVERNANCE_R01/inputs/neighbor_extract.yaml
     - docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_20_DEPLOYMENT_GOVERNANCE_R01/inputs/scope_manifest.yaml
     - docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_20_DEPLOYMENT_GOVERNANCE_R01/inputs/impact_bundle.yaml
     - docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_20_DEPLOYMENT_GOVERNANCE_R01/inputs/integration_gate.yaml
     execution_paths:
-      work_dir: docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_20_DEPLOYMENT_GOVERNANCE_R01/work/01_challenge/
-      primary_output: docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_20_DEPLOYMENT_GOVERNANCE_R01/work/01_challenge/challenge_report_<id>.md
+      work_dir: docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_20_DEPLOYMENT_GOVERNANCE_R01/work/02_arbitrage/
+      primary_output: docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_20_DEPLOYMENT_GOVERNANCE_R01/work/02_arbitrage/arbitrage.md
       reports_dir: docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_20_DEPLOYMENT_GOVERNANCE_R01/reports/
     required_scripts_status:
       scope_extract_present: true
       neighbor_extract_present: true
-      ids_first_ready: true
+      ids_first_ready: false
+      note: generic runtime status — stage-specific script status not yet bound
     forbidden_actions: []
     completion_evidence: []
     allowed_transitions: {}
-    compact_execution_prompt: Dans le repo learn-it, exécute STAGE_01_CHALLENGE du pipeline constitution
+    compact_execution_prompt: Dans le repo learn-it, exécute STAGE_02_ARBITRAGE du pipeline constitution
       pour run_id=CONSTITUTION_RUN_2026_04_20_DEPLOYMENT_GOVERNANCE_R01 en mode bounded_local_run. Lis
       d'abord docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_20_DEPLOYMENT_GOVERNANCE_R01/inputs/run_context.yaml,
-      docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_20_DEPLOYMENT_GOVERNANCE_R01/inputs/scope_extract.yaml,
-      docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_20_DEPLOYMENT_GOVERNANCE_R01/inputs/neighbor_extract.yaml,
       docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_20_DEPLOYMENT_GOVERNANCE_R01/inputs/scope_manifest.yaml,
       docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_20_DEPLOYMENT_GOVERNANCE_R01/inputs/impact_bundle.yaml,
       docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_20_DEPLOYMENT_GOVERNANCE_R01/inputs/integration_gate.yaml.
-      Applique le contrat stable défini dans docs/pipelines/constitution/stages/STAGE_01_CHALLENGE.skill.yaml.
+      Applique le contrat stable défini dans docs/pipelines/constitution/stages/STAGE_02_ARBITRAGE.skill.yaml.
       Ne produis que les livrables du stage courant et ne simule aucun script requis.
