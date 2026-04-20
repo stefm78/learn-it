@@ -296,6 +296,11 @@ def utc_now_iso() -> str:
     return datetime.now(timezone.utc).replace(microsecond=0).isoformat().replace("+00:00", "Z")
 
 
+def infer_closeout_scope(work_root: Path) -> str:
+    normalized = repo_path(work_root)
+    return "run" if "/runs/" in normalized else "pipeline"
+
+
 # ---------------------------------------------------------------------------
 # Validation
 # ---------------------------------------------------------------------------
@@ -409,14 +414,16 @@ def build_closeout_report(
     work_reset: bool,
     closeout_status: str,
     notes: List[str],
+    closeout_scope: str,
     backlog_entries_exported: Optional[int] = None,
 ) -> Dict[str, Any]:
     report: Dict[str, Any] = {
         "CLOSEOUT_REPORT": {
             "status": closeout_status,
             "pipeline_id": "constitution",
+            "closeout_scope": closeout_scope,
             "closed_at": utc_now_iso(),
-            "run_closed": closeout_status == "PASS",
+            "run_closed": closeout_status == "PASS" and closeout_scope == "run",
             "release_id": release_id,
             "source_release_path": source_release_path,
             "promotion_mode": promotion_mode,
@@ -439,14 +446,17 @@ def build_final_summary(
     current_cores: List[Dict[str, Any]],
     archive_path: str,
     work_reset: bool,
+    work_root_path: str,
+    closeout_scope: str,
     backlog_entries_exported: Optional[int] = None,
 ) -> str:
     lines = [
-        "# Final run summary — constitution",
+        "# Final closeout summary — constitution",
         "",
         "## Final status",
         "",
         "- Pipeline: `constitution`",
+        f"- Closeout scope: `{closeout_scope}`",
         "- Status: `closed`",
         f"- Release active: `{release_id}`",
         f"- Source release path: `{source_release_path}`",
@@ -472,7 +482,7 @@ def build_final_summary(
     lines.extend(
         [
             "",
-            "## Archived run snapshot",
+            "## Archived operational snapshot",
             "",
             "- Archived directories copied under the release archive:",
             "  - `work/`",
@@ -481,7 +491,7 @@ def build_final_summary(
             "",
             "## Workspace reset",
             "",
-            "- `docs/pipelines/constitution/work/` has been recreated empty and is ready for a new run.",
+            f"- `{work_root_path}` has been recreated empty and is ready for a new execution cycle.",
         ]
     )
 
@@ -552,6 +562,7 @@ def main() -> None:
     source_release_path = "unknown"
     promotion_mode = "unknown"
     archive_path = "unknown"
+    closeout_scope = infer_closeout_scope(work_root)
     backlog_entries_exported: Optional[int] = None
 
     try:
@@ -573,7 +584,7 @@ def main() -> None:
             arbitrage_path = Path(
                 args.arbitrage_path
                 if args.arbitrage_path
-                else f"{DEFAULT_WORK_ROOT}/arbitrage.md"
+                else str(work_root / "arbitrage.md")
             )
             backlog_path = Path(args.backlog_path)
             added = export_backlog_entries(
@@ -595,9 +606,9 @@ def main() -> None:
         archive_root.mkdir(parents=True, exist_ok=True)
 
         preliminary_notes = [
-            "run clôturé après promotion active vérifiée",
-            "archive complète du run effectuée sous docs/pipelines/constitution/archive/<release_id>/",
-            "workspace docs/pipelines/constitution/work/ réinitialisé pour une nouvelle exécution",
+            "closeout validé après promotion active vérifiée",
+            "archive complète de l'état opératoire effectuée sous docs/pipelines/constitution/archive/<release_id>/",
+            f"workspace {repo_path(work_root)} réinitialisé pour une nouvelle exécution",
         ]
 
         preliminary_report = build_closeout_report(
@@ -610,6 +621,7 @@ def main() -> None:
             work_reset=False,
             closeout_status="PASS",
             notes=preliminary_notes,
+            closeout_scope=closeout_scope,
             backlog_entries_exported=backlog_entries_exported,
         )
         preliminary_summary = build_final_summary(
@@ -619,6 +631,8 @@ def main() -> None:
             current_cores=current_cores,
             archive_path="pending",
             work_reset=False,
+            work_root_path=repo_path(work_root),
+            closeout_scope=closeout_scope,
             backlog_entries_exported=backlog_entries_exported,
         )
 
@@ -636,9 +650,9 @@ def main() -> None:
         work_reset = reset_work_root(work_root)
 
         final_notes = [
-            "run clôturé après promotion active vérifiée",
-            f"run archivé sous {archive_path}",
-            "workspace docs/pipelines/constitution/work/ réinitialisé pour une nouvelle exécution",
+            "closeout validé après promotion active vérifiée",
+            f"état opératoire archivé sous {archive_path}",
+            f"workspace {repo_path(work_root)} réinitialisé pour une nouvelle exécution",
         ]
         if backlog_entries_exported is not None:
             final_notes.append(
@@ -655,6 +669,7 @@ def main() -> None:
             work_reset=work_reset,
             closeout_status="PASS",
             notes=final_notes,
+            closeout_scope=closeout_scope,
             backlog_entries_exported=backlog_entries_exported,
         )
         final_summary = build_final_summary(
@@ -664,6 +679,8 @@ def main() -> None:
             current_cores=current_cores,
             archive_path=archive_path,
             work_reset=work_reset,
+            work_root_path=repo_path(work_root),
+            closeout_scope=closeout_scope,
             backlog_entries_exported=backlog_entries_exported,
         )
 
@@ -683,6 +700,7 @@ def main() -> None:
                 work_reset=False,
                 closeout_status="FAIL",
                 notes=[str(exc)],
+                closeout_scope=closeout_scope,
             ),
         )
         raise SystemExit(str(exc))
