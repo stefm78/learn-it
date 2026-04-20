@@ -33,7 +33,7 @@ Aucun patch YAML n’est produit ici. L’arbitrage décide seulement quoi corri
 - fallback ciblé repris explicitement sur la dépendance voisine manquante, avec lecture du Core `link.yaml`
 
 ### Constat clé de fallback
-Le challenge déclarait un fallback ciblé sur `REF_CORE_LEARNIT_REFERENTIEL_V2_0_IN_CONSTITUTION`.  
+Le challenge déclarait un fallback ciblé sur `REF_CORE_LEARNIT_REFERENTIEL_V2_0_IN_CONSTITUTION`.
 Le fallback confirme que le `LINK` canonique courant fédère désormais :
 - Constitution V4.0
 - Référentiel v3.0
@@ -225,3 +225,42 @@ governance_backlog_candidates:
       déclencheurs référentiels, patch governance et escalades hors session, puis
       décider s’il faut ajuster la partition ou seulement ses documents de binding.
     candidate_status: candidate_open
+```
+
+## deferred_or_blocked_decisions
+
+- **A1** : bloqué par besoin de traitement inter-Core / inter-scope
+- **A2** : différé, point de vigilance maintenu sans patch local immédiat
+- **A3** : bloqué par besoin de clarification de partition
+- **A4** : non bloqué, prêt pour patch local en STAGE_03
+
+## ambiguities_requiring_human_decision
+
+Aucune ambiguïté matérielle n’est jugée bloquante pour le passage à `STAGE_03_PATCH_SYNTHESIS` sur le point A4.
+
+En revanche, deux ambiguïtés de gouvernance doivent être conservées pour traitement humain ultérieur :
+1. quelle ancre inter-Core canoniser exactement pour la dépendance référentielle de `patch_lifecycle` ;
+2. jusqu’où formaliser la frontière `patch_lifecycle` / `learner_state` dans la partition elle-même.
+
+Par défaut conservateur, ces deux points ne doivent pas être corrigés localement dans `STAGE_03`.
+
+## human_actions_to_execute
+
+1. Relire et valider ce rapport d’arbitrage.
+2. Vérifier que la décision retenue pour `STAGE_03` reste strictement limitée au finding A4.
+3. Préserver les deux candidats `governance_backlog_candidates` pour export canonique en `STAGE_09`.
+4. Une fois l’arbitrage validé, mettre à jour le tracking avec la commande canonique :
+
+```bash
+python docs/patcher/shared/update_run_tracking.py \
+  --pipeline constitution \
+  --run-id CONSTITUTION_RUN_2026_04_20_PATCH_LIFECYCLE_R01 \
+  --stage-id STAGE_02_ARBITRAGE \
+  --stage-status done \
+  --run-status active \
+  --next-stage STAGE_03_PATCH_SYNTHESIS \
+  --summary "Arbitrage report validated; decisions ready for patch synthesis."
+```
+
+5. Après exécution confirmée, relancer avec :
+`Continue le run CONSTITUTION_RUN_2026_04_20_PATCH_LIFECYCLE_R01 — STAGE_02 est done, démarre STAGE_03_PATCH_SYNTHESIS.`

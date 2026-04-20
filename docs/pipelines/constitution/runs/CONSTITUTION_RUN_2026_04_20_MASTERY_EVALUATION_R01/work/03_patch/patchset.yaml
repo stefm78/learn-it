@@ -1,0 +1,105 @@
+PATCH_SET:
+  id: PATCHSET_CONSTITUTION_RUN_2026_04_20_MASTERY_EVALUATION_R01_STAGE_03
+  patch_dsl_version: "4.0"
+  atomic: true
+  description: >-
+    STAGE_03 patchset for CONSTITUTION_RUN_2026_04_20_MASTERY_EVALUATION_R01.
+    Human decision Option B retained at STAGE_02: no local patch is authorized
+    on the referential mismatch finding. This patchset therefore records explicit
+    no-change and note operations only, with full traceability to arbitrage.
+  files:
+    - file: docs/cores/current/constitution.yaml
+      operations:
+        - op: no_change
+          target:
+            id: INV_MSC_AND_STRICT
+          rationale: >-
+            Arbitrage AF-02 rejected any local correction on MSC logic. The strict
+            AND invariant remains valid and must be preserved as-is.
+          traceability:
+            run_id: CONSTITUTION_RUN_2026_04_20_MASTERY_EVALUATION_R01
+            stage_id: STAGE_03_PATCH_SYNTHESIS
+            arbitrage_report_ref: docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_20_MASTERY_EVALUATION_R01/work/02_arbitrage/arbitrage_report_mastery_evaluation_r01.md
+            arbitrage_finding_id: AF-02
+        - op: no_change
+          target:
+            id: INV_TRANSFER_SEPARATE_FROM_BASE_MASTERY
+          rationale: >-
+            Arbitrage AF-02 confirmed that transfer must remain separate from base
+            mastery. No local patch is authorized.
+          traceability:
+            run_id: CONSTITUTION_RUN_2026_04_20_MASTERY_EVALUATION_R01
+            stage_id: STAGE_03_PATCH_SYNTHESIS
+            arbitrage_report_ref: docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_20_MASTERY_EVALUATION_R01/work/02_arbitrage/arbitrage_report_mastery_evaluation_r01.md
+            arbitrage_finding_id: AF-02
+        - op: no_change
+          target:
+            id: RULE_MSC_COMPONENT_NON_CALCULABLE_DEFERS_BASE_MASTERY
+          rationale: >-
+            Arbitrage AF-02 rejected any weakening of the deferred behavior for
+            non-computable MSC components.
+          traceability:
+            run_id: CONSTITUTION_RUN_2026_04_20_MASTERY_EVALUATION_R01
+            stage_id: STAGE_03_PATCH_SYNTHESIS
+            arbitrage_report_ref: docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_20_MASTERY_EVALUATION_R01/work/02_arbitrage/arbitrage_report_mastery_evaluation_r01.md
+            arbitrage_finding_id: AF-02
+        - op: no_change
+          target:
+            id: INV_GRAPH_PROPAGATION_ONE_HOP
+          rationale: >-
+            Arbitrage AF-03 confirmed that the one-hop propagation boundary remains
+            valid and must not be modified locally.
+          traceability:
+            run_id: CONSTITUTION_RUN_2026_04_20_MASTERY_EVALUATION_R01
+            stage_id: STAGE_03_PATCH_SYNTHESIS
+            arbitrage_report_ref: docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_20_MASTERY_EVALUATION_R01/work/02_arbitrage/arbitrage_report_mastery_evaluation_r01.md
+            arbitrage_finding_id: AF-03
+        - op: no_change
+          target:
+            id: TYPE_SESSION_INTEGRITY_SCORE
+          rationale: >-
+            Arbitrage AF-04 rejected any relocation of session integrity logic out
+            of mastery_evaluation.
+          traceability:
+            run_id: CONSTITUTION_RUN_2026_04_20_MASTERY_EVALUATION_R01
+            stage_id: STAGE_03_PATCH_SYNTHESIS
+            arbitrage_report_ref: docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_20_MASTERY_EVALUATION_R01/work/02_arbitrage/arbitrage_report_mastery_evaluation_r01.md
+            arbitrage_finding_id: AF-04
+        - op: no_change
+          target:
+            id: TYPE_NC_MSC
+          rationale: >-
+            Arbitrage AF-04 rejected any relocation of NC_MSC logic out of
+            mastery_evaluation.
+          traceability:
+            run_id: CONSTITUTION_RUN_2026_04_20_MASTERY_EVALUATION_R01
+            stage_id: STAGE_03_PATCH_SYNTHESIS
+            arbitrage_report_ref: docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_20_MASTERY_EVALUATION_R01/work/02_arbitrage/arbitrage_report_mastery_evaluation_r01.md
+            arbitrage_finding_id: AF-04
+        - op: note
+          target:
+            id: INV_REFERENTIEL_VALIDITY_REQUIRED_FOR_DELEGATED_THRESHOLD_EVALUATION
+          rationale: >-
+            Arbitrage AF-01 and AF-05, with human decision Option B, determined that
+            the referential mismatch must not be patched locally in this run. The issue
+            is forwarded as a governance/scope-generation topic and remains out of local
+            patch scope for STAGE_03.
+          traceability:
+            run_id: CONSTITUTION_RUN_2026_04_20_MASTERY_EVALUATION_R01
+            stage_id: STAGE_03_PATCH_SYNTHESIS
+            arbitrage_report_ref: docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_20_MASTERY_EVALUATION_R01/work/02_arbitrage/arbitrage_report_mastery_evaluation_r01.md
+            arbitrage_finding_id: AF-01
+            human_decision: Option B
+        - op: note
+          target:
+            id: RUN_SCOPE_PATCH_DECISION
+          rationale: >-
+            Global stage outcome: no local patch operations are authorized for this run
+            after arbitrage. The patchset is intentionally limited to no_change/note
+            operations so that STAGE_04 can validate the absence of local modifications
+            while preserving full traceability.
+          traceability:
+            run_id: CONSTITUTION_RUN_2026_04_20_MASTERY_EVALUATION_R01
+            stage_id: STAGE_03_PATCH_SYNTHESIS
+            arbitrage_report_ref: docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_20_MASTERY_EVALUATION_R01/work/02_arbitrage/arbitrage_report_mastery_evaluation_r01.md
+            arbitrage_finding_id: BD-01
