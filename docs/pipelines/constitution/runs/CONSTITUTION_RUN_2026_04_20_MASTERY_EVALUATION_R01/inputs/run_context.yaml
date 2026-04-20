@@ -1,24 +1,26 @@
 run_context:
   schema_version: 0.2
-  generated_by: build_run_context_runtime_view_candidate_v2.py
-  note: Fichier synthétique — lire EN PREMIER. Remplace la lecture séquentielle de run_manifest + scope_manifest
-    + impact_bundle + integration_gate et expose une task view dérivée pour le stage exécutable. Sources
-    canoniques inchangées.
+  generated_by: docs/patcher/shared/build_run_context.py
+  note: Fichier synthétique — pour un run déjà identifié, lire EN PREMIER. Remplace la lecture séquentielle
+    de run_manifest + scope_manifest + impact_bundle + integration_gate et expose une task view dérivée
+    pour le stage exécutable. Sources canoniques inchangées.
   run_id: CONSTITUTION_RUN_2026_04_20_MASTERY_EVALUATION_R01
   pipeline_id: constitution
   mode: bounded_local_run
-  status: bootstrap_open
+  status: active
   scope_key: mastery_evaluation
-  current_stage: RUN_BOOTSTRAP
-  current_stage_canonical: RUN_BOOTSTRAP
-  last_stage_status: in_progress
-  next_stage: STAGE_01_CHALLENGE
-  next_stage_canonical: STAGE_01_CHALLENGE
-  next_executable_stage: STAGE_01_CHALLENGE
-  next_executable_stage_canonical: STAGE_01_CHALLENGE
+  current_stage: STAGE_01_CHALLENGE
+  current_stage_canonical: STAGE_01_CHALLENGE
+  last_stage_status: done
+  next_stage: STAGE_02_ARBITRAGE
+  next_stage_canonical: STAGE_02_ARBITRAGE
+  next_executable_stage: STAGE_02_ARBITRAGE
+  next_executable_stage_canonical: STAGE_02_ARBITRAGE
   terminal_closed: false
-  completed_stages: []
-  completed_stages_canonical: []
+  completed_stages:
+  - STAGE_01_CHALLENGE
+  completed_stages_canonical:
+  - STAGE_01_CHALLENGE
   scope_ids:
   - ACTION_PLAN_SHORT_DIAGNOSTIC_TASK
   - CONSTRAINT_NO_BIOMETRICS_OR_OFFSESSION_SURVEILLANCE
@@ -58,9 +60,18 @@ run_context:
   - TYPE_STATE_AXIS_ACTIVATION
   neighbor_ids_count: 5
   scope_extract:
-    present: false
+    present: true
+    found_ids_count: 29
+    missing_ids_count: 0
+    missing_ids: []
+    ref: docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_20_MASTERY_EVALUATION_R01/inputs/scope_extract.yaml
   neighbor_extract:
-    present: false
+    present: true
+    found_ids_count: 4
+    missing_ids_count: 1
+    missing_ids:
+    - REF_CORE_LEARNIT_REFERENTIEL_V2_0_IN_CONSTITUTION
+    ref: docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_20_MASTERY_EVALUATION_R01/inputs/neighbor_extract.yaml
   integration_gate:
     status: open
     total_checks: 7
@@ -72,42 +83,41 @@ run_context:
     impact_bundle: docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_20_MASTERY_EVALUATION_R01/inputs/impact_bundle.yaml
     integration_gate: docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_20_MASTERY_EVALUATION_R01/inputs/integration_gate.yaml
   source_fingerprints:
-    run_manifest.yaml: 5b5f4d4d66090633c47d804795a3f3e1f07d4e6d3cffa684b56a41f8cc63a852
+    run_manifest.yaml: d8883678264a822911b49fb533c5c91990b4fe32753a43fe991f157caceaa8ce
     scope_manifest.yaml: eaf544b032a49b3c54b48aec49f48e1788684a98eda0aac91933708a645ff629
     impact_bundle.yaml: 0311f3571b556e585a0f04663d4cd6bdc71b8d1fb82cae8d755959ee6c8ecc63
     integration_gate.yaml: d555f59930647f748f2b34a630a07c6744790e9b87ad53a7cf222257687b065a
+    scope_extract.yaml: ae7eae43ef7c26f73eb54ea7e940123efae76ddcd1f8b839f1631f3d25c57246
+    neighbor_extract.yaml: aa3b8eb769191bc0bb14c72e1612365c0017ba8717f3c1bd9a84af49cccabe4b
   task_view:
     status: executable
-    raw_stage_id: STAGE_01_CHALLENGE
-    stage_id: STAGE_01_CHALLENGE
-    skill_ref: docs/pipelines/constitution/stages/STAGE_01_CHALLENGE.skill.yaml
+    raw_stage_id: STAGE_02_ARBITRAGE
+    stage_id: STAGE_02_ARBITRAGE
+    skill_ref: docs/pipelines/constitution/stages/STAGE_02_ARBITRAGE.skill.yaml
     stage_kind: cognitive
-    closure_level: medium
+    closure_level: high
     resolved_inputs:
     - docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_20_MASTERY_EVALUATION_R01/inputs/run_context.yaml
-    - docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_20_MASTERY_EVALUATION_R01/inputs/scope_extract.yaml
-    - docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_20_MASTERY_EVALUATION_R01/inputs/neighbor_extract.yaml
     - docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_20_MASTERY_EVALUATION_R01/inputs/scope_manifest.yaml
     - docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_20_MASTERY_EVALUATION_R01/inputs/impact_bundle.yaml
     - docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_20_MASTERY_EVALUATION_R01/inputs/integration_gate.yaml
     execution_paths:
-      work_dir: docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_20_MASTERY_EVALUATION_R01/work/01_challenge/
-      primary_output: docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_20_MASTERY_EVALUATION_R01/work/01_challenge/challenge_report_<id>.md
+      work_dir: docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_20_MASTERY_EVALUATION_R01/work/02_arbitrage/
+      primary_output: docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_20_MASTERY_EVALUATION_R01/work/02_arbitrage/arbitrage.md
       reports_dir: docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_20_MASTERY_EVALUATION_R01/reports/
     required_scripts_status:
-      scope_extract_present: false
-      neighbor_extract_present: false
+      scope_extract_present: true
+      neighbor_extract_present: true
       ids_first_ready: false
+      note: generic runtime status — stage-specific script status not yet bound
     forbidden_actions: []
     completion_evidence: []
     allowed_transitions: {}
-    compact_execution_prompt: Dans le repo learn-it, exécute STAGE_01_CHALLENGE du pipeline constitution
+    compact_execution_prompt: Dans le repo learn-it, exécute STAGE_02_ARBITRAGE du pipeline constitution
       pour run_id=CONSTITUTION_RUN_2026_04_20_MASTERY_EVALUATION_R01 en mode bounded_local_run. Lis d'abord
       docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_20_MASTERY_EVALUATION_R01/inputs/run_context.yaml,
-      docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_20_MASTERY_EVALUATION_R01/inputs/scope_extract.yaml,
-      docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_20_MASTERY_EVALUATION_R01/inputs/neighbor_extract.yaml,
       docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_20_MASTERY_EVALUATION_R01/inputs/scope_manifest.yaml,
       docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_20_MASTERY_EVALUATION_R01/inputs/impact_bundle.yaml,
       docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_20_MASTERY_EVALUATION_R01/inputs/integration_gate.yaml.
-      Applique le contrat stable défini dans docs/pipelines/constitution/stages/STAGE_01_CHALLENGE.skill.yaml.
+      Applique le contrat stable défini dans docs/pipelines/constitution/stages/STAGE_02_ARBITRAGE.skill.yaml.
       Ne produis que les livrables du stage courant et ne simule aucun script requis.
