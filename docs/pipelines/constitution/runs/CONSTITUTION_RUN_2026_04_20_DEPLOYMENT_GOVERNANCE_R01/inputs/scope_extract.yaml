@@ -1,0 +1,459 @@
+scope_extract:
+  schema_version: 0.1
+  extract_type: scope
+  run_id: CONSTITUTION_RUN_2026_04_20_DEPLOYMENT_GOVERNANCE_R01
+  source:
+    scope_manifest_fingerprint: 0e63198d118c98286c0a4ca8c42af3f36d52498cde677fde82f4ab0e8854fabd
+    impact_bundle_fingerprint: 32f94b25e01f970ad7188d237e739f75a6a1d54415126a9a1a81aff1809f2038
+    core_fingerprints:
+      constitution: a76170fccf48fccab96facc65fd6acab11e3de157e6a29434110ebc8fbc23aca
+      referentiel: a118ea0c8cea3c618dbc8be780a9e17b30dbf9b9ca2d6546217e9d18c8b9bc30
+      link: 4676ee949a59583d47e12948698ad5f204e9d3fb89dbac8194b16f92ba4326a5
+  target_ids:
+  - ACTION_INFORM_LEARNER
+  - CONSTRAINT_NO_ASSISTED_DEPLOYMENT_WITHOUT_TUTORING
+  - CONSTRAINT_NO_CHANGE_TO_AND_LOGIC
+  - CONSTRAINT_NO_CHANGE_TO_GRAPH_PROPAGATION_RULE
+  - EVENT_GAMIFICATION_PROBATION_MAX_DURATION_REACHED
+  - EVENT_GF08_UNCOVERED_CONFLICT
+  - INV_ASSISTED_MODE_REQUIRES_TUTORING
+  - INV_CONSTITUTION_REFERENTIAL_SEPARATION
+  - INV_NO_RUNTIME_CONTENT_GENERATION
+  - INV_RUNTIME_FULLY_LOCAL
+  - INV_RUNTIME_QUALIFICATION_SIGNALS_MUST_BE_EXPLICIT_OR_OFFSESSION
+  - RULE_GAMIFICATION_PROBATION_MUST_CLOSE
+  - RULE_GF08_UNCOVERED_CONFLICT_CONSERVATIVE_RESPONSE
+  - RULE_NO_CALIBRATION_CONSERVATIVE_START
+  - RULE_UNVERIFIED_GAMIFICATION_PROBATION
+  - SYSTEM_LEARNIT
+  - TYPE_AUTONOMY_REGIME
+  - TYPE_HUMAN_CHECKPOINT
+  - TYPE_INTEGRITY_MODES
+  found_ids:
+  - ACTION_INFORM_LEARNER
+  - CONSTRAINT_NO_ASSISTED_DEPLOYMENT_WITHOUT_TUTORING
+  - CONSTRAINT_NO_CHANGE_TO_AND_LOGIC
+  - CONSTRAINT_NO_CHANGE_TO_GRAPH_PROPAGATION_RULE
+  - EVENT_GAMIFICATION_PROBATION_MAX_DURATION_REACHED
+  - EVENT_GF08_UNCOVERED_CONFLICT
+  - INV_ASSISTED_MODE_REQUIRES_TUTORING
+  - INV_CONSTITUTION_REFERENTIAL_SEPARATION
+  - INV_NO_RUNTIME_CONTENT_GENERATION
+  - INV_RUNTIME_FULLY_LOCAL
+  - INV_RUNTIME_QUALIFICATION_SIGNALS_MUST_BE_EXPLICIT_OR_OFFSESSION
+  - RULE_GAMIFICATION_PROBATION_MUST_CLOSE
+  - RULE_GF08_UNCOVERED_CONFLICT_CONSERVATIVE_RESPONSE
+  - RULE_NO_CALIBRATION_CONSERVATIVE_START
+  - RULE_UNVERIFIED_GAMIFICATION_PROBATION
+  - SYSTEM_LEARNIT
+  - TYPE_AUTONOMY_REGIME
+  - TYPE_HUMAN_CHECKPOINT
+  - TYPE_INTEGRITY_MODES
+  missing_ids: []
+  entries:
+  - _source_core: constitution
+    _source_section: TYPES
+    _matched_id: SYSTEM_LEARNIT
+    entry:
+      id: SYSTEM_LEARNIT
+      authority: primary
+      core_type: CONSTITUTION
+      source_anchor: '[S1]'
+      depends_on: []
+      relations: []
+      patchable: false
+      parameterizable: false
+      human_readable: Système Learn-it gouverné par une Constitution puis un Référentiel.
+      logic:
+        trigger: null
+        condition: null
+        effect: Cadre constitutionnel du moteur adaptatif.
+        scope: system
+  - _source_core: constitution
+    _source_section: TYPES
+    _matched_id: TYPE_HUMAN_CHECKPOINT
+    entry:
+      id: TYPE_HUMAN_CHECKPOINT
+      authority: primary
+      core_type: CONSTITUTION
+      source_anchor: '[S4][S17]'
+      depends_on: []
+      relations:
+      - type: constrains
+        target:
+          id: TYPE_AUTONOMY_REGIME
+      patchable: false
+      parameterizable: true
+      human_readable: Jalon humain bloquant ou non selon le niveau d’autonomie.
+      logic:
+        trigger: Parcours nécessitant validation humaine
+        condition: Niveau d’autonomie et risques pédagogiques déclarés.
+        effect: Blocage ou validation du parcours.
+        scope: runtime_governance
+  - _source_core: constitution
+    _source_section: TYPES
+    _matched_id: TYPE_INTEGRITY_MODES
+    entry:
+      id: TYPE_INTEGRITY_MODES
+      authority: primary
+      core_type: CONSTITUTION
+      source_anchor: '[S15]'
+      depends_on:
+      - TYPE_SESSION_INTEGRITY_SCORE
+      relations: []
+      patchable: false
+      parameterizable: true
+      human_readable: Modes Multi-profil, Invité et Évaluation Externe.
+      logic:
+        trigger: Configuration du déploiement
+        condition: Modes activés selon usage.
+        effect: Protection de l’intégrité du modèle apprenant.
+        scope: deployment
+  - _source_core: constitution
+    _source_section: TYPES
+    _matched_id: TYPE_AUTONOMY_REGIME
+    entry:
+      id: TYPE_AUTONOMY_REGIME
+      authority: primary
+      core_type: CONSTITUTION
+      source_anchor: '[S17]'
+      depends_on: []
+      relations: []
+      patchable: false
+      parameterizable: false
+      human_readable: 'Niveaux d’autonomie moteur : autonome, hybride recommandé, hybride bloquant, assisté.'
+      logic:
+        trigger: Conception du déploiement
+        condition: Cadre d’accompagnement déclaré.
+        effect: Régime d’autonomie applicable comme configuration de déploiement gouvernée. Ce régime
+          ne constitue jamais une règle adaptative implicite et n’autorise ni dérive décisionnelle autonome
+          ni réallocation silencieuse entre Core.
+        scope: deployment
+  - _source_core: constitution
+    _source_section: INVARIANTS
+    _matched_id: INV_RUNTIME_FULLY_LOCAL
+    entry:
+      id: INV_RUNTIME_FULLY_LOCAL
+      authority: primary
+      core_type: CONSTITUTION
+      source_anchor: '[S4][S13]'
+      depends_on:
+      - TYPE_AUTONOMY_REGIME
+      relations:
+      - type: constrains
+        target:
+          id: TYPE_AUTONOMY_REGIME
+      patchable: false
+      parameterizable: false
+      human_readable: Le moteur en usage est 100% local.
+      logic:
+        trigger: Exécution runtime
+        condition: Usage apprenant actif.
+        effect: Aucun appel réseau temps réel n’est autorisé. Cette contrainte borne l’architecture d’exécution
+          locale uniquement et ne vaut jamais règle pédagogique autonome, ni base d’inférence adaptative
+          implicite.
+        scope: runtime_architecture
+  - _source_core: constitution
+    _source_section: INVARIANTS
+    _matched_id: INV_NO_RUNTIME_CONTENT_GENERATION
+    entry:
+      id: INV_NO_RUNTIME_CONTENT_GENERATION
+      authority: primary
+      core_type: CONSTITUTION
+      source_anchor: '[S13]'
+      depends_on: []
+      relations:
+      - type: constrains
+        target:
+          id: TYPE_FEEDBACK_COVERAGE_MATRIX
+      patchable: false
+      parameterizable: false
+      human_readable: Aucune génération de contenu en usage.
+      logic:
+        trigger: Sélection de contenu runtime
+        condition: Besoin pédagogique détecté.
+        effect: Le moteur sélectionne uniquement des artefacts préexistants. Cette contrainte borne le
+          runtime et n’autorise aucune logique pédagogique implicite par génération, réécriture ou interprétation
+          autonome du contenu.
+        scope: runtime_architecture
+  - _source_core: constitution
+    _source_section: INVARIANTS
+    _matched_id: INV_CONSTITUTION_REFERENTIAL_SEPARATION
+    entry:
+      id: INV_CONSTITUTION_REFERENTIAL_SEPARATION
+      authority: primary
+      core_type: CONSTITUTION
+      source_anchor: '[S1]'
+      depends_on:
+      - REF_CORE_LEARNIT_REFERENTIEL_V4_0_IN_CONSTITUTION
+      relations:
+      - type: governs
+        target:
+          id: REF_CORE_LEARNIT_REFERENTIEL_V4_0_IN_CONSTITUTION
+      patchable: false
+      parameterizable: false
+      human_readable: Séparation inviolable Constitution/Référentiel.
+      logic:
+        trigger: Gouvernance du système
+        condition: Révision ou patch demandé.
+        effect: La Constitution fixe le quoi/pourquoi ; le Référentiel borne le combien/comment. Aucun
+          patch local ne peut transformer cette frontière d’autorité, ni confondre invariant constitutionnel
+          et paramètre référentiel.
+        scope: governance
+  - _source_core: constitution
+    _source_section: INVARIANTS
+    _matched_id: INV_ASSISTED_MODE_REQUIRES_TUTORING
+    entry:
+      id: INV_ASSISTED_MODE_REQUIRES_TUTORING
+      authority: primary
+      core_type: CONSTITUTION
+      source_anchor: '[S17]'
+      depends_on:
+      - TYPE_AUTONOMY_REGIME
+      relations: []
+      patchable: false
+      parameterizable: false
+      human_readable: Le mode Assisté exige une infrastructure tutorale.
+      logic:
+        trigger: Choix du mode Assisté
+        condition: Infrastructure de suivi tutoral absente.
+        effect: Déploiement Assisté interdit.
+        scope: deployment
+  - _source_core: constitution
+    _source_section: INVARIANTS
+    _matched_id: INV_RUNTIME_QUALIFICATION_SIGNALS_MUST_BE_EXPLICIT_OR_OFFSESSION
+    entry:
+      id: INV_RUNTIME_QUALIFICATION_SIGNALS_MUST_BE_EXPLICIT_OR_OFFSESSION
+      authority: primary
+      core_type: CONSTITUTION
+      source_anchor: '[ARBITRAGE_2026_04_01][OFFLINE-RUNTIME-01]'
+      depends_on:
+      - TYPE_CORPUS_CONFIDENCE_ICC
+      - TYPE_AUTHENTIC_CONTEXT
+      - INV_RUNTIME_FULLY_LOCAL
+      - INV_NO_RUNTIME_CONTENT_GENERATION
+      relations: []
+      patchable: false
+      parameterizable: false
+      human_readable: Les signaux comme misconception, ICC ou contexte authentique doivent provenir d’artefacts
+        hors session ou d’entrées explicites, jamais d’une inférence IA implicite en runtime local.
+      logic:
+        trigger: Qualification d’un signal de gouvernance ou d’un prérequis d’adaptation.
+        condition: Le moteur tente d’inférer localement un signal nécessitant interprétation sémantique
+          ou LLM.
+        effect: Interdiction ; seuls les artefacts précomputés hors session ou les indicateurs explicites
+          déterministes sont autorisés en usage local. Cette exigence borne la qualification des signaux
+          de runtime et ne vaut pas règle pédagogique autonome ni adaptation interprétative implicite.
+        scope: runtime_architecture
+  - _source_core: constitution
+    _source_section: RULES
+    _matched_id: RULE_NO_CALIBRATION_CONSERVATIVE_START
+    entry:
+      id: RULE_NO_CALIBRATION_CONSERVATIVE_START
+      authority: primary
+      core_type: CONSTITUTION
+      source_anchor: '[S2]'
+      depends_on: []
+      relations: []
+      patchable: false
+      parameterizable: false
+      human_readable: En absence de calibrage, le système part d’une hypothèse conservatrice.
+      logic:
+        trigger: Initialisation sans calibrage
+        condition: Calibrage absent.
+        effect: Position initiale basse + déblocage manuel apprenant.
+        scope: initialization
+  - _source_core: constitution
+    _source_section: RULES
+    _matched_id: RULE_GF08_UNCOVERED_CONFLICT_CONSERVATIVE_RESPONSE
+    entry:
+      id: RULE_GF08_UNCOVERED_CONFLICT_CONSERVATIVE_RESPONSE
+      authority: primary
+      core_type: CONSTITUTION
+      source_anchor: '[S14][S20]'
+      depends_on: []
+      relations:
+      - type: triggers
+        target:
+          id: ACTION_LOG_UNCOVERED_CONFLICT
+      patchable: false
+      parameterizable: false
+      human_readable: Un conflit GF-08 non couvert reçoit une réponse conservatrice.
+      logic:
+        trigger: Conflit inter-principes non couvert
+        condition: Aucune hiérarchie explicite ne tranche.
+        effect: Réponse conservatrice + log pour futur patch. Cette règle n’autorise jamais un patch implicite,
+          une promotion implicite, ni un changement structurel ou inter-Core silencieux.
+        scope: runtime_governance
+  - _source_core: constitution
+    _source_section: RULES
+    _matched_id: RULE_UNVERIFIED_GAMIFICATION_PROBATION
+    entry:
+      id: RULE_UNVERIFIED_GAMIFICATION_PROBATION
+      authority: primary
+      core_type: CONSTITUTION
+      source_anchor: '[S10][S18]'
+      depends_on: []
+      relations: []
+      patchable: false
+      parameterizable: true
+      human_readable: Une gamification non vérifiée place le système en mode probatoire.
+      logic:
+        trigger: Déploiement d’une gamification non validée
+        condition: Test de non-nuisance absent.
+        effect: Mode probatoire.
+        scope: deployment
+  - _source_core: constitution
+    _source_section: RULES
+    _matched_id: RULE_GAMIFICATION_PROBATION_MUST_CLOSE
+    entry:
+      id: RULE_GAMIFICATION_PROBATION_MUST_CLOSE
+      authority: primary
+      core_type: CONSTITUTION
+      source_anchor: '[ARBITRAGE_2026_04_01][GAM-PROB-02]'
+      depends_on:
+      - EVENT_GAMIFICATION_PROBATION_MAX_DURATION_REACHED
+      - ACTION_INFORM_LEARNER
+      relations:
+      - type: triggers
+        target:
+          id: ACTION_INFORM_LEARNER
+      patchable: false
+      parameterizable: true
+      human_readable: Une probation gamification doit se clôturer par validation explicite, suspension
+        ou retrait de la mécanique.
+      logic:
+        trigger: EVENT_GAMIFICATION_PROBATION_MAX_DURATION_REACHED.
+        condition: Validation de non-nuisance absente ou incomplète.
+        effect: Sortie explicite du mode probatoire par validation, suspension ou retrait ; l’apprenant
+          est informé si un changement visible intervient. Cette clôture explicite ne vaut ni validation
+          de patch, ni promotion, ni autorisation de changement structurel implicite.
+        scope: deployment
+  - _source_core: constitution
+    _source_section: CONSTRAINTS
+    _matched_id: CONSTRAINT_NO_CHANGE_TO_AND_LOGIC
+    entry:
+      id: CONSTRAINT_NO_CHANGE_TO_AND_LOGIC
+      authority: primary
+      core_type: CONSTITUTION
+      source_anchor: '[S14][S17b]'
+      depends_on:
+      - INV_MSC_AND_STRICT
+      relations: []
+      patchable: false
+      parameterizable: false
+      human_readable: La logique AND du MSC n’est pas patchable.
+      logic:
+        trigger: Révision de MSC
+        condition: Modification de logique d’agrégation demandée.
+        effect: Interdiction.
+        scope: governance
+  - _source_core: constitution
+    _source_section: CONSTRAINTS
+    _matched_id: CONSTRAINT_NO_CHANGE_TO_GRAPH_PROPAGATION_RULE
+    entry:
+      id: CONSTRAINT_NO_CHANGE_TO_GRAPH_PROPAGATION_RULE
+      authority: primary
+      core_type: CONSTITUTION
+      source_anchor: '[S14][S17c]'
+      depends_on:
+      - INV_GRAPH_PROPAGATION_ONE_HOP
+      relations: []
+      patchable: false
+      parameterizable: false
+      human_readable: La règle de propagation graphe n’est pas patchable.
+      logic:
+        trigger: Révision de propagation graphe
+        condition: Modification de profondeur ou de logique demandée.
+        effect: Interdiction.
+        scope: governance
+  - _source_core: constitution
+    _source_section: CONSTRAINTS
+    _matched_id: CONSTRAINT_NO_ASSISTED_DEPLOYMENT_WITHOUT_TUTORING
+    entry:
+      id: CONSTRAINT_NO_ASSISTED_DEPLOYMENT_WITHOUT_TUTORING
+      authority: primary
+      core_type: CONSTITUTION
+      source_anchor: '[S17]'
+      depends_on:
+      - INV_ASSISTED_MODE_REQUIRES_TUTORING
+      relations: []
+      patchable: false
+      parameterizable: false
+      human_readable: Pas de déploiement Assisté sans tutorat.
+      logic:
+        trigger: Déploiement Assisté
+        condition: Infrastructure tutorale absente.
+        effect: Interdiction.
+        scope: deployment
+  - _source_core: constitution
+    _source_section: EVENTS
+    _matched_id: EVENT_GF08_UNCOVERED_CONFLICT
+    entry:
+      id: EVENT_GF08_UNCOVERED_CONFLICT
+      authority: primary
+      core_type: CONSTITUTION
+      source_anchor: '[S14][S20]'
+      depends_on: []
+      relations:
+      - type: triggers
+        target:
+          id: RULE_GF08_UNCOVERED_CONFLICT_CONSERVATIVE_RESPONSE
+      patchable: false
+      parameterizable: false
+      human_readable: Conflit GF-08 non couvert.
+      logic:
+        trigger: Collision de principes
+        condition: Aucune règle spécifique disponible.
+        effect: Réponse conservatrice + journalisation.
+        scope: runtime_governance
+  - _source_core: constitution
+    _source_section: EVENTS
+    _matched_id: EVENT_GAMIFICATION_PROBATION_MAX_DURATION_REACHED
+    entry:
+      id: EVENT_GAMIFICATION_PROBATION_MAX_DURATION_REACHED
+      authority: primary
+      core_type: CONSTITUTION
+      source_anchor: '[ARBITRAGE_2026_04_01][GAM-PROB-01]'
+      depends_on:
+      - RULE_UNVERIFIED_GAMIFICATION_PROBATION
+      - REF_CORE_LEARNIT_REFERENTIEL_V4_0_IN_CONSTITUTION::PARAM_REFERENTIEL_GAMIFICATION_PROBATION_MAX_SESSIONS
+      relations:
+      - type: triggers
+        target:
+          id: RULE_GAMIFICATION_PROBATION_MUST_CLOSE
+      patchable: false
+      parameterizable: true
+      human_readable: La durée maximale autorisée du mode probatoire gamification est atteinte.
+      logic:
+        trigger: Supervision du mode probatoire.
+        condition: Le nombre maximal de sessions probatoires défini référentiellement est atteint sans
+          validation explicite.
+        effect: Ouverture d’une sortie obligatoire du mode probatoire ; aucune probation indéfinie n’est
+          autorisée.
+        scope: deployment
+  - _source_core: constitution
+    _source_section: ACTIONS
+    _matched_id: ACTION_INFORM_LEARNER
+    entry:
+      id: ACTION_INFORM_LEARNER
+      authority: primary
+      core_type: CONSTITUTION
+      source_anchor: '[S14]'
+      depends_on: []
+      relations: []
+      patchable: false
+      parameterizable: false
+      human_readable: Informer l’apprenant.
+      logic:
+        trigger: Patch, rejet ou changement visible
+        condition: Transparence requise.
+        effect: Notification explicite à l’apprenant.
+        scope: runtime_transparency
+  fallback_rule: If missing_ids is non-empty, the AI must explicitly signal each missing ID and fall back
+    to reading the full canonical Core file for that ID only. It must NOT silently ignore missing IDs.
+  notes:
+  - Généré déterministiquement par extract_scope_slice.py depuis les Core canoniques.
+  - Ce fichier est une vue dérivée. Les Core canoniques restent la source de vérité.
+  - En mode bounded_local_run, l'IA doit lire ce fichier en priorité sur les Core complets.
+  - Le champ _source_core indique l'origine canonique de chaque entrée.
