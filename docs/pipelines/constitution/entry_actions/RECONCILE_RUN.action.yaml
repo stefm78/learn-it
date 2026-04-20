@@ -1,0 +1,121 @@
+entry_action:
+  schema_version: 0.1
+  pipeline_id: constitution
+  action_id: RECONCILE_RUN
+  action_kind: run_reconciliation
+  authoritative_role: stable_run_reconciliation_contract
+
+  mission: >-
+    Réconcilier un run déjà identifié à partir de son run_id, en comparant
+    l'état matériel du run aux contrats stables actuels du pipeline, puis en
+    remettant le run en ligne par réparation déterministe des artefacts
+    dérivables, ou par troncature au bon stage de reprise si certaines preuves
+    ne sont plus justifiables. Cette action ne rejoue aucun stage métier.
+
+  entry_binding:
+    expected_mode: run_id_mode
+    protocol_anchor: docs/pipelines/constitution/AI_PROTOCOL.yaml
+    requires_run_id: true
+    stop_after_reconciliation: true
+
+  allowed_reads:
+    - docs/pipelines/constitution/AI_PROTOCOL.yaml
+    - docs/pipelines/constitution/pipeline.md
+    - docs/pipelines/constitution/PIPELINE_MODEL.yaml
+    - docs/pipelines/constitution/entry_actions/ENTRY_ACTIONS_INDEX.yaml
+    - docs/pipelines/constitution/stages/*
+    - docs/pipelines/constitution/runs/index.yaml
+    - docs/pipelines/constitution/runs/<run_id>/run_manifest.yaml
+    - docs/pipelines/constitution/runs/<run_id>/run_tracking.yaml
+    - docs/pipelines/constitution/runs/<run_id>/inputs/*
+    - docs/pipelines/constitution/runs/<run_id>/work/*
+    - docs/pipelines/constitution/runs/<run_id>/reports/*
+    - docs/pipelines/constitution/runs/<run_id>/outputs/*
+    - docs/patcher/shared/reconcile_run.py
+    - docs/patcher/shared/materialize_run_inputs.py
+    - docs/patcher/shared/extract_scope_slice.py
+    - docs/patcher/shared/build_run_context.py
+
+  forbidden_before_resolution:
+    - any_search
+    - compare_commits
+    - docs/cores/current/*
+    - docs/pipelines/constitution/archive/*
+    - tmp/*
+
+  preconditions:
+    - run_id_must_be_provided
+    - run_id_must_exist
+    - reconciliation_is_run_scoped_not_pipeline_scoped
+    - initial_version_supports_bounded_local_run_only
+
+  canonical_defaults:
+    dry_run_default: true
+    next_best_action_on_success: CONTINUE_ACTIVE_RUN
+    trusted_prefix_rule: >-
+      Le résultat utile d'une réconciliation est le plus long préfixe de stages
+      encore matériellement justifiable selon les contrats actuels.
+    truncation_rule: >-
+      Tout artefact aval reposant sur un stage non justifiable doit être
+      invalidé ou supprimé ; on repart alors du premier stage non fiable.
+
+  resolution_rules:
+    - read the identified run deeply starting from run_manifest.yaml
+    - if run_context.yaml exists, treat it as derived convenience only
+    - compare claimed progression against the latest stable contracts
+    - repair only derivable artifacts through owner scripts
+    - never replay business stages during reconciliation
+    - compute trusted prefix of stages
+    - truncate downstream state that is no longer justifiable
+    - rewrite tracking and run summary state only through reconcile_run.py
+    - rebuild run_context.yaml after any applied reconciliation
+    - if deterministic repair cannot justify a stage, cut to the proper restart stage
+
+  deterministic_commands:
+    reconcile_probe_command_template: >-
+      python docs/patcher/shared/reconcile_run.py
+      --pipeline constitution
+      --run-id <RUN_ID>
+      --repo-root .
+    reconcile_apply_command_template: >-
+      python docs/patcher/shared/reconcile_run.py
+      --pipeline constitution
+      --run-id <RUN_ID>
+      --repo-root .
+      --apply
+
+  required_outputs:
+    reconciliation_payload:
+      - entry_decision
+      - run_id
+      - reconciliation_status
+      - trusted_prefix_end_stage_optional
+      - restart_stage_optional
+      - repaired_artifacts
+      - invalidated_downstream_stage_set
+      - run_status_after_reconciliation
+      - next_best_action
+      - next_best_action_reason
+    allowed_entry_decision_values:
+      - run_reconciled_without_truncation
+      - run_truncated_to_restart_stage
+      - run_reconciliation_blocked
+
+  stop_condition:
+    - stop once the reconciliation outcome is resolved
+    - if apply was requested, stop once state rewrite and run_context rebuild are completed
+    - do not start the restart stage automatically
+
+  response_contract:
+    must_state:
+      - whether the run was changed materially
+      - the trusted prefix end stage if any
+      - the restart stage if any
+      - whether derivable artifacts were rebuilt
+      - whether downstream artifacts were invalidated
+      - the run status after reconciliation
+      - the next canonical action
+    must_not_state:
+      - simulated_reconciliation_as_fact
+      - claimed_stage_execution_as_fact
+      - implicit_restart_of_business_stage
