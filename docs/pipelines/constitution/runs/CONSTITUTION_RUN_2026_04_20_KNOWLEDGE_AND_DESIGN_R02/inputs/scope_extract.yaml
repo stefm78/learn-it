@@ -1,0 +1,483 @@
+scope_extract:
+  schema_version: 0.1
+  extract_type: scope
+  run_id: CONSTITUTION_RUN_2026_04_20_KNOWLEDGE_AND_DESIGN_R02
+  source:
+    scope_manifest_fingerprint: 039ef3e4e37dd240c6c5f292ef02da758697a8bdb1893a98b18f1337fe016d0f
+    impact_bundle_fingerprint: e0b2a568c7ec02292b81fd7b64d75b39dbf87d9c521cde8d8d1b995832f4ea51
+    core_fingerprints:
+      constitution: a76170fccf48fccab96facc65fd6acab11e3de157e6a29434110ebc8fbc23aca
+      referentiel: a118ea0c8cea3c618dbc8be780a9e17b30dbf9b9ca2d6546217e9d18c8b9bc30
+      link: 4676ee949a59583d47e12948698ad5f204e9d3fb89dbac8194b16f92ba4326a5
+  target_ids:
+  - ACTION_PLAN_COGNITIVE_CONFLICT_MISSION
+  - CONSTRAINT_NO_HIGH_BLOOM_WITHOUT_AUTHENTIC_CONTEXT
+  - CONSTRAINT_NO_RUNTIME_FEEDBACK_GENERATION
+  - EVENT_HIGH_BLOOM_WITHOUT_AUTHENTIC_CONTEXT
+  - EVENT_UNCOVERED_ERROR
+  - INV_AUTHENTIC_CONTEXT_REQUIRED_FOR_BLOOM4
+  - INV_CREATIVE_KU_AUTONOMY_REQUIRES_DETERMINISTIC_FEEDBACK_PATH
+  - INV_EXPLICIT_DEPENDENCY_EDGES_REQUIRED
+  - INV_KNOWLEDGE_GRAPH_MUST_BE_ACYCLIC
+  - INV_KU_TYPING_REQUIRED
+  - INV_MISSING_KU_TYPE_FORCES_SAFE_FALLBACK
+  - INV_NO_TEXT_ONLY_FOR_PROCEDURAL_OR_PERCEPTUAL
+  - RULE_MISCONCEPTION_REQUIRES_COGNITIVE_CONFLICT
+  - RULE_NON_EXAM_CONCEPT_KEPT_IN_GRAPH
+  - RULE_UNCOVERED_ERROR_GENERIC_FEEDBACK
+  - TYPE_AUTHENTIC_CONTEXT
+  - TYPE_CORPUS_CONFIDENCE_ICC
+  - TYPE_FEEDBACK_COVERAGE_MATRIX
+  - TYPE_KNOWLEDGE_GRAPH
+  - TYPE_KNOWLEDGE_UNIT
+  found_ids:
+  - ACTION_PLAN_COGNITIVE_CONFLICT_MISSION
+  - CONSTRAINT_NO_HIGH_BLOOM_WITHOUT_AUTHENTIC_CONTEXT
+  - CONSTRAINT_NO_RUNTIME_FEEDBACK_GENERATION
+  - EVENT_HIGH_BLOOM_WITHOUT_AUTHENTIC_CONTEXT
+  - EVENT_UNCOVERED_ERROR
+  - INV_AUTHENTIC_CONTEXT_REQUIRED_FOR_BLOOM4
+  - INV_CREATIVE_KU_AUTONOMY_REQUIRES_DETERMINISTIC_FEEDBACK_PATH
+  - INV_EXPLICIT_DEPENDENCY_EDGES_REQUIRED
+  - INV_KNOWLEDGE_GRAPH_MUST_BE_ACYCLIC
+  - INV_KU_TYPING_REQUIRED
+  - INV_MISSING_KU_TYPE_FORCES_SAFE_FALLBACK
+  - INV_NO_TEXT_ONLY_FOR_PROCEDURAL_OR_PERCEPTUAL
+  - RULE_MISCONCEPTION_REQUIRES_COGNITIVE_CONFLICT
+  - RULE_NON_EXAM_CONCEPT_KEPT_IN_GRAPH
+  - RULE_UNCOVERED_ERROR_GENERIC_FEEDBACK
+  - TYPE_AUTHENTIC_CONTEXT
+  - TYPE_CORPUS_CONFIDENCE_ICC
+  - TYPE_FEEDBACK_COVERAGE_MATRIX
+  - TYPE_KNOWLEDGE_GRAPH
+  - TYPE_KNOWLEDGE_UNIT
+  missing_ids: []
+  entries:
+  - _source_core: constitution
+    _source_section: TYPES
+    _matched_id: TYPE_KNOWLEDGE_UNIT
+    entry:
+      id: TYPE_KNOWLEDGE_UNIT
+      authority: primary
+      core_type: CONSTITUTION
+      source_anchor: '[S4][S16]'
+      depends_on: []
+      relations:
+      - type: instantiates
+        target:
+          id: TYPE_KNOWLEDGE_GRAPH
+      - type: constrains
+        target:
+          id: INV_KU_TYPING_REQUIRED
+      patchable: false
+      parameterizable: true
+      human_readable: Knowledge Unit atomique du graphe, à typage épistémologique obligatoire.
+      logic:
+        trigger: null
+        condition: Toute KU doit être typée.
+        effect: Le type KU conditionne feedback, trajectoire, proxys et lecture du MSC.
+        scope: knowledge_model
+  - _source_core: constitution
+    _source_section: TYPES
+    _matched_id: TYPE_KNOWLEDGE_GRAPH
+    entry:
+      id: TYPE_KNOWLEDGE_GRAPH
+      authority: primary
+      core_type: CONSTITUTION
+      source_anchor: '[S4][S18]'
+      depends_on:
+      - TYPE_KNOWLEDGE_UNIT
+      relations:
+      - type: instantiates
+        target:
+          id: TYPE_HUMAN_CHECKPOINT
+      - type: requires
+        target:
+          id: INV_EXPLICIT_DEPENDENCY_EDGES_REQUIRED
+      patchable: false
+      parameterizable: true
+      human_readable: Graphe orienté de KU et de dépendances explicites.
+      logic:
+        trigger: Analyse
+        condition: KU et arêtes de dépendance explicitement déclarées.
+        effect: Le domaine d’apprentissage est instancié localement.
+        scope: analysis_design
+  - _source_core: constitution
+    _source_section: TYPES
+    _matched_id: TYPE_FEEDBACK_COVERAGE_MATRIX
+    entry:
+      id: TYPE_FEEDBACK_COVERAGE_MATRIX
+      authority: primary
+      core_type: CONSTITUTION
+      source_anchor: '[S4][S18]'
+      depends_on:
+      - TYPE_KNOWLEDGE_UNIT
+      relations:
+      - type: validates
+        target:
+          id: RULE_UNCOVERED_ERROR_GENERIC_FEEDBACK
+      patchable: true
+      parameterizable: true
+      human_readable: Matrice d’erreurs et de templates de feedback.
+      logic:
+        trigger: Phase Design
+        condition: KU formelles ou procédurales présentes.
+        effect: Livrable obligatoire de couverture feedback.
+        scope: design
+  - _source_core: constitution
+    _source_section: TYPES
+    _matched_id: TYPE_CORPUS_CONFIDENCE_ICC
+    entry:
+      id: TYPE_CORPUS_CONFIDENCE_ICC
+      authority: primary
+      core_type: CONSTITUTION
+      source_anchor: '[S3][S20]'
+      depends_on: []
+      relations: []
+      patchable: false
+      parameterizable: true
+      human_readable: Indice de confiance du corpus.
+      logic:
+        trigger: Construction du graphe
+        condition: Corpus d’entrée évalué.
+        effect: Qualifie la confiance d’analyse.
+        scope: analysis
+  - _source_core: constitution
+    _source_section: TYPES
+    _matched_id: TYPE_AUTHENTIC_CONTEXT
+    entry:
+      id: TYPE_AUTHENTIC_CONTEXT
+      authority: primary
+      core_type: CONSTITUTION
+      source_anchor: '[S17e][S18]'
+      depends_on: []
+      relations:
+      - type: validates
+        target:
+          id: INV_AUTHENTIC_CONTEXT_REQUIRED_FOR_BLOOM4
+      patchable: true
+      parameterizable: true
+      human_readable: Contexte authentique de référence déclaré en Analyse.
+      logic:
+        trigger: Phase Analyse
+        condition: Situation-problème réelle explicitée.
+        effect: Autorise les missions de Bloom supérieur.
+        scope: analysis_design
+  - _source_core: constitution
+    _source_section: INVARIANTS
+    _matched_id: INV_NO_TEXT_ONLY_FOR_PROCEDURAL_OR_PERCEPTUAL
+    entry:
+      id: INV_NO_TEXT_ONLY_FOR_PROCEDURAL_OR_PERCEPTUAL
+      authority: primary
+      core_type: CONSTITUTION
+      source_anchor: '[S12]'
+      depends_on:
+      - TYPE_KNOWLEDGE_UNIT
+      relations: []
+      patchable: false
+      parameterizable: false
+      human_readable: Le canal textuel seul est interdit pour les KU procédurales et perceptuelles.
+      logic:
+        trigger: Conception des livrables
+        condition: KU procédurale ou perceptuelle détectée.
+        effect: Livrables multimodaux obligatoires.
+        scope: design
+  - _source_core: constitution
+    _source_section: INVARIANTS
+    _matched_id: INV_AUTHENTIC_CONTEXT_REQUIRED_FOR_BLOOM4
+    entry:
+      id: INV_AUTHENTIC_CONTEXT_REQUIRED_FOR_BLOOM4
+      authority: primary
+      core_type: CONSTITUTION
+      source_anchor: '[S17e]'
+      depends_on:
+      - TYPE_AUTHENTIC_CONTEXT
+      relations:
+      - type: blocks
+        target:
+          id: EVENT_HIGH_BLOOM_WITHOUT_AUTHENTIC_CONTEXT
+      patchable: false
+      parameterizable: false
+      human_readable: Le contexte authentique est obligatoire pour Bloom ≥ 4.
+      logic:
+        trigger: Conception ou lancement d’une mission Bloom ≥ 4
+        condition: Contexte authentique absent.
+        effect: Mission interdite et plafonnement à Bloom 2.
+        scope: analysis_design
+  - _source_core: constitution
+    _source_section: INVARIANTS
+    _matched_id: INV_KU_TYPING_REQUIRED
+    entry:
+      id: INV_KU_TYPING_REQUIRED
+      authority: primary
+      core_type: CONSTITUTION
+      source_anchor: '[S16]'
+      depends_on:
+      - TYPE_KNOWLEDGE_UNIT
+      relations: []
+      patchable: false
+      parameterizable: false
+      human_readable: Toute KU doit être typée.
+      logic:
+        trigger: Construction de graphe ou design
+        condition: KU non typée.
+        effect: Le système est incomplet et doit être corrigé avant usage fiable.
+        scope: analysis_design
+  - _source_core: constitution
+    _source_section: INVARIANTS
+    _matched_id: INV_EXPLICIT_DEPENDENCY_EDGES_REQUIRED
+    entry:
+      id: INV_EXPLICIT_DEPENDENCY_EDGES_REQUIRED
+      authority: primary
+      core_type: CONSTITUTION
+      source_anchor: '[S17c][S18]'
+      depends_on:
+      - TYPE_KNOWLEDGE_GRAPH
+      relations: []
+      patchable: false
+      parameterizable: false
+      human_readable: Les arêtes de dépendance doivent être explicites pour autoriser la propagation.
+      logic:
+        trigger: Analyse ou propagation d’incertitude
+        condition: Arêtes non explicites.
+        effect: Aucune propagation autorisée.
+        scope: analysis_runtime_graph
+  - _source_core: constitution
+    _source_section: INVARIANTS
+    _matched_id: INV_KNOWLEDGE_GRAPH_MUST_BE_ACYCLIC
+    entry:
+      id: INV_KNOWLEDGE_GRAPH_MUST_BE_ACYCLIC
+      authority: primary
+      core_type: CONSTITUTION
+      source_anchor: '[S4][S18][PATCH_V4_0]'
+      depends_on:
+      - TYPE_KNOWLEDGE_GRAPH
+      - TYPE_KNOWLEDGE_UNIT
+      relations:
+      - type: constrains
+        target:
+          id: TYPE_KNOWLEDGE_GRAPH
+      patchable: false
+      parameterizable: false
+      human_readable: Le graphe des KU doit rester acyclique au chargement initial comme après tout patch
+        ou rechargement incrémental.
+      logic:
+        trigger: Validation design, chargement du graphe ou revalidation post-patch.
+        condition: Un cycle de dépendance est détecté.
+        effect: État interdit ; déploiement bloqué, chargement refusé ou patch rejeté tant que l’acyclicité
+          n’est pas rétablie.
+        scope: knowledge_model
+  - _source_core: constitution
+    _source_section: INVARIANTS
+    _matched_id: INV_MISSING_KU_TYPE_FORCES_SAFE_FALLBACK
+    entry:
+      id: INV_MISSING_KU_TYPE_FORCES_SAFE_FALLBACK
+      authority: primary
+      core_type: CONSTITUTION
+      source_anchor: '[S12][S14][PATCH_V4_0]'
+      depends_on:
+      - TYPE_KNOWLEDGE_UNIT
+      - INV_KU_TYPING_REQUIRED
+      relations:
+      - type: constrains
+        target:
+          id: TYPE_KNOWLEDGE_UNIT
+      patchable: false
+      parameterizable: false
+      human_readable: Une KU sans type déclaré déclenche un mode de sécurité et interdit toute adaptation
+        fine.
+      logic:
+        trigger: Chargement ou sélection runtime d’une KU
+        condition: Type KU absent, indéterminé ou invalide.
+        effect: KU gelée pour l’adaptation fine ; feedback générique uniquement ; exclusion des règles
+          dépendantes du type ; signal de correction obligatoire.
+        scope: runtime_safety
+  - _source_core: constitution
+    _source_section: INVARIANTS
+    _matched_id: INV_CREATIVE_KU_AUTONOMY_REQUIRES_DETERMINISTIC_FEEDBACK_PATH
+    entry:
+      id: INV_CREATIVE_KU_AUTONOMY_REQUIRES_DETERMINISTIC_FEEDBACK_PATH
+      authority: primary
+      core_type: CONSTITUTION
+      source_anchor: '[S12][S17][PATCH_V4_0]'
+      depends_on:
+      - TYPE_KNOWLEDGE_UNIT
+      - TYPE_FEEDBACK_COVERAGE_MATRIX
+      relations: []
+      patchable: false
+      parameterizable: false
+      human_readable: Une KU créative ne peut être déployée en régime autonome que si son feedback local
+        déterministe est explicitement formalisé.
+      logic:
+        trigger: Validation de déploiement d’une KU créative
+        condition: Aucun chemin de feedback local déterministe n’est disponible.
+        effect: Régime autonome interdit pour cette KU ; checkpoint humain ou redesign requis.
+        scope: design_governance
+  - _source_core: constitution
+    _source_section: RULES
+    _matched_id: RULE_NON_EXAM_CONCEPT_KEPT_IN_GRAPH
+    entry:
+      id: RULE_NON_EXAM_CONCEPT_KEPT_IN_GRAPH
+      authority: primary
+      core_type: CONSTITUTION
+      source_anchor: '[S3]'
+      depends_on:
+      - TYPE_KNOWLEDGE_GRAPH
+      relations: []
+      patchable: false
+      parameterizable: true
+      human_readable: Un concept utile du corpus n’est pas supprimé du graphe même s’il est absent des
+        annales.
+      logic:
+        trigger: Construction ou révision du graphe
+        condition: Concept présent dans le corpus mais absent des annales.
+        effect: Le concept est maintenu avec Bloom minimal et pondération réduite.
+        scope: analysis_design
+  - _source_core: constitution
+    _source_section: RULES
+    _matched_id: RULE_MISCONCEPTION_REQUIRES_COGNITIVE_CONFLICT
+    entry:
+      id: RULE_MISCONCEPTION_REQUIRES_COGNITIVE_CONFLICT
+      authority: primary
+      core_type: CONSTITUTION
+      source_anchor: '[S3][S18]'
+      depends_on:
+      - TYPE_KNOWLEDGE_UNIT
+      relations:
+      - type: triggers
+        target:
+          id: ACTION_PLAN_COGNITIVE_CONFLICT_MISSION
+      patchable: false
+      parameterizable: false
+      human_readable: Une misconception impose une mission de conflit cognitif.
+      logic:
+        trigger: KU flaggée misconception
+        condition: Misconception détectée.
+        effect: Mission de conflit cognitif obligatoire.
+        scope: design_runtime
+  - _source_core: constitution
+    _source_section: RULES
+    _matched_id: RULE_UNCOVERED_ERROR_GENERIC_FEEDBACK
+    entry:
+      id: RULE_UNCOVERED_ERROR_GENERIC_FEEDBACK
+      authority: primary
+      core_type: CONSTITUTION
+      source_anchor: '[S4]'
+      depends_on:
+      - TYPE_FEEDBACK_COVERAGE_MATRIX
+      relations:
+      - type: triggers
+        target:
+          id: EVENT_UNCOVERED_ERROR
+      patchable: false
+      parameterizable: true
+      human_readable: 'Erreur non couverte : feedback générique de processus et flag hors-taxonomie.'
+      logic:
+        trigger: Erreur sans template couvert
+        condition: Aucune entrée matrice applicable.
+        effect: Feedback générique + flag erreur-hors-taxonomie.
+        scope: runtime_feedback
+  - _source_core: constitution
+    _source_section: CONSTRAINTS
+    _matched_id: CONSTRAINT_NO_RUNTIME_FEEDBACK_GENERATION
+    entry:
+      id: CONSTRAINT_NO_RUNTIME_FEEDBACK_GENERATION
+      authority: primary
+      core_type: CONSTITUTION
+      source_anchor: '[S4][S13]'
+      depends_on:
+      - INV_NO_RUNTIME_CONTENT_GENERATION
+      relations: []
+      patchable: false
+      parameterizable: false
+      human_readable: Pas de génération de feedback à la volée.
+      logic:
+        trigger: Production d’un feedback runtime
+        condition: Aucun template préindexé disponible.
+        effect: Interdiction de génération ; appliquer feedback générique autorisé seulement.
+        scope: runtime_feedback
+  - _source_core: constitution
+    _source_section: CONSTRAINTS
+    _matched_id: CONSTRAINT_NO_HIGH_BLOOM_WITHOUT_AUTHENTIC_CONTEXT
+    entry:
+      id: CONSTRAINT_NO_HIGH_BLOOM_WITHOUT_AUTHENTIC_CONTEXT
+      authority: primary
+      core_type: CONSTITUTION
+      source_anchor: '[S17e]'
+      depends_on:
+      - INV_AUTHENTIC_CONTEXT_REQUIRED_FOR_BLOOM4
+      relations: []
+      patchable: false
+      parameterizable: false
+      human_readable: Pas de Bloom ≥ 4 sans contexte authentique.
+      logic:
+        trigger: Conception ou exécution d’une mission haute Bloom
+        condition: Contexte authentique absent.
+        effect: Interdiction.
+        scope: analysis_design
+  - _source_core: constitution
+    _source_section: EVENTS
+    _matched_id: EVENT_UNCOVERED_ERROR
+    entry:
+      id: EVENT_UNCOVERED_ERROR
+      authority: primary
+      core_type: CONSTITUTION
+      source_anchor: '[S4][S18]'
+      depends_on:
+      - TYPE_FEEDBACK_COVERAGE_MATRIX
+      relations:
+      - type: triggers
+        target:
+          id: RULE_UNCOVERED_ERROR_GENERIC_FEEDBACK
+      patchable: false
+      parameterizable: true
+      human_readable: Erreur hors-taxonomie.
+      logic:
+        trigger: Réponse apprenant invalide
+        condition: Aucun pattern d’erreur couvert.
+        effect: Feedback générique + signal de patch.
+        scope: runtime_feedback
+  - _source_core: constitution
+    _source_section: EVENTS
+    _matched_id: EVENT_HIGH_BLOOM_WITHOUT_AUTHENTIC_CONTEXT
+    entry:
+      id: EVENT_HIGH_BLOOM_WITHOUT_AUTHENTIC_CONTEXT
+      authority: primary
+      core_type: CONSTITUTION
+      source_anchor: '[S17e]'
+      depends_on:
+      - TYPE_AUTHENTIC_CONTEXT
+      relations: []
+      patchable: false
+      parameterizable: false
+      human_readable: Tentative de Bloom ≥ 4 sans contexte authentique.
+      logic:
+        trigger: Conception ou exécution haute Bloom
+        condition: Contexte authentique absent.
+        effect: Blocage et plafonnement Bloom 2.
+        scope: analysis_design
+  - _source_core: constitution
+    _source_section: ACTIONS
+    _matched_id: ACTION_PLAN_COGNITIVE_CONFLICT_MISSION
+    entry:
+      id: ACTION_PLAN_COGNITIVE_CONFLICT_MISSION
+      authority: primary
+      core_type: CONSTITUTION
+      source_anchor: '[S3][S18]'
+      depends_on: []
+      relations: []
+      patchable: false
+      parameterizable: true
+      human_readable: Planifier une mission de conflit cognitif.
+      logic:
+        trigger: Misconception détectée
+        condition: Nœud flaggé.
+        effect: Mission corrective dédiée.
+        scope: design_runtime
+  fallback_rule: If missing_ids is non-empty, the AI must explicitly signal each missing ID and fall back
+    to reading the full canonical Core file for that ID only. It must NOT silently ignore missing IDs.
+  notes:
+  - Généré déterministiquement par extract_scope_slice.py depuis les Core canoniques.
+  - Ce fichier est une vue dérivée. Les Core canoniques restent la source de vérité.
+  - En mode bounded_local_run, l'IA doit lire ce fichier en priorité sur les Core complets.
+  - Le champ _source_core indique l'origine canonique de chaque entrée.
