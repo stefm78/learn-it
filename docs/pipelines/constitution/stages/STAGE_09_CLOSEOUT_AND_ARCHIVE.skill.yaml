@@ -102,6 +102,9 @@ deterministic_command_templates:
       docs/cores/current/manifest.yaml
       --closeout-report docs/pipelines/constitution/runs/<run_id>/reports/closeout_report.yaml
       --final-summary docs/pipelines/constitution/runs/<run_id>/outputs/final_run_summary.md
+      --work-root docs/pipelines/constitution/runs/<run_id>/work
+      --reports-root docs/pipelines/constitution/runs/<run_id>/reports
+      --outputs-root docs/pipelines/constitution/runs/<run_id>/outputs
     close_tracking: >-
       python docs/patcher/shared/update_run_tracking.py
       --pipeline constitution

@@ -502,6 +502,9 @@ def main() -> None:
     parser.add_argument("--closeout-report", default=DEFAULT_CLOSEOUT_REPORT_PATH)
     parser.add_argument("--final-summary", default=DEFAULT_FINAL_SUMMARY_PATH)
     parser.add_argument("--archive-root", default=DEFAULT_ARCHIVE_ROOT)
+    parser.add_argument("--work-root", default=DEFAULT_WORK_ROOT)
+    parser.add_argument("--reports-root", default=DEFAULT_REPORTS_ROOT)
+    parser.add_argument("--outputs-root", default=DEFAULT_OUTPUTS_ROOT)
     parser.add_argument(
         "--export-backlog-entries",
         action="store_true",
@@ -541,9 +544,9 @@ def main() -> None:
     closeout_report_path = Path(args.closeout_report)
     final_summary_path = Path(args.final_summary)
     archive_root = Path(args.archive_root)
-    work_root = Path(DEFAULT_WORK_ROOT)
-    reports_root = Path(DEFAULT_REPORTS_ROOT)
-    outputs_root = Path(DEFAULT_OUTPUTS_ROOT)
+    work_root = Path(args.work_root)
+    reports_root = Path(args.reports_root)
+    outputs_root = Path(args.outputs_root)
 
     release_id = "unknown"
     source_release_path = "unknown"
