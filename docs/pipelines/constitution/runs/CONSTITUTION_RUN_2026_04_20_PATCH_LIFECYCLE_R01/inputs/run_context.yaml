@@ -9,18 +9,20 @@ run_context:
   mode: bounded_local_run
   status: active
   scope_key: patch_lifecycle
-  current_stage: STAGE_01_CHALLENGE
-  current_stage_canonical: STAGE_01_CHALLENGE
+  current_stage: STAGE_02_ARBITRAGE
+  current_stage_canonical: STAGE_02_ARBITRAGE
   last_stage_status: done
-  next_stage: STAGE_02_ARBITRAGE
-  next_stage_canonical: STAGE_02_ARBITRAGE
-  next_executable_stage: STAGE_02_ARBITRAGE
-  next_executable_stage_canonical: STAGE_02_ARBITRAGE
+  next_stage: STAGE_03_PATCH_SYNTHESIS
+  next_stage_canonical: STAGE_03_PATCH_SYNTHESIS
+  next_executable_stage: STAGE_03_PATCH_SYNTHESIS
+  next_executable_stage_canonical: STAGE_03_PATCH_SYNTHESIS
   terminal_closed: false
   completed_stages:
   - STAGE_01_CHALLENGE
+  - STAGE_02_ARBITRAGE
   completed_stages_canonical:
   - STAGE_01_CHALLENGE
+  - STAGE_02_ARBITRAGE
   scope_ids:
   - ACTION_ESCALATE_PERSISTENT_DRIFT_OFFSESSION
   - ACTION_LOG_UNCOVERED_CONFLICT
@@ -71,7 +73,7 @@ run_context:
     impact_bundle: docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_20_PATCH_LIFECYCLE_R01/inputs/impact_bundle.yaml
     integration_gate: docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_20_PATCH_LIFECYCLE_R01/inputs/integration_gate.yaml
   source_fingerprints:
-    run_manifest.yaml: c7fc235df1c4edb907c048612eab259f5907858f565ef20d25c97a69073f1041
+    run_manifest.yaml: 8118eb1a608151b773de48ed690b1faebfa86c605da34fcf7a063a8884629c55
     scope_manifest.yaml: 689af14d4465e82a0bded10b82c4274daaae4d4f13a24ae63441ceea4a6b896d
     impact_bundle.yaml: 5c52184ac4a990864429e2a6ff51e56c7d3e6972923461545067eb1d2bebe7a0
     integration_gate.yaml: 026f70e3378e359d9df70878c0dbc80aae70abe08f9bab5e7c663bf32329e70c
@@ -79,9 +81,9 @@ run_context:
     neighbor_extract.yaml: a4da4a8cf1d2c8117b5b6e7b7ee66cbc41537b3e2e3fefd7f9e3d000b028cdbc
   task_view:
     status: executable
-    raw_stage_id: STAGE_02_ARBITRAGE
-    stage_id: STAGE_02_ARBITRAGE
-    skill_ref: docs/pipelines/constitution/stages/STAGE_02_ARBITRAGE.skill.yaml
+    raw_stage_id: STAGE_03_PATCH_SYNTHESIS
+    stage_id: STAGE_03_PATCH_SYNTHESIS
+    skill_ref: docs/pipelines/constitution/stages/STAGE_03_PATCH_SYNTHESIS.skill.yaml
     stage_kind: cognitive
     closure_level: high
     resolved_inputs:
@@ -90,8 +92,8 @@ run_context:
     - docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_20_PATCH_LIFECYCLE_R01/inputs/impact_bundle.yaml
     - docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_20_PATCH_LIFECYCLE_R01/inputs/integration_gate.yaml
     execution_paths:
-      work_dir: docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_20_PATCH_LIFECYCLE_R01/work/02_arbitrage/
-      primary_output: docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_20_PATCH_LIFECYCLE_R01/work/02_arbitrage/arbitrage.md
+      work_dir: docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_20_PATCH_LIFECYCLE_R01/work/03_patch/
+      primary_output: docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_20_PATCH_LIFECYCLE_R01/work/03_patch/patchset.yaml
       reports_dir: docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_20_PATCH_LIFECYCLE_R01/reports/
     required_scripts_status:
       scope_extract_present: true
@@ -101,11 +103,11 @@ run_context:
     forbidden_actions: []
     completion_evidence: []
     allowed_transitions: {}
-    compact_execution_prompt: Dans le repo learn-it, exécute STAGE_02_ARBITRAGE du pipeline constitution
+    compact_execution_prompt: Dans le repo learn-it, exécute STAGE_03_PATCH_SYNTHESIS du pipeline constitution
       pour run_id=CONSTITUTION_RUN_2026_04_20_PATCH_LIFECYCLE_R01 en mode bounded_local_run. Lis d'abord
       docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_20_PATCH_LIFECYCLE_R01/inputs/run_context.yaml,
       docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_20_PATCH_LIFECYCLE_R01/inputs/scope_manifest.yaml,
       docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_20_PATCH_LIFECYCLE_R01/inputs/impact_bundle.yaml,
       docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_20_PATCH_LIFECYCLE_R01/inputs/integration_gate.yaml.
-      Applique le contrat stable défini dans docs/pipelines/constitution/stages/STAGE_02_ARBITRAGE.skill.yaml.
+      Applique le contrat stable défini dans docs/pipelines/constitution/stages/STAGE_03_PATCH_SYNTHESIS.skill.yaml.
       Ne produis que les livrables du stage courant et ne simule aucun script requis.
