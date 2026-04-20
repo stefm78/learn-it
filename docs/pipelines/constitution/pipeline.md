@@ -71,8 +71,9 @@ Règle structurante :
 
 - Analyze scope partition: `docs/patcher/shared/analyze_constitution_scope_partition.py`
 - Generate constitution scopes: `docs/patcher/shared/generate_constitution_scopes.py`
-- **Materialize run inputs: `docs/patcher/shared/materialize_run_inputs.py`** ← à exécuter avant STAGE_01_CHALLENGE
-- **Build run context: `docs/patcher/shared/build_run_context.py`** ← à exécuter pendant MATERIALIZE_NEW_RUN
+- **Materialize run inputs: `docs/patcher/shared/materialize_run_inputs.py`** ← à exécuter pendant MATERIALIZE_NEW_RUN et avant STAGE_01_CHALLENGE
+- **Extract ids-first scope slices: `docs/patcher/shared/extract_scope_slice.py`** ← à exécuter pendant MATERIALIZE_NEW_RUN après `materialize_run_inputs.py` et avant `build_run_context.py`
+- **Build run context: `docs/patcher/shared/build_run_context.py`** ← à exécuter pendant MATERIALIZE_NEW_RUN après génération des extraits ids-first
 - Patch DSL: `docs/specs/patch-dsl/current.md`
 - Apply patch: `docs/patcher/shared/apply_patch.py`
 - Validate patchset: `docs/patcher/shared/validate_patchset.py`
@@ -95,12 +96,13 @@ When the user does not provide a `run_id`, entry is resolved through two distinc
 - `docs/pipelines/constitution/entry_actions/MATERIALIZE_NEW_RUN.action.yaml`
   - materially opens the run through deterministic tracking
   - materially generates run inputs via `materialize_run_inputs.py`
+  - materially generates ids-first extracts via `extract_scope_slice.py`
   - materially generates `run_context.yaml` via `build_run_context.py`
   - must stop before `STAGE_01_CHALLENGE`
   - must emit `CONTINUE_ACTIVE_RUN` as the next canonical action when bootstrap succeeds
 
 Structured rule:
 - no-run-id startup must not jump directly from entry decision to STAGE_01
-- run tracking materialization, input materialization, and run_context materialization are mandatory bootstrap acts
+- run tracking materialization, input materialization, ids-first extract materialization, and run_context materialization are mandatory bootstrap acts
 - `OPEN_NEW_RUN` stops on execution, not on guidance: after a successful decision it must point explicitly to `MATERIALIZE_NEW_RUN`
-- STAGE_01_CHALLENGE may start only after the run has been materially opened, its inputs materially generated, and `run_context.yaml` materially generated
+- STAGE_01_CHALLENGE may start only after the run has been materially opened, its inputs materially generated, its ids-first extracts materially generated, and `run_context.yaml` materially generated
