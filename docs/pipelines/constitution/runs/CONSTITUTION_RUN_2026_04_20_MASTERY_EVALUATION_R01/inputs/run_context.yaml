@@ -9,18 +9,20 @@ run_context:
   mode: bounded_local_run
   status: active
   scope_key: mastery_evaluation
-  current_stage: STAGE_01_CHALLENGE
-  current_stage_canonical: STAGE_01_CHALLENGE
+  current_stage: STAGE_02_ARBITRAGE
+  current_stage_canonical: STAGE_02_ARBITRAGE
   last_stage_status: done
-  next_stage: STAGE_02_ARBITRAGE
-  next_stage_canonical: STAGE_02_ARBITRAGE
-  next_executable_stage: STAGE_02_ARBITRAGE
-  next_executable_stage_canonical: STAGE_02_ARBITRAGE
+  next_stage: STAGE_03_PATCH_SYNTHESIS
+  next_stage_canonical: STAGE_03_PATCH_SYNTHESIS
+  next_executable_stage: STAGE_03_PATCH_SYNTHESIS
+  next_executable_stage_canonical: STAGE_03_PATCH_SYNTHESIS
   terminal_closed: false
   completed_stages:
   - STAGE_01_CHALLENGE
+  - STAGE_02_ARBITRAGE
   completed_stages_canonical:
   - STAGE_01_CHALLENGE
+  - STAGE_02_ARBITRAGE
   scope_ids:
   - ACTION_PLAN_SHORT_DIAGNOSTIC_TASK
   - CONSTRAINT_NO_BIOMETRICS_OR_OFFSESSION_SURVEILLANCE
@@ -83,7 +85,7 @@ run_context:
     impact_bundle: docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_20_MASTERY_EVALUATION_R01/inputs/impact_bundle.yaml
     integration_gate: docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_20_MASTERY_EVALUATION_R01/inputs/integration_gate.yaml
   source_fingerprints:
-    run_manifest.yaml: d8883678264a822911b49fb533c5c91990b4fe32753a43fe991f157caceaa8ce
+    run_manifest.yaml: 83d0d297a58acdde77705fafeab951da8cd14d90f24fb457dec04f6a54fa7b7b
     scope_manifest.yaml: eaf544b032a49b3c54b48aec49f48e1788684a98eda0aac91933708a645ff629
     impact_bundle.yaml: 0311f3571b556e585a0f04663d4cd6bdc71b8d1fb82cae8d755959ee6c8ecc63
     integration_gate.yaml: d555f59930647f748f2b34a630a07c6744790e9b87ad53a7cf222257687b065a
@@ -91,9 +93,9 @@ run_context:
     neighbor_extract.yaml: aa3b8eb769191bc0bb14c72e1612365c0017ba8717f3c1bd9a84af49cccabe4b
   task_view:
     status: executable
-    raw_stage_id: STAGE_02_ARBITRAGE
-    stage_id: STAGE_02_ARBITRAGE
-    skill_ref: docs/pipelines/constitution/stages/STAGE_02_ARBITRAGE.skill.yaml
+    raw_stage_id: STAGE_03_PATCH_SYNTHESIS
+    stage_id: STAGE_03_PATCH_SYNTHESIS
+    skill_ref: docs/pipelines/constitution/stages/STAGE_03_PATCH_SYNTHESIS.skill.yaml
     stage_kind: cognitive
     closure_level: high
     resolved_inputs:
@@ -102,8 +104,8 @@ run_context:
     - docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_20_MASTERY_EVALUATION_R01/inputs/impact_bundle.yaml
     - docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_20_MASTERY_EVALUATION_R01/inputs/integration_gate.yaml
     execution_paths:
-      work_dir: docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_20_MASTERY_EVALUATION_R01/work/02_arbitrage/
-      primary_output: docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_20_MASTERY_EVALUATION_R01/work/02_arbitrage/arbitrage.md
+      work_dir: docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_20_MASTERY_EVALUATION_R01/work/03_patch/
+      primary_output: docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_20_MASTERY_EVALUATION_R01/work/03_patch/patchset.yaml
       reports_dir: docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_20_MASTERY_EVALUATION_R01/reports/
     required_scripts_status:
       scope_extract_present: true
@@ -113,11 +115,11 @@ run_context:
     forbidden_actions: []
     completion_evidence: []
     allowed_transitions: {}
-    compact_execution_prompt: Dans le repo learn-it, exécute STAGE_02_ARBITRAGE du pipeline constitution
+    compact_execution_prompt: Dans le repo learn-it, exécute STAGE_03_PATCH_SYNTHESIS du pipeline constitution
       pour run_id=CONSTITUTION_RUN_2026_04_20_MASTERY_EVALUATION_R01 en mode bounded_local_run. Lis d'abord
       docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_20_MASTERY_EVALUATION_R01/inputs/run_context.yaml,
       docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_20_MASTERY_EVALUATION_R01/inputs/scope_manifest.yaml,
       docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_20_MASTERY_EVALUATION_R01/inputs/impact_bundle.yaml,
       docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_20_MASTERY_EVALUATION_R01/inputs/integration_gate.yaml.
-      Applique le contrat stable défini dans docs/pipelines/constitution/stages/STAGE_02_ARBITRAGE.skill.yaml.
+      Applique le contrat stable défini dans docs/pipelines/constitution/stages/STAGE_03_PATCH_SYNTHESIS.skill.yaml.
       Ne produis que les livrables du stage courant et ne simule aucun script requis.

@@ -11,12 +11,28 @@ NEW_PARSE_ARGS = '''
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="Reconcile a constitution run.")
     parser.add_argument("--pipeline", required=True)
-    parser.add_argument("--run-id", required=True)
+    parser.add_argument("--run-id", required=False)
     parser.add_argument("--repo-root", default=".")
     parser.add_argument(
         "--apply",
         action="store_true",
         help="Apply the reconciliation plan materially.",
+    )
+    parser.add_argument(
+        "--output",
+        choices=("human", "json"),
+        default="human",
+        help="Select output format.",
+    )
+    parser.add_argument(
+        "--dashboard",
+        action="store_true",
+        help="Render a dashboard view from runs/index.yaml.",
+    )
+    parser.add_argument(
+        "--dashboard-probe",
+        action="store_true",
+        help="Reserved for a later step: dashboard enriched with reconciliation probes.",
     )
     parser.add_argument(
         "--output-mode",
@@ -28,82 +44,175 @@ def parse_args() -> argparse.Namespace:
 '''
 
 
-NEW_COMPACT_HELPER = '''
-def build_compact_reconciliation_payload(payload: Dict[str, Any]) -> Dict[str, Any]:
-    repaired_artifacts = payload.get("repaired_artifacts", [])
-    invalidated_downstream_stage_set = payload.get("invalidated_downstream_stage_set", [])
+NEW_DASHBOARD_HELPERS = '''
+def build_dashboard_rows(index_data: Dict[str, Any], pattern: str) -> List[Dict[str, Any]]:
+    runs_index = index_data.get("runs_index", {})
+    active_runs = runs_index.get("active_runs", [])
+    closed_runs = runs_index.get("closed_runs", [])
 
-    would_change_material_state = bool(
-        repaired_artifacts or invalidated_downstream_stage_set
+    normalized_pattern = (pattern or "*").upper()
+
+    def matches(entry: Dict[str, Any]) -> bool:
+        candidates = [
+            str(entry.get("run_id", "")),
+            str(entry.get("scope_key", "")),
+            str(entry.get("scope_id", "")),
+        ]
+        return any(
+            candidate and fnmatch.fnmatchcase(candidate.upper(), normalized_pattern)
+            for candidate in candidates
+        )
+
+    rows: List[Dict[str, Any]] = []
+
+    if isinstance(active_runs, list):
+        for entry in active_runs:
+            if not isinstance(entry, dict):
+                continue
+            if not matches(entry):
+                continue
+            rows.append(
+                {
+                    "bucket": "active",
+                    "run_id": str(entry.get("run_id", "")),
+                    "scope_key": str(entry.get("scope_key", "")),
+                    "scope_id": str(entry.get("scope_id", "")),
+                    "run_status": str(entry.get("run_status", "")),
+                    "current_stage": str(entry.get("current_stage", "")),
+                    "mode": str(entry.get("mode", "")),
+                }
+            )
+
+    if isinstance(closed_runs, list):
+        for entry in closed_runs:
+            if not isinstance(entry, dict):
+                continue
+            if not matches(entry):
+                continue
+            rows.append(
+                {
+                    "bucket": "closed",
+                    "run_id": str(entry.get("run_id", "")),
+                    "scope_key": str(entry.get("scope_key", "")),
+                    "scope_id": str(entry.get("scope_id", "")),
+                    "run_status": str(entry.get("run_status", "")),
+                    "current_stage": str(entry.get("current_stage", "")),
+                    "mode": str(entry.get("mode", "")),
+                }
+            )
+
+    rows.sort(key=lambda item: (0 if item["bucket"] == "active" else 1, item["run_id"]))
+    return rows
+
+
+def build_dashboard_payload(
+    index_data: Dict[str, Any],
+    rows: List[Dict[str, Any]],
+    pattern: str,
+) -> Dict[str, Any]:
+    runs_index = index_data.get("runs_index", {})
+    active_runs = runs_index.get("active_runs", [])
+    closed_runs = runs_index.get("closed_runs", [])
+
+    matched_active = sum(1 for row in rows if row.get("bucket") == "active")
+    matched_closed = sum(1 for row in rows if row.get("bucket") == "closed")
+
+    payload = {
+        "runs_dashboard": {
+            "pipeline_id": str(runs_index.get("pipeline_id", "")),
+            "last_updated": str(runs_index.get("last_updated", "")),
+            "filter": pattern or "*",
+            "counts": {
+                "total_runs": len(active_runs) + len(closed_runs) if isinstance(active_runs, list) and isinstance(closed_runs, list) else len(rows),
+                "active_runs": len(active_runs) if isinstance(active_runs, list) else 0,
+                "closed_runs": len(closed_runs) if isinstance(closed_runs, list) else 0,
+                "matched_runs": len(rows),
+                "matched_active_runs": matched_active,
+                "matched_closed_runs": matched_closed,
+            },
+            "items": rows,
+        }
+    }
+    return payload
+
+
+def render_dashboard_human(
+    index_data: Dict[str, Any],
+    rows: List[Dict[str, Any]],
+    pattern: str,
+) -> str:
+    runs_index = index_data.get("runs_index", {})
+    active_runs = runs_index.get("active_runs", [])
+    closed_runs = runs_index.get("closed_runs", [])
+
+    total_runs = (len(active_runs) if isinstance(active_runs, list) else 0) + (len(closed_runs) if isinstance(closed_runs, list) else 0)
+    active_count = len(active_runs) if isinstance(active_runs, list) else 0
+    closed_count = len(closed_runs) if isinstance(closed_runs, list) else 0
+
+    lines: List[str] = []
+    if pattern and pattern != "*":
+        lines.append(f"FILTER {pattern}")
+    lines.append(
+        f"PIPELINE {runs_index.get('pipeline_id', '')}  |  LAST_UPDATED {runs_index.get('last_updated', '')}"
+    )
+    lines.append(
+        f"TOTAL {total_runs}  |  ACTIVE {active_count}  |  CLOSED {closed_count}  |  MATCHED {len(rows)}"
+    )
+    lines.append("")
+    lines.append(
+        f"{'RUN_ID':<52} {'SCOPE_KEY':<22} {'STATUS':<15} {'STAGE':<30} {'MODE'}"
     )
 
-    compact_payload = {
-        "status": payload.get("status", ""),
-        "apply": payload.get("apply", False),
-        "pipeline_id": payload.get("pipeline_id", ""),
-        "run_id": payload.get("run_id", ""),
-        "mode": payload.get("mode", ""),
-        "reconciliation_status": payload.get("reconciliation_status", ""),
-        "trusted_prefix_end_stage": payload.get("trusted_prefix_end_stage", ""),
-        "restart_stage": payload.get("restart_stage", ""),
-        "repaired_artifacts": repaired_artifacts,
-        "invalidated_downstream_stage_set": invalidated_downstream_stage_set,
-        "run_status_after_reconciliation": payload.get("run_status_after_reconciliation", ""),
-        "current_stage_after_reconciliation": payload.get("current_stage_after_reconciliation", ""),
-        "next_stage_after_reconciliation": payload.get("next_stage_after_reconciliation", ""),
-        "next_best_action": payload.get("next_best_action", ""),
-        "next_best_action_reason": payload.get("next_best_action_reason", ""),
-        "would_change_material_state": would_change_material_state,
-    }
+    for row in rows:
+        lines.append(
+            f"{row.get('run_id', ''):<52} "
+            f"{row.get('scope_key', ''):<22} "
+            f"{row.get('run_status', ''):<15} "
+            f"{row.get('current_stage', ''):<30} "
+            f"{row.get('mode', '')}"
+        )
 
-    return {"reconcile_run": compact_payload}
+    if not rows:
+        lines.append("(no run matched the current filter)")
+
+    return "\\n".join(lines) + "\\n"
 '''
 
 
-NEW_RESULT_BLOCK = '''
-    full_result = {
-        "reconcile_run": {
-            "status": "DONE",
-            "apply": args.apply,
-            "pipeline_id": args.pipeline,
-            "run_id": args.run_id,
-            "mode": mode,
-            "reconciliation_status": reconciliation_status,
-            "trusted_prefix_end_stage": trusted_prefix[-1] if trusted_prefix else "",
-            "restart_stage": restart_stage or "",
-            "restart_stage_reason": restart_stage_reason,
-            "restart_stage_policy_source": restart_stage_policy_source,
-            "claimed_done_stages": claimed_done,
-            "trusted_prefix": trusted_prefix,
-            "evidence_derivation_mode": (
-                "skill_expected_outputs_plus_required_execution_paths_with_fallback"
-            ),
-            "missing_evidence_by_stage": stage_missing_map,
-            "repaired_artifacts": repaired_artifacts,
-            "repair_commands": repair_commands,
-            "invalidated_downstream_stage_set": invalidated_stages,
-            "removed_artifacts": removed_artifacts,
-            "stage_contract_summary": stage_contract_summary,
-            "run_status_after_reconciliation": final_manifest.get("status", ""),
-            "current_stage_after_reconciliation": final_exec_state.get("current_stage", ""),
-            "next_stage_after_reconciliation": final_exec_state.get("next_stage", ""),
-            "run_context_rebuild": run_context_command,
-            "next_best_action": "CONTINUE_ACTIVE_RUN" if restart_stage else "INSPECT",
-            "next_best_action_reason": (
-                f"Run repositioned on {restart_stage}."
-                if restart_stage
-                else "Run is fully reconciled and does not require stage restart."
-            ),
-        }
-    }
+NEW_MAIN_HEAD = '''
+def main() -> int:
+    args = parse_args()
 
-    result = (
-        build_compact_reconciliation_payload(full_result["reconcile_run"])
-        if args.output_mode == "compact"
-        else full_result
-    )
+    if args.pipeline != "constitution":
+        raise SystemExit("Unsupported pipeline for now: constitution only")
 
-    print(json.dumps(result, indent=2, ensure_ascii=False))
+    repo_root = Path(args.repo_root).resolve()
+    pipeline_root = repo_root / "docs" / "pipelines" / args.pipeline
+
+    if args.dashboard or args.dashboard_probe:
+        if args.dashboard_probe:
+            raise SystemExit(
+                "--dashboard-probe is reserved for the next step. "
+                "Use --dashboard first."
+            )
+
+        runs_index_path = pipeline_root / "runs" / "index.yaml"
+        if not runs_index_path.exists():
+            raise SystemExit(f"runs/index.yaml missing: {runs_index_path}")
+
+        index_data = load_yaml(runs_index_path)
+        filter_pattern = args.run_id or "*"
+        rows = build_dashboard_rows(index_data, filter_pattern)
+
+        if args.output == "json":
+            payload = build_dashboard_payload(index_data, rows, filter_pattern)
+            print(json.dumps(payload, indent=2, ensure_ascii=False))
+        else:
+            print(render_dashboard_human(index_data, rows, filter_pattern), end="")
+        return 0
+
+    if not args.run_id:
+        raise SystemExit("--run-id is required outside dashboard mode")
 '''
 
 
@@ -127,52 +236,46 @@ def replace_top_level_function(source: str, func_name: str, new_block: str) -> s
     if end is None:
         end = len(lines)
 
-    replacement = new_block.strip("\n").splitlines(keepends=True)
-    replacement = [line if line.endswith("\n") else line + "\n" for line in replacement]
-    replacement.append("\n")
+    replacement = new_block.strip("\\n").splitlines(keepends=True)
+    replacement = [line if line.endswith("\\n") else line + "\\n" for line in replacement]
+    replacement.append("\\n")
 
-    new_lines = lines[:start] + replacement + lines[end:]
-    return "".join(new_lines)
+    return "".join(lines[:start] + replacement + lines[end:])
+
+
+def insert_import_if_missing(source: str, import_line: str, after_line: str) -> str:
+    if import_line in source:
+        return source
+    marker = after_line + "\\n"
+    idx = source.find(marker)
+    if idx == -1:
+        raise RuntimeError(f"Import anchor not found: {after_line}")
+    insert_at = idx + len(marker)
+    return source[:insert_at] + import_line + "\\n" + source[insert_at:]
 
 
 def insert_helper_before_main(source: str, helper_block: str) -> str:
-    marker = "def main() -> int:\n"
+    marker = "def main() -> int:\\n"
     idx = source.find(marker)
     if idx == -1:
         raise RuntimeError("main() marker not found")
-
     if helper_block.strip() in source:
         return source
-
-    helper_text = helper_block.strip("\n") + "\n\n"
-    return source[:idx] + helper_text + source[idx:]
+    return source[:idx] + helper_block.strip("\\n") + "\\n\\n" + source[idx:]
 
 
-def replace_result_block(source: str, new_block: str) -> str:
-    lines = source.splitlines(keepends=True)
+def replace_main_head(source: str, new_head: str) -> str:
+    marker_old = '''def main() -> int:
+    args = parse_args()
+    if args.pipeline != "constitution":
+        raise SystemExit("Unsupported pipeline for now: constitution only")
 
-    start = None
-    for i, line in enumerate(lines):
-        if line == '    result = {\n':
-            start = i
-            break
-    if start is None:
-        raise RuntimeError("Result block start not found")
-
-    end = None
-    for i in range(start, len(lines)):
-        if lines[i] == '    print(json.dumps(result, indent=2, ensure_ascii=False))\n':
-            end = i + 1
-            break
-    if end is None:
-        raise RuntimeError("Result block end not found")
-
-    replacement = new_block.strip("\n").splitlines(keepends=True)
-    replacement = [line if line.endswith("\n") else line + "\n" for line in replacement]
-    replacement.append("\n")
-
-    new_lines = lines[:start] + replacement + lines[end:]
-    return "".join(new_lines)
+    repo_root = Path(args.repo_root).resolve()
+    pipeline_root = repo_root / "docs" / "pipelines" / args.pipeline
+'''
+    if marker_old not in source:
+        raise RuntimeError("main() head block not found")
+    return source.replace(marker_old, new_head.strip("\\n") + "\\n", 1)
 
 
 def main() -> None:
@@ -180,10 +283,10 @@ def main() -> None:
         raise FileNotFoundError(f"Missing target file: {TARGET}")
 
     text = TARGET.read_text(encoding="utf-8")
-
+    text = insert_import_if_missing(text, "import fnmatch", "import argparse")
     text = replace_top_level_function(text, "parse_args", NEW_PARSE_ARGS)
-    text = insert_helper_before_main(text, NEW_COMPACT_HELPER)
-    text = replace_result_block(text, NEW_RESULT_BLOCK)
+    text = insert_helper_before_main(text, NEW_DASHBOARD_HELPERS)
+    text = replace_main_head(text, NEW_MAIN_HEAD)
 
     TARGET.write_text(text, encoding="utf-8")
     print(f"Patched: {TARGET}")
