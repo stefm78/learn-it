@@ -265,41 +265,52 @@ def derive_restart_stage_from_transition(
 def execution_path_required_by_contract(path_key: str, required_tokens: List[str]) -> Optional[str]:
     normalized_key = normalize_token(path_key)
 
-    candidate_fragments: Set[str] = {normalized_key}
-    for fragment in split_token_fragments(path_key):
-        candidate_fragments.add(fragment)
+    def trim_suffixes(value: str) -> str:
+        trimmed = value
+        for suffix in PATH_KEY_SUFFIXES:
+            if trimmed.endswith(suffix):
+                trimmed = trimmed[: -len(suffix)]
+                break
+        return trimmed.strip("_")
 
-    for suffix in PATH_KEY_SUFFIXES:
-        if normalized_key.endswith(suffix):
-            trimmed = normalized_key[: -len(suffix)]
-            if trimmed:
-                candidate_fragments.add(trimmed)
-                candidate_fragments.update(split_token_fragments(trimmed))
+    base_key = trim_suffixes(normalized_key)
+
+    # Aliases explicites pour les cas réellement voulus par les skills actuels.
+    explicit_aliases = {
+        "sandbox_root": {
+            "sandbox_or_output_tree_materialized",
+            "sandbox_root_materialized",
+            "sandbox_materialized",
+        },
+        "execution_report": {
+            "patch_execution_report_materialized",
+            "execution_report_materialized",
+        },
+    }
+
+    allowed_tokens = {normalize_token(token) for token in explicit_aliases.get(normalized_key, set())}
 
     for required_token in required_tokens:
         normalized_required = normalize_token(required_token)
 
-        # On ne dérive un execution_path comme preuve que si le contrat parle
-        # explicitement de matérialisation. Les tokens *_executed_for_real ne
-        # doivent pas suffire à justifier un dossier structurel.
+        # On ne dérive un execution_path comme preuve que pour un token de
+        # matérialisation explicite, jamais pour un simple *_executed_for_real.
         if "materialized" not in normalized_required:
             continue
 
-        required_fragments = split_token_fragments(required_token)
+        # 1) Cas explicitement autorisés.
+        if normalized_required in allowed_tokens:
+            return required_token
 
-        for fragment in candidate_fragments:
-            if not fragment:
-                continue
-
-            # Matching plus strict : on évite les collisions trop larges sur
-            # "release", "report", etc.
-            if fragment == normalized_required:
+        # 2) Fallback conservateur :
+        #    on n'accepte que des correspondances quasi exactes sur le nom du
+        #    chemin déclaré, après retrait du suffixe _root/_dir/_path.
+        if base_key:
+            if normalized_required == f"{base_key}_materialized":
                 return required_token
-            if fragment in required_fragments:
+            if normalized_required.startswith(f"{base_key}_") and normalized_required.endswith("_materialized"):
                 return required_token
-            if normalized_required.startswith(fragment + "_"):
-                return required_token
-            if normalized_required.endswith("_" + fragment):
+            if normalized_required.endswith(f"_{base_key}_materialized"):
                 return required_token
 
     return None
