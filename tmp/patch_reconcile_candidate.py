@@ -22,7 +22,7 @@ def parse_args() -> argparse.Namespace:
         "--output",
         choices=("human", "json"),
         default="human",
-        help="Select output format.",
+        help="Select output format. In this step, it affects dashboard mode.",
     )
     parser.add_argument(
         "--dashboard",
@@ -182,10 +182,23 @@ def render_dashboard_human(
 '''
 
 
+OLD_MAIN_HEAD = '''
+def main() -> int:
+    args = parse_args()
+    if args.pipeline != "constitution":
+        raise SystemExit("Unsupported pipeline for now: constitution only")
+
+    repo_root = Path(args.repo_root).resolve()
+    pipeline_root = repo_root / "docs" / "pipelines" / args.pipeline
+    run_root = pipeline_root / "runs" / args.run_id
+    run_manifest_path = run_root / "run_manifest.yaml"
+    runs_index_path = pipeline_root / "runs" / "index.yaml"
+'''
+
+
 NEW_MAIN_HEAD = '''
 def main() -> int:
     args = parse_args()
-
     if args.pipeline != "constitution":
         raise SystemExit("Unsupported pipeline for now: constitution only")
 
@@ -215,6 +228,10 @@ def main() -> int:
 
     if not args.run_id:
         raise SystemExit("--run-id is required outside dashboard mode")
+
+    run_root = pipeline_root / "runs" / args.run_id
+    run_manifest_path = run_root / "run_manifest.yaml"
+    runs_index_path = pipeline_root / "runs" / "index.yaml"
 '''
 
 
@@ -280,28 +297,30 @@ def insert_import_if_missing(source: str, import_line: str) -> str:
     return "".join(lines)
 
 
-def insert_helper_before_main(source: str, helper_block: str) -> str:
-    marker = "def main() -> int:\\n"
-    idx = source.find(marker)
-    if idx == -1:
-        raise RuntimeError("main() marker not found")
-    if helper_block.strip() in source:
+def insert_before_top_level_function(source: str, func_name: str, block: str) -> str:
+    if block.strip() in source:
         return source
-    return source[:idx] + helper_block.strip("\\n") + "\\n\\n" + source[idx:]
+
+    lines = source.splitlines(keepends=True)
+    start = None
+    for i, line in enumerate(lines):
+        if line.startswith(f"def {func_name}("):
+            start = i
+            break
+    if start is None:
+        raise RuntimeError(f"Top-level function marker not found: {func_name}")
+
+    insertion = block.strip("\\n").splitlines(keepends=True)
+    insertion = [line if line.endswith("\\n") else line + "\\n" for line in insertion]
+    insertion.append("\\n")
+
+    return "".join(lines[:start] + insertion + lines[start:])
 
 
-def replace_main_head(source: str, new_head: str) -> str:
-    old_head = '''def main() -> int:
-    args = parse_args()
-    if args.pipeline != "constitution":
-        raise SystemExit("Unsupported pipeline for now: constitution only")
-
-    repo_root = Path(args.repo_root).resolve()
-    pipeline_root = repo_root / "docs" / "pipelines" / args.pipeline
-'''
-    if old_head not in source:
-        raise RuntimeError("main() head block not found")
-    return source.replace(old_head, new_head.strip("\\n") + "\\n", 1)
+def replace_exact_once(source: str, old: str, new: str) -> str:
+    if old not in source:
+        raise RuntimeError("Expected block not found for replacement")
+    return source.replace(old, new, 1)
 
 
 def main() -> None:
@@ -314,8 +333,12 @@ def main() -> None:
 
     text = insert_import_if_missing(text, "import fnmatch")
     text = replace_top_level_function(text, "parse_args", NEW_PARSE_ARGS)
-    text = insert_helper_before_main(text, NEW_DASHBOARD_HELPERS)
-    text = replace_main_head(text, NEW_MAIN_HEAD)
+    text = insert_before_top_level_function(
+        text,
+        "build_compact_reconciliation_payload",
+        NEW_DASHBOARD_HELPERS,
+    )
+    text = replace_exact_once(text, OLD_MAIN_HEAD.strip("\\n"), NEW_MAIN_HEAD.strip("\\n"))
 
     TARGET.write_text(restore_newlines(text, newline), encoding="utf-8")
     print(f"Patched: {TARGET}")
