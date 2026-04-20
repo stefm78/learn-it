@@ -251,6 +251,12 @@ def restore_newlines(text: str, newline: str) -> str:
     return text.replace("\\n", newline)
 
 
+def cleanup_broken_literal_newlines(text: str) -> str:
+    text = text.replace("import fnmatch\\\\n\\n", "import fnmatch\\n")
+    text = text.replace("import fnmatch\\\\n", "import fnmatch\\n")
+    return text
+
+
 def replace_top_level_function(source: str, func_name: str, new_block: str) -> str:
     lines = source.splitlines(keepends=True)
 
@@ -331,6 +337,7 @@ def main() -> None:
     newline = detect_newline(raw_text)
     text = normalize_newlines(raw_text)
 
+    text = cleanup_broken_literal_newlines(text)
     text = insert_import_if_missing(text, "import fnmatch")
     text = replace_top_level_function(text, "parse_args", NEW_PARSE_ARGS)
     text = insert_before_top_level_function(
