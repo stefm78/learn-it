@@ -40,7 +40,10 @@ stages:
     optional: false
     orchestration_scope: run
     primary_skill_ref: docs/pipelines/constitution/stages/STAGE_01_CHALLENGE.skill.yaml
-    deterministic_scripts_required: []
+    deterministic_scripts_required:
+      - docs/patcher/shared/materialize_run_inputs.py
+      - docs/patcher/shared/extract_scope_slice.py
+      - docs/patcher/shared/build_run_context.py
     transitions:
       on_done:
         - STAGE_02_ARBITRAGE
