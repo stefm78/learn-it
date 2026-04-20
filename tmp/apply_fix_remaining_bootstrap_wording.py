@@ -5,120 +5,250 @@ def replace_once(text: str, old: str, new: str, label: str) -> str:
         raise SystemExit(f"[ERREUR] Bloc introuvable pour {label}")
     return text.replace(old, new, 1)
 
-path = Path("docs/pipelines/constitution/pipeline.md")
+path = Path("docs/patcher/shared/reconcile_run.py")
 text = path.read_text(encoding="utf-8")
 
 # -------------------------------------------------------------------
-# 1) AI startup note
+# 1) Renommer la table hardcodée en fallback
 # -------------------------------------------------------------------
-old = """## AI startup note
-
-For AI startup and run resolution, use `docs/pipelines/constitution/AI_PROTOCOL.yaml` as the authoritative entrypoint.
-In no-run-id entry mode, the canonical sequence is: `OPEN_NEW_RUN.action.yaml` for entry decision, then `MATERIALIZE_NEW_RUN.action.yaml` for deterministic run materialization, then stop before `STAGE_01_CHALLENGE` unless explicit continuation is requested.
-The first act must stop after the decision, but must also emit the next canonical action to the chat. When `OPEN_NEW_RUN` returns `open_new_run_authorized`, the next canonical action is `MATERIALIZE_NEW_RUN`.
-"""
-
-new = """## AI startup note
-
-For AI startup and run resolution, use `docs/pipelines/constitution/AI_PROTOCOL.yaml` as the authoritative entrypoint.
-In no-run-id entry mode, the canonical sequence is: `OPEN_NEW_RUN.action.yaml` for entry decision, then `MATERIALIZE_NEW_RUN.action.yaml` for deterministic run materialization, then stop before `STAGE_01_CHALLENGE` unless explicit continuation is requested.
-The first act must stop after the decision, but must also emit the next canonical action to the chat. When `OPEN_NEW_RUN` returns `open_new_run_authorized`, the next canonical action is `MATERIALIZE_NEW_RUN`.
-In run_id_mode, canonical run handling may also pass through `RECONCILE_RUN.action.yaml` before any stage restart, when a run must be brought back into line against the current stable contracts.
-"""
-
-text = replace_once(text, old, new, "AI startup note")
+text = replace_once(
+    text,
+    "STAGE_EVIDENCE: Dict[str, List[str]] = {\n",
+    "STAGE_EVIDENCE_FALLBACK: Dict[str, List[str]] = {\n",
+    "rename STAGE_EVIDENCE to STAGE_EVIDENCE_FALLBACK",
+)
 
 # -------------------------------------------------------------------
-# 2) Spec and tools
+# 2) Remplacer matches_any_glob + stage_evidence_status
 # -------------------------------------------------------------------
-old = """- `Closeout pipeline run: docs/patcher/shared/closeout_pipeline_run.py`
-- **Consolidate parallel runs: `docs/patcher/shared/consolidate_parallel_runs.py`** ← STAGE_06B uniquement
+old_block = """def matches_any_glob(base: Path, pattern: str) -> bool:
+    return any(base.glob(pattern))
+
+
+def stage_evidence_status(run_root: Path, stage_id: str) -> Tuple[bool, List[str]]:
+    missing: List[str] = []
+    for pattern in STAGE_EVIDENCE.get(stage_id, []):
+        if "*" in pattern or "?" in pattern or "[" in pattern:
+            if not matches_any_glob(run_root, pattern):
+                missing.append(pattern)
+        else:
+            if not (run_root / pattern).exists():
+                missing.append(pattern)
+    return len(missing) == 0, missing
 """
 
-new = """- `Closeout pipeline run: docs/patcher/shared/closeout_pipeline_run.py`
-- **Reconcile run: `docs/patcher/shared/reconcile_run.py`** ← à exécuter en run_id_mode pour remettre un run en ligne sans rejouer les stages métier
-- **Consolidate parallel runs: `docs/patcher/shared/consolidate_parallel_runs.py`** ← STAGE_06B uniquement
+new_block = """def matches_any_glob(base: Path, pattern: str) -> bool:
+    return any(base.glob(pattern))
+
+
+def stage_skill_path(repo_root: Path, pipeline_id: str, stage_id: str) -> Path:
+    return repo_root / "docs" / "pipelines" / pipeline_id / "stages" / f"{stage_id}.skill.yaml"
+
+
+def normalize_run_relative_pattern(pattern: str, pipeline_id: str, run_id: str) -> str:
+    prefixes = [
+        f"docs/pipelines/{pipeline_id}/runs/<run_id>/",
+        f"docs/pipelines/{pipeline_id}/runs/{run_id}/",
+    ]
+    for prefix in prefixes:
+        if pattern.startswith(prefix):
+            return pattern[len(prefix):]
+    return pattern
+
+
+def derive_stage_evidence_patterns(
+    *,
+    repo_root: Path,
+    pipeline_id: str,
+    run_id: str,
+    stage_id: str,
+    mode: str,
+) -> List[str]:
+    skill_path = stage_skill_path(repo_root, pipeline_id, stage_id)
+    skill_data = load_yaml_optional(skill_path)
+    expected_outputs = skill_data.get("expected_outputs", {})
+    if not isinstance(expected_outputs, dict):
+        expected_outputs = {}
+
+    mode_outputs = expected_outputs.get(mode, {})
+    if not isinstance(mode_outputs, dict):
+        mode_outputs = {}
+
+    derived_patterns: List[str] = []
+
+    for key in ("report_path_pattern", "primary_output_path_pattern"):
+        value = mode_outputs.get(key)
+        if isinstance(value, str) and value.strip():
+            derived_patterns.append(value.strip())
+
+    raw_artifacts = mode_outputs.get("required_raw_artifacts", [])
+    if isinstance(raw_artifacts, list):
+        for value in raw_artifacts:
+            if isinstance(value, str) and value.strip():
+                derived_patterns.append(value.strip())
+
+    normalized: List[str] = []
+    for pattern in derived_patterns:
+        normalized_pattern = normalize_run_relative_pattern(pattern, pipeline_id, run_id)
+        if normalized_pattern:
+            normalized.append(normalized_pattern)
+
+    if normalized:
+        return sorted(set(normalized))
+
+    return STAGE_EVIDENCE_FALLBACK.get(stage_id, [])
+
+
+def stage_evidence_status(run_root: Path, evidence_patterns: List[str]) -> Tuple[bool, List[str]]:
+    missing: List[str] = []
+    for pattern in evidence_patterns:
+        if "*" in pattern or "?" in pattern or "[" in pattern:
+            if not matches_any_glob(run_root, pattern):
+                missing.append(pattern)
+        else:
+            if not (run_root / pattern).exists():
+                missing.append(pattern)
+    return len(missing) == 0, missing
 """
 
-text = replace_once(text, old, new, "Spec and tools")
+text = replace_once(text, old_block, new_block, "replace hardcoded stage_evidence_status block")
 
 # -------------------------------------------------------------------
-# 3) Canonical entry actions section
+# 3) Faire dériver les preuves dans l’évaluation du préfixe fiable
 # -------------------------------------------------------------------
-old = """## Canonical entry actions
-
-When the user does not provide a `run_id`, entry is resolved through two distinct canonical actions:
-
-- `docs/pipelines/constitution/entry_actions/OPEN_NEW_RUN.action.yaml`
-  - resolves whether opening a new run is authorized
-  - must stop after the entry decision
-  - must not write tracking files directly
-  - must emit the next canonical action in the chat
-
-- `docs/pipelines/constitution/entry_actions/MATERIALIZE_NEW_RUN.action.yaml`
-  - materially opens the run through deterministic tracking
-  - materially generates run inputs via `materialize_run_inputs.py`
-  - materially generates ids-first extracts via `extract_scope_slice.py`
-  - materially generates `run_context.yaml` via `build_run_context.py`
-  - must stop before `STAGE_01_CHALLENGE`
-  - must emit `CONTINUE_ACTIVE_RUN` as the next canonical action when bootstrap succeeds
-
-Structured rule:
-- no-run-id startup must not jump directly from entry decision to STAGE_01
-- run tracking materialization, input materialization, ids-first extract materialization, and run_context materialization are mandatory bootstrap acts
-- `OPEN_NEW_RUN` stops on execution, not on guidance: after a successful decision it must point explicitly to `MATERIALIZE_NEW_RUN`
-- STAGE_01_CHALLENGE may start only after the run has been materially opened, its inputs materially generated, its ids-first extracts materially generated, and `run_context.yaml` materially generated
+old_block = """    for stage in claimed_prefix:
+        ok, missing = stage_evidence_status(run_root, stage)
+        if ok:
+            trusted_prefix.append(stage)
+        else:
+            first_non_trusted_stage = stage
+            stage_missing_map[stage] = missing
+            break
 """
 
-new = """## Canonical entry actions
-
-### No-run-id startup actions
-
-When the user does not provide a `run_id`, entry is resolved through two distinct canonical actions:
-
-- `docs/pipelines/constitution/entry_actions/OPEN_NEW_RUN.action.yaml`
-  - resolves whether opening a new run is authorized
-  - must stop after the entry decision
-  - must not write tracking files directly
-  - must emit the next canonical action in the chat
-
-- `docs/pipelines/constitution/entry_actions/MATERIALIZE_NEW_RUN.action.yaml`
-  - materially opens the run through deterministic tracking
-  - materially generates run inputs via `materialize_run_inputs.py`
-  - materially generates ids-first extracts via `extract_scope_slice.py`
-  - materially generates `run_context.yaml` via `build_run_context.py`
-  - must stop before `STAGE_01_CHALLENGE`
-  - must emit `CONTINUE_ACTIVE_RUN` as the next canonical action when bootstrap succeeds
-
-Structured rule:
-- no-run-id startup must not jump directly from entry decision to STAGE_01
-- run tracking materialization, input materialization, ids-first extract materialization, and run_context materialization are mandatory bootstrap acts
-- `OPEN_NEW_RUN` stops on execution, not on guidance: after a successful decision it must point explicitly to `MATERIALIZE_NEW_RUN`
-- STAGE_01_CHALLENGE may start only after the run has been materially opened, its inputs materially generated, its ids-first extracts materially generated, and `run_context.yaml` materially generated
-
-### Run-id actions
-
-When a `run_id` is already known, canonical handling may use dedicated run-scoped actions instead of jumping directly into stage execution:
-
-- `docs/pipelines/constitution/entry_actions/CONTINUE_ACTIVE_RUN.action.yaml`
-  - resolves continuation of a known active run
-  - must stop after the continue-or-not decision
-  - must not deep-read wider than the identified run
-
-- `docs/pipelines/constitution/entry_actions/RECONCILE_RUN.action.yaml`
-  - reconciles a known run against the latest stable contracts
-  - repairs derivable artifacts through owner scripts only
-  - truncates downstream state that is no longer materially justifiable
-  - must stop before any restarted business stage begins
-
-Structured rule:
-- run reconciliation is not a business stage and must not be modeled as one
-- reconciliation must compute the longest trusted prefix still justified by current contracts
-- what is derivable may be rebuilt deterministically; what is no longer justifiable must be cut
-- after successful reconciliation, the next canonical action is usually `CONTINUE_ACTIVE_RUN`
+new_block = """    for stage in claimed_prefix:
+        evidence_patterns = derive_stage_evidence_patterns(
+            repo_root=repo_root,
+            pipeline_id=args.pipeline,
+            run_id=args.run_id,
+            stage_id=stage,
+            mode=mode,
+        )
+        ok, missing = stage_evidence_status(run_root, evidence_patterns)
+        if ok:
+            trusted_prefix.append(stage)
+        else:
+            first_non_trusted_stage = stage
+            stage_missing_map[stage] = missing
+            break
 """
 
-text = replace_once(text, old, new, "Canonical entry actions section")
+text = replace_once(text, old_block, new_block, "derive evidence in trusted prefix evaluation")
+
+# -------------------------------------------------------------------
+# 4) Faire dériver les preuves dans l’invalidation aval
+# -------------------------------------------------------------------
+old_block = """def invalidate_downstream_artifacts(
+    *,
+    run_root: Path,
+    invalidated_stages: List[str],
+    apply: bool,
+) -> List[str]:
+    removed: List[str] = []
+
+    for stage in invalidated_stages:
+        for pattern in STAGE_EVIDENCE.get(stage, []):
+            if "*" in pattern or "?" in pattern or "[" in pattern:
+                for match in run_root.glob(pattern):
+                    if delete_path(match, apply=apply):
+                        removed.append(str(match.relative_to(run_root)).replace("\\\\", "/"))
+            else:
+                path = run_root / pattern
+                if delete_path(path, apply=apply):
+                    removed.append(str(path.relative_to(run_root)).replace("\\\\", "/"))
+
+        stage_record = run_root / "reports" / f"stage_completion_{stage}.yaml"
+        if delete_path(stage_record, apply=apply):
+            removed.append(str(stage_record.relative_to(run_root)).replace("\\\\", "/"))
+
+    return sorted(set(removed))
+"""
+
+new_block = """def invalidate_downstream_artifacts(
+    *,
+    repo_root: Path,
+    pipeline_id: str,
+    run_id: str,
+    mode: str,
+    run_root: Path,
+    invalidated_stages: List[str],
+    apply: bool,
+) -> List[str]:
+    removed: List[str] = []
+
+    for stage in invalidated_stages:
+        evidence_patterns = derive_stage_evidence_patterns(
+            repo_root=repo_root,
+            pipeline_id=pipeline_id,
+            run_id=run_id,
+            stage_id=stage,
+            mode=mode,
+        )
+        for pattern in evidence_patterns:
+            if "*" in pattern or "?" in pattern or "[" in pattern:
+                for match in run_root.glob(pattern):
+                    if delete_path(match, apply=apply):
+                        removed.append(str(match.relative_to(run_root)).replace("\\\\", "/"))
+            else:
+                path = run_root / pattern
+                if delete_path(path, apply=apply):
+                    removed.append(str(path.relative_to(run_root)).replace("\\\\", "/"))
+
+        stage_record = run_root / "reports" / f"stage_completion_{stage}.yaml"
+        if delete_path(stage_record, apply=apply):
+            removed.append(str(stage_record.relative_to(run_root)).replace("\\\\", "/"))
+
+    return sorted(set(removed))
+"""
+
+text = replace_once(text, old_block, new_block, "derive evidence in downstream invalidation")
+
+# -------------------------------------------------------------------
+# 5) Mettre à jour l’appel à invalidate_downstream_artifacts
+# -------------------------------------------------------------------
+old_block = """    removed_artifacts = invalidate_downstream_artifacts(
+        run_root=run_root,
+        invalidated_stages=invalidated_stages,
+        apply=args.apply,
+    )
+"""
+
+new_block = """    removed_artifacts = invalidate_downstream_artifacts(
+        repo_root=repo_root,
+        pipeline_id=args.pipeline,
+        run_id=args.run_id,
+        mode=mode,
+        run_root=run_root,
+        invalidated_stages=invalidated_stages,
+        apply=args.apply,
+    )
+"""
+
+text = replace_once(text, old_block, new_block, "update invalidate_downstream_artifacts call")
+
+# -------------------------------------------------------------------
+# 6) Ajouter une info de provenance dans la sortie
+# -------------------------------------------------------------------
+old_block = """            "trusted_prefix": trusted_prefix,
+            "missing_evidence_by_stage": stage_missing_map,
+"""
+
+new_block = """            "trusted_prefix": trusted_prefix,
+            "evidence_derivation_mode": "skill_expected_outputs_with_fallback",
+            "missing_evidence_by_stage": stage_missing_map,
+"""
+
+text = replace_once(text, old_block, new_block, "add evidence derivation mode in output")
 
 path.write_text(text, encoding="utf-8")
-print("OK: pipeline.md mis à jour pour RECONCILE_RUN")
+print("OK: reconcile_run.py dérive maintenant les preuves depuis les *.skill.yaml")

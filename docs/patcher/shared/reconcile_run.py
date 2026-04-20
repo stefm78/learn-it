@@ -45,7 +45,7 @@ STAGE_ALIASES: Dict[str, str] = {
     "STAGE_09_CLOSEOUT": "STAGE_09_CLOSEOUT_AND_ARCHIVE",
 }
 
-STAGE_EVIDENCE: Dict[str, List[str]] = {
+STAGE_EVIDENCE_FALLBACK: Dict[str, List[str]] = {
     "STAGE_01_CHALLENGE": [
         "work/01_challenge/challenge_report_*.md",
     ],
@@ -175,9 +175,67 @@ def matches_any_glob(base: Path, pattern: str) -> bool:
     return any(base.glob(pattern))
 
 
-def stage_evidence_status(run_root: Path, stage_id: str) -> Tuple[bool, List[str]]:
+def stage_skill_path(repo_root: Path, pipeline_id: str, stage_id: str) -> Path:
+    return repo_root / "docs" / "pipelines" / pipeline_id / "stages" / f"{stage_id}.skill.yaml"
+
+
+def normalize_run_relative_pattern(pattern: str, pipeline_id: str, run_id: str) -> str:
+    prefixes = [
+        f"docs/pipelines/{pipeline_id}/runs/<run_id>/",
+        f"docs/pipelines/{pipeline_id}/runs/{run_id}/",
+    ]
+    for prefix in prefixes:
+        if pattern.startswith(prefix):
+            return pattern[len(prefix):]
+    return pattern
+
+
+def derive_stage_evidence_patterns(
+    *,
+    repo_root: Path,
+    pipeline_id: str,
+    run_id: str,
+    stage_id: str,
+    mode: str,
+) -> List[str]:
+    skill_path = stage_skill_path(repo_root, pipeline_id, stage_id)
+    skill_data = load_yaml_optional(skill_path)
+    expected_outputs = skill_data.get("expected_outputs", {})
+    if not isinstance(expected_outputs, dict):
+        expected_outputs = {}
+
+    mode_outputs = expected_outputs.get(mode, {})
+    if not isinstance(mode_outputs, dict):
+        mode_outputs = {}
+
+    derived_patterns: List[str] = []
+
+    for key in ("report_path_pattern", "primary_output_path_pattern"):
+        value = mode_outputs.get(key)
+        if isinstance(value, str) and value.strip():
+            derived_patterns.append(value.strip())
+
+    raw_artifacts = mode_outputs.get("required_raw_artifacts", [])
+    if isinstance(raw_artifacts, list):
+        for value in raw_artifacts:
+            if isinstance(value, str) and value.strip():
+                derived_patterns.append(value.strip())
+
+    normalized: List[str] = []
+    for pattern in derived_patterns:
+        normalized_pattern = normalize_run_relative_pattern(pattern, pipeline_id, run_id)
+        if normalized_pattern:
+            normalized.append(normalized_pattern)
+
+    if normalized:
+        return sorted(set(normalized))
+
+    return STAGE_EVIDENCE_FALLBACK.get(stage_id, [])
+
+
+def stage_evidence_status(run_root: Path, evidence_patterns: List[str]) -> Tuple[bool, List[str]]:
     missing: List[str] = []
-    for pattern in STAGE_EVIDENCE.get(stage_id, []):
+    for pattern in evidence_patterns:
         if "*" in pattern or "?" in pattern or "[" in pattern:
             if not matches_any_glob(run_root, pattern):
                 missing.append(pattern)
@@ -286,6 +344,10 @@ def delete_path(path: Path, *, apply: bool) -> bool:
 
 def invalidate_downstream_artifacts(
     *,
+    repo_root: Path,
+    pipeline_id: str,
+    run_id: str,
+    mode: str,
     run_root: Path,
     invalidated_stages: List[str],
     apply: bool,
@@ -293,7 +355,14 @@ def invalidate_downstream_artifacts(
     removed: List[str] = []
 
     for stage in invalidated_stages:
-        for pattern in STAGE_EVIDENCE.get(stage, []):
+        evidence_patterns = derive_stage_evidence_patterns(
+            repo_root=repo_root,
+            pipeline_id=pipeline_id,
+            run_id=run_id,
+            stage_id=stage,
+            mode=mode,
+        )
+        for pattern in evidence_patterns:
             if "*" in pattern or "?" in pattern or "[" in pattern:
                 for match in run_root.glob(pattern):
                     if delete_path(match, apply=apply):
@@ -464,7 +533,14 @@ def main() -> int:
     first_non_trusted_stage: Optional[str] = None
 
     for stage in claimed_prefix:
-        ok, missing = stage_evidence_status(run_root, stage)
+        evidence_patterns = derive_stage_evidence_patterns(
+            repo_root=repo_root,
+            pipeline_id=args.pipeline,
+            run_id=args.run_id,
+            stage_id=stage,
+            mode=mode,
+        )
+        ok, missing = stage_evidence_status(run_root, evidence_patterns)
         if ok:
             trusted_prefix.append(stage)
         else:
@@ -506,6 +582,10 @@ def main() -> int:
         )
 
     removed_artifacts = invalidate_downstream_artifacts(
+        repo_root=repo_root,
+        pipeline_id=args.pipeline,
+        run_id=args.run_id,
+        mode=mode,
         run_root=run_root,
         invalidated_stages=invalidated_stages,
         apply=args.apply,
@@ -548,6 +628,7 @@ def main() -> int:
             "restart_stage": restart_stage or "",
             "claimed_done_stages": claimed_done,
             "trusted_prefix": trusted_prefix,
+            "evidence_derivation_mode": "skill_expected_outputs_with_fallback",
             "missing_evidence_by_stage": stage_missing_map,
             "repaired_artifacts": repaired_artifacts,
             "repair_commands": repair_commands,
