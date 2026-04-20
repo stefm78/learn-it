@@ -7,11 +7,12 @@ Mode: bounded_local_run
 
 L’arbitrage confirme le diagnostic principal du challenge : le scope `mastery_evaluation` est localement cohérent sur sa logique métier centrale, et aucune correction locale n’est retenue à ce stade sur MSC, la séparation de T, la propagation à un saut, ni sur les règles SIS / NC_MSC.
 
-Le seul écart matériel retenu concerne la cohérence inter-core et inter-artefacts autour des références au Référentiel. Ce point ne doit pas être corrigé silencieusement en STAGE_03 tant qu’une décision humaine n’a pas tranché entre deux voies raisonnables :
-- correction locale limitée des références attendues dans le périmètre Constitution du scope ;
-- révision plus large du scope catalog / impact bundle / logique de génération des voisins.
+Le seul écart matériel retenu concerne la cohérence inter-core et inter-artefacts autour des références au Référentiel. La décision humaine a désormais tranché : **Option B**. Le défaut n’est donc pas traité comme un simple reliquat local patchable dans ce run, mais comme un sujet de gouvernance / génération / partitionnement à remonter via backlog.
 
-Par défaut conservateur, cet arbitrage bloque toute synthèse de patch sur ce point tant que l’origine exacte de l’incohérence n’est pas arbitrée humainement. En revanche, il rejette explicitement toute tentative de retoucher la logique métier locale du scope, qui apparaît saine.
+En conséquence :
+- aucun patch local ne doit être synthétisé en STAGE_03 sur ce point ;
+- l’écart est conservé comme candidat backlog de gouvernance ;
+- les décisions de STAGE_02 sont désormais closes et ne nécessitent plus d’arbitrage humain complémentaire sur ce finding.
 
 ## Scope analysed
 
@@ -38,20 +39,15 @@ Périmètre de modification rappelé par le scope manifest :
 - challenge_scope_status: in_scope
 - arbitrage_decision: reporter
 - arbitrage_justification: >-
-    L’écart est réel et prioritaire, mais la correction exacte reste ambiguë. Le challenge
-    montre un décalage entre une attente de voisinage `REF_CORE_LEARNIT_REFERENTIEL_V2_0_IN_CONSTITUTION`
-    et des références de scope orientées vers `REF_CORE_LEARNIT_REFERENTIEL_V4_0_IN_CONSTITUTION`,
-    alors que le Référentiel courant observé n’est pas aligné simplement sur ce couple. Deux lectures
-    restent raisonnables : (1) reliquat obsolète local dans les artefacts du scope, ou (2) problème
-    plus large de génération / partitionnement / alignement inter-core. Trancher sans décision humaine
-    risquerait de produire un patch faux mais plausible.
-- patch_readiness: blocked_by_missing_human_decision
+    L’écart est réel et prioritaire. La décision humaine a retenu l’Option B : le sujet doit être traité
+    comme un problème plus large de gouvernance / génération / partitionnement, et non comme une correction
+    locale à synthétiser dans ce run. Il serait donc incorrect de produire un patch local sur la seule base
+    du mismatch observé.
+- patch_readiness: blocked_by_scope_extension
 - related_gate_checks:
   - WP_03
 - gate_effect: keeps_open
-- conservative_default: >-
-    Ne produire aucun patch sur ce point en STAGE_03 tant qu’un arbitrage humain n’a pas choisi
-    explicitement entre correction locale de référence et révision de génération plus large.
+- human_decision_applied: Option B
 
 ### AF-02 — Local MSC logic remains strict and separated from transfer
 - challenge_finding_id: F2
@@ -97,14 +93,14 @@ Périmètre de modification rappelé par le scope manifest :
 - challenge_scope_status: needs_scope_extension
 - arbitrage_decision: necessite_extension_scope
 - arbitrage_justification: >-
-    Si l’origine du défaut se situe dans la génération du voisinage, les décisions de partition ou
-    le catalogue de scopes, la correction dépasse le patch local du run. Ce point doit donc être
-    tracé comme extension / révision de gouvernance potentielle, pas absorbé silencieusement dans
-    un patch local.
+    La décision humaine Option B confirme que l’origine probable du défaut se situe dans la génération du
+    voisinage, les décisions de partition ou le catalogue de scopes. Ce point doit être traité hors patch local,
+    via backlog de gouvernance et révision plus large.
 - patch_readiness: blocked_by_scope_extension
 - related_gate_checks:
   - WP_03
 - gate_effect: keeps_open
+- human_decision_applied: Option B
 
 ### AF-06 — Run context stale after extract generation (challenge-time technical issue)
 - challenge_finding_id: R2
@@ -122,19 +118,19 @@ Périmètre de modification rappelé par le scope manifest :
 
 1. La logique métier locale du scope est jugée suffisamment saine pour ne pas justifier de patch local immédiat.
 2. Le point critique est un défaut de cohérence inter-core / inter-artefacts, pas un défaut de logique MSC.
-3. Le gate reste ouvert principalement à cause de la frontière Référentiel / voisinage / partitionnement.
-4. La voie conservatrice consiste à bloquer STAGE_03 sur ce point tant que l’humain n’a pas arbitré l’origine exacte de la correction.
+3. La décision humaine Option B confirme que ce point sort du traitement patch local de ce run.
+4. Le gate reste ouvert principalement à cause de la frontière Référentiel / voisinage / partitionnement.
 
 ## Decisions for patch
 
-Aucune décision n’est actuellement `ready_for_local_patch`.
-
-Décision la plus proche d’un futur patch :
-- AF-01 pourrait devenir patchable localement **uniquement** si l’humain confirme que l’écart est un reliquat
-  local de référence dans le périmètre Constitution du scope, et non un problème de génération plus large.
+Aucune décision n’est `ready_for_local_patch`.
 
 État global patch synthesis:
-- `blocked_by_missing_human_decision`
+- `blocked_by_scope_extension`
+
+Conséquence opérationnelle :
+- STAGE_03 ne doit pas synthétiser de patch local sur le finding AF-01.
+- Si STAGE_03 est ouvert malgré tout, il devra conclure à l’absence de patch local autorisé pour ce finding.
 
 ## Decisions not retained
 
@@ -144,7 +140,8 @@ Les corrections suivantes sont explicitement non retenues :
 - affaiblir `RULE_MSC_COMPONENT_NON_CALCULABLE_DEFERS_BASE_MASTERY`
 - modifier `INV_GRAPH_PROPAGATION_ONE_HOP`
 - déplacer SIS / NC_MSC vers `learner_state`
-- produire un patch YAML ou réécrire les Core pendant STAGE_02
+- produire un patch YAML local pour corriger le mismatch référentiel dans ce run
+- réécrire les Core pendant STAGE_02
 
 ## Governance backlog candidates
 
@@ -159,54 +156,39 @@ governance_backlog_candidates:
     source_finding_id: AF-05
     rationale: >-
       Le run révèle un écart entre la référence de voisinage attendue (`REF_CORE_LEARNIT_REFERENTIEL_V2_0_IN_CONSTITUTION`)
-      et les références réellement observées dans le scope et le Référentiel courant. La correction pourrait dépasser
-      le patch local et nécessiter une révision du scope catalog, du partitionnement ou de la logique de génération
-      des voisins.
+      et les références réellement observées dans le scope et le Référentiel courant. La décision humaine Option B
+      confirme que la correction dépasse le patch local et doit être traitée via gouvernance / révision de génération.
     recommended_stage00_action: >-
       Réévaluer les policy/decisions de génération de scope et les ancres inter-Core canonisées pour déterminer
-      si l’alignement doit être local au scope mastery_evaluation ou rejoué au niveau Stage 00 / génération du catalogue.
+      comment réaligner le scope mastery_evaluation, le voisinage référentiel et le catalogue de scopes.
     candidate_status: candidate_open
 ```
 
 ## Deferred or blocked decisions
 
-### BD-01 — Source exacte de la correction inter-core
+### BD-01 — Patch local sur le mismatch référentiel
 - status: blocked
 - reason: >-
-    Ambiguïté matérielle non levée entre correction locale in-scope et révision de génération / partition plus large.
+    La décision humaine Option B interdit le traitement comme patch local dans ce run.
 - effect_on_stage_03: >-
-    STAGE_03_PATCH_SYNTHESIS ne doit pas démarrer sur ce finding sans arbitrage humain explicite.
+    Aucun patch local ne doit être synthétisé sur ce finding ; le sujet relève d’une extension / révision plus large.
 
 ## Ambiguities requiring human decision
 
-### AD-01 — Comment traiter l’écart de référence référentielle ?
+Aucune ambiguïté matérielle restante sur le finding principal.
 
-Options raisonnables :
-1. **Option A — correction locale in_scope**
-   - Considérer que `REF_CORE_LEARNIT_REFERENTIEL_V2_0_IN_CONSTITUTION` est un reliquat obsolète local.
-   - Autoriser STAGE_03 à synthétiser un patch minimal dans le périmètre Constitution du scope.
+Décision humaine intégrée :
+- AD-01 resolved as **Option B**
 
-2. **Option B — révision de gouvernance / génération**
-   - Considérer que le défaut provient du scope catalog, des décisions de partition ou du générateur d’artefacts.
-   - Interdire tout patch local sur ce point dans ce run et traiter le sujet via backlog / Stage 00.
-
-Default conservateur retenu :
-- **Option B** tant qu’aucune décision humaine contraire n’est fournie.
-
-human_decision_required_flag: true
+human_decision_required_flag: false
 
 ## Human actions to execute
 
-1. **Relire et valider cet arbitrage**
+1. **Relire et valider cet arbitrage révisé**
    - Fichier cible :
      `docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_20_MASTERY_EVALUATION_R01/work/02_arbitrage/arbitrage_report_mastery_evaluation_r01.md`
 
-2. **Arbitrer explicitement AD-01**
-   - Décision attendue :
-     - soit `Option A` (patch local autorisé sur la référence inter-core)
-     - soit `Option B` (pas de patch local ; backlog / extension de scope)
-
-3. **Si tu valides l’arbitrage sans ambiguïté restante pour STAGE_03**
+2. **Mettre à jour le tracking de STAGE_02**
    - exécuter :
      ```bash
      python docs/patcher/shared/update_run_tracking.py \
@@ -216,9 +198,12 @@ human_decision_required_flag: true
        --stage-status done \
        --run-status active \
        --next-stage STAGE_03_PATCH_SYNTHESIS \
-       --summary "Arbitrage report validated; decisions ready for patch synthesis."
+       --summary "Arbitrage report validated; Option B retained; no local patch on referential mismatch."
      ```
 
-4. **Si tu dois me faire réviser l’arbitrage avec une décision humaine**
-   - relance avec :
-     `Révise l'arbitrage du run CONSTITUTION_RUN_2026_04_20_MASTERY_EVALUATION_R01 — décision humaine sur ambiguïtés : <tes notes>.`
+3. **Préserver le candidat backlog jusqu’au STAGE_09**
+   - ne pas perdre la section `governance_backlog_candidates` ; elle devra être relue en clôture pour export canonique.
+
+4. **Relancer ensuite**
+   - prompt suivant :
+     `Continue le run CONSTITUTION_RUN_2026_04_20_MASTERY_EVALUATION_R01 — STAGE_02 est done, démarre STAGE_03_PATCH_SYNTHESIS.`
