@@ -182,12 +182,5 @@ Niveau : moyen
 3. Confirmer que le fallback ciblé sur l’ID voisin manquant a été accepté comme lecture hors-scope strictement limitée.
 4. Une fois le rapport validé, mettre à jour le tracking avec la commande canonique du skill :
 
-```bash
-python docs/patcher/shared/update_run_tracking.py \
-  --pipeline constitution \
-  --run-id CONSTITUTION_RUN_2026_04_20_PATCH_LIFECYCLE_R01 \
-  --stage-id STAGE_01_CHALLENGE \
-  --stage-status done \
-  --run-status active \
-  --next-stage STAGE_02_ARBITRAGE \
-  --summary "Challenge report produced; ready for arbitrage."
+
+
