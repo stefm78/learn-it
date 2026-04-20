@@ -24,7 +24,7 @@ from pathlib import Path
 from typing import Any, Dict, List, Optional, Set, Tuple
 
 import yaml
-import fnmatch
+import fnmatch\n
 
 STAGE_ORDER: List[str] = [
     "STAGE_01_CHALLENGE",
@@ -134,40 +134,41 @@ def dump_yaml(path: Path, data: Dict[str, Any]) -> None:
     )
 
 
-def parse_args() -> argparse.Namespace:
-    parser = argparse.ArgumentParser(description="Reconcile a constitution run.")
-    parser.add_argument("--pipeline", required=True)
-    parser.add_argument("--run-id", required=False)
-    parser.add_argument("--repo-root", default=".")
-    parser.add_argument(
-        "--apply",
-        action="store_true",
-        help="Apply the reconciliation plan materially.",
-    )
-    parser.add_argument(
-        "--output",
-        choices=("human", "json"),
-        default="human",
-        help="Select output format. In this step, it affects dashboard mode.",
-    )
-    parser.add_argument(
-        "--dashboard",
-        action="store_true",
-        help="Render a dashboard view from runs/index.yaml.",
-    )
-    parser.add_argument(
-        "--dashboard-probe",
-        action="store_true",
-        help="Reserved for the next step: dashboard enriched with reconciliation probes.",
-    )
-    parser.add_argument(
-        "--output-mode",
-        choices=("full", "compact"),
-        default="full",
-        help="Select reconciliation payload verbosity.",
-    )
-    return parser.parse_args()
-def run_script(cmd: List[str], *, apply: bool, cwd: Path) -> Dict[str, Any]:
+
+\ndef parse_args() -> argparse.Namespace:
+\n    parser = argparse.ArgumentParser(description="Reconcile a constitution run.")
+\n    parser.add_argument("--pipeline", required=True)
+\n    parser.add_argument("--run-id", required=False)
+\n    parser.add_argument("--repo-root", default=".")
+\n    parser.add_argument(
+\n        "--apply",
+\n        action="store_true",
+\n        help="Apply the reconciliation plan materially.",
+\n    )
+\n    parser.add_argument(
+\n        "--output",
+\n        choices=("human", "json"),
+\n        default="human",
+\n        help="Select output format. In this step, it affects dashboard mode.",
+\n    )
+\n    parser.add_argument(
+\n        "--dashboard",
+\n        action="store_true",
+\n        help="Render a dashboard view from runs/index.yaml.",
+\n    )
+\n    parser.add_argument(
+\n        "--dashboard-probe",
+\n        action="store_true",
+\n        help="Reserved for the next step: dashboard enriched with reconciliation probes.",
+\n    )
+\n    parser.add_argument(
+\n        "--output-mode",
+\n        choices=("full", "compact"),
+\n        default="full",
+\n        help="Select reconciliation payload verbosity.",
+\n    )
+\n    return parser.parse_args()
+\n\ndef run_script(cmd: List[str], *, apply: bool, cwd: Path) -> Dict[str, Any]:
     if not apply:
         return {
             "planned": True,
@@ -796,141 +797,142 @@ def summarize_stage_contract(contract: Dict[str, Any]) -> Dict[str, Any]:
     }
 
 
-def build_dashboard_rows(index_data: Dict[str, Any], pattern: str) -> List[Dict[str, Any]]:
-    runs_index = index_data.get("runs_index", {})
-    active_runs = runs_index.get("active_runs", [])
-    closed_runs = runs_index.get("closed_runs", [])
 
-    normalized_pattern = (pattern or "*").upper()
-
-    def matches(entry: Dict[str, Any]) -> bool:
-        candidates = [
-            str(entry.get("run_id", "")),
-            str(entry.get("scope_key", "")),
-            str(entry.get("scope_id", "")),
-        ]
-        return any(
-            candidate and fnmatch.fnmatchcase(candidate.upper(), normalized_pattern)
-            for candidate in candidates
-        )
-
-    rows: List[Dict[str, Any]] = []
-
-    if isinstance(active_runs, list):
-        for entry in active_runs:
-            if not isinstance(entry, dict):
-                continue
-            if not matches(entry):
-                continue
-            rows.append(
-                {
-                    "bucket": "active",
-                    "run_id": str(entry.get("run_id", "")),
-                    "scope_key": str(entry.get("scope_key", "")),
-                    "scope_id": str(entry.get("scope_id", "")),
-                    "run_status": str(entry.get("run_status", "")),
-                    "current_stage": str(entry.get("current_stage", "")),
-                    "mode": str(entry.get("mode", "")),
-                }
-            )
-
-    if isinstance(closed_runs, list):
-        for entry in closed_runs:
-            if not isinstance(entry, dict):
-                continue
-            if not matches(entry):
-                continue
-            rows.append(
-                {
-                    "bucket": "closed",
-                    "run_id": str(entry.get("run_id", "")),
-                    "scope_key": str(entry.get("scope_key", "")),
-                    "scope_id": str(entry.get("scope_id", "")),
-                    "run_status": str(entry.get("run_status", "")),
-                    "current_stage": str(entry.get("current_stage", "")),
-                    "mode": str(entry.get("mode", "")),
-                }
-            )
-
-    rows.sort(key=lambda item: (0 if item["bucket"] == "active" else 1, item["run_id"]))
-    return rows
-
-
-def build_dashboard_payload(
-    index_data: Dict[str, Any],
-    rows: List[Dict[str, Any]],
-    pattern: str,
-) -> Dict[str, Any]:
-    runs_index = index_data.get("runs_index", {})
-    active_runs = runs_index.get("active_runs", [])
-    closed_runs = runs_index.get("closed_runs", [])
-
-    matched_active = sum(1 for row in rows if row.get("bucket") == "active")
-    matched_closed = sum(1 for row in rows if row.get("bucket") == "closed")
-
-    payload = {
-        "runs_dashboard": {
-            "pipeline_id": str(runs_index.get("pipeline_id", "")),
-            "last_updated": str(runs_index.get("last_updated", "")),
-            "filter": pattern or "*",
-            "counts": {
-                "total_runs": (len(active_runs) if isinstance(active_runs, list) else 0)
-                + (len(closed_runs) if isinstance(closed_runs, list) else 0),
-                "active_runs": len(active_runs) if isinstance(active_runs, list) else 0,
-                "closed_runs": len(closed_runs) if isinstance(closed_runs, list) else 0,
-                "matched_runs": len(rows),
-                "matched_active_runs": matched_active,
-                "matched_closed_runs": matched_closed,
-            },
-            "items": rows,
-        }
-    }
-    return payload
-
-
-def render_dashboard_human(
-    index_data: Dict[str, Any],
-    rows: List[Dict[str, Any]],
-    pattern: str,
-) -> str:
-    runs_index = index_data.get("runs_index", {})
-    active_runs = runs_index.get("active_runs", [])
-    closed_runs = runs_index.get("closed_runs", [])
-
-    total_runs = (len(active_runs) if isinstance(active_runs, list) else 0) + (
-        len(closed_runs) if isinstance(closed_runs, list) else 0
-    )
-    active_count = len(active_runs) if isinstance(active_runs, list) else 0
-    closed_count = len(closed_runs) if isinstance(closed_runs, list) else 0
-
-    lines: List[str] = []
-    if pattern and pattern != "*":
-        lines.append(f"FILTER {pattern}")
-    lines.append(
-        f"PIPELINE {runs_index.get('pipeline_id', '')}  |  LAST_UPDATED {runs_index.get('last_updated', '')}"
-    )
-    lines.append(
-        f"TOTAL {total_runs}  |  ACTIVE {active_count}  |  CLOSED {closed_count}  |  MATCHED {len(rows)}"
-    )
-    lines.append("")
-    lines.append(
-        f"{'RUN_ID':<52} {'SCOPE_KEY':<22} {'STATUS':<15} {'STAGE':<30} {'MODE'}"
-    )
-
-    for row in rows:
-        lines.append(
-            f"{row.get('run_id', ''):<52} "
-            f"{row.get('scope_key', ''):<22} "
-            f"{row.get('run_status', ''):<15} "
-            f"{row.get('current_stage', ''):<30} "
-            f"{row.get('mode', '')}"
-        )
-
-    if not rows:
-        lines.append("(no run matched the current filter)")
-
-    return "\n".join(lines) + "\n"
-def build_compact_reconciliation_payload(payload: Dict[str, Any]) -> Dict[str, Any]:
+\ndef build_dashboard_rows(index_data: Dict[str, Any], pattern: str) -> List[Dict[str, Any]]:
+\n    runs_index = index_data.get("runs_index", {})
+\n    active_runs = runs_index.get("active_runs", [])
+\n    closed_runs = runs_index.get("closed_runs", [])
+\n
+\n    normalized_pattern = (pattern or "*").upper()
+\n
+\n    def matches(entry: Dict[str, Any]) -> bool:
+\n        candidates = [
+\n            str(entry.get("run_id", "")),
+\n            str(entry.get("scope_key", "")),
+\n            str(entry.get("scope_id", "")),
+\n        ]
+\n        return any(
+\n            candidate and fnmatch.fnmatchcase(candidate.upper(), normalized_pattern)
+\n            for candidate in candidates
+\n        )
+\n
+\n    rows: List[Dict[str, Any]] = []
+\n
+\n    if isinstance(active_runs, list):
+\n        for entry in active_runs:
+\n            if not isinstance(entry, dict):
+\n                continue
+\n            if not matches(entry):
+\n                continue
+\n            rows.append(
+\n                {
+\n                    "bucket": "active",
+\n                    "run_id": str(entry.get("run_id", "")),
+\n                    "scope_key": str(entry.get("scope_key", "")),
+\n                    "scope_id": str(entry.get("scope_id", "")),
+\n                    "run_status": str(entry.get("run_status", "")),
+\n                    "current_stage": str(entry.get("current_stage", "")),
+\n                    "mode": str(entry.get("mode", "")),
+\n                }
+\n            )
+\n
+\n    if isinstance(closed_runs, list):
+\n        for entry in closed_runs:
+\n            if not isinstance(entry, dict):
+\n                continue
+\n            if not matches(entry):
+\n                continue
+\n            rows.append(
+\n                {
+\n                    "bucket": "closed",
+\n                    "run_id": str(entry.get("run_id", "")),
+\n                    "scope_key": str(entry.get("scope_key", "")),
+\n                    "scope_id": str(entry.get("scope_id", "")),
+\n                    "run_status": str(entry.get("run_status", "")),
+\n                    "current_stage": str(entry.get("current_stage", "")),
+\n                    "mode": str(entry.get("mode", "")),
+\n                }
+\n            )
+\n
+\n    rows.sort(key=lambda item: (0 if item["bucket"] == "active" else 1, item["run_id"]))
+\n    return rows
+\n
+\n
+\ndef build_dashboard_payload(
+\n    index_data: Dict[str, Any],
+\n    rows: List[Dict[str, Any]],
+\n    pattern: str,
+\n) -> Dict[str, Any]:
+\n    runs_index = index_data.get("runs_index", {})
+\n    active_runs = runs_index.get("active_runs", [])
+\n    closed_runs = runs_index.get("closed_runs", [])
+\n
+\n    matched_active = sum(1 for row in rows if row.get("bucket") == "active")
+\n    matched_closed = sum(1 for row in rows if row.get("bucket") == "closed")
+\n
+\n    payload = {
+\n        "runs_dashboard": {
+\n            "pipeline_id": str(runs_index.get("pipeline_id", "")),
+\n            "last_updated": str(runs_index.get("last_updated", "")),
+\n            "filter": pattern or "*",
+\n            "counts": {
+\n                "total_runs": (len(active_runs) if isinstance(active_runs, list) else 0)
+\n                + (len(closed_runs) if isinstance(closed_runs, list) else 0),
+\n                "active_runs": len(active_runs) if isinstance(active_runs, list) else 0,
+\n                "closed_runs": len(closed_runs) if isinstance(closed_runs, list) else 0,
+\n                "matched_runs": len(rows),
+\n                "matched_active_runs": matched_active,
+\n                "matched_closed_runs": matched_closed,
+\n            },
+\n            "items": rows,
+\n        }
+\n    }
+\n    return payload
+\n
+\n
+\ndef render_dashboard_human(
+\n    index_data: Dict[str, Any],
+\n    rows: List[Dict[str, Any]],
+\n    pattern: str,
+\n) -> str:
+\n    runs_index = index_data.get("runs_index", {})
+\n    active_runs = runs_index.get("active_runs", [])
+\n    closed_runs = runs_index.get("closed_runs", [])
+\n
+\n    total_runs = (len(active_runs) if isinstance(active_runs, list) else 0) + (
+\n        len(closed_runs) if isinstance(closed_runs, list) else 0
+\n    )
+\n    active_count = len(active_runs) if isinstance(active_runs, list) else 0
+\n    closed_count = len(closed_runs) if isinstance(closed_runs, list) else 0
+\n
+\n    lines: List[str] = []
+\n    if pattern and pattern != "*":
+\n        lines.append(f"FILTER {pattern}")
+\n    lines.append(
+\n        f"PIPELINE {runs_index.get('pipeline_id', '')}  |  LAST_UPDATED {runs_index.get('last_updated', '')}"
+\n    )
+\n    lines.append(
+\n        f"TOTAL {total_runs}  |  ACTIVE {active_count}  |  CLOSED {closed_count}  |  MATCHED {len(rows)}"
+\n    )
+\n    lines.append("")
+\n    lines.append(
+\n        f"{'RUN_ID':<52} {'SCOPE_KEY':<22} {'STATUS':<15} {'STAGE':<30} {'MODE'}"
+\n    )
+\n
+\n    for row in rows:
+\n        lines.append(
+\n            f"{row.get('run_id', ''):<52} "
+\n            f"{row.get('scope_key', ''):<22} "
+\n            f"{row.get('run_status', ''):<15} "
+\n            f"{row.get('current_stage', ''):<30} "
+\n            f"{row.get('mode', '')}"
+\n        )
+\n
+\n    if not rows:
+\n        lines.append("(no run matched the current filter)")
+\n
+\n    return "\n".join(lines) + "\n"
+\n\ndef build_compact_reconciliation_payload(payload: Dict[str, Any]) -> Dict[str, Any]:
     repaired_artifacts = payload.get("repaired_artifacts", [])
     invalidated_downstream_stage_set = payload.get("invalidated_downstream_stage_set", [])
 
