@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """Build an enriched run_context.yaml with derived runtime task view.
 
-Temporary candidate placed under tmp/ before in-place replacement of
-`docs/patcher/shared/build_run_context.py`.
+Canonical script for reconstructing `docs/patcher/shared/build_run_context.py`
+runtime output from run_manifest and materialized run inputs.
 
 Changes in v2:
 - fix Windows/pathlib issue when --output-path is relative
@@ -227,6 +227,7 @@ def derive_required_scripts_status(
         and scope_extract_status.get("present", False)
         and neighbor_extract_status.get("present", False)
         and scope_extract_status.get("missing_ids_count", 0) == 0
+        and neighbor_extract_status.get("missing_ids_count", 0) == 0
     )
     status = {
         "scope_extract_present": scope_extract_status.get("present", False),
@@ -420,7 +421,7 @@ def build_run_context(
     return {
         "run_context": {
             "schema_version": 0.2,
-            "generated_by": "build_run_context_runtime_view_candidate_v2.py",
+            "generated_by": "docs/patcher/shared/build_run_context.py",
             "note": (
                 "Fichier synthétique — lire EN PREMIER. Remplace la lecture séquentielle de "
                 "run_manifest + scope_manifest + impact_bundle + integration_gate et expose "
@@ -513,7 +514,7 @@ def main() -> int:
 
     rc = context["run_context"]
     result = {
-        "build_run_context_runtime_view_candidate": {
+        "build_run_context": {
             "status": "DONE",
             "run_id": args.run_id,
             "current_stage": rc["current_stage"],
