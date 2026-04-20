@@ -9,6 +9,7 @@ scope: core-governance
 For AI startup and run resolution, use `docs/pipelines/constitution/AI_PROTOCOL.yaml` as the authoritative entrypoint.
 In no-run-id entry mode, the canonical sequence is: `OPEN_NEW_RUN.action.yaml` for entry decision, then `MATERIALIZE_NEW_RUN.action.yaml` for deterministic run materialization, then stop before `STAGE_01_CHALLENGE` unless explicit continuation is requested.
 The first act must stop after the decision, but must also emit the next canonical action to the chat. When `OPEN_NEW_RUN` returns `open_new_run_authorized`, the next canonical action is `MATERIALIZE_NEW_RUN`.
+In run_id_mode, canonical run handling may also pass through `RECONCILE_RUN.action.yaml` before any stage restart, when a run must be brought back into line against the current stable contracts.
 
 ## Goal
 
@@ -81,9 +82,12 @@ Règle structurante :
 - `Materialize release: docs/patcher/shared/materialize_release.py`
 - `Validate release plan: docs/patcher/shared/validate_release_plan.py`
 - `Closeout pipeline run: docs/patcher/shared/closeout_pipeline_run.py`
+- **Reconcile run: `docs/patcher/shared/reconcile_run.py`** ← à exécuter en run_id_mode pour remettre un run en ligne sans rejouer les stages métier
 - **Consolidate parallel runs: `docs/patcher/shared/consolidate_parallel_runs.py`** ← STAGE_06B uniquement
 
 ## Canonical entry actions
+
+### No-run-id startup actions
 
 When the user does not provide a `run_id`, entry is resolved through two distinct canonical actions:
 
@@ -106,3 +110,24 @@ Structured rule:
 - run tracking materialization, input materialization, ids-first extract materialization, and run_context materialization are mandatory bootstrap acts
 - `OPEN_NEW_RUN` stops on execution, not on guidance: after a successful decision it must point explicitly to `MATERIALIZE_NEW_RUN`
 - STAGE_01_CHALLENGE may start only after the run has been materially opened, its inputs materially generated, its ids-first extracts materially generated, and `run_context.yaml` materially generated
+
+### Run-id actions
+
+When a `run_id` is already known, canonical handling may use dedicated run-scoped actions instead of jumping directly into stage execution:
+
+- `docs/pipelines/constitution/entry_actions/CONTINUE_ACTIVE_RUN.action.yaml`
+  - resolves continuation of a known active run
+  - must stop after the continue-or-not decision
+  - must not deep-read wider than the identified run
+
+- `docs/pipelines/constitution/entry_actions/RECONCILE_RUN.action.yaml`
+  - reconciles a known run against the latest stable contracts
+  - repairs derivable artifacts through owner scripts only
+  - truncates downstream state that is no longer materially justifiable
+  - must stop before any restarted business stage begins
+
+Structured rule:
+- run reconciliation is not a business stage and must not be modeled as one
+- reconciliation must compute the longest trusted prefix still justified by current contracts
+- what is derivable may be rebuilt deterministically; what is no longer justifiable must be cut
+- after successful reconciliation, the next canonical action is usually `CONTINUE_ACTIVE_RUN`
