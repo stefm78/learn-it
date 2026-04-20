@@ -1,0 +1,12 @@
+stage_completion_record:
+  schema_version: 0.1
+  pipeline_id: constitution
+  run_id: CONSTITUTION_RUN_2026_04_20_LEARNER_STATE_R01
+  stage_id: RUN_BOOTSTRAP
+  stage_status: in_progress
+  run_status: bootstrap_open
+  next_stage: STAGE_01_CHALLENGE
+  scope_status: confirmed_for_bounded_run
+  summary: Entry authorized; run materially opened for learner_state; awaiting Stage
+    01 confirmation.
+  recorded_at: '2026-04-20T07:19:19Z'

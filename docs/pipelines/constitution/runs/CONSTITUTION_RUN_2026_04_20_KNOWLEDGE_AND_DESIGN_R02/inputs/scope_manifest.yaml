@@ -1,0 +1,56 @@
+scope_manifest:
+  schema_version: 0.1
+  run_id: CONSTITUTION_RUN_2026_04_20_KNOWLEDGE_AND_DESIGN_R02
+  scope_id: CONSTITUTION_SCOPE_KNOWLEDGE_AND_DESIGN
+  scope_key: knowledge_and_design
+  source:
+    scope_definition_ref: docs/pipelines/constitution/scope_catalog/scope_definitions/knowledge_and_design.yaml
+    scope_definition_fingerprint: 2b61cd4430f02a57efd1f1b4aed6a1ffe0e5da940536aae299462b3740111a34
+  writable_perimeter:
+    files:
+    - docs/cores/current/constitution.yaml
+    modules:
+    - knowledge_model
+    - analysis
+    - analysis_design
+    - analysis_runtime_graph
+    - design
+    - design_governance
+    - design_runtime
+    ids:
+    - ACTION_PLAN_COGNITIVE_CONFLICT_MISSION
+    - CONSTRAINT_NO_HIGH_BLOOM_WITHOUT_AUTHENTIC_CONTEXT
+    - CONSTRAINT_NO_RUNTIME_FEEDBACK_GENERATION
+    - EVENT_HIGH_BLOOM_WITHOUT_AUTHENTIC_CONTEXT
+    - EVENT_UNCOVERED_ERROR
+    - INV_AUTHENTIC_CONTEXT_REQUIRED_FOR_BLOOM4
+    - INV_CREATIVE_KU_AUTONOMY_REQUIRES_DETERMINISTIC_FEEDBACK_PATH
+    - INV_EXPLICIT_DEPENDENCY_EDGES_REQUIRED
+    - INV_KNOWLEDGE_GRAPH_MUST_BE_ACYCLIC
+    - INV_KU_TYPING_REQUIRED
+    - INV_MISSING_KU_TYPE_FORCES_SAFE_FALLBACK
+    - INV_NO_TEXT_ONLY_FOR_PROCEDURAL_OR_PERCEPTUAL
+    - RULE_MISCONCEPTION_REQUIRES_COGNITIVE_CONFLICT
+    - RULE_NON_EXAM_CONCEPT_KEPT_IN_GRAPH
+    - RULE_UNCOVERED_ERROR_GENERIC_FEEDBACK
+    - TYPE_AUTHENTIC_CONTEXT
+    - TYPE_CORPUS_CONFIDENCE_ICC
+    - TYPE_FEEDBACK_COVERAGE_MATRIX
+    - TYPE_KNOWLEDGE_GRAPH
+    - TYPE_KNOWLEDGE_UNIT
+  governance:
+    allowed_operations:
+    - challenge
+    - arbitrage
+    - patch
+    - local_validation
+    forbidden_operations:
+    - direct_current_promotion
+    - silent_out_of_scope_modification
+    - implicit_cross_core_reallocation
+    scope_extension_policy:
+      explicit_decision_required: true
+  notes:
+  - Généré déterministiquement par materialize_run_inputs.py depuis la scope_definition.
+  - Ce fichier déclare le périmètre modifiable autorisé du run.
+  - Tout ce qui n'est pas dans writable_perimeter.ids ne peut pas être modifié implicitement.

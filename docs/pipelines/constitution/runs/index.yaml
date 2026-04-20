@@ -2,8 +2,56 @@ runs_index:
   schema_version: 0.1
   pipeline_id: constitution
   status: active
-  last_updated: '2026-04-18'
-  active_runs: []
+  last_updated: '2026-04-20'
+  active_runs:
+  - run_id: CONSTITUTION_RUN_2026_04_20_DEPLOYMENT_GOVERNANCE_R01
+    scope_id: CONSTITUTION_SCOPE_DEPLOYMENT_GOVERNANCE
+    scope_key: deployment_governance
+    run_status: bootstrap_open
+    current_stage: STAGE_01_CHALLENGE
+    mode: bounded_local_run
+    run_manifest_ref: docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_20_DEPLOYMENT_GOVERNANCE_R01/run_manifest.yaml
+    scope_status: confirmed_for_bounded_run
+  - run_id: CONSTITUTION_RUN_2026_04_20_MASTERY_EVALUATION_R01
+    scope_id: CONSTITUTION_SCOPE_MASTERY_EVALUATION
+    scope_key: mastery_evaluation
+    run_status: bootstrap_open
+    current_stage: STAGE_01_CHALLENGE
+    mode: bounded_local_run
+    run_manifest_ref: docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_20_MASTERY_EVALUATION_R01/run_manifest.yaml
+    scope_status: confirmed_for_bounded_run
+  - run_id: CONSTITUTION_RUN_2026_04_20_LEARNER_STATE_R01
+    scope_id: CONSTITUTION_SCOPE_LEARNER_STATE
+    scope_key: learner_state
+    run_status: bootstrap_open
+    current_stage: STAGE_01_CHALLENGE
+    mode: bounded_local_run
+    run_manifest_ref: docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_20_LEARNER_STATE_R01/run_manifest.yaml
+    scope_status: confirmed_for_bounded_run
+  - run_id: CONSTITUTION_RUN_2026_04_20_PATCH_LIFECYCLE_R01
+    scope_id: CONSTITUTION_SCOPE_PATCH_LIFECYCLE
+    scope_key: patch_lifecycle
+    run_status: bootstrap_open
+    current_stage: STAGE_01_CHALLENGE
+    mode: bounded_local_run
+    run_manifest_ref: docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_20_PATCH_LIFECYCLE_R01/run_manifest.yaml
+    scope_status: confirmed_for_bounded_run
+  - run_id: CONSTITUTION_RUN_2026_04_20_KNOWLEDGE_AND_DESIGN_R01
+    scope_id: ''
+    scope_key: ''
+    run_status: bootstrap_open
+    current_stage: STAGE_01_CHALLENGE
+    mode: bounded_local_run
+    run_manifest_ref: docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_20_KNOWLEDGE_AND_DESIGN_R01/run_manifest.yaml
+    scope_status: confirmed_for_bounded_run
+  - run_id: CONSTITUTION_RUN_2026_04_20_KNOWLEDGE_AND_DESIGN_R02
+    scope_id: CONSTITUTION_SCOPE_KNOWLEDGE_AND_DESIGN
+    scope_key: knowledge_and_design
+    run_status: bootstrap_open
+    current_stage: STAGE_01_CHALLENGE
+    mode: bounded_local_run
+    run_manifest_ref: docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_20_KNOWLEDGE_AND_DESIGN_R02/run_manifest.yaml
+    scope_status: confirmed_for_bounded_run
   closed_runs:
   - run_id: CONSTITUTION_RUN_2026_04_13_DEPLOYMENT_GOVERNANCE_R01
     scope_id: CONSTITUTION_SCOPE_DEPLOYMENT_GOVERNANCE

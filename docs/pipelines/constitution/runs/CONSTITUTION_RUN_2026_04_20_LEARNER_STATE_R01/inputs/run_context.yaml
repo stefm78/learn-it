@@ -1,0 +1,106 @@
+run_context:
+  schema_version: 0.2
+  generated_by: build_run_context_runtime_view_candidate_v2.py
+  note: Fichier synthétique — lire EN PREMIER. Remplace la lecture séquentielle de run_manifest + scope_manifest
+    + impact_bundle + integration_gate et expose une task view dérivée pour le stage exécutable. Sources
+    canoniques inchangées.
+  run_id: CONSTITUTION_RUN_2026_04_20_LEARNER_STATE_R01
+  pipeline_id: constitution
+  mode: bounded_local_run
+  status: bootstrap_open
+  scope_key: learner_state
+  current_stage: RUN_BOOTSTRAP
+  current_stage_canonical: RUN_BOOTSTRAP
+  last_stage_status: in_progress
+  next_stage: STAGE_01_CHALLENGE
+  next_stage_canonical: STAGE_01_CHALLENGE
+  next_executable_stage: STAGE_01_CHALLENGE
+  next_executable_stage_canonical: STAGE_01_CHALLENGE
+  terminal_closed: false
+  completed_stages: []
+  completed_stages_canonical: []
+  scope_ids:
+  - ACTION_APPLY_LIGHT_REVERSIBLE_SCAFFOLDING
+  - ACTION_LOG_AR_PROXY_DISCORDANCE
+  - EVENT_ACTIVATION_DISTRESS_PERSISTENCE_ESCALATION
+  - EVENT_CONSERVATIVE_SCAFFOLDING_ESCALATION
+  - EVENT_LONG_INTERRUPTION
+  - INV_AR_N2_SHORT_FORM_REQUIRES_EXPLICIT_PRIORITY
+  - INV_CONSERVATIVE_RULE_WITHOUT_AR_N1
+  - INV_DISTRESS_REGIME_PRIORITY_CANNOT_BE_OVERRIDDEN
+  - INV_VC_NOT_GENERAL_MOTIVATION_PROXY
+  - PARAM_AR_N1_INTERACTION_BUDGET
+  - PARAM_AR_N2_INTERACTION_BUDGET
+  - PARAM_AR_N3_INTERACTION_BUDGET
+  - RULE_ACTIVATION_DISTRESS_PERSISTENCE_ESCALATION_OFFSESSION
+  - RULE_AR_N1_OVERRIDES_PROXY
+  - RULE_CONSERVATIVE_SCAFFOLDING_ESCALATION_REQUIRES_OFFSESSION_REVIEW
+  - RULE_LEARNER_STATE_AXIS_UNKNOWN_ALLOWED
+  - RULE_LONG_INTERRUPTION_REQUIRES_DIAGNOSTIC_RESUME
+  - RULE_MULTI_AXIS_UNKNOWN_OR_UNOBSERVABLE_SAFE_ENTRY
+  - RULE_SESSION_INTENTION_NON_BLOCKING
+  - TYPE_LEARNER_STATE_MODEL
+  - TYPE_SELF_REPORT_AR_N1
+  - TYPE_SELF_REPORT_AR_N2
+  - TYPE_SELF_REPORT_AR_N3
+  - TYPE_STATE_AXIS_ACTIVATION
+  - TYPE_STATE_AXIS_CALIBRATION
+  - TYPE_STATE_AXIS_VALUE_COST
+  scope_ids_count: 26
+  neighbor_ids:
+  - REF_CORE_LEARNIT_REFERENTIEL_V2_0_IN_CONSTITUTION
+  neighbor_ids_count: 1
+  scope_extract:
+    present: false
+  neighbor_extract:
+    present: false
+  integration_gate:
+    status: open
+    total_checks: 7
+    cleared_checks: 0
+    promotion_blocked: true
+  canonical_refs:
+    run_manifest: docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_20_LEARNER_STATE_R01/run_manifest.yaml
+    scope_manifest: docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_20_LEARNER_STATE_R01/inputs/scope_manifest.yaml
+    impact_bundle: docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_20_LEARNER_STATE_R01/inputs/impact_bundle.yaml
+    integration_gate: docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_20_LEARNER_STATE_R01/inputs/integration_gate.yaml
+  source_fingerprints:
+    run_manifest.yaml: 0410e06beec54924a1b6c9e99a75814abcbe04f0f158f4c2d6d94899d43152b2
+    scope_manifest.yaml: 5b24024bd26377ae020b591aa456d0b67add4eb3e8bd90a0bfe33ef286af8b49
+    impact_bundle.yaml: 99e14034ee89f174b8831112a85cf9273ae228af04cc4961dc14453738dba756
+    integration_gate.yaml: 8ed499b6b0033f0dfb8aec8d1157eaaed8bffbe1bd8ff7e99533de4c5c35f15d
+  task_view:
+    status: executable
+    raw_stage_id: STAGE_01_CHALLENGE
+    stage_id: STAGE_01_CHALLENGE
+    skill_ref: docs/pipelines/constitution/stages/STAGE_01_CHALLENGE.skill.yaml
+    stage_kind: cognitive
+    closure_level: medium
+    resolved_inputs:
+    - docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_20_LEARNER_STATE_R01/inputs/run_context.yaml
+    - docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_20_LEARNER_STATE_R01/inputs/scope_extract.yaml
+    - docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_20_LEARNER_STATE_R01/inputs/neighbor_extract.yaml
+    - docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_20_LEARNER_STATE_R01/inputs/scope_manifest.yaml
+    - docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_20_LEARNER_STATE_R01/inputs/impact_bundle.yaml
+    - docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_20_LEARNER_STATE_R01/inputs/integration_gate.yaml
+    execution_paths:
+      work_dir: docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_20_LEARNER_STATE_R01/work/01_challenge/
+      primary_output: docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_20_LEARNER_STATE_R01/work/01_challenge/challenge_report_<id>.md
+      reports_dir: docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_20_LEARNER_STATE_R01/reports/
+    required_scripts_status:
+      scope_extract_present: false
+      neighbor_extract_present: false
+      ids_first_ready: false
+    forbidden_actions: []
+    completion_evidence: []
+    allowed_transitions: {}
+    compact_execution_prompt: Dans le repo learn-it, exécute STAGE_01_CHALLENGE du pipeline constitution
+      pour run_id=CONSTITUTION_RUN_2026_04_20_LEARNER_STATE_R01 en mode bounded_local_run. Lis d'abord
+      docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_20_LEARNER_STATE_R01/inputs/run_context.yaml,
+      docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_20_LEARNER_STATE_R01/inputs/scope_extract.yaml,
+      docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_20_LEARNER_STATE_R01/inputs/neighbor_extract.yaml,
+      docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_20_LEARNER_STATE_R01/inputs/scope_manifest.yaml,
+      docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_20_LEARNER_STATE_R01/inputs/impact_bundle.yaml,
+      docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_20_LEARNER_STATE_R01/inputs/integration_gate.yaml.
+      Applique le contrat stable défini dans docs/pipelines/constitution/stages/STAGE_01_CHALLENGE.skill.yaml.
+      Ne produis que les livrables du stage courant et ne simule aucun script requis.

@@ -1,0 +1,21 @@
+impact_bundle:
+  schema_version: 0.1
+  run_id: CONSTITUTION_RUN_2026_04_20_KNOWLEDGE_AND_DESIGN_R02
+  scope_id: CONSTITUTION_SCOPE_KNOWLEDGE_AND_DESIGN
+  scope_key: knowledge_and_design
+  source:
+    scope_definition_ref: docs/pipelines/constitution/scope_catalog/scope_definitions/knowledge_and_design.yaml
+    scope_definition_fingerprint: 2b61cd4430f02a57efd1f1b4aed6a1ffe0e5da940536aae299462b3740111a34
+    partition_report_used: true
+  mandatory_reads:
+    files:
+    - docs/cores/current/referentiel.yaml
+    - docs/cores/current/link.yaml
+    ids:
+    - REF_CORE_LEARNIT_REFERENTIEL_V2_0_IN_CONSTITUTION
+  neighbor_scopes: []
+  notes:
+  - Généré déterministiquement par materialize_run_inputs.py.
+  - Ce fichier étend le devoir de lecture, pas le droit de modifier.
+  - neighbor_scopes dérivés des cross_scope_edges du rapport de partition.
+  - Un voisin absent de ce fichier mais découvert pendant le run doit être signalé explicitement.

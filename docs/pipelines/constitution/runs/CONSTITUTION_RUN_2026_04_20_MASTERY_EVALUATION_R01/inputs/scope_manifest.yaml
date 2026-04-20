@@ -1,0 +1,62 @@
+scope_manifest:
+  schema_version: 0.1
+  run_id: CONSTITUTION_RUN_2026_04_20_MASTERY_EVALUATION_R01
+  scope_id: CONSTITUTION_SCOPE_MASTERY_EVALUATION
+  scope_key: mastery_evaluation
+  source:
+    scope_definition_ref: docs/pipelines/constitution/scope_catalog/scope_definitions/mastery_evaluation.yaml
+    scope_definition_fingerprint: d04a8f297a000d3afe12a736a10dfb855ca7f0b123f3ffbba0b6d0e19bee411d
+  writable_perimeter:
+    files:
+    - docs/cores/current/constitution.yaml
+    modules:
+    - runtime_evaluation
+    - runtime_graph
+    - runtime_integrity
+    - runtime_safety
+    ids:
+    - ACTION_PLAN_SHORT_DIAGNOSTIC_TASK
+    - CONSTRAINT_NO_BIOMETRICS_OR_OFFSESSION_SURVEILLANCE
+    - EVENT_LOW_SIS
+    - EVENT_MSC_DOWNGRADE
+    - EVENT_MSC_PERCEPTION_DIVERGENCE_DETECTED
+    - EVENT_PROVISIONAL_MASTERY_WINDOW_EXPIRED
+    - EVENT_SYSTEMIC_INVESTIGATION_AUTO_OPENED
+    - EVENT_SYSTEMIC_INVESTIGATION_CLOSED
+    - EVENT_T_EVALUATION_OVERDUE
+    - INV_GRAPH_PROPAGATION_ONE_HOP
+    - INV_MSC_AND_STRICT
+    - INV_REFERENTIEL_VALIDITY_REQUIRED_FOR_DELEGATED_THRESHOLD_EVALUATION
+    - INV_SECONDARY_RETROGRADATION_IS_NEW_EVENT
+    - INV_TRANSFER_SEPARATE_FROM_BASE_MASTERY
+    - PARAM_PROVISIONAL_MASTERY_VERIFICATION_WINDOW
+    - RULE_LOW_SIS_NEVER_AUTO_PENALIZES
+    - RULE_MSC_COMPONENT_NON_CALCULABLE_DEFERS_BASE_MASTERY
+    - RULE_MSC_DOWNGRADE_MARKS_DEPENDENTS
+    - RULE_MSC_PERCEPTION_DIVERGENCE_PROTOCOL
+    - RULE_PROVISIONAL_MASTERY_WINDOW_EXPIRY_SAFE_FALLBACK
+    - RULE_SYSTEMIC_INVESTIGATION_OPEN_CLOSE_WINDOW
+    - RULE_T_EVALUATION_OVERDUE_REQUIRES_SIGNAL_OR_FOLLOWUP
+    - TYPE_MASTERY_COMPONENT_A
+    - TYPE_MASTERY_COMPONENT_P
+    - TYPE_MASTERY_COMPONENT_R
+    - TYPE_MASTERY_COMPONENT_T
+    - TYPE_MASTERY_MODEL
+    - TYPE_NC_MSC
+    - TYPE_SESSION_INTEGRITY_SCORE
+  governance:
+    allowed_operations:
+    - challenge
+    - arbitrage
+    - patch
+    - local_validation
+    forbidden_operations:
+    - direct_current_promotion
+    - silent_out_of_scope_modification
+    - implicit_cross_core_reallocation
+    scope_extension_policy:
+      explicit_decision_required: true
+  notes:
+  - Généré déterministiquement par materialize_run_inputs.py depuis la scope_definition.
+  - Ce fichier déclare le périmètre modifiable autorisé du run.
+  - Tout ce qui n'est pas dans writable_perimeter.ids ne peut pas être modifié implicitement.

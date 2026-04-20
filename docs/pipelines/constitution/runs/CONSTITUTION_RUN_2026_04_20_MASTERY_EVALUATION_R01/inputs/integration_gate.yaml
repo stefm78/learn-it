@@ -1,0 +1,58 @@
+integration_gate:
+  schema_version: 0.1
+  run_id: CONSTITUTION_RUN_2026_04_20_MASTERY_EVALUATION_R01
+  scope_id: CONSTITUTION_SCOPE_MASTERY_EVALUATION
+  scope_key: mastery_evaluation
+  status: open
+  source:
+    scope_definition_ref: docs/pipelines/constitution/scope_catalog/scope_definitions/mastery_evaluation.yaml
+    scope_definition_fingerprint: d04a8f297a000d3afe12a736a10dfb855ca7f0b123f3ffbba0b6d0e19bee411d
+  promotion_blocked_until_cleared: true
+  gate_checks:
+  - check_id: WP_01
+    description: Ne pas diluer la logique MSC AND strict dans des simplifications de score.
+    source: watchpoint
+    clearance_required: true
+    cleared: false
+  - check_id: WP_02
+    description: Préserver la séparation entre maîtrise de base (P+R+A) et transférabilité (T).
+    source: watchpoint
+    clearance_required: true
+    cleared: false
+  - check_id: WP_03
+    description: Vérifier les frontières entre évaluation locale, propagation graphe et dépendances référentielles.
+    source: watchpoint
+    clearance_required: true
+    cleared: false
+  - check_id: WP_04
+    description: Vérifier qu'une composante non calculable reste deferred et ne tombe jamais implicitement
+      à false.
+    source: watchpoint
+    clearance_required: true
+    cleared: false
+  - check_id: WP_05
+    description: Vérifier que INV_GRAPH_PROPAGATION_ONE_HOP reste dans ce scope et non dans knowledge_and_design.
+    source: watchpoint
+    clearance_required: true
+    cleared: false
+  - check_id: WP_06
+    description: Ne pas laisser les règles d'intégrité session (SIS, NC_MSC) glisser vers learner_state.
+    source: watchpoint
+    clearance_required: true
+    cleared: false
+  - check_id: FORBIDDEN_OPS_ENFORCEMENT
+    description: Vérifier qu'aucune opération interdite n'a été effectuée pendant le run.
+    forbidden_operations:
+    - direct_current_promotion
+    - silent_out_of_scope_modification
+    - implicit_cross_core_reallocation
+    source: governance.default_forbidden_operations
+    clearance_required: true
+    cleared: false
+  clearance_record: []
+  notes:
+  - Généré déterministiquement par materialize_run_inputs.py.
+  - Ce fichier déclare les contrôles globaux à rejouer avant release/promotion.
+  - En mode borné, il bloque toute promotion implicite d'un succès local.
+  - Chaque check doit être explicitement cleared avant que status puisse passer à 'cleared'.
+  - La clearance finale est un acte humain ou IA gouverné — pas automatique.

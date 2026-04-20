@@ -1,0 +1,56 @@
+integration_gate:
+  schema_version: 0.1
+  run_id: CONSTITUTION_RUN_2026_04_20_KNOWLEDGE_AND_DESIGN_R02
+  scope_id: CONSTITUTION_SCOPE_KNOWLEDGE_AND_DESIGN
+  scope_key: knowledge_and_design
+  status: open
+  source:
+    scope_definition_ref: docs/pipelines/constitution/scope_catalog/scope_definitions/knowledge_and_design.yaml
+    scope_definition_fingerprint: 2b61cd4430f02a57efd1f1b4aed6a1ffe0e5da940536aae299462b3740111a34
+  promotion_blocked_until_cleared: true
+  gate_checks:
+  - check_id: WP_01
+    description: Vérifier la frontière entre structure du graphe (topologie, acyclicité) et règles d'évaluation
+      runtime.
+    source: watchpoint
+    clearance_required: true
+    cleared: false
+  - check_id: WP_02
+    description: Vérifier que INV_EXPLICIT_DEPENDENCY_EDGES_REQUIRED reste associé à ce scope et non à
+      mastery_evaluation.
+    source: watchpoint
+    clearance_required: true
+    cleared: false
+  - check_id: WP_03
+    description: Vérifier que le contexte authentique est bien une contrainte de design, pas une règle
+      runtime.
+    source: watchpoint
+    clearance_required: true
+    cleared: false
+  - check_id: WP_04
+    description: Ne pas dériver de règles adaptatives depuis les invariants de structure de graphe.
+    source: watchpoint
+    clearance_required: true
+    cleared: false
+  - check_id: WP_05
+    description: Vérifier que les règles de misconception restent dans la phase design et ne glissent
+      pas vers learner_state.
+    source: watchpoint
+    clearance_required: true
+    cleared: false
+  - check_id: FORBIDDEN_OPS_ENFORCEMENT
+    description: Vérifier qu'aucune opération interdite n'a été effectuée pendant le run.
+    forbidden_operations:
+    - direct_current_promotion
+    - silent_out_of_scope_modification
+    - implicit_cross_core_reallocation
+    source: governance.default_forbidden_operations
+    clearance_required: true
+    cleared: false
+  clearance_record: []
+  notes:
+  - Généré déterministiquement par materialize_run_inputs.py.
+  - Ce fichier déclare les contrôles globaux à rejouer avant release/promotion.
+  - En mode borné, il bloque toute promotion implicite d'un succès local.
+  - Chaque check doit être explicitement cleared avant que status puisse passer à 'cleared'.
+  - La clearance finale est un acte humain ou IA gouverné — pas automatique.

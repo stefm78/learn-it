@@ -1,0 +1,100 @@
+run_context:
+  schema_version: 0.2
+  generated_by: build_run_context_runtime_view_candidate_v2.py
+  note: Fichier synthétique — lire EN PREMIER. Remplace la lecture séquentielle de run_manifest + scope_manifest
+    + impact_bundle + integration_gate et expose une task view dérivée pour le stage exécutable. Sources
+    canoniques inchangées.
+  run_id: CONSTITUTION_RUN_2026_04_20_KNOWLEDGE_AND_DESIGN_R02
+  pipeline_id: constitution
+  mode: bounded_local_run
+  status: bootstrap_open
+  scope_key: knowledge_and_design
+  current_stage: RUN_BOOTSTRAP
+  current_stage_canonical: RUN_BOOTSTRAP
+  last_stage_status: in_progress
+  next_stage: STAGE_01_CHALLENGE
+  next_stage_canonical: STAGE_01_CHALLENGE
+  next_executable_stage: STAGE_01_CHALLENGE
+  next_executable_stage_canonical: STAGE_01_CHALLENGE
+  terminal_closed: false
+  completed_stages: []
+  completed_stages_canonical: []
+  scope_ids:
+  - ACTION_PLAN_COGNITIVE_CONFLICT_MISSION
+  - CONSTRAINT_NO_HIGH_BLOOM_WITHOUT_AUTHENTIC_CONTEXT
+  - CONSTRAINT_NO_RUNTIME_FEEDBACK_GENERATION
+  - EVENT_HIGH_BLOOM_WITHOUT_AUTHENTIC_CONTEXT
+  - EVENT_UNCOVERED_ERROR
+  - INV_AUTHENTIC_CONTEXT_REQUIRED_FOR_BLOOM4
+  - INV_CREATIVE_KU_AUTONOMY_REQUIRES_DETERMINISTIC_FEEDBACK_PATH
+  - INV_EXPLICIT_DEPENDENCY_EDGES_REQUIRED
+  - INV_KNOWLEDGE_GRAPH_MUST_BE_ACYCLIC
+  - INV_KU_TYPING_REQUIRED
+  - INV_MISSING_KU_TYPE_FORCES_SAFE_FALLBACK
+  - INV_NO_TEXT_ONLY_FOR_PROCEDURAL_OR_PERCEPTUAL
+  - RULE_MISCONCEPTION_REQUIRES_COGNITIVE_CONFLICT
+  - RULE_NON_EXAM_CONCEPT_KEPT_IN_GRAPH
+  - RULE_UNCOVERED_ERROR_GENERIC_FEEDBACK
+  - TYPE_AUTHENTIC_CONTEXT
+  - TYPE_CORPUS_CONFIDENCE_ICC
+  - TYPE_FEEDBACK_COVERAGE_MATRIX
+  - TYPE_KNOWLEDGE_GRAPH
+  - TYPE_KNOWLEDGE_UNIT
+  scope_ids_count: 20
+  neighbor_ids:
+  - REF_CORE_LEARNIT_REFERENTIEL_V2_0_IN_CONSTITUTION
+  neighbor_ids_count: 1
+  scope_extract:
+    present: false
+  neighbor_extract:
+    present: false
+  integration_gate:
+    status: open
+    total_checks: 6
+    cleared_checks: 0
+    promotion_blocked: true
+  canonical_refs:
+    run_manifest: docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_20_KNOWLEDGE_AND_DESIGN_R02/run_manifest.yaml
+    scope_manifest: docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_20_KNOWLEDGE_AND_DESIGN_R02/inputs/scope_manifest.yaml
+    impact_bundle: docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_20_KNOWLEDGE_AND_DESIGN_R02/inputs/impact_bundle.yaml
+    integration_gate: docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_20_KNOWLEDGE_AND_DESIGN_R02/inputs/integration_gate.yaml
+  source_fingerprints:
+    run_manifest.yaml: c4eeff31145e5b177194a1b2a569812ca912acb371d2b48535e02013ec138426
+    scope_manifest.yaml: 039ef3e4e37dd240c6c5f292ef02da758697a8bdb1893a98b18f1337fe016d0f
+    impact_bundle.yaml: e0b2a568c7ec02292b81fd7b64d75b39dbf87d9c521cde8d8d1b995832f4ea51
+    integration_gate.yaml: 7d2e6e9b068ed5c9c890cfe7e010514df8eba25413f7c165c8438c1f71dd64d6
+  task_view:
+    status: executable
+    raw_stage_id: STAGE_01_CHALLENGE
+    stage_id: STAGE_01_CHALLENGE
+    skill_ref: docs/pipelines/constitution/stages/STAGE_01_CHALLENGE.skill.yaml
+    stage_kind: cognitive
+    closure_level: medium
+    resolved_inputs:
+    - docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_20_KNOWLEDGE_AND_DESIGN_R02/inputs/run_context.yaml
+    - docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_20_KNOWLEDGE_AND_DESIGN_R02/inputs/scope_extract.yaml
+    - docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_20_KNOWLEDGE_AND_DESIGN_R02/inputs/neighbor_extract.yaml
+    - docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_20_KNOWLEDGE_AND_DESIGN_R02/inputs/scope_manifest.yaml
+    - docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_20_KNOWLEDGE_AND_DESIGN_R02/inputs/impact_bundle.yaml
+    - docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_20_KNOWLEDGE_AND_DESIGN_R02/inputs/integration_gate.yaml
+    execution_paths:
+      work_dir: docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_20_KNOWLEDGE_AND_DESIGN_R02/work/01_challenge/
+      primary_output: docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_20_KNOWLEDGE_AND_DESIGN_R02/work/01_challenge/challenge_report_<id>.md
+      reports_dir: docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_20_KNOWLEDGE_AND_DESIGN_R02/reports/
+    required_scripts_status:
+      scope_extract_present: false
+      neighbor_extract_present: false
+      ids_first_ready: false
+    forbidden_actions: []
+    completion_evidence: []
+    allowed_transitions: {}
+    compact_execution_prompt: Dans le repo learn-it, exécute STAGE_01_CHALLENGE du pipeline constitution
+      pour run_id=CONSTITUTION_RUN_2026_04_20_KNOWLEDGE_AND_DESIGN_R02 en mode bounded_local_run. Lis
+      d'abord docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_20_KNOWLEDGE_AND_DESIGN_R02/inputs/run_context.yaml,
+      docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_20_KNOWLEDGE_AND_DESIGN_R02/inputs/scope_extract.yaml,
+      docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_20_KNOWLEDGE_AND_DESIGN_R02/inputs/neighbor_extract.yaml,
+      docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_20_KNOWLEDGE_AND_DESIGN_R02/inputs/scope_manifest.yaml,
+      docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_20_KNOWLEDGE_AND_DESIGN_R02/inputs/impact_bundle.yaml,
+      docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_20_KNOWLEDGE_AND_DESIGN_R02/inputs/integration_gate.yaml.
+      Applique le contrat stable défini dans docs/pipelines/constitution/stages/STAGE_01_CHALLENGE.skill.yaml.
+      Ne produis que les livrables du stage courant et ne simule aucun script requis.
