@@ -6,322 +6,263 @@ stage_skill:
   stage_kind: cognitive
   closure_level: high
   authoritative_role: stable_stage_contract
-
-mission: >-
-  Transformer un ou plusieurs challenge_reports en une décision d'arbitrage
-  structurée et traçable, exploitable par STAGE_03_PATCH_SYNTHESIS.
-  Ce stage ne produit pas de patch YAML et ne réécrit pas les Core.
-  Il décide — pour chaque constat — de corriger maintenant, reporter,
-  rejeter ou signaler un besoin d'extension de scope.
-  En mode borné, il distingue explicitement ce qui est in_scope,
-  out_of_scope_but_relevant, et needs_scope_extension.
-
+mission: Transformer un ou plusieurs challenge_reports en une décision d'arbitrage
+  structurée et traçable, exploitable par STAGE_03_PATCH_SYNTHESIS. Ce stage ne produit
+  pas de patch YAML et ne réécrit pas les Core. Il décide — pour chaque constat —
+  de corriger maintenant, reporter, rejeter ou signaler un besoin d'extension de scope.
+  En mode borné, il distingue explicitement ce qui est in_scope, out_of_scope_but_relevant,
+  et needs_scope_extension.
 model_requirements:
   reasoning_level: advanced
-  justification: >-
-    L'arbitrage exige un jugement structuré sur des constats complexes et
-    potentiellement contradictoires issus du challenge. Il faut évaluer la
-    gravité, l'impact, la compatibilité pipeline et la minimalité de chaque
-    décision. Un raisonnement superficiel produira des décisions incohérentes
-    ou trop larges qui bloqueront ou dégraderont la synthèse de patch.
-    Un modèle avec capacité de raisonnement approfondi est obligatoire.
+  justification: L'arbitrage exige un jugement structuré sur des constats complexes
+    et potentiellement contradictoires issus du challenge. Il faut évaluer la gravité,
+    l'impact, la compatibilité pipeline et la minimalité de chaque décision. Un raisonnement
+    superficiel produira des décisions incohérentes ou trop larges qui bloqueront
+    ou dégraderont la synthèse de patch. Un modèle avec capacité de raisonnement approfondi
+    est obligatoire.
   recommended_models:
-    - o3
-    - claude-opus-4
-    - gemini-2.5-pro
+  - o3
+  - claude-opus-4
+  - gemini-2.5-pro
   minimum_acceptable: tout modèle avec extended thinking ou chain-of-thought activable
-  warning: >-
-    ⚠️ NE PAS exécuter ce stage avec un modèle standard. La qualité de
-    l'arbitrage conditionne directement la précision et la sécurité du patch
-    produit en STAGE_03. Une décision mal qualifiée peut introduire une
-    correction hors scope ou omettre un risque critique.
-
+  warning: ⚠️ NE PAS exécuter ce stage avec un modèle standard. La qualité de l'arbitrage
+    conditionne directement la précision et la sécurité du patch produit en STAGE_03.
+    Une décision mal qualifiée peut introduire une correction hors scope ou omettre
+    un risque critique.
 runtime_binding:
   expected_mode_values:
-    - nominal_global
-    - bounded_local_run
-    - bounded_transition
-  run_context_role: >-
-    run_context.yaml doit être lu en premier pour résoudre le mode,
-    les chemins d'entrée et l'état ids-first.
-    Il ne remplace pas les sources canoniques.
-  human_notes_role: >-
-    Les éventuelles notes humaines d'arbitrage transmises dans le prompt
-    ont autorité sur les décisions IA en cas de conflit.
-    Elles doivent être explicitement intégrées et tracées dans l'output.
-
+  - nominal_global
+  - bounded_local_run
+  - bounded_transition
+  run_context_role: run_context.yaml doit être lu en premier pour résoudre le mode,
+    les chemins d'entrée et l'état ids-first. Il ne remplace pas les sources canoniques.
+  human_notes_role: Les éventuelles notes humaines d'arbitrage transmises dans le
+    prompt ont autorité sur les décisions IA en cas de conflit. Elles doivent être
+    explicitement intégrées et tracées dans l'output.
 primary_reads:
   bounded_local_run:
-    - docs/pipelines/constitution/runs/<run_id>/inputs/run_context.yaml
-    - docs/pipelines/constitution/runs/<run_id>/inputs/scope_manifest.yaml
-    - docs/pipelines/constitution/runs/<run_id>/inputs/impact_bundle.yaml
-    - docs/pipelines/constitution/runs/<run_id>/inputs/integration_gate.yaml
-    - docs/pipelines/constitution/runs/<run_id>/work/01_challenge/challenge_report*.md
+  - docs/pipelines/constitution/runs/<run_id>/inputs/run_context.yaml
+  - docs/pipelines/constitution/runs/<run_id>/inputs/scope_manifest.yaml
+  - docs/pipelines/constitution/runs/<run_id>/inputs/impact_bundle.yaml
+  - docs/pipelines/constitution/runs/<run_id>/inputs/integration_gate.yaml
+  - docs/pipelines/constitution/runs/<run_id>/work/01_challenge/challenge_report*.md
   nominal_global:
-    - docs/pipelines/constitution/work/01_challenge/challenge_report*.md
-    - docs/cores/current/constitution.yaml
-    - docs/cores/current/referentiel.yaml
-    - docs/cores/current/link.yaml
+  - docs/pipelines/constitution/work/01_challenge/challenge_report*.md
+  - docs/cores/current/constitution.yaml
+  - docs/cores/current/referentiel.yaml
+  - docs/cores/current/link.yaml
   bounded_transition:
-    - docs/pipelines/constitution/inputs/scope_manifest.yaml
-    - docs/pipelines/constitution/inputs/impact_bundle.yaml
-    - docs/pipelines/constitution/work/01_challenge/challenge_report*.md
-
+  - docs/pipelines/constitution/inputs/scope_manifest.yaml
+  - docs/pipelines/constitution/inputs/impact_bundle.yaml
+  - docs/pipelines/constitution/work/01_challenge/challenge_report*.md
 challenge_report_resolution:
-  rule: >-
-    En bounded_local_run, s'il existe un unique challenge_report*.md dans
-    work/01_challenge, STAGE_02 doit l'utiliser comme source principale.
-    S'il en existe plusieurs, ils doivent tous être consolidés.
+  rule: En bounded_local_run, s'il existe un unique challenge_report*.md dans work/01_challenge,
+    STAGE_02 doit l'utiliser comme source principale. S'il en existe plusieurs, ils
+    doivent tous être consolidés.
   requirements:
-    - no_primary_challenge_report_omitted
-    - naming_may_be_scope_specific_not_only_numeric
-    - challenge_report_declared_arbitrages_must_be_consumed
-
+  - no_primary_challenge_report_omitted
+  - naming_may_be_scope_specific_not_only_numeric
+  - challenge_report_declared_arbitrages_must_be_consumed
 supporting_reads_if_declared_by_challenge:
   bounded_local_run:
-    - docs/pipelines/constitution/runs/<run_id>/inputs/scope_extract.yaml
-    - docs/pipelines/constitution/runs/<run_id>/inputs/neighbor_extract.yaml
-    - docs/pipelines/constitution/runs/<run_id>/inputs/integration_gate.yaml
-
+  - docs/pipelines/constitution/runs/<run_id>/inputs/scope_extract.yaml
+  - docs/pipelines/constitution/runs/<run_id>/inputs/neighbor_extract.yaml
+  - docs/pipelines/constitution/runs/<run_id>/inputs/integration_gate.yaml
 fallback_reads:
-  rule: >-
-    Si le challenge_report déclare un fallback ciblé sur un ID manquant
-    ou un voisin absent, STAGE_02 doit reprendre explicitement cette lecture
-    de fallback avant arbitrage.
+  rule: Si le challenge_report déclare un fallback ciblé sur un ID manquant ou un
+    voisin absent, STAGE_02 doit reprendre explicitement cette lecture de fallback
+    avant arbitrage.
   fallback_targets:
-    - docs/cores/current/constitution.yaml
-    - docs/cores/current/referentiel.yaml
-    - docs/cores/current/link.yaml
-
+  - docs/cores/current/constitution.yaml
+  - docs/cores/current/referentiel.yaml
+  - docs/cores/current/link.yaml
 forbidden_reads_before_resolution:
-  - docs/prompts/shared/Make05CorePatch.md
-  - docs/pipelines/constitution/archive/*
-  - tmp/*
-
+- docs/prompts/shared/Make05CorePatch.md
+- docs/pipelines/constitution/archive/*
+- tmp/*
 required_scripts:
   none: true
-  note: >-
-    Ce stage est purement cognitif. Aucun script déterministe n'est requis.
-    L'IA ne simule aucune exécution de script.
-
+  note: Ce stage est purement cognitif. Aucun script déterministe n'est requis. L'IA
+    ne simule aucune exécution de script.
 analysis_axes:
-  - consolidation_des_constats
-  - qualification_des_ecarts
-  - decision_arbitrage
-  - compatibilite_pipeline
-  - minimalite_et_tracabilite
-
+- consolidation_des_constats
+- qualification_des_ecarts
+- decision_arbitrage
+- compatibilite_pipeline
+- minimalite_et_tracabilite
 challenge_to_arbitrage_binding:
-  rule: >-
-    STAGE_02 doit reprendre explicitement tous les risques prioritaires,
-    findings majeurs et arbitrages ouverts déclarés par le challenge_report.
-    Aucun risque majeur du challenge ne peut être omis.
+  rule: STAGE_02 doit reprendre explicitement tous les risques prioritaires, findings
+    majeurs et arbitrages ouverts déclarés par le challenge_report. Aucun risque majeur
+    du challenge ne peut être omis.
   required_fields_per_finding:
-    - challenge_finding_id
-    - challenge_scope_status
-    - arbitrage_decision
-    - arbitrage_justification
-    - patch_readiness
-
+  - challenge_finding_id
+  - challenge_scope_status
+  - arbitrage_decision
+  - arbitrage_justification
+  - patch_readiness
 decision_values:
-  - corriger_maintenant
-  - reporter
-  - rejeter
-  - hors_perimetre
-  - necessite_extension_scope
-
+- corriger_maintenant
+- reporter
+- rejeter
+- hors_perimetre
+- necessite_extension_scope
 patch_readiness_values:
-  - ready_for_local_patch
-  - decision_only_no_patch_yet
-  - blocked_by_scope_extension
-  - blocked_by_missing_human_decision
-
+- ready_for_local_patch
+- decision_only_no_patch_yet
+- blocked_by_scope_extension
+- blocked_by_missing_human_decision
 scope_rules:
   statuses:
-    - in_scope
-    - out_of_scope_but_relevant
-    - needs_scope_extension
+  - in_scope
+  - out_of_scope_but_relevant
+  - needs_scope_extension
   constraints:
-    - no_silent_out_of_scope_correction
-    - impact_bundle_extends_reading_not_write_permissions
-    - human_notes_override_ai_decision_if_conflict
-    - all_significant_findings_must_have_explicit_decision
-    - no_patch_yaml_generation
-    - no_core_rewrite
-
+  - no_silent_out_of_scope_correction
+  - impact_bundle_extends_reading_not_write_permissions
+  - human_notes_override_ai_decision_if_conflict
+  - all_significant_findings_must_have_explicit_decision
+  - no_patch_yaml_generation
+  - no_core_rewrite
 ambiguity_resolution:
-  rule: >-
-    Si plusieurs décisions restent raisonnablement possibles après lecture
-    complète du challenge_report et de la surface autorisée, STAGE_02 ne doit
-    pas trancher silencieusement. Il doit expliciter l'ambiguïté, proposer
-    l'option par défaut la plus conservatrice, et demander une validation
-    ou un arbitrage humain avant tout passage à STAGE_03 sur les points concernés.
+  rule: Si plusieurs décisions restent raisonnablement possibles après lecture complète
+    du challenge_report et de la surface autorisée, STAGE_02 ne doit pas trancher
+    silencieusement. Il doit expliciter l'ambiguïté, proposer l'option par défaut
+    la plus conservatrice, et demander une validation ou un arbitrage humain avant
+    tout passage à STAGE_03 sur les points concernés.
   required_outputs:
-    - ambiguity_declared_per_finding_if_any
-    - options_presented_if_material
-    - conservative_default_identified
-    - human_decision_required_flag_if_needed
+  - ambiguity_declared_per_finding_if_any
+  - options_presented_if_material
+  - conservative_default_identified
+  - human_decision_required_flag_if_needed
   default_behavior:
     unresolved_material_ambiguity: blocked_by_missing_human_decision
-
 integration_gate_binding:
-  rule: >-
-    Lorsque le run fournit un integration_gate.yaml, chaque finding significatif
+  rule: Lorsque le run fournit un integration_gate.yaml, chaque finding significatif
     doit indiquer s'il contribue à lever, préserver ou laisser ouvert un ou plusieurs
     gate_checks.
   required_fields_per_significant_finding:
-    - related_gate_checks
-    - gate_effect
-
+  - related_gate_checks
+  - gate_effect
 governance_backlog_binding:
-  rule: >-
-    Lorsqu'un finding reçoit la décision necessite_extension_scope, ou révèle
-    un scope_gap, un orphan_id, un policy_conflict ou un partition_angle_mort,
-    STAGE_02 doit créer une trace locale de backlog candidate dans l'arbitrage_report.
-    Cette trace locale sert d'entrée à relire en STAGE_09 pour export canonique
-    vers docs/pipelines/constitution/scope_catalog/governance_backlog.yaml.
+  rule: Lorsqu'un finding reçoit la décision necessite_extension_scope, ou révèle
+    un scope_gap, un orphan_id, un policy_conflict ou un partition_angle_mort, STAGE_02
+    doit créer une trace locale de backlog candidate dans l'arbitrage_report. Cette
+    trace locale sert d'entrée à relire en STAGE_09 pour export canonique vers docs/pipelines/constitution/scope_catalog/governance_backlog.yaml.
     STAGE_02 ne modifie jamais directement governance_backlog.yaml.
   candidate_entry_types:
-    - scope_extension_needed
-    - scope_gap
-    - orphan_id
-    - policy_conflict
-    - partition_angle_mort
+  - scope_extension_needed
+  - scope_gap
+  - orphan_id
+  - policy_conflict
+  - partition_angle_mort
   required_fields_per_backlog_candidate:
-    - candidate_id
-    - backlog_entry_type
-    - title
-    - related_scope_keys
-    - originating_run_id
-    - source_finding_id
-    - rationale
-    - recommended_stage00_action
-    - candidate_status
+  - candidate_id
+  - backlog_entry_type
+  - title
+  - related_scope_keys
+  - originating_run_id
+  - source_finding_id
+  - rationale
+  - recommended_stage00_action
+  - candidate_status
   candidate_status_values:
-    - candidate_open
-    - candidate_needs_human_review
+  - candidate_open
+  - candidate_needs_human_review
   serialization_format:
     section_name: governance_backlog_candidates
     encoding: yaml_fenced_block
     root_key: governance_backlog_candidates
-    example: |-
-      ```yaml
-      governance_backlog_candidates:
-        - candidate_id: GBC_R4_SCOPE_REF_V3_ALIGNMENT
-          backlog_entry_type: scope_extension_needed
-          title: Aligner la référence inter-Core Constitution → Référentiel v3.0
-          related_scope_keys:
-            - deployment_governance
-          originating_run_id: CONSTITUTION_RUN_2026_04_16_DEPLOYMENT_GOVERNANCE_R01
-          source_finding_id: R4
-          rationale: >-
-            La référence inter-Core actuelle pointe vers un identifiant V2.0 alors que
-            le Core référentiel courant est v3.0 ; la remise en cohérence dépasse le
-            patch local du run et doit être rejouée lors d'une révision de partition.
-          recommended_stage00_action: >-
-            Réévaluer la policy/decisions de scope generation pour canoniser la bonne
-            ancre inter-Core et régénérer le scope catalog si nécessaire.
-          candidate_status: candidate_open
-      ```
-
+    example: "```yaml\ngovernance_backlog_candidates:\n  - candidate_id: GBC_R4_SCOPE_REF_V3_ALIGNMENT\n\
+      \    backlog_entry_type: scope_extension_needed\n    title: Aligner la référence\
+      \ inter-Core Constitution → Référentiel v3.0\n    related_scope_keys:\n    \
+      \  - deployment_governance\n    originating_run_id: CONSTITUTION_RUN_2026_04_16_DEPLOYMENT_GOVERNANCE_R01\n\
+      \    source_finding_id: R4\n    rationale: >-\n      La référence inter-Core\
+      \ actuelle pointe vers un identifiant V2.0 alors que\n      le Core référentiel\
+      \ courant est v3.0 ; la remise en cohérence dépasse le\n      patch local du\
+      \ run et doit être rejouée lors d'une révision de partition.\n    recommended_stage00_action:\
+      \ >-\n      Réévaluer la policy/decisions de scope generation pour canoniser\
+      \ la bonne\n      ancre inter-Core et régénérer le scope catalog si nécessaire.\n\
+      \    candidate_status: candidate_open\n```"
 gate_effect_values:
-  - helps_clear
-  - no_effect
-  - keeps_open
-  - requires_human_clearance
-
+- helps_clear
+- no_effect
+- keeps_open
+- requires_human_clearance
 required_output_sections:
-  - executive_summary
-  - scope_analysed
-  - detailed_arbitrage_by_finding
-  - consolidated_points
-  - decisions_for_patch
-  - decisions_not_retained
-  - governance_backlog_candidates
-  - deferred_or_blocked_decisions
-  - ambiguities_requiring_human_decision
-
+- executive_summary
+- scope_analysed
+- detailed_arbitrage_by_finding
+- consolidated_points
+- decisions_for_patch
+- decisions_not_retained
+- governance_backlog_candidates
+- deferred_or_blocked_decisions
+- ambiguities_requiring_human_decision
 expected_outputs:
   bounded_local_run:
-    report_path_pattern: docs/pipelines/constitution/runs/<run_id>/work/02_arbitrage/arbitrage_report_<id>.md
+    report_path_pattern: docs/pipelines/constitution/runs/<run_id>/work/02_arbitrage/arbitrage*.md
   nominal_global:
-    report_path_pattern: docs/pipelines/constitution/work/02_arbitrage/arbitrage_report_<id>.md
+    report_path_pattern: docs/pipelines/constitution/work/02_arbitrage/arbitrage*.md
   bounded_transition:
-    report_path_pattern: docs/pipelines/constitution/work/02_arbitrage/arbitrage_report_<id>.md
-
+    report_path_pattern: docs/pipelines/constitution/work/02_arbitrage/arbitrage*.md
 completion_evidence:
   required:
-    - arbitrage_report_written
-    - all_challenge_reports_considered
-    - every_significant_finding_has_explicit_decision
-    - every_priority_risk_from_challenge_has_explicit_decision
-    - every_arbitrage_request_from_challenge_is_resolved
-    - decisions_for_patch_section_present
-    - scope_status_declared_per_finding
-    - human_notes_integrated_if_provided
-    - ambiguities_explicitly_flagged_if_any
-    - governance_backlog_candidates_declared_if_needed
-    - governance_backlog_candidates_serialized_in_yaml_block_if_present
+  - arbitrage_report_written
+  - all_challenge_reports_considered
+  - every_significant_finding_has_explicit_decision
+  - every_priority_risk_from_challenge_has_explicit_decision
+  - every_arbitrage_request_from_challenge_is_resolved
+  - decisions_for_patch_section_present
+  - scope_status_declared_per_finding
+  - human_notes_integrated_if_provided
+  - ambiguities_explicitly_flagged_if_any
+  - governance_backlog_candidates_declared_if_needed
+  - governance_backlog_candidates_serialized_in_yaml_block_if_present
   not_sufficient:
-    - informal_chat_summary_only
-    - findings_without_decision
-    - patch_yaml_produced
-
+  - informal_chat_summary_only
+  - findings_without_decision
+  - patch_yaml_produced
 human_actions_required:
-  description: >-
-    L'IA produit l'arbitrage_report et s'arrête. L'humain relit et valide
-    les décisions avant de poursuivre vers STAGE_03_PATCH_SYNTHESIS.
-    Il peut transmettre des notes correctives à l'IA pour révision avant
-    de confirmer la transition.
+  description: L'IA produit l'arbitrage_report et s'arrête. L'humain relit et valide
+    les décisions avant de poursuivre vers STAGE_03_PATCH_SYNTHESIS. Il peut transmettre
+    des notes correctives à l'IA pour révision avant de confirmer la transition.
   on_done:
     step: 1
     label: Valider l'arbitrage et mettre à jour le tracking
     mandatory: true
-    command: >-
-      python docs/patcher/shared/update_run_tracking.py
-      --pipeline constitution
-      --run-id <RUN_ID>
-      --stage-id STAGE_02_ARBITRAGE
-      --stage-status done
-      --run-status active
-      --next-stage STAGE_03_PATCH_SYNTHESIS
-      --summary "Arbitrage report validated; decisions ready for patch synthesis."
-    expected_effect: >-
-      run_manifest.yaml : current_stage passe à STAGE_03_PATCH_SYNTHESIS,
-      STAGE_02_ARBITRAGE apparaît dans completed_stages.
-    next_step: >-
-      Relancer l'IA avec :
-      "Continue le run <RUN_ID> — STAGE_02 est done, démarre STAGE_03_PATCH_SYNTHESIS."
+    command: python docs/patcher/shared/update_run_tracking.py --pipeline constitution
+      --run-id <RUN_ID> --stage-id STAGE_02_ARBITRAGE --stage-status done --run-status
+      active --next-stage STAGE_03_PATCH_SYNTHESIS --summary "Arbitrage report validated;
+      decisions ready for patch synthesis."
+    expected_effect: 'run_manifest.yaml : current_stage passe à STAGE_03_PATCH_SYNTHESIS,
+      STAGE_02_ARBITRAGE apparaît dans completed_stages.'
+    next_step: 'Relancer l''IA avec : "Continue le run <RUN_ID> — STAGE_02 est done,
+      démarre STAGE_03_PATCH_SYNTHESIS."'
   on_revision_needed:
     step: 1
     label: Transmettre les notes de révision à l'IA
     mandatory: false
-    note: >-
-      Si des décisions sont incorrectes ou incomplètes, relancer l'IA avec :
-      "Révise l'arbitrage du run <RUN_ID> — notes : <tes notes>."
-      Ne pas exécuter update_run_tracking.py tant que l'arbitrage n'est pas validé.
+    note: 'Si des décisions sont incorrectes ou incomplètes, relancer l''IA avec :
+      "Révise l''arbitrage du run <RUN_ID> — notes : <tes notes>." Ne pas exécuter
+      update_run_tracking.py tant que l''arbitrage n''est pas validé.'
   on_human_arbitration_needed:
     step: 1
     label: Arbitrer les points ambigus avant patch synthesis
     mandatory: true
-    note: >-
-      Si une ambiguïté matérielle subsiste, l'humain doit choisir explicitement
-      entre les options proposées dans l'arbitrage_report ou fournir une note
-      d'arbitrage complémentaire. Tant que cette décision n'est pas fournie,
-      STAGE_03_PATCH_SYNTHESIS ne doit pas démarrer pour les points concernés.
-    next_step: >-
-      Relancer l'IA avec :
-      "Révise l'arbitrage du run <RUN_ID> — décision humaine sur ambiguïtés : <tes notes>."
+    note: Si une ambiguïté matérielle subsiste, l'humain doit choisir explicitement
+      entre les options proposées dans l'arbitrage_report ou fournir une note d'arbitrage
+      complémentaire. Tant que cette décision n'est pas fournie, STAGE_03_PATCH_SYNTHESIS
+      ne doit pas démarrer pour les points concernés.
+    next_step: 'Relancer l''IA avec : "Révise l''arbitrage du run <RUN_ID> — décision
+      humaine sur ambiguïtés : <tes notes>."'
   on_scope_extension_candidates_present:
     step: 1
     label: Préserver les candidats backlog pour export en clôture
     mandatory: true
-    note: >-
-      Si l'arbitrage_report contient une section governance_backlog_candidates,
+    note: Si l'arbitrage_report contient une section governance_backlog_candidates,
       ces candidats doivent être conservés jusqu'au STAGE_09 afin d'être exportés
-      canoniquement vers governance_backlog.yaml. STAGE_02 ne met jamais à jour
-      governance_backlog.yaml directement.
-
+      canoniquement vers governance_backlog.yaml. STAGE_02 ne met jamais à jour governance_backlog.yaml
+      directement.
 allowed_transitions:
   on_done:
     next_stage: STAGE_03_PATCH_SYNTHESIS
@@ -332,20 +273,19 @@ allowed_transitions:
   on_human_arbitration_needed:
     next_action: human_arbitrates_then_ai_revises
     note: Aucun passage à STAGE_03 tant qu'une ambiguïté matérielle reste non arbitrée.
-
 forbidden_actions:
-  - patch_yaml_generation
-  - core_document_rewrite
-  - silent_out_of_scope_decision
-  - finding_without_explicit_decision
-  - simulated_script_execution
-  - omitting_human_actions_from_output
-  - overriding_human_notes_silently
-  - direct_write_to_governance_backlog_during_stage_02
-
-migration_note: >-
-  Premier skill STAGE_02 pour le pipeline constitution.
-  Consolide en YAML machine-readable les règles exprimées dans
-  `Make04ConstitutionArbitrage.md`, `AI_PROTOCOL.yaml` et `pipeline.md`.
-  Introduit le pattern model_requirements et human_actions_required
-  en cohérence avec RUN_BOOTSTRAP.skill.yaml et STAGE_01_CHALLENGE.skill.yaml.
+- patch_yaml_generation
+- core_document_rewrite
+- silent_out_of_scope_decision
+- finding_without_explicit_decision
+- simulated_script_execution
+- omitting_human_actions_from_output
+- overriding_human_notes_silently
+- direct_write_to_governance_backlog_during_stage_02
+migration_note: 'Premier skill STAGE_02 pour le pipeline constitution. Consolide en
+  YAML machine-readable les règles exprimées dans `Make04ConstitutionArbitrage.md`,
+  `AI_PROTOCOL.yaml` et `pipeline.md`. Introduit le pattern model_requirements et
+  human_actions_required en cohérence avec RUN_BOOTSTRAP.skill.yaml et STAGE_01_CHALLENGE.skill.yaml.
+  Fix (2026-04-20): alignement expected_outputs sur le consommateur aval STAGE_03_PATCH_SYNTHESIS
+  et sur les artefacts réellement matérialisés du run ; report_path_pattern passe
+  à arbitrage*.md.'
