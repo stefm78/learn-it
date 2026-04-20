@@ -55,7 +55,9 @@ entry_action:
 
   resolution_rules:
     - derive run_id using the documented canonical convention only
+    - derive scope_id canonically from <SCOPE_KEY> when not already materially observed
     - pass --bootstrap-create to update_run_tracking.py to atomically create run directory and minimal run_manifest.yaml if absent
+    - pass --scope-key <SCOPE_KEY> and --scope-id <SCOPE_ID> together with --bootstrap-create so the minimal run_manifest.yaml is seeded consistently for downstream deterministic scripts
     - pass --skip-rebuild-context to update_run_tracking.py during bootstrap — inputs do not exist yet at step ① and build_run_context.py would fail; run_context.yaml is built explicitly at step ④ after materialize_run_inputs.py and extract_scope_slice.py have produced the required inputs
     - use update_run_tracking.py for tracking materialization
     - do not write runs/index.yaml directly
@@ -80,6 +82,8 @@ entry_action:
       --next-stage STAGE_01_CHALLENGE
       --scope-status confirmed_for_bounded_run
       --bootstrap-create
+      --scope-key <SCOPE_KEY>
+      --scope-id <SCOPE_ID>
       --skip-rebuild-context
       --summary "Entry authorized; run materially opened for <SCOPE_KEY>; awaiting Stage 01 confirmation."
     input_materialization_command_template: >-
