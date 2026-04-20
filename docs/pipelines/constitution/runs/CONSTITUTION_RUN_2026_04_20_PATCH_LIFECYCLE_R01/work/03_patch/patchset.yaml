@@ -1,0 +1,138 @@
+PATCH_SET:
+  id: PATCH_PATCH_LIFECYCLE_2026_04_20_GF08_TRACE_R01
+  patch_dsl_version: "4.0"
+  atomic: true
+  description: >-
+    Patch local minimal issu de l'arbitrage validé du run
+    CONSTITUTION_RUN_2026_04_20_PATCH_LIFECYCLE_R01.
+    Corrige uniquement le finding A4 / CH_F04_UNCOVERED_CONFLICT_GOVERNED_EXIT_PATH
+    en explicitant qu'un conflit GF-08 non couvert journalisé doit déboucher sur
+    une issue gouvernante traçable. Les findings A1, A2 et A3 restent hors patch
+    local immédiat et sont conservés comme notes de traçabilité.
+  patch_scope:
+    mode: bounded_local_run
+    run_id: CONSTITUTION_RUN_2026_04_20_PATCH_LIFECYCLE_R01
+    scope_key: patch_lifecycle
+    source_arbitrage_report: docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_20_PATCH_LIFECYCLE_R01/work/02_arbitrage/arbitrage_patch_lifecycle.md
+    writable_files:
+      - docs/cores/current/constitution.yaml
+    patchable_now:
+      - challenge_finding_id: CH_F04_UNCOVERED_CONFLICT_GOVERNED_EXIT_PATH
+        scope_status: in_scope
+        arbitrage_decision: corriger_maintenant
+        patch_readiness: ready_for_local_patch
+    not_patchable_now:
+      - challenge_finding_id: CH_F01_REFERENTIAL_DEPENDENCY_ALIGNMENT
+        scope_status: out_of_scope_but_relevant
+        arbitrage_decision: necessite_extension_scope
+        patch_readiness: blocked_by_scope_extension
+      - challenge_finding_id: CH_F02_PATCH_VS_RUNTIME_ADAPTATION_BOUNDARY
+        scope_status: in_scope
+        arbitrage_decision: reporter
+        patch_readiness: decision_only_no_patch_yet
+      - challenge_finding_id: CH_F03_PATCH_LIFECYCLE_LEARNER_STATE_BOUNDARY
+        scope_status: out_of_scope_but_relevant
+        arbitrage_decision: necessite_extension_scope
+        patch_readiness: blocked_by_scope_extension
+  arbitrage_to_patch_mapping:
+    - challenge_finding_id: CH_F04_UNCOVERED_CONFLICT_GOVERNED_EXIT_PATH
+      retained_for_patch: true
+      target_file: docs/cores/current/constitution.yaml
+      target_section: ACTIONS
+      target_id: ACTION_LOG_UNCOVERED_CONFLICT
+      target_fields:
+        - human_readable
+        - logic.effect
+      rationale: >-
+        Clarification locale minimale explicitant qu'un conflit GF-08 non couvert
+        journalisé ne reste pas un état passif et doit alimenter une issue gouvernante
+        traçable.
+    - challenge_finding_id: CH_F01_REFERENTIAL_DEPENDENCY_ALIGNMENT
+      retained_for_patch: false
+      disposition: note_only
+      rationale: >-
+        Incohérence inter-Core / inter-version dépassant le scope borné ; conservée
+        pour backlog de gouvernance.
+    - challenge_finding_id: CH_F02_PATCH_VS_RUNTIME_ADAPTATION_BOUNDARY
+      retained_for_patch: false
+      disposition: note_only
+      rationale: >-
+        Risque maintenu en vigilance explicite ; garde-fous existants jugés suffisants
+        à ce stade sans patch local minimal supplémentaire.
+    - challenge_finding_id: CH_F03_PATCH_LIFECYCLE_LEARNER_STATE_BOUNDARY
+      retained_for_patch: false
+      disposition: note_only
+      rationale: >-
+        Sujet de frontière de partition / répartition de responsabilité entre scopes ;
+        pas de patch local silencieux.
+  fallback_reads_used_if_any:
+    - file: docs/cores/current/constitution.yaml
+      reason: >-
+        Lecture de fallback ciblée utilisée en STAGE_03 pour verrouiller le
+        expected_core_id du fichier cible et localiser précisément l'objet
+        ACTION_LOG_UNCOVERED_CONFLICT avant synthèse du patch.
+  files:
+    - file: docs/cores/current/constitution.yaml
+      expected_core_id: CORE_LEARNIT_CONSTITUTION_V4_0
+      operations:
+        - op: assert
+          target:
+            section: ACTIONS
+            id: ACTION_LOG_UNCOVERED_CONFLICT
+        - op: replace_field
+          target:
+            section: ACTIONS
+            id: ACTION_LOG_UNCOVERED_CONFLICT
+            field: human_readable
+          value: Journaliser un conflit GF-08 non couvert avec issue gouvernante traçable.
+        - op: replace_field
+          target:
+            section: ACTIONS
+            id: ACTION_LOG_UNCOVERED_CONFLICT
+            field: logic.effect
+          value: >-
+            Trace structurée locale obligatoire contenant l’identifiant du conflit,
+            le contexte, la réponse conservatrice appliquée et le statut de résolution ;
+            cette trace doit alimenter une sortie gouvernante explicite et traçable
+            en clôture ou en arbitrage hors session. Aucun simple log passif sans
+            issue gouvernante n’est autorisé.
+        - op: note
+          value:
+            id: NOTE_CH_F01_REFERENTIAL_DEPENDENCY_ALIGNMENT
+            source_finding_id: CH_F01_REFERENTIAL_DEPENDENCY_ALIGNMENT
+            decision: necessite_extension_scope
+            reason: >-
+              Traitement inter-Core / inter-scope conservé pour backlog de gouvernance ;
+              aucun patch local en STAGE_03.
+        - op: note
+          value:
+            id: NOTE_CH_F02_PATCH_VS_RUNTIME_ADAPTATION_BOUNDARY
+            source_finding_id: CH_F02_PATCH_VS_RUNTIME_ADAPTATION_BOUNDARY
+            decision: reporter
+            reason: >-
+              Garde-fous existants conservés ; aucun défaut textuel assez précis ne
+              justifie un patch local minimal immédiat.
+        - op: note
+          value:
+            id: NOTE_CH_F03_PATCH_LIFECYCLE_LEARNER_STATE_BOUNDARY
+            source_finding_id: CH_F03_PATCH_LIFECYCLE_LEARNER_STATE_BOUNDARY
+            decision: necessite_extension_scope
+            reason: >-
+              Clarification de frontière inter-scope à traiter en gouvernance/partition,
+              pas par extension locale silencieuse du patch.
+  human_actions_to_execute:
+    - step: 1
+      label: Tracer STAGE_03 done et passer à STAGE_04_PATCH_VALIDATION
+      mandatory: true
+      command: >-
+        python docs/patcher/shared/update_run_tracking.py
+        --pipeline constitution
+        --run-id CONSTITUTION_RUN_2026_04_20_PATCH_LIFECYCLE_R01
+        --stage-id STAGE_03_PATCH_SYNTHESIS
+        --stage-status done
+        --run-status active
+        --next-stage STAGE_04_PATCH_VALIDATION
+        --summary "Patchset synthesized; ready for deterministic validation."
+      next_step: >-
+        Après exécution confirmée, relancer l'IA avec :
+        "Continue le run CONSTITUTION_RUN_2026_04_20_PATCH_LIFECYCLE_R01 — STAGE_03 est done, démarre STAGE_04_PATCH_VALIDATION."
