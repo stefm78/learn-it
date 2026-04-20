@@ -527,7 +527,7 @@ def main() -> None:
     parser.add_argument(
         "--arbitrage-path",
         default=None,
-        help="Path to arbitrage report (default: docs/pipelines/constitution/work/arbitrage.md)",
+        help="Path to arbitrage report (default: <work-root>/arbitrage.md)",
     )
     parser.add_argument(
         "--backlog-path",
