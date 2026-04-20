@@ -15,10 +15,8 @@ run_manifest:
     last_updated: '2026-04-18T23:01:58Z'
     next_stage: ''
     completed_stages:
-    - RUN_BOOTSTRAP
     - STAGE_01_CHALLENGE
     - STAGE_02_ARBITRAGE
-    - STAGE_03_PATCH_SYNTHESIS
     - STAGE_03_PATCH_SYNTHESIS
     - STAGE_04_PATCH_VALIDATION
     - STAGE_05_APPLY
@@ -27,16 +25,6 @@ run_manifest:
     - STAGE_08_PROMOTE_CURRENT
     - STAGE_09_CLOSEOUT_AND_ARCHIVE
     stage_history:
-    - stage_id: RUN_BOOTSTRAP
-      stage_status: in_progress
-      recorded_at: '2026-04-16T13:46:19Z'
-      summary: Entry authorized; run materially opened for deployment_governance;
-        awaiting Stage 01 confirmation.
-    - stage_id: RUN_BOOTSTRAP
-      stage_status: done
-      recorded_at: '2026-04-16T21:36:07Z'
-      summary: Bootstrap readiness confirmed; all mandatory checks passed; run ready
-        for Stage 01.
     - stage_id: STAGE_01_CHALLENGE
       stage_status: done
       recorded_at: '2026-04-18T10:32:02Z'
