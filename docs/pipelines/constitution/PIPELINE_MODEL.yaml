@@ -113,7 +113,7 @@ stages:
         - STAGE_08_PROMOTE_CURRENT
   - stage_id: STAGE_08_PROMOTE_CURRENT
     optional: false
-    orchestration_scope: pipeline_or_single_run
+    orchestration_scope: run_or_pipeline
     primary_skill_ref: docs/pipelines/constitution/stages/STAGE_08_PROMOTE_CURRENT.skill.yaml
     deterministic_scripts_required:
       - docs/patcher/shared/promote_current.py
@@ -148,7 +148,7 @@ external_orchestration:
     - resolve entry action at low context
     - choose run / pipeline / orchestration path
     - detect anomalies and consolidation-ready states
-    - consume run_context first when present
+    - consume run_context first when present only after explicit run selection or when run_id is already known
 
 migration_status:
   status: bootstrap_started
