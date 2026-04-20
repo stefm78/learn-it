@@ -8,10 +8,11 @@ stage_skill:
   authoritative_role: stable_stage_contract
 
 mission: >-
-  Superviser la clôture finale du run après promotion validée, avec
+  Superviser la clôture finale après promotion validée, soit au niveau d'un
+  run unique, soit au niveau pipeline-level après consolidation, avec
   exécution réelle du script de closeout et vérification de la cohérence
-  des artefacts finaux. Ce stage termine le run et archive son état
-  opératoire sans réécrire les Core métier eux-mêmes.
+  des artefacts finaux. Ce stage termine proprement le cycle opératoire
+  sans réécrire les Core métier eux-mêmes.
 
 model_requirements:
   reasoning_level: advanced
@@ -28,10 +29,13 @@ model_requirements:
 runtime_binding:
   expected_mode_values:
     - bounded_local_run
+    - parallel_consolidation
     - nominal_global
     - bounded_transition
   run_context_role: >-
     En mode bounded_local_run, run_context.yaml doit être lu en premier.
+    En mode parallel_consolidation, nominal_global ou bounded_transition,
+    les artefacts pipeline-level font autorité.
     Il ne remplace pas la preuve d'exécution réelle du closeout.
   execution_evidence_role: >-
     closeout_pipeline_run.py doit être réellement exécuté. L'IA ne doit jamais
@@ -51,6 +55,9 @@ primary_reads:
   bounded_local_run:
     - docs/pipelines/constitution/runs/<run_id>/inputs/run_context.yaml
     - docs/pipelines/constitution/runs/<run_id>/reports/promotion_report.yaml
+    - docs/cores/current/manifest.yaml
+  parallel_consolidation:
+    - docs/pipelines/constitution/reports/promotion_report.yaml
     - docs/cores/current/manifest.yaml
   nominal_global:
     - docs/pipelines/constitution/reports/promotion_report.yaml
@@ -101,6 +108,13 @@ deterministic_command_templates:
       --run-status closed
       --summary "Run closeout completed with archive and final summary; pipeline run is closed."
       --close-run
+  parallel_consolidation:
+    closeout: >-
+      python docs/patcher/shared/closeout_pipeline_run.py
+      docs/pipelines/constitution/reports/promotion_report.yaml
+      docs/cores/current/manifest.yaml
+      --closeout-report docs/pipelines/constitution/reports/closeout_report.yaml
+      --final-summary docs/pipelines/constitution/outputs/final_run_summary.md
   nominal_global:
     closeout: >-
       python docs/patcher/shared/closeout_pipeline_run.py
@@ -128,6 +142,10 @@ expected_outputs:
     primary_output_path_pattern: docs/pipelines/constitution/runs/<run_id>/reports/closeout_report.yaml
     required_raw_artifacts:
       - docs/pipelines/constitution/runs/<run_id>/outputs/final_run_summary.md
+  parallel_consolidation:
+    primary_output_path_pattern: docs/pipelines/constitution/reports/closeout_report.yaml
+    required_raw_artifacts:
+      - docs/pipelines/constitution/outputs/final_run_summary.md
   nominal_global:
     primary_output_path_pattern: docs/pipelines/constitution/reports/closeout_report.yaml
     required_raw_artifacts:
@@ -168,9 +186,9 @@ human_actions_required:
     mandatory: true
   on_pass:
     step: 1
-    label: Fermer explicitement le tracking du run
+    label: Finaliser la clôture avec action humaine adaptée au mode
     mandatory: true
-    command: >-
+    command_bounded_local_run: >-
       python docs/patcher/shared/update_run_tracking.py
       --pipeline constitution
       --run-id <RUN_ID>
@@ -179,9 +197,13 @@ human_actions_required:
       --run-status closed
       --summary "Run closeout completed with archive and final summary; pipeline run is closed."
       --close-run
+    note_pipeline_level_modes: >-
+      En modes parallel_consolidation, nominal_global et bounded_transition,
+      aucun close tracking run-level n'est requis ici.
+      Le closeout pipeline-level est convergent dès que les artefacts de closeout
+      sont validés. Le prochain point d'entrée redevient la résolution d'entrée du pipeline.
     note: >-
-      Aucun stage supplémentaire n'est requis après cette fermeture de tracking.
-      Le prochain point d'entrée redevient la résolution d'entrée du pipeline.
+      Aucun stage supplémentaire n'est requis après cette clôture.
   on_fail:
     step: 1
     label: Corriger les anomalies finales avant nouvelle tentative

@@ -222,9 +222,9 @@ human_actions_required:
     mandatory: true
   on_pass:
     step: 1
-    label: Mettre à jour le tracking et poursuivre vers STAGE_09_CLOSEOUT_AND_ARCHIVE
+    label: Poursuivre vers STAGE_09_CLOSEOUT_AND_ARCHIVE avec action humaine adaptée au mode
     mandatory: true
-    command: >-
+    command_bounded_local_run: >-
       python docs/patcher/shared/update_run_tracking.py
       --pipeline constitution
       --run-id <RUN_ID>
@@ -233,6 +233,11 @@ human_actions_required:
       --run-status active
       --next-stage STAGE_09_CLOSEOUT_AND_ARCHIVE
       --summary "Promotion to current completed with validated manifests; ready for closeout."
+    note_pipeline_level_modes: >-
+      En modes parallel_consolidation, nominal_global et bounded_transition,
+      aucun update_run_tracking.py run-level ne doit être émis ici.
+      La suite consiste à démarrer explicitement STAGE_09_CLOSEOUT_AND_ARCHIVE
+      sur les artefacts pipeline-level de promotion validés.
   on_fail:
     step: 1
     label: Corriger les anomalies de promotion avant reprise
@@ -241,7 +246,10 @@ human_actions_required:
 allowed_transitions:
   on_pass:
     next_stage: STAGE_09_CLOSEOUT_AND_ARCHIVE
-    precondition: human must confirm update_run_tracking.py execution
+    precondition: >-
+      En bounded_local_run, human must confirm update_run_tracking.py execution.
+      En parallel_consolidation, nominal_global et bounded_transition,
+      la transition est pipeline-level et ne dépend pas d'un run_id unique.
   on_fail:
     next_stage: STAGE_07_RELEASE_MATERIALIZATION
   on_blocked:

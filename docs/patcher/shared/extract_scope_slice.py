@@ -30,10 +30,12 @@ IDENTIFICATION STRATEGY:
   Each section is either a list of entries (each with an 'id' field) or a dict
   of entries keyed by their id. Entries are matched against the target ID set.
 
-Integration in pipeline.md:
-  Spec and tools section — called after materialize_run_inputs.py, before STAGE_01_CHALLENGE.
+Integration in pipeline.md / AI_PROTOCOL.yaml:
+  Canonical bootstrap chain — called during MATERIALIZE_NEW_RUN,
+  after materialize_run_inputs.py and before build_run_context.py,
+  still before STAGE_01_CHALLENGE.
   Command:
-    python docs/patcher/shared/extract_scope_slice.py --run-id <RUN_ID>
+    python docs/patcher/shared/extract_scope_slice.py --pipeline constitution --run-id <RUN_ID>
 """
 
 from __future__ import annotations

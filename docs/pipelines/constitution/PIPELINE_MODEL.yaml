@@ -124,7 +124,7 @@ stages:
         - STAGE_09_CLOSEOUT_AND_ARCHIVE
   - stage_id: STAGE_09_CLOSEOUT_AND_ARCHIVE
     optional: false
-    orchestration_scope: run
+    orchestration_scope: run_or_pipeline
     primary_skill_ref: docs/pipelines/constitution/stages/STAGE_09_CLOSEOUT_AND_ARCHIVE.skill.yaml
     deterministic_scripts_required:
       - docs/patcher/shared/closeout_pipeline_run.py

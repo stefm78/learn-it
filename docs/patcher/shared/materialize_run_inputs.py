@@ -18,10 +18,11 @@ scope_key resolution order (robustness):
   1. run_manifest.scope_key          (canonical, top-level field)
   2. run_manifest.scope_binding.scope_key  (fallback for older manifests)
 
-Integration in pipeline.md:
-  Spec and tools section — called before STAGE_01_CHALLENGE.
+Integration in pipeline.md / AI_PROTOCOL.yaml:
+  Canonical bootstrap chain — called during MATERIALIZE_NEW_RUN,
+  before STAGE_01_CHALLENGE and before extract_scope_slice.py / build_run_context.py.
   Command:
-    python docs/patcher/shared/materialize_run_inputs.py --run-id <RUN_ID>
+    python docs/patcher/shared/materialize_run_inputs.py --pipeline constitution --run-id <RUN_ID>
 """
 
 from __future__ import annotations

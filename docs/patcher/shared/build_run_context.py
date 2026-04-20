@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Build an enriched run_context.yaml with derived runtime task view.
+"""Build an enriched run_context.yaml with derived runtime task view for a run already identified.
 
 Canonical script for reconstructing `docs/patcher/shared/build_run_context.py`
 runtime output from run_manifest and materialized run inputs.
@@ -423,7 +423,7 @@ def build_run_context(
             "schema_version": 0.2,
             "generated_by": "docs/patcher/shared/build_run_context.py",
             "note": (
-                "Fichier synthétique — lire EN PREMIER. Remplace la lecture séquentielle de "
+                "Fichier synthétique — pour un run déjà identifié, lire EN PREMIER. Remplace la lecture séquentielle de "
                 "run_manifest + scope_manifest + impact_bundle + integration_gate et expose "
                 "une task view dérivée pour le stage exécutable. Sources canoniques inchangées."
             ),

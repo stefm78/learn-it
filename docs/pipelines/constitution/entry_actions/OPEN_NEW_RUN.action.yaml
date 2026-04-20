@@ -64,7 +64,7 @@ entry_action:
       - next_action_contract_ref
       - run_id_pattern
       - canonical_scripts
-      - stop_after_materialization
+      - stop_after_decision
       - next_best_action_reason
     allowed_entry_decision_values:
       - open_new_run_authorized
