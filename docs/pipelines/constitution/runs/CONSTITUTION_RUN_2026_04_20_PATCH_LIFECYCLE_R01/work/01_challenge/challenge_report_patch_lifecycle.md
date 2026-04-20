@@ -14,20 +14,21 @@ Le second risque important tient à la frontière conceptuelle entre :
 1. des déclencheurs de patch gouvernés ici,
 2. les signaux d’état qui les produisent ailleurs,
 3. une possible tentation de glissement vers une adaptation runtime directe.
+
 L’integration gate signale déjà ce risque avec justesse. Le stage doit donc recommander un arbitrage sur la netteté de cette frontière, pas une extension silencieuse du scope.
 
 ## challenge_scope
 
 ### Read surface used
-- `run_context.yaml` en premier, conformément au protocole :contentReference[oaicite:4]{index=4}
-- `scope_extract.yaml` comme source ids-first principale pour les IDs du scope :contentReference[oaicite:5]{index=5}
-- `neighbor_extract.yaml` comme source ids-first du voisin logique, avec constat de manque d’ID :contentReference[oaicite:6]{index=6}
-- `scope_manifest.yaml` pour les droits de modification et interdictions de gouvernance :contentReference[oaicite:7]{index=7}
-- `impact_bundle.yaml` pour le devoir de lecture voisin :contentReference[oaicite:8]{index=8}
-- `integration_gate.yaml` pour les watchpoints globaux de cohérence :contentReference[oaicite:9]{index=9}
+- `run_context.yaml` en premier, conformément au protocole
+- `scope_extract.yaml` comme source ids-first principale pour les IDs du scope
+- `neighbor_extract.yaml` comme source ids-first du voisin logique, avec constat de manque d’ID
+- `scope_manifest.yaml` pour les droits de modification et interdictions de gouvernance
+- `impact_bundle.yaml` pour le devoir de lecture voisin
+- `integration_gate.yaml` pour les watchpoints globaux de cohérence
 
 ### Fallback IDs declared
-- `REF_CORE_LEARNIT_REFERENTIEL_V2_0_IN_CONSTITUTION` : absent de `neighbor_extract.yaml`, fallback explicite requis vers le Core canonique concerné, et pour cet ID seulement :contentReference[oaicite:10]{index=10}
+- `REF_CORE_LEARNIT_REFERENTIEL_V2_0_IN_CONSTITUTION` : absent de `neighbor_extract.yaml`, fallback explicite requis vers le Core canonique concerné, et pour cet ID seulement
 
 ### Scope status for major findings
 - Findings sur les IDs listés dans `writable_perimeter.ids` : `in_scope`
@@ -40,25 +41,26 @@ L’integration gate signale déjà ce risque avec justesse. Le stage doit donc 
 
 Le cœur du scope est cohérent.
 
-`TYPE_PATCH_ARTIFACT`, `TYPE_PATCH_IMPACT_SCOPE` et `TYPE_PATCH_QUALITY_GATE` forment une base logique lisible : un patch existe comme artefact borné, son impact doit être calculable structurellement, et sa qualité doit être contrôlée sans recours à des critères locaux non déterministes :contentReference[oaicite:11]{index=11}
+`TYPE_PATCH_ARTIFACT`, `TYPE_PATCH_IMPACT_SCOPE` et `TYPE_PATCH_QUALITY_GATE` forment une base logique lisible : un patch existe comme artefact borné, son impact doit être calculable structurellement, et sa qualité doit être contrôlée sans recours à des critères locaux non déterministes.
 
 Les invariants renforcent bien cette base :
 - `INV_NO_PARTIAL_PATCH_STATE` interdit les états partiels
 - `INV_INVALID_PATCH_REJECTED` rejette tout patch hors bornes ou sans impact calculable
 - `INV_PATCH_LOCAL_VALIDATION_MUST_BE_DETERMINISTIC` interdit de faire reposer la décision locale sur du sémantique ou de l’interprétatif
 - `INV_PATCH_ARTIFACTS_MUST_BE_PRECOMPUTED_OFF_SESSION` interdit la génération/QA d’artefacts pendant l’usage apprenant
-- `INV_PERSISTENT_DRIFT_REQUIRES_ESCALATION_IF_PATCH_BLOCKED` couvre le cas où la correction locale ne suffit plus :contentReference[oaicite:12]{index=12}
+- `INV_PERSISTENT_DRIFT_REQUIRES_ESCALATION_IF_PATCH_BLOCKED` couvre le cas où la correction locale ne suffit plus
 
 Le chaînage règles → événements → actions reste globalement net :
 - `EVENT_PERSISTENT_LOW_VC` → `RULE_PERSISTENT_LOW_VC_TRIGGERS_RELEVANCE_PATCH` → `ACTION_TRIGGER_RELEVANCE_PATCH`
 - `EVENT_AR_REFRACTORY_PROFILE_DETECTED` → `RULE_AR_REFRACTORY_PROFILE_TRIGGERS_SOLLICITATION_PATCH` → `ACTION_TRIGGER_AR_SOLLICITATION_PATCH`
-- dérive persistante non patchable → `RULE_PERSISTENT_DRIFT_BLOCKED_PATCH_ESCALATES_OFFSESSION` → `ACTION_ESCALATE_PERSISTENT_DRIFT_OFFSESSION` :contentReference[oaicite:13]{index=13}
+- dérive persistante non patchable → `RULE_PERSISTENT_DRIFT_BLOCKED_PATCH_ESCALATES_OFFSESSION` → `ACTION_ESCALATE_PERSISTENT_DRIFT_OFFSESSION`
 
 En revanche, une légère hétérogénéité conceptuelle subsiste entre :
 - validation locale de patch,
 - gouvernance des déclencheurs de patch,
 - architecture hors session des artefacts,
 - journalisation de conflits runtime.
+
 Le scope reste tenable, mais il agrège plusieurs couches voisines. Ce n’est pas incohérent, mais cela appelle une vigilance de partition.
 
 ### 2. theoretical_soundness
@@ -66,9 +68,9 @@ Le scope reste tenable, mais il agrège plusieurs couches voisines. Ce n’est p
 Le modèle théorique est fort sur un principe : la correction locale doit rester gouvernée, bornée, déterministe, et ne jamais se confondre avec une réécriture libre du système.
 
 C’est particulièrement sain sur trois plans :
-- refus de l’inférence psychologique autonome (`CONSTRAINT_NO_AUTONOMOUS_PSYCHOLOGICAL_INFERENCE`) :contentReference[oaicite:14]{index=14}
-- refus du changement de philosophie adaptative par patch (`CONSTRAINT_NO_ADAPTIVE_PHILOSOPHY_CHANGE`) :contentReference[oaicite:15]{index=15}
-- déplacement hors session de tout ce qui exige génération, QA ou jugement interprétatif (`INV_PATCH_ARTIFACTS_MUST_BE_PRECOMPUTED_OFF_SESSION`, `INV_PATCH_LOCAL_VALIDATION_MUST_BE_DETERMINISTIC`) :contentReference[oaicite:16]{index=16}
+- refus de l’inférence psychologique autonome (`CONSTRAINT_NO_AUTONOMOUS_PSYCHOLOGICAL_INFERENCE`)
+- refus du changement de philosophie adaptative par patch (`CONSTRAINT_NO_ADAPTIVE_PHILOSOPHY_CHANGE`)
+- déplacement hors session de tout ce qui exige génération, QA ou jugement interprétatif (`INV_PATCH_ARTIFACTS_MUST_BE_PRECOMPUTED_OFF_SESSION`, `INV_PATCH_LOCAL_VALIDATION_MUST_BE_DETERMINISTIC`)
 
 La zone la plus sensible théoriquement est l’usage de signaux comme `persistent low VC` ou `AR refractory profile`. Le scope dit bien qu’ils déclenchent des patches, mais ces signaux et leurs seuils vivent en dépendance d’un référentiel externe. Sans cette lecture voisine stabilisée, le scope patch peut devenir correct sur le “quoi faire” mais moins explicite sur le “quand exactement agir”.
 
@@ -77,18 +79,18 @@ La zone la plus sensible théoriquement est l’usage de signaux comme `persiste
 Je ne vois pas d’état moteur totalement non défini au centre du scope, mais deux zones d’indétermination relative existent.
 
 Première zone : la boucle d’inefficacité des patches.  
-`INV_PERSISTENT_DRIFT_REQUIRES_ESCALATION_IF_PATCH_BLOCKED` prévoit une condition complémentaire liée à `N` patches successifs sans disparition du signal, avec délégation du paramètre au Référentiel :contentReference[oaicite:17]{index=17}  
+`INV_PERSISTENT_DRIFT_REQUIRES_ESCALATION_IF_PATCH_BLOCKED` prévoit une condition complémentaire liée à `N` patches successifs sans disparition du signal, avec délégation du paramètre au Référentiel.  
 Le principe est bon, mais le comportement moteur dépend alors d’un paramètre externe non visible ici. Sans fallback ciblé réussi sur la référence canonique, le runtime gouvernant reste partiellement aveugle sur son seuil.
 
 Deuxième zone : le statut des conflits non couverts.  
-`ACTION_LOG_UNCOVERED_CONFLICT` journalise un conflit GF-08 non couvert :contentReference[oaicite:18]{index=18}  
+`ACTION_LOG_UNCOVERED_CONFLICT` journalise un conflit GF-08 non couvert.  
 Mais l’articulation exacte entre cette journalisation, l’escalade hors session, et la décision future de patch n’est pas entièrement exprimée dans le scope extrait. On a la trace, mais la règle de raccord entre conflit journalisé et sortie gouvernante n’est pas pleinement visible ici.
 
 ### 4. implicit_ai_dependencies
 
 Le scope réduit fortement les dépendances implicites à l’IA, ce qui est une qualité.
 
-Il interdit justement que la validation locale d’un patch repose sur un jugement sémantique ou pédagogique ad hoc, et il expulse hors session ce qui relèverait de génération ou de QA :contentReference[oaicite:19]{index=19}  
+Il interdit justement que la validation locale d’un patch repose sur un jugement sémantique ou pédagogique ad hoc, et il expulse hors session ce qui relèverait de génération ou de QA.  
 C’est un très bon rempart contre une dérive agentique.
 
 La dépendance implicite restante ne vient pas tant de l’IA que de la résolution de voisinage :
@@ -105,14 +107,14 @@ La gouvernance explicite du scope est saine.
 `scope_manifest.yaml` autorise `challenge`, `arbitrage`, `patch`, `local_validation` et interdit notamment :
 - `direct_current_promotion`
 - `silent_out_of_scope_modification`
-- `implicit_cross_core_reallocation` :contentReference[oaicite:20]{index=20}
+- `implicit_cross_core_reallocation`
 
 L’`integration_gate` renforce très bien les points de vigilance :
 - déterminisme strict de la validation locale
 - précomputation hors session des artefacts
 - interdiction de glissement vers adaptation runtime directe
 - frontière avec `learner_state`
-- distinction entre escalade hors session et escalade d’état :contentReference[oaicite:21]{index=21}
+- distinction entre escalade hors session et escalade d’état
 
 Le vrai enjeu de gouvernance n’est donc pas une faiblesse locale, mais la nécessité d’un arbitrage humain sur la partition : faut-il laisser ces frontières telles quelles, ou clarifier davantage le partage entre `patch_lifecycle`, `learner_state` et le Référentiel ?
 
@@ -122,35 +124,35 @@ Quelques scénarios adversariaux ressortent.
 
 #### Scénario A — patch local qui devient adaptation déguisée
 Un acteur pourrait utiliser la logique de patch relevance ou AR pour introduire de facto une modification de stratégie adaptative runtime.  
-Le scope s’en protège par `CONSTRAINT_NO_ADAPTIVE_PHILOSOPHY_CHANGE` et par les watchpoints du gate, mais le risque reste réel au niveau de l’interprétation des patchs :contentReference[oaicite:22]{index=22} :contentReference[oaicite:23]{index=23}
+Le scope s’en protège par `CONSTRAINT_NO_ADAPTIVE_PHILOSOPHY_CHANGE` et par les watchpoints du gate, mais le risque reste réel au niveau de l’interprétation des patchs.
 
 #### Scénario B — dépendance silencieuse au Référentiel
-Les règles se déclenchent sur des seuils ou fenêtres externes. Si la référence voisine est absente, obsolète, ou mal nommée, on peut conserver une règle apparemment valide mais opératoirement mal fondée. `neighbor_extract.yaml` montre déjà un signal de ce type avec l’ID référentiel attendu mais non trouvé :contentReference[oaicite:24]{index=24}
+Les règles se déclenchent sur des seuils ou fenêtres externes. Si la référence voisine est absente, obsolète, ou mal nommée, on peut conserver une règle apparemment valide mais opératoirement mal fondée. `neighbor_extract.yaml` montre déjà un signal de ce type avec l’ID référentiel attendu mais non trouvé.
 
 #### Scénario C — confusion entre escalade patch et escalade d’état
-Le gate le signale explicitement : ne pas confondre escalade hors session `patch_lifecycle` et escalade relevant de `learner_state` :contentReference[oaicite:25]{index=25}  
+Le gate le signale explicitement : ne pas confondre escalade hors session `patch_lifecycle` et escalade relevant de `learner_state`.  
 Sans clarification, un futur patch pourrait capturer des décisions qui devraient rester du côté état/apprenant.
 
 #### Scénario D — conflits journalisés sans boucle de clôture claire
-`ACTION_LOG_UNCOVERED_CONFLICT` donne une trace, mais sans règle visible ici pour garantir sa résorption systémique, on peut accumuler des logs sans fermeture gouvernante nette :contentReference[oaicite:26]{index=26}
+`ACTION_LOG_UNCOVERED_CONFLICT` donne une trace, mais sans règle visible ici pour garantir sa résorption systémique, on peut accumuler des logs sans fermeture gouvernante nette.
 
 ### 7. risk_prioritization
 
 #### Risque 1 — Dépendance voisine insuffisamment stabilisée
 Niveau : élevé  
-Le voisin référentiel requis par `impact_bundle` est explicitement manquant de `neighbor_extract.yaml`, ce qui force un fallback ciblé et signale une couture inter-core fragile :contentReference[oaicite:27]{index=27} :contentReference[oaicite:28]{index=28}
+Le voisin référentiel requis par `impact_bundle` est explicitement manquant de `neighbor_extract.yaml`, ce qui force un fallback ciblé et signale une couture inter-core fragile.
 
 #### Risque 2 — Glissement du patch vers l’adaptation runtime
 Niveau : élevé  
-Le scope contient déjà les garde-fous, mais il est exposé par nature à cette tentation conceptuelle. L’integration gate en atteste :contentReference[oaicite:29]{index=29}
+Le scope contient déjà les garde-fous, mais il est exposé par nature à cette tentation conceptuelle. L’integration gate en atteste.
 
 #### Risque 3 — Frontière incomplètement nette avec learner_state
 Niveau : moyen à élevé  
-Les déclencheurs de patch reposent sur des signaux d’état ; le partage de responsabilité mérite arbitrage explicite, pas extension silencieuse du scope :contentReference[oaicite:30]{index=30}
+Les déclencheurs de patch reposent sur des signaux d’état ; le partage de responsabilité mérite arbitrage explicite, pas extension silencieuse du scope.
 
 #### Risque 4 — Journalisation sans fermeture gouvernante suffisante
 Niveau : moyen  
-`ACTION_LOG_UNCOVERED_CONFLICT` existe, mais sa réinjection dans une chaîne de résolution n’est pas pleinement visible dans ce scope :contentReference[oaicite:31]{index=31}
+`ACTION_LOG_UNCOVERED_CONFLICT` existe, mais sa réinjection dans une chaîne de résolution n’est pas pleinement visible dans ce scope.
 
 ## priority_risks
 
@@ -180,12 +182,5 @@ Niveau : moyen
 3. Confirmer que le fallback ciblé sur l’ID voisin manquant a été accepté comme lecture hors-scope strictement limitée.
 4. Une fois le rapport validé, mettre à jour le tracking avec la commande canonique du skill :
 
-```bash
-python docs/patcher/shared/update_run_tracking.py \
-  --pipeline constitution \
-  --run-id CONSTITUTION_RUN_2026_04_20_PATCH_LIFECYCLE_R01 \
-  --stage-id STAGE_01_CHALLENGE \
-  --stage-status done \
-  --run-status active \
-  --next-stage STAGE_02_ARBITRAGE \
-  --summary "Challenge report produced; ready for arbitrage."
+
+
