@@ -32,7 +32,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--dashboard-probe",
         action="store_true",
-        help="Reserved for a later step: dashboard enriched with reconciliation probes.",
+        help="Reserved for the next step: dashboard enriched with reconciliation probes.",
     )
     parser.add_argument(
         "--output-mode",
@@ -123,7 +123,8 @@ def build_dashboard_payload(
             "last_updated": str(runs_index.get("last_updated", "")),
             "filter": pattern or "*",
             "counts": {
-                "total_runs": len(active_runs) + len(closed_runs) if isinstance(active_runs, list) and isinstance(closed_runs, list) else len(rows),
+                "total_runs": (len(active_runs) if isinstance(active_runs, list) else 0)
+                + (len(closed_runs) if isinstance(closed_runs, list) else 0),
                 "active_runs": len(active_runs) if isinstance(active_runs, list) else 0,
                 "closed_runs": len(closed_runs) if isinstance(closed_runs, list) else 0,
                 "matched_runs": len(rows),
@@ -145,7 +146,9 @@ def render_dashboard_human(
     active_runs = runs_index.get("active_runs", [])
     closed_runs = runs_index.get("closed_runs", [])
 
-    total_runs = (len(active_runs) if isinstance(active_runs, list) else 0) + (len(closed_runs) if isinstance(closed_runs, list) else 0)
+    total_runs = (len(active_runs) if isinstance(active_runs, list) else 0) + (
+        len(closed_runs) if isinstance(closed_runs, list) else 0
+    )
     active_count = len(active_runs) if isinstance(active_runs, list) else 0
     closed_count = len(closed_runs) if isinstance(closed_runs, list) else 0
 
@@ -192,8 +195,7 @@ def main() -> int:
     if args.dashboard or args.dashboard_probe:
         if args.dashboard_probe:
             raise SystemExit(
-                "--dashboard-probe is reserved for the next step. "
-                "Use --dashboard first."
+                "--dashboard-probe is reserved for the next step. Use --dashboard first."
             )
 
         runs_index_path = pipeline_root / "runs" / "index.yaml"
@@ -214,6 +216,22 @@ def main() -> int:
     if not args.run_id:
         raise SystemExit("--run-id is required outside dashboard mode")
 '''
+
+
+def detect_newline(text: str) -> str:
+    if "\\r\\n" in text:
+        return "\\r\\n"
+    if "\\r" in text:
+        return "\\r"
+    return "\\n"
+
+
+def normalize_newlines(text: str) -> str:
+    return text.replace("\\r\\n", "\\n").replace("\\r", "\\n")
+
+
+def restore_newlines(text: str, newline: str) -> str:
+    return text.replace("\\n", newline)
 
 
 def replace_top_level_function(source: str, func_name: str, new_block: str) -> str:
@@ -243,15 +261,23 @@ def replace_top_level_function(source: str, func_name: str, new_block: str) -> s
     return "".join(lines[:start] + replacement + lines[end:])
 
 
-def insert_import_if_missing(source: str, import_line: str, after_line: str) -> str:
-    if import_line in source:
+def insert_import_if_missing(source: str, import_line: str) -> str:
+    lines = source.splitlines(keepends=True)
+
+    if any(line.strip() == import_line for line in lines):
         return source
-    marker = after_line + "\\n"
-    idx = source.find(marker)
-    if idx == -1:
-        raise RuntimeError(f"Import anchor not found: {after_line}")
-    insert_at = idx + len(marker)
-    return source[:insert_at] + import_line + "\\n" + source[insert_at:]
+
+    insert_at = None
+    for i, line in enumerate(lines):
+        stripped = line.strip()
+        if stripped.startswith("import ") or stripped.startswith("from "):
+            insert_at = i + 1
+
+    if insert_at is None:
+        raise RuntimeError("No import block found in target file")
+
+    lines.insert(insert_at, import_line + "\\n")
+    return "".join(lines)
 
 
 def insert_helper_before_main(source: str, helper_block: str) -> str:
@@ -265,7 +291,7 @@ def insert_helper_before_main(source: str, helper_block: str) -> str:
 
 
 def replace_main_head(source: str, new_head: str) -> str:
-    marker_old = '''def main() -> int:
+    old_head = '''def main() -> int:
     args = parse_args()
     if args.pipeline != "constitution":
         raise SystemExit("Unsupported pipeline for now: constitution only")
@@ -273,22 +299,25 @@ def replace_main_head(source: str, new_head: str) -> str:
     repo_root = Path(args.repo_root).resolve()
     pipeline_root = repo_root / "docs" / "pipelines" / args.pipeline
 '''
-    if marker_old not in source:
+    if old_head not in source:
         raise RuntimeError("main() head block not found")
-    return source.replace(marker_old, new_head.strip("\\n") + "\\n", 1)
+    return source.replace(old_head, new_head.strip("\\n") + "\\n", 1)
 
 
 def main() -> None:
     if not TARGET.exists():
         raise FileNotFoundError(f"Missing target file: {TARGET}")
 
-    text = TARGET.read_text(encoding="utf-8")
-    text = insert_import_if_missing(text, "import fnmatch", "import argparse")
+    raw_text = TARGET.read_text(encoding="utf-8")
+    newline = detect_newline(raw_text)
+    text = normalize_newlines(raw_text)
+
+    text = insert_import_if_missing(text, "import fnmatch")
     text = replace_top_level_function(text, "parse_args", NEW_PARSE_ARGS)
     text = insert_helper_before_main(text, NEW_DASHBOARD_HELPERS)
     text = replace_main_head(text, NEW_MAIN_HEAD)
 
-    TARGET.write_text(text, encoding="utf-8")
+    TARGET.write_text(restore_newlines(text, newline), encoding="utf-8")
     print(f"Patched: {TARGET}")
 
 
