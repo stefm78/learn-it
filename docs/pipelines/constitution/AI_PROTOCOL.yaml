@@ -193,6 +193,20 @@ ai_protocol:
       - logical_review_or_document_reading_may_complement_a_required_script_execution_but_must_never_replace_it
       - the_ai_must_never_directly_push_files_owned_by_a_deterministic_script_see_forbidden_direct_writes
 
+  reconciliation_mode:
+    allowed_reads:
+      - docs/pipelines/constitution/AI_PROTOCOL.yaml
+      - docs/pipelines/constitution/pipeline.md
+      - docs/pipelines/constitution/PIPELINE_MODEL.yaml
+      - docs/pipelines/constitution/runs/index.yaml
+      - docs/pipelines/constitution/runs/<run_id>/run_manifest.yaml
+      - docs/pipelines/constitution/runs/<run_id>/inputs/*
+      - docs/pipelines/constitution/runs/<run_id>/work/*
+      - docs/pipelines/constitution/runs/<run_id>/reports/*
+      - docs/pipelines/constitution/runs/<run_id>/outputs/*
+    next_step_policy:
+      after_reconciliation_success: CONTINUE_ACTIVE_RUN
+      
   tracking:
     required_args:
       - --pipeline constitution

@@ -16,6 +16,8 @@ entry_actions_index:
       ref: docs/pipelines/constitution/entry_actions/INSPECT.action.yaml
     - action_id: PARTITION_REFRESH
       ref: docs/pipelines/constitution/entry_actions/PARTITION_REFRESH.action.yaml
+    - action_id: RECONCILE_RUN
+      ref: docs/pipelines/constitution/entry_actions/RECONCILE_RUN.action.yaml
   launcher_rule: >-
     Le launcher choisit l'action d'entrée adaptée au contexte, puis charge le
     contrat correspondant et ne fait que résoudre les paramètres d'instance.
