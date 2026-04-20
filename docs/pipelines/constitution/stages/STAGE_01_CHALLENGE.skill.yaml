@@ -10,7 +10,7 @@ stage_skill:
 mission: >-
   Challenger la Constitution, le Référentiel et le LINK comme système cohérent,
   en mode global ou borné, sans correction silencieuse hors scope et avec une
-  lecture ids-first prioritaire quand les extraits sont présents.
+  lecture ids-first prioritaire conformément au bootstrap canonique en mode borné.
 
 model_requirements:
   reasoning_level: advanced
@@ -164,8 +164,9 @@ human_actions_required:
     label: Exécuter les scripts de précondition manquants
     mandatory: true
     note: >-
-      L'IA aura émis la commande exacte (extract_scope_slice.py ou
-      materialize_run_inputs.py). L'exécuter, puis relancer l'IA sur ce stage.
+      L'IA aura émis la commande exacte (materialize_run_inputs.py,
+      extract_scope_slice.py ou build_run_context.py selon l'écart observé).
+      L'exécuter, puis relancer l'IA sur ce stage.
     next_step: >-
       Après exécution confirmée, relancer l'IA avec :
       "Reprends STAGE_01_CHALLENGE pour <RUN_ID> — les scripts correctifs ont été exécutés."
