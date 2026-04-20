@@ -191,12 +191,25 @@ def probe_run_context(pipeline_root: Path, run_id: str) -> dict[str, Any]:
         missing = se.get("scope_extract", {}).get("missing_ids", [])
         scope_extract_complete = len(missing) == 0
 
+    neighbor_extract_complete = False
+    if neighbor_extract_present:
+        ne = load_yaml(neighbor_extract_path)
+        missing = ne.get("neighbor_extract", {}).get("missing_ids", [])
+        neighbor_extract_complete = len(missing) == 0
+
     probe: dict[str, Any] = {
         "run_context_present": run_context_present,
         "scope_extract_present": scope_extract_present,
         "scope_extract_complete": scope_extract_complete,
         "neighbor_extract_present": neighbor_extract_present,
-        "ids_first_ready": run_context_present and scope_extract_present and scope_extract_complete,
+        "neighbor_extract_complete": neighbor_extract_complete,
+        "ids_first_ready": (
+            run_context_present
+            and scope_extract_present
+            and neighbor_extract_present
+            and scope_extract_complete
+            and neighbor_extract_complete
+        ),
     }
 
     if run_context_present:
@@ -253,6 +266,7 @@ def build_stage_prompt(
     terminal_closed = ids_first.get("terminal_closed", False)
     ids_first_ready = ids_first.get("ids_first_ready", False)
     scope_extract_complete = ids_first.get("scope_extract_complete", False)
+    neighbor_extract_complete = ids_first.get("neighbor_extract_complete", False)
     run_root = f"docs/pipelines/{pipeline_id}/runs/{run_id}"
 
     if terminal_closed or task_view_status == "terminal_closed":
@@ -274,16 +288,16 @@ def build_stage_prompt(
             f"Ne lis les Core complets QUE si missing_ids est non vide dans les extraits. Produis le livrable du stage uniquement sous {run_root}/... "
             f"À la fin, donne la commande update_run_tracking.py de clôture du stage."
         )
-    if scope_extract_complete:
+    if scope_extract_complete and neighbor_extract_complete:
         return (
             f"Dans le repo learn-it, sur la branche {branch}, avant de démarrer {current_stage} pour run_id={run_id}, génère d'abord run_context.yaml manquant : "
-            f"python docs/patcher/shared/build_run_context.py --run-id {run_id} Ensuite applique l'ordre de lecture ids-first : "
+            f"python docs/patcher/shared/build_run_context.py --pipeline {pipeline_id} --run-id {run_id} Ensuite applique l'ordre de lecture ids-first : "
             f"{run_root}/inputs/run_context.yaml → {run_root}/inputs/scope_extract.yaml → {run_root}/inputs/neighbor_extract.yaml. Ne lis les Core complets que si missing_ids est non vide."
         )
     return (
         f"Dans le repo learn-it, sur la branche {branch}, les extraits ids-first sont absents ou incomplets pour run_id={run_id}. "
-        f"Exécute d'abord la séquence de matérialisation complète : 1. python docs/patcher/shared/materialize_run_inputs.py --run-id {run_id} ; "
-        f"2. python docs/patcher/shared/extract_scope_slice.py --run-id {run_id} ; 3. python docs/patcher/shared/build_run_context.py --run-id {run_id} ; "
+        f"Exécute d'abord la séquence de matérialisation complète : 1. python docs/patcher/shared/materialize_run_inputs.py --pipeline {pipeline_id} --run-id {run_id} ; "
+        f"2. python docs/patcher/shared/extract_scope_slice.py --pipeline {pipeline_id} --run-id {run_id} ; 3. python docs/patcher/shared/build_run_context.py --pipeline {pipeline_id} --run-id {run_id} ; "
         f"Puis démarre {current_stage} en mode ids-first avec lecture sous {run_root}/inputs/."
     )
 
