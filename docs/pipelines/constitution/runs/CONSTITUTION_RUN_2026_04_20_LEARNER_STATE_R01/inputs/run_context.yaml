@@ -1,9 +1,9 @@
 run_context:
   schema_version: 0.2
-  generated_by: build_run_context_runtime_view_candidate_v2.py
-  note: Fichier synthétique — lire EN PREMIER. Remplace la lecture séquentielle de run_manifest + scope_manifest
-    + impact_bundle + integration_gate et expose une task view dérivée pour le stage exécutable. Sources
-    canoniques inchangées.
+  generated_by: docs/patcher/shared/build_run_context.py
+  note: Fichier synthétique — pour un run déjà identifié, lire EN PREMIER. Remplace la lecture séquentielle
+    de run_manifest + scope_manifest + impact_bundle + integration_gate et expose une task view dérivée
+    pour le stage exécutable. Sources canoniques inchangées.
   run_id: CONSTITUTION_RUN_2026_04_20_LEARNER_STATE_R01
   pipeline_id: constitution
   mode: bounded_local_run
@@ -51,9 +51,18 @@ run_context:
   - REF_CORE_LEARNIT_REFERENTIEL_V2_0_IN_CONSTITUTION
   neighbor_ids_count: 1
   scope_extract:
-    present: false
+    present: true
+    found_ids_count: 26
+    missing_ids_count: 0
+    missing_ids: []
+    ref: docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_20_LEARNER_STATE_R01/inputs/scope_extract.yaml
   neighbor_extract:
-    present: false
+    present: true
+    found_ids_count: 0
+    missing_ids_count: 1
+    missing_ids:
+    - REF_CORE_LEARNIT_REFERENTIEL_V2_0_IN_CONSTITUTION
+    ref: docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_20_LEARNER_STATE_R01/inputs/neighbor_extract.yaml
   integration_gate:
     status: open
     total_checks: 7
@@ -69,6 +78,8 @@ run_context:
     scope_manifest.yaml: 5b24024bd26377ae020b591aa456d0b67add4eb3e8bd90a0bfe33ef286af8b49
     impact_bundle.yaml: 99e14034ee89f174b8831112a85cf9273ae228af04cc4961dc14453738dba756
     integration_gate.yaml: 8ed499b6b0033f0dfb8aec8d1157eaaed8bffbe1bd8ff7e99533de4c5c35f15d
+    scope_extract.yaml: ff097b637428fbd4ffe61f44d73cf869ecce80ea8067df53d35e684419ad042d
+    neighbor_extract.yaml: a3d2d2f2982c3bc293a0e021f10d9f801f8a48c0a384796b1cb0215d1c556635
   task_view:
     status: executable
     raw_stage_id: STAGE_01_CHALLENGE
@@ -88,8 +99,8 @@ run_context:
       primary_output: docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_20_LEARNER_STATE_R01/work/01_challenge/challenge_report_<id>.md
       reports_dir: docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_20_LEARNER_STATE_R01/reports/
     required_scripts_status:
-      scope_extract_present: false
-      neighbor_extract_present: false
+      scope_extract_present: true
+      neighbor_extract_present: true
       ids_first_ready: false
     forbidden_actions: []
     completion_evidence: []

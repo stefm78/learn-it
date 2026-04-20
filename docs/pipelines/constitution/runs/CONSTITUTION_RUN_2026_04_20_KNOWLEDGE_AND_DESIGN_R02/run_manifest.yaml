@@ -3,24 +3,29 @@ run_manifest:
   pipeline_id: constitution
   run_id: CONSTITUTION_RUN_2026_04_20_KNOWLEDGE_AND_DESIGN_R02
   mode: bounded_local_run
-  status: bootstrap_open
+  status: active
   scope_key: knowledge_and_design
   scope_binding:
     scope_id: CONSTITUTION_SCOPE_KNOWLEDGE_AND_DESIGN
     scope_key: knowledge_and_design
     scope_definition_ref: docs/pipelines/constitution/scope_catalog/scope_definitions/knowledge_and_design.yaml
   execution_state:
-    current_stage: RUN_BOOTSTRAP
-    last_stage_status: in_progress
-    last_updated: '2026-04-20T07:29:34Z'
-    next_stage: STAGE_01_CHALLENGE
-    completed_stages: []
+    current_stage: STAGE_01_CHALLENGE
+    last_stage_status: done
+    last_updated: '2026-04-20T11:47:05Z'
+    next_stage: STAGE_02_ARBITRAGE
+    completed_stages:
+    - STAGE_01_CHALLENGE
     stage_history:
     - stage_id: RUN_BOOTSTRAP
       stage_status: in_progress
       recorded_at: '2026-04-20T07:29:34Z'
       summary: Entry authorized; run materially opened for knowledge_and_design; awaiting
         Stage 01 confirmation.
+    - stage_id: STAGE_01_CHALLENGE
+      stage_status: done
+      recorded_at: '2026-04-20T11:47:05Z'
+      summary: Challenge report produced; ready for arbitrage.
   scope_tracking:
     scope_status: confirmed_for_bounded_run
     last_updated: '2026-04-20T07:29:34Z'
