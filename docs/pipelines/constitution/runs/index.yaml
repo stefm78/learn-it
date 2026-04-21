@@ -4,13 +4,6 @@ runs_index:
   status: active
   last_updated: '2026-04-21'
   active_runs:
-  - run_id: CONSTITUTION_RUN_2026_04_20_MASTERY_EVALUATION_R01
-    scope_id: CONSTITUTION_SCOPE_MASTERY_EVALUATION
-    scope_key: mastery_evaluation
-    run_status: active
-    current_stage: STAGE_05_APPLY
-    mode: bounded_local_run
-    run_manifest_ref: docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_20_MASTERY_EVALUATION_R01/run_manifest.yaml
   - run_id: CONSTITUTION_RUN_2026_04_20_DEPLOYMENT_GOVERNANCE_R01
     scope_id: CONSTITUTION_SCOPE_DEPLOYMENT_GOVERNANCE
     scope_key: deployment_governance
@@ -39,6 +32,13 @@ runs_index:
     current_stage: STAGE_06_CORE_VALIDATION
     mode: bounded_local_run
     run_manifest_ref: docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_20_LEARNER_STATE_R01/run_manifest.yaml
+  - run_id: CONSTITUTION_RUN_2026_04_20_MASTERY_EVALUATION_R01
+    scope_id: CONSTITUTION_SCOPE_MASTERY_EVALUATION
+    scope_key: mastery_evaluation
+    run_status: active
+    current_stage: STAGE_06_CORE_VALIDATION
+    mode: bounded_local_run
+    run_manifest_ref: docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_20_MASTERY_EVALUATION_R01/run_manifest.yaml
   closed_runs:
   - run_id: CONSTITUTION_RUN_2026_04_13_DEPLOYMENT_GOVERNANCE_R01
     scope_id: CONSTITUTION_SCOPE_DEPLOYMENT_GOVERNANCE
