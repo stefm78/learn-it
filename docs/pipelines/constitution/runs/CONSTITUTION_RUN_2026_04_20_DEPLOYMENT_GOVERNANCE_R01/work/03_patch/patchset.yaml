@@ -28,23 +28,23 @@ PATCH_SET:
             versus the active V4.0 reference must be handled through governed
             scope/policy regeneration, not through a silent local patch.
     - file: docs/cores/current/referentiel.yaml
-      expected_core_id: CORE_LEARNIT_REFERENTIEL_V2_0
+      expected_core_id: CORE_LEARNIT_REFERENTIEL_v3.0
       operations:
         - op: assert_meta
           target:
             field: id
-          equals: CORE_LEARNIT_REFERENTIEL_V2_0
+          equals: CORE_LEARNIT_REFERENTIEL_v3.0
         - op: no_change
           reason: >-
             No arbitrated in-scope correction targets the Referentiel for this
             run. Reading extension from impact_bundle does not grant write rights.
     - file: docs/cores/current/link.yaml
-      expected_core_id: CORE_LINK_LEARNIT_CONSTITUTION_V4_0__REFERENTIEL_V2_0
+      expected_core_id: CORE_LINK_LEARNIT_CONSTITUTION_V4_0__REFERENTIEL_v3.0
       operations:
         - op: assert_meta
           target:
             field: id
-          equals: CORE_LINK_LEARNIT_CONSTITUTION_V4_0__REFERENTIEL_V2_0
+          equals: CORE_LINK_LEARNIT_CONSTITUTION_V4_0__REFERENTIEL_v3.0
         - op: no_change
           reason: >-
             No arbitrated in-scope correction targets the Link core for this run.
