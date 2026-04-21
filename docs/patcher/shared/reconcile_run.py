@@ -889,100 +889,101 @@ def build_dashboard_payload(
 
 
 def render_dashboard_human(
-\n    index_data: Dict[str, Any],
-\n    rows: List[Dict[str, Any]],
-\n    pattern: str,
-\n) -> str:
-\n    runs_index = index_data.get("runs_index", {})
-\n    active_runs = runs_index.get("active_runs", [])
-\n    closed_runs = runs_index.get("closed_runs", [])
-\n
-\n    total_runs = (len(active_runs) if isinstance(active_runs, list) else 0) + (
-\n        len(closed_runs) if isinstance(closed_runs, list) else 0
-\n    )
-\n    active_count = len(active_runs) if isinstance(active_runs, list) else 0
-\n    closed_count = len(closed_runs) if isinstance(closed_runs, list) else 0
-\n
-\n    headers = {
-\n        "run_id": "RUN_ID",
-\n        "scope_key": "SCOPE_KEY",
-\n        "run_status": "STATUS",
-\n        "current_stage": "STAGE",
-\n        "mode": "MODE",
-\n    }
-\n
-\n    def s(value: Any) -> str:
-\n        return "" if value is None else str(value)
-\n
-\n    widths = {
-\n        "run_id": len(headers["run_id"]),
-\n        "scope_key": len(headers["scope_key"]),
-\n        "run_status": len(headers["run_status"]),
-\n        "current_stage": len(headers["current_stage"]),
-\n        "mode": len(headers["mode"]),
-\n    }
-\n
-\n    for row in rows:
-\n        widths["run_id"] = max(widths["run_id"], len(s(row.get("run_id", ""))))
-\n        widths["scope_key"] = max(widths["scope_key"], len(s(row.get("scope_key", ""))))
-\n        widths["run_status"] = max(widths["run_status"], len(s(row.get("run_status", ""))))
-\n        widths["current_stage"] = max(widths["current_stage"], len(s(row.get("current_stage", ""))))
-\n        widths["mode"] = max(widths["mode"], len(s(row.get("mode", ""))))
-\n
-\n    def fmt_row(run_id: str, scope_key: str, run_status: str, current_stage: str, mode: str) -> str:
-\n        return (
-\n            f"{run_id:<{widths['run_id']}} | "
-\n            f"{scope_key:<{widths['scope_key']}} | "
-\n            f"{run_status:<{widths['run_status']}} | "
-\n            f"{current_stage:<{widths['current_stage']}} | "
-\n            f"{mode:<{widths['mode']}}"
-\n        )
-\n
-\n    lines: List[str] = []
-\n    if pattern and pattern != "*":
-\n        lines.append(f"FILTER {pattern}")
-\n    lines.append(
-\n        f"PIPELINE {runs_index.get('pipeline_id', '')}  |  LAST_UPDATED {runs_index.get('last_updated', '')}"
-\n    )
-\n    lines.append(
-\n        f"TOTAL {total_runs}  |  ACTIVE {active_count}  |  CLOSED {closed_count}  |  MATCHED {len(rows)}"
-\n    )
-\n    lines.append("")
-\n
-\n    header_line = fmt_row(
-\n        headers["run_id"],
-\n        headers["scope_key"],
-\n        headers["run_status"],
-\n        headers["current_stage"],
-\n        headers["mode"],
-\n    )
-\n    separator_line = (
-\n        f"{'-' * widths['run_id']}-+-"
-\n        f"{'-' * widths['scope_key']}-+-"
-\n        f"{'-' * widths['run_status']}-+-"
-\n        f"{'-' * widths['current_stage']}-+-"
-\n        f"{'-' * widths['mode']}"
-\n    )
-\n
-\n    lines.append(header_line)
-\n    lines.append(separator_line)
-\n
-\n    for row in rows:
-\n        lines.append(
-\n            fmt_row(
-\n                s(row.get("run_id", "")),
-\n                s(row.get("scope_key", "")),
-\n                s(row.get("run_status", "")),
-\n                s(row.get("current_stage", "")),
-\n                s(row.get("mode", "")),
-\n            )
-\n        )
-\n
-\n    if not rows:
-\n        lines.append("(no run matched the current filter)")
-\n
-\n    return "\n".join(lines) + "\n"
-\n\ndef build_compact_reconciliation_payload(payload: Dict[str, Any]) -> Dict[str, Any]:
+    index_data: Dict[str, Any],
+    rows: List[Dict[str, Any]],
+    pattern: str,
+) -> str:
+    runs_index = index_data.get("runs_index", {})
+    active_runs = runs_index.get("active_runs", [])
+    closed_runs = runs_index.get("closed_runs", [])
+
+    total_runs = (len(active_runs) if isinstance(active_runs, list) else 0) + (
+        len(closed_runs) if isinstance(closed_runs, list) else 0
+    )
+    active_count = len(active_runs) if isinstance(active_runs, list) else 0
+    closed_count = len(closed_runs) if isinstance(closed_runs, list) else 0
+
+    headers = {
+        "run_id": "RUN_ID",
+        "scope_key": "SCOPE_KEY",
+        "run_status": "STATUS",
+        "current_stage": "STAGE",
+        "mode": "MODE",
+    }
+
+    def s(value: Any) -> str:
+        return "" if value is None else str(value)
+
+    widths = {
+        "run_id": len(headers["run_id"]),
+        "scope_key": len(headers["scope_key"]),
+        "run_status": len(headers["run_status"]),
+        "current_stage": len(headers["current_stage"]),
+        "mode": len(headers["mode"]),
+    }
+
+    for row in rows:
+        widths["run_id"] = max(widths["run_id"], len(s(row.get("run_id", ""))))
+        widths["scope_key"] = max(widths["scope_key"], len(s(row.get("scope_key", ""))))
+        widths["run_status"] = max(widths["run_status"], len(s(row.get("run_status", ""))))
+        widths["current_stage"] = max(widths["current_stage"], len(s(row.get("current_stage", ""))))
+        widths["mode"] = max(widths["mode"], len(s(row.get("mode", ""))))
+
+    def fmt_row(run_id: str, scope_key: str, run_status: str, current_stage: str, mode: str) -> str:
+        return (
+            f"{run_id:<{widths['run_id']}} | "
+            f"{scope_key:<{widths['scope_key']}} | "
+            f"{run_status:<{widths['run_status']}} | "
+            f"{current_stage:<{widths['current_stage']}} | "
+            f"{mode:<{widths['mode']}}"
+        )
+
+    lines: List[str] = []
+    if pattern and pattern != "*":
+        lines.append(f"FILTER {pattern}")
+    lines.append(
+        f"PIPELINE {runs_index.get('pipeline_id', '')}  |  LAST_UPDATED {runs_index.get('last_updated', '')}"
+    )
+    lines.append(
+        f"TOTAL {total_runs}  |  ACTIVE {active_count}  |  CLOSED {closed_count}  |  MATCHED {len(rows)}"
+    )
+    lines.append("")
+
+    header_line = fmt_row(
+        headers["run_id"],
+        headers["scope_key"],
+        headers["run_status"],
+        headers["current_stage"],
+        headers["mode"],
+    )
+    separator_line = (
+        f"{'-' * widths['run_id']}-+-"
+        f"{'-' * widths['scope_key']}-+-"
+        f"{'-' * widths['run_status']}-+-"
+        f"{'-' * widths['current_stage']}-+-"
+        f"{'-' * widths['mode']}"
+    )
+
+    lines.append(header_line)
+    lines.append(separator_line)
+
+    for row in rows:
+        lines.append(
+            fmt_row(
+                s(row.get("run_id", "")),
+                s(row.get("scope_key", "")),
+                s(row.get("run_status", "")),
+                s(row.get("current_stage", "")),
+                s(row.get("mode", "")),
+            )
+        )
+
+    if not rows:
+        lines.append("(no run matched the current filter)")
+
+    return "\n".join(lines) + "\n"
+
+def build_compact_reconciliation_payload(payload: Dict[str, Any]) -> Dict[str, Any]:
     repaired_artifacts = payload.get("repaired_artifacts", [])
     invalidated_downstream_stage_set = payload.get("invalidated_downstream_stage_set", [])
 
