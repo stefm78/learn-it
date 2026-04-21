@@ -9,22 +9,24 @@ run_context:
   mode: bounded_local_run
   status: active
   scope_key: knowledge_and_design
-  current_stage: STAGE_03_PATCH_SYNTHESIS
-  current_stage_canonical: STAGE_03_PATCH_SYNTHESIS
+  current_stage: STAGE_04_PATCH_VALIDATION
+  current_stage_canonical: STAGE_04_PATCH_VALIDATION
   last_stage_status: done
-  next_stage: STAGE_04_PATCH_VALIDATION
-  next_stage_canonical: STAGE_04_PATCH_VALIDATION
-  next_executable_stage: STAGE_04_PATCH_VALIDATION
-  next_executable_stage_canonical: STAGE_04_PATCH_VALIDATION
+  next_stage: STAGE_05_APPLY
+  next_stage_canonical: STAGE_05_APPLY
+  next_executable_stage: STAGE_05_APPLY
+  next_executable_stage_canonical: STAGE_05_APPLY
   terminal_closed: false
   completed_stages:
   - STAGE_01_CHALLENGE
   - STAGE_02_ARBITRAGE
   - STAGE_03_PATCH_SYNTHESIS
+  - STAGE_04_PATCH_VALIDATION
   completed_stages_canonical:
   - STAGE_01_CHALLENGE
   - STAGE_02_ARBITRAGE
   - STAGE_03_PATCH_SYNTHESIS
+  - STAGE_04_PATCH_VALIDATION
   scope_ids:
   - ACTION_PLAN_COGNITIVE_CONFLICT_MISSION
   - CONSTRAINT_NO_HIGH_BLOOM_WITHOUT_AUTHENTIC_CONTEXT
@@ -74,7 +76,7 @@ run_context:
     impact_bundle: docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_20_KNOWLEDGE_AND_DESIGN_R02/inputs/impact_bundle.yaml
     integration_gate: docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_20_KNOWLEDGE_AND_DESIGN_R02/inputs/integration_gate.yaml
   source_fingerprints:
-    run_manifest.yaml: ed140f76f4ad119ce763115f97aadb131bbdd91253f4d2ab81dd34cc8d86b200
+    run_manifest.yaml: 3e14c96904a6d45e12f1b2ea1994666427d4a7fb87ff2489889e3a40d9449fc9
     scope_manifest.yaml: 039ef3e4e37dd240c6c5f292ef02da758697a8bdb1893a98b18f1337fe016d0f
     impact_bundle.yaml: e0b2a568c7ec02292b81fd7b64d75b39dbf87d9c521cde8d8d1b995832f4ea51
     integration_gate.yaml: 7d2e6e9b068ed5c9c890cfe7e010514df8eba25413f7c165c8438c1f71dd64d6
@@ -82,9 +84,9 @@ run_context:
     neighbor_extract.yaml: 445a41072afcc1e665adabb6f67a16250220d5b59e09e905ad15e7421c683c39
   task_view:
     status: executable
-    raw_stage_id: STAGE_04_PATCH_VALIDATION
-    stage_id: STAGE_04_PATCH_VALIDATION
-    skill_ref: docs/pipelines/constitution/stages/STAGE_04_PATCH_VALIDATION.skill.yaml
+    raw_stage_id: STAGE_05_APPLY
+    stage_id: STAGE_05_APPLY
+    skill_ref: docs/pipelines/constitution/stages/STAGE_05_APPLY.skill.yaml
     stage_kind: hybrid
     closure_level: high
     resolved_inputs:
@@ -93,8 +95,8 @@ run_context:
     - docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_20_KNOWLEDGE_AND_DESIGN_R02/inputs/impact_bundle.yaml
     - docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_20_KNOWLEDGE_AND_DESIGN_R02/inputs/integration_gate.yaml
     execution_paths:
-      work_dir: docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_20_KNOWLEDGE_AND_DESIGN_R02/work/04_patch_validation/
-      primary_output: docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_20_KNOWLEDGE_AND_DESIGN_R02/work/04_patch_validation/patch_validation.yaml
+      work_dir: docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_20_KNOWLEDGE_AND_DESIGN_R02/work/05_apply/
+      primary_output: docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_20_KNOWLEDGE_AND_DESIGN_R02/reports/patch_execution_report.yaml
       reports_dir: docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_20_KNOWLEDGE_AND_DESIGN_R02/reports/
     required_scripts_status:
       scope_extract_present: true
@@ -104,11 +106,11 @@ run_context:
     forbidden_actions: []
     completion_evidence: []
     allowed_transitions: {}
-    compact_execution_prompt: Dans le repo learn-it, exécute STAGE_04_PATCH_VALIDATION du pipeline constitution
-      pour run_id=CONSTITUTION_RUN_2026_04_20_KNOWLEDGE_AND_DESIGN_R02 en mode bounded_local_run. Lis
-      d'abord docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_20_KNOWLEDGE_AND_DESIGN_R02/inputs/run_context.yaml,
+    compact_execution_prompt: Dans le repo learn-it, exécute STAGE_05_APPLY du pipeline constitution pour
+      run_id=CONSTITUTION_RUN_2026_04_20_KNOWLEDGE_AND_DESIGN_R02 en mode bounded_local_run. Lis d'abord
+      docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_20_KNOWLEDGE_AND_DESIGN_R02/inputs/run_context.yaml,
       docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_20_KNOWLEDGE_AND_DESIGN_R02/inputs/scope_manifest.yaml,
       docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_20_KNOWLEDGE_AND_DESIGN_R02/inputs/impact_bundle.yaml,
       docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_20_KNOWLEDGE_AND_DESIGN_R02/inputs/integration_gate.yaml.
-      Applique le contrat stable défini dans docs/pipelines/constitution/stages/STAGE_04_PATCH_VALIDATION.skill.yaml.
+      Applique le contrat stable défini dans docs/pipelines/constitution/stages/STAGE_05_APPLY.skill.yaml.
       Ne produis que les livrables du stage courant et ne simule aucun script requis.
