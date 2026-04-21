@@ -1,9 +1,9 @@
 PATCHSET_VALIDATION:
-  status: FAIL
+  status: PASS
   scope: patchset
-  anomalies_count: 1
+  anomalies_count: 0
   warnings_count: 0
   anomalies:
-    - file[0] champ manquant: expected_core_id
+    - none
   warnings:
     - none
