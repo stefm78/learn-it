@@ -13,6 +13,20 @@ PATCH_EXECUTION_REPORT:
     - no_change Arbitrage finding A1 / challenge finding R1 was classified as necessite_extension_scope and blocked_by_scope_extension. No direct local patch is authorized on constitution.yaml in this run.
     - note None
     text_replacements: 0
+  - file: docs/cores/current/referentiel.yaml
+    expected_core_id: CORE_LEARNIT_REFERENTIEL_v3.0
+    actual_core_id: CORE_LEARNIT_REFERENTIEL_v3.0
+    operations:
+    - assert_meta id
+    - no_change No arbitrated in-scope correction targets the Referentiel for this run. Reading extension from impact_bundle does not grant write rights.
+    text_replacements: 0
+  - file: docs/cores/current/link.yaml
+    expected_core_id: CORE_LINK_LEARNIT_CONSTITUTION_V4_0__REFERENTIEL_v3.0
+    actual_core_id: CORE_LINK_LEARNIT_CONSTITUTION_V4_0__REFERENTIEL_v3.0
+    operations:
+    - assert_meta id
+    - no_change No arbitrated in-scope correction targets the Link core for this run. Inter-core alignment concerns were explicitly retained as governance backlog candidate rather than local patch material.
+    text_replacements: 0
   errors:
-  - 'Core ID inattendu pour docs/cores/current/referentiel.yaml: attendu=CORE_LEARNIT_REFERENTIEL_V2_0 trouvé=CORE_LEARNIT_REFERENTIEL_v3.0'
+  - 'Alias de Core non résolu: TYPE_BINDING_LEARNER_STATE_SIGNAL_AUTHORITY_CHAIN -> LINK_REF_CORE_LEARNIT_CONSTITUTION_V4_0'
   federation: {}
