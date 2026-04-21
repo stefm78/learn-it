@@ -12,13 +12,18 @@ mission: >-
   à partir soit d'un run, soit d'un workspace de consolidation.
   Ce stage ne promeut pas current. Il exige l'exécution réelle des scripts
   de release puis une revue IA de cohérence du résultat.
+  Lorsque la chaîne réelle conclut qu'aucune release n'est requise
+  (release_required=false), le stage peut se conclure sans bundle matérialisé,
+  sans manifest de release écrit, et sans validation de manifest, à condition
+  que ce NOOP soit explicitement confirmé par les artefacts bruts de release.
 
 model_requirements:
   reasoning_level: advanced
   justification: >-
     Ce stage combine plusieurs artefacts déterministes de release avec une
     revue logique de cohérence inter-Core. Le modèle doit interpréter un
-    release_plan réel et un release manifest réel avant toute conclusion.
+    release_plan réel et, selon le cas, soit un release manifest réel, soit
+    un NOOP réel explicitement confirmé, avant toute conclusion.
   recommended_models:
     - o3
     - claude-opus-4
@@ -35,13 +40,15 @@ runtime_binding:
     En mode bounded_local_run, run_context.yaml doit être lu en premier.
     En mode consolidation, le workspace pipeline-level fait autorité.
   execution_evidence_role: >-
-    build_release_plan.py, validate_release_plan.py, materialize_release.py et
-    validate_release_manifest.py doivent être réellement exécutés.
+    build_release_plan.py, validate_release_plan.py et materialize_release.py
+    doivent être réellement exécutés dans tous les cas. validate_release_manifest.py
+    devient obligatoire uniquement si une release est effectivement matérialisée
+    et qu'un manifest.yaml existe.
   artifact_ownership_rule: >-
     Les artefacts bruts produits par script (release_plan.yaml, validations,
-    release_materialization_report, manifest.yaml) restent les sources de vérité
-    du stage. L'IA ne doit pas inventer de flags CLI inexistants ni écraser un
-    artefact brut produit par script.
+    release_materialization_report, manifest.yaml quand il existe) restent les
+    sources de vérité du stage. L'IA ne doit pas inventer de flags CLI
+    inexistants ni écraser un artefact brut produit par script.
 
 primary_reads:
   bounded_local_run:
@@ -72,6 +79,7 @@ required_scripts:
     - docs/patcher/shared/build_release_plan.py
     - docs/patcher/shared/validate_release_plan.py
     - docs/patcher/shared/materialize_release.py
+  conditional_release_chain_if_materialized_release:
     - docs/patcher/shared/validate_release_manifest.py
   note: >-
     Si l'IA ne peut pas exécuter les scripts elle-même, elle doit émettre les
@@ -83,22 +91,47 @@ required_scripts:
     - validate_release_manifest.py <manifest.yaml> [schema.yaml]
     Aucune de ces commandes ne supporte les flags --pipeline, --run-id,
     --plan ou --manifest décrits dans les versions antérieures du skill.
+    validate_release_manifest.py n'est requis que si la chaîne a réellement
+    matérialisé une release avec manifest.yaml.
+
+noop_release_rules:
+  enabled: true
+  detection_signals:
+    - release_plan.RELEASE_PLAN.release_required == false
+    - release_plan.RELEASE_PLAN.status == PASS
+    - release_plan_validation.RELEASE_PLAN_VALIDATION.status == PASS
+    - release_materialization_report.RELEASE_MATERIALIZATION_REPORT.status == PASS
+    - release_materialization_report.RELEASE_MATERIALIZATION_REPORT.manifest_written == false
+  consequences:
+    - no_release_bundle_materialized_is_allowed
+    - validate_release_manifest_py_not_required
+    - release_manifest_validation_yaml_not_required
+    - stage_may_pass_if_no_blocking_release_coherence_issue
 
 script_execution_contract:
   required_before_pass_or_fail:
     - build_release_plan_executed_for_real
     - validate_release_plan_executed_for_real
     - materialize_release_executed_for_real
-    - validate_release_manifest_executed_for_real
     - release_plan_yaml_materialized
     - release_plan_validation_yaml_materialized
     - release_materialization_report_yaml_materialized
-    - release_manifest_yaml_materialized
-    - release_manifest_validation_yaml_materialized
   blocked_if_missing_evidence: true
   blocked_status_value: BLOCKED
+  noop_pass_when:
+    - release_plan_status_is_pass
+    - release_required_is_false
+    - release_plan_validation_status_is_pass
+    - release_materialization_report_status_is_pass
+    - release_materialization_report_manifest_written_is_false
+  materialized_release_pass_requires:
+    - release_required_is_true
+    - validate_release_manifest_executed_for_real
+    - release_manifest_yaml_materialized
+    - release_manifest_validation_yaml_materialized
+    - release_manifest_validation_status_is_pass
   pass_requires:
-    - release_chain_all_passed
+    - noop_release_confirmed_or_materialized_release_validated
     - no_blocking_release_coherence_issue
   fail_requires:
     - any_release_script_failed
@@ -141,9 +174,10 @@ deterministic_command_templates:
       docs/pipelines/constitution/runs/<run_id>/reports/release_materialization_report.yaml
       docs/pipelines/constitution/runs/<run_id>/reports/release_candidate_notes.md
     resolve_manifest_path_note: >-
-      Après build_release_plan.py, l'IA peut demander à l'humain d'extraire le
-      release_path réel depuis release_plan.yaml avant validate_release_manifest.py,
-      car <release_id> n'est connu qu'après matérialisation du plan.
+      Après build_release_plan.py et materialize_release.py, l'IA ne doit demander
+      l'extraction du release_path réel depuis release_plan.yaml que si
+      release_required=true ou si release_materialization_report.yaml indique
+      manifest_written=true.
     validate_release_manifest: >-
       python docs/patcher/shared/validate_release_manifest.py
       docs/cores/releases/<release_id>/manifest.yaml
@@ -238,24 +272,32 @@ expected_outputs:
     required_raw_artifacts:
       - docs/pipelines/constitution/runs/<run_id>/reports/release_plan_validation.yaml
       - docs/pipelines/constitution/runs/<run_id>/reports/release_materialization_report.yaml
+    conditional_raw_artifacts_if_release_required_true:
       - docs/pipelines/constitution/runs/<run_id>/reports/release_manifest_validation.yaml
+    noop_note: >-
+      Si release_required=false est confirmé par release_plan.yaml et
+      release_materialization_report.yaml, l'absence de manifest et de
+      release_manifest_validation.yaml n'est pas bloquante.
   parallel_consolidation:
     primary_output_path_pattern: docs/pipelines/constitution/work/consolidation/release_plan.yaml
     required_raw_artifacts:
       - docs/pipelines/constitution/reports/release_plan_validation.yaml
       - docs/pipelines/constitution/reports/release_materialization_report.yaml
+    conditional_raw_artifacts_if_release_required_true:
       - docs/pipelines/constitution/reports/release_manifest_validation.yaml
   nominal_global:
     primary_output_path_pattern: docs/pipelines/constitution/work/07_release/release_plan.yaml
     required_raw_artifacts:
       - docs/pipelines/constitution/reports/release_plan_validation.yaml
       - docs/pipelines/constitution/reports/release_materialization_report.yaml
+    conditional_raw_artifacts_if_release_required_true:
       - docs/pipelines/constitution/reports/release_manifest_validation.yaml
   bounded_transition:
     primary_output_path_pattern: docs/pipelines/constitution/work/07_release/release_plan.yaml
     required_raw_artifacts:
       - docs/pipelines/constitution/reports/release_plan_validation.yaml
       - docs/pipelines/constitution/reports/release_materialization_report.yaml
+    conditional_raw_artifacts_if_release_required_true:
       - docs/pipelines/constitution/reports/release_manifest_validation.yaml
 
 completion_evidence:
@@ -265,15 +307,15 @@ completion_evidence:
     - release_plan_materialized
     - release_plan_validation_materialized
     - release_materialization_report_materialized
-    - release_manifest_materialized
-    - release_manifest_validation_materialized
+    - noop_or_materialized_release_path_explicitly_classified
     - final_status_is_pass_fail_or_blocked
     - human_actions_explicitly_stated_in_output
   not_sufficient:
     - informal_chat_summary_only
     - release_reasoning_without_script_evidence
     - pass_without_materialized_release_artifacts
-    - pass_without_release_manifest_validation_yaml
+    - pass_without_noop_confirmation_when_release_required_false
+    - pass_without_release_manifest_validation_when_release_required_true
     - simulated_script_execution
 
 status_values:
@@ -285,7 +327,8 @@ human_actions_required:
   description: >-
     Si les scripts n'ont pas été exécutés réellement, l'humain doit lancer les
     commandes émises puis relancer l'IA sur ce stage. Une fois la release
-    matérialisée et validée, l'humain peut poursuivre vers STAGE_08.
+    matérialisée et validée, ou le NOOP de release explicitement confirmé,
+    l'humain peut poursuivre vers STAGE_08.
   on_blocked:
     step: 1
     label: Exécuter la chaîne de release puis relancer ce stage
@@ -293,8 +336,10 @@ human_actions_required:
     note: >-
       Si le workspace de release n'existe pas encore, l'IA doit fournir d'abord
       les commandes Git Bash exactes de préparation. Si <release_id> n'est pas
-      encore connu, l'IA doit demander explicitement l'extraction du release_path
-      depuis release_plan.yaml avant validate_release_manifest.py.
+      encore connu, l'IA ne doit demander son extraction depuis release_plan.yaml
+      que si une release réelle a été matérialisée. En cas de NOOP explicite
+      (release_required=false, manifest_written=false), validate_release_manifest.py
+      n'est pas attendu.
   on_pass:
     step: 1
     label: Poursuivre vers STAGE_08_PROMOTE_CURRENT avec action humaine adaptée au mode
@@ -307,7 +352,7 @@ human_actions_required:
       --stage-status done
       --run-status active
       --next-stage STAGE_08_PROMOTE_CURRENT
-      --summary "Release materialization completed with validated artifacts; ready for promote current."
+      --summary "Release materialization completed or confirmed as canonical NOOP; ready for promote current."
     note_pipeline_level_modes: >-
       En modes parallel_consolidation, nominal_global et bounded_transition,
       aucun update_run_tracking.py run-level ne doit être émis ici.
@@ -333,6 +378,8 @@ allowed_transitions:
 forbidden_actions:
   - simulated_release_chain_execution
   - pass_without_real_execution_evidence
+  - pass_without_noop_evidence_when_release_required_false
+  - pass_without_release_manifest_validation_when_release_required_true
   - direct_current_promotion
   - current_alias_update_without_stage_08
   - omitting_human_actions_from_output
@@ -341,3 +388,5 @@ forbidden_actions:
 migration_note: >-
   Premier skill STAGE_07 pour le pipeline constitution.
   Consolide en YAML machine-readable les règles de release du pipeline.
+  Ajusté pour reconnaître explicitement le cas canonique de release NOOP
+  (release_required=false) sans exiger artificiellement un manifest absent.
