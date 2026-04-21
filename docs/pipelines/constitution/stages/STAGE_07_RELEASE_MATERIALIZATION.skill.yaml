@@ -16,6 +16,8 @@ mission: >-
   (release_required=false), le stage peut se conclure sans bundle matérialisé,
   sans manifest de release écrit, et sans validation de manifest, à condition
   que ce NOOP soit explicitement confirmé par les artefacts bruts de release.
+  Dans ce cas NOOP canonique, il n'y a rien à promouvoir vers current :
+  le stage aval direct devient STAGE_09_CLOSEOUT_AND_ARCHIVE.
 
 model_requirements:
   reasoning_level: advanced
@@ -23,7 +25,8 @@ model_requirements:
     Ce stage combine plusieurs artefacts déterministes de release avec une
     revue logique de cohérence inter-Core. Le modèle doit interpréter un
     release_plan réel et, selon le cas, soit un release manifest réel, soit
-    un NOOP réel explicitement confirmé, avant toute conclusion.
+    un NOOP réel explicitement confirmé, avant toute conclusion et avant de
+    choisir correctement la branche aval : promotion réelle ou closeout direct.
   recommended_models:
     - o3
     - claude-opus-4
@@ -106,6 +109,8 @@ noop_release_rules:
     - no_release_bundle_materialized_is_allowed
     - validate_release_manifest_py_not_required
     - release_manifest_validation_yaml_not_required
+    - promote_current_stage_not_required
+    - direct_closeout_allowed
     - stage_may_pass_if_no_blocking_release_coherence_issue
 
 script_execution_contract:
@@ -328,7 +333,8 @@ human_actions_required:
     Si les scripts n'ont pas été exécutés réellement, l'humain doit lancer les
     commandes émises puis relancer l'IA sur ce stage. Une fois la release
     matérialisée et validée, ou le NOOP de release explicitement confirmé,
-    l'humain peut poursuivre vers STAGE_08.
+    l'humain poursuit soit vers STAGE_08_PROMOTE_CURRENT soit directement vers
+    STAGE_09_CLOSEOUT_AND_ARCHIVE selon la branche aval décidée par les artefacts.
   on_blocked:
     step: 1
     label: Exécuter la chaîne de release puis relancer ce stage
@@ -340,9 +346,9 @@ human_actions_required:
       que si une release réelle a été matérialisée. En cas de NOOP explicite
       (release_required=false, manifest_written=false), validate_release_manifest.py
       n'est pas attendu.
-  on_pass:
+  on_pass_materialized_release:
     step: 1
-    label: Poursuivre vers STAGE_08_PROMOTE_CURRENT avec action humaine adaptée au mode
+    label: Poursuivre vers STAGE_08_PROMOTE_CURRENT
     mandatory: true
     command_bounded_local_run: >-
       python docs/patcher/shared/update_run_tracking.py
@@ -352,24 +358,52 @@ human_actions_required:
       --stage-status done
       --run-status active
       --next-stage STAGE_08_PROMOTE_CURRENT
-      --summary "Release materialization completed or confirmed as canonical NOOP; ready for promote current."
+      --summary "Release materialization completed with validated artifacts; ready for promote current."
     note_pipeline_level_modes: >-
       En modes parallel_consolidation, nominal_global et bounded_transition,
       aucun update_run_tracking.py run-level ne doit être émis ici.
       La suite consiste à démarrer explicitement STAGE_08_PROMOTE_CURRENT
       sur les artefacts pipeline-level matérialisés.
+  on_pass_noop_release:
+    step: 1
+    label: Clore directement vers STAGE_09_CLOSEOUT_AND_ARCHIVE
+    mandatory: true
+    command_bounded_local_run: >-
+      python docs/patcher/shared/update_run_tracking.py
+      --pipeline constitution
+      --run-id <RUN_ID>
+      --stage-id STAGE_07_RELEASE_MATERIALIZATION
+      --stage-status done
+      --run-status active
+      --next-stage STAGE_09_CLOSEOUT_AND_ARCHIVE
+      --summary "Release chain concluded no release required; current already aligned, ready for closeout."
+    note_pipeline_level_modes: >-
+      En modes parallel_consolidation, nominal_global et bounded_transition,
+      aucun promote_current n'est attendu si le NOOP de release est confirmé.
+      La suite consiste à démarrer explicitement STAGE_09_CLOSEOUT_AND_ARCHIVE
+      sur les artefacts pipeline-level de NOOP validés.
   on_fail:
     step: 1
     label: Corriger les anomalies de release avant reprise
     mandatory: true
 
 allowed_transitions:
-  on_pass:
+  on_pass_materialized_release:
     next_stage: STAGE_08_PROMOTE_CURRENT
     precondition: >-
       En bounded_local_run, human must confirm update_run_tracking.py execution.
       En parallel_consolidation, nominal_global et bounded_transition,
       la transition est pipeline-level et ne dépend pas d'un run_id unique.
+      Cette branche ne s'applique que si release_required=true et qu'une release
+      a réellement été matérialisée.
+  on_pass_noop_release:
+    next_stage: STAGE_09_CLOSEOUT_AND_ARCHIVE
+    precondition: >-
+      En bounded_local_run, human must confirm update_run_tracking.py execution.
+      En parallel_consolidation, nominal_global et bounded_transition,
+      la transition est pipeline-level et ne dépend pas d'un run_id unique.
+      Cette branche s'applique uniquement si le NOOP de release est confirmé
+      par les artefacts réels de STAGE_07.
   on_fail:
     next_stage: STAGE_06_CORE_VALIDATION_or_STAGE_06B_CONSOLIDATION
   on_blocked:
@@ -389,4 +423,5 @@ migration_note: >-
   Premier skill STAGE_07 pour le pipeline constitution.
   Consolide en YAML machine-readable les règles de release du pipeline.
   Ajusté pour reconnaître explicitement le cas canonique de release NOOP
-  (release_required=false) sans exiger artificiellement un manifest absent.
+  (release_required=false) sans exiger artificiellement un manifest absent,
+  et pour bypasser STAGE_08 lorsque rien n'est à promouvoir vers current.
