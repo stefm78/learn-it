@@ -1,0 +1,68 @@
+CORE_VALIDATION:
+  run_id: CONSTITUTION_RUN_2026_04_20_DEPLOYMENT_GOVERNANCE_R01
+  stage_id: STAGE_06_CORE_VALIDATION
+  mode: bounded_local_run
+  validation_scope:
+    validated_state_source: docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_20_DEPLOYMENT_GOVERNANCE_R01/work/05_apply/sandbox/docs/cores/current/
+    apply_evidence_ref: docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_20_DEPLOYMENT_GOVERNANCE_R01/reports/patch_execution_report.yaml
+    validated_files:
+      - docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_20_DEPLOYMENT_GOVERNANCE_R01/work/05_apply/sandbox/docs/cores/current/constitution.yaml
+      - docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_20_DEPLOYMENT_GOVERNANCE_R01/work/05_apply/sandbox/docs/cores/current/referentiel.yaml
+      - docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_20_DEPLOYMENT_GOVERNANCE_R01/work/05_apply/sandbox/docs/cores/current/link.yaml
+    fallback_reads_used: []
+  logical_validation_summary:
+    status: PASS
+    core_type_alignment: PASS
+    invariant_integrity: PASS
+    logical_consistency: PASS
+    relation_coherence: PASS
+    inter_core_reference_clarity: PASS
+    bounded_run_release_readiness: PASS
+    summary: >-
+      The sandbox state validated by STAGE_05_APPLY is logically coherent and release-ready
+      for this bounded run. Constitution V4_0, Referentiel v3.0, and Link V4_0__V3_0 are
+      mutually aligned in the sandbox and the apply report confirms real execution with PASS.
+  anomalies_and_corrections:
+    blocking_issues: []
+    non_blocking_findings:
+      - finding_id: NBF_01
+        severity: minor
+        location: run inputs only
+        description: >-
+          run_context.yaml and impact_bundle.yaml still reference
+          REF_CORE_LEARNIT_REFERENTIEL_V2_0_IN_CONSTITUTION as neighbor/read identifier,
+          while the validated sandbox Constitution uses REF_CORE_LEARNIT_REFERENTIEL_V4_0_IN_CONSTITUTION.
+          This did not affect STAGE_05 or sandbox coherence because federation was declared
+          in the patchset and the sandbox cores are internally consistent.
+        recommended_follow_up: >-
+          Refresh or reconcile run inputs in a future governance/reconciliation path if these
+          derived inputs are expected to mirror the active Constitution naming exactly.
+    corrections_required_before_next_stage: []
+  fallback_reads_used_if_any:
+    used: false
+    refs: []
+  downstream_decision:
+    validation_status: PASS
+    decision: direct_release_materialization
+    rationale: >-
+      No blocking logical issue was detected in the real sandbox state, and no explicit
+      multi-run consolidation requirement is evidenced by this run-local validation context.
+  human_actions_to_execute:
+    - step: 1
+      mandatory: true
+      label: Mettre à jour le tracking vers STAGE_07_RELEASE_MATERIALIZATION
+      command: >-
+        python docs/patcher/shared/update_run_tracking.py
+        --pipeline constitution
+        --run-id CONSTITUTION_RUN_2026_04_20_DEPLOYMENT_GOVERNANCE_R01
+        --stage-id STAGE_06_CORE_VALIDATION
+        --stage-status done
+        --run-status active
+        --next-stage STAGE_07_RELEASE_MATERIALIZATION
+        --summary "Core validation passed; run ready for release materialization."
+    - step: 2
+      mandatory: true
+      label: Relancer le pipeline sur STAGE_07_RELEASE_MATERIALIZATION
+      next_step_prompt: >-
+        Continue le run CONSTITUTION_RUN_2026_04_20_DEPLOYMENT_GOVERNANCE_R01 —
+        STAGE_06 est done, démarre STAGE_07_RELEASE_MATERIALIZATION.
