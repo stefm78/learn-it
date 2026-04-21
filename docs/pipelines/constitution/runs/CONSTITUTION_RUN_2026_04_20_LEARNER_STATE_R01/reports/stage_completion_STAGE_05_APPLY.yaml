@@ -1,0 +1,11 @@
+stage_completion_record:
+  schema_version: 0.1
+  pipeline_id: constitution
+  run_id: CONSTITUTION_RUN_2026_04_20_LEARNER_STATE_R01
+  stage_id: STAGE_05_APPLY
+  stage_status: done
+  run_status: active
+  next_stage: STAGE_06_CORE_VALIDATION
+  scope_status: ''
+  summary: Patch applied in sandbox with real execution evidence; ready for core validation.
+  recorded_at: '2026-04-21T14:42:22Z'

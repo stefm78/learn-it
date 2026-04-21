@@ -10,15 +10,16 @@ run_manifest:
     scope_key: learner_state
     scope_definition_ref: docs/pipelines/constitution/scope_catalog/scope_definitions/learner_state.yaml
   execution_state:
-    current_stage: STAGE_04_PATCH_VALIDATION
+    current_stage: STAGE_05_APPLY
     last_stage_status: done
-    last_updated: '2026-04-21T14:33:50Z'
-    next_stage: STAGE_05_APPLY
+    last_updated: '2026-04-21T14:42:22Z'
+    next_stage: STAGE_06_CORE_VALIDATION
     completed_stages:
     - STAGE_01_CHALLENGE
     - STAGE_02_ARBITRAGE
     - STAGE_03_PATCH_SYNTHESIS
     - STAGE_04_PATCH_VALIDATION
+    - STAGE_05_APPLY
     stage_history:
     - stage_id: RUN_BOOTSTRAP
       stage_status: in_progress
@@ -41,6 +42,11 @@ run_manifest:
       stage_status: done
       recorded_at: '2026-04-21T14:33:50Z'
       summary: Patch validation passed with real execution evidence; ready for apply.
+    - stage_id: STAGE_05_APPLY
+      stage_status: done
+      recorded_at: '2026-04-21T14:42:22Z'
+      summary: Patch applied in sandbox with real execution evidence; ready for core
+        validation.
   scope_tracking:
     scope_status: confirmed_for_bounded_run
     last_updated: '2026-04-20T07:19:19Z'
