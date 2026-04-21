@@ -10,14 +10,15 @@ run_manifest:
     scope_key: mastery_evaluation
     scope_definition_ref: docs/pipelines/constitution/scope_catalog/scope_definitions/mastery_evaluation.yaml
   execution_state:
-    current_stage: STAGE_03_PATCH_SYNTHESIS
+    current_stage: STAGE_04_PATCH_VALIDATION
     last_stage_status: done
-    last_updated: '2026-04-20T16:55:32Z'
-    next_stage: STAGE_04_PATCH_VALIDATION
+    last_updated: '2026-04-21T14:45:42Z'
+    next_stage: STAGE_05_APPLY
     completed_stages:
     - STAGE_01_CHALLENGE
     - STAGE_02_ARBITRAGE
     - STAGE_03_PATCH_SYNTHESIS
+    - STAGE_04_PATCH_VALIDATION
     stage_history:
     - stage_id: RUN_BOOTSTRAP
       stage_status: in_progress
@@ -37,6 +38,10 @@ run_manifest:
       stage_status: done
       recorded_at: '2026-04-20T16:55:32Z'
       summary: Patchset synthesized; ready for deterministic validation.
+    - stage_id: STAGE_04_PATCH_VALIDATION
+      stage_status: done
+      recorded_at: '2026-04-21T14:45:42Z'
+      summary: Patch validation passed with real execution evidence; ready for apply.
   scope_tracking:
     scope_status: confirmed_for_bounded_run
     last_updated: '2026-04-20T07:17:51Z'

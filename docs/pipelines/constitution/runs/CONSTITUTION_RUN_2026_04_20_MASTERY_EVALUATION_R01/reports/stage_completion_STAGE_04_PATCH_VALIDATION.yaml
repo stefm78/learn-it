@@ -1,0 +1,11 @@
+stage_completion_record:
+  schema_version: 0.1
+  pipeline_id: constitution
+  run_id: CONSTITUTION_RUN_2026_04_20_MASTERY_EVALUATION_R01
+  stage_id: STAGE_04_PATCH_VALIDATION
+  stage_status: done
+  run_status: active
+  next_stage: STAGE_05_APPLY
+  scope_status: ''
+  summary: Patch validation passed with real execution evidence; ready for apply.
+  recorded_at: '2026-04-21T14:45:42Z'
