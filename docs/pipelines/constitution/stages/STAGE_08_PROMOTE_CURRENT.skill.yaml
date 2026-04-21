@@ -13,6 +13,10 @@ mission: >-
   promotion report. Ce stage est le seul autorisé à modifier current.
   Il exige l'exécution réelle des scripts de promotion puis une revue IA
   finale de cohérence avant closeout.
+  Ce stage n'est applicable que si STAGE_07 a réellement matérialisé une
+  release promotable. Si STAGE_07 a conclu à un NOOP canonique
+  (release_required=false, manifest_written=false), STAGE_08 ne doit pas être
+  démarré : le pipeline doit aller directement vers STAGE_09_CLOSEOUT_AND_ARCHIVE.
 
 model_requirements:
   reasoning_level: advanced
@@ -20,7 +24,8 @@ model_requirements:
     Ce stage est à fort impact car il modifie l'état courant du repo. Le modèle
     doit interpréter correctement les artefacts de promotion, vérifier la
     cohérence entre release source, current manifest et promotion report,
-    et distinguer nettement preuve scriptée et revue complémentaire.
+    distinguer nettement preuve scriptée et revue complémentaire, et refuser
+    proprement une entrée misroutée si aucun bundle de release n'existe.
   recommended_models:
     - o3
     - claude-opus-4
@@ -38,12 +43,28 @@ runtime_binding:
     En mode consolidation, les artefacts pipeline-level font autorité.
   execution_evidence_role: >-
     promote_current.py, validate_current_manifest.py et
-    validate_promotion_report.py doivent être réellement exécutés.
+    validate_promotion_report.py doivent être réellement exécutés lorsqu'une
+    release matérialisée existe. Aucun de ces scripts ne doit être exécuté si
+    l'amont confirme un NOOP canonique de release.
   artifact_ownership_rule: >-
     Les artefacts bruts produits par script (promotion_report.yaml,
     docs/cores/current/manifest.yaml et validations associées) restent les
     sources de vérité du stage. L'IA ne doit pas inventer de flags CLI
     inexistants ni réécrire un artefact brut produit par script.
+
+upstream_preconditions:
+  materialized_release_required:
+    - release_plan.RELEASE_PLAN.release_required == true
+    - release_materialization_report.RELEASE_MATERIALIZATION_REPORT.status == PASS
+    - release_materialization_report.RELEASE_MATERIALIZATION_REPORT.manifest_written == true
+  noop_misroute_detection:
+    - release_plan.RELEASE_PLAN.release_required == false
+    - release_materialization_report.RELEASE_MATERIALIZATION_REPORT.status == PASS
+    - release_materialization_report.RELEASE_MATERIALIZATION_REPORT.manifest_written == false
+  consequence_on_noop_misroute: >-
+    Ne pas exécuter la chaîne de promotion. Déclarer le stage BLOCKED avec
+    motif de mauvais routage aval et demander une correction de tracking vers
+    STAGE_09_CLOSEOUT_AND_ARCHIVE.
 
 primary_reads:
   bounded_local_run:
@@ -82,6 +103,7 @@ required_scripts:
     - validate_promotion_report.py <promotion_report.yaml> [schema.yaml]
     Aucune de ces commandes ne supporte les flags --pipeline, --run-id,
     --manifest ou --report décrits dans les versions antérieures du skill.
+    Ces scripts ne doivent être appelés que si une release matérialisée existe.
 
 script_execution_contract:
   required_before_pass_or_fail:
@@ -100,6 +122,9 @@ script_execution_contract:
   fail_requires:
     - any_promotion_script_failed
     - or_blocking_current_coherence_issue_after_real_execution
+  blocked_on_noop_misroute_requires:
+    - no_promotion_script_execution_started
+    - explicit_tracking_correction_requested
 
 deterministic_command_templates:
   bounded_local_run:
@@ -205,6 +230,7 @@ completion_evidence:
     - pass_without_materialized_current_artifacts
     - pass_without_validation_artifacts
     - simulated_script_execution
+    - entering_stage_08_on_noop_upstream_without_explicit_block
 
 status_values:
   - PASS
@@ -216,10 +242,25 @@ human_actions_required:
     Si les scripts n'ont pas été exécutés réellement, l'humain doit lancer les
     commandes émises puis relancer l'IA sur ce stage. Une fois la promotion
     validée, l'humain peut poursuivre vers STAGE_09_CLOSEOUT_AND_ARCHIVE.
+    Si l'entrée sur STAGE_08 est invalide parce que STAGE_07 était un NOOP,
+    l'humain doit corriger le tracking pour pointer directement vers STAGE_09.
   on_blocked:
     step: 1
     label: Exécuter la chaîne de promotion puis relancer ce stage
     mandatory: true
+  on_blocked_noop_misroute:
+    step: 1
+    label: Corriger le tracking vers STAGE_09_CLOSEOUT_AND_ARCHIVE sans exécuter la promotion
+    mandatory: true
+    command_bounded_local_run: >-
+      python docs/patcher/shared/update_run_tracking.py
+      --pipeline constitution
+      --run-id <RUN_ID>
+      --stage-id STAGE_08_PROMOTE_CURRENT
+      --stage-status blocked
+      --run-status active
+      --next-stage STAGE_09_CLOSEOUT_AND_ARCHIVE
+      --summary "STAGE_08 skipped: upstream STAGE_07 confirmed canonical no-op release; no promote current required."
   on_pass:
     step: 1
     label: Poursuivre vers STAGE_09_CLOSEOUT_AND_ARCHIVE avec action humaine adaptée au mode
@@ -254,14 +295,23 @@ allowed_transitions:
     next_stage: STAGE_07_RELEASE_MATERIALIZATION
   on_blocked:
     next_action: execute_promotion_chain_and_retry_same_stage
+  on_blocked_noop_misroute:
+    next_stage: STAGE_09_CLOSEOUT_AND_ARCHIVE
+    precondition: >-
+      Cette branche s'applique uniquement si STAGE_07 a explicitement confirmé
+      un NOOP canonique de release et qu'aucune promotion current n'est requise.
 
 forbidden_actions:
   - simulated_promotion_chain_execution
   - pass_without_real_execution_evidence
   - direct_closeout_without_stage_09
+  - entering_stage_08_after_confirmed_noop_release_and_executing_promote_current
   - omitting_human_actions_from_output
   - using_nonexistent_promotion_cli_flags
 
 migration_note: >-
   Premier skill STAGE_08 pour le pipeline constitution.
   Consolide en YAML machine-readable les règles de promotion current du pipeline.
+  Ajusté pour expliciter qu'il ne s'applique qu'à une release réellement
+  matérialisée, et qu'un NOOP canonique de STAGE_07 doit bypasser STAGE_08
+  au profit d'un closeout direct.
