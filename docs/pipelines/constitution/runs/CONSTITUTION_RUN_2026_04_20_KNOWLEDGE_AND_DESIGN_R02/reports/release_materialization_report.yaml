@@ -1,0 +1,8 @@
+RELEASE_MATERIALIZATION_REPORT:
+  status: PASS
+  release_id: CORE_RELEASE_2026_04_21_R01_NOOP
+  release_path: docs/cores/releases/CORE_RELEASE_2026_04_21_R01/
+  files_written: []
+  manifest_written: false
+  notes:
+  - 'release_required=false : aucune matérialisation effectuée'
