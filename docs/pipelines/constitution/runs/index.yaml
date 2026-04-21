@@ -11,13 +11,6 @@ runs_index:
     current_stage: STAGE_05_APPLY
     mode: bounded_local_run
     run_manifest_ref: docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_20_DEPLOYMENT_GOVERNANCE_R01/run_manifest.yaml
-  - run_id: CONSTITUTION_RUN_2026_04_20_PATCH_LIFECYCLE_R01
-    scope_id: CONSTITUTION_SCOPE_PATCH_LIFECYCLE
-    scope_key: patch_lifecycle
-    run_status: active
-    current_stage: STAGE_03_PATCH_SYNTHESIS
-    mode: bounded_local_run
-    run_manifest_ref: docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_20_PATCH_LIFECYCLE_R01/run_manifest.yaml
   - run_id: CONSTITUTION_RUN_2026_04_20_MASTERY_EVALUATION_R01
     scope_id: CONSTITUTION_SCOPE_MASTERY_EVALUATION
     scope_key: mastery_evaluation
@@ -39,6 +32,13 @@ runs_index:
     current_stage: STAGE_05_APPLY
     mode: bounded_local_run
     run_manifest_ref: docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_20_KNOWLEDGE_AND_DESIGN_R02/run_manifest.yaml
+  - run_id: CONSTITUTION_RUN_2026_04_20_PATCH_LIFECYCLE_R01
+    scope_id: CONSTITUTION_SCOPE_PATCH_LIFECYCLE
+    scope_key: patch_lifecycle
+    run_status: active
+    current_stage: STAGE_04_PATCH_VALIDATION
+    mode: bounded_local_run
+    run_manifest_ref: docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_20_PATCH_LIFECYCLE_R01/run_manifest.yaml
   closed_runs:
   - run_id: CONSTITUTION_RUN_2026_04_13_DEPLOYMENT_GOVERNANCE_R01
     scope_id: CONSTITUTION_SCOPE_DEPLOYMENT_GOVERNANCE
