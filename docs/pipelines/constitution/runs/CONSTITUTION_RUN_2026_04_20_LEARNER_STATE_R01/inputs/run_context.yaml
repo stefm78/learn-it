@@ -84,7 +84,7 @@ run_context:
     impact_bundle: docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_20_LEARNER_STATE_R01/inputs/impact_bundle.yaml
     integration_gate: docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_20_LEARNER_STATE_R01/inputs/integration_gate.yaml
   source_fingerprints:
-    run_manifest.yaml: d55cdf0e0f1c5026d45b2d279e56c3d7aa013385cdaf173d06eac5b8a1004340
+    run_manifest.yaml: 13c831a8e1533e4f75e6ce6d633c1d67287cdc596ca2fc7b1b1fde2ced6f4d3d
     scope_manifest.yaml: 5b24024bd26377ae020b591aa456d0b67add4eb3e8bd90a0bfe33ef286af8b49
     impact_bundle.yaml: 99e14034ee89f174b8831112a85cf9273ae228af04cc4961dc14453738dba756
     integration_gate.yaml: 8ed499b6b0033f0dfb8aec8d1157eaaed8bffbe1bd8ff7e99533de4c5c35f15d

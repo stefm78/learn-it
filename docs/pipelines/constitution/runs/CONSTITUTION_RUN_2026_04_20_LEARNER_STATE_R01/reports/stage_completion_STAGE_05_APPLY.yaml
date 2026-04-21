@@ -7,5 +7,6 @@ stage_completion_record:
   run_status: active
   next_stage: STAGE_06_CORE_VALIDATION
   scope_status: ''
-  summary: Patch applied in sandbox with real execution evidence; ready for core validation.
-  recorded_at: '2026-04-21T14:42:22Z'
+  summary: Patch applied in sandbox with complete core materialization; ready for
+    core validation.
+  recorded_at: '2026-04-21T15:27:19Z'

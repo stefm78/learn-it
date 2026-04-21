@@ -12,7 +12,7 @@ run_manifest:
   execution_state:
     current_stage: STAGE_05_APPLY
     last_stage_status: done
-    last_updated: '2026-04-21T14:42:22Z'
+    last_updated: '2026-04-21T15:27:19Z'
     next_stage: STAGE_06_CORE_VALIDATION
     completed_stages:
     - STAGE_01_CHALLENGE
@@ -47,6 +47,11 @@ run_manifest:
       recorded_at: '2026-04-21T14:42:22Z'
       summary: Patch applied in sandbox with real execution evidence; ready for core
         validation.
+    - stage_id: STAGE_05_APPLY
+      stage_status: done
+      recorded_at: '2026-04-21T15:27:19Z'
+      summary: Patch applied in sandbox with complete core materialization; ready
+        for core validation.
   scope_tracking:
     scope_status: confirmed_for_bounded_run
     last_updated: '2026-04-20T07:19:19Z'
