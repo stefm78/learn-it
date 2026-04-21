@@ -7,6 +7,16 @@ PATCH_SET:
     Arbitrage validated that no local in-scope correction must be applied now.
     The inter-core reference drift is preserved as governance backlog candidate
     and not converted into a local patch.
+  federation:
+    REF_CORE_LEARNIT_REFERENTIEL_V4_0_IN_CONSTITUTION:
+      file: docs/cores/current/referentiel.yaml
+      expected_core_id: CORE_LEARNIT_REFERENTIEL_v3.0
+    LINK_REF_CORE_LEARNIT_CONSTITUTION_V4_0:
+      file: docs/cores/current/constitution.yaml
+      expected_core_id: CORE_LEARNIT_CONSTITUTION_V4_0
+    LINK_REF_CORE_LEARNIT_REFERENTIEL_v3.0:
+      file: docs/cores/current/referentiel.yaml
+      expected_core_id: CORE_LEARNIT_REFERENTIEL_v3.0
   files:
     - file: docs/cores/current/constitution.yaml
       expected_core_id: CORE_LEARNIT_CONSTITUTION_V4_0
