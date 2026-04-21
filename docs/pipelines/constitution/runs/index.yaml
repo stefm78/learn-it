@@ -4,14 +4,6 @@ runs_index:
   status: active
   last_updated: '2026-04-21'
   active_runs:
-  - run_id: CONSTITUTION_RUN_2026_04_20_KNOWLEDGE_AND_DESIGN_R01
-    scope_id: ''
-    scope_key: ''
-    run_status: bootstrap_open
-    current_stage: STAGE_01_CHALLENGE
-    mode: bounded_local_run
-    run_manifest_ref: docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_20_KNOWLEDGE_AND_DESIGN_R01/run_manifest.yaml
-    scope_status: confirmed_for_bounded_run
   - run_id: CONSTITUTION_RUN_2026_04_20_DEPLOYMENT_GOVERNANCE_R01
     scope_id: CONSTITUTION_SCOPE_DEPLOYMENT_GOVERNANCE
     scope_key: deployment_governance
@@ -87,3 +79,5 @@ runs_index:
   notes:
   - Index l\u00e9ger destin\u00e9 au startup des IA sans contexte. Il \u00e9vite d'avoir
     \u00e0 scanner l'ensemble de `runs/` avant de d\u00e9terminer le bon point d'entr\u00e9e.
+  - Purged stale index-only run reference CONSTITUTION_RUN_2026_04_20_KNOWLEDGE_AND_DESIGN_R01
+    on 2026-04-21T14:03:57Z.
