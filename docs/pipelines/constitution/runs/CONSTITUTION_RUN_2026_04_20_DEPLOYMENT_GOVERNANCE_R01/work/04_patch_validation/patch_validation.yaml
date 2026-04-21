@@ -6,4 +6,4 @@ PATCHSET_VALIDATION:
   anomalies:
     - none
   warnings:
-    - federation déclarée mais aucune référence inter-Core qualifiée détectée
+    - federation dÃ©clarÃ©e mais aucune rÃ©fÃ©rence inter-Core qualifiÃ©e dÃ©tectÃ©e
