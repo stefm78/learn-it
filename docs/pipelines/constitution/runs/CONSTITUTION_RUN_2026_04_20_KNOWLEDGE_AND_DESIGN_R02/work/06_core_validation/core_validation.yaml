@@ -2,65 +2,49 @@ CORE_VALIDATION:
   run_id: CONSTITUTION_RUN_2026_04_20_KNOWLEDGE_AND_DESIGN_R02
   stage_id: STAGE_06_CORE_VALIDATION
   mode: bounded_local_run
-  validation_status: FAIL
+  validation_status: PASS
   validation_scope:
     patch_execution_report_read: true
     sandbox_reads:
       constitution_yaml: present
-      referentiel_yaml: missing
-      link_yaml: missing
-    fallback_reads_used:
-      - docs/cores/current/referentiel.yaml
-      - docs/cores/current/link.yaml
+      referentiel_yaml: present
+      link_yaml: present
   logical_validation_summary: >-
-    Le Core Constitution patché en sandbox est lisible et son réalignement vers la
-    référence référentielle v3.0 est logiquement cohérent avec les Core canoniques
-    actuels. Cependant, la sandbox matérialisée par STAGE_05 est incomplète pour une
-    validation Core bornée et propre: seuls les artefacts Constitution patchés sont
-    présents, tandis que referentiel.yaml et link.yaml sont absents de la sandbox.
-    La validation ne peut donc pas conclure à un PASS sur l'état complet réellement
-    matérialisé par STAGE_05_APPLY.
+    Les trois Core réellement matérialisés dans la sandbox ont été relus. La
+    Constitution patchée est cohérente avec le report d'application réel et le
+    réalignement de REF_CORE_LEARNIT_REFERENTIEL_v4.0_IN_CONSTITUTION vers
+    REF_CORE_LEARNIT_REFERENTIEL_v3.0_IN_CONSTITUTION est compatible avec le
+    Référentiel V3.0 et le LINK V4_0__V3_0. Aucun conflit logique bloquant,
+    collision d'identifiants, rupture de séparation inter-Core ou ambiguïté
+    d'autorité n'a été détecté sur le périmètre validé.
   anomalies_and_corrections:
-    blocking_issues:
-      - id: SANDBOX_MISSING_REFERENTIEL
-        summary: >-
-          docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_20_KNOWLEDGE_AND_DESIGN_R02/work/05_apply/sandbox/docs/cores/current/referentiel.yaml
-          est absent.
-        correction: >-
-          Rejouer STAGE_05_APPLY avec une sandbox matérialisant aussi le Référentiel
-          courant avant validation Core.
-      - id: SANDBOX_MISSING_LINK
-        summary: >-
-          docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_20_KNOWLEDGE_AND_DESIGN_R02/work/05_apply/sandbox/docs/cores/current/link.yaml
-          est absent.
-        correction: >-
-          Rejouer STAGE_05_APPLY avec une sandbox matérialisant aussi le LINK courant
-          avant validation Core.
+    blocking_issues: []
     non_blocking_findings:
-      - id: INTERCORE_ALIGNMENT_LOOKS_CONSISTENT
+      - id: REPLACE_TEXT_BLAST_RADIUS_TO_RECHECK_IF_SCOPE_EXPANDS
         summary: >-
-          Le renommage vers REF_CORE_LEARNIT_REFERENTIEL_v3.0_IN_CONSTITUTION dans la
-          Constitution patchée paraît cohérent avec docs/cores/current/referentiel.yaml
-          et docs/cores/current/link.yaml lus en fallback.
+          Le patch_execution_report indique replace_text all_strings (23) et un total
+          de 24 remplacements textuels. Aucun effet bloquant n'est visible sur la
+          sandbox validée, mais ce pattern doit rester sous vigilance si des patchs
+          futurs élargissent le périmètre ou touchent plusieurs Core à la fois.
+      - id: INTERCORE_ALIGNMENT_CONFIRMED
+        summary: >-
+          La Constitution patchée référence désormais explicitement le Référentiel
+          v3.0, ce qui est cohérent avec CORE_LEARNIT_REFERENTIEL_v3.0 et
+          CORE_LINK_LEARNIT_CONSTITUTION_V4_0__REFERENTIEL_v3.0 présents dans la
+          sandbox.
   fallback_reads_used_if_any:
-    declared: true
-    rationale: >-
-      Utilisés uniquement pour qualifier la cohérence inter-Core potentielle face à une
-      sandbox incomplète, sans remplacer l'obligation de valider l'état réellement
-      matérialisé par STAGE_05_APPLY.
+    declared: false
+    rationale: none
   downstream_decision:
-    decision: return_upstream_for_correction
-    target_stage: STAGE_05_APPLY
+    decision: direct_release_materialization
+    target_stage: STAGE_07_RELEASE_MATERIALIZATION
     rationale: >-
-      La validation Core échoue faute de sandbox complète. Le retour amont porte sur la
-      matérialisation et l'application en sandbox, pas sur le patchset logique lui-même.
+      La validation Core est au PASS et aucun besoin de consolidation parallèle n'a
+      été détecté dans le contexte lu pour ce run borné.
   human_actions_to_execute:
     - step: 1
       action: >-
-        Repréparer la sandbox de STAGE_05_APPLY en y copiant constitution.yaml,
-        referentiel.yaml et link.yaml depuis docs/cores/current/ avant de rejouer
-        apply_patch.py.
+        Mettre à jour le tracking vers STAGE_07_RELEASE_MATERIALIZATION.
     - step: 2
       action: >-
-        Rejouer STAGE_05_APPLY puis relancer STAGE_06_CORE_VALIDATION sur la sandbox
-        complète.
+        Relancer le run sur STAGE_07_RELEASE_MATERIALIZATION.
