@@ -10,13 +10,14 @@ run_manifest:
     scope_key: knowledge_and_design
     scope_definition_ref: docs/pipelines/constitution/scope_catalog/scope_definitions/knowledge_and_design.yaml
   execution_state:
-    current_stage: STAGE_02_ARBITRAGE
+    current_stage: STAGE_03_PATCH_SYNTHESIS
     last_stage_status: done
-    last_updated: '2026-04-20T16:57:38Z'
-    next_stage: STAGE_03_PATCH_SYNTHESIS
+    last_updated: '2026-04-21T12:12:23Z'
+    next_stage: STAGE_04_PATCH_VALIDATION
     completed_stages:
     - STAGE_01_CHALLENGE
     - STAGE_02_ARBITRAGE
+    - STAGE_03_PATCH_SYNTHESIS
     stage_history:
     - stage_id: RUN_BOOTSTRAP
       stage_status: in_progress
@@ -31,6 +32,10 @@ run_manifest:
       stage_status: done
       recorded_at: '2026-04-20T16:57:38Z'
       summary: Arbitrage report revised with human decisions; ready for patch synthesis.
+    - stage_id: STAGE_03_PATCH_SYNTHESIS
+      stage_status: done
+      recorded_at: '2026-04-21T12:12:23Z'
+      summary: Patchset synthesized; ready for deterministic validation.
   scope_tracking:
     scope_status: confirmed_for_bounded_run
     last_updated: '2026-04-20T07:29:34Z'
