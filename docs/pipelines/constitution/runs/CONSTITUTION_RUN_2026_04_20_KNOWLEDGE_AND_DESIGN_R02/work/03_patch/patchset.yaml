@@ -1,0 +1,81 @@
+PATCH_SET:
+  id: PATCH_CONSTITUTION_KNOWLEDGE_AND_DESIGN_R02_INTERCORE_REF_ALIGNMENT
+  patch_dsl_version: "4.0"
+  atomic: true
+  description: >-
+    Minimal bounded patch synthesized from STAGE_02_ARBITRAGE for
+    CONSTITUTION_RUN_2026_04_20_KNOWLEDGE_AND_DESIGN_R02.
+    Applies only the arbitrated local correction on inter-Core reference alignment
+    in docs/cores/current/constitution.yaml.
+  files:
+    - file: docs/cores/current/constitution.yaml
+      expected_core_id: CORE_LEARNIT_CONSTITUTION_V4_0
+      operations:
+        - op: assert_meta
+          target:
+            field: id
+          equals: CORE_LEARNIT_CONSTITUTION_V4_0
+
+        - op: assert
+          target:
+            section: TYPES
+            id: REF_CORE_LEARNIT_REFERENTIEL_V4_0_IN_CONSTITUTION
+
+        - op: replace_text
+          target:
+            scope: all_strings
+          old: REF_CORE_LEARNIT_REFERENTIEL_V4_0_IN_CONSTITUTION
+          new: REF_CORE_LEARNIT_REFERENTIEL_v3.0_IN_CONSTITUTION
+          require_match: true
+
+        - op: replace_text
+          target:
+            scope: object_field
+            section: TYPES
+            id: REF_CORE_LEARNIT_REFERENTIEL_v3.0_IN_CONSTITUTION
+            field: human_readable
+          old: Référence explicite vers le Core Référentiel Learn-it V4.0.
+          new: Référence explicite vers le Core Référentiel Learn-it V3.0.
+          require_match: true
+
+        - op: note
+          id: PATCH_SCOPE
+          value: >-
+            Patch local minimal limité à la Constitution courante, conformément à
+            CF2_INTERCORE_REF_DRIFT arbitré corriger_maintenant / ready_for_local_patch.
+
+        - op: note
+          id: ARBITRAGE_TO_PATCH_MAPPING
+          value: >-
+            CF2_INTERCORE_REF_DRIFT -> local realignment of Constitution-side referential
+            anchor from REF_CORE_LEARNIT_REFERENTIEL_V4_0_IN_CONSTITUTION to
+            REF_CORE_LEARNIT_REFERENTIEL_v3.0_IN_CONSTITUTION.
+
+        - op: note
+          id: FALLBACK_READS_USED
+          value: >-
+            Fallback reads used for localization during STAGE_03: docs/cores/current/link.yaml,
+            docs/cores/current/constitution.yaml, docs/cores/current/referentiel.yaml.
+
+        - op: note
+          id: NO_PATCH_CF3_IMPLICIT_RUNTIME_CONTENT_DEPENDENCY
+          value: >-
+            No local patch now. Point kept for governance backlog / possible scope repartitioning,
+            per revised STAGE_02 arbitrage.
+
+        - op: note
+          id: NO_PATCH_CF4_SCOPE_BOUNDARY_SANCTUARIZATION
+          value: >-
+            No local patch now. Boundary preserved as architectural vigilance only.
+
+        - op: note
+          id: NO_PATCH_CF5_NEIGHBOR_READ_UNDERSPECIFIED
+          value: >-
+            No local patch now. Point deferred to scope generation / partition review backlog.
+
+        - op: note
+          id: HUMAN_ACTIONS_TO_EXECUTE
+          value: >-
+            After writing this patchset, execute update_run_tracking.py to move the run to
+            STAGE_04_PATCH_VALIDATION, then run deterministic validation there. No validation
+            or apply claim is made by this patchset.
