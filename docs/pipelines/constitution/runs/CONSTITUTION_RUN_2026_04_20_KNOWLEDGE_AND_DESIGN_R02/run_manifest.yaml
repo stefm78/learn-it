@@ -10,16 +10,17 @@ run_manifest:
     scope_key: knowledge_and_design
     scope_definition_ref: docs/pipelines/constitution/scope_catalog/scope_definitions/knowledge_and_design.yaml
   execution_state:
-    current_stage: STAGE_05_APPLY
+    current_stage: STAGE_06_CORE_VALIDATION
     last_stage_status: done
-    last_updated: '2026-04-21T14:40:24Z'
-    next_stage: STAGE_06_CORE_VALIDATION
+    last_updated: '2026-04-21T14:49:36Z'
+    next_stage: STAGE_07_RELEASE_MATERIALIZATION
     completed_stages:
     - STAGE_01_CHALLENGE
     - STAGE_02_ARBITRAGE
     - STAGE_03_PATCH_SYNTHESIS
     - STAGE_04_PATCH_VALIDATION
     - STAGE_05_APPLY
+    - STAGE_06_CORE_VALIDATION
     stage_history:
     - stage_id: RUN_BOOTSTRAP
       stage_status: in_progress
@@ -47,6 +48,10 @@ run_manifest:
       recorded_at: '2026-04-21T14:40:24Z'
       summary: Patch applied in sandbox with real execution evidence; ready for core
         validation.
+    - stage_id: STAGE_06_CORE_VALIDATION
+      stage_status: done
+      recorded_at: '2026-04-21T14:49:36Z'
+      summary: Core validation passed; run ready for release materialization.
   scope_tracking:
     scope_status: confirmed_for_bounded_run
     last_updated: '2026-04-20T07:29:34Z'
