@@ -9,6 +9,7 @@ PATCH_SET:
     no-change and note operations only, with full traceability to arbitrage.
   files:
     - file: docs/cores/current/constitution.yaml
+      expected_core_id: CORE_LEARNIT_CONSTITUTION_V4_0
       operations:
         - op: no_change
           target:
