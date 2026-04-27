@@ -1,0 +1,2472 @@
+constitution_graph_nodes:
+  schema_version: 0.1
+  source_cores:
+    constitution: docs/cores/current/constitution.yaml
+    referentiel: docs/cores/current/referentiel.yaml
+    link: docs/cores/current/link.yaml
+  node_count: 246
+  nodes:
+  - id: ACTION_APPLY_LIGHT_REVERSIBLE_SCAFFOLDING
+    source_core: constitution
+    source_path: docs/cores/current/constitution.yaml
+    source_core_id: CORE_LEARNIT_CONSTITUTION_V4_0
+    source_core_version: V4_0_FINAL
+    source_section: ACTIONS
+    logic_scope: runtime
+    current_owner_scope: learner_state
+    neighbor_of_scopes: []
+    entry_fingerprint: 4008008538cb872f5dcb02db88191ffde3fa3773367c8f73006e1f4ff7fa7883
+  - id: ACTION_ESCALATE_PERSISTENT_DRIFT_OFFSESSION
+    source_core: constitution
+    source_path: docs/cores/current/constitution.yaml
+    source_core_id: CORE_LEARNIT_CONSTITUTION_V4_0
+    source_core_version: V4_0_FINAL
+    source_section: ACTIONS
+    logic_scope: governance
+    current_owner_scope: patch_lifecycle
+    neighbor_of_scopes: []
+    entry_fingerprint: edfba110eba665fb948ee7dbd27ecaee7acfa2cde5da0c5e8a9a4627d3ed444e
+  - id: ACTION_INFORM_LEARNER
+    source_core: constitution
+    source_path: docs/cores/current/constitution.yaml
+    source_core_id: CORE_LEARNIT_CONSTITUTION_V4_0
+    source_core_version: V4_0_FINAL
+    source_section: ACTIONS
+    logic_scope: runtime_transparency
+    current_owner_scope: deployment_governance
+    neighbor_of_scopes: []
+    entry_fingerprint: 77a19e5646402f0ec97963114fdcf2b2e7ce0607765b72ed905209ac5701abb2
+  - id: ACTION_LOG_AR_PROXY_DISCORDANCE
+    source_core: constitution
+    source_path: docs/cores/current/constitution.yaml
+    source_core_id: CORE_LEARNIT_CONSTITUTION_V4_0
+    source_core_version: V4_0_FINAL
+    source_section: ACTIONS
+    logic_scope: runtime_observability
+    current_owner_scope: learner_state
+    neighbor_of_scopes: []
+    entry_fingerprint: b79fe8db47eb6e6dd616afa6f3859d463cba1260b3651ff56b7eac2a86b39379
+  - id: ACTION_LOG_UNCOVERED_CONFLICT
+    source_core: constitution
+    source_path: docs/cores/current/constitution.yaml
+    source_core_id: CORE_LEARNIT_CONSTITUTION_V4_0
+    source_core_version: V4_0_FINAL
+    source_section: ACTIONS
+    logic_scope: runtime_governance
+    current_owner_scope: patch_lifecycle
+    neighbor_of_scopes: []
+    entry_fingerprint: 2b1548fd96102d5586d7c7745b8532aa0155296ca90b3245067b83009d18830f
+  - id: ACTION_PLAN_COGNITIVE_CONFLICT_MISSION
+    source_core: constitution
+    source_path: docs/cores/current/constitution.yaml
+    source_core_id: CORE_LEARNIT_CONSTITUTION_V4_0
+    source_core_version: V4_0_FINAL
+    source_section: ACTIONS
+    logic_scope: design_runtime
+    current_owner_scope: knowledge_and_design
+    neighbor_of_scopes: []
+    entry_fingerprint: ca02523e29571d8b5f8392d9e5cca8c5c49e9a97095f42d9f9bad49556ce8144
+  - id: ACTION_PLAN_SHORT_DIAGNOSTIC_TASK
+    source_core: constitution
+    source_path: docs/cores/current/constitution.yaml
+    source_core_id: CORE_LEARNIT_CONSTITUTION_V4_0
+    source_core_version: V4_0_FINAL
+    source_section: ACTIONS
+    logic_scope: runtime
+    current_owner_scope: mastery_evaluation
+    neighbor_of_scopes: []
+    entry_fingerprint: 0deb4408014652f006af9a196e7cd125cdb3d02f80f063185c0a55d2ed5ca108
+  - id: ACTION_ROLLBACK_PATCH
+    source_core: constitution
+    source_path: docs/cores/current/constitution.yaml
+    source_core_id: CORE_LEARNIT_CONSTITUTION_V4_0
+    source_core_version: V4_0_FINAL
+    source_section: ACTIONS
+    logic_scope: patch_layer
+    current_owner_scope: patch_lifecycle
+    neighbor_of_scopes: []
+    entry_fingerprint: a93087b8bed4f4757e7084320aef64643775719cf5ecd61192d3c83cda4dd84f
+  - id: ACTION_TRIGGER_AR_SOLLICITATION_PATCH
+    source_core: constitution
+    source_path: docs/cores/current/constitution.yaml
+    source_core_id: CORE_LEARNIT_CONSTITUTION_V4_0
+    source_core_version: V4_0_FINAL
+    source_section: ACTIONS
+    logic_scope: patch_layer
+    current_owner_scope: patch_lifecycle
+    neighbor_of_scopes: []
+    entry_fingerprint: 8e9fa2d2035049be0f9c5db8bfde3898c90a0ef7880c4ab98fe35d08191fcd1f
+  - id: ACTION_TRIGGER_RELEVANCE_PATCH
+    source_core: constitution
+    source_path: docs/cores/current/constitution.yaml
+    source_core_id: CORE_LEARNIT_CONSTITUTION_V4_0
+    source_core_version: V4_0_FINAL
+    source_section: ACTIONS
+    logic_scope: patch_layer
+    current_owner_scope: patch_lifecycle
+    neighbor_of_scopes: []
+    entry_fingerprint: 7f92600cd48b48d76e2bce6d2f352293c7f03f6c8f56e5a778ba55b6f288b29b
+  - id: CONSTRAINT_NO_ADAPTIVE_PHILOSOPHY_CHANGE
+    source_core: constitution
+    source_path: docs/cores/current/constitution.yaml
+    source_core_id: CORE_LEARNIT_CONSTITUTION_V4_0
+    source_core_version: V4_0_FINAL
+    source_section: CONSTRAINTS
+    logic_scope: patch_governance
+    current_owner_scope: patch_lifecycle
+    neighbor_of_scopes: []
+    entry_fingerprint: 7182862a05367e5614cc95dc9793eea44cdf9da5c8d21c81afb9907c819ea920
+  - id: CONSTRAINT_NO_ASSISTED_DEPLOYMENT_WITHOUT_TUTORING
+    source_core: constitution
+    source_path: docs/cores/current/constitution.yaml
+    source_core_id: CORE_LEARNIT_CONSTITUTION_V4_0
+    source_core_version: V4_0_FINAL
+    source_section: CONSTRAINTS
+    logic_scope: deployment
+    current_owner_scope: deployment_governance
+    neighbor_of_scopes: []
+    entry_fingerprint: 9bb7550e964b7f16ee121f2fe2add5dd7ca3c949ab0733967d21099d5ee51276
+  - id: CONSTRAINT_NO_AUTONOMOUS_PSYCHOLOGICAL_INFERENCE
+    source_core: constitution
+    source_path: docs/cores/current/constitution.yaml
+    source_core_id: CORE_LEARNIT_CONSTITUTION_V4_0
+    source_core_version: V4_0_FINAL
+    source_section: CONSTRAINTS
+    logic_scope: patch_governance
+    current_owner_scope: patch_lifecycle
+    neighbor_of_scopes: []
+    entry_fingerprint: 8836cb4c1ce31b2f8336337a4b8147f02ee017b302ee08a8f5877bdaae85936c
+  - id: CONSTRAINT_NO_BIOMETRICS_OR_OFFSESSION_SURVEILLANCE
+    source_core: constitution
+    source_path: docs/cores/current/constitution.yaml
+    source_core_id: CORE_LEARNIT_CONSTITUTION_V4_0
+    source_core_version: V4_0_FINAL
+    source_section: CONSTRAINTS
+    logic_scope: runtime_integrity
+    current_owner_scope: mastery_evaluation
+    neighbor_of_scopes: []
+    entry_fingerprint: 05605c6b3826de2326f93d5bc7467c2b6370426949f7a78b8b9616b032c12443
+  - id: CONSTRAINT_NO_CHANGE_TO_AND_LOGIC
+    source_core: constitution
+    source_path: docs/cores/current/constitution.yaml
+    source_core_id: CORE_LEARNIT_CONSTITUTION_V4_0
+    source_core_version: V4_0_FINAL
+    source_section: CONSTRAINTS
+    logic_scope: governance
+    current_owner_scope: deployment_governance
+    neighbor_of_scopes: []
+    entry_fingerprint: a15182bfe87e5136a1b594c38cc27003510601065f82fa7b8cb6e06cfe1fa136
+  - id: CONSTRAINT_NO_CHANGE_TO_GRAPH_PROPAGATION_RULE
+    source_core: constitution
+    source_path: docs/cores/current/constitution.yaml
+    source_core_id: CORE_LEARNIT_CONSTITUTION_V4_0
+    source_core_version: V4_0_FINAL
+    source_section: CONSTRAINTS
+    logic_scope: governance
+    current_owner_scope: deployment_governance
+    neighbor_of_scopes: []
+    entry_fingerprint: 9728010de1b2b8fa1d1acf7379d2c1fbfe0a3b199da970fc87863403e7bdc14d
+  - id: CONSTRAINT_NO_HIGH_BLOOM_WITHOUT_AUTHENTIC_CONTEXT
+    source_core: constitution
+    source_path: docs/cores/current/constitution.yaml
+    source_core_id: CORE_LEARNIT_CONSTITUTION_V4_0
+    source_core_version: V4_0_FINAL
+    source_section: CONSTRAINTS
+    logic_scope: analysis_design
+    current_owner_scope: knowledge_and_design
+    neighbor_of_scopes: []
+    entry_fingerprint: 72c3a27988a1b1074ca5293f13539520341ba6a07f3d6e3dbfef2c14d4ab7f3a
+  - id: CONSTRAINT_NO_RUNTIME_FEEDBACK_GENERATION
+    source_core: constitution
+    source_path: docs/cores/current/constitution.yaml
+    source_core_id: CORE_LEARNIT_CONSTITUTION_V4_0
+    source_core_version: V4_0_FINAL
+    source_section: CONSTRAINTS
+    logic_scope: runtime_feedback
+    current_owner_scope: knowledge_and_design
+    neighbor_of_scopes: []
+    entry_fingerprint: f6bee4e161b1e38b921ddeba593305ac3651480d53e8f3d367e93c1fcc2c11c7
+  - id: CORE_LEARNIT_CONSTITUTION_V4_0
+    source_core: constitution
+    source_path: docs/cores/current/constitution.yaml
+    source_core_id: CORE_LEARNIT_CONSTITUTION_V4_0
+    source_core_version: V4_0_FINAL
+    source_section: CORE
+    logic_scope: null
+    current_owner_scope: null
+    neighbor_of_scopes: []
+    entry_fingerprint: 758296ffa116ff991edec840d73e5c49b8e7440a5720ea3b2d11b8128086894e
+  - id: EVENT_ACTIVATION_DISTRESS_PERSISTENCE_ESCALATION
+    source_core: constitution
+    source_path: docs/cores/current/constitution.yaml
+    source_core_id: CORE_LEARNIT_CONSTITUTION_V4_0
+    source_core_version: V4_0_FINAL
+    source_section: EVENTS
+    logic_scope: runtime_state
+    current_owner_scope: learner_state
+    neighbor_of_scopes: []
+    entry_fingerprint: 9ac329cbab4bfb4c998c156a86ba18ec6cab9242fe367fb694c4696f5b3ac664
+  - id: EVENT_AR_REFRACTORY_PROFILE_DETECTED
+    source_core: constitution
+    source_path: docs/cores/current/constitution.yaml
+    source_core_id: CORE_LEARNIT_CONSTITUTION_V4_0
+    source_core_version: V4_0_FINAL
+    source_section: EVENTS
+    logic_scope: patch_governance
+    current_owner_scope: patch_lifecycle
+    neighbor_of_scopes: []
+    entry_fingerprint: cfa32b2ca9947cf046ea13e6b459885865187344dac710694b2ecc248bc4b8a4
+  - id: EVENT_CONSERVATIVE_SCAFFOLDING_ESCALATION
+    source_core: constitution
+    source_path: docs/cores/current/constitution.yaml
+    source_core_id: CORE_LEARNIT_CONSTITUTION_V4_0
+    source_core_version: V4_0_FINAL
+    source_section: EVENTS
+    logic_scope: runtime_state
+    current_owner_scope: learner_state
+    neighbor_of_scopes: []
+    entry_fingerprint: 33f0eddc796d825b3e53ae9a07cb4cacbbc512e3da4e5da6bbeb5185eecf98f7
+  - id: EVENT_GAMIFICATION_PROBATION_MAX_DURATION_REACHED
+    source_core: constitution
+    source_path: docs/cores/current/constitution.yaml
+    source_core_id: CORE_LEARNIT_CONSTITUTION_V4_0
+    source_core_version: V4_0_FINAL
+    source_section: EVENTS
+    logic_scope: deployment
+    current_owner_scope: deployment_governance
+    neighbor_of_scopes: []
+    entry_fingerprint: cff2c9001414387cf21ef4a45d990ba1e4a7d0aaf49efa7135cc5d6ff3b5bfba
+  - id: EVENT_GF08_UNCOVERED_CONFLICT
+    source_core: constitution
+    source_path: docs/cores/current/constitution.yaml
+    source_core_id: CORE_LEARNIT_CONSTITUTION_V4_0
+    source_core_version: V4_0_FINAL
+    source_section: EVENTS
+    logic_scope: runtime_governance
+    current_owner_scope: deployment_governance
+    neighbor_of_scopes: []
+    entry_fingerprint: 7fe8663a62466af45c0db6c83121c76f8bb32a4572bb345621ef5a91e10fb009
+  - id: EVENT_HIGH_BLOOM_WITHOUT_AUTHENTIC_CONTEXT
+    source_core: constitution
+    source_path: docs/cores/current/constitution.yaml
+    source_core_id: CORE_LEARNIT_CONSTITUTION_V4_0
+    source_core_version: V4_0_FINAL
+    source_section: EVENTS
+    logic_scope: analysis_design
+    current_owner_scope: knowledge_and_design
+    neighbor_of_scopes: []
+    entry_fingerprint: a65aff7c9d80de5f4030f1e0e07ec71747ad751a2f85874597b1778449df7980
+  - id: EVENT_LONG_INTERRUPTION
+    source_core: constitution
+    source_path: docs/cores/current/constitution.yaml
+    source_core_id: CORE_LEARNIT_CONSTITUTION_V4_0
+    source_core_version: V4_0_FINAL
+    source_section: EVENTS
+    logic_scope: runtime_resume
+    current_owner_scope: learner_state
+    neighbor_of_scopes: []
+    entry_fingerprint: 14d95de41fc874c379cb41b1f232d20648ebe145cae506a26133b478df02d30d
+  - id: EVENT_LOW_SIS
+    source_core: constitution
+    source_path: docs/cores/current/constitution.yaml
+    source_core_id: CORE_LEARNIT_CONSTITUTION_V4_0
+    source_core_version: V4_0_FINAL
+    source_section: EVENTS
+    logic_scope: runtime_integrity
+    current_owner_scope: mastery_evaluation
+    neighbor_of_scopes: []
+    entry_fingerprint: 6c01d432116d3aab10a17161b3454b84bc1ece7a0eb5ed9e4aa61febe9b5069a
+  - id: EVENT_MSC_DOWNGRADE
+    source_core: constitution
+    source_path: docs/cores/current/constitution.yaml
+    source_core_id: CORE_LEARNIT_CONSTITUTION_V4_0
+    source_core_version: V4_0_FINAL
+    source_section: EVENTS
+    logic_scope: runtime_evaluation
+    current_owner_scope: mastery_evaluation
+    neighbor_of_scopes: []
+    entry_fingerprint: 344ee3bcdd7ebc2f6ee19f85e55ba1c9885c9348bce9c7af537b59864c4108b5
+  - id: EVENT_MSC_PERCEPTION_DIVERGENCE_DETECTED
+    source_core: constitution
+    source_path: docs/cores/current/constitution.yaml
+    source_core_id: CORE_LEARNIT_CONSTITUTION_V4_0
+    source_core_version: V4_0_FINAL
+    source_section: EVENTS
+    logic_scope: runtime_evaluation
+    current_owner_scope: mastery_evaluation
+    neighbor_of_scopes: []
+    entry_fingerprint: 3abe3ef6b4454829ce97b737979bdf9e9f3acfc280466a95c2f238dca40d4a34
+  - id: EVENT_PATCH_INVALID
+    source_core: constitution
+    source_path: docs/cores/current/constitution.yaml
+    source_core_id: CORE_LEARNIT_CONSTITUTION_V4_0
+    source_core_version: V4_0_FINAL
+    source_section: EVENTS
+    logic_scope: patch_validation
+    current_owner_scope: patch_lifecycle
+    neighbor_of_scopes: []
+    entry_fingerprint: 03ad03378d5e202027ebac177ef8e321715fbc2c6d376ed9bc0e74a1b6fe1173
+  - id: EVENT_PERSISTENT_LOW_VC
+    source_core: constitution
+    source_path: docs/cores/current/constitution.yaml
+    source_core_id: CORE_LEARNIT_CONSTITUTION_V4_0
+    source_core_version: V4_0_FINAL
+    source_section: EVENTS
+    logic_scope: patch_governance
+    current_owner_scope: patch_lifecycle
+    neighbor_of_scopes: []
+    entry_fingerprint: 5e5b078b2e39f467b4a08a8a30ecf9fd567b1ebd51786c667bb4b92039f33157
+  - id: EVENT_PROVISIONAL_MASTERY_WINDOW_EXPIRED
+    source_core: constitution
+    source_path: docs/cores/current/constitution.yaml
+    source_core_id: CORE_LEARNIT_CONSTITUTION_V4_0
+    source_core_version: V4_0_FINAL
+    source_section: EVENTS
+    logic_scope: runtime_evaluation
+    current_owner_scope: mastery_evaluation
+    neighbor_of_scopes: []
+    entry_fingerprint: ceabe824853dbfdaa75fca2317336ddf8a3f0c4f7d7ca47a32eb4a5224e9f54d
+  - id: EVENT_SYSTEMIC_INVESTIGATION_AUTO_OPENED
+    source_core: constitution
+    source_path: docs/cores/current/constitution.yaml
+    source_core_id: CORE_LEARNIT_CONSTITUTION_V4_0
+    source_core_version: V4_0_FINAL
+    source_section: EVENTS
+    logic_scope: runtime_safety
+    current_owner_scope: mastery_evaluation
+    neighbor_of_scopes: []
+    entry_fingerprint: 313cf8e0c7527c6630069e2c44d642b48d7eac9cf2a9cc06bfd73313951025fe
+  - id: EVENT_SYSTEMIC_INVESTIGATION_CLOSED
+    source_core: constitution
+    source_path: docs/cores/current/constitution.yaml
+    source_core_id: CORE_LEARNIT_CONSTITUTION_V4_0
+    source_core_version: V4_0_FINAL
+    source_section: EVENTS
+    logic_scope: runtime_safety
+    current_owner_scope: mastery_evaluation
+    neighbor_of_scopes: []
+    entry_fingerprint: ad588f01b722723fbca8e42fa09420e49d69bfcce0ece22024c9b1f525a16a5c
+  - id: EVENT_T_EVALUATION_OVERDUE
+    source_core: constitution
+    source_path: docs/cores/current/constitution.yaml
+    source_core_id: CORE_LEARNIT_CONSTITUTION_V4_0
+    source_core_version: V4_0_FINAL
+    source_section: EVENTS
+    logic_scope: runtime_evaluation
+    current_owner_scope: mastery_evaluation
+    neighbor_of_scopes: []
+    entry_fingerprint: 67f4c0630470fe55eec121825899c26a583cbef60b943bf8c471e07e5e567ba9
+  - id: EVENT_UNCOVERED_ERROR
+    source_core: constitution
+    source_path: docs/cores/current/constitution.yaml
+    source_core_id: CORE_LEARNIT_CONSTITUTION_V4_0
+    source_core_version: V4_0_FINAL
+    source_section: EVENTS
+    logic_scope: runtime_feedback
+    current_owner_scope: knowledge_and_design
+    neighbor_of_scopes: []
+    entry_fingerprint: ec1285a0dcb665defb0598283393e834047e9d176c88e95662b5c68eca13c358
+  - id: INV_AR_N2_SHORT_FORM_REQUIRES_EXPLICIT_PRIORITY
+    source_core: constitution
+    source_path: docs/cores/current/constitution.yaml
+    source_core_id: CORE_LEARNIT_CONSTITUTION_V4_0
+    source_core_version: V4_0_FINAL
+    source_section: INVARIANTS
+    logic_scope: runtime_feedback
+    current_owner_scope: learner_state
+    neighbor_of_scopes: []
+    entry_fingerprint: c24beb0589c7b284a3c30437f8cd87d4e24da9e01355dbb3b107f5b2c44510c2
+  - id: INV_ASSISTED_MODE_REQUIRES_TUTORING
+    source_core: constitution
+    source_path: docs/cores/current/constitution.yaml
+    source_core_id: CORE_LEARNIT_CONSTITUTION_V4_0
+    source_core_version: V4_0_FINAL
+    source_section: INVARIANTS
+    logic_scope: deployment
+    current_owner_scope: deployment_governance
+    neighbor_of_scopes: []
+    entry_fingerprint: 0e5ccfa8b8fd46d443edb34dbb819438097586583fa656106208069f804738cb
+  - id: INV_AUTHENTIC_CONTEXT_REQUIRED_FOR_BLOOM4
+    source_core: constitution
+    source_path: docs/cores/current/constitution.yaml
+    source_core_id: CORE_LEARNIT_CONSTITUTION_V4_0
+    source_core_version: V4_0_FINAL
+    source_section: INVARIANTS
+    logic_scope: analysis_design
+    current_owner_scope: knowledge_and_design
+    neighbor_of_scopes: []
+    entry_fingerprint: c601fef4eaf3fcfa81c3867060a112ffd99001fed0783195f68a38da00ad922a
+  - id: INV_CONSERVATIVE_RULE_WITHOUT_AR_N1
+    source_core: constitution
+    source_path: docs/cores/current/constitution.yaml
+    source_core_id: CORE_LEARNIT_CONSTITUTION_V4_0
+    source_core_version: V4_0_FINAL
+    source_section: INVARIANTS
+    logic_scope: runtime_state
+    current_owner_scope: learner_state
+    neighbor_of_scopes: []
+    entry_fingerprint: 8189ac76e86a3994ac19f410c066bf42305b634d18059e9eb5ac1b4b6f0f9d2b
+  - id: INV_CONSTITUTION_REFERENTIAL_SEPARATION
+    source_core: constitution
+    source_path: docs/cores/current/constitution.yaml
+    source_core_id: CORE_LEARNIT_CONSTITUTION_V4_0
+    source_core_version: V4_0_FINAL
+    source_section: INVARIANTS
+    logic_scope: governance
+    current_owner_scope: deployment_governance
+    neighbor_of_scopes: []
+    entry_fingerprint: cde66ab59aa27a0e3645fc72cf12d578259cca09c1cf43f547eada268f6da6d2
+  - id: INV_CREATIVE_KU_AUTONOMY_REQUIRES_DETERMINISTIC_FEEDBACK_PATH
+    source_core: constitution
+    source_path: docs/cores/current/constitution.yaml
+    source_core_id: CORE_LEARNIT_CONSTITUTION_V4_0
+    source_core_version: V4_0_FINAL
+    source_section: INVARIANTS
+    logic_scope: design_governance
+    current_owner_scope: knowledge_and_design
+    neighbor_of_scopes: []
+    entry_fingerprint: 6ba49a85cbf5366c1f3f78e6a33a99c57b4c527900cfb333376038b3be3f0851
+  - id: INV_DISTRESS_REGIME_PRIORITY_CANNOT_BE_OVERRIDDEN
+    source_core: constitution
+    source_path: docs/cores/current/constitution.yaml
+    source_core_id: CORE_LEARNIT_CONSTITUTION_V4_0
+    source_core_version: V4_0_FINAL
+    source_section: INVARIANTS
+    logic_scope: runtime_state
+    current_owner_scope: learner_state
+    neighbor_of_scopes: []
+    entry_fingerprint: 52bbb378ec293e17dfeb9425d9f46cb27e7953f4a6b35f4c2efe0519b11a56d3
+  - id: INV_EXPLICIT_DEPENDENCY_EDGES_REQUIRED
+    source_core: constitution
+    source_path: docs/cores/current/constitution.yaml
+    source_core_id: CORE_LEARNIT_CONSTITUTION_V4_0
+    source_core_version: V4_0_FINAL
+    source_section: INVARIANTS
+    logic_scope: analysis_runtime_graph
+    current_owner_scope: knowledge_and_design
+    neighbor_of_scopes:
+    - mastery_evaluation
+    entry_fingerprint: 2ebb4bda6cdc8a5daae41f4df254d97763377dc79d701cf0535c65150459348c
+  - id: INV_GRAPH_PROPAGATION_ONE_HOP
+    source_core: constitution
+    source_path: docs/cores/current/constitution.yaml
+    source_core_id: CORE_LEARNIT_CONSTITUTION_V4_0
+    source_core_version: V4_0_FINAL
+    source_section: INVARIANTS
+    logic_scope: runtime_graph
+    current_owner_scope: mastery_evaluation
+    neighbor_of_scopes: []
+    entry_fingerprint: 8ab13ecd6f6f7e8330dcd18c960c4f48ec269604ccc38fbf8f5c206025026e16
+  - id: INV_INVALID_PATCH_REJECTED
+    source_core: constitution
+    source_path: docs/cores/current/constitution.yaml
+    source_core_id: CORE_LEARNIT_CONSTITUTION_V4_0
+    source_core_version: V4_0_FINAL
+    source_section: INVARIANTS
+    logic_scope: patch_validation
+    current_owner_scope: patch_lifecycle
+    neighbor_of_scopes: []
+    entry_fingerprint: ca89d4cbf1c37cc9ebe33b6a5f29dcbee71263daf42877c28716a7c058a2c894
+  - id: INV_KNOWLEDGE_GRAPH_MUST_BE_ACYCLIC
+    source_core: constitution
+    source_path: docs/cores/current/constitution.yaml
+    source_core_id: CORE_LEARNIT_CONSTITUTION_V4_0
+    source_core_version: V4_0_FINAL
+    source_section: INVARIANTS
+    logic_scope: knowledge_model
+    current_owner_scope: knowledge_and_design
+    neighbor_of_scopes: []
+    entry_fingerprint: 4fbb06cc381d929d1c5df25b4a69cbfc100faaabcd986ed899811901b158418b
+  - id: INV_KU_TYPING_REQUIRED
+    source_core: constitution
+    source_path: docs/cores/current/constitution.yaml
+    source_core_id: CORE_LEARNIT_CONSTITUTION_V4_0
+    source_core_version: V4_0_FINAL
+    source_section: INVARIANTS
+    logic_scope: analysis_design
+    current_owner_scope: knowledge_and_design
+    neighbor_of_scopes: []
+    entry_fingerprint: 64f57d2c99e6d1921872ef86f45962e97c5af76495a10ba84a7fe8cca710589c
+  - id: INV_MISSING_KU_TYPE_FORCES_SAFE_FALLBACK
+    source_core: constitution
+    source_path: docs/cores/current/constitution.yaml
+    source_core_id: CORE_LEARNIT_CONSTITUTION_V4_0
+    source_core_version: V4_0_FINAL
+    source_section: INVARIANTS
+    logic_scope: runtime_safety
+    current_owner_scope: knowledge_and_design
+    neighbor_of_scopes: []
+    entry_fingerprint: f875aabfb7a97ea78efd5b9983b12e9d9ad8b14a1205ddb89a633b62955b68b5
+  - id: INV_MSC_AND_STRICT
+    source_core: constitution
+    source_path: docs/cores/current/constitution.yaml
+    source_core_id: CORE_LEARNIT_CONSTITUTION_V4_0
+    source_core_version: V4_0_FINAL
+    source_section: INVARIANTS
+    logic_scope: runtime_evaluation
+    current_owner_scope: mastery_evaluation
+    neighbor_of_scopes: []
+    entry_fingerprint: a8b91aaba2b49a910a30ca07d64ce9240f4d4f75acc328e6b4963a0c6131773a
+  - id: INV_NO_PARTIAL_PATCH_STATE
+    source_core: constitution
+    source_path: docs/cores/current/constitution.yaml
+    source_core_id: CORE_LEARNIT_CONSTITUTION_V4_0
+    source_core_version: V4_0_FINAL
+    source_section: INVARIANTS
+    logic_scope: patch_layer
+    current_owner_scope: patch_lifecycle
+    neighbor_of_scopes: []
+    entry_fingerprint: 2439151fce4cc94c136f61ba289ceceba29db6d2cd77d635d536463de05526e4
+  - id: INV_NO_RUNTIME_CONTENT_GENERATION
+    source_core: constitution
+    source_path: docs/cores/current/constitution.yaml
+    source_core_id: CORE_LEARNIT_CONSTITUTION_V4_0
+    source_core_version: V4_0_FINAL
+    source_section: INVARIANTS
+    logic_scope: runtime_architecture
+    current_owner_scope: deployment_governance
+    neighbor_of_scopes: []
+    entry_fingerprint: 574ddd18fb3dcaa5d00372236c8c746dfbb1a054123f02159635bc4bdf62ab0d
+  - id: INV_NO_TEXT_ONLY_FOR_PROCEDURAL_OR_PERCEPTUAL
+    source_core: constitution
+    source_path: docs/cores/current/constitution.yaml
+    source_core_id: CORE_LEARNIT_CONSTITUTION_V4_0
+    source_core_version: V4_0_FINAL
+    source_section: INVARIANTS
+    logic_scope: design
+    current_owner_scope: knowledge_and_design
+    neighbor_of_scopes: []
+    entry_fingerprint: e12d1d747e309649cd19764035467f22d15f546b911435efc619bacd428dbf6c
+  - id: INV_PATCH_ARTIFACTS_MUST_BE_PRECOMPUTED_OFF_SESSION
+    source_core: constitution
+    source_path: docs/cores/current/constitution.yaml
+    source_core_id: CORE_LEARNIT_CONSTITUTION_V4_0
+    source_core_version: V4_0_FINAL
+    source_section: INVARIANTS
+    logic_scope: patch_architecture
+    current_owner_scope: patch_lifecycle
+    neighbor_of_scopes: []
+    entry_fingerprint: f247d93b0ef4fa5b7e085966b1a1f545aca9acd7dfc01ff0a0167395ef35671d
+  - id: INV_PATCH_LOCAL_VALIDATION_MUST_BE_DETERMINISTIC
+    source_core: constitution
+    source_path: docs/cores/current/constitution.yaml
+    source_core_id: CORE_LEARNIT_CONSTITUTION_V4_0
+    source_core_version: V4_0_FINAL
+    source_section: INVARIANTS
+    logic_scope: patch_validation
+    current_owner_scope: patch_lifecycle
+    neighbor_of_scopes: []
+    entry_fingerprint: 6c1f1ea39ddec49492d731c5e660e6eaa3a08280425082bcb5e8275d34b049f3
+  - id: INV_PERSISTENT_DRIFT_REQUIRES_ESCALATION_IF_PATCH_BLOCKED
+    source_core: constitution
+    source_path: docs/cores/current/constitution.yaml
+    source_core_id: CORE_LEARNIT_CONSTITUTION_V4_0
+    source_core_version: V4_0_FINAL
+    source_section: INVARIANTS
+    logic_scope: patch_governance
+    current_owner_scope: patch_lifecycle
+    neighbor_of_scopes: []
+    entry_fingerprint: ff953e36df3a1775c6de021bef563c73492c9f0c3edf21490a62ce508c609ae1
+  - id: INV_REFERENTIEL_VALIDITY_REQUIRED_FOR_DELEGATED_THRESHOLD_EVALUATION
+    source_core: constitution
+    source_path: docs/cores/current/constitution.yaml
+    source_core_id: CORE_LEARNIT_CONSTITUTION_V4_0
+    source_core_version: V4_0_FINAL
+    source_section: INVARIANTS
+    logic_scope: runtime_safety
+    current_owner_scope: mastery_evaluation
+    neighbor_of_scopes: []
+    entry_fingerprint: bc9c6590ef9fe82b427ff08e96103a499260f7029704baefc94637226a96e1c5
+  - id: INV_RUNTIME_FULLY_LOCAL
+    source_core: constitution
+    source_path: docs/cores/current/constitution.yaml
+    source_core_id: CORE_LEARNIT_CONSTITUTION_V4_0
+    source_core_version: V4_0_FINAL
+    source_section: INVARIANTS
+    logic_scope: runtime_architecture
+    current_owner_scope: deployment_governance
+    neighbor_of_scopes: []
+    entry_fingerprint: ade1642549ba0df22f22f114a828fc1620e49f2315082be46d427dfd8ca32c45
+  - id: INV_RUNTIME_QUALIFICATION_SIGNALS_MUST_BE_EXPLICIT_OR_OFFSESSION
+    source_core: constitution
+    source_path: docs/cores/current/constitution.yaml
+    source_core_id: CORE_LEARNIT_CONSTITUTION_V4_0
+    source_core_version: V4_0_FINAL
+    source_section: INVARIANTS
+    logic_scope: runtime_architecture
+    current_owner_scope: deployment_governance
+    neighbor_of_scopes: []
+    entry_fingerprint: 700477de6668a5e529e81edfd917621d9f55689cd954df946551eca4b3d57da1
+  - id: INV_SECONDARY_RETROGRADATION_IS_NEW_EVENT
+    source_core: constitution
+    source_path: docs/cores/current/constitution.yaml
+    source_core_id: CORE_LEARNIT_CONSTITUTION_V4_0
+    source_core_version: V4_0_FINAL
+    source_section: INVARIANTS
+    logic_scope: runtime_graph
+    current_owner_scope: mastery_evaluation
+    neighbor_of_scopes: []
+    entry_fingerprint: 7c5a9a0b41f9bc9f32d722d22508702742a6b32902ec3b15f623b6938a23f4f4
+  - id: INV_TRANSFER_SEPARATE_FROM_BASE_MASTERY
+    source_core: constitution
+    source_path: docs/cores/current/constitution.yaml
+    source_core_id: CORE_LEARNIT_CONSTITUTION_V4_0
+    source_core_version: V4_0_FINAL
+    source_section: INVARIANTS
+    logic_scope: runtime_evaluation
+    current_owner_scope: mastery_evaluation
+    neighbor_of_scopes: []
+    entry_fingerprint: 7e53ebcec9e1fe0545b448dda5724bd1c38a27e77f9a4d7a080d8e64494961ca
+  - id: INV_VC_NOT_GENERAL_MOTIVATION_PROXY
+    source_core: constitution
+    source_path: docs/cores/current/constitution.yaml
+    source_core_id: CORE_LEARNIT_CONSTITUTION_V4_0
+    source_core_version: V4_0_FINAL
+    source_section: INVARIANTS
+    logic_scope: runtime_state
+    current_owner_scope: learner_state
+    neighbor_of_scopes: []
+    entry_fingerprint: a50a931b28d073dcd3c6935790fbe6fe7ed9bcdd7503b44d0e9f7c0e50f586b9
+  - id: PARAM_AR_N1_INTERACTION_BUDGET
+    source_core: constitution
+    source_path: docs/cores/current/constitution.yaml
+    source_core_id: CORE_LEARNIT_CONSTITUTION_V4_0
+    source_core_version: V4_0_FINAL
+    source_section: PARAMETERS
+    logic_scope: runtime_feedback
+    current_owner_scope: learner_state
+    neighbor_of_scopes: []
+    entry_fingerprint: 4c508908a07f13e9bab03c9157f275bfbdcb0927a332069e9516a10defa9a80e
+  - id: PARAM_AR_N2_INTERACTION_BUDGET
+    source_core: constitution
+    source_path: docs/cores/current/constitution.yaml
+    source_core_id: CORE_LEARNIT_CONSTITUTION_V4_0
+    source_core_version: V4_0_FINAL
+    source_section: PARAMETERS
+    logic_scope: runtime_feedback
+    current_owner_scope: learner_state
+    neighbor_of_scopes: []
+    entry_fingerprint: 334af7f613b27c0a0e45100613d643a8147e39c523e9134158116b4f34916901
+  - id: PARAM_AR_N3_INTERACTION_BUDGET
+    source_core: constitution
+    source_path: docs/cores/current/constitution.yaml
+    source_core_id: CORE_LEARNIT_CONSTITUTION_V4_0
+    source_core_version: V4_0_FINAL
+    source_section: PARAMETERS
+    logic_scope: runtime_feedback
+    current_owner_scope: learner_state
+    neighbor_of_scopes: []
+    entry_fingerprint: 8e9e57b33ccffdfcac6ad937444b81715ef7972206a1f9065ff3b12315d34239
+  - id: PARAM_PROVISIONAL_MASTERY_VERIFICATION_WINDOW
+    source_core: constitution
+    source_path: docs/cores/current/constitution.yaml
+    source_core_id: CORE_LEARNIT_CONSTITUTION_V4_0
+    source_core_version: V4_0_FINAL
+    source_section: PARAMETERS
+    logic_scope: runtime_evaluation
+    current_owner_scope: mastery_evaluation
+    neighbor_of_scopes: []
+    entry_fingerprint: 75054ea13c1d73bdd48eb120c2908f5eec22c7ed60fa3682d2679cbfa92e664c
+  - id: RULE_ACTIVATION_DISTRESS_PERSISTENCE_ESCALATION_OFFSESSION
+    source_core: constitution
+    source_path: docs/cores/current/constitution.yaml
+    source_core_id: CORE_LEARNIT_CONSTITUTION_V4_0
+    source_core_version: V4_0_FINAL
+    source_section: RULES
+    logic_scope: runtime_state
+    current_owner_scope: learner_state
+    neighbor_of_scopes: []
+    entry_fingerprint: 245a40a487a0768bd79360dfb1a174238dc501e9f93215058b59fddbeccfee91
+  - id: RULE_AR_N1_OVERRIDES_PROXY
+    source_core: constitution
+    source_path: docs/cores/current/constitution.yaml
+    source_core_id: CORE_LEARNIT_CONSTITUTION_V4_0
+    source_core_version: V4_0_FINAL
+    source_section: RULES
+    logic_scope: runtime_state
+    current_owner_scope: learner_state
+    neighbor_of_scopes: []
+    entry_fingerprint: c1449d5c6cad5654b1066b88145a4ef127e1fa9af726c0c75504e85e1b002daa
+  - id: RULE_AR_REFRACTORY_PROFILE_TRIGGERS_SOLLICITATION_PATCH
+    source_core: constitution
+    source_path: docs/cores/current/constitution.yaml
+    source_core_id: CORE_LEARNIT_CONSTITUTION_V4_0
+    source_core_version: V4_0_FINAL
+    source_section: RULES
+    logic_scope: patch_governance
+    current_owner_scope: patch_lifecycle
+    neighbor_of_scopes: []
+    entry_fingerprint: ec01fcf3adb69f8c1bdc8fa1a1690f2a97fc148c2c9914ed7f7d534cbd028c20
+  - id: RULE_CONSERVATIVE_SCAFFOLDING_ESCALATION_REQUIRES_OFFSESSION_REVIEW
+    source_core: constitution
+    source_path: docs/cores/current/constitution.yaml
+    source_core_id: CORE_LEARNIT_CONSTITUTION_V4_0
+    source_core_version: V4_0_FINAL
+    source_section: RULES
+    logic_scope: runtime_state
+    current_owner_scope: learner_state
+    neighbor_of_scopes: []
+    entry_fingerprint: c6966ac4e4616075bd4bb8d935e4ed638040ca20bef786b211856170fcbe70ce
+  - id: RULE_GAMIFICATION_PROBATION_MUST_CLOSE
+    source_core: constitution
+    source_path: docs/cores/current/constitution.yaml
+    source_core_id: CORE_LEARNIT_CONSTITUTION_V4_0
+    source_core_version: V4_0_FINAL
+    source_section: RULES
+    logic_scope: deployment
+    current_owner_scope: deployment_governance
+    neighbor_of_scopes: []
+    entry_fingerprint: e02217017e17f7803e4f3615ade9f9de0bbb68ae4f11d5ea067fc18f92653c95
+  - id: RULE_GF08_UNCOVERED_CONFLICT_CONSERVATIVE_RESPONSE
+    source_core: constitution
+    source_path: docs/cores/current/constitution.yaml
+    source_core_id: CORE_LEARNIT_CONSTITUTION_V4_0
+    source_core_version: V4_0_FINAL
+    source_section: RULES
+    logic_scope: runtime_governance
+    current_owner_scope: deployment_governance
+    neighbor_of_scopes: []
+    entry_fingerprint: ede00cfd34b5c4b9890b550f266a4db91129080dfd08ea27f6531fcc3bdc8233
+  - id: RULE_LEARNER_STATE_AXIS_UNKNOWN_ALLOWED
+    source_core: constitution
+    source_path: docs/cores/current/constitution.yaml
+    source_core_id: CORE_LEARNIT_CONSTITUTION_V4_0
+    source_core_version: V4_0_FINAL
+    source_section: RULES
+    logic_scope: runtime_state
+    current_owner_scope: learner_state
+    neighbor_of_scopes: []
+    entry_fingerprint: f0d88d16903008763128910135dbab7a2666b1b5774ba613ba9b151b8afada9d
+  - id: RULE_LONG_INTERRUPTION_REQUIRES_DIAGNOSTIC_RESUME
+    source_core: constitution
+    source_path: docs/cores/current/constitution.yaml
+    source_core_id: CORE_LEARNIT_CONSTITUTION_V4_0
+    source_core_version: V4_0_FINAL
+    source_section: RULES
+    logic_scope: runtime_resume
+    current_owner_scope: learner_state
+    neighbor_of_scopes: []
+    entry_fingerprint: c81805373b64b5724a34315335e3c06d5a753c23325cf8bebc6048f4de16e5aa
+  - id: RULE_LOW_SIS_NEVER_AUTO_PENALIZES
+    source_core: constitution
+    source_path: docs/cores/current/constitution.yaml
+    source_core_id: CORE_LEARNIT_CONSTITUTION_V4_0
+    source_core_version: V4_0_FINAL
+    source_section: RULES
+    logic_scope: runtime_integrity
+    current_owner_scope: mastery_evaluation
+    neighbor_of_scopes: []
+    entry_fingerprint: 40d257d48656416338e1c5c96efddcf9240e06152d74c44e02f66e165a7ccc56
+  - id: RULE_MISCONCEPTION_REQUIRES_COGNITIVE_CONFLICT
+    source_core: constitution
+    source_path: docs/cores/current/constitution.yaml
+    source_core_id: CORE_LEARNIT_CONSTITUTION_V4_0
+    source_core_version: V4_0_FINAL
+    source_section: RULES
+    logic_scope: design_runtime
+    current_owner_scope: knowledge_and_design
+    neighbor_of_scopes: []
+    entry_fingerprint: 31bee8485ac90b6d6d267830ebeaeb1486c0d73486a46ba755952d40b87d45ea
+  - id: RULE_MSC_COMPONENT_NON_CALCULABLE_DEFERS_BASE_MASTERY
+    source_core: constitution
+    source_path: docs/cores/current/constitution.yaml
+    source_core_id: CORE_LEARNIT_CONSTITUTION_V4_0
+    source_core_version: V4_0_FINAL
+    source_section: RULES
+    logic_scope: runtime_evaluation
+    current_owner_scope: mastery_evaluation
+    neighbor_of_scopes: []
+    entry_fingerprint: a8c35057abdafd639ee3987d8d8a5f9dc9aae98f0d687fc5fb84923c4f1d2eae
+  - id: RULE_MSC_DOWNGRADE_MARKS_DEPENDENTS
+    source_core: constitution
+    source_path: docs/cores/current/constitution.yaml
+    source_core_id: CORE_LEARNIT_CONSTITUTION_V4_0
+    source_core_version: V4_0_FINAL
+    source_section: RULES
+    logic_scope: runtime_graph
+    current_owner_scope: mastery_evaluation
+    neighbor_of_scopes: []
+    entry_fingerprint: 814f46e12bada8a0a68da5d3f9938d00978b13231d5035970d48d6602e724e8e
+  - id: RULE_MSC_PERCEPTION_DIVERGENCE_PROTOCOL
+    source_core: constitution
+    source_path: docs/cores/current/constitution.yaml
+    source_core_id: CORE_LEARNIT_CONSTITUTION_V4_0
+    source_core_version: V4_0_FINAL
+    source_section: RULES
+    logic_scope: runtime_evaluation
+    current_owner_scope: mastery_evaluation
+    neighbor_of_scopes: []
+    entry_fingerprint: 293fd641dd5652602627e89a01fb2a03af28a050668b23d2c4f4b0353980e162
+  - id: RULE_MULTI_AXIS_UNKNOWN_OR_UNOBSERVABLE_SAFE_ENTRY
+    source_core: constitution
+    source_path: docs/cores/current/constitution.yaml
+    source_core_id: CORE_LEARNIT_CONSTITUTION_V4_0
+    source_core_version: V4_0_FINAL
+    source_section: RULES
+    logic_scope: runtime_state
+    current_owner_scope: learner_state
+    neighbor_of_scopes: []
+    entry_fingerprint: c8e270dd901c60e47e68520db6d048169bb156147f21917a8bb39b18901db591
+  - id: RULE_NON_EXAM_CONCEPT_KEPT_IN_GRAPH
+    source_core: constitution
+    source_path: docs/cores/current/constitution.yaml
+    source_core_id: CORE_LEARNIT_CONSTITUTION_V4_0
+    source_core_version: V4_0_FINAL
+    source_section: RULES
+    logic_scope: analysis_design
+    current_owner_scope: knowledge_and_design
+    neighbor_of_scopes: []
+    entry_fingerprint: 10fd56daf028e3bf9879b105a5f72a368335fc6a6319c8e0a9dcafd20971cd1b
+  - id: RULE_NO_CALIBRATION_CONSERVATIVE_START
+    source_core: constitution
+    source_path: docs/cores/current/constitution.yaml
+    source_core_id: CORE_LEARNIT_CONSTITUTION_V4_0
+    source_core_version: V4_0_FINAL
+    source_section: RULES
+    logic_scope: initialization
+    current_owner_scope: deployment_governance
+    neighbor_of_scopes: []
+    entry_fingerprint: 373565bddb51d0b9c8ddc6da2243f271933be1fd7686c016e067e99acf2211b3
+  - id: RULE_PATCH_SERIALIZATION
+    source_core: constitution
+    source_path: docs/cores/current/constitution.yaml
+    source_core_id: CORE_LEARNIT_CONSTITUTION_V4_0
+    source_core_version: V4_0_FINAL
+    source_section: RULES
+    logic_scope: patch_governance
+    current_owner_scope: null
+    neighbor_of_scopes: []
+    entry_fingerprint: 063b6ebaf661dadfc400a95aee025862dba10688bc986cb6a17ef150de944838
+  - id: RULE_PERSISTENT_DRIFT_BLOCKED_PATCH_ESCALATES_OFFSESSION
+    source_core: constitution
+    source_path: docs/cores/current/constitution.yaml
+    source_core_id: CORE_LEARNIT_CONSTITUTION_V4_0
+    source_core_version: V4_0_FINAL
+    source_section: RULES
+    logic_scope: patch_governance
+    current_owner_scope: patch_lifecycle
+    neighbor_of_scopes: []
+    entry_fingerprint: 8fee004315fee74b567838d0e70074af8d1ad4502aada0a8743529bd58faa741
+  - id: RULE_PERSISTENT_LOW_VC_TRIGGERS_RELEVANCE_PATCH
+    source_core: constitution
+    source_path: docs/cores/current/constitution.yaml
+    source_core_id: CORE_LEARNIT_CONSTITUTION_V4_0
+    source_core_version: V4_0_FINAL
+    source_section: RULES
+    logic_scope: patch_governance
+    current_owner_scope: patch_lifecycle
+    neighbor_of_scopes: []
+    entry_fingerprint: 7af1aa0de2217eee839320ddcadf9a67a5b5e9291131b1d5df8c1c339f8a4aab
+  - id: RULE_PROVISIONAL_MASTERY_WINDOW_EXPIRY_SAFE_FALLBACK
+    source_core: constitution
+    source_path: docs/cores/current/constitution.yaml
+    source_core_id: CORE_LEARNIT_CONSTITUTION_V4_0
+    source_core_version: V4_0_FINAL
+    source_section: RULES
+    logic_scope: runtime_evaluation
+    current_owner_scope: mastery_evaluation
+    neighbor_of_scopes: []
+    entry_fingerprint: fd41e52174f9a66d78bd28a1511f92d87962c99280ddf6237c0b9e31ec5d0e25
+  - id: RULE_SESSION_INTENTION_NON_BLOCKING
+    source_core: constitution
+    source_path: docs/cores/current/constitution.yaml
+    source_core_id: CORE_LEARNIT_CONSTITUTION_V4_0
+    source_core_version: V4_0_FINAL
+    source_section: RULES
+    logic_scope: runtime_feedback
+    current_owner_scope: learner_state
+    neighbor_of_scopes: []
+    entry_fingerprint: cb58723e7e64c1322f9bb3aee6e417893d662b36320c0a81d759463812e21583
+  - id: RULE_SYSTEMIC_INVESTIGATION_OPEN_CLOSE_WINDOW
+    source_core: constitution
+    source_path: docs/cores/current/constitution.yaml
+    source_core_id: CORE_LEARNIT_CONSTITUTION_V4_0
+    source_core_version: V4_0_FINAL
+    source_section: RULES
+    logic_scope: runtime_safety
+    current_owner_scope: mastery_evaluation
+    neighbor_of_scopes: []
+    entry_fingerprint: 381d38fec42f679f345a0c02482eefabd07ba0a58f2c6029f575008d9a7bc68d
+  - id: RULE_T_EVALUATION_OVERDUE_REQUIRES_SIGNAL_OR_FOLLOWUP
+    source_core: constitution
+    source_path: docs/cores/current/constitution.yaml
+    source_core_id: CORE_LEARNIT_CONSTITUTION_V4_0
+    source_core_version: V4_0_FINAL
+    source_section: RULES
+    logic_scope: runtime_evaluation
+    current_owner_scope: mastery_evaluation
+    neighbor_of_scopes: []
+    entry_fingerprint: 250ecbbd8a969bef83363cdf2981431daf8d9e2d5459e6efd658b5d8881f5626
+  - id: RULE_UNCOVERED_ERROR_GENERIC_FEEDBACK
+    source_core: constitution
+    source_path: docs/cores/current/constitution.yaml
+    source_core_id: CORE_LEARNIT_CONSTITUTION_V4_0
+    source_core_version: V4_0_FINAL
+    source_section: RULES
+    logic_scope: runtime_feedback
+    current_owner_scope: knowledge_and_design
+    neighbor_of_scopes: []
+    entry_fingerprint: 3900aac8ddaaecd54d239320f3558362052f5ac4a942c27b7ab47f43bce5d929
+  - id: RULE_UNVERIFIED_GAMIFICATION_PROBATION
+    source_core: constitution
+    source_path: docs/cores/current/constitution.yaml
+    source_core_id: CORE_LEARNIT_CONSTITUTION_V4_0
+    source_core_version: V4_0_FINAL
+    source_section: RULES
+    logic_scope: deployment
+    current_owner_scope: deployment_governance
+    neighbor_of_scopes: []
+    entry_fingerprint: f5a10276794f7d18e8b4a04eca6131023340e893eced0e79e69ae0d9faadc5e4
+  - id: REF_CORE_LEARNIT_REFERENTIEL_V4_0_IN_CONSTITUTION
+    source_core: constitution
+    source_path: docs/cores/current/constitution.yaml
+    source_core_id: CORE_LEARNIT_CONSTITUTION_V4_0
+    source_core_version: V4_0_FINAL
+    source_section: TYPES
+    logic_scope: intercore_reference
+    current_owner_scope: null
+    neighbor_of_scopes: []
+    entry_fingerprint: d0e53f91692db2b920aec775872e79c1531d2566024b2e0717d38d2764c52b57
+  - id: SYSTEM_LEARNIT
+    source_core: constitution
+    source_path: docs/cores/current/constitution.yaml
+    source_core_id: CORE_LEARNIT_CONSTITUTION_V4_0
+    source_core_version: V4_0_FINAL
+    source_section: TYPES
+    logic_scope: system
+    current_owner_scope: deployment_governance
+    neighbor_of_scopes: []
+    entry_fingerprint: 70d8b760205df35c539fd03f0de843312d4fe5e31052f07045b46a644446a09b
+  - id: TYPE_AUTHENTIC_CONTEXT
+    source_core: constitution
+    source_path: docs/cores/current/constitution.yaml
+    source_core_id: CORE_LEARNIT_CONSTITUTION_V4_0
+    source_core_version: V4_0_FINAL
+    source_section: TYPES
+    logic_scope: analysis_design
+    current_owner_scope: knowledge_and_design
+    neighbor_of_scopes: []
+    entry_fingerprint: 54907db6ccc0a1127686aeff17cf7ca7162042c5b341ef053af3c6ba0c4fc096
+  - id: TYPE_AUTONOMY_REGIME
+    source_core: constitution
+    source_path: docs/cores/current/constitution.yaml
+    source_core_id: CORE_LEARNIT_CONSTITUTION_V4_0
+    source_core_version: V4_0_FINAL
+    source_section: TYPES
+    logic_scope: deployment
+    current_owner_scope: deployment_governance
+    neighbor_of_scopes: []
+    entry_fingerprint: 4bb165fd541d8c274f58b145b48ca2d3f8867da5bffea2f736389aab9f3ac713
+  - id: TYPE_CORPUS_CONFIDENCE_ICC
+    source_core: constitution
+    source_path: docs/cores/current/constitution.yaml
+    source_core_id: CORE_LEARNIT_CONSTITUTION_V4_0
+    source_core_version: V4_0_FINAL
+    source_section: TYPES
+    logic_scope: analysis
+    current_owner_scope: knowledge_and_design
+    neighbor_of_scopes: []
+    entry_fingerprint: 5587c8ac989dd0e01a80c3df9b808c8833fb1e39026fe28219ed7d722f6bcdc3
+  - id: TYPE_FEEDBACK_COVERAGE_MATRIX
+    source_core: constitution
+    source_path: docs/cores/current/constitution.yaml
+    source_core_id: CORE_LEARNIT_CONSTITUTION_V4_0
+    source_core_version: V4_0_FINAL
+    source_section: TYPES
+    logic_scope: design
+    current_owner_scope: knowledge_and_design
+    neighbor_of_scopes: []
+    entry_fingerprint: eb37c3a43905e14f6a801bbbb072761b14bc13084fe9313a4b8698542c7a3b39
+  - id: TYPE_HUMAN_CHECKPOINT
+    source_core: constitution
+    source_path: docs/cores/current/constitution.yaml
+    source_core_id: CORE_LEARNIT_CONSTITUTION_V4_0
+    source_core_version: V4_0_FINAL
+    source_section: TYPES
+    logic_scope: runtime_governance
+    current_owner_scope: deployment_governance
+    neighbor_of_scopes: []
+    entry_fingerprint: de2bb18b3212aa676e6510fe086035c49b021bf828d519c895544ee3e5efbe11
+  - id: TYPE_INTEGRITY_MODES
+    source_core: constitution
+    source_path: docs/cores/current/constitution.yaml
+    source_core_id: CORE_LEARNIT_CONSTITUTION_V4_0
+    source_core_version: V4_0_FINAL
+    source_section: TYPES
+    logic_scope: deployment
+    current_owner_scope: deployment_governance
+    neighbor_of_scopes: []
+    entry_fingerprint: 66464f1839af6e605318917e19eabfe0f678a523d651842db359c70e88a8a75d
+  - id: TYPE_KNOWLEDGE_GRAPH
+    source_core: constitution
+    source_path: docs/cores/current/constitution.yaml
+    source_core_id: CORE_LEARNIT_CONSTITUTION_V4_0
+    source_core_version: V4_0_FINAL
+    source_section: TYPES
+    logic_scope: analysis_design
+    current_owner_scope: knowledge_and_design
+    neighbor_of_scopes:
+    - mastery_evaluation
+    entry_fingerprint: f174152577258a8339fe07870b9c55064824e1f6b80a1884b591636f7ba5aa42
+  - id: TYPE_KNOWLEDGE_UNIT
+    source_core: constitution
+    source_path: docs/cores/current/constitution.yaml
+    source_core_id: CORE_LEARNIT_CONSTITUTION_V4_0
+    source_core_version: V4_0_FINAL
+    source_section: TYPES
+    logic_scope: knowledge_model
+    current_owner_scope: knowledge_and_design
+    neighbor_of_scopes: []
+    entry_fingerprint: 390311f2e00679e3cb766f6782c7954abb5557a63c662e15917b492d4f7fa9e1
+  - id: TYPE_LEARNER_STATE_MODEL
+    source_core: constitution
+    source_path: docs/cores/current/constitution.yaml
+    source_core_id: CORE_LEARNIT_CONSTITUTION_V4_0
+    source_core_version: V4_0_FINAL
+    source_section: TYPES
+    logic_scope: runtime_state
+    current_owner_scope: learner_state
+    neighbor_of_scopes:
+    - mastery_evaluation
+    entry_fingerprint: 2b0fdc532a8f6c12256ba427b3faa3e0146f263a0f75101df2b362bb58f3da84
+  - id: TYPE_MASTERY_COMPONENT_A
+    source_core: constitution
+    source_path: docs/cores/current/constitution.yaml
+    source_core_id: CORE_LEARNIT_CONSTITUTION_V4_0
+    source_core_version: V4_0_FINAL
+    source_section: TYPES
+    logic_scope: runtime_evaluation
+    current_owner_scope: mastery_evaluation
+    neighbor_of_scopes: []
+    entry_fingerprint: 0f1246394b7b854c01c777ee1681281c4f5f310e204f45f0128859284a5339de
+  - id: TYPE_MASTERY_COMPONENT_P
+    source_core: constitution
+    source_path: docs/cores/current/constitution.yaml
+    source_core_id: CORE_LEARNIT_CONSTITUTION_V4_0
+    source_core_version: V4_0_FINAL
+    source_section: TYPES
+    logic_scope: runtime_evaluation
+    current_owner_scope: mastery_evaluation
+    neighbor_of_scopes: []
+    entry_fingerprint: 517b21ff58579aadfde07d66ae4c274308779eb41eeed6d6214bdecb9b87d3b2
+  - id: TYPE_MASTERY_COMPONENT_R
+    source_core: constitution
+    source_path: docs/cores/current/constitution.yaml
+    source_core_id: CORE_LEARNIT_CONSTITUTION_V4_0
+    source_core_version: V4_0_FINAL
+    source_section: TYPES
+    logic_scope: runtime_evaluation
+    current_owner_scope: mastery_evaluation
+    neighbor_of_scopes: []
+    entry_fingerprint: 5802b424357347ee404b43f1ad3cb20e8587b6ead6b480ca467978f9d6b02700
+  - id: TYPE_MASTERY_COMPONENT_T
+    source_core: constitution
+    source_path: docs/cores/current/constitution.yaml
+    source_core_id: CORE_LEARNIT_CONSTITUTION_V4_0
+    source_core_version: V4_0_FINAL
+    source_section: TYPES
+    logic_scope: runtime_evaluation
+    current_owner_scope: mastery_evaluation
+    neighbor_of_scopes: []
+    entry_fingerprint: 9360e78e5ddcd82f36a75c56e53926d2b765f69222c51133488a10a9591f065b
+  - id: TYPE_MASTERY_MODEL
+    source_core: constitution
+    source_path: docs/cores/current/constitution.yaml
+    source_core_id: CORE_LEARNIT_CONSTITUTION_V4_0
+    source_core_version: V4_0_FINAL
+    source_section: TYPES
+    logic_scope: runtime_evaluation
+    current_owner_scope: mastery_evaluation
+    neighbor_of_scopes: []
+    entry_fingerprint: 6291d137e03a02d3191fea77d1557fb819572671af7911eca2791a44f79d3b33
+  - id: TYPE_NC_MSC
+    source_core: constitution
+    source_path: docs/cores/current/constitution.yaml
+    source_core_id: CORE_LEARNIT_CONSTITUTION_V4_0
+    source_core_version: V4_0_FINAL
+    source_section: TYPES
+    logic_scope: runtime_integrity
+    current_owner_scope: mastery_evaluation
+    neighbor_of_scopes: []
+    entry_fingerprint: de367f4928f51d213f7b6ba86e0c96b3fec01d33bf07272ce0956aeb9493b547
+  - id: TYPE_PATCH_ARTIFACT
+    source_core: constitution
+    source_path: docs/cores/current/constitution.yaml
+    source_core_id: CORE_LEARNIT_CONSTITUTION_V4_0
+    source_core_version: V4_0_FINAL
+    source_section: TYPES
+    logic_scope: patch_layer
+    current_owner_scope: patch_lifecycle
+    neighbor_of_scopes: []
+    entry_fingerprint: 73027c07c491682b8dbdd112d747ffa65e7a672c23df825bfa5712e6946a19b9
+  - id: TYPE_PATCH_IMPACT_SCOPE
+    source_core: constitution
+    source_path: docs/cores/current/constitution.yaml
+    source_core_id: CORE_LEARNIT_CONSTITUTION_V4_0
+    source_core_version: V4_0_FINAL
+    source_section: TYPES
+    logic_scope: patch_validation
+    current_owner_scope: patch_lifecycle
+    neighbor_of_scopes: []
+    entry_fingerprint: 04a8aeb997bbe93308f3a696cbb1057110d760e42d89b5851c00112e88d1371e
+  - id: TYPE_PATCH_QUALITY_GATE
+    source_core: constitution
+    source_path: docs/cores/current/constitution.yaml
+    source_core_id: CORE_LEARNIT_CONSTITUTION_V4_0
+    source_core_version: V4_0_FINAL
+    source_section: TYPES
+    logic_scope: patch_validation
+    current_owner_scope: patch_lifecycle
+    neighbor_of_scopes: []
+    entry_fingerprint: bef4d73009ea63118700933a0f5a25c6e284cb281765adaa912997b96ed69ac7
+  - id: TYPE_SELF_REPORT_AR_N1
+    source_core: constitution
+    source_path: docs/cores/current/constitution.yaml
+    source_core_id: CORE_LEARNIT_CONSTITUTION_V4_0
+    source_core_version: V4_0_FINAL
+    source_section: TYPES
+    logic_scope: runtime_feedback
+    current_owner_scope: learner_state
+    neighbor_of_scopes: []
+    entry_fingerprint: e3c37d5f90bb61b30d5beb8f956c6eecc952143c0c731357a422095ae468bc7d
+  - id: TYPE_SELF_REPORT_AR_N2
+    source_core: constitution
+    source_path: docs/cores/current/constitution.yaml
+    source_core_id: CORE_LEARNIT_CONSTITUTION_V4_0
+    source_core_version: V4_0_FINAL
+    source_section: TYPES
+    logic_scope: runtime_feedback
+    current_owner_scope: learner_state
+    neighbor_of_scopes: []
+    entry_fingerprint: 139cfb3a39742e8c842dfd59e63dff4fad484aab7d010a7f1e01247418f33494
+  - id: TYPE_SELF_REPORT_AR_N3
+    source_core: constitution
+    source_path: docs/cores/current/constitution.yaml
+    source_core_id: CORE_LEARNIT_CONSTITUTION_V4_0
+    source_core_version: V4_0_FINAL
+    source_section: TYPES
+    logic_scope: runtime_feedback
+    current_owner_scope: learner_state
+    neighbor_of_scopes: []
+    entry_fingerprint: d32fa9d9732447593d68dc8622077d71192bf81b6ce1f2424de69787e3717b4c
+  - id: TYPE_SESSION_INTEGRITY_SCORE
+    source_core: constitution
+    source_path: docs/cores/current/constitution.yaml
+    source_core_id: CORE_LEARNIT_CONSTITUTION_V4_0
+    source_core_version: V4_0_FINAL
+    source_section: TYPES
+    logic_scope: runtime_integrity
+    current_owner_scope: mastery_evaluation
+    neighbor_of_scopes: []
+    entry_fingerprint: 7316da2edf6a7aafb8197774ee3b21025fb1af74b5ca178a2091389c74ef373a
+  - id: TYPE_STATE_AXIS_ACTIVATION
+    source_core: constitution
+    source_path: docs/cores/current/constitution.yaml
+    source_core_id: CORE_LEARNIT_CONSTITUTION_V4_0
+    source_core_version: V4_0_FINAL
+    source_section: TYPES
+    logic_scope: runtime_state
+    current_owner_scope: learner_state
+    neighbor_of_scopes:
+    - mastery_evaluation
+    entry_fingerprint: 25aa26ab3ccad49ea209da836d1817d11bb4bd11e2d3c61e97177340d22d8879
+  - id: TYPE_STATE_AXIS_CALIBRATION
+    source_core: constitution
+    source_path: docs/cores/current/constitution.yaml
+    source_core_id: CORE_LEARNIT_CONSTITUTION_V4_0
+    source_core_version: V4_0_FINAL
+    source_section: TYPES
+    logic_scope: runtime_state
+    current_owner_scope: learner_state
+    neighbor_of_scopes: []
+    entry_fingerprint: 6f74b6af05005809f7fdf3689b7f5ebebc2a441c79be4c385edfbc9abc2db27c
+  - id: TYPE_STATE_AXIS_VALUE_COST
+    source_core: constitution
+    source_path: docs/cores/current/constitution.yaml
+    source_core_id: CORE_LEARNIT_CONSTITUTION_V4_0
+    source_core_version: V4_0_FINAL
+    source_section: TYPES
+    logic_scope: runtime_state
+    current_owner_scope: learner_state
+    neighbor_of_scopes: []
+    entry_fingerprint: f0306de290d861db1f6e4512416075ded3a55eda0415176324987bf3b718f15b
+  - id: CONSTRAINT_LINK_NO_BUSINESS_LOGIC
+    source_core: link
+    source_path: docs/cores/current/link.yaml
+    source_core_id: CORE_LINK_LEARNIT_CONSTITUTION_V4_0__REFERENTIEL_v3.0
+    source_core_version: V4_0__V3_0_FINAL
+    source_section: CONSTRAINTS
+    logic_scope: link_governance
+    current_owner_scope: null
+    neighbor_of_scopes: []
+    entry_fingerprint: d4a91ae0cfdd19880bad3e0e3f0a9591bc7b3b1abcc35e19832f1762dddecd06
+  - id: CORE_LINK_LEARNIT_CONSTITUTION_V4_0__REFERENTIEL_v3.0
+    source_core: link
+    source_path: docs/cores/current/link.yaml
+    source_core_id: CORE_LINK_LEARNIT_CONSTITUTION_V4_0__REFERENTIEL_v3.0
+    source_core_version: V4_0__V3_0_FINAL
+    source_section: CORE
+    logic_scope: null
+    current_owner_scope: null
+    neighbor_of_scopes: []
+    entry_fingerprint: fb4a3c50f7c0b6304b42bc7f7d79cc54c2aa6483815dd675d211c529b2caa4c4
+  - id: LINK_REF_CORE_LEARNIT_CONSTITUTION_V4_0
+    source_core: link
+    source_path: docs/cores/current/link.yaml
+    source_core_id: CORE_LINK_LEARNIT_CONSTITUTION_V4_0__REFERENTIEL_v3.0
+    source_core_version: V4_0__V3_0_FINAL
+    source_section: TYPES
+    logic_scope: link_reference
+    current_owner_scope: null
+    neighbor_of_scopes: []
+    entry_fingerprint: 317aad728310d5f86ed4fab96458c0145e17eae371c0b463d1e4a8bea511d373
+  - id: LINK_REF_CORE_LEARNIT_REFERENTIEL_v3.0
+    source_core: link
+    source_path: docs/cores/current/link.yaml
+    source_core_id: CORE_LINK_LEARNIT_CONSTITUTION_V4_0__REFERENTIEL_v3.0
+    source_core_version: V4_0__V3_0_FINAL
+    source_section: TYPES
+    logic_scope: link_reference
+    current_owner_scope: null
+    neighbor_of_scopes: []
+    entry_fingerprint: 8881deaafe0fdb62cd10238016686e2cf9e36c14f898f95f3948ce21d6706ef8
+  - id: TYPE_BINDING_ACTIVATION_DISTRESS_PERSISTENCE_ESCALATION_CHAIN
+    source_core: link
+    source_path: docs/cores/current/link.yaml
+    source_core_id: CORE_LINK_LEARNIT_CONSTITUTION_V4_0__REFERENTIEL_v3.0
+    source_core_version: V4_0__V3_0_FINAL
+    source_section: TYPES
+    logic_scope: intercore_binding
+    current_owner_scope: null
+    neighbor_of_scopes: []
+    entry_fingerprint: 81d9a3180693be82838464cef07e8680cb6daf47cb649b1686e83bd06eb253c0
+  - id: TYPE_BINDING_AR_N3_CALIBRATION_TO_SIGNAL_REWEIGHTING
+    source_core: link
+    source_path: docs/cores/current/link.yaml
+    source_core_id: CORE_LINK_LEARNIT_CONSTITUTION_V4_0__REFERENTIEL_v3.0
+    source_core_version: V4_0__V3_0_FINAL
+    source_section: TYPES
+    logic_scope: intercore_binding
+    current_owner_scope: null
+    neighbor_of_scopes: []
+    entry_fingerprint: 016c818490093e332484d75e97306f4eba16ade7c1759eabebd2a7eca38fba74
+  - id: TYPE_BINDING_CONSERVATIVE_SCAFFOLDING_ESCALATION_CHAIN
+    source_core: link
+    source_path: docs/cores/current/link.yaml
+    source_core_id: CORE_LINK_LEARNIT_CONSTITUTION_V4_0__REFERENTIEL_v3.0
+    source_core_version: V4_0__V3_0_FINAL
+    source_section: TYPES
+    logic_scope: intercore_binding
+    current_owner_scope: null
+    neighbor_of_scopes: []
+    entry_fingerprint: 8c8d6b49dba9d20f593de3c751767c83bc5f9340ed9c08dcffc8782268519070
+  - id: TYPE_BINDING_CONSTITUTION_REFERENTIEL_LAYER_SEPARATION
+    source_core: link
+    source_path: docs/cores/current/link.yaml
+    source_core_id: CORE_LINK_LEARNIT_CONSTITUTION_V4_0__REFERENTIEL_v3.0
+    source_core_version: V4_0__V3_0_FINAL
+    source_section: TYPES
+    logic_scope: intercore_governance
+    current_owner_scope: null
+    neighbor_of_scopes: []
+    entry_fingerprint: c4d37906d25d51dceb160cbc9632bc5806098bfa011cf101494a310f23ca6c28
+  - id: TYPE_BINDING_CONSTITUTION_TO_REFERENTIEL_OPERATIONAL_PARAMETERS
+    source_core: link
+    source_path: docs/cores/current/link.yaml
+    source_core_id: CORE_LINK_LEARNIT_CONSTITUTION_V4_0__REFERENTIEL_v3.0
+    source_core_version: V4_0__V3_0_FINAL
+    source_section: TYPES
+    logic_scope: intercore_binding
+    current_owner_scope: null
+    neighbor_of_scopes: []
+    entry_fingerprint: a14e340885720167c7c76e9a0dccd31df6848c1e7c7e7bc5d13776d1b313c502
+  - id: TYPE_BINDING_FEEDBACK_COVERAGE_TO_REFERENTIEL_THRESHOLD
+    source_core: link
+    source_path: docs/cores/current/link.yaml
+    source_core_id: CORE_LINK_LEARNIT_CONSTITUTION_V4_0__REFERENTIEL_v3.0
+    source_core_version: V4_0__V3_0_FINAL
+    source_section: TYPES
+    logic_scope: intercore_binding
+    current_owner_scope: null
+    neighbor_of_scopes: []
+    entry_fingerprint: ce36e9934e8dd195e095cc6a7340868b04fef969a2a0e374a11e04952948a8d0
+  - id: TYPE_BINDING_LEARNER_STATE_SIGNAL_AUTHORITY_CHAIN
+    source_core: link
+    source_path: docs/cores/current/link.yaml
+    source_core_id: CORE_LINK_LEARNIT_CONSTITUTION_V4_0__REFERENTIEL_v3.0
+    source_core_version: V4_0__V3_0_FINAL
+    source_section: TYPES
+    logic_scope: intercore_binding
+    current_owner_scope: null
+    neighbor_of_scopes: []
+    entry_fingerprint: cf8eb5c435fb42befc4c38197e158fc9e886fb8a61f0c63b2c7ef4c089e4780d
+  - id: TYPE_BINDING_MSC_COMPONENTS_TO_REFERENTIEL_PARAMETERS
+    source_core: link
+    source_path: docs/cores/current/link.yaml
+    source_core_id: CORE_LINK_LEARNIT_CONSTITUTION_V4_0__REFERENTIEL_v3.0
+    source_core_version: V4_0__V3_0_FINAL
+    source_section: TYPES
+    logic_scope: intercore_binding
+    current_owner_scope: null
+    neighbor_of_scopes: []
+    entry_fingerprint: fa8efcaca2631c126209c89eaaa2a9bac5e24796bf3b64bca1902440ec985ef9
+  - id: TYPE_BINDING_MSC_PERCEPTION_DIVERGENCE_THRESHOLD_CHAIN
+    source_core: link
+    source_path: docs/cores/current/link.yaml
+    source_core_id: CORE_LINK_LEARNIT_CONSTITUTION_V4_0__REFERENTIEL_v3.0
+    source_core_version: V4_0__V3_0_FINAL
+    source_section: TYPES
+    logic_scope: intercore_binding
+    current_owner_scope: null
+    neighbor_of_scopes: []
+    entry_fingerprint: 84790e5b93c91f928df091045378ff70c0d2f2ca8859e1dca18d01a89b51e0d9
+  - id: TYPE_BINDING_PATCH_TRIGGER_GOVERNANCE_CHAIN
+    source_core: link
+    source_path: docs/cores/current/link.yaml
+    source_core_id: CORE_LINK_LEARNIT_CONSTITUTION_V4_0__REFERENTIEL_v3.0
+    source_core_version: V4_0__V3_0_FINAL
+    source_section: TYPES
+    logic_scope: intercore_binding
+    current_owner_scope: null
+    neighbor_of_scopes: []
+    entry_fingerprint: 78b37689fd5b6a33a93c12d251f73249ec31eaaff5c22e893ede27df1660015e
+  - id: TYPE_BINDING_REFERENTIEL_TO_CONSTITUTION_GOVERNING_INVARIANTS
+    source_core: link
+    source_path: docs/cores/current/link.yaml
+    source_core_id: CORE_LINK_LEARNIT_CONSTITUTION_V4_0__REFERENTIEL_v3.0
+    source_core_version: V4_0__V3_0_FINAL
+    source_section: TYPES
+    logic_scope: intercore_binding
+    current_owner_scope: null
+    neighbor_of_scopes: []
+    entry_fingerprint: b71f7ca37c699f13318cdfe0fc98c0f67e5a1f9f0c9a7cfdc1f05f0d821aae3e
+  - id: TYPE_BINDING_SYSTEMIC_INVESTIGATION_CHAIN
+    source_core: link
+    source_path: docs/cores/current/link.yaml
+    source_core_id: CORE_LINK_LEARNIT_CONSTITUTION_V4_0__REFERENTIEL_v3.0
+    source_core_version: V4_0__V3_0_FINAL
+    source_section: TYPES
+    logic_scope: intercore_binding
+    current_owner_scope: null
+    neighbor_of_scopes: []
+    entry_fingerprint: 4c4bb5c902e2ce09b742bc2b372872ca097d4f731a55fe8ca923293f626cd114
+  - id: ACTION_REFERENTIEL_REDUCE_AR_N2_FREQUENCY
+    source_core: referentiel
+    source_path: docs/cores/current/referentiel.yaml
+    source_core_id: CORE_LEARNIT_REFERENTIEL_v3.0
+    source_core_version: V3_0_FINAL
+    source_section: ACTIONS
+    logic_scope: runtime_feedback
+    current_owner_scope: null
+    neighbor_of_scopes: []
+    entry_fingerprint: 01c2c964eb55ba75f3f25b47a6a799347a7a9938518ec1c3a4f5f87a39b335b9
+  - id: ACTION_REFERENTIEL_REDUCE_SESSION_INTENTION_FREQUENCY
+    source_core: referentiel
+    source_path: docs/cores/current/referentiel.yaml
+    source_core_id: CORE_LEARNIT_REFERENTIEL_v3.0
+    source_core_version: V3_0_FINAL
+    source_section: ACTIONS
+    logic_scope: runtime_feedback
+    current_owner_scope: null
+    neighbor_of_scopes: []
+    entry_fingerprint: f2dc49a6eff36fd737a855e77a94ae35710d2f7d16dad95c1455e74d6899169c
+  - id: ACTION_REFERENTIEL_SIGNAL_ANALYSIS_REVISION
+    source_core: referentiel
+    source_path: docs/cores/current/referentiel.yaml
+    source_core_id: CORE_LEARNIT_REFERENTIEL_v3.0
+    source_core_version: V3_0_FINAL
+    source_section: ACTIONS
+    logic_scope: governance
+    current_owner_scope: null
+    neighbor_of_scopes: []
+    entry_fingerprint: 65778aa026be265b9477281b85088d9440fc5e97b999323baa877b622c45a8fd
+  - id: ACTION_REFERENTIEL_TRIGGER_AR_SOLLICITATION_PATCH
+    source_core: referentiel
+    source_path: docs/cores/current/referentiel.yaml
+    source_core_id: CORE_LEARNIT_REFERENTIEL_v3.0
+    source_core_version: V3_0_FINAL
+    source_section: ACTIONS
+    logic_scope: patch_governance
+    current_owner_scope: null
+    neighbor_of_scopes: []
+    entry_fingerprint: 5705dcc3611e944434405cee2b3c712a8d6fa79c98b4189411e053230487d615
+  - id: ACTION_REFERENTIEL_TRIGGER_RELEVANCE_PATCH
+    source_core: referentiel
+    source_path: docs/cores/current/referentiel.yaml
+    source_core_id: CORE_LEARNIT_REFERENTIEL_v3.0
+    source_core_version: V3_0_FINAL
+    source_section: ACTIONS
+    logic_scope: patch_governance
+    current_owner_scope: null
+    neighbor_of_scopes: []
+    entry_fingerprint: 01371cf343e38d59ca5e7ca1c91a4de70a1c686dbed1ccd43f7ba63b65a06302
+  - id: CONSTRAINT_REFERENTIEL_AR_REFRACTORY_NOT_PENALIZED
+    source_core: referentiel
+    source_path: docs/cores/current/referentiel.yaml
+    source_core_id: CORE_LEARNIT_REFERENTIEL_v3.0
+    source_core_version: V3_0_FINAL
+    source_section: CONSTRAINTS
+    logic_scope: runtime_feedback
+    current_owner_scope: null
+    neighbor_of_scopes: []
+    entry_fingerprint: d0e53b04bc82609c55ea774df27de50d690c1d95f7d572a3a0d797f6abe52fcd
+  - id: CONSTRAINT_REFERENTIEL_DOUBLE_BUFFER_REQUIRED_FOR_PATCH
+    source_core: referentiel
+    source_path: docs/cores/current/referentiel.yaml
+    source_core_id: CORE_LEARNIT_REFERENTIEL_v3.0
+    source_core_version: V3_0_FINAL
+    source_section: CONSTRAINTS
+    logic_scope: patch_layer
+    current_owner_scope: null
+    neighbor_of_scopes: []
+    entry_fingerprint: 6db317b62d473b8c86d0700a97a63640b8b2953480376740555e94eddfe60a02
+  - id: CONSTRAINT_REFERENTIEL_LOCAL_VERIFICATION_REQUIRED_BEFORE_PATCH_APPLY
+    source_core: referentiel
+    source_path: docs/cores/current/referentiel.yaml
+    source_core_id: CORE_LEARNIT_REFERENTIEL_v3.0
+    source_core_version: V3_0_FINAL
+    source_section: CONSTRAINTS
+    logic_scope: patch_validation
+    current_owner_scope: null
+    neighbor_of_scopes: []
+    entry_fingerprint: d62b8db617252bc990f8eabf74673d50820a77691fe083eca68c070484562459
+  - id: CONSTRAINT_REFERENTIEL_NO_BEHAVIORAL_PROXY_FOR_VC
+    source_core: referentiel
+    source_path: docs/cores/current/referentiel.yaml
+    source_core_id: CORE_LEARNIT_REFERENTIEL_v3.0
+    source_core_version: V3_0_FINAL
+    source_section: CONSTRAINTS
+    logic_scope: runtime_state
+    current_owner_scope: null
+    neighbor_of_scopes: []
+    entry_fingerprint: 77cc57cae43cba275cdd6d27629ca663d9832683d379d845e0fb02e133691728
+  - id: CONSTRAINT_REFERENTIEL_NO_DIFFICULTY_ADJUSTMENT_FROM_VC_PATCH
+    source_core: referentiel
+    source_path: docs/cores/current/referentiel.yaml
+    source_core_id: CORE_LEARNIT_REFERENTIEL_v3.0
+    source_core_version: V3_0_FINAL
+    source_section: CONSTRAINTS
+    logic_scope: patch_governance
+    current_owner_scope: null
+    neighbor_of_scopes: []
+    entry_fingerprint: cf50f160ca9aee5a025822e81e22291ba6a7b3431ece537f23f93197f5be609b
+  - id: CONSTRAINT_REFERENTIEL_PATCH_SCOPE_MUST_REMAIN_CONSTITUTIONALLY_BOUNDED
+    source_core: referentiel
+    source_path: docs/cores/current/referentiel.yaml
+    source_core_id: CORE_LEARNIT_REFERENTIEL_v3.0
+    source_core_version: V3_0_FINAL
+    source_section: CONSTRAINTS
+    logic_scope: patch_validation
+    current_owner_scope: null
+    neighbor_of_scopes: []
+    entry_fingerprint: 8df6dfefe2ee5d4478b1be9061057b928f0fc877b9a9b8aadbb704b2a3aa628b
+  - id: CORE_LEARNIT_REFERENTIEL_v3.0
+    source_core: referentiel
+    source_path: docs/cores/current/referentiel.yaml
+    source_core_id: CORE_LEARNIT_REFERENTIEL_v3.0
+    source_core_version: V3_0_FINAL
+    source_section: CORE
+    logic_scope: null
+    current_owner_scope: null
+    neighbor_of_scopes: []
+    entry_fingerprint: e73509d1a9ce247ca6904b4de7236c17388c90ba8ba1b5818bb0b840215be0b7
+  - id: EVENT_REFERENTIEL_AR_REFRACTORY_PROFILE_DETECTED
+    source_core: referentiel
+    source_path: docs/cores/current/referentiel.yaml
+    source_core_id: CORE_LEARNIT_REFERENTIEL_v3.0
+    source_core_version: V3_0_FINAL
+    source_section: EVENTS
+    logic_scope: runtime_feedback
+    current_owner_scope: null
+    neighbor_of_scopes: []
+    entry_fingerprint: 1e560b10ebee0cec4bf7b9de0bb07f08f89bb13b065e2258ecacb6bd8a9135f9
+  - id: EVENT_REFERENTIEL_FEEDBACK_COVERAGE_LOW
+    source_core: referentiel
+    source_path: docs/cores/current/referentiel.yaml
+    source_core_id: CORE_LEARNIT_REFERENTIEL_v3.0
+    source_core_version: V3_0_FINAL
+    source_section: EVENTS
+    logic_scope: design_quality
+    current_owner_scope: null
+    neighbor_of_scopes: []
+    entry_fingerprint: edb3a8aa17b98beb998f2570d1e455506dd1c005f985a48b54dcab34b9e06d67
+  - id: EVENT_REFERENTIEL_LOW_AR_N2_COMPLETION
+    source_core: referentiel
+    source_path: docs/cores/current/referentiel.yaml
+    source_core_id: CORE_LEARNIT_REFERENTIEL_v3.0
+    source_core_version: V3_0_FINAL
+    source_section: EVENTS
+    logic_scope: runtime_feedback
+    current_owner_scope: null
+    neighbor_of_scopes: []
+    entry_fingerprint: 0c6602ca0d7836c5f284ad6dbd2bcb33a026c0c66873bf6333c86e59f5a1c88c
+  - id: EVENT_REFERENTIEL_LOW_SESSION_INTENTION_COMPLETION
+    source_core: referentiel
+    source_path: docs/cores/current/referentiel.yaml
+    source_core_id: CORE_LEARNIT_REFERENTIEL_v3.0
+    source_core_version: V3_0_FINAL
+    source_section: EVENTS
+    logic_scope: runtime_feedback
+    current_owner_scope: null
+    neighbor_of_scopes: []
+    entry_fingerprint: c458526183c650882fc5b1ee6cab3e09d72576120833d259b19345db7be5e920
+  - id: EVENT_REFERENTIEL_PATCH_TRIGGER_THRESHOLD_CROSSED
+    source_core: referentiel
+    source_path: docs/cores/current/referentiel.yaml
+    source_core_id: CORE_LEARNIT_REFERENTIEL_v3.0
+    source_core_version: V3_0_FINAL
+    source_section: EVENTS
+    logic_scope: patch_governance
+    current_owner_scope: null
+    neighbor_of_scopes: []
+    entry_fingerprint: 7f74312e3c9406677158b75d58342531bdb8c5a0b2ed3b460c20c2428e7a116e
+  - id: EVENT_REFERENTIEL_VC_PERSISTENT_LOW_DETECTED
+    source_core: referentiel
+    source_path: docs/cores/current/referentiel.yaml
+    source_core_id: CORE_LEARNIT_REFERENTIEL_v3.0
+    source_core_version: V3_0_FINAL
+    source_section: EVENTS
+    logic_scope: runtime_state
+    current_owner_scope: null
+    neighbor_of_scopes: []
+    entry_fingerprint: 1e13c41ca735ad7cc8062325ca694022eb2fc8e93a37d0ea65bb1e200bb6495e
+  - id: INVARIANT_ISOLATED_LOW_VC_MEANS_NO_ACTION
+    source_core: referentiel
+    source_path: docs/cores/current/referentiel.yaml
+    source_core_id: CORE_LEARNIT_REFERENTIEL_v3.0
+    source_core_version: V3_0_FINAL
+    source_section: INVARIANTS
+    logic_scope: runtime_state
+    current_owner_scope: null
+    neighbor_of_scopes: []
+    entry_fingerprint: 06e5c7680699aeb33fd4f35275ac1ebff5bdfa75b02a500d7dcfe377a88ff501
+  - id: INV_REFERENTIEL_CONSTITUTIONAL_AND_LOGIC_NOT_MODIFIABLE_HERE
+    source_core: referentiel
+    source_path: docs/cores/current/referentiel.yaml
+    source_core_id: CORE_LEARNIT_REFERENTIEL_v3.0
+    source_core_version: V3_0_FINAL
+    source_section: INVARIANTS
+    logic_scope: governance
+    current_owner_scope: null
+    neighbor_of_scopes: []
+    entry_fingerprint: feb2b304167b0a208d8def6d7be87772718695d951ffdc1806475d29486ff6c4
+  - id: INV_REFERENTIEL_CREATIVE_R_FALLBACK_IS_X1
+    source_core: referentiel
+    source_path: docs/cores/current/referentiel.yaml
+    source_core_id: CORE_LEARNIT_REFERENTIEL_v3.0
+    source_core_version: V3_0_FINAL
+    source_section: INVARIANTS
+    logic_scope: runtime_evaluation
+    current_owner_scope: null
+    neighbor_of_scopes: []
+    entry_fingerprint: 60481c323775fb9bf5e3625d8b5d7bbe4ff85518e6161d51cbd02ef784901085
+  - id: INV_REFERENTIEL_GRAPH_ONE_HOP_NOT_MODIFIABLE_HERE
+    source_core: referentiel
+    source_path: docs/cores/current/referentiel.yaml
+    source_core_id: CORE_LEARNIT_REFERENTIEL_v3.0
+    source_core_version: V3_0_FINAL
+    source_section: INVARIANTS
+    logic_scope: governance
+    current_owner_scope: null
+    neighbor_of_scopes: []
+    entry_fingerprint: c419f7400fe62d9ee38616d4268a526d40a3c0c7062f5d1bbe9b060441fdabb7
+  - id: INV_REFERENTIEL_PATCH_QUALITY_CHECKLIST_NOT_MODIFIABLE_HERE
+    source_core: referentiel
+    source_path: docs/cores/current/referentiel.yaml
+    source_core_id: CORE_LEARNIT_REFERENTIEL_v3.0
+    source_core_version: V3_0_FINAL
+    source_section: INVARIANTS
+    logic_scope: patch_governance
+    current_owner_scope: null
+    neighbor_of_scopes: []
+    entry_fingerprint: 92f6e18cfa2d43cae9db8688be22ca5b2b237d3d1cfef2c110d1ed9a91b0253d
+  - id: INV_REFERENTIEL_SESSION_INTENTION_NON_PENALIZED
+    source_core: referentiel
+    source_path: docs/cores/current/referentiel.yaml
+    source_core_id: CORE_LEARNIT_REFERENTIEL_v3.0
+    source_core_version: V3_0_FINAL
+    source_section: INVARIANTS
+    logic_scope: runtime_feedback
+    current_owner_scope: null
+    neighbor_of_scopes: []
+    entry_fingerprint: 5c3d847803597fa874698dd033cc7d6f9415fc2a85cf9ddcb3266f68eb599c02
+  - id: INV_REFERENTIEL_VC_UNKNOWN_MEANS_NO_INFERENCE
+    source_core: referentiel
+    source_path: docs/cores/current/referentiel.yaml
+    source_core_id: CORE_LEARNIT_REFERENTIEL_v3.0
+    source_core_version: V3_0_FINAL
+    source_section: INVARIANTS
+    logic_scope: runtime_state
+    current_owner_scope: null
+    neighbor_of_scopes: []
+    entry_fingerprint: 2ab18db120947111ac5bd83b1348348a2a80005604b6f3cabded8b5ba7daf05c
+  - id: PARAM_REFERENTIEL_ACTIVATION_DISTRESS_PERSISTENCE_SESSIONS
+    source_core: referentiel
+    source_path: docs/cores/current/referentiel.yaml
+    source_core_id: CORE_LEARNIT_REFERENTIEL_v3.0
+    source_core_version: V3_0_FINAL
+    source_section: PARAMETERS
+    logic_scope: runtime_state
+    current_owner_scope: null
+    neighbor_of_scopes: []
+    entry_fingerprint: 0ab6950b801b40e0ad4c13a37421712bc91fe765febf209706e52a98d8bd60b7
+  - id: PARAM_REFERENTIEL_ADAPTIVE_REGIME_PROXY_MIN
+    source_core: referentiel
+    source_path: docs/cores/current/referentiel.yaml
+    source_core_id: CORE_LEARNIT_REFERENTIEL_v3.0
+    source_core_version: V3_0_FINAL
+    source_section: PARAMETERS
+    logic_scope: runtime_state
+    current_owner_scope: null
+    neighbor_of_scopes: []
+    entry_fingerprint: f824cfeadb14ba988b085fac017b44f9f36e6fee7dcd6575c57b9fe47b64f209
+  - id: PARAM_REFERENTIEL_ADAPTIVE_REGIME_TARGET_STATES
+    source_core: referentiel
+    source_path: docs/cores/current/referentiel.yaml
+    source_core_id: CORE_LEARNIT_REFERENTIEL_v3.0
+    source_core_version: V3_0_FINAL
+    source_section: PARAMETERS
+    logic_scope: runtime_state
+    current_owner_scope: null
+    neighbor_of_scopes: []
+    entry_fingerprint: ba6a65ed60ac5d2cc9f660aa5b95282e0e2257a7af7e51794900469238cae73d
+  - id: PARAM_REFERENTIEL_AR_N2_COMPLETION_THRESHOLD
+    source_core: referentiel
+    source_path: docs/cores/current/referentiel.yaml
+    source_core_id: CORE_LEARNIT_REFERENTIEL_v3.0
+    source_core_version: V3_0_FINAL
+    source_section: PARAMETERS
+    logic_scope: runtime_feedback
+    current_owner_scope: null
+    neighbor_of_scopes: []
+    entry_fingerprint: aeeb85dd8eb546783dc1cfcc8251968071bc784a813ec8680a2fb4f0fc74e7ce
+  - id: PARAM_REFERENTIEL_AR_N2_COMPLETION_WINDOW_SESSIONS
+    source_core: referentiel
+    source_path: docs/cores/current/referentiel.yaml
+    source_core_id: CORE_LEARNIT_REFERENTIEL_v3.0
+    source_core_version: V3_0_FINAL
+    source_section: PARAMETERS
+    logic_scope: runtime_feedback
+    current_owner_scope: null
+    neighbor_of_scopes: []
+    entry_fingerprint: d561b2702d197bd76a091f5947d150438fce1519d5816cfa41ca5d3a467b6466
+  - id: PARAM_REFERENTIEL_AR_N2_FREQUENCY_REFERENCE
+    source_core: referentiel
+    source_path: docs/cores/current/referentiel.yaml
+    source_core_id: CORE_LEARNIT_REFERENTIEL_v3.0
+    source_core_version: V3_0_FINAL
+    source_section: PARAMETERS
+    logic_scope: runtime_feedback
+    current_owner_scope: null
+    neighbor_of_scopes: []
+    entry_fingerprint: 8fd6c04c771a1c1901d0aeeb80bc54bf523ff5f22bcece5b743c8f363f069454
+  - id: PARAM_REFERENTIEL_AR_N2_MAX_ITEMS
+    source_core: referentiel
+    source_path: docs/cores/current/referentiel.yaml
+    source_core_id: CORE_LEARNIT_REFERENTIEL_v3.0
+    source_core_version: V3_0_FINAL
+    source_section: PARAMETERS
+    logic_scope: runtime_feedback
+    current_owner_scope: null
+    neighbor_of_scopes: []
+    entry_fingerprint: 9d4fd3deabc93ac22925ca06d02358df01bae195bd770fa16a311281006f997d
+  - id: PARAM_REFERENTIEL_AR_N3_FREQUENCY_REFERENCE
+    source_core: referentiel
+    source_path: docs/cores/current/referentiel.yaml
+    source_core_id: CORE_LEARNIT_REFERENTIEL_v3.0
+    source_core_version: V3_0_FINAL
+    source_section: PARAMETERS
+    logic_scope: runtime_feedback
+    current_owner_scope: null
+    neighbor_of_scopes: []
+    entry_fingerprint: e9934dda55729371bae132977509e4f869f5da3bf5137584fb447a9a8ca613fe
+  - id: PARAM_REFERENTIEL_AR_REFRACTORY_SESSIONS_REFERENCE
+    source_core: referentiel
+    source_path: docs/cores/current/referentiel.yaml
+    source_core_id: CORE_LEARNIT_REFERENTIEL_v3.0
+    source_core_version: V3_0_FINAL
+    source_section: PARAMETERS
+    logic_scope: runtime_feedback
+    current_owner_scope: null
+    neighbor_of_scopes: []
+    entry_fingerprint: 1f3b5b61bfa516957c5d645be4229c52852a735bffa95b13851e5efeaa42b0c4
+  - id: PARAM_REFERENTIEL_CALIBRATION_UNITS_MAX
+    source_core: referentiel
+    source_path: docs/cores/current/referentiel.yaml
+    source_core_id: CORE_LEARNIT_REFERENTIEL_v3.0
+    source_core_version: V3_0_FINAL
+    source_section: PARAMETERS
+    logic_scope: runtime_calibration
+    current_owner_scope: null
+    neighbor_of_scopes: []
+    entry_fingerprint: 647c8118c5bc94a99f9270c2f5be843497ef0b15051b85bc5fe148ecf6f035f7
+  - id: PARAM_REFERENTIEL_COGNITIVE_FATIGUE_MINUTES_GUARDRAIL
+    source_core: referentiel
+    source_path: docs/cores/current/referentiel.yaml
+    source_core_id: CORE_LEARNIT_REFERENTIEL_v3.0
+    source_core_version: V3_0_FINAL
+    source_section: PARAMETERS
+    logic_scope: runtime_safety
+    current_owner_scope: null
+    neighbor_of_scopes: []
+    entry_fingerprint: a7b99df28e1f537c2977d2e3ca2defbda281df04b02e2ccc9b02e3afd26de065
+  - id: PARAM_REFERENTIEL_CONSERVATIVE_SCAFFOLDING_ESCALATION_SESSIONS
+    source_core: referentiel
+    source_path: docs/cores/current/referentiel.yaml
+    source_core_id: CORE_LEARNIT_REFERENTIEL_v3.0
+    source_core_version: V3_0_FINAL
+    source_section: PARAMETERS
+    logic_scope: runtime_state
+    current_owner_scope: null
+    neighbor_of_scopes: []
+    entry_fingerprint: 0762722e9fc4a8edc19e9078f0205a4b1a638a46a92b4b76990025fa75662d48
+  - id: PARAM_REFERENTIEL_CONSOLIDATION_SATISFACTORY_SESSION_CRITERION
+    source_core: referentiel
+    source_path: docs/cores/current/referentiel.yaml
+    source_core_id: CORE_LEARNIT_REFERENTIEL_v3.0
+    source_core_version: V3_0_FINAL
+    source_section: PARAMETERS
+    logic_scope: runtime_state
+    current_owner_scope: null
+    neighbor_of_scopes: []
+    entry_fingerprint: 0e0f83ca2aab791ab1e56ea872930d16924c4d441354b4c60716fe0f915eea36
+  - id: PARAM_REFERENTIEL_COVERAGE_REBALANCING_DELAY_MULTIPLIER
+    source_core: referentiel
+    source_path: docs/cores/current/referentiel.yaml
+    source_core_id: CORE_LEARNIT_REFERENTIEL_v3.0
+    source_core_version: V3_0_FINAL
+    source_section: PARAMETERS
+    logic_scope: runtime_planning
+    current_owner_scope: null
+    neighbor_of_scopes: []
+    entry_fingerprint: a90eec138a73dea138d86cc6311f010c31ddc1875ee773621b337aae659ca9c9
+  - id: PARAM_REFERENTIEL_CRITICAL_ADAPTATION_INERTIA_EXCEPTION_HOURS
+    source_core: referentiel
+    source_path: docs/cores/current/referentiel.yaml
+    source_core_id: CORE_LEARNIT_REFERENTIEL_v3.0
+    source_core_version: V3_0_FINAL
+    source_section: PARAMETERS
+    logic_scope: patch_governance
+    current_owner_scope: null
+    neighbor_of_scopes: []
+    entry_fingerprint: ea62a073abe9c1cf6f75af492565305c6001cc1fa2513e6b6936ffd8b97fde88
+  - id: PARAM_REFERENTIEL_CRITICAL_ADAPTATION_INERTIA_HOURS
+    source_core: referentiel
+    source_path: docs/cores/current/referentiel.yaml
+    source_core_id: CORE_LEARNIT_REFERENTIEL_v3.0
+    source_core_version: V3_0_FINAL
+    source_section: PARAMETERS
+    logic_scope: patch_governance
+    current_owner_scope: null
+    neighbor_of_scopes: []
+    entry_fingerprint: 0e20d96f1a651b5f932b72bec180132b03a95eed744032d1ae9c17366a0cdf6b
+  - id: PARAM_REFERENTIEL_DEGRADATION_FAILURE_COUNT
+    source_core: referentiel
+    source_path: docs/cores/current/referentiel.yaml
+    source_core_id: CORE_LEARNIT_REFERENTIEL_v3.0
+    source_core_version: V3_0_FINAL
+    source_section: PARAMETERS
+    logic_scope: runtime_evaluation
+    current_owner_scope: null
+    neighbor_of_scopes: []
+    entry_fingerprint: 58d35fcb6fa0c8d563bd41c08d570e76b5b2703c7519f2608c5ec7aa3cab39d3
+  - id: PARAM_REFERENTIEL_FEEDBACK_COVERAGE_REFERENCE_THRESHOLD
+    source_core: referentiel
+    source_path: docs/cores/current/referentiel.yaml
+    source_core_id: CORE_LEARNIT_REFERENTIEL_v3.0
+    source_core_version: V3_0_FINAL
+    source_section: PARAMETERS
+    logic_scope: design_quality
+    current_owner_scope: null
+    neighbor_of_scopes: []
+    entry_fingerprint: 596d404231b15f2d5b97d5b0d258ae163cb6375849ab585810610bc7abe689b5
+  - id: PARAM_REFERENTIEL_GAMIFICATION_PROBATION_MAX_SESSIONS
+    source_core: referentiel
+    source_path: docs/cores/current/referentiel.yaml
+    source_core_id: CORE_LEARNIT_REFERENTIEL_v3.0
+    source_core_version: V3_0_FINAL
+    source_section: PARAMETERS
+    logic_scope: deployment
+    current_owner_scope: null
+    neighbor_of_scopes: []
+    entry_fingerprint: 7a7cc50c0962a98e0ab3f3d2c0adcf9512a1c55b96175e3496ff3d76737151df
+  - id: PARAM_REFERENTIEL_INTERLEAVING_DISTINCT_TASKS_MIN
+    source_core: referentiel
+    source_path: docs/cores/current/referentiel.yaml
+    source_core_id: CORE_LEARNIT_REFERENTIEL_v3.0
+    source_core_version: V3_0_FINAL
+    source_section: PARAMETERS
+    logic_scope: runtime_planning
+    current_owner_scope: null
+    neighbor_of_scopes: []
+    entry_fingerprint: 12309601867d68d759275994c3da64fdab790a4c3828591327db854f42db4ad0
+  - id: PARAM_REFERENTIEL_INTERLEAVING_SUCCESS_STREAK
+    source_core: referentiel
+    source_path: docs/cores/current/referentiel.yaml
+    source_core_id: CORE_LEARNIT_REFERENTIEL_v3.0
+    source_core_version: V3_0_FINAL
+    source_section: PARAMETERS
+    logic_scope: runtime_planning
+    current_owner_scope: null
+    neighbor_of_scopes: []
+    entry_fingerprint: 9ccdc787c00b792a1b36a2a28c6c43850da734daa878eabd9c97df0596f8b79f
+  - id: PARAM_REFERENTIEL_KU_CALIBRATION_CREATIVE_DURATION
+    source_core: referentiel
+    source_path: docs/cores/current/referentiel.yaml
+    source_core_id: CORE_LEARNIT_REFERENTIEL_v3.0
+    source_core_version: V3_0_FINAL
+    source_section: PARAMETERS
+    logic_scope: runtime_calibration
+    current_owner_scope: null
+    neighbor_of_scopes: []
+    entry_fingerprint: 205b7350f32fd665db69b8b2c306e152f8031e653b1750b41c6cda153fcd55b2
+  - id: PARAM_REFERENTIEL_KU_CALIBRATION_DECLARATIVE_DURATION
+    source_core: referentiel
+    source_path: docs/cores/current/referentiel.yaml
+    source_core_id: CORE_LEARNIT_REFERENTIEL_v3.0
+    source_core_version: V3_0_FINAL
+    source_section: PARAMETERS
+    logic_scope: runtime_calibration
+    current_owner_scope: null
+    neighbor_of_scopes: []
+    entry_fingerprint: 44d45b5c180fc55639af831c671d9ca413dd66b240474c18abee3cfc98048327
+  - id: PARAM_REFERENTIEL_KU_CALIBRATION_FORMAL_DURATION
+    source_core: referentiel
+    source_path: docs/cores/current/referentiel.yaml
+    source_core_id: CORE_LEARNIT_REFERENTIEL_v3.0
+    source_core_version: V3_0_FINAL
+    source_section: PARAMETERS
+    logic_scope: runtime_calibration
+    current_owner_scope: null
+    neighbor_of_scopes: []
+    entry_fingerprint: d3f5ea1199a35e98d2ff01bff8b9bf3ba1303290edd42224ba5c82bdfc144e0f
+  - id: PARAM_REFERENTIEL_KU_CALIBRATION_PERCEPTUAL_DURATION
+    source_core: referentiel
+    source_path: docs/cores/current/referentiel.yaml
+    source_core_id: CORE_LEARNIT_REFERENTIEL_v3.0
+    source_core_version: V3_0_FINAL
+    source_section: PARAMETERS
+    logic_scope: runtime_calibration
+    current_owner_scope: null
+    neighbor_of_scopes: []
+    entry_fingerprint: 869aa427fa230056823d0ab885ee3f2589a99adf8aecb6e1b5c8a06e270d69d1
+  - id: PARAM_REFERENTIEL_KU_CALIBRATION_PROCEDURAL_DURATION
+    source_core: referentiel
+    source_path: docs/cores/current/referentiel.yaml
+    source_core_id: CORE_LEARNIT_REFERENTIEL_v3.0
+    source_core_version: V3_0_FINAL
+    source_section: PARAMETERS
+    logic_scope: runtime_calibration
+    current_owner_scope: null
+    neighbor_of_scopes: []
+    entry_fingerprint: 2fd2f7d0f06fb452b514a6a18e759fbb7c1450363d541bdef014028216e54561
+  - id: PARAM_REFERENTIEL_LOW_AR_CALIBRATION_CONSECUTIVE_BILANS
+    source_core: referentiel
+    source_path: docs/cores/current/referentiel.yaml
+    source_core_id: CORE_LEARNIT_REFERENTIEL_v3.0
+    source_core_version: V3_0_FINAL
+    source_section: PARAMETERS
+    logic_scope: runtime_feedback
+    current_owner_scope: null
+    neighbor_of_scopes: []
+    entry_fingerprint: abb5d1a4737f4af82da80cc12a046234941755bbb311c7c24730acbb401983e8
+  - id: PARAM_REFERENTIEL_MSC_AUTONOMY_SUCCESS_COUNT
+    source_core: referentiel
+    source_path: docs/cores/current/referentiel.yaml
+    source_core_id: CORE_LEARNIT_REFERENTIEL_v3.0
+    source_core_version: V3_0_FINAL
+    source_section: PARAMETERS
+    logic_scope: runtime_evaluation
+    current_owner_scope: null
+    neighbor_of_scopes: []
+    entry_fingerprint: 2470b0b7a69690e96bf804e5096e205b1f7bd3d27f15936a093abfd27f763ff1
+  - id: PARAM_REFERENTIEL_MSC_PERCEPTION_DIVERGENCE_THRESHOLD
+    source_core: referentiel
+    source_path: docs/cores/current/referentiel.yaml
+    source_core_id: CORE_LEARNIT_REFERENTIEL_v3.0
+    source_core_version: V3_0_FINAL
+    source_section: PARAMETERS
+    logic_scope: runtime_evaluation
+    current_owner_scope: null
+    neighbor_of_scopes: []
+    entry_fingerprint: c183325028b0bcc34b978ab527cc81522d171d9f2f8fdebba72d75279c2f9fdd
+  - id: PARAM_REFERENTIEL_MSC_PRECISION_OCCURRENCES_MIN
+    source_core: referentiel
+    source_path: docs/cores/current/referentiel.yaml
+    source_core_id: CORE_LEARNIT_REFERENTIEL_v3.0
+    source_core_version: V3_0_FINAL
+    source_section: PARAMETERS
+    logic_scope: runtime_evaluation
+    current_owner_scope: null
+    neighbor_of_scopes: []
+    entry_fingerprint: 8fb3ca5794d97f14179092e7828da1884f7949bc2571616335257fe5fe277efe
+  - id: PARAM_REFERENTIEL_MSC_PRECISION_THRESHOLD
+    source_core: referentiel
+    source_path: docs/cores/current/referentiel.yaml
+    source_core_id: CORE_LEARNIT_REFERENTIEL_v3.0
+    source_core_version: V3_0_FINAL
+    source_section: PARAMETERS
+    logic_scope: runtime_evaluation
+    current_owner_scope: null
+    neighbor_of_scopes: []
+    entry_fingerprint: f8d92329d69ad11ba4dcfdc0f7100127bf1b093532399e8343644a261226f26d
+  - id: PARAM_REFERENTIEL_MSC_ROBUSTNESS_DELAY_MEDIUM
+    source_core: referentiel
+    source_path: docs/cores/current/referentiel.yaml
+    source_core_id: CORE_LEARNIT_REFERENTIEL_v3.0
+    source_core_version: V3_0_FINAL
+    source_section: PARAMETERS
+    logic_scope: runtime_evaluation
+    current_owner_scope: null
+    neighbor_of_scopes: []
+    entry_fingerprint: 965ae46472e423b668532b07853b2c903f6e72851e2657b39d81305aa3e7e027
+  - id: PARAM_REFERENTIEL_MSC_ROBUSTNESS_DELAY_SHORT
+    source_core: referentiel
+    source_path: docs/cores/current/referentiel.yaml
+    source_core_id: CORE_LEARNIT_REFERENTIEL_v3.0
+    source_core_version: V3_0_FINAL
+    source_section: PARAMETERS
+    logic_scope: runtime_evaluation
+    current_owner_scope: null
+    neighbor_of_scopes: []
+    entry_fingerprint: 3211f61f8bc8c95d1d3e7cc04ec28721462dab3c68ccadc5d3a8c748db8d3b29
+  - id: PARAM_REFERENTIEL_OSCILLATION_MAX_CYCLES_BEFORE_ESCALATION
+    source_core: referentiel
+    source_path: docs/cores/current/referentiel.yaml
+    source_core_id: CORE_LEARNIT_REFERENTIEL_v3.0
+    source_core_version: V3_0_FINAL
+    source_section: PARAMETERS
+    logic_scope: runtime_state
+    current_owner_scope: null
+    neighbor_of_scopes: []
+    entry_fingerprint: efb2ba228ffa7ca695ad0c50809548afd0fad303310cddafef28775dac51bcb9
+  - id: PARAM_REFERENTIEL_PATCH_RETENTION_DAYS
+    source_core: referentiel
+    source_path: docs/cores/current/referentiel.yaml
+    source_core_id: CORE_LEARNIT_REFERENTIEL_v3.0
+    source_core_version: V3_0_FINAL
+    source_section: PARAMETERS
+    logic_scope: patch_layer
+    current_owner_scope: null
+    neighbor_of_scopes: []
+    entry_fingerprint: 94b8f79fa6ef8fbbedea1177b4dadb11510899057862ce5c98b9fd18fbd92b2a
+  - id: PARAM_REFERENTIEL_PROPAGATION_CHECK_MAX_DELAY_SESSIONS
+    source_core: referentiel
+    source_path: docs/cores/current/referentiel.yaml
+    source_core_id: CORE_LEARNIT_REFERENTIEL_v3.0
+    source_core_version: V3_0_FINAL
+    source_section: PARAMETERS
+    logic_scope: runtime_graph
+    current_owner_scope: null
+    neighbor_of_scopes: []
+    entry_fingerprint: 7de032baa62650528ff39c0ba2880229a35a4475b00ba503b137d4c25aee499e
+  - id: PARAM_REFERENTIEL_PROXY_MIN_WEIGHT
+    source_core: referentiel
+    source_path: docs/cores/current/referentiel.yaml
+    source_core_id: CORE_LEARNIT_REFERENTIEL_v3.0
+    source_core_version: V3_0_FINAL
+    source_section: PARAMETERS
+    logic_scope: runtime_state
+    current_owner_scope: null
+    neighbor_of_scopes: []
+    entry_fingerprint: 357cc6d90eb8248933e987b877b8816edf7053614d9fbba026d9fdee0bfdadfe
+  - id: PARAM_REFERENTIEL_R_MULTIPLIER_CREATIVE_FALLBACK
+    source_core: referentiel
+    source_path: docs/cores/current/referentiel.yaml
+    source_core_id: CORE_LEARNIT_REFERENTIEL_v3.0
+    source_core_version: V3_0_FINAL
+    source_section: PARAMETERS
+    logic_scope: runtime_evaluation
+    current_owner_scope: null
+    neighbor_of_scopes: []
+    entry_fingerprint: ba7140cdea13151652213062763ae4b511749c0eccdce8ee5f280925fce21441
+  - id: PARAM_REFERENTIEL_R_MULTIPLIER_DECLARATIVE
+    source_core: referentiel
+    source_path: docs/cores/current/referentiel.yaml
+    source_core_id: CORE_LEARNIT_REFERENTIEL_v3.0
+    source_core_version: V3_0_FINAL
+    source_section: PARAMETERS
+    logic_scope: runtime_evaluation
+    current_owner_scope: null
+    neighbor_of_scopes: []
+    entry_fingerprint: 3d6dbb1594f57410bdc9151f1c6ad36fb40dc53ecdf149a9e97e80ccb15f26d4
+  - id: PARAM_REFERENTIEL_R_MULTIPLIER_FORMAL
+    source_core: referentiel
+    source_path: docs/cores/current/referentiel.yaml
+    source_core_id: CORE_LEARNIT_REFERENTIEL_v3.0
+    source_core_version: V3_0_FINAL
+    source_section: PARAMETERS
+    logic_scope: runtime_evaluation
+    current_owner_scope: null
+    neighbor_of_scopes: []
+    entry_fingerprint: c1116573d7fefaf9b31769dc23a58ea7eb9e2e349d76119e38152290b49e701e
+  - id: PARAM_REFERENTIEL_R_MULTIPLIER_PERCEPTUAL
+    source_core: referentiel
+    source_path: docs/cores/current/referentiel.yaml
+    source_core_id: CORE_LEARNIT_REFERENTIEL_v3.0
+    source_core_version: V3_0_FINAL
+    source_section: PARAMETERS
+    logic_scope: runtime_evaluation
+    current_owner_scope: null
+    neighbor_of_scopes: []
+    entry_fingerprint: 02b7e9ab779b14e165c5516e7a578fc350e404c2e21b1a9773c86f9de4c01bbb
+  - id: PARAM_REFERENTIEL_R_MULTIPLIER_PROCEDURAL
+    source_core: referentiel
+    source_path: docs/cores/current/referentiel.yaml
+    source_core_id: CORE_LEARNIT_REFERENTIEL_v3.0
+    source_core_version: V3_0_FINAL
+    source_section: PARAMETERS
+    logic_scope: runtime_evaluation
+    current_owner_scope: null
+    neighbor_of_scopes: []
+    entry_fingerprint: ba70854c047488607bc04ca6ca01d3592efcd7b97a0a76406a7bfa8d13d34901
+  - id: PARAM_REFERENTIEL_SESSION_INTENTION_COMPLETION_THRESHOLD
+    source_core: referentiel
+    source_path: docs/cores/current/referentiel.yaml
+    source_core_id: CORE_LEARNIT_REFERENTIEL_v3.0
+    source_core_version: V3_0_FINAL
+    source_section: PARAMETERS
+    logic_scope: runtime_feedback
+    current_owner_scope: null
+    neighbor_of_scopes: []
+    entry_fingerprint: 6dc86173eadf7c05c439cd2ea7f69ed99ba09f9eba5b9265cdea9f5ebc388651
+  - id: PARAM_REFERENTIEL_SESSION_INTENTION_COMPLETION_WINDOW
+    source_core: referentiel
+    source_path: docs/cores/current/referentiel.yaml
+    source_core_id: CORE_LEARNIT_REFERENTIEL_v3.0
+    source_core_version: V3_0_FINAL
+    source_section: PARAMETERS
+    logic_scope: runtime_feedback
+    current_owner_scope: null
+    neighbor_of_scopes: []
+    entry_fingerprint: 31d2df21fe6f2700a5e2bd31709e438a72c632136008e1e187c997a4dd5c8876
+  - id: PARAM_REFERENTIEL_SESSION_INTENTION_FREQUENCY_REFERENCE
+    source_core: referentiel
+    source_path: docs/cores/current/referentiel.yaml
+    source_core_id: CORE_LEARNIT_REFERENTIEL_v3.0
+    source_core_version: V3_0_FINAL
+    source_section: PARAMETERS
+    logic_scope: runtime_feedback
+    current_owner_scope: null
+    neighbor_of_scopes: []
+    entry_fingerprint: cbf72830979f3265b031018740480a14bda0da51f8d1f3c68808282a2247fee9
+  - id: PARAM_REFERENTIEL_SYSTEMIC_INVESTIGATION_MAX_WINDOW_SESSIONS
+    source_core: referentiel
+    source_path: docs/cores/current/referentiel.yaml
+    source_core_id: CORE_LEARNIT_REFERENTIEL_v3.0
+    source_core_version: V3_0_FINAL
+    source_section: PARAMETERS
+    logic_scope: runtime_safety
+    current_owner_scope: null
+    neighbor_of_scopes: []
+    entry_fingerprint: 523cded615261dd86fb5e7e142fee7b12fa32b409d44c8ee8baf6830fd9dc83e
+  - id: PARAM_REFERENTIEL_SYSTEMIC_INVESTIGATION_SESSION_THRESHOLD
+    source_core: referentiel
+    source_path: docs/cores/current/referentiel.yaml
+    source_core_id: CORE_LEARNIT_REFERENTIEL_v3.0
+    source_core_version: V3_0_FINAL
+    source_section: PARAMETERS
+    logic_scope: runtime_safety
+    current_owner_scope: null
+    neighbor_of_scopes: []
+    entry_fingerprint: 3744f10a8bb450cf7a5b7e6a9beb6fe81dd5bbde2a8a7da7b1f66290cff3caac
+  - id: PARAM_REFERENTIEL_SYSTEMIC_INVESTIGATION_TRIGGER_CONDITIONS
+    source_core: referentiel
+    source_path: docs/cores/current/referentiel.yaml
+    source_core_id: CORE_LEARNIT_REFERENTIEL_v3.0
+    source_core_version: V3_0_FINAL
+    source_section: PARAMETERS
+    logic_scope: runtime_safety
+    current_owner_scope: null
+    neighbor_of_scopes: []
+    entry_fingerprint: d6f1bf96fb6f6d92fef59475eb978bbe12f4b7c4636baad850afe99ef7dc7de1
+  - id: PARAM_REFERENTIEL_VC_LOW_PERSISTENCE_SESSIONS_REFERENCE
+    source_core: referentiel
+    source_path: docs/cores/current/referentiel.yaml
+    source_core_id: CORE_LEARNIT_REFERENTIEL_v3.0
+    source_core_version: V3_0_FINAL
+    source_section: PARAMETERS
+    logic_scope: runtime_state
+    current_owner_scope: null
+    neighbor_of_scopes: []
+    entry_fingerprint: cf56afb4c6505024c3cc113a91ed36c2ff1e80c2548679b7b2adea70b05ae92a
+  - id: PARAM_REFERENTIEL_VC_PATCH_CYCLES_BEFORE_ANALYSIS_ESCALATION
+    source_core: referentiel
+    source_path: docs/cores/current/referentiel.yaml
+    source_core_id: CORE_LEARNIT_REFERENTIEL_v3.0
+    source_core_version: V3_0_FINAL
+    source_section: PARAMETERS
+    logic_scope: patch_governance
+    current_owner_scope: null
+    neighbor_of_scopes: []
+    entry_fingerprint: 259e7ef5dbd1069236c35ed794496736dfc1bc963dcf6249716916a5822bea02
+  - id: PARAM_REFERENTIEL_VC_UNOBSERVABLE_WINDOW_BEFORE_AXIS_DEACTIVATION
+    source_core: referentiel
+    source_path: docs/cores/current/referentiel.yaml
+    source_core_id: CORE_LEARNIT_REFERENTIEL_v3.0
+    source_core_version: V3_0_FINAL
+    source_section: PARAMETERS
+    logic_scope: runtime_state
+    current_owner_scope: null
+    neighbor_of_scopes: []
+    entry_fingerprint: 6cce26a7f738b155a845386decf3afd5d6a0d7156592080fed788a0e823c565d
+  - id: RULE_REFERENTIEL_ADAPTIVE_REGIME_CONFLICT_RESOLUTION
+    source_core: referentiel
+    source_path: docs/cores/current/referentiel.yaml
+    source_core_id: CORE_LEARNIT_REFERENTIEL_v3.0
+    source_core_version: V3_0_FINAL
+    source_section: RULES
+    logic_scope: runtime_state
+    current_owner_scope: null
+    neighbor_of_scopes: []
+    entry_fingerprint: fc36b90136e63587fe9014e394b2f7d6c6a18dd20f819706c30fcc04442900f7
+  - id: RULE_REFERENTIEL_ADAPTIVE_REGIME_DETECTION_MIN_PROXIES
+    source_core: referentiel
+    source_path: docs/cores/current/referentiel.yaml
+    source_core_id: CORE_LEARNIT_REFERENTIEL_v3.0
+    source_core_version: V3_0_FINAL
+    source_section: RULES
+    logic_scope: runtime_state
+    current_owner_scope: null
+    neighbor_of_scopes: []
+    entry_fingerprint: 4780f69db53feed1df636007718304fa03905fbf9ae3fea53bb30a38abfbe74a
+  - id: RULE_REFERENTIEL_AR_REFRACTORY_DETECTION
+    source_core: referentiel
+    source_path: docs/cores/current/referentiel.yaml
+    source_core_id: CORE_LEARNIT_REFERENTIEL_v3.0
+    source_core_version: V3_0_FINAL
+    source_section: RULES
+    logic_scope: runtime_feedback
+    current_owner_scope: null
+    neighbor_of_scopes: []
+    entry_fingerprint: ce79cc11744b029c8de40c9c6363a217699711474eecc179f80519566880264e
+  - id: RULE_REFERENTIEL_COVERAGE_REBALANCING_ACTIVATION
+    source_core: referentiel
+    source_path: docs/cores/current/referentiel.yaml
+    source_core_id: CORE_LEARNIT_REFERENTIEL_v3.0
+    source_core_version: V3_0_FINAL
+    source_section: RULES
+    logic_scope: runtime_planning
+    current_owner_scope: null
+    neighbor_of_scopes: []
+    entry_fingerprint: ade2dea5cdc7b7456ff25b90b70baee11c2c1a5fece6b13ea808142033d92f8c
+  - id: RULE_REFERENTIEL_CURRENT_RETROGRADATION_VS_POSTMASTERY_REVOCATION
+    source_core: referentiel
+    source_path: docs/cores/current/referentiel.yaml
+    source_core_id: CORE_LEARNIT_REFERENTIEL_v3.0
+    source_core_version: V3_0_FINAL
+    source_section: RULES
+    logic_scope: runtime_evaluation
+    current_owner_scope: null
+    neighbor_of_scopes: []
+    entry_fingerprint: 36d07e137d842737b204bcf1028c8745a07880d0e90e8874bf431b281a54a1c2
+  - id: RULE_REFERENTIEL_ESCALATION_PRIORITY_ORDER
+    source_core: referentiel
+    source_path: docs/cores/current/referentiel.yaml
+    source_core_id: CORE_LEARNIT_REFERENTIEL_v3.0
+    source_core_version: V3_0_FINAL
+    source_section: RULES
+    logic_scope: runtime_safety
+    current_owner_scope: null
+    neighbor_of_scopes: []
+    entry_fingerprint: 89d3751e7f0b45d20c577c16cc7855fbb57c368eda7756a98a5cba9a8d7b84bc
+  - id: RULE_REFERENTIEL_INTERLEAVING_ACTIVATION
+    source_core: referentiel
+    source_path: docs/cores/current/referentiel.yaml
+    source_core_id: CORE_LEARNIT_REFERENTIEL_v3.0
+    source_core_version: V3_0_FINAL
+    source_section: RULES
+    logic_scope: runtime_planning
+    current_owner_scope: null
+    neighbor_of_scopes: []
+    entry_fingerprint: 62acfd1bbe1d38ce6d6fd66bab92c24ec1808cc8aa91fb973f0094f6db4ec093
+  - id: RULE_REFERENTIEL_INTERLEAVING_CONTENT_REQUIRES_A
+    source_core: referentiel
+    source_path: docs/cores/current/referentiel.yaml
+    source_core_id: CORE_LEARNIT_REFERENTIEL_v3.0
+    source_core_version: V3_0_FINAL
+    source_section: RULES
+    logic_scope: runtime_progression
+    current_owner_scope: null
+    neighbor_of_scopes: []
+    entry_fingerprint: 8b82d2e06d342cce6bc9a9e3655c98f175dd8e316ff355efb941146edca72b16
+  - id: RULE_REFERENTIEL_LOW_AR_CALIBRATION_TEMPORARILY_REWEIGHTS_SIGNALS
+    source_core: referentiel
+    source_path: docs/cores/current/referentiel.yaml
+    source_core_id: CORE_LEARNIT_REFERENTIEL_v3.0
+    source_core_version: V3_0_FINAL
+    source_section: RULES
+    logic_scope: runtime_feedback
+    current_owner_scope: null
+    neighbor_of_scopes: []
+    entry_fingerprint: 781d04f722ed53ba1361432e9b6493a98a8c0637ac4e739cfa7706f0657a2be2
+  - id: RULE_REFERENTIEL_LOW_FEEDBACK_COVERAGE_SIGNALS_REVISION
+    source_core: referentiel
+    source_path: docs/cores/current/referentiel.yaml
+    source_core_id: CORE_LEARNIT_REFERENTIEL_v3.0
+    source_core_version: V3_0_FINAL
+    source_section: RULES
+    logic_scope: design_quality
+    current_owner_scope: null
+    neighbor_of_scopes: []
+    entry_fingerprint: 5c7829e11b3ac4c314d6839d2f8d8ee01a9e3cd7308a76cda39bb492add0f8ab
+  - id: RULE_REFERENTIEL_OSCILLATION_EXIT_AND_ESCALATION
+    source_core: referentiel
+    source_path: docs/cores/current/referentiel.yaml
+    source_core_id: CORE_LEARNIT_REFERENTIEL_v3.0
+    source_core_version: V3_0_FINAL
+    source_section: RULES
+    logic_scope: runtime_state
+    current_owner_scope: null
+    neighbor_of_scopes: []
+    entry_fingerprint: 6d4d846ee93c0a6ee71e7f25cf99eac98811b5b12163719d263608b315f0286d
+  - id: RULE_REFERENTIEL_REDUCE_AR_N2_FREQUENCY_ON_LOW_COMPLETION
+    source_core: referentiel
+    source_path: docs/cores/current/referentiel.yaml
+    source_core_id: CORE_LEARNIT_REFERENTIEL_v3.0
+    source_core_version: V3_0_FINAL
+    source_section: RULES
+    logic_scope: runtime_feedback
+    current_owner_scope: null
+    neighbor_of_scopes: []
+    entry_fingerprint: 96887b77635413ad673879b9c83f02402964f0e7f551ef476c258bf2400d1c5b
+  - id: RULE_REFERENTIEL_REDUCE_SESSION_INTENTION_FREQUENCY_ON_LOW_COMPLETION
+    source_core: referentiel
+    source_path: docs/cores/current/referentiel.yaml
+    source_core_id: CORE_LEARNIT_REFERENTIEL_v3.0
+    source_core_version: V3_0_FINAL
+    source_section: RULES
+    logic_scope: runtime_feedback
+    current_owner_scope: null
+    neighbor_of_scopes: []
+    entry_fingerprint: d9f2154ac8157b6a4dbabb08938c786ffa43268fa5e0f412a3c6f47a3d1cbcd4
+  - id: RULE_REFERENTIEL_SECONDARY_RETROGRADATION_DEFERRED_REENTRY
+    source_core: referentiel
+    source_path: docs/cores/current/referentiel.yaml
+    source_core_id: CORE_LEARNIT_REFERENTIEL_v3.0
+    source_core_version: V3_0_FINAL
+    source_section: RULES
+    logic_scope: runtime_graph
+    current_owner_scope: null
+    neighbor_of_scopes: []
+    entry_fingerprint: a3df3f4adcfad29af82a5672f9c8ca50a1204c186d36e77ae94cbd26d42eeb02
+  - id: RULE_REFERENTIEL_SIGNAL_PRECEDENCE_ORDER
+    source_core: referentiel
+    source_path: docs/cores/current/referentiel.yaml
+    source_core_id: CORE_LEARNIT_REFERENTIEL_v3.0
+    source_core_version: V3_0_FINAL
+    source_section: RULES
+    logic_scope: runtime_state
+    current_owner_scope: null
+    neighbor_of_scopes: []
+    entry_fingerprint: 88f294cac61b52a22f4e764ae753b3f1dda175b36f55206f0c2d510b7f98fe10
+  - id: RULE_REFERENTIEL_SYSTEMIC_INVESTIGATION_RUNTIME_BEHAVIOR
+    source_core: referentiel
+    source_path: docs/cores/current/referentiel.yaml
+    source_core_id: CORE_LEARNIT_REFERENTIEL_v3.0
+    source_core_version: V3_0_FINAL
+    source_section: RULES
+    logic_scope: runtime_safety
+    current_owner_scope: null
+    neighbor_of_scopes: []
+    entry_fingerprint: 296b68ad2da81eebf067dd7a346d7d9252a3d3355a46d8679de9b40bd7777355
+  - id: RULE_REFERENTIEL_UNVALIDATED_GAMIFICATION_PROBATION
+    source_core: referentiel
+    source_path: docs/cores/current/referentiel.yaml
+    source_core_id: CORE_LEARNIT_REFERENTIEL_v3.0
+    source_core_version: V3_0_FINAL
+    source_section: RULES
+    logic_scope: deployment
+    current_owner_scope: null
+    neighbor_of_scopes: []
+    entry_fingerprint: 57da888df2f583bc567b350c5e434458e5c51d68aea52e1127ed6e026649de82
+  - id: RULE_REFERENTIEL_VC_PATCH_ESCALATION_AFTER_TWO_CYCLES
+    source_core: referentiel
+    source_path: docs/cores/current/referentiel.yaml
+    source_core_id: CORE_LEARNIT_REFERENTIEL_v3.0
+    source_core_version: V3_0_FINAL
+    source_section: RULES
+    logic_scope: patch_governance
+    current_owner_scope: null
+    neighbor_of_scopes: []
+    entry_fingerprint: 8e63f5f5c9daf7c567fcafd713f622b06b8a5964c7e48186b799de9ef892d687
+  - id: RULE_REFERENTIEL_VC_PERSISTENCE_TRIGGERS_RELEVANCE_PATCH
+    source_core: referentiel
+    source_path: docs/cores/current/referentiel.yaml
+    source_core_id: CORE_LEARNIT_REFERENTIEL_v3.0
+    source_core_version: V3_0_FINAL
+    source_section: RULES
+    logic_scope: runtime_state
+    current_owner_scope: null
+    neighbor_of_scopes: []
+    entry_fingerprint: 497fb4e997c14fc7152fc7506a3903d7a106a45b4d721604970d316741105f0a
+  - id: RULE_REFERENTIEL_VC_UNOBSERVABLE_DISABLING
+    source_core: referentiel
+    source_path: docs/cores/current/referentiel.yaml
+    source_core_id: CORE_LEARNIT_REFERENTIEL_v3.0
+    source_core_version: V3_0_FINAL
+    source_section: RULES
+    logic_scope: runtime_state
+    current_owner_scope: null
+    neighbor_of_scopes: []
+    entry_fingerprint: 84fbee6303c732e08c57104d2d70eb6fe78a78406326d9061c516ec2e5bb76cd
+  - id: REF_CORE_LEARNIT_CONSTITUTION_V4_0_IN_REFERENTIEL
+    source_core: referentiel
+    source_path: docs/cores/current/referentiel.yaml
+    source_core_id: CORE_LEARNIT_REFERENTIEL_v3.0
+    source_core_version: V3_0_FINAL
+    source_section: TYPES
+    logic_scope: intercore_reference
+    current_owner_scope: null
+    neighbor_of_scopes: []
+    entry_fingerprint: 2df40ae59cb143bc5706938d0fda68655c1df3f0b7a407c353a79d51a655cb4f
+  - id: TYPE_REFERENTIEL_ADAPTIVE_REGIME_MATRIX
+    source_core: referentiel
+    source_path: docs/cores/current/referentiel.yaml
+    source_core_id: CORE_LEARNIT_REFERENTIEL_v3.0
+    source_core_version: V3_0_FINAL
+    source_section: TYPES
+    logic_scope: runtime_state
+    current_owner_scope: null
+    neighbor_of_scopes: []
+    entry_fingerprint: 3828de7a7c8a6f451131b09001b69280e054ece83bdde671eaf174736034c1f1
+  - id: TYPE_REFERENTIEL_AR_N2_CONFIGURATION
+    source_core: referentiel
+    source_path: docs/cores/current/referentiel.yaml
+    source_core_id: CORE_LEARNIT_REFERENTIEL_v3.0
+    source_core_version: V3_0_FINAL
+    source_section: TYPES
+    logic_scope: runtime_feedback
+    current_owner_scope: null
+    neighbor_of_scopes: []
+    entry_fingerprint: c259ec620c342e9edd5d913b06fbac5c8f73c2d4291cd95d15db6e5e58c82019
+  - id: TYPE_REFERENTIEL_AR_N3_CONFIGURATION
+    source_core: referentiel
+    source_path: docs/cores/current/referentiel.yaml
+    source_core_id: CORE_LEARNIT_REFERENTIEL_v3.0
+    source_core_version: V3_0_FINAL
+    source_section: TYPES
+    logic_scope: runtime_feedback
+    current_owner_scope: null
+    neighbor_of_scopes: []
+    entry_fingerprint: a2701e3f3ca7ddee7353567f7119e1bed3232da00b5012f8088b81dba93164a6
+  - id: TYPE_REFERENTIEL_AR_REFRACTORY_PARAMETER_BLOCK
+    source_core: referentiel
+    source_path: docs/cores/current/referentiel.yaml
+    source_core_id: CORE_LEARNIT_REFERENTIEL_v3.0
+    source_core_version: V3_0_FINAL
+    source_section: TYPES
+    logic_scope: runtime_feedback
+    current_owner_scope: null
+    neighbor_of_scopes: []
+    entry_fingerprint: bea770a27b16d824150d7676066550d07bc283229201f27edfd5a86ca8a3c6f0
+  - id: TYPE_REFERENTIEL_FEEDBACK_COVERAGE_METRIC
+    source_core: referentiel
+    source_path: docs/cores/current/referentiel.yaml
+    source_core_id: CORE_LEARNIT_REFERENTIEL_v3.0
+    source_core_version: V3_0_FINAL
+    source_section: TYPES
+    logic_scope: design_quality
+    current_owner_scope: null
+    neighbor_of_scopes: []
+    entry_fingerprint: 60798b6a7554976f2f7ac35b42c2e2474e97c6d2a5e2969322da53960d7310e0
+  - id: TYPE_REFERENTIEL_GRAPH_PROPAGATION_OPERATIONAL_NOTE
+    source_core: referentiel
+    source_path: docs/cores/current/referentiel.yaml
+    source_core_id: CORE_LEARNIT_REFERENTIEL_v3.0
+    source_core_version: V3_0_FINAL
+    source_section: TYPES
+    logic_scope: governance_note
+    current_owner_scope: null
+    neighbor_of_scopes: []
+    entry_fingerprint: 1115b3f0b9c611cfe215ae4d225907b9d2711a256fa92834833728b2a16b5c79
+  - id: TYPE_REFERENTIEL_KU_CALIBRATION_FORMAT_TABLE
+    source_core: referentiel
+    source_path: docs/cores/current/referentiel.yaml
+    source_core_id: CORE_LEARNIT_REFERENTIEL_v3.0
+    source_core_version: V3_0_FINAL
+    source_section: TYPES
+    logic_scope: runtime_calibration
+    current_owner_scope: null
+    neighbor_of_scopes: []
+    entry_fingerprint: bb1ecb8b5c4f121a00c3e63a9a1c1bffde6b5aee1bf415bb52de5ef71fb753b6
+  - id: TYPE_REFERENTIEL_MINIMAL_BEHAVIORAL_PROXY_SET
+    source_core: referentiel
+    source_path: docs/cores/current/referentiel.yaml
+    source_core_id: CORE_LEARNIT_REFERENTIEL_v3.0
+    source_core_version: V3_0_FINAL
+    source_section: TYPES
+    logic_scope: runtime_state
+    current_owner_scope: null
+    neighbor_of_scopes: []
+    entry_fingerprint: b942d6344a34be7e644d1d3b30aa01f7e5b20958c78c193b8c09a59069867f93
+  - id: TYPE_REFERENTIEL_PATCH_SCOPE_TABLE
+    source_core: referentiel
+    source_path: docs/cores/current/referentiel.yaml
+    source_core_id: CORE_LEARNIT_REFERENTIEL_v3.0
+    source_core_version: V3_0_FINAL
+    source_section: TYPES
+    logic_scope: patch_validation
+    current_owner_scope: null
+    neighbor_of_scopes: []
+    entry_fingerprint: a56af0c9a8f88f55c9e91e69e0d8402c3f1c68e2f19d3306f3567ccf00d9f7b1
+  - id: TYPE_REFERENTIEL_PATCH_TRIGGER_TABLE
+    source_core: referentiel
+    source_path: docs/cores/current/referentiel.yaml
+    source_core_id: CORE_LEARNIT_REFERENTIEL_v3.0
+    source_core_version: V3_0_FINAL
+    source_section: TYPES
+    logic_scope: patch_governance
+    current_owner_scope: null
+    neighbor_of_scopes: []
+    entry_fingerprint: fd42e757558d1a613d0e7c5205d615187bb9f899f8af61d96dca81b4a948af21
+  - id: TYPE_REFERENTIEL_REFERENTIAL_PARAMETER_LAYER
+    source_core: referentiel
+    source_path: docs/cores/current/referentiel.yaml
+    source_core_id: CORE_LEARNIT_REFERENTIEL_v3.0
+    source_core_version: V3_0_FINAL
+    source_section: TYPES
+    logic_scope: governance
+    current_owner_scope: null
+    neighbor_of_scopes: []
+    entry_fingerprint: 056bfc55a7d3a1c9967f852b31a513d95a78c78363284da4bcae68ba6c65b62a
+  - id: TYPE_REFERENTIEL_SESSION_INTENTION_CONFIGURATION
+    source_core: referentiel
+    source_path: docs/cores/current/referentiel.yaml
+    source_core_id: CORE_LEARNIT_REFERENTIEL_v3.0
+    source_core_version: V3_0_FINAL
+    source_section: TYPES
+    logic_scope: runtime_feedback
+    current_owner_scope: null
+    neighbor_of_scopes: []
+    entry_fingerprint: e28b52e5e587562a7f7e127e7c9a2cee0e5a2441d5458d2f14655dd1d649123a
+  - id: TYPE_REFERENTIEL_SIGNAL_CONFIDENCE_HIERARCHY
+    source_core: referentiel
+    source_path: docs/cores/current/referentiel.yaml
+    source_core_id: CORE_LEARNIT_REFERENTIEL_v3.0
+    source_core_version: V3_0_FINAL
+    source_section: TYPES
+    logic_scope: runtime_state
+    current_owner_scope: null
+    neighbor_of_scopes: []
+    entry_fingerprint: b49bd8a37f0b0244a6353b5901344b481252255e71a46f4fc36ca821770b7188
+  - id: TYPE_REFERENTIEL_TEMPORAL_MULTIPLIER_TABLE
+    source_core: referentiel
+    source_path: docs/cores/current/referentiel.yaml
+    source_core_id: CORE_LEARNIT_REFERENTIEL_v3.0
+    source_core_version: V3_0_FINAL
+    source_section: TYPES
+    logic_scope: runtime_evaluation
+    current_owner_scope: null
+    neighbor_of_scopes: []
+    entry_fingerprint: 5e9961d26ec7d4a06825508b159f609e08af9da887671cb0b504a1056b00b82d
+  - id: TYPE_REFERENTIEL_VC_PARAMETER_BLOCK
+    source_core: referentiel
+    source_path: docs/cores/current/referentiel.yaml
+    source_core_id: CORE_LEARNIT_REFERENTIEL_v3.0
+    source_core_version: V3_0_FINAL
+    source_section: TYPES
+    logic_scope: runtime_state
+    current_owner_scope: null
+    neighbor_of_scopes: []
+    entry_fingerprint: b6b6a3ca407ec4a4daaf4f835ee975cf977e049ae303694007cb2604e5670cd6

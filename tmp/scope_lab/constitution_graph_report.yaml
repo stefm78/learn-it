@@ -1,0 +1,74 @@
+constitution_dependency_graph_report:
+  schema_version: 0.1
+  status: PASS
+  node_count: 246
+  edge_count: 402
+  missing_target_edge_count: 0
+  duplicate_node_id_count: 0
+  duplicate_node_ids: []
+  nodes_by_core:
+    constitution: 118
+    link: 16
+    referentiel: 112
+  nodes_by_section:
+    ACTIONS: 15
+    CONSTRAINTS: 15
+    CORE: 3
+    EVENTS: 23
+    INVARIANTS: 33
+    PARAMETERS: 55
+    RULES: 45
+    TYPES: 57
+  nodes_by_owner_scope:
+    UNOWNED: 131
+    deployment_governance: 19
+    knowledge_and_design: 20
+    learner_state: 26
+    mastery_evaluation: 29
+    patch_lifecycle: 21
+  edges_by_classification:
+    cross_scope_edge: 27
+    internal_scope_edge: 167
+    unowned_or_unscoped_edge: 208
+  cross_scope_pairs:
+  - source_scope: learner_state
+    target_scope: patch_lifecycle
+    edge_count: 4
+  - source_scope: patch_lifecycle
+    target_scope: learner_state
+    edge_count: 4
+  - source_scope: deployment_governance
+    target_scope: knowledge_and_design
+    edge_count: 3
+  - source_scope: deployment_governance
+    target_scope: mastery_evaluation
+    edge_count: 3
+  - source_scope: mastery_evaluation
+    target_scope: knowledge_and_design
+    edge_count: 3
+  - source_scope: knowledge_and_design
+    target_scope: deployment_governance
+    edge_count: 2
+  - source_scope: mastery_evaluation
+    target_scope: patch_lifecycle
+    edge_count: 2
+  - source_scope: patch_lifecycle
+    target_scope: deployment_governance
+    edge_count: 2
+  - source_scope: deployment_governance
+    target_scope: patch_lifecycle
+    edge_count: 1
+  - source_scope: learner_state
+    target_scope: mastery_evaluation
+    edge_count: 1
+  - source_scope: mastery_evaluation
+    target_scope: deployment_governance
+    edge_count: 1
+  - source_scope: mastery_evaluation
+    target_scope: learner_state
+    edge_count: 1
+  missing_targets: []
+  notes:
+  - Experimental Scope Lab graph extraction. Does not modify canonical sources.
+  - Only explicit reference-shaped fields are treated as edges in this first version.
+  - Graph clustering and closure analysis are intentionally left to later phases.
