@@ -7,7 +7,7 @@ scope_catalog:
     constitution_ref: docs/cores/current/constitution.yaml
     referentiel_ref: docs/cores/current/referentiel.yaml
     link_ref: docs/cores/current/link.yaml
-    source_fingerprint: d01b62f616afdcb5898451f987f9fb1cda04911510d7edd286fe43f1198ea6fd
+    source_fingerprint: ec47bdb4cfe8e4ab891552dd105e8384eb80e90445a407e451ba655fefe9c695
   generation:
     mode: deterministic_governed
     status: generated
