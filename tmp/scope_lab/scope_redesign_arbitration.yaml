@@ -1,0 +1,940 @@
+scope_redesign_arbitration:
+  schema_version: 0.1
+  status: PENDING_HUMAN_ARBITRATION
+  source: tmp/scope_lab/scope_redesign_candidates.yaml
+  summary:
+    candidate_count: 34
+    macro_decision_count: 6
+    candidate_type_counts:
+      classify_unowned_core_area: 13
+      declare_or_review_neighbors: 8
+      keep_patch_core_with_subcluster: 1
+      review_multi_owner_cluster: 6
+      review_patch_trigger_boundary: 1
+      review_scope_boundary: 5
+    priority_counts:
+      high: 27
+      medium: 7
+    macro_candidate_counts:
+      MACRO_001_REFERENTIEL_LINK_UNOWNED_CLASSIFICATION: 13
+      MACRO_002_PATCH_LIFECYCLE_CORE_STRUCTURE: 1
+      MACRO_003_PATCH_TRIGGER_BOUNDARY: 1
+      MACRO_004_MULTI_OWNER_CLUSTER_REVIEW: 6
+      MACRO_005_NEIGHBOR_DECLARATION_REVIEW: 8
+      MACRO_006_SCOPE_BOUNDARY_REVIEW: 5
+  macro_decisions:
+  - macro_decision_id: MACRO_001_REFERENTIEL_LINK_UNOWNED_CLASSIFICATION
+    title: Classify currently UNOWNED referentiel/link areas
+    status: pending_human_arbitration
+    priority: high
+    candidate_count: 13
+    candidate_ids:
+    - CAND_UNOWNED_AREA_012
+    - CAND_UNOWNED_AREA_013
+    - CAND_UNOWNED_AREA_014
+    - CAND_UNOWNED_AREA_015
+    - CAND_UNOWNED_AREA_016
+    - CAND_UNOWNED_AREA_017
+    - CAND_UNOWNED_AREA_018
+    - CAND_UNOWNED_AREA_019
+    - CAND_UNOWNED_AREA_020
+    - CAND_UNOWNED_AREA_021
+    - CAND_UNOWNED_AREA_022
+    - CAND_UNOWNED_AREA_023
+    - CAND_UNOWNED_AREA_024
+    problem_statement: Referentiel/link areas are currently UNOWNED by the constitution scope catalog.
+    default_recommendation: Do not force all referentiel/link IDs into existing constitution scopes. Classify them explicitly.
+    human_arbitration_options:
+    - declare_referentiel_and_link_as_read_only_external_cores
+    - create_separate_referentiel_link_scope_family
+    - assign_selected_referentiel_link_clusters_to_existing_scopes
+    - declare_shared_or_global_ids
+    - defer_to_backlog
+    human_decision:
+      arbitration_status: pending
+      selected_option: null
+      rationale: null
+      canonicalization_action: null
+  - macro_decision_id: MACRO_002_PATCH_LIFECYCLE_CORE_STRUCTURE
+    title: Decide whether patch lifecycle structural core remains a canonical scope/subcluster
+    status: pending_human_arbitration
+    priority: medium
+    candidate_count: 1
+    candidate_ids:
+    - CAND_PATCH_LIFECYCLE_033
+    problem_statement: The graph identifies a strong patch_lifecycle structural core.
+    default_recommendation: Keep the structural patch core in patch_lifecycle for now and name it as a diagnostic subcluster.
+    human_arbitration_options:
+    - keep_in_patch_lifecycle
+    - name_as_patch_structure_subcluster
+    - split_as_patch_core_scope
+    - defer_to_backlog
+    human_decision:
+      arbitration_status: pending
+      selected_option: null
+      rationale: null
+      canonicalization_action: null
+  - macro_decision_id: MACRO_003_PATCH_TRIGGER_BOUNDARY
+    title: Decide boundary for patch triggers and learner/runtime signals
+    status: pending_human_arbitration
+    priority: high
+    candidate_count: 1
+    candidate_ids:
+    - CAND_PATCH_LIFECYCLE_034
+    problem_statement: Patch trigger nodes are graph-close to learner_state and runtime signals.
+    default_recommendation: Keep governed patch decisions in patch_lifecycle, but declare learner/runtime inputs as explicit
+      neighbors.
+    human_arbitration_options:
+    - keep_triggers_in_patch_lifecycle_with_neighbors
+    - move_triggers_to_learner_state
+    - create_patch_trigger_bridge
+    - split_patch_lifecycle
+    - defer_to_backlog
+    human_decision:
+      arbitration_status: pending
+      selected_option: null
+      rationale: null
+      canonicalization_action: null
+  - macro_decision_id: MACRO_004_MULTI_OWNER_CLUSTER_REVIEW
+    title: Review multi-owner graph clusters
+    status: pending_human_arbitration
+    priority: high
+    candidate_count: 6
+    candidate_ids:
+    - CAND_MULTI_OWNER_CLUSTER_006
+    - CAND_MULTI_OWNER_CLUSTER_007
+    - CAND_MULTI_OWNER_CLUSTER_008
+    - CAND_MULTI_OWNER_CLUSTER_009
+    - CAND_MULTI_OWNER_CLUSTER_010
+    - CAND_MULTI_OWNER_CLUSTER_011
+    problem_statement: Some graph clusters contain nodes owned by several current scopes.
+    default_recommendation: Prefer explicit neighbors or bridge classification before moving ownership.
+    human_arbitration_options:
+    - split_clusters_by_existing_owners
+    - declare_bridge_areas
+    - move_selected_node_ownership
+    - declare_neighbors_only
+    - defer_to_backlog
+    human_decision:
+      arbitration_status: pending
+      selected_option: null
+      rationale: null
+      canonicalization_action: null
+  - macro_decision_id: MACRO_005_NEIGHBOR_DECLARATION_REVIEW
+    title: Review explicit neighbor declarations
+    status: pending_human_arbitration
+    priority: medium
+    candidate_count: 8
+    candidate_ids:
+    - CAND_NEIGHBOR_REVIEW_025
+    - CAND_NEIGHBOR_REVIEW_026
+    - CAND_NEIGHBOR_REVIEW_027
+    - CAND_NEIGHBOR_REVIEW_028
+    - CAND_NEIGHBOR_REVIEW_029
+    - CAND_NEIGHBOR_REVIEW_030
+    - CAND_NEIGHBOR_REVIEW_031
+    - CAND_NEIGHBOR_REVIEW_032
+    problem_statement: Several clusters show external dependency pressure.
+    default_recommendation: Convert stable external dependencies into explicit neighbor decisions where appropriate.
+    human_arbitration_options:
+    - declare_neighbor_ids
+    - declare_neighbor_scope
+    - move_ownership_if_boundary_is_wrong
+    - create_bridge_if_dependency_is_structural
+    - defer_to_backlog
+    human_decision:
+      arbitration_status: pending
+      selected_option: null
+      rationale: null
+      canonicalization_action: null
+  - macro_decision_id: MACRO_006_SCOPE_BOUNDARY_REVIEW
+    title: Review all existing scope boundaries
+    status: pending_human_arbitration
+    priority: high
+    candidate_count: 5
+    candidate_ids:
+    - CAND_SCOPE_BOUNDARY_001
+    - CAND_SCOPE_BOUNDARY_002
+    - CAND_SCOPE_BOUNDARY_003
+    - CAND_SCOPE_BOUNDARY_004
+    - CAND_SCOPE_BOUNDARY_005
+    problem_statement: All five current scopes are marked as split_merge_or_bridge_review.
+    default_recommendation: Do not redesign all scopes at once. Use patch_lifecycle as first stress-test.
+    human_arbitration_options:
+    - keep_all_current_scopes_for_now
+    - redesign_patch_lifecycle_first
+    - redesign_all_scopes
+    - create_scope_generation_policy_v2
+    - defer_to_backlog
+    human_decision:
+      arbitration_status: pending
+      selected_option: null
+      rationale: null
+      canonicalization_action: null
+  candidate_arbitration_items:
+  - candidate_id: CAND_SCOPE_BOUNDARY_001
+    candidate_type: review_scope_boundary
+    priority: high
+    title: Review graph boundary alignment for scope deployment_governance
+    affected_scope_keys:
+    - deployment_governance
+    affected_cluster_ids:
+    - LABEL_CLUSTER_001
+    - LABEL_CLUSTER_020
+    - LABEL_CLUSTER_013
+    - LABEL_CLUSTER_025
+    - LABEL_CLUSTER_005
+    - LABEL_CLUSTER_008
+    - LABEL_CLUSTER_012
+    affected_node_count: 0
+    recommended_arbitration_options:
+    - keep_scope_with_explicit_neighbors
+    - split_scope
+    - merge_with_related_scope
+    - move_selected_nodes
+    - create_bridge_or_shared_classification
+    - defer_to_backlog
+    macro_decision_id: MACRO_006_SCOPE_BOUNDARY_REVIEW
+    human_decision:
+      arbitration_status: pending
+      selected_option: null
+      rationale: null
+      canonicalization_action: null
+  - candidate_id: CAND_SCOPE_BOUNDARY_002
+    candidate_type: review_scope_boundary
+    priority: high
+    title: Review graph boundary alignment for scope knowledge_and_design
+    affected_scope_keys:
+    - knowledge_and_design
+    affected_cluster_ids:
+    - LABEL_CLUSTER_007
+    - LABEL_CLUSTER_008
+    - LABEL_CLUSTER_021
+    - LABEL_CLUSTER_013
+    affected_node_count: 0
+    recommended_arbitration_options:
+    - keep_scope_with_explicit_neighbors
+    - split_scope
+    - merge_with_related_scope
+    - move_selected_nodes
+    - create_bridge_or_shared_classification
+    - defer_to_backlog
+    macro_decision_id: MACRO_006_SCOPE_BOUNDARY_REVIEW
+    human_decision:
+      arbitration_status: pending
+      selected_option: null
+      rationale: null
+      canonicalization_action: null
+  - candidate_id: CAND_SCOPE_BOUNDARY_003
+    candidate_type: review_scope_boundary
+    priority: high
+    title: Review graph boundary alignment for scope learner_state
+    affected_scope_keys:
+    - learner_state
+    affected_cluster_ids:
+    - LABEL_CLUSTER_006
+    - LABEL_CLUSTER_001
+    - LABEL_CLUSTER_016
+    - LABEL_CLUSTER_002
+    affected_node_count: 0
+    recommended_arbitration_options:
+    - keep_scope_with_explicit_neighbors
+    - split_scope
+    - merge_with_related_scope
+    - move_selected_nodes
+    - create_bridge_or_shared_classification
+    - defer_to_backlog
+    macro_decision_id: MACRO_006_SCOPE_BOUNDARY_REVIEW
+    human_decision:
+      arbitration_status: pending
+      selected_option: null
+      rationale: null
+      canonicalization_action: null
+  - candidate_id: CAND_SCOPE_BOUNDARY_004
+    candidate_type: review_scope_boundary
+    priority: high
+    title: Review graph boundary alignment for scope mastery_evaluation
+    affected_scope_keys:
+    - mastery_evaluation
+    affected_cluster_ids:
+    - LABEL_CLUSTER_005
+    - LABEL_CLUSTER_012
+    - LABEL_CLUSTER_008
+    - LABEL_CLUSTER_001
+    - LABEL_CLUSTER_009
+    - LABEL_CLUSTER_026
+    affected_node_count: 0
+    recommended_arbitration_options:
+    - keep_scope_with_explicit_neighbors
+    - split_scope
+    - merge_with_related_scope
+    - move_selected_nodes
+    - create_bridge_or_shared_classification
+    - defer_to_backlog
+    macro_decision_id: MACRO_006_SCOPE_BOUNDARY_REVIEW
+    human_decision:
+      arbitration_status: pending
+      selected_option: null
+      rationale: null
+      canonicalization_action: null
+  - candidate_id: CAND_SCOPE_BOUNDARY_005
+    candidate_type: review_scope_boundary
+    priority: high
+    title: Review graph boundary alignment for scope patch_lifecycle
+    affected_scope_keys:
+    - patch_lifecycle
+    affected_cluster_ids:
+    - LABEL_CLUSTER_003
+    - LABEL_CLUSTER_001
+    - LABEL_CLUSTER_013
+    - LABEL_CLUSTER_025
+    affected_node_count: 0
+    recommended_arbitration_options:
+    - keep_scope_with_explicit_neighbors
+    - split_scope
+    - merge_with_related_scope
+    - move_selected_nodes
+    - create_bridge_or_shared_classification
+    - defer_to_backlog
+    macro_decision_id: MACRO_006_SCOPE_BOUNDARY_REVIEW
+    human_decision:
+      arbitration_status: pending
+      selected_option: null
+      rationale: null
+      canonicalization_action: null
+  - candidate_id: CAND_MULTI_OWNER_CLUSTER_006
+    candidate_type: review_multi_owner_cluster
+    priority: high
+    title: Review multi-owner cluster LABEL_CLUSTER_001
+    affected_scope_keys:
+    - deployment_governance
+    - learner_state
+    - mastery_evaluation
+    - patch_lifecycle
+    affected_cluster_ids:
+    - LABEL_CLUSTER_001
+    affected_node_count: 26
+    recommended_arbitration_options:
+    - split_cluster_by_existing_owners
+    - merge_scope_fragments
+    - declare_bridge_area
+    - move_node_ownership
+    - declare_neighbors
+    - defer_to_backlog
+    macro_decision_id: MACRO_004_MULTI_OWNER_CLUSTER_REVIEW
+    human_decision:
+      arbitration_status: pending
+      selected_option: null
+      rationale: null
+      canonicalization_action: null
+  - candidate_id: CAND_MULTI_OWNER_CLUSTER_007
+    candidate_type: review_multi_owner_cluster
+    priority: high
+    title: Review multi-owner cluster LABEL_CLUSTER_005
+    affected_scope_keys:
+    - deployment_governance
+    - mastery_evaluation
+    affected_cluster_ids:
+    - LABEL_CLUSTER_005
+    affected_node_count: 12
+    recommended_arbitration_options:
+    - split_cluster_by_existing_owners
+    - merge_scope_fragments
+    - declare_bridge_area
+    - move_node_ownership
+    - declare_neighbors
+    - defer_to_backlog
+    macro_decision_id: MACRO_004_MULTI_OWNER_CLUSTER_REVIEW
+    human_decision:
+      arbitration_status: pending
+      selected_option: null
+      rationale: null
+      canonicalization_action: null
+  - candidate_id: CAND_MULTI_OWNER_CLUSTER_008
+    candidate_type: review_multi_owner_cluster
+    priority: high
+    title: Review multi-owner cluster LABEL_CLUSTER_008
+    affected_scope_keys:
+    - deployment_governance
+    - knowledge_and_design
+    - mastery_evaluation
+    affected_cluster_ids:
+    - LABEL_CLUSTER_008
+    affected_node_count: 9
+    recommended_arbitration_options:
+    - split_cluster_by_existing_owners
+    - merge_scope_fragments
+    - declare_bridge_area
+    - move_node_ownership
+    - declare_neighbors
+    - defer_to_backlog
+    macro_decision_id: MACRO_004_MULTI_OWNER_CLUSTER_REVIEW
+    human_decision:
+      arbitration_status: pending
+      selected_option: null
+      rationale: null
+      canonicalization_action: null
+  - candidate_id: CAND_MULTI_OWNER_CLUSTER_009
+    candidate_type: review_multi_owner_cluster
+    priority: high
+    title: Review multi-owner cluster LABEL_CLUSTER_012
+    affected_scope_keys:
+    - deployment_governance
+    - mastery_evaluation
+    affected_cluster_ids:
+    - LABEL_CLUSTER_012
+    affected_node_count: 6
+    recommended_arbitration_options:
+    - split_cluster_by_existing_owners
+    - merge_scope_fragments
+    - declare_bridge_area
+    - move_node_ownership
+    - declare_neighbors
+    - defer_to_backlog
+    macro_decision_id: MACRO_004_MULTI_OWNER_CLUSTER_REVIEW
+    human_decision:
+      arbitration_status: pending
+      selected_option: null
+      rationale: null
+      canonicalization_action: null
+  - candidate_id: CAND_MULTI_OWNER_CLUSTER_010
+    candidate_type: review_multi_owner_cluster
+    priority: high
+    title: Review multi-owner cluster LABEL_CLUSTER_013
+    affected_scope_keys:
+    - deployment_governance
+    - knowledge_and_design
+    - patch_lifecycle
+    affected_cluster_ids:
+    - LABEL_CLUSTER_013
+    affected_node_count: 6
+    recommended_arbitration_options:
+    - split_cluster_by_existing_owners
+    - merge_scope_fragments
+    - declare_bridge_area
+    - move_node_ownership
+    - declare_neighbors
+    - defer_to_backlog
+    macro_decision_id: MACRO_004_MULTI_OWNER_CLUSTER_REVIEW
+    human_decision:
+      arbitration_status: pending
+      selected_option: null
+      rationale: null
+      canonicalization_action: null
+  - candidate_id: CAND_MULTI_OWNER_CLUSTER_011
+    candidate_type: review_multi_owner_cluster
+    priority: high
+    title: Review multi-owner cluster LABEL_CLUSTER_025
+    affected_scope_keys:
+    - deployment_governance
+    - patch_lifecycle
+    affected_cluster_ids:
+    - LABEL_CLUSTER_025
+    affected_node_count: 3
+    recommended_arbitration_options:
+    - split_cluster_by_existing_owners
+    - merge_scope_fragments
+    - declare_bridge_area
+    - move_node_ownership
+    - declare_neighbors
+    - defer_to_backlog
+    macro_decision_id: MACRO_004_MULTI_OWNER_CLUSTER_REVIEW
+    human_decision:
+      arbitration_status: pending
+      selected_option: null
+      rationale: null
+      canonicalization_action: null
+  - candidate_id: CAND_UNOWNED_AREA_012
+    candidate_type: classify_unowned_core_area
+    priority: high
+    title: Classify unowned core area LABEL_CLUSTER_004
+    affected_scope_keys: []
+    affected_cluster_ids:
+    - LABEL_CLUSTER_004
+    affected_node_count: 14
+    recommended_arbitration_options:
+    - assign_to_existing_scope
+    - create_new_scope
+    - declare_shared_or_global
+    - declare_read_only_referentiel_area
+    - exclude_from_constitution_scope_bijection_with_policy
+    - defer_to_backlog
+    macro_decision_id: MACRO_001_REFERENTIEL_LINK_UNOWNED_CLASSIFICATION
+    human_decision:
+      arbitration_status: pending
+      selected_option: null
+      rationale: null
+      canonicalization_action: null
+  - candidate_id: CAND_UNOWNED_AREA_013
+    candidate_type: classify_unowned_core_area
+    priority: high
+    title: Classify unowned core area LABEL_CLUSTER_010
+    affected_scope_keys: []
+    affected_cluster_ids:
+    - LABEL_CLUSTER_010
+    affected_node_count: 7
+    recommended_arbitration_options:
+    - assign_to_existing_scope
+    - create_new_scope
+    - declare_shared_or_global
+    - declare_read_only_referentiel_area
+    - exclude_from_constitution_scope_bijection_with_policy
+    - defer_to_backlog
+    macro_decision_id: MACRO_001_REFERENTIEL_LINK_UNOWNED_CLASSIFICATION
+    human_decision:
+      arbitration_status: pending
+      selected_option: null
+      rationale: null
+      canonicalization_action: null
+  - candidate_id: CAND_UNOWNED_AREA_014
+    candidate_type: classify_unowned_core_area
+    priority: high
+    title: Classify unowned core area LABEL_CLUSTER_011
+    affected_scope_keys: []
+    affected_cluster_ids:
+    - LABEL_CLUSTER_011
+    affected_node_count: 6
+    recommended_arbitration_options:
+    - assign_to_existing_scope
+    - create_new_scope
+    - declare_shared_or_global
+    - declare_read_only_referentiel_area
+    - exclude_from_constitution_scope_bijection_with_policy
+    - defer_to_backlog
+    macro_decision_id: MACRO_001_REFERENTIEL_LINK_UNOWNED_CLASSIFICATION
+    human_decision:
+      arbitration_status: pending
+      selected_option: null
+      rationale: null
+      canonicalization_action: null
+  - candidate_id: CAND_UNOWNED_AREA_015
+    candidate_type: classify_unowned_core_area
+    priority: high
+    title: Classify unowned core area LABEL_CLUSTER_014
+    affected_scope_keys: []
+    affected_cluster_ids:
+    - LABEL_CLUSTER_014
+    affected_node_count: 5
+    recommended_arbitration_options:
+    - assign_to_existing_scope
+    - create_new_scope
+    - declare_shared_or_global
+    - declare_read_only_referentiel_area
+    - exclude_from_constitution_scope_bijection_with_policy
+    - defer_to_backlog
+    macro_decision_id: MACRO_001_REFERENTIEL_LINK_UNOWNED_CLASSIFICATION
+    human_decision:
+      arbitration_status: pending
+      selected_option: null
+      rationale: null
+      canonicalization_action: null
+  - candidate_id: CAND_UNOWNED_AREA_016
+    candidate_type: classify_unowned_core_area
+    priority: high
+    title: Classify unowned core area LABEL_CLUSTER_015
+    affected_scope_keys: []
+    affected_cluster_ids:
+    - LABEL_CLUSTER_015
+    affected_node_count: 5
+    recommended_arbitration_options:
+    - assign_to_existing_scope
+    - create_new_scope
+    - declare_shared_or_global
+    - declare_read_only_referentiel_area
+    - exclude_from_constitution_scope_bijection_with_policy
+    - defer_to_backlog
+    macro_decision_id: MACRO_001_REFERENTIEL_LINK_UNOWNED_CLASSIFICATION
+    human_decision:
+      arbitration_status: pending
+      selected_option: null
+      rationale: null
+      canonicalization_action: null
+  - candidate_id: CAND_UNOWNED_AREA_017
+    candidate_type: classify_unowned_core_area
+    priority: high
+    title: Classify unowned core area LABEL_CLUSTER_017
+    affected_scope_keys: []
+    affected_cluster_ids:
+    - LABEL_CLUSTER_017
+    affected_node_count: 5
+    recommended_arbitration_options:
+    - assign_to_existing_scope
+    - create_new_scope
+    - declare_shared_or_global
+    - declare_read_only_referentiel_area
+    - exclude_from_constitution_scope_bijection_with_policy
+    - defer_to_backlog
+    macro_decision_id: MACRO_001_REFERENTIEL_LINK_UNOWNED_CLASSIFICATION
+    human_decision:
+      arbitration_status: pending
+      selected_option: null
+      rationale: null
+      canonicalization_action: null
+  - candidate_id: CAND_UNOWNED_AREA_018
+    candidate_type: classify_unowned_core_area
+    priority: high
+    title: Classify unowned core area LABEL_CLUSTER_018
+    affected_scope_keys: []
+    affected_cluster_ids:
+    - LABEL_CLUSTER_018
+    affected_node_count: 4
+    recommended_arbitration_options:
+    - assign_to_existing_scope
+    - create_new_scope
+    - declare_shared_or_global
+    - declare_read_only_referentiel_area
+    - exclude_from_constitution_scope_bijection_with_policy
+    - defer_to_backlog
+    macro_decision_id: MACRO_001_REFERENTIEL_LINK_UNOWNED_CLASSIFICATION
+    human_decision:
+      arbitration_status: pending
+      selected_option: null
+      rationale: null
+      canonicalization_action: null
+  - candidate_id: CAND_UNOWNED_AREA_019
+    candidate_type: classify_unowned_core_area
+    priority: high
+    title: Classify unowned core area LABEL_CLUSTER_019
+    affected_scope_keys: []
+    affected_cluster_ids:
+    - LABEL_CLUSTER_019
+    affected_node_count: 4
+    recommended_arbitration_options:
+    - assign_to_existing_scope
+    - create_new_scope
+    - declare_shared_or_global
+    - declare_read_only_referentiel_area
+    - exclude_from_constitution_scope_bijection_with_policy
+    - defer_to_backlog
+    macro_decision_id: MACRO_001_REFERENTIEL_LINK_UNOWNED_CLASSIFICATION
+    human_decision:
+      arbitration_status: pending
+      selected_option: null
+      rationale: null
+      canonicalization_action: null
+  - candidate_id: CAND_UNOWNED_AREA_020
+    candidate_type: classify_unowned_core_area
+    priority: high
+    title: Classify unowned core area LABEL_CLUSTER_022
+    affected_scope_keys: []
+    affected_cluster_ids:
+    - LABEL_CLUSTER_022
+    affected_node_count: 4
+    recommended_arbitration_options:
+    - assign_to_existing_scope
+    - create_new_scope
+    - declare_shared_or_global
+    - declare_read_only_referentiel_area
+    - exclude_from_constitution_scope_bijection_with_policy
+    - defer_to_backlog
+    macro_decision_id: MACRO_001_REFERENTIEL_LINK_UNOWNED_CLASSIFICATION
+    human_decision:
+      arbitration_status: pending
+      selected_option: null
+      rationale: null
+      canonicalization_action: null
+  - candidate_id: CAND_UNOWNED_AREA_021
+    candidate_type: classify_unowned_core_area
+    priority: high
+    title: Classify unowned core area LABEL_CLUSTER_023
+    affected_scope_keys: []
+    affected_cluster_ids:
+    - LABEL_CLUSTER_023
+    affected_node_count: 4
+    recommended_arbitration_options:
+    - assign_to_existing_scope
+    - create_new_scope
+    - declare_shared_or_global
+    - declare_read_only_referentiel_area
+    - exclude_from_constitution_scope_bijection_with_policy
+    - defer_to_backlog
+    macro_decision_id: MACRO_001_REFERENTIEL_LINK_UNOWNED_CLASSIFICATION
+    human_decision:
+      arbitration_status: pending
+      selected_option: null
+      rationale: null
+      canonicalization_action: null
+  - candidate_id: CAND_UNOWNED_AREA_022
+    candidate_type: classify_unowned_core_area
+    priority: high
+    title: Classify unowned core area LABEL_CLUSTER_024
+    affected_scope_keys: []
+    affected_cluster_ids:
+    - LABEL_CLUSTER_024
+    affected_node_count: 4
+    recommended_arbitration_options:
+    - assign_to_existing_scope
+    - create_new_scope
+    - declare_shared_or_global
+    - declare_read_only_referentiel_area
+    - exclude_from_constitution_scope_bijection_with_policy
+    - defer_to_backlog
+    macro_decision_id: MACRO_001_REFERENTIEL_LINK_UNOWNED_CLASSIFICATION
+    human_decision:
+      arbitration_status: pending
+      selected_option: null
+      rationale: null
+      canonicalization_action: null
+  - candidate_id: CAND_UNOWNED_AREA_023
+    candidate_type: classify_unowned_core_area
+    priority: high
+    title: Classify unowned core area LABEL_CLUSTER_027
+    affected_scope_keys: []
+    affected_cluster_ids:
+    - LABEL_CLUSTER_027
+    affected_node_count: 3
+    recommended_arbitration_options:
+    - assign_to_existing_scope
+    - create_new_scope
+    - declare_shared_or_global
+    - declare_read_only_referentiel_area
+    - exclude_from_constitution_scope_bijection_with_policy
+    - defer_to_backlog
+    macro_decision_id: MACRO_001_REFERENTIEL_LINK_UNOWNED_CLASSIFICATION
+    human_decision:
+      arbitration_status: pending
+      selected_option: null
+      rationale: null
+      canonicalization_action: null
+  - candidate_id: CAND_UNOWNED_AREA_024
+    candidate_type: classify_unowned_core_area
+    priority: high
+    title: Classify unowned core area LABEL_CLUSTER_028
+    affected_scope_keys: []
+    affected_cluster_ids:
+    - LABEL_CLUSTER_028
+    affected_node_count: 3
+    recommended_arbitration_options:
+    - assign_to_existing_scope
+    - create_new_scope
+    - declare_shared_or_global
+    - declare_read_only_referentiel_area
+    - exclude_from_constitution_scope_bijection_with_policy
+    - defer_to_backlog
+    macro_decision_id: MACRO_001_REFERENTIEL_LINK_UNOWNED_CLASSIFICATION
+    human_decision:
+      arbitration_status: pending
+      selected_option: null
+      rationale: null
+      canonicalization_action: null
+  - candidate_id: CAND_NEIGHBOR_REVIEW_025
+    candidate_type: declare_or_review_neighbors
+    priority: medium
+    title: Review neighbor declarations for cluster LABEL_CLUSTER_002
+    affected_scope_keys:
+    - learner_state
+    - mastery_evaluation
+    affected_cluster_ids:
+    - LABEL_CLUSTER_002
+    affected_node_count: 13
+    recommended_arbitration_options:
+    - declare_neighbor_ids
+    - declare_neighbor_scope
+    - move_ownership_if_boundary_is_wrong
+    - create_bridge_if_dependency_is_structural
+    - defer_to_backlog
+    macro_decision_id: MACRO_005_NEIGHBOR_DECLARATION_REVIEW
+    human_decision:
+      arbitration_status: pending
+      selected_option: null
+      rationale: null
+      canonicalization_action: null
+  - candidate_id: CAND_NEIGHBOR_REVIEW_026
+    candidate_type: declare_or_review_neighbors
+    priority: medium
+    title: Review neighbor declarations for cluster LABEL_CLUSTER_003
+    affected_scope_keys: []
+    affected_cluster_ids:
+    - LABEL_CLUSTER_003
+    affected_node_count: 1
+    recommended_arbitration_options:
+    - declare_neighbor_ids
+    - declare_neighbor_scope
+    - move_ownership_if_boundary_is_wrong
+    - create_bridge_if_dependency_is_structural
+    - defer_to_backlog
+    macro_decision_id: MACRO_005_NEIGHBOR_DECLARATION_REVIEW
+    human_decision:
+      arbitration_status: pending
+      selected_option: null
+      rationale: null
+      canonicalization_action: null
+  - candidate_id: CAND_NEIGHBOR_REVIEW_027
+    candidate_type: declare_or_review_neighbors
+    priority: medium
+    title: Review neighbor declarations for cluster LABEL_CLUSTER_006
+    affected_scope_keys:
+    - learner_state
+    affected_cluster_ids:
+    - LABEL_CLUSTER_006
+    affected_node_count: 2
+    recommended_arbitration_options:
+    - declare_neighbor_ids
+    - declare_neighbor_scope
+    - move_ownership_if_boundary_is_wrong
+    - create_bridge_if_dependency_is_structural
+    - defer_to_backlog
+    macro_decision_id: MACRO_005_NEIGHBOR_DECLARATION_REVIEW
+    human_decision:
+      arbitration_status: pending
+      selected_option: null
+      rationale: null
+      canonicalization_action: null
+  - candidate_id: CAND_NEIGHBOR_REVIEW_028
+    candidate_type: declare_or_review_neighbors
+    priority: medium
+    title: Review neighbor declarations for cluster LABEL_CLUSTER_007
+    affected_scope_keys:
+    - knowledge_and_design
+    affected_cluster_ids:
+    - LABEL_CLUSTER_007
+    affected_node_count: 1
+    recommended_arbitration_options:
+    - declare_neighbor_ids
+    - declare_neighbor_scope
+    - move_ownership_if_boundary_is_wrong
+    - create_bridge_if_dependency_is_structural
+    - defer_to_backlog
+    macro_decision_id: MACRO_005_NEIGHBOR_DECLARATION_REVIEW
+    human_decision:
+      arbitration_status: pending
+      selected_option: null
+      rationale: null
+      canonicalization_action: null
+  - candidate_id: CAND_NEIGHBOR_REVIEW_029
+    candidate_type: declare_or_review_neighbors
+    priority: medium
+    title: Review neighbor declarations for cluster LABEL_CLUSTER_009
+    affected_scope_keys:
+    - patch_lifecycle
+    affected_cluster_ids:
+    - LABEL_CLUSTER_009
+    affected_node_count: 4
+    recommended_arbitration_options:
+    - declare_neighbor_ids
+    - declare_neighbor_scope
+    - move_ownership_if_boundary_is_wrong
+    - create_bridge_if_dependency_is_structural
+    - defer_to_backlog
+    macro_decision_id: MACRO_005_NEIGHBOR_DECLARATION_REVIEW
+    human_decision:
+      arbitration_status: pending
+      selected_option: null
+      rationale: null
+      canonicalization_action: null
+  - candidate_id: CAND_NEIGHBOR_REVIEW_030
+    candidate_type: declare_or_review_neighbors
+    priority: high
+    title: Review neighbor declarations for cluster LABEL_CLUSTER_016
+    affected_scope_keys:
+    - learner_state
+    - patch_lifecycle
+    affected_cluster_ids:
+    - LABEL_CLUSTER_016
+    affected_node_count: 6
+    recommended_arbitration_options:
+    - declare_neighbor_ids
+    - declare_neighbor_scope
+    - move_ownership_if_boundary_is_wrong
+    - create_bridge_if_dependency_is_structural
+    - defer_to_backlog
+    macro_decision_id: MACRO_005_NEIGHBOR_DECLARATION_REVIEW
+    human_decision:
+      arbitration_status: pending
+      selected_option: null
+      rationale: null
+      canonicalization_action: null
+  - candidate_id: CAND_NEIGHBOR_REVIEW_031
+    candidate_type: declare_or_review_neighbors
+    priority: high
+    title: Review neighbor declarations for cluster LABEL_CLUSTER_020
+    affected_scope_keys: []
+    affected_cluster_ids:
+    - LABEL_CLUSTER_020
+    affected_node_count: 0
+    recommended_arbitration_options:
+    - declare_neighbor_ids
+    - declare_neighbor_scope
+    - move_ownership_if_boundary_is_wrong
+    - create_bridge_if_dependency_is_structural
+    - defer_to_backlog
+    macro_decision_id: MACRO_005_NEIGHBOR_DECLARATION_REVIEW
+    human_decision:
+      arbitration_status: pending
+      selected_option: null
+      rationale: null
+      canonicalization_action: null
+  - candidate_id: CAND_NEIGHBOR_REVIEW_032
+    candidate_type: declare_or_review_neighbors
+    priority: medium
+    title: Review neighbor declarations for cluster LABEL_CLUSTER_026
+    affected_scope_keys:
+    - mastery_evaluation
+    affected_cluster_ids:
+    - LABEL_CLUSTER_026
+    affected_node_count: 1
+    recommended_arbitration_options:
+    - declare_neighbor_ids
+    - declare_neighbor_scope
+    - move_ownership_if_boundary_is_wrong
+    - create_bridge_if_dependency_is_structural
+    - defer_to_backlog
+    macro_decision_id: MACRO_005_NEIGHBOR_DECLARATION_REVIEW
+    human_decision:
+      arbitration_status: pending
+      selected_option: null
+      rationale: null
+      canonicalization_action: null
+  - candidate_id: CAND_PATCH_LIFECYCLE_033
+    candidate_type: keep_patch_core_with_subcluster
+    priority: medium
+    title: Keep patch lifecycle structural core as a coherent subcluster
+    affected_scope_keys:
+    - patch_lifecycle
+    affected_cluster_ids:
+    - LABEL_CLUSTER_003
+    affected_node_count: 15
+    recommended_arbitration_options:
+    - keep_in_patch_lifecycle
+    - name_as_patch_structure_subcluster
+    - split_as_patch_core_scope
+    - declare_neighbors_for_unowned_reference
+    macro_decision_id: MACRO_002_PATCH_LIFECYCLE_CORE_STRUCTURE
+    human_decision:
+      arbitration_status: pending
+      selected_option: null
+      rationale: null
+      canonicalization_action: null
+  - candidate_id: CAND_PATCH_LIFECYCLE_034
+    candidate_type: review_patch_trigger_boundary
+    priority: high
+    title: Review patch trigger boundary with learner_state and runtime signals
+    affected_scope_keys:
+    - patch_lifecycle
+    affected_cluster_ids:
+    - LABEL_CLUSTER_001
+    - LABEL_CLUSTER_013
+    - LABEL_CLUSTER_025
+    affected_node_count: 6
+    recommended_arbitration_options:
+    - keep_triggers_in_patch_lifecycle_with_neighbors
+    - move_triggers_to_learner_state
+    - create_patch_trigger_bridge
+    - split_patch_lifecycle
+    - defer_to_backlog
+    macro_decision_id: MACRO_003_PATCH_TRIGGER_BOUNDARY
+    human_decision:
+      arbitration_status: pending
+      selected_option: null
+      rationale: null
+      canonicalization_action: null
+  completion_criteria:
+  - Each macro_decision has a non-pending human_decision.
+  - Each accepted macro_decision identifies a canonicalization_action.
+  - Accepted changes are converted into core patches and/or scope_generation decisions.
+  - The scope catalog is regenerated deterministically after canonical changes.
+  - Ownership bijection and full reconstruction are validated before serious bounded runs.
+  notes:
+  - This file is editable by humans.
+  - It is not a canonical policy file yet.
+  - It is an arbitration scaffold for the Scope Lab.
