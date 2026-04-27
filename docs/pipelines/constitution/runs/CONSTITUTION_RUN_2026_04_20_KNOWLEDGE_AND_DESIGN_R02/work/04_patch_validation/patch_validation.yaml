@@ -1,9 +1,0 @@
-PATCHSET_VALIDATION:
-  status: PASS
-  scope: patchset
-  anomalies_count: 0
-  warnings_count: 1
-  anomalies:
-    - none
-  warnings:
-    - file[0] utilise replace_text scope=all_strings ; vérifier que le périmètre est bien borné

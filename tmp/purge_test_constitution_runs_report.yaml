@@ -1,0 +1,30 @@
+purge_test_constitution_runs:
+  mode: apply
+  generated_at: '2026-04-27T15:45:15.389915+00:00'
+  target_run_ids:
+  - CONSTITUTION_RUN_2026_04_20_DEPLOYMENT_GOVERNANCE_R01
+  - CONSTITUTION_RUN_2026_04_20_KNOWLEDGE_AND_DESIGN_R02
+  - CONSTITUTION_RUN_2026_04_20_PATCH_LIFECYCLE_R01
+  - CONSTITUTION_RUN_2026_04_20_LEARNER_STATE_R01
+  - CONSTITUTION_RUN_2026_04_20_MASTERY_EVALUATION_R01
+  protected_run_ids:
+  - CONSTITUTION_RUN_2026_04_27_PATCH_LIFECYCLE_EXTRACT_VALIDATION_R01
+  found_in_active_index:
+  - CONSTITUTION_RUN_2026_04_20_DEPLOYMENT_GOVERNANCE_R01
+  - CONSTITUTION_RUN_2026_04_20_KNOWLEDGE_AND_DESIGN_R02
+  - CONSTITUTION_RUN_2026_04_20_PATCH_LIFECYCLE_R01
+  - CONSTITUTION_RUN_2026_04_20_LEARNER_STATE_R01
+  - CONSTITUTION_RUN_2026_04_20_MASTERY_EVALUATION_R01
+  found_in_closed_index: []
+  missing_from_index: []
+  run_dirs_to_delete:
+  - docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_20_DEPLOYMENT_GOVERNANCE_R01
+  - docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_20_KNOWLEDGE_AND_DESIGN_R02
+  - docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_20_PATCH_LIFECYCLE_R01
+  - docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_20_LEARNER_STATE_R01
+  - docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_20_MASTERY_EVALUATION_R01
+  missing_run_dirs: []
+  files_to_update:
+  - docs/pipelines/constitution/runs/index.yaml
+  apply_done: true
+  backup_index: tmp/runs_index_before_test_purge.yaml
