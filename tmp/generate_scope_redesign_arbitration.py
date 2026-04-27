@@ -8,12 +8,6 @@ Reads:
 
 Writes:
   - tmp/scope_lab/scope_redesign_arbitration.yaml
-
-Purpose:
-  Convert raw redesign candidates into a smaller set of macro-decisions
-  and editable arbitration items.
-
-This script does not modify canonical cores, policies, decisions, or scope catalog.
 """
 
 from __future__ import annotations
@@ -28,6 +22,123 @@ try:
     import yaml
 except ImportError as exc:
     raise SystemExit("PyYAML is required. Install with: pip install pyyaml") from exc
+
+
+MACRO_DEFINITIONS = {
+    "MACRO_001_REFERENTIEL_LINK_UNOWNED_CLASSIFICATION": {
+        "title": "Classify currently UNOWNED referentiel/link areas",
+        "priority": "high",
+        "problem_statement": (
+            "A large part of the graph belongs to referentiel/link and is currently UNOWNED by the "
+            "constitution scope catalog. Ownership bijection cannot pass until these areas are explicitly classified."
+        ),
+        "default_recommendation": (
+            "Do not force all referentiel/link IDs into the existing constitution scopes. Introduce an explicit "
+            "classification policy: referentiel-owned/read-only, link-owned/read-only, shared/global, or assigned "
+            "to an existing scope only when there is true governance ownership."
+        ),
+        "human_arbitration_options": [
+            "declare_referentiel_and_link_as_read_only_external_cores",
+            "create_separate_referentiel_link_scope_family",
+            "assign_selected_referentiel_link_clusters_to_existing_scopes",
+            "declare_shared_or_global_ids",
+            "defer_to_backlog",
+        ],
+    },
+    "MACRO_002_PATCH_LIFECYCLE_CORE_STRUCTURE": {
+        "title": "Decide whether patch lifecycle structural core remains a canonical scope/subcluster",
+        "priority": "medium",
+        "problem_statement": (
+            "The graph identifies a strong patch_lifecycle structural core around patch artifact, impact scope, "
+            "quality gate, rollback, and validation."
+        ),
+        "default_recommendation": (
+            "Keep the structural patch core in patch_lifecycle for now, and name it explicitly as a diagnostic "
+            "subcluster. Do not split it before deciding the trigger boundary."
+        ),
+        "human_arbitration_options": [
+            "keep_in_patch_lifecycle",
+            "name_as_patch_structure_subcluster",
+            "split_as_patch_core_scope",
+            "defer_to_backlog",
+        ],
+    },
+    "MACRO_003_PATCH_TRIGGER_BOUNDARY": {
+        "title": "Decide boundary for patch triggers and learner/runtime signals",
+        "priority": "high",
+        "problem_statement": (
+            "Patch trigger nodes are graph-close to learner_state and runtime signals. This is the main stress-test "
+            "for the current patch_lifecycle scope."
+        ),
+        "default_recommendation": (
+            "Do not move trigger nodes immediately. Keep them in patch_lifecycle if they represent governed patch "
+            "decisions, but declare learner_state/runtime inputs as explicit neighbors. If the boundary remains "
+            "ambiguous, create a bridge treatment for patch_trigger_governance."
+        ),
+        "human_arbitration_options": [
+            "keep_triggers_in_patch_lifecycle_with_neighbors",
+            "move_triggers_to_learner_state",
+            "create_patch_trigger_bridge",
+            "split_patch_lifecycle",
+            "defer_to_backlog",
+        ],
+    },
+    "MACRO_004_MULTI_OWNER_CLUSTER_REVIEW": {
+        "title": "Review multi-owner graph clusters",
+        "priority": "high",
+        "problem_statement": (
+            "Some graph clusters contain nodes owned by several current scopes. These clusters may indicate bridge "
+            "areas, bad boundaries, or missing neighbor declarations."
+        ),
+        "default_recommendation": (
+            "Do not merge scopes globally. Review each multi-owner cluster and prefer explicit neighbors or bridge "
+            "classification before moving ownership."
+        ),
+        "human_arbitration_options": [
+            "split_clusters_by_existing_owners",
+            "declare_bridge_areas",
+            "move_selected_node_ownership",
+            "declare_neighbors_only",
+            "defer_to_backlog",
+        ],
+    },
+    "MACRO_005_NEIGHBOR_DECLARATION_REVIEW": {
+        "title": "Review explicit neighbor declarations",
+        "priority": "medium",
+        "problem_statement": (
+            "Several clusters show external dependency pressure. Most of these dependencies should probably become "
+            "explicit read neighbors rather than ownership moves."
+        ),
+        "default_recommendation": (
+            "Convert stable external dependencies into force_logical_neighbors decisions where appropriate."
+        ),
+        "human_arbitration_options": [
+            "declare_neighbor_ids",
+            "declare_neighbor_scope",
+            "move_ownership_if_boundary_is_wrong",
+            "create_bridge_if_dependency_is_structural",
+            "defer_to_backlog",
+        ],
+    },
+    "MACRO_006_SCOPE_BOUNDARY_REVIEW": {
+        "title": "Review all existing scope boundaries",
+        "priority": "high",
+        "problem_statement": (
+            "All five current scopes are marked as split_merge_or_bridge_review by graph alignment."
+        ),
+        "default_recommendation": (
+            "Do not redesign all scopes at once. Use patch_lifecycle as the first stress-test, then update the "
+            "general scoping policy based on what is learned."
+        ),
+        "human_arbitration_options": [
+            "keep_all_current_scopes_for_now",
+            "redesign_patch_lifecycle_first",
+            "redesign_all_scopes",
+            "create_scope_generation_policy_v2",
+            "defer_to_backlog",
+        ],
+    },
+}
 
 
 def load_yaml(path: Path) -> Any:
@@ -53,27 +164,18 @@ def load_candidates(path: Path) -> list[dict[str, Any]]:
 
 
 def group_for_candidate(candidate: dict[str, Any]) -> str:
-    ctype = candidate.get("candidate_type")
+    candidate_type = candidate.get("candidate_type")
 
-    if ctype == "classify_unowned_core_area":
-        return "MACRO_001_REFERENTIEL_LINK_UNOWNED_CLASSIFICATION"
+    mapping = {
+        "classify_unowned_core_area": "MACRO_001_REFERENTIEL_LINK_UNOWNED_CLASSIFICATION",
+        "keep_patch_core_with_subcluster": "MACRO_002_PATCH_LIFECYCLE_CORE_STRUCTURE",
+        "review_patch_trigger_boundary": "MACRO_003_PATCH_TRIGGER_BOUNDARY",
+        "review_multi_owner_cluster": "MACRO_004_MULTI_OWNER_CLUSTER_REVIEW",
+        "declare_or_review_neighbors": "MACRO_005_NEIGHBOR_DECLARATION_REVIEW",
+        "review_scope_boundary": "MACRO_006_SCOPE_BOUNDARY_REVIEW",
+    }
 
-    if ctype == "keep_patch_core_with_subcluster":
-        return "MACRO_002_PATCH_LIFECYCLE_CORE_STRUCTURE"
-
-    if ctype == "review_patch_trigger_boundary":
-        return "MACRO_003_PATCH_TRIGGER_BOUNDARY"
-
-    if ctype == "review_multi_owner_cluster":
-        return "MACRO_004_MULTI_OWNER_CLUSTER_REVIEW"
-
-    if ctype == "declare_or_review_neighbors":
-        return "MACRO_005_NEIGHBOR_DECLARATION_REVIEW"
-
-    if ctype == "review_scope_boundary":
-        return "MACRO_006_SCOPE_BOUNDARY_REVIEW"
-
-    return "MACRO_999_OTHER"
+    return mapping.get(candidate_type, "MACRO_999_OTHER")
 
 
 def short_candidate(candidate: dict[str, Any]) -> dict[str, Any]:
@@ -97,198 +199,31 @@ def build_macro_decisions(candidates: list[dict[str, Any]]) -> list[dict[str, An
 
     macros: list[dict[str, Any]] = []
 
-    macros.append(
-        {
-            "macro_decision_id": "MACRO_001_REFERENTIEL_LINK_UNOWNED_CLASSIFICATION",
-            "title": "Classify currently UNOWNED referentiel/link areas",
-            "status": "pending_human_arbitration",
-            "priority": "high",
-            "candidate_ids": [
-                c["candidate_id"]
-                for c in grouped.get("MACRO_001_REFERENTIEL_LINK_UNOWNED_CLASSIFICATION", [])
-            ],
-            "problem_statement": >-
-                "A large part of the graph belongs to referentiel/link and is currently UNOWNED "
-                "by the constitution scope catalog. Ownership bijection cannot pass until these "
-                "areas are explicitly classified.",
-            "default_recommendation": >-
-                "Do not force all referentiel/link IDs into the existing constitution scopes. "
-                "Introduce an explicit classification policy: referentiel-owned/read-only, "
-                "link-owned/read-only, shared/global, or assigned to an existing scope only when "
-                "there is true governance ownership.",
-            "human_arbitration_options": [
-                "declare_referentiel_and_link_as_read_only_external_cores",
-                "create_separate_referentiel_link_scope_family",
-                "assign_selected_referentiel_link_clusters_to_existing_scopes",
-                "declare_shared_or_global_ids",
-                "defer_to_backlog",
-            ],
-            "human_decision": {
-                "arbitration_status": "pending",
-                "selected_option": null,
-                "rationale": null,
-                "canonicalization_action": null,
-            },
-        }
-    )
-
-    macros.append(
-        {
-            "macro_decision_id": "MACRO_002_PATCH_LIFECYCLE_CORE_STRUCTURE",
-            "title": "Decide whether patch lifecycle structural core remains a canonical scope/subcluster",
-            "status": "pending_human_arbitration",
-            "priority": "medium",
-            "candidate_ids": [
-                c["candidate_id"]
-                for c in grouped.get("MACRO_002_PATCH_LIFECYCLE_CORE_STRUCTURE", [])
-            ],
-            "problem_statement": >-
-                "The graph identifies a strong patch_lifecycle structural core around patch artifact, "
-                "impact scope, quality gate, rollback, and validation.",
-            "default_recommendation": >-
-                "Keep the structural patch core in patch_lifecycle for now, and name it explicitly "
-                "as a diagnostic subcluster. Do not split it before deciding the trigger boundary.",
-            "human_arbitration_options": [
-                "keep_in_patch_lifecycle",
-                "name_as_patch_structure_subcluster",
-                "split_as_patch_core_scope",
-                "defer_to_backlog",
-            ],
-            "human_decision": {
-                "arbitration_status": "pending",
-                "selected_option": null,
-                "rationale": null,
-                "canonicalization_action": null,
-            },
-        }
-    )
-
-    macros.append(
-        {
-            "macro_decision_id": "MACRO_003_PATCH_TRIGGER_BOUNDARY",
-            "title": "Decide boundary for patch triggers and learner/runtime signals",
-            "status": "pending_human_arbitration",
-            "priority": "high",
-            "candidate_ids": [
-                c["candidate_id"]
-                for c in grouped.get("MACRO_003_PATCH_TRIGGER_BOUNDARY", [])
-            ],
-            "problem_statement": >-
-                "Patch trigger nodes are graph-close to learner_state and runtime signals. "
-                "This is the main stress-test for the current patch_lifecycle scope.",
-            "default_recommendation": >-
-                "Do not move trigger nodes immediately. Keep them in patch_lifecycle if they represent "
-                "governed patch decisions, but declare learner_state/runtime inputs as explicit neighbors. "
-                "If the boundary remains ambiguous, create a bridge treatment for patch_trigger_governance.",
-            "human_arbitration_options": [
-                "keep_triggers_in_patch_lifecycle_with_neighbors",
-                "move_triggers_to_learner_state",
-                "create_patch_trigger_bridge",
-                "split_patch_lifecycle",
-                "defer_to_backlog",
-            ],
-            "human_decision": {
-                "arbitration_status": "pending",
-                "selected_option": null,
-                "rationale": null,
-                "canonicalization_action": null,
-            },
-        }
-    )
-
-    macros.append(
-        {
-            "macro_decision_id": "MACRO_004_MULTI_OWNER_CLUSTER_REVIEW",
-            "title": "Review multi-owner graph clusters",
-            "status": "pending_human_arbitration",
-            "priority": "high",
-            "candidate_ids": [
-                c["candidate_id"]
-                for c in grouped.get("MACRO_004_MULTI_OWNER_CLUSTER_REVIEW", [])
-            ],
-            "problem_statement": >-
-                "Some graph clusters contain nodes owned by several current scopes. "
-                "These clusters may indicate bridge areas, bad boundaries, or missing neighbor declarations.",
-            "default_recommendation": >-
-                "Do not merge scopes globally. Review each multi-owner cluster and prefer explicit neighbors "
-                "or bridge classification before moving ownership.",
-            "human_arbitration_options": [
-                "split_clusters_by_existing_owners",
-                "declare_bridge_areas",
-                "move_selected_node_ownership",
-                "declare_neighbors_only",
-                "defer_to_backlog",
-            ],
-            "human_decision": {
-                "arbitration_status": "pending",
-                "selected_option": null,
-                "rationale": null,
-                "canonicalization_action": null,
-            },
-        }
-    )
-
-    macros.append(
-        {
-            "macro_decision_id": "MACRO_005_NEIGHBOR_DECLARATION_REVIEW",
-            "title": "Review explicit neighbor declarations",
-            "status": "pending_human_arbitration",
-            "priority": "medium",
-            "candidate_ids": [
-                c["candidate_id"]
-                for c in grouped.get("MACRO_005_NEIGHBOR_DECLARATION_REVIEW", [])
-            ],
-            "problem_statement": >-
-                "Several clusters show external dependency pressure. "
-                "Most of these dependencies should probably become explicit read neighbors rather than ownership moves.",
-            "default_recommendation": >-
-                "Convert stable external dependencies into force_logical_neighbors decisions where appropriate.",
-            "human_arbitration_options": [
-                "declare_neighbor_ids",
-                "declare_neighbor_scope",
-                "move_ownership_if_boundary_is_wrong",
-                "create_bridge_if_dependency_is_structural",
-                "defer_to_backlog",
-            ],
-            "human_decision": {
-                "arbitration_status": "pending",
-                "selected_option": null,
-                "rationale": null,
-                "canonicalization_action": null,
-            },
-        }
-    )
-
-    macros.append(
-        {
-            "macro_decision_id": "MACRO_006_SCOPE_BOUNDARY_REVIEW",
-            "title": "Review all existing scope boundaries",
-            "status": "pending_human_arbitration",
-            "priority": "high",
-            "candidate_ids": [
-                c["candidate_id"]
-                for c in grouped.get("MACRO_006_SCOPE_BOUNDARY_REVIEW", [])
-            ],
-            "problem_statement": >-
-                "All five current scopes are marked as split_merge_or_bridge_review by graph alignment.",
-            "default_recommendation": >-
-                "Do not redesign all scopes at once. Use patch_lifecycle as the first stress-test, "
-                "then update the general scoping policy based on what is learned.",
-            "human_arbitration_options": [
-                "keep_all_current_scopes_for_now",
-                "redesign_patch_lifecycle_first",
-                "redesign_all_scopes",
-                "create_scope_generation_policy_v2",
-                "defer_to_backlog",
-            ],
-            "human_decision": {
-                "arbitration_status": "pending",
-                "selected_option": null,
-                "rationale": null,
-                "canonicalization_action": null,
-            },
-        }
-    )
+    for macro_id, definition in MACRO_DEFINITIONS.items():
+        macro_candidates = grouped.get(macro_id, [])
+        macros.append(
+            {
+                "macro_decision_id": macro_id,
+                "title": definition["title"],
+                "status": "pending_human_arbitration",
+                "priority": definition["priority"],
+                "candidate_ids": [
+                    candidate.get("candidate_id")
+                    for candidate in macro_candidates
+                    if candidate.get("candidate_id")
+                ],
+                "candidate_count": len(macro_candidates),
+                "problem_statement": definition["problem_statement"],
+                "default_recommendation": definition["default_recommendation"],
+                "human_arbitration_options": definition["human_arbitration_options"],
+                "human_decision": {
+                    "arbitration_status": "pending",
+                    "selected_option": None,
+                    "rationale": None,
+                    "canonicalization_action": None,
+                },
+            }
+        )
 
     return macros
 
@@ -311,9 +246,9 @@ def build_arbitration_items(candidates: list[dict[str, Any]]) -> list[dict[str, 
 
 
 def summarize(candidates: list[dict[str, Any]], macros: list[dict[str, Any]]) -> dict[str, Any]:
-    type_counts = Counter(c.get("candidate_type") for c in candidates)
-    priority_counts = Counter(c.get("priority") for c in candidates)
-    macro_counts = Counter(group_for_candidate(c) for c in candidates)
+    type_counts = Counter(candidate.get("candidate_type") for candidate in candidates)
+    priority_counts = Counter(candidate.get("priority") for candidate in candidates)
+    macro_counts = Counter(group_for_candidate(candidate) for candidate in candidates)
 
     return {
         "candidate_count": len(candidates),
