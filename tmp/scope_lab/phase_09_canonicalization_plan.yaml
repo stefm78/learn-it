@@ -1,0 +1,162 @@
+phase_09_canonicalization_plan:
+  schema_version: 0.1
+  status: draft_for_review
+  phase: PHASE_09_CANONICAL_PATCH_PLANNING
+  scope: constitution_scope_graph_clustering
+  source_artifacts:
+  - docs/transformations/core_modularization/SCOPE_GRAPH_CLUSTERING_APPROACH.md
+  - docs/transformations/core_modularization/REFERENTIEL_LINK_EXTERNAL_READ_ONLY_TREATMENT.md
+  - tmp/scope_lab/scope_redesign_arbitration.yaml
+  - tmp/scope_lab/scope_redesign_arbitration_summary.md
+  - tmp/scope_lab/scope_redesign_candidates.yaml
+  - tmp/scope_lab/scope_alignment_report.yaml
+  - tmp/scope_lab/cluster_closure_report.yaml
+  accepted_macro_decisions:
+  - macro_decision_id: MACRO_001_REFERENTIEL_LINK_UNOWNED_CLASSIFICATION
+    selected_option: declare_referentiel_and_link_as_read_only_external_cores
+    canonicalization_intent: Introduce explicit external_read_only classification for referentiel/link IDs in Constitution
+      scoping. Do not force referentiel/link IDs into Constitution scope ownership.
+  - macro_decision_id: MACRO_002_PATCH_LIFECYCLE_CORE_STRUCTURE
+    selected_option: name_as_patch_structure_subcluster
+    canonicalization_intent: Keep patch lifecycle structural IDs in patch_lifecycle and name the diagnostic subcluster patch_structure_and_quality.
+  - macro_decision_id: MACRO_003_PATCH_TRIGGER_BOUNDARY
+    selected_option: keep_triggers_in_patch_lifecycle_with_neighbors
+    canonicalization_intent: Keep governed patch trigger IDs in patch_lifecycle while declaring learner_state/runtime source
+      IDs as explicit read neighbors.
+  - macro_decision_id: MACRO_006_SCOPE_BOUNDARY_REVIEW
+    selected_option: redesign_patch_lifecycle_first
+    canonicalization_intent: Use patch_lifecycle as the first pilot scope. Keep other scope boundary redesign items in backlog
+      until the method is validated.
+  pending_macro_decisions:
+  - macro_decision_id: MACRO_004_MULTI_OWNER_CLUSTER_REVIEW
+    status: pending
+    note: Do not apply broad multi-owner moves yet. Use patch_lifecycle pilot first.
+  - macro_decision_id: MACRO_005_NEIGHBOR_DECLARATION_REVIEW
+    status: pending
+    note: Only patch_lifecycle-critical neighbor decisions should be considered in this phase.
+  canonical_write_strategy:
+    do_not_modify_in_phase_09a:
+    - docs/cores/current/constitution.yaml
+    - docs/cores/current/referentiel.yaml
+    - docs/cores/current/link.yaml
+    - docs/pipelines/constitution/scope_catalog/manifest.yaml
+    - docs/pipelines/constitution/scope_catalog/scope_definitions/*.yaml
+    candidate_policy_files_to_patch_in_phase_09b:
+    - docs/pipelines/constitution/policies/scope_generation/policy.yaml
+    - docs/pipelines/constitution/policies/scope_generation/decisions.yaml
+    rationale: The current step should define canonical classification and generation rules. Generated scope catalog files
+      must only change through deterministic regeneration.
+  planned_policy_updates:
+  - target_file: docs/pipelines/constitution/policies/scope_generation/policy.yaml
+    change_id: POLICY_CHANGE_001
+    change_type: add_core_role_classification
+    description: Declare Constitution as the owned core family for this scope catalog, and declare referentiel/link as external_read_only
+      cores for Constitution bounded runs.
+    suggested_yaml_shape:
+      core_role_classification:
+        owned_core_family: constitution
+        owned_core_files:
+        - docs/cores/current/constitution.yaml
+        external_read_only_core_files:
+        - docs/cores/current/referentiel.yaml
+        - docs/cores/current/link.yaml
+        default_cross_core_write_policy: forbidden_without_explicit_cross_core_run_contract
+  - target_file: docs/pipelines/constitution/policies/scope_generation/policy.yaml
+    change_id: POLICY_CHANGE_002
+    change_type: add_external_id_classification_contract
+    description: 'Define the classes the bijection validator must understand: constitution_owned, external_read_only_referentiel,
+      external_read_only_link, shared_or_global, missing_or_invalid.'
+    suggested_yaml_shape:
+      id_classification_contract:
+        constitution_owned:
+          description: ID owned by exactly one published Constitution scope.
+          requires_unique_owner: true
+        external_read_only_referentiel:
+          description: Referentiel ID readable by Constitution runs but not owned by them.
+          requires_unique_constitution_owner: false
+        external_read_only_link:
+          description: Link ID readable by Constitution runs but not owned by them.
+          requires_unique_constitution_owner: false
+        shared_or_global:
+          description: Explicitly governed shared/global ID classification.
+          requires_explicit_decision: true
+        missing_or_invalid:
+          description: Referenced ID absent from canonical sources or not classified.
+          blocking: true
+  - target_file: docs/pipelines/constitution/policies/scope_generation/policy.yaml
+    change_id: POLICY_CHANGE_003
+    change_type: add_diagnostic_subcluster_policy
+    description: Allow non-canonical diagnostic subclusters to be recorded for Scope Lab analysis without becoming scope ownership
+      boundaries.
+    suggested_yaml_shape:
+      diagnostic_subclusters:
+        status: scope_lab_only_until_promoted
+        allowed_use:
+        - explain cluster structure
+        - guide neighbor review
+        - guide future scope redesign
+        forbidden_use:
+        - direct ownership reassignment
+        - generated catalog mutation without decisions
+  planned_decision_updates:
+  - target_file: docs/pipelines/constitution/policies/scope_generation/decisions.yaml
+    change_id: DECISION_CHANGE_001
+    decision_type: classify_external_read_only_cores
+    scope_keys_affected:
+    - deployment_governance
+    - knowledge_and_design
+    - learner_state
+    - mastery_evaluation
+    - patch_lifecycle
+    target_core_files:
+    - docs/cores/current/referentiel.yaml
+    - docs/cores/current/link.yaml
+    description: Classify referentiel/link IDs as external_read_only for Constitution scoping unless explicitly overridden
+      by a cross-core governed run.
+  - target_file: docs/pipelines/constitution/policies/scope_generation/decisions.yaml
+    change_id: DECISION_CHANGE_002
+    decision_type: record_diagnostic_subcluster
+    scope_keys_affected:
+    - patch_lifecycle
+    subcluster_key: patch_structure_and_quality
+    target_ids_from_candidate: CAND_PATCH_LIFECYCLE_033
+    description: Record the patch_lifecycle structural core as a diagnostic subcluster, while keeping ownership in patch_lifecycle.
+  - target_file: docs/pipelines/constitution/policies/scope_generation/decisions.yaml
+    change_id: DECISION_CHANGE_003
+    decision_type: record_diagnostic_subcluster
+    scope_keys_affected:
+    - patch_lifecycle
+    subcluster_key: patch_trigger_governance
+    target_ids_from_candidate: CAND_PATCH_LIFECYCLE_034
+    description: Record patch trigger governance as a diagnostic subcluster. Keep governed trigger IDs in patch_lifecycle
+      and declare required learner_state IDs as neighbors.
+  - target_file: docs/pipelines/constitution/policies/scope_generation/decisions.yaml
+    change_id: DECISION_CHANGE_004
+    decision_type: force_logical_neighbors
+    scope_keys_affected:
+    - patch_lifecycle
+    candidate_source: CAND_PATCH_LIFECYCLE_034
+    description: Add explicit learner_state neighbor IDs required by patch trigger governance, after reviewing the candidate
+      source node list.
+    status: requires_exact_id_selection_before_patch
+  backlog_items:
+  - backlog_id: BACKLOG_SCOPE_MULTI_OWNER_CLUSTERS
+    source_macro_decision: MACRO_004_MULTI_OWNER_CLUSTER_REVIEW
+    reason: Do not resolve all multi-owner clusters before patch_lifecycle pilot validation.
+  - backlog_id: BACKLOG_SCOPE_NEIGHBOR_REVIEW_GLOBAL
+    source_macro_decision: MACRO_005_NEIGHBOR_DECLARATION_REVIEW
+    reason: Global neighbor review should follow the patch_lifecycle pilot.
+  - backlog_id: BACKLOG_REFERENTIEL_LINK_PIPELINE_DECISION
+    source: REFERENTIEL_LINK_EXTERNAL_READ_ONLY_TREATMENT.md
+    reason: Decide whether referentiel/link need their own scope catalog family or pipeline.
+  required_validation_after_phase_09b:
+  - Run or update generate_constitution_scopes.py after policy/decisions patch.
+  - Create or update validate_scope_partition_bijection.py.
+  - Validate that all Constitution IDs are owned exactly once.
+  - Validate that referentiel/link IDs are classified as external_read_only or explicitly governed otherwise.
+  - Validate that no Constitution bounded run writes referentiel.yaml or link.yaml by default.
+  - Validate full structural reconstruction of constitution/referentiel/link before serious bounded runs.
+  recommended_next_step:
+    phase: PHASE_09B_POLICY_DECISIONS_PATCH
+    action: Create a deterministic patch script or direct patch for policy.yaml and decisions.yaml based on this plan. Do
+      not edit generated scope_catalog files manually.
