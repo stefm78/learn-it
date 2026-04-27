@@ -1,9 +1,8 @@
 # Scope graph clustering approach
 
-Status: draft implementation tracking note  
+Status: draft implementation note  
 Pipeline: `constitution`  
-Scope: core modularization / scope partitioning  
-Canonical branch: `feat/core-modularization-bootstrap`
+Scope: core modularization / scope partitioning
 
 ## 1. Purpose
 
@@ -344,165 +343,22 @@ scope_partition_bijection_validation:
 
 ## 11. Proposed implementation plan
 
-### Step 1 — Stop disposable test runs
+1. Stop, abandon, or purge disposable test runs.
+2. Free Stage 00 or the Scope Lab from disposable run constraints.
+3. Create `tmp/scope_lab/`.
+4. Build a full graph from `constitution`, `referentiel`, and `link`.
+5. Detect natural graph clusters.
+6. Analyze cluster closure: internal edges, outgoing neighbors, incoming dependencies, missing targets, candidate nodes, and candidate edges.
+7. Compare clusters with the current canonical scopes.
+8. Produce explicit redesign candidates.
+9. Record human arbitration.
+10. Patch canonical cores and scope generation inputs if needed.
+11. Regenerate the scope catalog deterministically.
+12. Validate ownership bijection and full reconstruction.
+13. Validate scope and neighbor extracts.
+14. Relaunch one serious pilot bounded local run.
 
-Current test runs may be interrupted, abandoned, or destroyed so they do not constrain the scoping redesign.
-
-### Step 2 — Free Stage 00 / Scope Lab
-
-Clean `runs/index.yaml` or mark disposable runs so that scope partition review is not blocked by test artifacts.
-
-### Step 3 — Create Scope Lab workspace
-
-Initial workspace:
-
-```text
-tmp/scope_lab/
-```
-
-Later promoted artifacts may live under:
-
-```text
-docs/transformations/core_modularization/
-docs/patcher/shared/
-```
-
-### Step 4 — Build full graph
-
-Create an experimental script:
-
-```text
-tmp/analyze_constitution_dependency_graph.py
-```
-
-Expected outputs:
-
-```text
-tmp/scope_lab/constitution_graph_nodes.yaml
-tmp/scope_lab/constitution_graph_edges.yaml
-```
-
-The graph must include `constitution`, `referentiel`, and `link`, not just `constitution`.
-
-### Step 5 — Detect natural clusters
-
-Produce:
-
-```text
-tmp/scope_lab/constitution_graph_clusters.yaml
-```
-
-### Step 6 — Analyze cluster closure
-
-For each cluster, compute:
-
-- internal nodes;
-- internal edges;
-- incoming external edges;
-- outgoing external edges;
-- missing target IDs;
-- bridge nodes;
-- bridge edges;
-- candidate neighbors;
-- candidate nodes;
-- candidate edges.
-
-### Step 7 — Compare clusters with current scopes
-
-Produce:
-
-```text
-tmp/scope_lab/scope_alignment_report.yaml
-```
-
-The report should classify each current scope as:
-
-```text
-stable
-slightly_under_scoped
-slightly_over_scoped
-split_candidate
-merge_candidate
-transverse_scope
-requires_neighbor_review
-```
-
-### Step 8 — Produce redesign candidates
-
-Produce:
-
-```text
-tmp/scope_lab/scope_redesign_candidates.yaml
-```
-
-Candidate action types:
-
-```text
-keep_scope
-split_scope
-merge_scopes
-move_node
-create_scope
-declare_neighbor
-create_candidate_node
-create_candidate_edge
-defer_to_backlog
-```
-
-### Step 9 — Human arbitration
-
-Each candidate must be resolved as:
-
-```text
-accepted
-rejected
-deferred
-backlog
-```
-
-### Step 10 — Patch canonical inputs
-
-If candidates are accepted:
-
-- patch `constitution.yaml`, `referentiel.yaml`, or `link.yaml` if the canon changes;
-- patch `scope_generation/decisions.yaml` for ownership and neighbors;
-- patch `scope_generation/policy.yaml` only if the declared scope model changes.
-
-### Step 11 — Regenerate scope catalog
-
-Run:
-
-```bash
-python docs/patcher/shared/generate_constitution_scopes.py \
-  --apply \
-  --report tmp/constitution_scope_generation_report.yaml
-```
-
-### Step 12 — Validate bijection and full reconstruction
-
-Create or promote:
-
-```text
-docs/patcher/shared/validate_scope_partition_bijection.py
-```
-
-Expected output:
-
-```text
-tmp/scope_partition_bijection_validation.yaml
-```
-
-This is a blocking gate.
-
-### Step 13 — Test extracts
-
-Use `extract_scope_slice.py` on one pilot run or synthetic run input to validate that `scope_extract.yaml` and `neighbor_extract.yaml` are sufficient and minimal.
-
-### Step 14 — Relaunch one bounded local run
-
-Only after bijection and reconstruction pass, open a single serious pilot run.
-
-Recommended stress-test scope:
+Recommended first stress-test scope:
 
 ```text
 patch_lifecycle
@@ -512,15 +368,13 @@ because it is likely the most transverse and boundary-sensitive scope.
 
 ## 12. Required scripts to implement or evolve
 
-### Existing scripts to reuse
+Existing scripts to reuse:
 
 - `docs/patcher/shared/analyze_constitution_scope_partition.py`
 - `docs/patcher/shared/generate_constitution_scopes.py`
 - `docs/patcher/shared/extract_scope_slice.py`
 
-### New scripts proposed
-
-Experimental first:
+Experimental scripts proposed first:
 
 ```text
 tmp/analyze_constitution_dependency_graph.py
