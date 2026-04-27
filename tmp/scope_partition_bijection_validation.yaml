@@ -1,6 +1,6 @@
 scope_partition_bijection_validation:
   schema_version: 0.1
-  status: FAIL
+  status: PASS
   policy_ref: C:/Users/Stef/dev/learn-it/docs/pipelines/constitution/policies/scope_generation/policy.yaml
   scope_definitions_dir: C:/Users/Stef/dev/learn-it/docs/pipelines/constitution/scope_catalog/scope_definitions
   source_fingerprints:
@@ -15,15 +15,13 @@ scope_partition_bijection_validation:
       referentiel: 112
     classification_counts:
       canonical_core_header: 3
-      constitution_owned: 115
+      constitution_intercore_reference: 1
+      constitution_owned: 116
       external_read_only_link: 15
       external_read_only_referentiel: 111
-      missing_constitution_owner: 2
   ownership_bijection:
-    status: FAIL
-    missing_constitution_owner_ids:
-    - REF_CORE_LEARNIT_REFERENTIEL_V4_0_IN_CONSTITUTION
-    - RULE_PATCH_SERIALIZATION
+    status: PASS
+    missing_constitution_owner_ids: []
     duplicate_constitution_owner_ids: []
     duplicate_owned_ids: []
     extra_owned_ids_not_in_canon: []
@@ -143,6 +141,7 @@ scope_partition_bijection_validation:
       - INV_PATCH_LOCAL_VALIDATION_MUST_BE_DETERMINISTIC
       - INV_PERSISTENT_DRIFT_REQUIRES_ESCALATION_IF_PATCH_BLOCKED
       - RULE_AR_REFRACTORY_PROFILE_TRIGGERS_SOLLICITATION_PATCH
+      - RULE_PATCH_SERIALIZATION
       - RULE_PERSISTENT_DRIFT_BLOCKED_PATCH_ESCALATES_OFFSESSION
       - RULE_PERSISTENT_LOW_VC_TRIGGERS_RELEVANCE_PATCH
       - TYPE_PATCH_ARTIFACT
@@ -157,34 +156,31 @@ scope_partition_bijection_validation:
     external_read_only_link_count: 15
     unclassified_external_or_unknown_ids: []
   neighbor_validation:
-    status: FAIL
-    neighbor_ids_not_in_canon:
-    - REF_CORE_LEARNIT_REFERENTIEL_V2_0_IN_CONSTITUTION
+    status: PASS
+    neighbor_ids_not_in_canon: []
     neighbors_by_scope:
       deployment_governance:
-      - REF_CORE_LEARNIT_REFERENTIEL_V2_0_IN_CONSTITUTION
+      - REF_CORE_LEARNIT_REFERENTIEL_V4_0_IN_CONSTITUTION
       knowledge_and_design:
-      - REF_CORE_LEARNIT_REFERENTIEL_V2_0_IN_CONSTITUTION
+      - REF_CORE_LEARNIT_REFERENTIEL_V4_0_IN_CONSTITUTION
       learner_state:
-      - REF_CORE_LEARNIT_REFERENTIEL_V2_0_IN_CONSTITUTION
+      - REF_CORE_LEARNIT_REFERENTIEL_V4_0_IN_CONSTITUTION
       mastery_evaluation:
       - INV_EXPLICIT_DEPENDENCY_EDGES_REQUIRED
-      - REF_CORE_LEARNIT_REFERENTIEL_V2_0_IN_CONSTITUTION
+      - REF_CORE_LEARNIT_REFERENTIEL_V4_0_IN_CONSTITUTION
       - TYPE_KNOWLEDGE_GRAPH
       - TYPE_LEARNER_STATE_MODEL
       - TYPE_STATE_AXIS_ACTIVATION
       patch_lifecycle:
-      - REF_CORE_LEARNIT_REFERENTIEL_V2_0_IN_CONSTITUTION
+      - REF_CORE_LEARNIT_REFERENTIEL_V4_0_IN_CONSTITUTION
   reconstruction_readiness:
-    status: BLOCKED
+    status: PASS
     mode: id_partition_readiness
     note: Generated scope definitions are an ownership/index catalog and do not carry full entry bodies. Full structural reconstruction
       must be validated later from source cores plus scope extracts or a content-carrying partition artifact.
-    constitution_business_ids_are_partitioned: false
+    constitution_business_ids_are_partitioned: true
     referentiel_link_are_explicitly_classified: true
-  blocking_findings:
-  - neighbor_ids_absent_from_canon
-  - constitution_business_ids_without_owner
+  blocking_findings: []
   warnings:
   - CORE header IDs are classified as canonical_core_header and are not required to be owned by a scope.
   - This validator checks ID-level bijection. It does not prove byte-for-byte YAML reconstruction.

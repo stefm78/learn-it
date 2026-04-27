@@ -18,7 +18,6 @@ scope_generation_report:
   - docs/pipelines/constitution/scope_catalog/scope_definitions/learner_state.yaml
   - docs/pipelines/constitution/scope_catalog/scope_definitions/mastery_evaluation.yaml
   - docs/pipelines/constitution/scope_catalog/scope_definitions/patch_lifecycle.yaml
-  - docs/pipelines/constitution/scope_catalog/manifest.yaml
   outputs:
   - docs/pipelines/constitution/scope_catalog/scope_definitions/deployment_governance.yaml
   - docs/pipelines/constitution/scope_catalog/scope_definitions/knowledge_and_design.yaml

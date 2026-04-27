@@ -47,7 +47,7 @@ scope_definition:
     - docs/cores/current/referentiel.yaml
     - docs/cores/current/link.yaml
     ids:
-    - REF_CORE_LEARNIT_REFERENTIEL_V2_0_IN_CONSTITUTION
+    - REF_CORE_LEARNIT_REFERENTIEL_V4_0_IN_CONSTITUTION
   governance:
     default_allowed_operations:
     - challenge

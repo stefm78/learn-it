@@ -202,13 +202,25 @@ def policy_external_files(policy_doc: dict[str, Any]) -> set[str]:
     return set(files)
 
 
+def is_constitution_intercore_reference_id(entry_id: str | None) -> bool:
+    return (
+        isinstance(entry_id, str)
+        and entry_id.startswith("REF_CORE_")
+        and entry_id.endswith("_IN_CONSTITUTION")
+    )
+
+
 def classify_id(entry: dict[str, Any], owners: list[str], external_files: set[str]) -> str:
+    entry_id = entry.get("id")
     source_core = entry.get("source_core")
     source_section = entry.get("source_section")
     source_path = entry.get("source_path")
 
     if source_section == "CORE":
         return "canonical_core_header"
+
+    if source_core == "constitution" and is_constitution_intercore_reference_id(entry_id):
+        return "constitution_intercore_reference"
 
     if source_core == "constitution":
         if len(owners) == 1:

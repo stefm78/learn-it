@@ -191,6 +191,7 @@ scope_generation_decisions:
     - ACTION_TRIGGER_AR_SOLLICITATION_PATCH
     - ACTION_ESCALATE_PERSISTENT_DRIFT_OFFSESSION
     - ACTION_LOG_UNCOVERED_CONFLICT
+    - RULE_PATCH_SERIALIZATION
     target_patterns: []
     decision_payload:
       assignment_mode: force_include
@@ -200,7 +201,8 @@ scope_generation_decisions:
     challenged_with_ai: true
     justification: 'Seed du scope patch_lifecycle. Couvre le cycle complet de vie des patches : structure (ARTIFACT, IMPACT_SCOPE,
       QUALITY_GATE), validation déterministe, architecture off-session (PRECOMPUTED), déclencheurs gouvernés (VC basse persistante,
-      AR-réfractaire) et escalade dérive persistante.'
+      AR-réfractaire) et escalade dérive persistante. RULE_PATCH_SERIALIZATION est ajouté au périmètre patch_lifecycle car
+      la sérialisation des patches relève du cycle de vie patch et de ses garanties de validation/rejouabilité.'
   - decision_id: SGEN_DECISION_006
     status: approved
     decision_type: force_logical_neighbors
@@ -211,18 +213,18 @@ scope_generation_decisions:
     - mastery_evaluation
     - patch_lifecycle
     target_ids:
-    - REF_CORE_LEARNIT_REFERENTIEL_V2_0_IN_CONSTITUTION
+    - REF_CORE_LEARNIT_REFERENTIEL_V4_0_IN_CONSTITUTION
     target_patterns: []
     decision_payload:
       neighbor_class: intercore_reference_forced
       read_mode: primary
-      note: 'REF_CORE_LEARNIT_REFERENTIEL_V2_0_IN_CONSTITUTION reçoit 22+ arêtes entrantes depuis la quasi-totalité des scopes.
+      note: 'REF_CORE_LEARNIT_REFERENTIEL_V4_0_IN_CONSTITUTION reçoit 22+ arêtes entrantes depuis la quasi-totalité des scopes.
         Il est canonisé comme neighbor forcé systématique sur tous les scopes plutôt qu''érigé en scope autonome (masse insuffisante
         : 1 entrée).'
     applies_from: 2026-04-13
     decided_by: human
     challenged_with_ai: true
-    justification: Canonisation de REF_CORE_LEARNIT_REFERENTIEL_V2_0_IN_CONSTITUTION comme neighbor forcé systématique sur
+    justification: Canonisation de REF_CORE_LEARNIT_REFERENTIEL_V4_0_IN_CONSTITUTION comme neighbor forcé systématique sur
       l'ensemble des 5 scopes. Décision explicite de ne pas ériger intercore_reference en scope autonome.
   - decision_id: SGEN_DECISION_007
     status: approved
