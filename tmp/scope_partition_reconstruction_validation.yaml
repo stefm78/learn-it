@@ -1,0 +1,167 @@
+scope_partition_reconstruction_validation:
+  schema_version: 0.1
+  status: PASS
+  validation_mode: normalized_structural_reconstruction
+  policy_ref: docs/pipelines/constitution/policies/scope_generation/policy.yaml
+  scope_definitions_dir: docs/pipelines/constitution/scope_catalog/scope_definitions
+  scope_count: 5
+  scope_keys:
+  - deployment_governance
+  - knowledge_and_design
+  - learner_state
+  - mastery_evaluation
+  - patch_lifecycle
+  core_results:
+    constitution:
+      status: PASS
+      source_ref: docs/cores/current/constitution.yaml
+      reconstruction_mode: owned_scope_partition_plus_constitution_intercore_references
+      source_normalized_fingerprint: 18963f1c809ba29446231fceb2038d9f8ad522782d1e545f9fae504904ad6a08
+      reconstructed_normalized_fingerprint: 18963f1c809ba29446231fceb2038d9f8ad522782d1e545f9fae504904ad6a08
+      details:
+        included_owned_id_count: 116
+        included_owned_ids:
+        - ACTION_APPLY_LIGHT_REVERSIBLE_SCAFFOLDING
+        - ACTION_ESCALATE_PERSISTENT_DRIFT_OFFSESSION
+        - ACTION_INFORM_LEARNER
+        - ACTION_LOG_AR_PROXY_DISCORDANCE
+        - ACTION_LOG_UNCOVERED_CONFLICT
+        - ACTION_PLAN_COGNITIVE_CONFLICT_MISSION
+        - ACTION_PLAN_SHORT_DIAGNOSTIC_TASK
+        - ACTION_ROLLBACK_PATCH
+        - ACTION_TRIGGER_AR_SOLLICITATION_PATCH
+        - ACTION_TRIGGER_RELEVANCE_PATCH
+        - CONSTRAINT_NO_ADAPTIVE_PHILOSOPHY_CHANGE
+        - CONSTRAINT_NO_ASSISTED_DEPLOYMENT_WITHOUT_TUTORING
+        - CONSTRAINT_NO_AUTONOMOUS_PSYCHOLOGICAL_INFERENCE
+        - CONSTRAINT_NO_BIOMETRICS_OR_OFFSESSION_SURVEILLANCE
+        - CONSTRAINT_NO_CHANGE_TO_AND_LOGIC
+        - CONSTRAINT_NO_CHANGE_TO_GRAPH_PROPAGATION_RULE
+        - CONSTRAINT_NO_HIGH_BLOOM_WITHOUT_AUTHENTIC_CONTEXT
+        - CONSTRAINT_NO_RUNTIME_FEEDBACK_GENERATION
+        - EVENT_ACTIVATION_DISTRESS_PERSISTENCE_ESCALATION
+        - EVENT_AR_REFRACTORY_PROFILE_DETECTED
+        - EVENT_CONSERVATIVE_SCAFFOLDING_ESCALATION
+        - EVENT_GAMIFICATION_PROBATION_MAX_DURATION_REACHED
+        - EVENT_GF08_UNCOVERED_CONFLICT
+        - EVENT_HIGH_BLOOM_WITHOUT_AUTHENTIC_CONTEXT
+        - EVENT_LONG_INTERRUPTION
+        - EVENT_LOW_SIS
+        - EVENT_MSC_DOWNGRADE
+        - EVENT_MSC_PERCEPTION_DIVERGENCE_DETECTED
+        - EVENT_PATCH_INVALID
+        - EVENT_PERSISTENT_LOW_VC
+        - EVENT_PROVISIONAL_MASTERY_WINDOW_EXPIRED
+        - EVENT_SYSTEMIC_INVESTIGATION_AUTO_OPENED
+        - EVENT_SYSTEMIC_INVESTIGATION_CLOSED
+        - EVENT_T_EVALUATION_OVERDUE
+        - EVENT_UNCOVERED_ERROR
+        - INV_AR_N2_SHORT_FORM_REQUIRES_EXPLICIT_PRIORITY
+        - INV_ASSISTED_MODE_REQUIRES_TUTORING
+        - INV_AUTHENTIC_CONTEXT_REQUIRED_FOR_BLOOM4
+        - INV_CONSERVATIVE_RULE_WITHOUT_AR_N1
+        - INV_CONSTITUTION_REFERENTIAL_SEPARATION
+        - INV_CREATIVE_KU_AUTONOMY_REQUIRES_DETERMINISTIC_FEEDBACK_PATH
+        - INV_DISTRESS_REGIME_PRIORITY_CANNOT_BE_OVERRIDDEN
+        - INV_EXPLICIT_DEPENDENCY_EDGES_REQUIRED
+        - INV_GRAPH_PROPAGATION_ONE_HOP
+        - INV_INVALID_PATCH_REJECTED
+        - INV_KNOWLEDGE_GRAPH_MUST_BE_ACYCLIC
+        - INV_KU_TYPING_REQUIRED
+        - INV_MISSING_KU_TYPE_FORCES_SAFE_FALLBACK
+        - INV_MSC_AND_STRICT
+        - INV_NO_PARTIAL_PATCH_STATE
+        - INV_NO_RUNTIME_CONTENT_GENERATION
+        - INV_NO_TEXT_ONLY_FOR_PROCEDURAL_OR_PERCEPTUAL
+        - INV_PATCH_ARTIFACTS_MUST_BE_PRECOMPUTED_OFF_SESSION
+        - INV_PATCH_LOCAL_VALIDATION_MUST_BE_DETERMINISTIC
+        - INV_PERSISTENT_DRIFT_REQUIRES_ESCALATION_IF_PATCH_BLOCKED
+        - INV_REFERENTIEL_VALIDITY_REQUIRED_FOR_DELEGATED_THRESHOLD_EVALUATION
+        - INV_RUNTIME_FULLY_LOCAL
+        - INV_RUNTIME_QUALIFICATION_SIGNALS_MUST_BE_EXPLICIT_OR_OFFSESSION
+        - INV_SECONDARY_RETROGRADATION_IS_NEW_EVENT
+        - INV_TRANSFER_SEPARATE_FROM_BASE_MASTERY
+        - INV_VC_NOT_GENERAL_MOTIVATION_PROXY
+        - PARAM_AR_N1_INTERACTION_BUDGET
+        - PARAM_AR_N2_INTERACTION_BUDGET
+        - PARAM_AR_N3_INTERACTION_BUDGET
+        - PARAM_PROVISIONAL_MASTERY_VERIFICATION_WINDOW
+        - RULE_ACTIVATION_DISTRESS_PERSISTENCE_ESCALATION_OFFSESSION
+        - RULE_AR_N1_OVERRIDES_PROXY
+        - RULE_AR_REFRACTORY_PROFILE_TRIGGERS_SOLLICITATION_PATCH
+        - RULE_CONSERVATIVE_SCAFFOLDING_ESCALATION_REQUIRES_OFFSESSION_REVIEW
+        - RULE_GAMIFICATION_PROBATION_MUST_CLOSE
+        - RULE_GF08_UNCOVERED_CONFLICT_CONSERVATIVE_RESPONSE
+        - RULE_LEARNER_STATE_AXIS_UNKNOWN_ALLOWED
+        - RULE_LONG_INTERRUPTION_REQUIRES_DIAGNOSTIC_RESUME
+        - RULE_LOW_SIS_NEVER_AUTO_PENALIZES
+        - RULE_MISCONCEPTION_REQUIRES_COGNITIVE_CONFLICT
+        - RULE_MSC_COMPONENT_NON_CALCULABLE_DEFERS_BASE_MASTERY
+        - RULE_MSC_DOWNGRADE_MARKS_DEPENDENTS
+        - RULE_MSC_PERCEPTION_DIVERGENCE_PROTOCOL
+        - RULE_MULTI_AXIS_UNKNOWN_OR_UNOBSERVABLE_SAFE_ENTRY
+        - RULE_NON_EXAM_CONCEPT_KEPT_IN_GRAPH
+        - RULE_NO_CALIBRATION_CONSERVATIVE_START
+        - RULE_PATCH_SERIALIZATION
+        - RULE_PERSISTENT_DRIFT_BLOCKED_PATCH_ESCALATES_OFFSESSION
+        - RULE_PERSISTENT_LOW_VC_TRIGGERS_RELEVANCE_PATCH
+        - RULE_PROVISIONAL_MASTERY_WINDOW_EXPIRY_SAFE_FALLBACK
+        - RULE_SESSION_INTENTION_NON_BLOCKING
+        - RULE_SYSTEMIC_INVESTIGATION_OPEN_CLOSE_WINDOW
+        - RULE_T_EVALUATION_OVERDUE_REQUIRES_SIGNAL_OR_FOLLOWUP
+        - RULE_UNCOVERED_ERROR_GENERIC_FEEDBACK
+        - RULE_UNVERIFIED_GAMIFICATION_PROBATION
+        - SYSTEM_LEARNIT
+        - TYPE_AUTHENTIC_CONTEXT
+        - TYPE_AUTONOMY_REGIME
+        - TYPE_CORPUS_CONFIDENCE_ICC
+        - TYPE_FEEDBACK_COVERAGE_MATRIX
+        - TYPE_HUMAN_CHECKPOINT
+        - TYPE_INTEGRITY_MODES
+        - TYPE_KNOWLEDGE_GRAPH
+        - TYPE_KNOWLEDGE_UNIT
+        - TYPE_LEARNER_STATE_MODEL
+        - TYPE_MASTERY_COMPONENT_A
+        - TYPE_MASTERY_COMPONENT_P
+        - TYPE_MASTERY_COMPONENT_R
+        - TYPE_MASTERY_COMPONENT_T
+        - TYPE_MASTERY_MODEL
+        - TYPE_NC_MSC
+        - TYPE_PATCH_ARTIFACT
+        - TYPE_PATCH_IMPACT_SCOPE
+        - TYPE_PATCH_QUALITY_GATE
+        - TYPE_SELF_REPORT_AR_N1
+        - TYPE_SELF_REPORT_AR_N2
+        - TYPE_SELF_REPORT_AR_N3
+        - TYPE_SESSION_INTEGRITY_SCORE
+        - TYPE_STATE_AXIS_ACTIVATION
+        - TYPE_STATE_AXIS_CALIBRATION
+        - TYPE_STATE_AXIS_VALUE_COST
+        pass_through_intercore_reference_ids:
+        - REF_CORE_LEARNIT_REFERENTIEL_V4_0_IN_CONSTITUTION
+        missing_owner_ids_during_reconstruction: []
+        unidentified_entries_copied_as_passthrough: []
+    referentiel:
+      status: PASS
+      source_ref: docs/cores/current/referentiel.yaml
+      reconstruction_mode: external_read_only_passthrough
+      source_normalized_fingerprint: 343c78a6a17c083d2f0c4bf3a53be70ce184bc28d156b64957de20909e9eb6f0
+      reconstructed_normalized_fingerprint: 343c78a6a17c083d2f0c4bf3a53be70ce184bc28d156b64957de20909e9eb6f0
+      details:
+        mode: external_read_only_passthrough
+        reason: Core is classified as external_read_only for Constitution scoping.
+    link:
+      status: PASS
+      source_ref: docs/cores/current/link.yaml
+      reconstruction_mode: external_read_only_passthrough
+      source_normalized_fingerprint: a89f7770cad2a367e4eb5cf61502fcfe650ba4a671a5e17278dda06a535d6573
+      reconstructed_normalized_fingerprint: a89f7770cad2a367e4eb5cf61502fcfe650ba4a671a5e17278dda06a535d6573
+      details:
+        mode: external_read_only_passthrough
+        reason: Core is classified as external_read_only for Constitution scoping.
+  blocking_findings: []
+  notes:
+  - Constitution is reconstructed from generated scope target.ids plus pass-through Constitution inter-core references.
+  - Referentiel and Link are reconstructed as external_read_only passthrough cores according to policy.
+  - Comparison uses normalized YAML structural fingerprints, not byte-for-byte file comparison.
+  - This validator does not mutate canonical cores or generated catalog files.
