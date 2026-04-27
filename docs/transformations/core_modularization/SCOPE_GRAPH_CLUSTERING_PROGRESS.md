@@ -28,15 +28,14 @@ This tracker reflects the current Scope Lab execution state after:
 
 ```yaml
 current_phase:
-  phase_id: PHASE_11B
-  label: full_structural_reconstruction_validation
+  phase_id: PHASE_12
+  label: extract_validation
   status: pending
   summary: >-
-    ID-level ownership bijection now passes. Constitution business IDs are owned
-    exactly once, referentiel/link IDs are classified as external_read_only, and
-    neighbor IDs resolve against canonical cores. The remaining validation gap is
-    full structural reconstruction: proving that the published partition can
-    reconstruct constitution/referentiel/link content structurally, not only by ID.
+    ID-level ownership bijection and normalized structural reconstruction now
+    pass. The next gate is extract validation: prove that scope_extract.yaml and
+    neighbor_extract.yaml can be generated and validated for a synthetic or pilot
+    patch_lifecycle bounded_local_run.
 ```
 
 ## Phase tracker
@@ -186,7 +185,7 @@ phases:
 
   - phase_id: PHASE_11
     label: bijection_and_reconstruction_validation
-    status: partially_done
+    status: done
     objective: Validate ownership bijection and full structural reconstruction of constitution, referentiel, and link.
     outputs:
       - tmp/validate_scope_partition_bijection.py
@@ -198,7 +197,7 @@ phases:
       external_read_only_classification_status: PASS
       neighbor_validation_status: PASS
       reconstruction_readiness_status: PASS
-      full_structural_reconstruction_status: pending
+      full_structural_reconstruction_status: PASS
     note: >-
       The current validator proves ID-level partition readiness. It does not yet
       prove full structural reconstruction because generated scope_definitions are
@@ -206,16 +205,23 @@ phases:
 
   - phase_id: PHASE_11B
     label: full_structural_reconstruction_validation
-    status: pending
+    status: done
     objective: Validate normalized structural reconstruction of constitution, referentiel, and link from a content-carrying partition or scope extracts.
-    expected_outputs:
+    outputs:
       - tmp/validate_scope_partition_reconstruction.py
       - tmp/scope_partition_reconstruction_validation.yaml
+    result:
+      status: PASS
+      validation_mode: normalized_structural_reconstruction
+      blocking_findings: []
+      constitution_reconstruction_mode: owned_scope_partition_plus_constitution_intercore_references
+      referentiel_reconstruction_mode: external_read_only_passthrough
+      link_reconstruction_mode: external_read_only_passthrough
 
   - phase_id: PHASE_12
     label: extract_validation
-    status: not_started
-    objective: Validate scope_extract.yaml and neighbor_extract.yaml on a synthetic or pilot run.
+    status: pending
+    objective: Validate scope_extract.yaml and neighbor_extract.yaml on a synthetic or pilot patch_lifecycle run.
 
   - phase_id: PHASE_13
     label: pilot_bounded_local_run
@@ -250,7 +256,7 @@ implementation_tracking:
   external_read_only_classification_passed: true
   neighbor_validation_passed: true
   id_level_reconstruction_readiness_passed: true
-  full_reconstruction_passed: false
+  full_reconstruction_passed: true
   extract_tests_passed: false
   pilot_bounded_local_run_opened: false
 ```
@@ -320,8 +326,8 @@ risks:
   - risk_id: RISK_004
     label: reconstruction_validation_too_weak
     severity: high
-    status: open
-    mitigation: Current validator passes ID-level readiness only. PHASE_11B must prove normalized structural reconstruction.
+    status: mitigated_for_current_partition
+    mitigation: ID-level readiness and normalized structural reconstruction both pass for the current partition.
 
   - risk_id: RISK_005
     label: global_multi_owner_clusters_unresolved
@@ -341,20 +347,20 @@ risks:
 ```yaml
 next_actions:
   - action_id: NEXT_001
-    status: next
+    status: done
     label: Implement structural reconstruction validator
     target: tmp/validate_scope_partition_reconstruction.py
     phase: PHASE_11B
 
   - action_id: NEXT_002
-    status: pending
-    label: Decide whether full reconstruction should use scope extracts or a content-carrying partition artifact
-    target: docs/patcher/shared/extract_scope_slice.py
+    status: next
+    label: Validate scope_extract.yaml and neighbor_extract.yaml on a synthetic or pilot patch_lifecycle run
+    phase: PHASE_12
 
   - action_id: NEXT_003
     status: pending
-    label: Validate scope_extract.yaml and neighbor_extract.yaml on a synthetic or pilot patch_lifecycle run
-    phase: PHASE_12
+    label: Decide whether extract validation is sufficient for opening a serious patch_lifecycle pilot run
+    target: docs/patcher/shared/extract_scope_slice.py
 
   - action_id: NEXT_004
     status: pending
