@@ -1,0 +1,396 @@
+PATCH_SET:
+  id: PATCHSET_CONSTITUTION_PATCH_LIFECYCLE_R01_STAGE03
+  patch_dsl_version: "4.0"
+  atomic: true
+  description: >-
+    Minimal in-scope patchset for CONSTITUTION_RUN_2026_04_27_PATCH_LIFECYCLE_R01.
+    Implements STAGE_02 arbitration decisions for patch_lifecycle only. Does not patch
+    referentiel, link, learner_state ownership, generated scope catalog, or governance backlog.
+  stage_context:
+    run_id: CONSTITUTION_RUN_2026_04_27_PATCH_LIFECYCLE_R01
+    stage_id: STAGE_03_PATCH_SYNTHESIS
+    mode: bounded_local_run
+    scope_key: patch_lifecycle
+    arbitrage_ref: docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_27_PATCH_LIFECYCLE_R01/work/02_arbitrage/arbitrage.md
+    fallback_reads_used:
+      - docs/cores/current/constitution.yaml#CORE.id
+    fallback_reason: >-
+      Limited fallback used only to lock expected_core_id required by Patch DSL.
+      No full-core semantic analysis was performed beyond this target file identity check.
+  federation: {}
+  files:
+    - file: docs/cores/current/constitution.yaml
+      expected_core_id: CORE_LEARNIT_CONSTITUTION_V4_0
+      operations:
+        - op: replace_field
+          target:
+            section: TYPES
+            id: TYPE_PATCH_QUALITY_GATE
+            field: human_readable
+          value: Vérificateur local déterministe de la qualité déclarée d’un patch, fondé sur une preuve de QA pédagogique précomputée hors session.
+          traceability:
+            arbitrage_decision: PATCH_DECISION_001
+            finding_id: ARB-F01
+
+        - op: replace_field
+          target:
+            section: TYPES
+            id: TYPE_PATCH_QUALITY_GATE
+            field: logic.condition
+          value: >-
+            Une preuve de QA pédagogique hors session est présente, intègre, liée au même impact_scope,
+            aux mêmes empreintes de sources et à la même version d’artefact que le patch soumis. Le
+            runtime local ne décide jamais sémantiquement de la qualité pédagogique ; il vérifie seulement
+            des critères déterministes de présence, intégrité, cohérence de portée, version, fraîcheur et
+            statut déclaré.
+          traceability:
+            arbitrage_decision: PATCH_DECISION_001
+            finding_id: ARB-F01
+
+        - op: replace_field
+          target:
+            section: TYPES
+            id: TYPE_PATCH_QUALITY_GATE
+            field: logic.effect
+          value: >-
+            Validation locale du patch uniquement si la preuve précomputée est déterministiquement vérifiable ;
+            rejet local si la preuve manque, diverge de l’impact_scope, ne correspond pas aux empreintes de
+            sources déclarées, est expirée ou porte un statut de QA défavorable. Aucune évaluation sémantique
+            ou pédagogique n’est effectuée localement.
+          traceability:
+            arbitrage_decision: PATCH_DECISION_001
+            finding_id: ARB-F01
+
+        - op: replace_field
+          target:
+            section: TYPES
+            id: TYPE_PATCH_ARTIFACT
+            field: logic.condition
+          value: >-
+            Bornes respectées, impact_scope calculable, attributs obligatoires présents, atomicité garantie,
+            empreintes de sources et métadonnées de validité/fraîcheur déclarées ; la QA pédagogique est
+            précomputée hors session et matérialisée par une preuve vérifiable localement sans jugement
+            sémantique.
+          traceability:
+            arbitrage_decision: PATCH_DECISION_001
+            finding_id: ARB-F01
+
+        - op: replace_field
+          target:
+            section: INVARIANTS
+            id: INV_PATCH_LOCAL_VALIDATION_MUST_BE_DETERMINISTIC
+            field: logic.condition
+          value: >-
+            Un critère sémantique, pédagogique ou interprétatif est requis localement pour décider, ou la
+            preuve de QA hors session ne peut pas être vérifiée par des critères strictement déterministes
+            de présence, intégrité, portée, version, fraîcheur, empreintes de sources et statut déclaré.
+          traceability:
+            arbitrage_decision: PATCH_DECISION_001
+            finding_id: ARB-F01
+
+        - op: replace_field
+          target:
+            section: INVARIANTS
+            id: INV_PATCH_LOCAL_VALIDATION_MUST_BE_DETERMINISTIC
+            field: logic.effect
+          value: >-
+            État interdit ; le critère doit être déplacé dans la chaîne hors session de QA pédagogique.
+            Le runtime local peut seulement vérifier déterministiquement la preuve précomputée et doit
+            rejeter le patch si cette vérification échoue ou exige une interprétation.
+          traceability:
+            arbitrage_decision: PATCH_DECISION_001
+            finding_id: ARB-F01
+
+        - op: replace_field
+          target:
+            section: INVARIANTS
+            id: INV_PATCH_ARTIFACTS_MUST_BE_PRECOMPUTED_OFF_SESSION
+            field: logic.effect
+          value: >-
+            Préparation exclusivement hors session ; aucune génération, QA pédagogique ou validation distante
+            pendant l’usage apprenant. L’artefact livré au runtime local doit inclure les métadonnées
+            déterministes nécessaires à la vérification locale : impact_scope déclaré, empreintes de sources,
+            version, fraîcheur/validité, statut de QA précomputée et preuve d’intégrité.
+          traceability:
+            arbitrage_decision: PATCH_DECISION_001
+            finding_id: ARB-F01
+
+        - op: replace_field
+          target:
+            section: RULES
+            id: RULE_PERSISTENT_LOW_VC_TRIGGERS_RELEVANCE_PATCH
+            field: logic.condition
+          value: >-
+            Seuil de persistance atteint sur un signal VC explicite et déjà gouverné par le périmètre
+            learner_state. La règle consomme ce signal ; elle ne calcule pas la VC, n’infère pas la
+            motivation et ne produit aucune interprétation psychologique autonome.
+          traceability:
+            arbitrage_decision: PATCH_DECISION_002
+            finding_id: ARB-F02
+
+        - op: replace_field
+          target:
+            section: RULES
+            id: RULE_PERSISTENT_LOW_VC_TRIGGERS_RELEVANCE_PATCH
+            field: logic.effect
+          value: >-
+            Révision de la contextualisation, des enjeux ou du lien au contexte authentique ; difficulté,
+            seuils de maîtrise, règles d’évaluation et philosophie adaptative inchangés.
+          traceability:
+            arbitrage_decision: PATCH_DECISION_005
+            finding_id: ARB-F10
+
+        - op: replace_field
+          target:
+            section: EVENTS
+            id: EVENT_PERSISTENT_LOW_VC
+            field: logic.condition
+          value: >-
+            Seuil référentiel atteint sur un signal VC observable, explicite et produit hors du patch_lifecycle.
+            L’événement ne constitue pas un proxy général de motivation et n’autorise aucune pénalisation.
+          traceability:
+            arbitrage_decision: PATCH_DECISION_002
+            finding_id: ARB-F02
+
+        - op: replace_field
+          target:
+            section: ACTIONS
+            id: ACTION_TRIGGER_RELEVANCE_PATCH
+            field: logic.effect
+          value: >-
+            Déclenchement d’un patch borné de contextualisation, d’enjeux ou de lien au contexte authentique.
+            L’action ne baisse pas la difficulté, ne modifie pas les seuils de maîtrise, ne change pas la
+            propagation graphe et ne change pas la philosophie adaptative.
+          traceability:
+            arbitrage_decision: PATCH_DECISION_005
+            finding_id: ARB-F10
+
+        - op: replace_field
+          target:
+            section: RULES
+            id: RULE_AR_REFRACTORY_PROFILE_TRIGGERS_SOLLICITATION_PATCH
+            field: human_readable
+          value: Une fenêtre observable de non-réponse AR déclenche une adaptation non punitive du mode de sollicitation.
+          traceability:
+            arbitrage_decision: PATCH_DECISION_006
+            finding_id: ARB-F11
+
+        - op: replace_field
+          target:
+            section: RULES
+            id: RULE_AR_REFRACTORY_PROFILE_TRIGGERS_SOLLICITATION_PATCH
+            field: logic.trigger
+          value: Fenêtre observable de non-réponse AR, sans interprétation psychologique.
+          traceability:
+            arbitrage_decision: PATCH_DECISION_006
+            finding_id: ARB-F11
+
+        - op: replace_field
+          target:
+            section: RULES
+            id: RULE_AR_REFRACTORY_PROFILE_TRIGGERS_SOLLICITATION_PATCH
+            field: logic.condition
+          value: >-
+            Fenêtre de non-réponse atteinte sur un signal AR explicite et déjà gouverné. La règle ne diagnostique
+            pas un profil psychologique, n’infère pas l’intention du learner et n’autorise aucune pénalisation.
+          traceability:
+            arbitrage_decision: PATCH_DECISION_006
+            finding_id: ARB-F11
+
+        - op: replace_field
+          target:
+            section: RULES
+            id: RULE_AR_REFRACTORY_PROFILE_TRIGGERS_SOLLICITATION_PATCH
+            field: logic.effect
+          value: >-
+            Patch non punitif du format, de la cadence ou du canal de sollicitation AR, sans pression comportementale,
+            sans baisse de difficulté et sans inférence psychologique autonome.
+          traceability:
+            arbitrage_decision: PATCH_DECISION_006
+            finding_id: ARB-F11
+
+        - op: replace_field
+          target:
+            section: EVENTS
+            id: EVENT_AR_REFRACTORY_PROFILE_DETECTED
+            field: human_readable
+          value: Fenêtre observable de non-réponse AR détectée.
+          traceability:
+            arbitrage_decision: PATCH_DECISION_006
+            finding_id: ARB-F11
+
+        - op: replace_field
+          target:
+            section: EVENTS
+            id: EVENT_AR_REFRACTORY_PROFILE_DETECTED
+            field: logic.trigger
+          value: Fenêtre de non-réponse AR-N1 observable.
+          traceability:
+            arbitrage_decision: PATCH_DECISION_006
+            finding_id: ARB-F11
+
+        - op: replace_field
+          target:
+            section: EVENTS
+            id: EVENT_AR_REFRACTORY_PROFILE_DETECTED
+            field: logic.effect
+          value: >-
+            Déclencheur de patch de sollicitation non punitif. L’événement ne qualifie aucun état psychologique
+            et ne produit aucune pénalisation.
+          traceability:
+            arbitrage_decision: PATCH_DECISION_006
+            finding_id: ARB-F11
+
+        - op: replace_field
+          target:
+            section: ACTIONS
+            id: ACTION_TRIGGER_AR_SOLLICITATION_PATCH
+            field: logic.effect
+          value: >-
+            Révision non punitive du format, de la cadence ou du canal de sollicitation AR. L’action ne diagnostique
+            pas le learner, ne force pas la réponse et ne modifie pas la difficulté ou l’évaluation.
+          traceability:
+            arbitrage_decision: PATCH_DECISION_006
+            finding_id: ARB-F11
+
+        - op: replace_field
+          target:
+            section: RULES
+            id: RULE_PATCH_SERIALIZATION
+            field: logic.effect
+          value: >-
+            Un seul patch est traité à la fois par apprenant. Les déclenchements concurrents sont placés en file
+            d’attente FIFO. Aucun patch concurrent ne peut démarrer tant que le patch actif n’a pas atteint un état
+            terminal déterministe : appliqué, rejeté, rollbacké, ou bloqué après échec vérifié du rollback avec
+            escalade hors session. Le rollback du patch actif relève du traitement terminal immédiat de ce patch,
+            et non d’un nouveau patch à placer en file FIFO.
+          traceability:
+            arbitrage_decision: PATCH_DECISION_003
+            finding_id: ARB-F03
+
+        - op: replace_field
+          target:
+            section: ACTIONS
+            id: ACTION_ROLLBACK_PATCH
+            field: logic.effect
+          value: >-
+            Retour à l’état identique au snapshot pré-application. Méthode obligatoire : un snapshot de l’état des
+            fichiers cibles doit être capturé avant toute écriture ; en cas de détection de partialité, le snapshot
+            est restauré intégralement. Aucune écriture partielle ne doit subsister après rollback. Si la restauration
+            ne peut pas être achevée ou vérifiée déterministiquement, le runtime entre dans un état local bloqué,
+            interdit toute nouvelle application de patch et émet une escalade hors session de réparation d’intégrité
+            avec trace d’exécution minimale.
+          traceability:
+            arbitrage_decision: PATCH_DECISION_004
+            finding_id: ARB-F04
+
+        - op: replace_field
+          target:
+            section: INVARIANTS
+            id: INV_NO_PARTIAL_PATCH_STATE
+            field: logic.effect
+          value: >-
+            Patch annulé ou rollback obligatoire. Si le rollback ne peut pas être vérifié comme complet, toute nouvelle
+            application de patch est bloquée et une escalade hors session de réparation d’intégrité devient obligatoire.
+          traceability:
+            arbitrage_decision: PATCH_DECISION_004
+            finding_id: ARB-F04
+
+        - op: replace_field
+          target:
+            section: INVARIANTS
+            id: INV_PERSISTENT_DRIFT_REQUIRES_ESCALATION_IF_PATCH_BLOCKED
+            field: logic.condition
+          value: >-
+            Condition primaire : le signal de dérive persiste alors que le patch requis reste rejeté, impossible ou
+            bloqué par les contraintes de validation locale. Condition complémentaire : N patches successifs du même
+            type ont été appliqués sans disparition du signal de dérive, où N est un paramètre externe du Référentiel.
+            La production du signal de dérive reste hors du patch_lifecycle ; le patch_lifecycle traite uniquement
+            l’échec, le blocage ou l’inefficacité des corrections par patch.
+          traceability:
+            arbitrage_decision: PATCH_DECISION_007
+            finding_id: ARB-F08
+
+        - op: replace_field
+          target:
+            section: INVARIANTS
+            id: INV_PERSISTENT_DRIFT_REQUIRES_ESCALATION_IF_PATCH_BLOCKED
+            field: logic.effect
+          value: >-
+            Escalade obligatoire hors session vers la chaîne d’analyse/correction lorsque la dérive ne peut pas être
+            résolue par patch local valide ou persiste malgré N applications valides successives. Cette escalade ne
+            transfère pas au patch_lifecycle la propriété des signaux learner_state ou des régimes de détresse/conservatisme.
+          traceability:
+            arbitrage_decision: PATCH_DECISION_007
+            finding_id: ARB-F08
+
+        - op: replace_field
+          target:
+            section: RULES
+            id: RULE_PERSISTENT_DRIFT_BLOCKED_PATCH_ESCALATES_OFFSESSION
+            field: logic.condition
+          value: >-
+            Le patch requis reste rejeté, impossible, bloqué par validation locale, ou s’avère inefficace après le
+            nombre maximum autorisé d’itérations valides. Les causes learner_state ou gouvernance plus larges sont
+            consommées comme signaux externes et ne sont pas redéfinies par cette règle.
+          traceability:
+            arbitrage_decision: PATCH_DECISION_007
+            finding_id: ARB-F08
+
+        - op: replace_field
+          target:
+            section: ACTIONS
+            id: ACTION_ESCALATE_PERSISTENT_DRIFT_OFFSESSION
+            field: logic.condition
+          value: >-
+            Le runtime local a atteint une borne d’escalade liée à un patch rejeté, impossible, bloqué, rollback non
+            vérifiable ou inefficace après itérations autorisées. Les situations de détresse, conservatisme sans sortie
+            ou investigation systémique restent des signaux externes si elles ne sont pas directement causées par le
+            cycle de vie patch.
+          traceability:
+            arbitrage_decision: PATCH_DECISION_007
+            finding_id: ARB-F08
+
+        - op: note
+          value:
+            id: NOTE_SCOPE_EXTENSION_LEARNER_STATE_NEIGHBORS
+            related_arbitrage_finding: ARB-F02
+            decision: necessite_extension_scope
+            summary: >-
+              Do not add TYPE_STATE_AXIS_VALUE_COST or TYPE_SELF_REPORT_AR_N1 to patch_lifecycle ownership in this run.
+              Explicit learner_state read-neighbor declaration must be handled through scope_generation policy/decisions
+              and deterministic catalog regeneration.
+
+        - op: note
+          value:
+            id: NOTE_EXTERNAL_READ_ONLY_REFERENTIEL_PARAMETER
+            related_arbitrage_finding: ARB-F07
+            decision: necessite_extension_scope
+            summary: >-
+              Do not patch referentiel.yaml or introduce concrete referential parameters in this Constitution bounded run.
+              Track PARAM_REFERENTIEL_MAX_PATCH_ITERATIONS_BEFORE_ESCALATION as external-read-only follow-up.
+
+        - op: note
+          value:
+            id: NOTE_ACTION_LOG_UNCOVERED_CONFLICT_DEFERRED
+            related_arbitrage_finding: ARB-F09
+            decision: reporter
+            summary: >-
+              Do not move, split or patch ACTION_LOG_UNCOVERED_CONFLICT in this pilot. Preserve as governance boundary debt.
+
+        - op: note
+          value:
+            id: NOTE_PRIORITY_QUEUE_AND_FULL_STATE_MACHINE_DEFERRED
+            related_arbitrage_findings:
+              - ARB-F03
+              - ARB-F05
+            decision: reporter
+            summary: >-
+              Do not introduce a full patch priority queue or full patch state machine in this patchset. Only minimal
+              terminal-state and rollback semantics are patched now.
+  human_actions_to_execute:
+    - >-
+      Run docs/patcher/shared/update_run_tracking.py for STAGE_03_PATCH_SYNTHESIS done and next stage
+      STAGE_04_PATCH_VALIDATION after reviewing this patchset.
+    - >-
+      Do not claim validation until STAGE_04 executes validate_patchset.py for this patchset.
