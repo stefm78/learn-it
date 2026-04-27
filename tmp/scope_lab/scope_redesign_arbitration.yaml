@@ -1,6 +1,6 @@
 scope_redesign_arbitration:
   schema_version: 0.1
-  status: PENDING_HUMAN_ARBITRATION
+  status: PARTIALLY_ARBITRATED
   source: tmp/scope_lab/scope_redesign_candidates.yaml
   summary:
     candidate_count: 34
@@ -22,10 +22,12 @@ scope_redesign_arbitration:
       MACRO_004_MULTI_OWNER_CLUSTER_REVIEW: 6
       MACRO_005_NEIGHBOR_DECLARATION_REVIEW: 8
       MACRO_006_SCOPE_BOUNDARY_REVIEW: 5
+    accepted_macro_decision_count: 4
+    pending_macro_decision_count: 2
   macro_decisions:
   - macro_decision_id: MACRO_001_REFERENTIEL_LINK_UNOWNED_CLASSIFICATION
     title: Classify currently UNOWNED referentiel/link areas
-    status: pending_human_arbitration
+    status: arbitrated
     priority: high
     candidate_count: 13
     candidate_ids:
@@ -51,13 +53,18 @@ scope_redesign_arbitration:
     - declare_shared_or_global_ids
     - defer_to_backlog
     human_decision:
-      arbitration_status: pending
-      selected_option: null
-      rationale: null
-      canonicalization_action: null
+      arbitration_status: accepted
+      selected_option: declare_referentiel_and_link_as_read_only_external_cores
+      rationale: Les IDs referentiel/link ne doivent pas être forcés artificiellement dans les scopes Constitution. Ils constituent
+        des surfaces de référence et de liaison inter-core, lues par les runs constitution mais non possédées par eux, sauf
+        décision explicite.
+      canonicalization_action: 'Introduire une politique explicite de classification des IDs referentiel/link : external_read_only_core
+        pour les IDs lus mais non possédés par la Constitution, shared/global seulement si nécessaire, et ownership par un
+        scope constitution uniquement lorsqu''il existe une responsabilité de gouvernance réelle. Le validateur de bijection
+        devra distinguer les IDs constitution-owned des IDs external_read_only.'
   - macro_decision_id: MACRO_002_PATCH_LIFECYCLE_CORE_STRUCTURE
     title: Decide whether patch lifecycle structural core remains a canonical scope/subcluster
-    status: pending_human_arbitration
+    status: arbitrated
     priority: medium
     candidate_count: 1
     candidate_ids:
@@ -70,13 +77,17 @@ scope_redesign_arbitration:
     - split_as_patch_core_scope
     - defer_to_backlog
     human_decision:
-      arbitration_status: pending
-      selected_option: null
-      rationale: null
-      canonicalization_action: null
+      arbitration_status: accepted
+      selected_option: name_as_patch_structure_subcluster
+      rationale: Le graphe montre un cœur patch_lifecycle très cohérent autour de TYPE_PATCH_ARTIFACT, TYPE_PATCH_IMPACT_SCOPE,
+        TYPE_PATCH_QUALITY_GATE, rollback, validation locale et rejet des patches invalides. Ce bloc ne doit pas être séparé
+        immédiatement en scope autonome, mais il doit être nommé comme sous-grappe diagnostique stable.
+      canonicalization_action: Conserver ces IDs dans patch_lifecycle. Ajouter une classification ou note de sous-grappe nommée
+        patch_structure_and_quality dans les artefacts de Scope Lab, puis éventuellement dans la policy de scoping si la méthode
+        est validée.
   - macro_decision_id: MACRO_003_PATCH_TRIGGER_BOUNDARY
     title: Decide boundary for patch triggers and learner/runtime signals
-    status: pending_human_arbitration
+    status: arbitrated
     priority: high
     candidate_count: 1
     candidate_ids:
@@ -91,10 +102,14 @@ scope_redesign_arbitration:
     - split_patch_lifecycle
     - defer_to_backlog
     human_decision:
-      arbitration_status: pending
-      selected_option: null
-      rationale: null
-      canonicalization_action: null
+      arbitration_status: accepted
+      selected_option: keep_triggers_in_patch_lifecycle_with_neighbors
+      rationale: 'Les déclencheurs de patch sont proches de learner_state dans le graphe, mais ils représentent des décisions
+        gouvernées de cycle de vie du patch : déclencher un patch de relevance, déclencher une sollicitation AR, ou escalader
+        une dérive persistante. Leur ownership doit donc rester dans patch_lifecycle, tandis que les signaux d''état apprenant
+        doivent être lus comme neighbors explicites.'
+      canonicalization_action: Conserver les règles/événements/actions de déclenchement dans patch_lifecycle. Déclarer explicitement
+        les IDs learner_state nécessaires comme neighbors. Créer si besoin une sous-grappe diagnostique patch_trigger_governance.
   - macro_decision_id: MACRO_004_MULTI_OWNER_CLUSTER_REVIEW
     title: Review multi-owner graph clusters
     status: pending_human_arbitration
@@ -149,7 +164,7 @@ scope_redesign_arbitration:
       canonicalization_action: null
   - macro_decision_id: MACRO_006_SCOPE_BOUNDARY_REVIEW
     title: Review all existing scope boundaries
-    status: pending_human_arbitration
+    status: arbitrated
     priority: high
     candidate_count: 5
     candidate_ids:
@@ -167,10 +182,13 @@ scope_redesign_arbitration:
     - create_scope_generation_policy_v2
     - defer_to_backlog
     human_decision:
-      arbitration_status: pending
-      selected_option: null
-      rationale: null
-      canonicalization_action: null
+      arbitration_status: accepted
+      selected_option: redesign_patch_lifecycle_first
+      rationale: Les cinq scopes actuels montrent des signaux de revue, mais une refonte globale serait trop risquée. patch_lifecycle
+        est le meilleur stress-test car il combine un cœur structurel clair avec des frontières difficiles autour des déclencheurs,
+        du learner_state et des signaux runtime.
+      canonicalization_action: Utiliser patch_lifecycle comme premier scope pilote pour valider la méthode graph-based. Les
+        autres scopes restent temporairement inchangés, avec leurs anomalies conservées comme backlog d'arbitrage.
   candidate_arbitration_items:
   - candidate_id: CAND_SCOPE_BOUNDARY_001
     candidate_type: review_scope_boundary
