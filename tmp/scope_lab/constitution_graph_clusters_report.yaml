@@ -1,0 +1,13 @@
+constitution_graph_clusters_report:
+  schema_version: 0.1
+  status: PASS
+  node_count: 246
+  edge_count: 402
+  weak_component_count: 34
+  label_cluster_count: 56
+  largest_weak_component_size: 195
+  largest_label_cluster_size: 26
+  notes:
+  - Weak components show pure graph connectivity.
+  - Label propagation is a deterministic lightweight community heuristic.
+  - PHASE_05 must perform closure analysis before any scoping decision.

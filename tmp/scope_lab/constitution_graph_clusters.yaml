@@ -1,0 +1,1991 @@
+constitution_graph_clusters:
+  schema_version: 0.1
+  status: PASS
+  cluster_count: 90
+  methods:
+  - weak_component
+  - label_propagation
+  clusters:
+  - cluster_id: WEAK_COMPONENT_001
+    method: weak_component
+    node_count: 195
+    internal_edge_count: 381
+    external_edge_count: 0
+    boundary_pressure: low
+    dominant_owner_scope: UNOWNED
+    dominant_owner_ratio: 0.4667
+    nodes_by_owner_scope:
+      UNOWNED: 91
+      deployment_governance: 14
+      knowledge_and_design: 20
+      learner_state: 26
+      mastery_evaluation: 24
+      patch_lifecycle: 20
+    nodes_by_core:
+      constitution: 106
+      link: 14
+      referentiel: 75
+    nodes_by_section:
+      ACTIONS: 13
+      CONSTRAINTS: 14
+      EVENTS: 19
+      INVARIANTS: 33
+      PARAMETERS: 29
+      RULES: 35
+      TYPES: 52
+    node_ids:
+    - ACTION_APPLY_LIGHT_REVERSIBLE_SCAFFOLDING
+    - ACTION_ESCALATE_PERSISTENT_DRIFT_OFFSESSION
+    - ACTION_INFORM_LEARNER
+    - ACTION_LOG_AR_PROXY_DISCORDANCE
+    - ACTION_PLAN_COGNITIVE_CONFLICT_MISSION
+    - ACTION_PLAN_SHORT_DIAGNOSTIC_TASK
+    - ACTION_REFERENTIEL_REDUCE_AR_N2_FREQUENCY
+    - ACTION_REFERENTIEL_REDUCE_SESSION_INTENTION_FREQUENCY
+    - ACTION_REFERENTIEL_TRIGGER_AR_SOLLICITATION_PATCH
+    - ACTION_REFERENTIEL_TRIGGER_RELEVANCE_PATCH
+    - ACTION_ROLLBACK_PATCH
+    - ACTION_TRIGGER_AR_SOLLICITATION_PATCH
+    - ACTION_TRIGGER_RELEVANCE_PATCH
+    - CONSTRAINT_LINK_NO_BUSINESS_LOGIC
+    - CONSTRAINT_NO_ADAPTIVE_PHILOSOPHY_CHANGE
+    - CONSTRAINT_NO_ASSISTED_DEPLOYMENT_WITHOUT_TUTORING
+    - CONSTRAINT_NO_AUTONOMOUS_PSYCHOLOGICAL_INFERENCE
+    - CONSTRAINT_NO_CHANGE_TO_AND_LOGIC
+    - CONSTRAINT_NO_CHANGE_TO_GRAPH_PROPAGATION_RULE
+    - CONSTRAINT_NO_HIGH_BLOOM_WITHOUT_AUTHENTIC_CONTEXT
+    - CONSTRAINT_NO_RUNTIME_FEEDBACK_GENERATION
+    - CONSTRAINT_REFERENTIEL_AR_REFRACTORY_NOT_PENALIZED
+    - CONSTRAINT_REFERENTIEL_DOUBLE_BUFFER_REQUIRED_FOR_PATCH
+    - CONSTRAINT_REFERENTIEL_LOCAL_VERIFICATION_REQUIRED_BEFORE_PATCH_APPLY
+    - CONSTRAINT_REFERENTIEL_NO_BEHAVIORAL_PROXY_FOR_VC
+    - CONSTRAINT_REFERENTIEL_NO_DIFFICULTY_ADJUSTMENT_FROM_VC_PATCH
+    - CONSTRAINT_REFERENTIEL_PATCH_SCOPE_MUST_REMAIN_CONSTITUTIONALLY_BOUNDED
+    - EVENT_ACTIVATION_DISTRESS_PERSISTENCE_ESCALATION
+    - EVENT_AR_REFRACTORY_PROFILE_DETECTED
+    - EVENT_CONSERVATIVE_SCAFFOLDING_ESCALATION
+    - EVENT_GAMIFICATION_PROBATION_MAX_DURATION_REACHED
+    - EVENT_HIGH_BLOOM_WITHOUT_AUTHENTIC_CONTEXT
+    - EVENT_LONG_INTERRUPTION
+    - EVENT_MSC_DOWNGRADE
+    - EVENT_MSC_PERCEPTION_DIVERGENCE_DETECTED
+    - EVENT_PATCH_INVALID
+    - EVENT_PERSISTENT_LOW_VC
+    - EVENT_PROVISIONAL_MASTERY_WINDOW_EXPIRED
+    - EVENT_REFERENTIEL_AR_REFRACTORY_PROFILE_DETECTED
+    - EVENT_REFERENTIEL_FEEDBACK_COVERAGE_LOW
+    - EVENT_REFERENTIEL_PATCH_TRIGGER_THRESHOLD_CROSSED
+    - EVENT_REFERENTIEL_VC_PERSISTENT_LOW_DETECTED
+    - EVENT_SYSTEMIC_INVESTIGATION_AUTO_OPENED
+    - EVENT_SYSTEMIC_INVESTIGATION_CLOSED
+    - EVENT_T_EVALUATION_OVERDUE
+    - EVENT_UNCOVERED_ERROR
+    - INVARIANT_ISOLATED_LOW_VC_MEANS_NO_ACTION
+    - INV_AR_N2_SHORT_FORM_REQUIRES_EXPLICIT_PRIORITY
+    - INV_ASSISTED_MODE_REQUIRES_TUTORING
+    - INV_AUTHENTIC_CONTEXT_REQUIRED_FOR_BLOOM4
+    - INV_CONSERVATIVE_RULE_WITHOUT_AR_N1
+    - INV_CONSTITUTION_REFERENTIAL_SEPARATION
+    - INV_CREATIVE_KU_AUTONOMY_REQUIRES_DETERMINISTIC_FEEDBACK_PATH
+    - INV_DISTRESS_REGIME_PRIORITY_CANNOT_BE_OVERRIDDEN
+    - INV_EXPLICIT_DEPENDENCY_EDGES_REQUIRED
+    - INV_GRAPH_PROPAGATION_ONE_HOP
+    - INV_INVALID_PATCH_REJECTED
+    - INV_KNOWLEDGE_GRAPH_MUST_BE_ACYCLIC
+    - INV_KU_TYPING_REQUIRED
+    - INV_MISSING_KU_TYPE_FORCES_SAFE_FALLBACK
+    - INV_MSC_AND_STRICT
+    - INV_NO_PARTIAL_PATCH_STATE
+    - INV_NO_RUNTIME_CONTENT_GENERATION
+    - INV_NO_TEXT_ONLY_FOR_PROCEDURAL_OR_PERCEPTUAL
+    - INV_PATCH_ARTIFACTS_MUST_BE_PRECOMPUTED_OFF_SESSION
+    - INV_PATCH_LOCAL_VALIDATION_MUST_BE_DETERMINISTIC
+    - INV_PERSISTENT_DRIFT_REQUIRES_ESCALATION_IF_PATCH_BLOCKED
+    - INV_REFERENTIEL_CONSTITUTIONAL_AND_LOGIC_NOT_MODIFIABLE_HERE
+    - INV_REFERENTIEL_CREATIVE_R_FALLBACK_IS_X1
+    - INV_REFERENTIEL_GRAPH_ONE_HOP_NOT_MODIFIABLE_HERE
+    - INV_REFERENTIEL_PATCH_QUALITY_CHECKLIST_NOT_MODIFIABLE_HERE
+    - INV_REFERENTIEL_SESSION_INTENTION_NON_PENALIZED
+    - INV_REFERENTIEL_VALIDITY_REQUIRED_FOR_DELEGATED_THRESHOLD_EVALUATION
+    - INV_REFERENTIEL_VC_UNKNOWN_MEANS_NO_INFERENCE
+    - INV_RUNTIME_FULLY_LOCAL
+    - INV_RUNTIME_QUALIFICATION_SIGNALS_MUST_BE_EXPLICIT_OR_OFFSESSION
+    - INV_SECONDARY_RETROGRADATION_IS_NEW_EVENT
+    - INV_TRANSFER_SEPARATE_FROM_BASE_MASTERY
+    - INV_VC_NOT_GENERAL_MOTIVATION_PROXY
+    - LINK_REF_CORE_LEARNIT_CONSTITUTION_V4_0
+    - PARAM_AR_N1_INTERACTION_BUDGET
+    - PARAM_AR_N2_INTERACTION_BUDGET
+    - PARAM_AR_N3_INTERACTION_BUDGET
+    - PARAM_PROVISIONAL_MASTERY_VERIFICATION_WINDOW
+    - PARAM_REFERENTIEL_ACTIVATION_DISTRESS_PERSISTENCE_SESSIONS
+    - PARAM_REFERENTIEL_ADAPTIVE_REGIME_TARGET_STATES
+    - PARAM_REFERENTIEL_AR_N2_FREQUENCY_REFERENCE
+    - PARAM_REFERENTIEL_AR_N2_MAX_ITEMS
+    - PARAM_REFERENTIEL_AR_N3_FREQUENCY_REFERENCE
+    - PARAM_REFERENTIEL_AR_REFRACTORY_SESSIONS_REFERENCE
+    - PARAM_REFERENTIEL_CALIBRATION_UNITS_MAX
+    - PARAM_REFERENTIEL_CONSERVATIVE_SCAFFOLDING_ESCALATION_SESSIONS
+    - PARAM_REFERENTIEL_CONSOLIDATION_SATISFACTORY_SESSION_CRITERION
+    - PARAM_REFERENTIEL_DEGRADATION_FAILURE_COUNT
+    - PARAM_REFERENTIEL_FEEDBACK_COVERAGE_REFERENCE_THRESHOLD
+    - PARAM_REFERENTIEL_LOW_AR_CALIBRATION_CONSECUTIVE_BILANS
+    - PARAM_REFERENTIEL_MSC_AUTONOMY_SUCCESS_COUNT
+    - PARAM_REFERENTIEL_MSC_PERCEPTION_DIVERGENCE_THRESHOLD
+    - PARAM_REFERENTIEL_MSC_PRECISION_THRESHOLD
+    - PARAM_REFERENTIEL_MSC_ROBUSTNESS_DELAY_SHORT
+    - PARAM_REFERENTIEL_OSCILLATION_MAX_CYCLES_BEFORE_ESCALATION
+    - PARAM_REFERENTIEL_PROXY_MIN_WEIGHT
+    - PARAM_REFERENTIEL_R_MULTIPLIER_CREATIVE_FALLBACK
+    - PARAM_REFERENTIEL_R_MULTIPLIER_DECLARATIVE
+    - PARAM_REFERENTIEL_SESSION_INTENTION_FREQUENCY_REFERENCE
+    - PARAM_REFERENTIEL_SYSTEMIC_INVESTIGATION_MAX_WINDOW_SESSIONS
+    - PARAM_REFERENTIEL_SYSTEMIC_INVESTIGATION_SESSION_THRESHOLD
+    - PARAM_REFERENTIEL_SYSTEMIC_INVESTIGATION_TRIGGER_CONDITIONS
+    - PARAM_REFERENTIEL_VC_LOW_PERSISTENCE_SESSIONS_REFERENCE
+    - REF_CORE_LEARNIT_CONSTITUTION_V4_0_IN_REFERENTIEL
+    - REF_CORE_LEARNIT_REFERENTIEL_V4_0_IN_CONSTITUTION
+    - RULE_ACTIVATION_DISTRESS_PERSISTENCE_ESCALATION_OFFSESSION
+    - RULE_AR_N1_OVERRIDES_PROXY
+    - RULE_AR_REFRACTORY_PROFILE_TRIGGERS_SOLLICITATION_PATCH
+    - RULE_CONSERVATIVE_SCAFFOLDING_ESCALATION_REQUIRES_OFFSESSION_REVIEW
+    - RULE_GAMIFICATION_PROBATION_MUST_CLOSE
+    - RULE_LEARNER_STATE_AXIS_UNKNOWN_ALLOWED
+    - RULE_LONG_INTERRUPTION_REQUIRES_DIAGNOSTIC_RESUME
+    - RULE_MISCONCEPTION_REQUIRES_COGNITIVE_CONFLICT
+    - RULE_MSC_COMPONENT_NON_CALCULABLE_DEFERS_BASE_MASTERY
+    - RULE_MSC_DOWNGRADE_MARKS_DEPENDENTS
+    - RULE_MSC_PERCEPTION_DIVERGENCE_PROTOCOL
+    - RULE_MULTI_AXIS_UNKNOWN_OR_UNOBSERVABLE_SAFE_ENTRY
+    - RULE_NON_EXAM_CONCEPT_KEPT_IN_GRAPH
+    - RULE_PATCH_SERIALIZATION
+    - RULE_PERSISTENT_DRIFT_BLOCKED_PATCH_ESCALATES_OFFSESSION
+    - RULE_PERSISTENT_LOW_VC_TRIGGERS_RELEVANCE_PATCH
+    - RULE_PROVISIONAL_MASTERY_WINDOW_EXPIRY_SAFE_FALLBACK
+    - RULE_REFERENTIEL_ADAPTIVE_REGIME_CONFLICT_RESOLUTION
+    - RULE_REFERENTIEL_AR_REFRACTORY_DETECTION
+    - RULE_REFERENTIEL_CURRENT_RETROGRADATION_VS_POSTMASTERY_REVOCATION
+    - RULE_REFERENTIEL_ESCALATION_PRIORITY_ORDER
+    - RULE_REFERENTIEL_INTERLEAVING_CONTENT_REQUIRES_A
+    - RULE_REFERENTIEL_LOW_AR_CALIBRATION_TEMPORARILY_REWEIGHTS_SIGNALS
+    - RULE_REFERENTIEL_LOW_FEEDBACK_COVERAGE_SIGNALS_REVISION
+    - RULE_REFERENTIEL_OSCILLATION_EXIT_AND_ESCALATION
+    - RULE_REFERENTIEL_SECONDARY_RETROGRADATION_DEFERRED_REENTRY
+    - RULE_REFERENTIEL_SIGNAL_PRECEDENCE_ORDER
+    - RULE_REFERENTIEL_SYSTEMIC_INVESTIGATION_RUNTIME_BEHAVIOR
+    - RULE_REFERENTIEL_VC_PERSISTENCE_TRIGGERS_RELEVANCE_PATCH
+    - RULE_REFERENTIEL_VC_UNOBSERVABLE_DISABLING
+    - RULE_SESSION_INTENTION_NON_BLOCKING
+    - RULE_SYSTEMIC_INVESTIGATION_OPEN_CLOSE_WINDOW
+    - RULE_T_EVALUATION_OVERDUE_REQUIRES_SIGNAL_OR_FOLLOWUP
+    - RULE_UNCOVERED_ERROR_GENERIC_FEEDBACK
+    - RULE_UNVERIFIED_GAMIFICATION_PROBATION
+    - TYPE_AUTHENTIC_CONTEXT
+    - TYPE_AUTONOMY_REGIME
+    - TYPE_BINDING_ACTIVATION_DISTRESS_PERSISTENCE_ESCALATION_CHAIN
+    - TYPE_BINDING_AR_N3_CALIBRATION_TO_SIGNAL_REWEIGHTING
+    - TYPE_BINDING_CONSERVATIVE_SCAFFOLDING_ESCALATION_CHAIN
+    - TYPE_BINDING_CONSTITUTION_REFERENTIEL_LAYER_SEPARATION
+    - TYPE_BINDING_CONSTITUTION_TO_REFERENTIEL_OPERATIONAL_PARAMETERS
+    - TYPE_BINDING_FEEDBACK_COVERAGE_TO_REFERENTIEL_THRESHOLD
+    - TYPE_BINDING_LEARNER_STATE_SIGNAL_AUTHORITY_CHAIN
+    - TYPE_BINDING_MSC_COMPONENTS_TO_REFERENTIEL_PARAMETERS
+    - TYPE_BINDING_MSC_PERCEPTION_DIVERGENCE_THRESHOLD_CHAIN
+    - TYPE_BINDING_PATCH_TRIGGER_GOVERNANCE_CHAIN
+    - TYPE_BINDING_REFERENTIEL_TO_CONSTITUTION_GOVERNING_INVARIANTS
+    - TYPE_BINDING_SYSTEMIC_INVESTIGATION_CHAIN
+    - TYPE_CORPUS_CONFIDENCE_ICC
+    - TYPE_FEEDBACK_COVERAGE_MATRIX
+    - TYPE_HUMAN_CHECKPOINT
+    - TYPE_KNOWLEDGE_GRAPH
+    - TYPE_KNOWLEDGE_UNIT
+    - TYPE_LEARNER_STATE_MODEL
+    - TYPE_MASTERY_COMPONENT_A
+    - TYPE_MASTERY_COMPONENT_P
+    - TYPE_MASTERY_COMPONENT_R
+    - TYPE_MASTERY_COMPONENT_T
+    - TYPE_MASTERY_MODEL
+    - TYPE_PATCH_ARTIFACT
+    - TYPE_PATCH_IMPACT_SCOPE
+    - TYPE_PATCH_QUALITY_GATE
+    - TYPE_REFERENTIEL_ADAPTIVE_REGIME_MATRIX
+    - TYPE_REFERENTIEL_AR_N2_CONFIGURATION
+    - TYPE_REFERENTIEL_AR_N3_CONFIGURATION
+    - TYPE_REFERENTIEL_AR_REFRACTORY_PARAMETER_BLOCK
+    - TYPE_REFERENTIEL_FEEDBACK_COVERAGE_METRIC
+    - TYPE_REFERENTIEL_GRAPH_PROPAGATION_OPERATIONAL_NOTE
+    - TYPE_REFERENTIEL_KU_CALIBRATION_FORMAT_TABLE
+    - TYPE_REFERENTIEL_MINIMAL_BEHAVIORAL_PROXY_SET
+    - TYPE_REFERENTIEL_PATCH_SCOPE_TABLE
+    - TYPE_REFERENTIEL_PATCH_TRIGGER_TABLE
+    - TYPE_REFERENTIEL_REFERENTIAL_PARAMETER_LAYER
+    - TYPE_REFERENTIEL_SESSION_INTENTION_CONFIGURATION
+    - TYPE_REFERENTIEL_SIGNAL_CONFIDENCE_HIERARCHY
+    - TYPE_REFERENTIEL_TEMPORAL_MULTIPLIER_TABLE
+    - TYPE_REFERENTIEL_VC_PARAMETER_BLOCK
+    - TYPE_SELF_REPORT_AR_N1
+    - TYPE_SELF_REPORT_AR_N2
+    - TYPE_SELF_REPORT_AR_N3
+    - TYPE_STATE_AXIS_ACTIVATION
+    - TYPE_STATE_AXIS_CALIBRATION
+    - TYPE_STATE_AXIS_VALUE_COST
+  - cluster_id: WEAK_COMPONENT_002
+    method: weak_component
+    node_count: 6
+    internal_edge_count: 8
+    external_edge_count: 0
+    boundary_pressure: low
+    dominant_owner_scope: mastery_evaluation
+    dominant_owner_ratio: 0.8333
+    nodes_by_owner_scope:
+      deployment_governance: 1
+      mastery_evaluation: 5
+    nodes_by_core:
+      constitution: 6
+    nodes_by_section:
+      CONSTRAINTS: 1
+      EVENTS: 1
+      RULES: 1
+      TYPES: 3
+    node_ids:
+    - CONSTRAINT_NO_BIOMETRICS_OR_OFFSESSION_SURVEILLANCE
+    - EVENT_LOW_SIS
+    - RULE_LOW_SIS_NEVER_AUTO_PENALIZES
+    - TYPE_INTEGRITY_MODES
+    - TYPE_NC_MSC
+    - TYPE_SESSION_INTEGRITY_SCORE
+  - cluster_id: WEAK_COMPONENT_003
+    method: weak_component
+    node_count: 4
+    internal_edge_count: 3
+    external_edge_count: 0
+    boundary_pressure: low
+    dominant_owner_scope: UNOWNED
+    dominant_owner_ratio: 1.0
+    nodes_by_owner_scope:
+      UNOWNED: 4
+    nodes_by_core:
+      referentiel: 4
+    nodes_by_section:
+      EVENTS: 1
+      PARAMETERS: 2
+      RULES: 1
+    node_ids:
+    - EVENT_REFERENTIEL_LOW_AR_N2_COMPLETION
+    - PARAM_REFERENTIEL_AR_N2_COMPLETION_THRESHOLD
+    - PARAM_REFERENTIEL_AR_N2_COMPLETION_WINDOW_SESSIONS
+    - RULE_REFERENTIEL_REDUCE_AR_N2_FREQUENCY_ON_LOW_COMPLETION
+  - cluster_id: WEAK_COMPONENT_004
+    method: weak_component
+    node_count: 4
+    internal_edge_count: 3
+    external_edge_count: 0
+    boundary_pressure: low
+    dominant_owner_scope: UNOWNED
+    dominant_owner_ratio: 1.0
+    nodes_by_owner_scope:
+      UNOWNED: 4
+    nodes_by_core:
+      referentiel: 4
+    nodes_by_section:
+      EVENTS: 1
+      PARAMETERS: 2
+      RULES: 1
+    node_ids:
+    - EVENT_REFERENTIEL_LOW_SESSION_INTENTION_COMPLETION
+    - PARAM_REFERENTIEL_SESSION_INTENTION_COMPLETION_THRESHOLD
+    - PARAM_REFERENTIEL_SESSION_INTENTION_COMPLETION_WINDOW
+    - RULE_REFERENTIEL_REDUCE_SESSION_INTENTION_FREQUENCY_ON_LOW_COMPLETION
+  - cluster_id: WEAK_COMPONENT_005
+    method: weak_component
+    node_count: 3
+    internal_edge_count: 2
+    external_edge_count: 0
+    boundary_pressure: low
+    dominant_owner_scope: deployment_governance
+    dominant_owner_ratio: 0.6667
+    nodes_by_owner_scope:
+      deployment_governance: 2
+      patch_lifecycle: 1
+    nodes_by_core:
+      constitution: 3
+    nodes_by_section:
+      ACTIONS: 1
+      EVENTS: 1
+      RULES: 1
+    node_ids:
+    - ACTION_LOG_UNCOVERED_CONFLICT
+    - EVENT_GF08_UNCOVERED_CONFLICT
+    - RULE_GF08_UNCOVERED_CONFLICT_CONSERVATIVE_RESPONSE
+  - cluster_id: WEAK_COMPONENT_006
+    method: weak_component
+    node_count: 3
+    internal_edge_count: 2
+    external_edge_count: 0
+    boundary_pressure: low
+    dominant_owner_scope: UNOWNED
+    dominant_owner_ratio: 1.0
+    nodes_by_owner_scope:
+      UNOWNED: 3
+    nodes_by_core:
+      referentiel: 3
+    nodes_by_section:
+      PARAMETERS: 2
+      RULES: 1
+    node_ids:
+    - PARAM_REFERENTIEL_INTERLEAVING_DISTINCT_TASKS_MIN
+    - PARAM_REFERENTIEL_INTERLEAVING_SUCCESS_STREAK
+    - RULE_REFERENTIEL_INTERLEAVING_ACTIVATION
+  - cluster_id: WEAK_COMPONENT_007
+    method: weak_component
+    node_count: 2
+    internal_edge_count: 1
+    external_edge_count: 0
+    boundary_pressure: low
+    dominant_owner_scope: UNOWNED
+    dominant_owner_ratio: 1.0
+    nodes_by_owner_scope:
+      UNOWNED: 2
+    nodes_by_core:
+      referentiel: 2
+    nodes_by_section:
+      PARAMETERS: 1
+      RULES: 1
+    node_ids:
+    - PARAM_REFERENTIEL_ADAPTIVE_REGIME_PROXY_MIN
+    - RULE_REFERENTIEL_ADAPTIVE_REGIME_DETECTION_MIN_PROXIES
+  - cluster_id: WEAK_COMPONENT_008
+    method: weak_component
+    node_count: 2
+    internal_edge_count: 1
+    external_edge_count: 0
+    boundary_pressure: low
+    dominant_owner_scope: UNOWNED
+    dominant_owner_ratio: 1.0
+    nodes_by_owner_scope:
+      UNOWNED: 2
+    nodes_by_core:
+      referentiel: 2
+    nodes_by_section:
+      PARAMETERS: 1
+      RULES: 1
+    node_ids:
+    - PARAM_REFERENTIEL_COVERAGE_REBALANCING_DELAY_MULTIPLIER
+    - RULE_REFERENTIEL_COVERAGE_REBALANCING_ACTIVATION
+  - cluster_id: WEAK_COMPONENT_009
+    method: weak_component
+    node_count: 2
+    internal_edge_count: 1
+    external_edge_count: 0
+    boundary_pressure: low
+    dominant_owner_scope: UNOWNED
+    dominant_owner_ratio: 1.0
+    nodes_by_owner_scope:
+      UNOWNED: 2
+    nodes_by_core:
+      referentiel: 2
+    nodes_by_section:
+      PARAMETERS: 1
+      RULES: 1
+    node_ids:
+    - PARAM_REFERENTIEL_VC_PATCH_CYCLES_BEFORE_ANALYSIS_ESCALATION
+    - RULE_REFERENTIEL_VC_PATCH_ESCALATION_AFTER_TWO_CYCLES
+  - cluster_id: WEAK_COMPONENT_010
+    method: weak_component
+    node_count: 1
+    internal_edge_count: 0
+    external_edge_count: 0
+    boundary_pressure: low
+    dominant_owner_scope: UNOWNED
+    dominant_owner_ratio: 1.0
+    nodes_by_owner_scope:
+      UNOWNED: 1
+    nodes_by_core:
+      referentiel: 1
+    nodes_by_section:
+      ACTIONS: 1
+    node_ids:
+    - ACTION_REFERENTIEL_SIGNAL_ANALYSIS_REVISION
+  - cluster_id: WEAK_COMPONENT_011
+    method: weak_component
+    node_count: 1
+    internal_edge_count: 0
+    external_edge_count: 0
+    boundary_pressure: low
+    dominant_owner_scope: UNOWNED
+    dominant_owner_ratio: 1.0
+    nodes_by_owner_scope:
+      UNOWNED: 1
+    nodes_by_core:
+      constitution: 1
+    nodes_by_section:
+      CORE: 1
+    node_ids:
+    - CORE_LEARNIT_CONSTITUTION_V4_0
+  - cluster_id: WEAK_COMPONENT_012
+    method: weak_component
+    node_count: 1
+    internal_edge_count: 0
+    external_edge_count: 0
+    boundary_pressure: low
+    dominant_owner_scope: UNOWNED
+    dominant_owner_ratio: 1.0
+    nodes_by_owner_scope:
+      UNOWNED: 1
+    nodes_by_core:
+      referentiel: 1
+    nodes_by_section:
+      CORE: 1
+    node_ids:
+    - CORE_LEARNIT_REFERENTIEL_v3.0
+  - cluster_id: WEAK_COMPONENT_013
+    method: weak_component
+    node_count: 1
+    internal_edge_count: 0
+    external_edge_count: 0
+    boundary_pressure: low
+    dominant_owner_scope: UNOWNED
+    dominant_owner_ratio: 1.0
+    nodes_by_owner_scope:
+      UNOWNED: 1
+    nodes_by_core:
+      link: 1
+    nodes_by_section:
+      CORE: 1
+    node_ids:
+    - CORE_LINK_LEARNIT_CONSTITUTION_V4_0__REFERENTIEL_v3.0
+  - cluster_id: WEAK_COMPONENT_014
+    method: weak_component
+    node_count: 1
+    internal_edge_count: 0
+    external_edge_count: 0
+    boundary_pressure: low
+    dominant_owner_scope: UNOWNED
+    dominant_owner_ratio: 1.0
+    nodes_by_owner_scope:
+      UNOWNED: 1
+    nodes_by_core:
+      link: 1
+    nodes_by_section:
+      TYPES: 1
+    node_ids:
+    - LINK_REF_CORE_LEARNIT_REFERENTIEL_v3.0
+  - cluster_id: WEAK_COMPONENT_015
+    method: weak_component
+    node_count: 1
+    internal_edge_count: 0
+    external_edge_count: 0
+    boundary_pressure: low
+    dominant_owner_scope: UNOWNED
+    dominant_owner_ratio: 1.0
+    nodes_by_owner_scope:
+      UNOWNED: 1
+    nodes_by_core:
+      referentiel: 1
+    nodes_by_section:
+      PARAMETERS: 1
+    node_ids:
+    - PARAM_REFERENTIEL_COGNITIVE_FATIGUE_MINUTES_GUARDRAIL
+  - cluster_id: WEAK_COMPONENT_016
+    method: weak_component
+    node_count: 1
+    internal_edge_count: 0
+    external_edge_count: 0
+    boundary_pressure: low
+    dominant_owner_scope: UNOWNED
+    dominant_owner_ratio: 1.0
+    nodes_by_owner_scope:
+      UNOWNED: 1
+    nodes_by_core:
+      referentiel: 1
+    nodes_by_section:
+      PARAMETERS: 1
+    node_ids:
+    - PARAM_REFERENTIEL_CRITICAL_ADAPTATION_INERTIA_EXCEPTION_HOURS
+  - cluster_id: WEAK_COMPONENT_017
+    method: weak_component
+    node_count: 1
+    internal_edge_count: 0
+    external_edge_count: 0
+    boundary_pressure: low
+    dominant_owner_scope: UNOWNED
+    dominant_owner_ratio: 1.0
+    nodes_by_owner_scope:
+      UNOWNED: 1
+    nodes_by_core:
+      referentiel: 1
+    nodes_by_section:
+      PARAMETERS: 1
+    node_ids:
+    - PARAM_REFERENTIEL_CRITICAL_ADAPTATION_INERTIA_HOURS
+  - cluster_id: WEAK_COMPONENT_018
+    method: weak_component
+    node_count: 1
+    internal_edge_count: 0
+    external_edge_count: 0
+    boundary_pressure: low
+    dominant_owner_scope: UNOWNED
+    dominant_owner_ratio: 1.0
+    nodes_by_owner_scope:
+      UNOWNED: 1
+    nodes_by_core:
+      referentiel: 1
+    nodes_by_section:
+      PARAMETERS: 1
+    node_ids:
+    - PARAM_REFERENTIEL_GAMIFICATION_PROBATION_MAX_SESSIONS
+  - cluster_id: WEAK_COMPONENT_019
+    method: weak_component
+    node_count: 1
+    internal_edge_count: 0
+    external_edge_count: 0
+    boundary_pressure: low
+    dominant_owner_scope: UNOWNED
+    dominant_owner_ratio: 1.0
+    nodes_by_owner_scope:
+      UNOWNED: 1
+    nodes_by_core:
+      referentiel: 1
+    nodes_by_section:
+      PARAMETERS: 1
+    node_ids:
+    - PARAM_REFERENTIEL_KU_CALIBRATION_CREATIVE_DURATION
+  - cluster_id: WEAK_COMPONENT_020
+    method: weak_component
+    node_count: 1
+    internal_edge_count: 0
+    external_edge_count: 0
+    boundary_pressure: low
+    dominant_owner_scope: UNOWNED
+    dominant_owner_ratio: 1.0
+    nodes_by_owner_scope:
+      UNOWNED: 1
+    nodes_by_core:
+      referentiel: 1
+    nodes_by_section:
+      PARAMETERS: 1
+    node_ids:
+    - PARAM_REFERENTIEL_KU_CALIBRATION_DECLARATIVE_DURATION
+  - cluster_id: WEAK_COMPONENT_021
+    method: weak_component
+    node_count: 1
+    internal_edge_count: 0
+    external_edge_count: 0
+    boundary_pressure: low
+    dominant_owner_scope: UNOWNED
+    dominant_owner_ratio: 1.0
+    nodes_by_owner_scope:
+      UNOWNED: 1
+    nodes_by_core:
+      referentiel: 1
+    nodes_by_section:
+      PARAMETERS: 1
+    node_ids:
+    - PARAM_REFERENTIEL_KU_CALIBRATION_FORMAL_DURATION
+  - cluster_id: WEAK_COMPONENT_022
+    method: weak_component
+    node_count: 1
+    internal_edge_count: 0
+    external_edge_count: 0
+    boundary_pressure: low
+    dominant_owner_scope: UNOWNED
+    dominant_owner_ratio: 1.0
+    nodes_by_owner_scope:
+      UNOWNED: 1
+    nodes_by_core:
+      referentiel: 1
+    nodes_by_section:
+      PARAMETERS: 1
+    node_ids:
+    - PARAM_REFERENTIEL_KU_CALIBRATION_PERCEPTUAL_DURATION
+  - cluster_id: WEAK_COMPONENT_023
+    method: weak_component
+    node_count: 1
+    internal_edge_count: 0
+    external_edge_count: 0
+    boundary_pressure: low
+    dominant_owner_scope: UNOWNED
+    dominant_owner_ratio: 1.0
+    nodes_by_owner_scope:
+      UNOWNED: 1
+    nodes_by_core:
+      referentiel: 1
+    nodes_by_section:
+      PARAMETERS: 1
+    node_ids:
+    - PARAM_REFERENTIEL_KU_CALIBRATION_PROCEDURAL_DURATION
+  - cluster_id: WEAK_COMPONENT_024
+    method: weak_component
+    node_count: 1
+    internal_edge_count: 0
+    external_edge_count: 0
+    boundary_pressure: low
+    dominant_owner_scope: UNOWNED
+    dominant_owner_ratio: 1.0
+    nodes_by_owner_scope:
+      UNOWNED: 1
+    nodes_by_core:
+      referentiel: 1
+    nodes_by_section:
+      PARAMETERS: 1
+    node_ids:
+    - PARAM_REFERENTIEL_MSC_PRECISION_OCCURRENCES_MIN
+  - cluster_id: WEAK_COMPONENT_025
+    method: weak_component
+    node_count: 1
+    internal_edge_count: 0
+    external_edge_count: 0
+    boundary_pressure: low
+    dominant_owner_scope: UNOWNED
+    dominant_owner_ratio: 1.0
+    nodes_by_owner_scope:
+      UNOWNED: 1
+    nodes_by_core:
+      referentiel: 1
+    nodes_by_section:
+      PARAMETERS: 1
+    node_ids:
+    - PARAM_REFERENTIEL_MSC_ROBUSTNESS_DELAY_MEDIUM
+  - cluster_id: WEAK_COMPONENT_026
+    method: weak_component
+    node_count: 1
+    internal_edge_count: 0
+    external_edge_count: 0
+    boundary_pressure: low
+    dominant_owner_scope: UNOWNED
+    dominant_owner_ratio: 1.0
+    nodes_by_owner_scope:
+      UNOWNED: 1
+    nodes_by_core:
+      referentiel: 1
+    nodes_by_section:
+      PARAMETERS: 1
+    node_ids:
+    - PARAM_REFERENTIEL_PATCH_RETENTION_DAYS
+  - cluster_id: WEAK_COMPONENT_027
+    method: weak_component
+    node_count: 1
+    internal_edge_count: 0
+    external_edge_count: 0
+    boundary_pressure: low
+    dominant_owner_scope: UNOWNED
+    dominant_owner_ratio: 1.0
+    nodes_by_owner_scope:
+      UNOWNED: 1
+    nodes_by_core:
+      referentiel: 1
+    nodes_by_section:
+      PARAMETERS: 1
+    node_ids:
+    - PARAM_REFERENTIEL_PROPAGATION_CHECK_MAX_DELAY_SESSIONS
+  - cluster_id: WEAK_COMPONENT_028
+    method: weak_component
+    node_count: 1
+    internal_edge_count: 0
+    external_edge_count: 0
+    boundary_pressure: low
+    dominant_owner_scope: UNOWNED
+    dominant_owner_ratio: 1.0
+    nodes_by_owner_scope:
+      UNOWNED: 1
+    nodes_by_core:
+      referentiel: 1
+    nodes_by_section:
+      PARAMETERS: 1
+    node_ids:
+    - PARAM_REFERENTIEL_R_MULTIPLIER_FORMAL
+  - cluster_id: WEAK_COMPONENT_029
+    method: weak_component
+    node_count: 1
+    internal_edge_count: 0
+    external_edge_count: 0
+    boundary_pressure: low
+    dominant_owner_scope: UNOWNED
+    dominant_owner_ratio: 1.0
+    nodes_by_owner_scope:
+      UNOWNED: 1
+    nodes_by_core:
+      referentiel: 1
+    nodes_by_section:
+      PARAMETERS: 1
+    node_ids:
+    - PARAM_REFERENTIEL_R_MULTIPLIER_PERCEPTUAL
+  - cluster_id: WEAK_COMPONENT_030
+    method: weak_component
+    node_count: 1
+    internal_edge_count: 0
+    external_edge_count: 0
+    boundary_pressure: low
+    dominant_owner_scope: UNOWNED
+    dominant_owner_ratio: 1.0
+    nodes_by_owner_scope:
+      UNOWNED: 1
+    nodes_by_core:
+      referentiel: 1
+    nodes_by_section:
+      PARAMETERS: 1
+    node_ids:
+    - PARAM_REFERENTIEL_R_MULTIPLIER_PROCEDURAL
+  - cluster_id: WEAK_COMPONENT_031
+    method: weak_component
+    node_count: 1
+    internal_edge_count: 0
+    external_edge_count: 0
+    boundary_pressure: low
+    dominant_owner_scope: UNOWNED
+    dominant_owner_ratio: 1.0
+    nodes_by_owner_scope:
+      UNOWNED: 1
+    nodes_by_core:
+      referentiel: 1
+    nodes_by_section:
+      PARAMETERS: 1
+    node_ids:
+    - PARAM_REFERENTIEL_VC_UNOBSERVABLE_WINDOW_BEFORE_AXIS_DEACTIVATION
+  - cluster_id: WEAK_COMPONENT_032
+    method: weak_component
+    node_count: 1
+    internal_edge_count: 0
+    external_edge_count: 0
+    boundary_pressure: low
+    dominant_owner_scope: deployment_governance
+    dominant_owner_ratio: 1.0
+    nodes_by_owner_scope:
+      deployment_governance: 1
+    nodes_by_core:
+      constitution: 1
+    nodes_by_section:
+      RULES: 1
+    node_ids:
+    - RULE_NO_CALIBRATION_CONSERVATIVE_START
+  - cluster_id: WEAK_COMPONENT_033
+    method: weak_component
+    node_count: 1
+    internal_edge_count: 0
+    external_edge_count: 0
+    boundary_pressure: low
+    dominant_owner_scope: UNOWNED
+    dominant_owner_ratio: 1.0
+    nodes_by_owner_scope:
+      UNOWNED: 1
+    nodes_by_core:
+      referentiel: 1
+    nodes_by_section:
+      RULES: 1
+    node_ids:
+    - RULE_REFERENTIEL_UNVALIDATED_GAMIFICATION_PROBATION
+  - cluster_id: WEAK_COMPONENT_034
+    method: weak_component
+    node_count: 1
+    internal_edge_count: 0
+    external_edge_count: 0
+    boundary_pressure: low
+    dominant_owner_scope: deployment_governance
+    dominant_owner_ratio: 1.0
+    nodes_by_owner_scope:
+      deployment_governance: 1
+    nodes_by_core:
+      constitution: 1
+    nodes_by_section:
+      TYPES: 1
+    node_ids:
+    - SYSTEM_LEARNIT
+  - cluster_id: LABEL_CLUSTER_001
+    method: label_propagation
+    node_count: 26
+    internal_edge_count: 45
+    external_edge_count: 36
+    boundary_pressure: medium
+    dominant_owner_scope: learner_state
+    dominant_owner_ratio: 0.3846
+    nodes_by_owner_scope:
+      UNOWNED: 4
+      deployment_governance: 5
+      learner_state: 10
+      mastery_evaluation: 3
+      patch_lifecycle: 4
+    nodes_by_core:
+      constitution: 23
+      link: 1
+      referentiel: 2
+    nodes_by_section:
+      ACTIONS: 3
+      EVENTS: 6
+      INVARIANTS: 2
+      PARAMETERS: 2
+      RULES: 9
+      TYPES: 4
+    node_ids:
+    - ACTION_INFORM_LEARNER
+    - ACTION_LOG_AR_PROXY_DISCORDANCE
+    - ACTION_PLAN_SHORT_DIAGNOSTIC_TASK
+    - EVENT_ACTIVATION_DISTRESS_PERSISTENCE_ESCALATION
+    - EVENT_AR_REFRACTORY_PROFILE_DETECTED
+    - EVENT_GAMIFICATION_PROBATION_MAX_DURATION_REACHED
+    - EVENT_LONG_INTERRUPTION
+    - EVENT_MSC_PERCEPTION_DIVERGENCE_DETECTED
+    - EVENT_PERSISTENT_LOW_VC
+    - INV_CONSTITUTION_REFERENTIAL_SEPARATION
+    - INV_DISTRESS_REGIME_PRIORITY_CANNOT_BE_OVERRIDDEN
+    - PARAM_AR_N1_INTERACTION_BUDGET
+    - PARAM_REFERENTIEL_ACTIVATION_DISTRESS_PERSISTENCE_SESSIONS
+    - REF_CORE_LEARNIT_REFERENTIEL_V4_0_IN_CONSTITUTION
+    - RULE_ACTIVATION_DISTRESS_PERSISTENCE_ESCALATION_OFFSESSION
+    - RULE_AR_N1_OVERRIDES_PROXY
+    - RULE_AR_REFRACTORY_PROFILE_TRIGGERS_SOLLICITATION_PATCH
+    - RULE_GAMIFICATION_PROBATION_MUST_CLOSE
+    - RULE_LONG_INTERRUPTION_REQUIRES_DIAGNOSTIC_RESUME
+    - RULE_MSC_PERCEPTION_DIVERGENCE_PROTOCOL
+    - RULE_PERSISTENT_LOW_VC_TRIGGERS_RELEVANCE_PATCH
+    - RULE_REFERENTIEL_ESCALATION_PRIORITY_ORDER
+    - RULE_UNVERIFIED_GAMIFICATION_PROBATION
+    - TYPE_BINDING_ACTIVATION_DISTRESS_PERSISTENCE_ESCALATION_CHAIN
+    - TYPE_SELF_REPORT_AR_N1
+    - TYPE_STATE_AXIS_ACTIVATION
+  - cluster_id: LABEL_CLUSTER_002
+    method: label_propagation
+    node_count: 24
+    internal_edge_count: 45
+    external_edge_count: 30
+    boundary_pressure: medium
+    dominant_owner_scope: UNOWNED
+    dominant_owner_ratio: 0.9167
+    nodes_by_owner_scope:
+      UNOWNED: 22
+      learner_state: 2
+    nodes_by_core:
+      constitution: 2
+      link: 8
+      referentiel: 14
+    nodes_by_section:
+      CONSTRAINTS: 1
+      INVARIANTS: 2
+      PARAMETERS: 8
+      RULES: 2
+      TYPES: 11
+    node_ids:
+    - CONSTRAINT_LINK_NO_BUSINESS_LOGIC
+    - INV_REFERENTIEL_CONSTITUTIONAL_AND_LOGIC_NOT_MODIFIABLE_HERE
+    - INV_REFERENTIEL_VC_UNKNOWN_MEANS_NO_INFERENCE
+    - LINK_REF_CORE_LEARNIT_CONSTITUTION_V4_0
+    - PARAM_AR_N3_INTERACTION_BUDGET
+    - PARAM_REFERENTIEL_DEGRADATION_FAILURE_COUNT
+    - PARAM_REFERENTIEL_LOW_AR_CALIBRATION_CONSECUTIVE_BILANS
+    - PARAM_REFERENTIEL_MSC_AUTONOMY_SUCCESS_COUNT
+    - PARAM_REFERENTIEL_MSC_PERCEPTION_DIVERGENCE_THRESHOLD
+    - PARAM_REFERENTIEL_MSC_PRECISION_THRESHOLD
+    - PARAM_REFERENTIEL_MSC_ROBUSTNESS_DELAY_SHORT
+    - PARAM_REFERENTIEL_PROXY_MIN_WEIGHT
+    - RULE_REFERENTIEL_LOW_AR_CALIBRATION_TEMPORARILY_REWEIGHTS_SIGNALS
+    - RULE_REFERENTIEL_SIGNAL_PRECEDENCE_ORDER
+    - TYPE_BINDING_AR_N3_CALIBRATION_TO_SIGNAL_REWEIGHTING
+    - TYPE_BINDING_CONSTITUTION_REFERENTIEL_LAYER_SEPARATION
+    - TYPE_BINDING_CONSTITUTION_TO_REFERENTIEL_OPERATIONAL_PARAMETERS
+    - TYPE_BINDING_LEARNER_STATE_SIGNAL_AUTHORITY_CHAIN
+    - TYPE_BINDING_MSC_COMPONENTS_TO_REFERENTIEL_PARAMETERS
+    - TYPE_BINDING_MSC_PERCEPTION_DIVERGENCE_THRESHOLD_CHAIN
+    - TYPE_REFERENTIEL_MINIMAL_BEHAVIORAL_PROXY_SET
+    - TYPE_REFERENTIEL_REFERENTIAL_PARAMETER_LAYER
+    - TYPE_REFERENTIEL_SIGNAL_CONFIDENCE_HIERARCHY
+    - TYPE_SELF_REPORT_AR_N3
+  - cluster_id: LABEL_CLUSTER_003
+    method: label_propagation
+    node_count: 16
+    internal_edge_count: 31
+    external_edge_count: 15
+    boundary_pressure: medium
+    dominant_owner_scope: patch_lifecycle
+    dominant_owner_ratio: 0.9375
+    nodes_by_owner_scope:
+      UNOWNED: 1
+      patch_lifecycle: 15
+    nodes_by_core:
+      constitution: 16
+    nodes_by_section:
+      ACTIONS: 4
+      CONSTRAINTS: 2
+      EVENTS: 1
+      INVARIANTS: 4
+      RULES: 2
+      TYPES: 3
+    node_ids:
+    - ACTION_ESCALATE_PERSISTENT_DRIFT_OFFSESSION
+    - ACTION_ROLLBACK_PATCH
+    - ACTION_TRIGGER_AR_SOLLICITATION_PATCH
+    - ACTION_TRIGGER_RELEVANCE_PATCH
+    - CONSTRAINT_NO_ADAPTIVE_PHILOSOPHY_CHANGE
+    - CONSTRAINT_NO_AUTONOMOUS_PSYCHOLOGICAL_INFERENCE
+    - EVENT_PATCH_INVALID
+    - INV_INVALID_PATCH_REJECTED
+    - INV_NO_PARTIAL_PATCH_STATE
+    - INV_PATCH_LOCAL_VALIDATION_MUST_BE_DETERMINISTIC
+    - INV_PERSISTENT_DRIFT_REQUIRES_ESCALATION_IF_PATCH_BLOCKED
+    - RULE_PATCH_SERIALIZATION
+    - RULE_PERSISTENT_DRIFT_BLOCKED_PATCH_ESCALATES_OFFSESSION
+    - TYPE_PATCH_ARTIFACT
+    - TYPE_PATCH_IMPACT_SCOPE
+    - TYPE_PATCH_QUALITY_GATE
+  - cluster_id: LABEL_CLUSTER_004
+    method: label_propagation
+    node_count: 14
+    internal_edge_count: 15
+    external_edge_count: 14
+    boundary_pressure: medium
+    dominant_owner_scope: UNOWNED
+    dominant_owner_ratio: 1.0
+    nodes_by_owner_scope:
+      UNOWNED: 14
+    nodes_by_core:
+      referentiel: 14
+    nodes_by_section:
+      INVARIANTS: 2
+      PARAMETERS: 3
+      RULES: 4
+      TYPES: 5
+    node_ids:
+    - INV_REFERENTIEL_GRAPH_ONE_HOP_NOT_MODIFIABLE_HERE
+    - INV_REFERENTIEL_PATCH_QUALITY_CHECKLIST_NOT_MODIFIABLE_HERE
+    - PARAM_REFERENTIEL_ADAPTIVE_REGIME_TARGET_STATES
+    - PARAM_REFERENTIEL_AR_N3_FREQUENCY_REFERENCE
+    - PARAM_REFERENTIEL_CALIBRATION_UNITS_MAX
+    - REF_CORE_LEARNIT_CONSTITUTION_V4_0_IN_REFERENTIEL
+    - RULE_REFERENTIEL_ADAPTIVE_REGIME_CONFLICT_RESOLUTION
+    - RULE_REFERENTIEL_CURRENT_RETROGRADATION_VS_POSTMASTERY_REVOCATION
+    - RULE_REFERENTIEL_INTERLEAVING_CONTENT_REQUIRES_A
+    - RULE_REFERENTIEL_SECONDARY_RETROGRADATION_DEFERRED_REENTRY
+    - TYPE_REFERENTIEL_ADAPTIVE_REGIME_MATRIX
+    - TYPE_REFERENTIEL_AR_N3_CONFIGURATION
+    - TYPE_REFERENTIEL_GRAPH_PROPAGATION_OPERATIONAL_NOTE
+    - TYPE_REFERENTIEL_KU_CALIBRATION_FORMAT_TABLE
+  - cluster_id: LABEL_CLUSTER_005
+    method: label_propagation
+    node_count: 12
+    internal_edge_count: 23
+    external_edge_count: 11
+    boundary_pressure: medium
+    dominant_owner_scope: mastery_evaluation
+    dominant_owner_ratio: 0.9167
+    nodes_by_owner_scope:
+      deployment_governance: 1
+      mastery_evaluation: 11
+    nodes_by_core:
+      constitution: 12
+    nodes_by_section:
+      CONSTRAINTS: 1
+      EVENTS: 1
+      INVARIANTS: 3
+      RULES: 2
+      TYPES: 5
+    node_ids:
+    - CONSTRAINT_NO_CHANGE_TO_AND_LOGIC
+    - EVENT_T_EVALUATION_OVERDUE
+    - INV_MSC_AND_STRICT
+    - INV_REFERENTIEL_VALIDITY_REQUIRED_FOR_DELEGATED_THRESHOLD_EVALUATION
+    - INV_TRANSFER_SEPARATE_FROM_BASE_MASTERY
+    - RULE_MSC_COMPONENT_NON_CALCULABLE_DEFERS_BASE_MASTERY
+    - RULE_T_EVALUATION_OVERDUE_REQUIRES_SIGNAL_OR_FOLLOWUP
+    - TYPE_MASTERY_COMPONENT_A
+    - TYPE_MASTERY_COMPONENT_P
+    - TYPE_MASTERY_COMPONENT_R
+    - TYPE_MASTERY_COMPONENT_T
+    - TYPE_MASTERY_MODEL
+  - cluster_id: LABEL_CLUSTER_006
+    method: label_propagation
+    node_count: 11
+    internal_edge_count: 20
+    external_edge_count: 10
+    boundary_pressure: medium
+    dominant_owner_scope: learner_state
+    dominant_owner_ratio: 1.0
+    nodes_by_owner_scope:
+      learner_state: 11
+    nodes_by_core:
+      constitution: 11
+    nodes_by_section:
+      ACTIONS: 1
+      INVARIANTS: 2
+      PARAMETERS: 1
+      RULES: 3
+      TYPES: 4
+    node_ids:
+    - ACTION_APPLY_LIGHT_REVERSIBLE_SCAFFOLDING
+    - INV_AR_N2_SHORT_FORM_REQUIRES_EXPLICIT_PRIORITY
+    - INV_VC_NOT_GENERAL_MOTIVATION_PROXY
+    - PARAM_AR_N2_INTERACTION_BUDGET
+    - RULE_LEARNER_STATE_AXIS_UNKNOWN_ALLOWED
+    - RULE_MULTI_AXIS_UNKNOWN_OR_UNOBSERVABLE_SAFE_ENTRY
+    - RULE_SESSION_INTENTION_NON_BLOCKING
+    - TYPE_LEARNER_STATE_MODEL
+    - TYPE_SELF_REPORT_AR_N2
+    - TYPE_STATE_AXIS_CALIBRATION
+    - TYPE_STATE_AXIS_VALUE_COST
+  - cluster_id: LABEL_CLUSTER_007
+    method: label_propagation
+    node_count: 10
+    internal_edge_count: 16
+    external_edge_count: 6
+    boundary_pressure: medium
+    dominant_owner_scope: knowledge_and_design
+    dominant_owner_ratio: 1.0
+    nodes_by_owner_scope:
+      knowledge_and_design: 10
+    nodes_by_core:
+      constitution: 10
+    nodes_by_section:
+      ACTIONS: 1
+      EVENTS: 1
+      INVARIANTS: 4
+      RULES: 2
+      TYPES: 2
+    node_ids:
+    - ACTION_PLAN_COGNITIVE_CONFLICT_MISSION
+    - EVENT_UNCOVERED_ERROR
+    - INV_CREATIVE_KU_AUTONOMY_REQUIRES_DETERMINISTIC_FEEDBACK_PATH
+    - INV_KU_TYPING_REQUIRED
+    - INV_MISSING_KU_TYPE_FORCES_SAFE_FALLBACK
+    - INV_NO_TEXT_ONLY_FOR_PROCEDURAL_OR_PERCEPTUAL
+    - RULE_MISCONCEPTION_REQUIRES_COGNITIVE_CONFLICT
+    - RULE_UNCOVERED_ERROR_GENERIC_FEEDBACK
+    - TYPE_FEEDBACK_COVERAGE_MATRIX
+    - TYPE_KNOWLEDGE_UNIT
+  - cluster_id: LABEL_CLUSTER_008
+    method: label_propagation
+    node_count: 9
+    internal_edge_count: 13
+    external_edge_count: 6
+    boundary_pressure: medium
+    dominant_owner_scope: mastery_evaluation
+    dominant_owner_ratio: 0.4444
+    nodes_by_owner_scope:
+      deployment_governance: 1
+      knowledge_and_design: 4
+      mastery_evaluation: 4
+    nodes_by_core:
+      constitution: 9
+    nodes_by_section:
+      CONSTRAINTS: 1
+      EVENTS: 1
+      INVARIANTS: 4
+      RULES: 2
+      TYPES: 1
+    node_ids:
+    - CONSTRAINT_NO_CHANGE_TO_GRAPH_PROPAGATION_RULE
+    - EVENT_MSC_DOWNGRADE
+    - INV_EXPLICIT_DEPENDENCY_EDGES_REQUIRED
+    - INV_GRAPH_PROPAGATION_ONE_HOP
+    - INV_KNOWLEDGE_GRAPH_MUST_BE_ACYCLIC
+    - INV_SECONDARY_RETROGRADATION_IS_NEW_EVENT
+    - RULE_MSC_DOWNGRADE_MARKS_DEPENDENTS
+    - RULE_NON_EXAM_CONCEPT_KEPT_IN_GRAPH
+    - TYPE_KNOWLEDGE_GRAPH
+  - cluster_id: LABEL_CLUSTER_009
+    method: label_propagation
+    node_count: 8
+    internal_edge_count: 12
+    external_edge_count: 8
+    boundary_pressure: medium
+    dominant_owner_scope: UNOWNED
+    dominant_owner_ratio: 0.625
+    nodes_by_owner_scope:
+      UNOWNED: 5
+      mastery_evaluation: 3
+    nodes_by_core:
+      constitution: 3
+      link: 1
+      referentiel: 4
+    nodes_by_section:
+      EVENTS: 2
+      PARAMETERS: 3
+      RULES: 2
+      TYPES: 1
+    node_ids:
+    - EVENT_SYSTEMIC_INVESTIGATION_AUTO_OPENED
+    - EVENT_SYSTEMIC_INVESTIGATION_CLOSED
+    - PARAM_REFERENTIEL_SYSTEMIC_INVESTIGATION_MAX_WINDOW_SESSIONS
+    - PARAM_REFERENTIEL_SYSTEMIC_INVESTIGATION_SESSION_THRESHOLD
+    - PARAM_REFERENTIEL_SYSTEMIC_INVESTIGATION_TRIGGER_CONDITIONS
+    - RULE_REFERENTIEL_SYSTEMIC_INVESTIGATION_RUNTIME_BEHAVIOR
+    - RULE_SYSTEMIC_INVESTIGATION_OPEN_CLOSE_WINDOW
+    - TYPE_BINDING_SYSTEMIC_INVESTIGATION_CHAIN
+  - cluster_id: LABEL_CLUSTER_010
+    method: label_propagation
+    node_count: 7
+    internal_edge_count: 8
+    external_edge_count: 5
+    boundary_pressure: medium
+    dominant_owner_scope: UNOWNED
+    dominant_owner_ratio: 1.0
+    nodes_by_owner_scope:
+      UNOWNED: 7
+    nodes_by_core:
+      referentiel: 7
+    nodes_by_section:
+      ACTIONS: 1
+      CONSTRAINTS: 2
+      EVENTS: 1
+      PARAMETERS: 1
+      RULES: 1
+      TYPES: 1
+    node_ids:
+    - ACTION_REFERENTIEL_TRIGGER_RELEVANCE_PATCH
+    - CONSTRAINT_REFERENTIEL_DOUBLE_BUFFER_REQUIRED_FOR_PATCH
+    - CONSTRAINT_REFERENTIEL_PATCH_SCOPE_MUST_REMAIN_CONSTITUTIONALLY_BOUNDED
+    - EVENT_REFERENTIEL_VC_PERSISTENT_LOW_DETECTED
+    - PARAM_REFERENTIEL_VC_LOW_PERSISTENCE_SESSIONS_REFERENCE
+    - RULE_REFERENTIEL_VC_PERSISTENCE_TRIGGERS_RELEVANCE_PATCH
+    - TYPE_REFERENTIEL_PATCH_SCOPE_TABLE
+  - cluster_id: LABEL_CLUSTER_011
+    method: label_propagation
+    node_count: 6
+    internal_edge_count: 6
+    external_edge_count: 1
+    boundary_pressure: medium
+    dominant_owner_scope: UNOWNED
+    dominant_owner_ratio: 1.0
+    nodes_by_owner_scope:
+      UNOWNED: 6
+    nodes_by_core:
+      referentiel: 6
+    nodes_by_section:
+      ACTIONS: 1
+      CONSTRAINTS: 1
+      EVENTS: 1
+      PARAMETERS: 1
+      RULES: 1
+      TYPES: 1
+    node_ids:
+    - ACTION_REFERENTIEL_TRIGGER_AR_SOLLICITATION_PATCH
+    - CONSTRAINT_REFERENTIEL_AR_REFRACTORY_NOT_PENALIZED
+    - EVENT_REFERENTIEL_AR_REFRACTORY_PROFILE_DETECTED
+    - PARAM_REFERENTIEL_AR_REFRACTORY_SESSIONS_REFERENCE
+    - RULE_REFERENTIEL_AR_REFRACTORY_DETECTION
+    - TYPE_REFERENTIEL_AR_REFRACTORY_PARAMETER_BLOCK
+  - cluster_id: LABEL_CLUSTER_012
+    method: label_propagation
+    node_count: 6
+    internal_edge_count: 8
+    external_edge_count: 0
+    boundary_pressure: low
+    dominant_owner_scope: mastery_evaluation
+    dominant_owner_ratio: 0.8333
+    nodes_by_owner_scope:
+      deployment_governance: 1
+      mastery_evaluation: 5
+    nodes_by_core:
+      constitution: 6
+    nodes_by_section:
+      CONSTRAINTS: 1
+      EVENTS: 1
+      RULES: 1
+      TYPES: 3
+    node_ids:
+    - CONSTRAINT_NO_BIOMETRICS_OR_OFFSESSION_SURVEILLANCE
+    - EVENT_LOW_SIS
+    - RULE_LOW_SIS_NEVER_AUTO_PENALIZES
+    - TYPE_INTEGRITY_MODES
+    - TYPE_NC_MSC
+    - TYPE_SESSION_INTEGRITY_SCORE
+  - cluster_id: LABEL_CLUSTER_013
+    method: label_propagation
+    node_count: 6
+    internal_edge_count: 6
+    external_edge_count: 6
+    boundary_pressure: high
+    dominant_owner_scope: deployment_governance
+    dominant_owner_ratio: 0.5
+    nodes_by_owner_scope:
+      deployment_governance: 3
+      knowledge_and_design: 2
+      patch_lifecycle: 1
+    nodes_by_core:
+      constitution: 6
+    nodes_by_section:
+      CONSTRAINTS: 1
+      INVARIANTS: 4
+      TYPES: 1
+    node_ids:
+    - CONSTRAINT_NO_RUNTIME_FEEDBACK_GENERATION
+    - INV_NO_RUNTIME_CONTENT_GENERATION
+    - INV_PATCH_ARTIFACTS_MUST_BE_PRECOMPUTED_OFF_SESSION
+    - INV_RUNTIME_FULLY_LOCAL
+    - INV_RUNTIME_QUALIFICATION_SIGNALS_MUST_BE_EXPLICIT_OR_OFFSESSION
+    - TYPE_CORPUS_CONFIDENCE_ICC
+  - cluster_id: LABEL_CLUSTER_014
+    method: label_propagation
+    node_count: 5
+    internal_edge_count: 7
+    external_edge_count: 11
+    boundary_pressure: high
+    dominant_owner_scope: UNOWNED
+    dominant_owner_ratio: 1.0
+    nodes_by_owner_scope:
+      UNOWNED: 5
+    nodes_by_core:
+      link: 2
+      referentiel: 3
+    nodes_by_section:
+      CONSTRAINTS: 1
+      EVENTS: 1
+      TYPES: 3
+    node_ids:
+    - CONSTRAINT_REFERENTIEL_LOCAL_VERIFICATION_REQUIRED_BEFORE_PATCH_APPLY
+    - EVENT_REFERENTIEL_PATCH_TRIGGER_THRESHOLD_CROSSED
+    - TYPE_BINDING_PATCH_TRIGGER_GOVERNANCE_CHAIN
+    - TYPE_BINDING_REFERENTIEL_TO_CONSTITUTION_GOVERNING_INVARIANTS
+    - TYPE_REFERENTIEL_PATCH_TRIGGER_TABLE
+  - cluster_id: LABEL_CLUSTER_015
+    method: label_propagation
+    node_count: 5
+    internal_edge_count: 5
+    external_edge_count: 3
+    boundary_pressure: medium
+    dominant_owner_scope: UNOWNED
+    dominant_owner_ratio: 1.0
+    nodes_by_owner_scope:
+      UNOWNED: 5
+    nodes_by_core:
+      referentiel: 5
+    nodes_by_section:
+      CONSTRAINTS: 2
+      INVARIANTS: 1
+      RULES: 1
+      TYPES: 1
+    node_ids:
+    - CONSTRAINT_REFERENTIEL_NO_BEHAVIORAL_PROXY_FOR_VC
+    - CONSTRAINT_REFERENTIEL_NO_DIFFICULTY_ADJUSTMENT_FROM_VC_PATCH
+    - INVARIANT_ISOLATED_LOW_VC_MEANS_NO_ACTION
+    - RULE_REFERENTIEL_VC_UNOBSERVABLE_DISABLING
+    - TYPE_REFERENTIEL_VC_PARAMETER_BLOCK
+  - cluster_id: LABEL_CLUSTER_016
+    method: label_propagation
+    node_count: 5
+    internal_edge_count: 7
+    external_edge_count: 8
+    boundary_pressure: high
+    dominant_owner_scope: learner_state
+    dominant_owner_ratio: 0.6
+    nodes_by_owner_scope:
+      UNOWNED: 2
+      learner_state: 3
+    nodes_by_core:
+      constitution: 3
+      link: 1
+      referentiel: 1
+    nodes_by_section:
+      EVENTS: 1
+      INVARIANTS: 1
+      PARAMETERS: 1
+      RULES: 1
+      TYPES: 1
+    node_ids:
+    - EVENT_CONSERVATIVE_SCAFFOLDING_ESCALATION
+    - INV_CONSERVATIVE_RULE_WITHOUT_AR_N1
+    - PARAM_REFERENTIEL_CONSERVATIVE_SCAFFOLDING_ESCALATION_SESSIONS
+    - RULE_CONSERVATIVE_SCAFFOLDING_ESCALATION_REQUIRES_OFFSESSION_REVIEW
+    - TYPE_BINDING_CONSERVATIVE_SCAFFOLDING_ESCALATION_CHAIN
+  - cluster_id: LABEL_CLUSTER_017
+    method: label_propagation
+    node_count: 5
+    internal_edge_count: 7
+    external_edge_count: 6
+    boundary_pressure: medium
+    dominant_owner_scope: UNOWNED
+    dominant_owner_ratio: 1.0
+    nodes_by_owner_scope:
+      UNOWNED: 5
+    nodes_by_core:
+      link: 1
+      referentiel: 4
+    nodes_by_section:
+      EVENTS: 1
+      PARAMETERS: 1
+      RULES: 1
+      TYPES: 2
+    node_ids:
+    - EVENT_REFERENTIEL_FEEDBACK_COVERAGE_LOW
+    - PARAM_REFERENTIEL_FEEDBACK_COVERAGE_REFERENCE_THRESHOLD
+    - RULE_REFERENTIEL_LOW_FEEDBACK_COVERAGE_SIGNALS_REVISION
+    - TYPE_BINDING_FEEDBACK_COVERAGE_TO_REFERENTIEL_THRESHOLD
+    - TYPE_REFERENTIEL_FEEDBACK_COVERAGE_METRIC
+  - cluster_id: LABEL_CLUSTER_018
+    method: label_propagation
+    node_count: 4
+    internal_edge_count: 3
+    external_edge_count: 1
+    boundary_pressure: medium
+    dominant_owner_scope: UNOWNED
+    dominant_owner_ratio: 1.0
+    nodes_by_owner_scope:
+      UNOWNED: 4
+    nodes_by_core:
+      referentiel: 4
+    nodes_by_section:
+      ACTIONS: 1
+      PARAMETERS: 2
+      TYPES: 1
+    node_ids:
+    - ACTION_REFERENTIEL_REDUCE_AR_N2_FREQUENCY
+    - PARAM_REFERENTIEL_AR_N2_FREQUENCY_REFERENCE
+    - PARAM_REFERENTIEL_AR_N2_MAX_ITEMS
+    - TYPE_REFERENTIEL_AR_N2_CONFIGURATION
+  - cluster_id: LABEL_CLUSTER_019
+    method: label_propagation
+    node_count: 4
+    internal_edge_count: 3
+    external_edge_count: 1
+    boundary_pressure: medium
+    dominant_owner_scope: UNOWNED
+    dominant_owner_ratio: 1.0
+    nodes_by_owner_scope:
+      UNOWNED: 4
+    nodes_by_core:
+      referentiel: 4
+    nodes_by_section:
+      ACTIONS: 1
+      INVARIANTS: 1
+      PARAMETERS: 1
+      TYPES: 1
+    node_ids:
+    - ACTION_REFERENTIEL_REDUCE_SESSION_INTENTION_FREQUENCY
+    - INV_REFERENTIEL_SESSION_INTENTION_NON_PENALIZED
+    - PARAM_REFERENTIEL_SESSION_INTENTION_FREQUENCY_REFERENCE
+    - TYPE_REFERENTIEL_SESSION_INTENTION_CONFIGURATION
+  - cluster_id: LABEL_CLUSTER_020
+    method: label_propagation
+    node_count: 4
+    internal_edge_count: 3
+    external_edge_count: 3
+    boundary_pressure: high
+    dominant_owner_scope: deployment_governance
+    dominant_owner_ratio: 1.0
+    nodes_by_owner_scope:
+      deployment_governance: 4
+    nodes_by_core:
+      constitution: 4
+    nodes_by_section:
+      CONSTRAINTS: 1
+      INVARIANTS: 1
+      TYPES: 2
+    node_ids:
+    - CONSTRAINT_NO_ASSISTED_DEPLOYMENT_WITHOUT_TUTORING
+    - INV_ASSISTED_MODE_REQUIRES_TUTORING
+    - TYPE_AUTONOMY_REGIME
+    - TYPE_HUMAN_CHECKPOINT
+  - cluster_id: LABEL_CLUSTER_021
+    method: label_propagation
+    node_count: 4
+    internal_edge_count: 5
+    external_edge_count: 1
+    boundary_pressure: medium
+    dominant_owner_scope: knowledge_and_design
+    dominant_owner_ratio: 1.0
+    nodes_by_owner_scope:
+      knowledge_and_design: 4
+    nodes_by_core:
+      constitution: 4
+    nodes_by_section:
+      CONSTRAINTS: 1
+      EVENTS: 1
+      INVARIANTS: 1
+      TYPES: 1
+    node_ids:
+    - CONSTRAINT_NO_HIGH_BLOOM_WITHOUT_AUTHENTIC_CONTEXT
+    - EVENT_HIGH_BLOOM_WITHOUT_AUTHENTIC_CONTEXT
+    - INV_AUTHENTIC_CONTEXT_REQUIRED_FOR_BLOOM4
+    - TYPE_AUTHENTIC_CONTEXT
+  - cluster_id: LABEL_CLUSTER_022
+    method: label_propagation
+    node_count: 4
+    internal_edge_count: 3
+    external_edge_count: 0
+    boundary_pressure: low
+    dominant_owner_scope: UNOWNED
+    dominant_owner_ratio: 1.0
+    nodes_by_owner_scope:
+      UNOWNED: 4
+    nodes_by_core:
+      referentiel: 4
+    nodes_by_section:
+      EVENTS: 1
+      PARAMETERS: 2
+      RULES: 1
+    node_ids:
+    - EVENT_REFERENTIEL_LOW_AR_N2_COMPLETION
+    - PARAM_REFERENTIEL_AR_N2_COMPLETION_THRESHOLD
+    - PARAM_REFERENTIEL_AR_N2_COMPLETION_WINDOW_SESSIONS
+    - RULE_REFERENTIEL_REDUCE_AR_N2_FREQUENCY_ON_LOW_COMPLETION
+  - cluster_id: LABEL_CLUSTER_023
+    method: label_propagation
+    node_count: 4
+    internal_edge_count: 3
+    external_edge_count: 0
+    boundary_pressure: low
+    dominant_owner_scope: UNOWNED
+    dominant_owner_ratio: 1.0
+    nodes_by_owner_scope:
+      UNOWNED: 4
+    nodes_by_core:
+      referentiel: 4
+    nodes_by_section:
+      EVENTS: 1
+      PARAMETERS: 2
+      RULES: 1
+    node_ids:
+    - EVENT_REFERENTIEL_LOW_SESSION_INTENTION_COMPLETION
+    - PARAM_REFERENTIEL_SESSION_INTENTION_COMPLETION_THRESHOLD
+    - PARAM_REFERENTIEL_SESSION_INTENTION_COMPLETION_WINDOW
+    - RULE_REFERENTIEL_REDUCE_SESSION_INTENTION_FREQUENCY_ON_LOW_COMPLETION
+  - cluster_id: LABEL_CLUSTER_024
+    method: label_propagation
+    node_count: 4
+    internal_edge_count: 3
+    external_edge_count: 1
+    boundary_pressure: medium
+    dominant_owner_scope: UNOWNED
+    dominant_owner_ratio: 1.0
+    nodes_by_owner_scope:
+      UNOWNED: 4
+    nodes_by_core:
+      referentiel: 4
+    nodes_by_section:
+      INVARIANTS: 1
+      PARAMETERS: 2
+      TYPES: 1
+    node_ids:
+    - INV_REFERENTIEL_CREATIVE_R_FALLBACK_IS_X1
+    - PARAM_REFERENTIEL_R_MULTIPLIER_CREATIVE_FALLBACK
+    - PARAM_REFERENTIEL_R_MULTIPLIER_DECLARATIVE
+    - TYPE_REFERENTIEL_TEMPORAL_MULTIPLIER_TABLE
+  - cluster_id: LABEL_CLUSTER_025
+    method: label_propagation
+    node_count: 3
+    internal_edge_count: 2
+    external_edge_count: 0
+    boundary_pressure: low
+    dominant_owner_scope: deployment_governance
+    dominant_owner_ratio: 0.6667
+    nodes_by_owner_scope:
+      deployment_governance: 2
+      patch_lifecycle: 1
+    nodes_by_core:
+      constitution: 3
+    nodes_by_section:
+      ACTIONS: 1
+      EVENTS: 1
+      RULES: 1
+    node_ids:
+    - ACTION_LOG_UNCOVERED_CONFLICT
+    - EVENT_GF08_UNCOVERED_CONFLICT
+    - RULE_GF08_UNCOVERED_CONFLICT_CONSERVATIVE_RESPONSE
+  - cluster_id: LABEL_CLUSTER_026
+    method: label_propagation
+    node_count: 3
+    internal_edge_count: 3
+    external_edge_count: 2
+    boundary_pressure: medium
+    dominant_owner_scope: mastery_evaluation
+    dominant_owner_ratio: 1.0
+    nodes_by_owner_scope:
+      mastery_evaluation: 3
+    nodes_by_core:
+      constitution: 3
+    nodes_by_section:
+      EVENTS: 1
+      PARAMETERS: 1
+      RULES: 1
+    node_ids:
+    - EVENT_PROVISIONAL_MASTERY_WINDOW_EXPIRED
+    - PARAM_PROVISIONAL_MASTERY_VERIFICATION_WINDOW
+    - RULE_PROVISIONAL_MASTERY_WINDOW_EXPIRY_SAFE_FALLBACK
+  - cluster_id: LABEL_CLUSTER_027
+    method: label_propagation
+    node_count: 3
+    internal_edge_count: 2
+    external_edge_count: 1
+    boundary_pressure: medium
+    dominant_owner_scope: UNOWNED
+    dominant_owner_ratio: 1.0
+    nodes_by_owner_scope:
+      UNOWNED: 3
+    nodes_by_core:
+      referentiel: 3
+    nodes_by_section:
+      PARAMETERS: 2
+      RULES: 1
+    node_ids:
+    - PARAM_REFERENTIEL_CONSOLIDATION_SATISFACTORY_SESSION_CRITERION
+    - PARAM_REFERENTIEL_OSCILLATION_MAX_CYCLES_BEFORE_ESCALATION
+    - RULE_REFERENTIEL_OSCILLATION_EXIT_AND_ESCALATION
+  - cluster_id: LABEL_CLUSTER_028
+    method: label_propagation
+    node_count: 3
+    internal_edge_count: 2
+    external_edge_count: 0
+    boundary_pressure: low
+    dominant_owner_scope: UNOWNED
+    dominant_owner_ratio: 1.0
+    nodes_by_owner_scope:
+      UNOWNED: 3
+    nodes_by_core:
+      referentiel: 3
+    nodes_by_section:
+      PARAMETERS: 2
+      RULES: 1
+    node_ids:
+    - PARAM_REFERENTIEL_INTERLEAVING_DISTINCT_TASKS_MIN
+    - PARAM_REFERENTIEL_INTERLEAVING_SUCCESS_STREAK
+    - RULE_REFERENTIEL_INTERLEAVING_ACTIVATION
+  - cluster_id: LABEL_CLUSTER_029
+    method: label_propagation
+    node_count: 2
+    internal_edge_count: 1
+    external_edge_count: 0
+    boundary_pressure: low
+    dominant_owner_scope: UNOWNED
+    dominant_owner_ratio: 1.0
+    nodes_by_owner_scope:
+      UNOWNED: 2
+    nodes_by_core:
+      referentiel: 2
+    nodes_by_section:
+      PARAMETERS: 1
+      RULES: 1
+    node_ids:
+    - PARAM_REFERENTIEL_ADAPTIVE_REGIME_PROXY_MIN
+    - RULE_REFERENTIEL_ADAPTIVE_REGIME_DETECTION_MIN_PROXIES
+  - cluster_id: LABEL_CLUSTER_030
+    method: label_propagation
+    node_count: 2
+    internal_edge_count: 1
+    external_edge_count: 0
+    boundary_pressure: low
+    dominant_owner_scope: UNOWNED
+    dominant_owner_ratio: 1.0
+    nodes_by_owner_scope:
+      UNOWNED: 2
+    nodes_by_core:
+      referentiel: 2
+    nodes_by_section:
+      PARAMETERS: 1
+      RULES: 1
+    node_ids:
+    - PARAM_REFERENTIEL_COVERAGE_REBALANCING_DELAY_MULTIPLIER
+    - RULE_REFERENTIEL_COVERAGE_REBALANCING_ACTIVATION
+  - cluster_id: LABEL_CLUSTER_031
+    method: label_propagation
+    node_count: 2
+    internal_edge_count: 1
+    external_edge_count: 0
+    boundary_pressure: low
+    dominant_owner_scope: UNOWNED
+    dominant_owner_ratio: 1.0
+    nodes_by_owner_scope:
+      UNOWNED: 2
+    nodes_by_core:
+      referentiel: 2
+    nodes_by_section:
+      PARAMETERS: 1
+      RULES: 1
+    node_ids:
+    - PARAM_REFERENTIEL_VC_PATCH_CYCLES_BEFORE_ANALYSIS_ESCALATION
+    - RULE_REFERENTIEL_VC_PATCH_ESCALATION_AFTER_TWO_CYCLES
+  - cluster_id: LABEL_CLUSTER_032
+    method: label_propagation
+    node_count: 1
+    internal_edge_count: 0
+    external_edge_count: 0
+    boundary_pressure: low
+    dominant_owner_scope: UNOWNED
+    dominant_owner_ratio: 1.0
+    nodes_by_owner_scope:
+      UNOWNED: 1
+    nodes_by_core:
+      referentiel: 1
+    nodes_by_section:
+      ACTIONS: 1
+    node_ids:
+    - ACTION_REFERENTIEL_SIGNAL_ANALYSIS_REVISION
+  - cluster_id: LABEL_CLUSTER_033
+    method: label_propagation
+    node_count: 1
+    internal_edge_count: 0
+    external_edge_count: 0
+    boundary_pressure: low
+    dominant_owner_scope: UNOWNED
+    dominant_owner_ratio: 1.0
+    nodes_by_owner_scope:
+      UNOWNED: 1
+    nodes_by_core:
+      constitution: 1
+    nodes_by_section:
+      CORE: 1
+    node_ids:
+    - CORE_LEARNIT_CONSTITUTION_V4_0
+  - cluster_id: LABEL_CLUSTER_034
+    method: label_propagation
+    node_count: 1
+    internal_edge_count: 0
+    external_edge_count: 0
+    boundary_pressure: low
+    dominant_owner_scope: UNOWNED
+    dominant_owner_ratio: 1.0
+    nodes_by_owner_scope:
+      UNOWNED: 1
+    nodes_by_core:
+      referentiel: 1
+    nodes_by_section:
+      CORE: 1
+    node_ids:
+    - CORE_LEARNIT_REFERENTIEL_v3.0
+  - cluster_id: LABEL_CLUSTER_035
+    method: label_propagation
+    node_count: 1
+    internal_edge_count: 0
+    external_edge_count: 0
+    boundary_pressure: low
+    dominant_owner_scope: UNOWNED
+    dominant_owner_ratio: 1.0
+    nodes_by_owner_scope:
+      UNOWNED: 1
+    nodes_by_core:
+      link: 1
+    nodes_by_section:
+      CORE: 1
+    node_ids:
+    - CORE_LINK_LEARNIT_CONSTITUTION_V4_0__REFERENTIEL_v3.0
+  - cluster_id: LABEL_CLUSTER_036
+    method: label_propagation
+    node_count: 1
+    internal_edge_count: 0
+    external_edge_count: 0
+    boundary_pressure: low
+    dominant_owner_scope: UNOWNED
+    dominant_owner_ratio: 1.0
+    nodes_by_owner_scope:
+      UNOWNED: 1
+    nodes_by_core:
+      link: 1
+    nodes_by_section:
+      TYPES: 1
+    node_ids:
+    - LINK_REF_CORE_LEARNIT_REFERENTIEL_v3.0
+  - cluster_id: LABEL_CLUSTER_037
+    method: label_propagation
+    node_count: 1
+    internal_edge_count: 0
+    external_edge_count: 0
+    boundary_pressure: low
+    dominant_owner_scope: UNOWNED
+    dominant_owner_ratio: 1.0
+    nodes_by_owner_scope:
+      UNOWNED: 1
+    nodes_by_core:
+      referentiel: 1
+    nodes_by_section:
+      PARAMETERS: 1
+    node_ids:
+    - PARAM_REFERENTIEL_COGNITIVE_FATIGUE_MINUTES_GUARDRAIL
+  - cluster_id: LABEL_CLUSTER_038
+    method: label_propagation
+    node_count: 1
+    internal_edge_count: 0
+    external_edge_count: 0
+    boundary_pressure: low
+    dominant_owner_scope: UNOWNED
+    dominant_owner_ratio: 1.0
+    nodes_by_owner_scope:
+      UNOWNED: 1
+    nodes_by_core:
+      referentiel: 1
+    nodes_by_section:
+      PARAMETERS: 1
+    node_ids:
+    - PARAM_REFERENTIEL_CRITICAL_ADAPTATION_INERTIA_EXCEPTION_HOURS
+  - cluster_id: LABEL_CLUSTER_039
+    method: label_propagation
+    node_count: 1
+    internal_edge_count: 0
+    external_edge_count: 0
+    boundary_pressure: low
+    dominant_owner_scope: UNOWNED
+    dominant_owner_ratio: 1.0
+    nodes_by_owner_scope:
+      UNOWNED: 1
+    nodes_by_core:
+      referentiel: 1
+    nodes_by_section:
+      PARAMETERS: 1
+    node_ids:
+    - PARAM_REFERENTIEL_CRITICAL_ADAPTATION_INERTIA_HOURS
+  - cluster_id: LABEL_CLUSTER_040
+    method: label_propagation
+    node_count: 1
+    internal_edge_count: 0
+    external_edge_count: 0
+    boundary_pressure: low
+    dominant_owner_scope: UNOWNED
+    dominant_owner_ratio: 1.0
+    nodes_by_owner_scope:
+      UNOWNED: 1
+    nodes_by_core:
+      referentiel: 1
+    nodes_by_section:
+      PARAMETERS: 1
+    node_ids:
+    - PARAM_REFERENTIEL_GAMIFICATION_PROBATION_MAX_SESSIONS
+  - cluster_id: LABEL_CLUSTER_041
+    method: label_propagation
+    node_count: 1
+    internal_edge_count: 0
+    external_edge_count: 0
+    boundary_pressure: low
+    dominant_owner_scope: UNOWNED
+    dominant_owner_ratio: 1.0
+    nodes_by_owner_scope:
+      UNOWNED: 1
+    nodes_by_core:
+      referentiel: 1
+    nodes_by_section:
+      PARAMETERS: 1
+    node_ids:
+    - PARAM_REFERENTIEL_KU_CALIBRATION_CREATIVE_DURATION
+  - cluster_id: LABEL_CLUSTER_042
+    method: label_propagation
+    node_count: 1
+    internal_edge_count: 0
+    external_edge_count: 0
+    boundary_pressure: low
+    dominant_owner_scope: UNOWNED
+    dominant_owner_ratio: 1.0
+    nodes_by_owner_scope:
+      UNOWNED: 1
+    nodes_by_core:
+      referentiel: 1
+    nodes_by_section:
+      PARAMETERS: 1
+    node_ids:
+    - PARAM_REFERENTIEL_KU_CALIBRATION_DECLARATIVE_DURATION
+  - cluster_id: LABEL_CLUSTER_043
+    method: label_propagation
+    node_count: 1
+    internal_edge_count: 0
+    external_edge_count: 0
+    boundary_pressure: low
+    dominant_owner_scope: UNOWNED
+    dominant_owner_ratio: 1.0
+    nodes_by_owner_scope:
+      UNOWNED: 1
+    nodes_by_core:
+      referentiel: 1
+    nodes_by_section:
+      PARAMETERS: 1
+    node_ids:
+    - PARAM_REFERENTIEL_KU_CALIBRATION_FORMAL_DURATION
+  - cluster_id: LABEL_CLUSTER_044
+    method: label_propagation
+    node_count: 1
+    internal_edge_count: 0
+    external_edge_count: 0
+    boundary_pressure: low
+    dominant_owner_scope: UNOWNED
+    dominant_owner_ratio: 1.0
+    nodes_by_owner_scope:
+      UNOWNED: 1
+    nodes_by_core:
+      referentiel: 1
+    nodes_by_section:
+      PARAMETERS: 1
+    node_ids:
+    - PARAM_REFERENTIEL_KU_CALIBRATION_PERCEPTUAL_DURATION
+  - cluster_id: LABEL_CLUSTER_045
+    method: label_propagation
+    node_count: 1
+    internal_edge_count: 0
+    external_edge_count: 0
+    boundary_pressure: low
+    dominant_owner_scope: UNOWNED
+    dominant_owner_ratio: 1.0
+    nodes_by_owner_scope:
+      UNOWNED: 1
+    nodes_by_core:
+      referentiel: 1
+    nodes_by_section:
+      PARAMETERS: 1
+    node_ids:
+    - PARAM_REFERENTIEL_KU_CALIBRATION_PROCEDURAL_DURATION
+  - cluster_id: LABEL_CLUSTER_046
+    method: label_propagation
+    node_count: 1
+    internal_edge_count: 0
+    external_edge_count: 0
+    boundary_pressure: low
+    dominant_owner_scope: UNOWNED
+    dominant_owner_ratio: 1.0
+    nodes_by_owner_scope:
+      UNOWNED: 1
+    nodes_by_core:
+      referentiel: 1
+    nodes_by_section:
+      PARAMETERS: 1
+    node_ids:
+    - PARAM_REFERENTIEL_MSC_PRECISION_OCCURRENCES_MIN
+  - cluster_id: LABEL_CLUSTER_047
+    method: label_propagation
+    node_count: 1
+    internal_edge_count: 0
+    external_edge_count: 0
+    boundary_pressure: low
+    dominant_owner_scope: UNOWNED
+    dominant_owner_ratio: 1.0
+    nodes_by_owner_scope:
+      UNOWNED: 1
+    nodes_by_core:
+      referentiel: 1
+    nodes_by_section:
+      PARAMETERS: 1
+    node_ids:
+    - PARAM_REFERENTIEL_MSC_ROBUSTNESS_DELAY_MEDIUM
+  - cluster_id: LABEL_CLUSTER_048
+    method: label_propagation
+    node_count: 1
+    internal_edge_count: 0
+    external_edge_count: 0
+    boundary_pressure: low
+    dominant_owner_scope: UNOWNED
+    dominant_owner_ratio: 1.0
+    nodes_by_owner_scope:
+      UNOWNED: 1
+    nodes_by_core:
+      referentiel: 1
+    nodes_by_section:
+      PARAMETERS: 1
+    node_ids:
+    - PARAM_REFERENTIEL_PATCH_RETENTION_DAYS
+  - cluster_id: LABEL_CLUSTER_049
+    method: label_propagation
+    node_count: 1
+    internal_edge_count: 0
+    external_edge_count: 0
+    boundary_pressure: low
+    dominant_owner_scope: UNOWNED
+    dominant_owner_ratio: 1.0
+    nodes_by_owner_scope:
+      UNOWNED: 1
+    nodes_by_core:
+      referentiel: 1
+    nodes_by_section:
+      PARAMETERS: 1
+    node_ids:
+    - PARAM_REFERENTIEL_PROPAGATION_CHECK_MAX_DELAY_SESSIONS
+  - cluster_id: LABEL_CLUSTER_050
+    method: label_propagation
+    node_count: 1
+    internal_edge_count: 0
+    external_edge_count: 0
+    boundary_pressure: low
+    dominant_owner_scope: UNOWNED
+    dominant_owner_ratio: 1.0
+    nodes_by_owner_scope:
+      UNOWNED: 1
+    nodes_by_core:
+      referentiel: 1
+    nodes_by_section:
+      PARAMETERS: 1
+    node_ids:
+    - PARAM_REFERENTIEL_R_MULTIPLIER_FORMAL
+  - cluster_id: LABEL_CLUSTER_051
+    method: label_propagation
+    node_count: 1
+    internal_edge_count: 0
+    external_edge_count: 0
+    boundary_pressure: low
+    dominant_owner_scope: UNOWNED
+    dominant_owner_ratio: 1.0
+    nodes_by_owner_scope:
+      UNOWNED: 1
+    nodes_by_core:
+      referentiel: 1
+    nodes_by_section:
+      PARAMETERS: 1
+    node_ids:
+    - PARAM_REFERENTIEL_R_MULTIPLIER_PERCEPTUAL
+  - cluster_id: LABEL_CLUSTER_052
+    method: label_propagation
+    node_count: 1
+    internal_edge_count: 0
+    external_edge_count: 0
+    boundary_pressure: low
+    dominant_owner_scope: UNOWNED
+    dominant_owner_ratio: 1.0
+    nodes_by_owner_scope:
+      UNOWNED: 1
+    nodes_by_core:
+      referentiel: 1
+    nodes_by_section:
+      PARAMETERS: 1
+    node_ids:
+    - PARAM_REFERENTIEL_R_MULTIPLIER_PROCEDURAL
+  - cluster_id: LABEL_CLUSTER_053
+    method: label_propagation
+    node_count: 1
+    internal_edge_count: 0
+    external_edge_count: 0
+    boundary_pressure: low
+    dominant_owner_scope: UNOWNED
+    dominant_owner_ratio: 1.0
+    nodes_by_owner_scope:
+      UNOWNED: 1
+    nodes_by_core:
+      referentiel: 1
+    nodes_by_section:
+      PARAMETERS: 1
+    node_ids:
+    - PARAM_REFERENTIEL_VC_UNOBSERVABLE_WINDOW_BEFORE_AXIS_DEACTIVATION
+  - cluster_id: LABEL_CLUSTER_054
+    method: label_propagation
+    node_count: 1
+    internal_edge_count: 0
+    external_edge_count: 0
+    boundary_pressure: low
+    dominant_owner_scope: deployment_governance
+    dominant_owner_ratio: 1.0
+    nodes_by_owner_scope:
+      deployment_governance: 1
+    nodes_by_core:
+      constitution: 1
+    nodes_by_section:
+      RULES: 1
+    node_ids:
+    - RULE_NO_CALIBRATION_CONSERVATIVE_START
+  - cluster_id: LABEL_CLUSTER_055
+    method: label_propagation
+    node_count: 1
+    internal_edge_count: 0
+    external_edge_count: 0
+    boundary_pressure: low
+    dominant_owner_scope: UNOWNED
+    dominant_owner_ratio: 1.0
+    nodes_by_owner_scope:
+      UNOWNED: 1
+    nodes_by_core:
+      referentiel: 1
+    nodes_by_section:
+      RULES: 1
+    node_ids:
+    - RULE_REFERENTIEL_UNVALIDATED_GAMIFICATION_PROBATION
+  - cluster_id: LABEL_CLUSTER_056
+    method: label_propagation
+    node_count: 1
+    internal_edge_count: 0
+    external_edge_count: 0
+    boundary_pressure: low
+    dominant_owner_scope: deployment_governance
+    dominant_owner_ratio: 1.0
+    nodes_by_owner_scope:
+      deployment_governance: 1
+    nodes_by_core:
+      constitution: 1
+    nodes_by_section:
+      TYPES: 1
+    node_ids:
+    - SYSTEM_LEARNIT
