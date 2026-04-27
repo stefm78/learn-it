@@ -10,12 +10,13 @@ run_manifest:
     scope_key: patch_lifecycle
     scope_definition_ref: docs/pipelines/constitution/scope_catalog/scope_definitions/patch_lifecycle.yaml
   execution_state:
-    current_stage: STAGE_01_CHALLENGE
+    current_stage: STAGE_02_ARBITRAGE
     last_stage_status: done
-    last_updated: '2026-04-27T16:07:14Z'
-    next_stage: STAGE_02_ARBITRAGE
+    last_updated: '2026-04-27T16:16:37Z'
+    next_stage: STAGE_03_PATCH_SYNTHESIS
     completed_stages:
     - STAGE_01_CHALLENGE
+    - STAGE_02_ARBITRAGE
     stage_history:
     - stage_id: RUN_BOOTSTRAP
       stage_status: in_progress
@@ -26,6 +27,10 @@ run_manifest:
       stage_status: done
       recorded_at: '2026-04-27T16:07:14Z'
       summary: Challenge reports R01/R02 produced; ready for arbitrage.
+    - stage_id: STAGE_02_ARBITRAGE
+      stage_status: done
+      recorded_at: '2026-04-27T16:16:37Z'
+      summary: Arbitrage report validated; decisions ready for patch synthesis.
   scope_tracking:
     scope_status: confirmed_for_bounded_run
     last_updated: '2026-04-27T15:48:27Z'
