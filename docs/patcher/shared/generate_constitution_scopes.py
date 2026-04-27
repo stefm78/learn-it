@@ -112,6 +112,12 @@ def collect_scope_seeds(policy: Dict[str, Any]) -> Dict[str, ScopeSeed]:
     return seeds
 
 
+METADATA_ONLY_DECISION_TYPES = {
+    "classify_external_read_only_cores",
+    "record_diagnostic_subcluster",
+}
+
+
 def collect_decisions(decisions: Dict[str, Any]) -> Tuple[Dict[str, List[str]], Dict[str, List[str]]]:
     decisions_root = decisions["scope_generation_decisions"]
     target_ids: Dict[str, List[str]] = {}
@@ -130,6 +136,11 @@ def collect_decisions(decisions: Dict[str, Any]) -> Tuple[Dict[str, List[str]], 
         elif decision_type == "force_logical_neighbors":
             for scope_key in affected:
                 neighbor_ids.setdefault(scope_key, []).extend(ids)
+        elif decision_type in METADATA_ONLY_DECISION_TYPES:
+            # These decisions enrich scoping governance and validation semantics,
+            # but they do not directly add target IDs or neighbor IDs to generated
+            # scope definitions.
+            continue
         else:
             raise ValueError(f"Unsupported scope generation decision_type: {decision_type}")
 

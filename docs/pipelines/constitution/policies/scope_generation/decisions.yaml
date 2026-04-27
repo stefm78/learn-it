@@ -327,7 +327,7 @@ scope_generation_decisions:
       ownership_effect: none
       owner_scope_remains: patch_lifecycle
       source_candidate_id: CAND_PATCH_LIFECYCLE_034
-      source_cluster_ids: &id001
+      source_cluster_ids:
       - LABEL_CLUSTER_001
       - LABEL_CLUSTER_013
       - LABEL_CLUSTER_025
@@ -348,7 +348,10 @@ scope_generation_decisions:
       neighbor_class: patch_trigger_governance_required_read_neighbor
       read_mode: primary
       source_candidate_id: CAND_PATCH_LIFECYCLE_034
-      source_cluster_ids: *id001
+      source_cluster_ids:
+      - LABEL_CLUSTER_001
+      - LABEL_CLUSTER_013
+      - LABEL_CLUSTER_025
       requires_exact_id_selection_before_approval: true
       note: Patch trigger governance remains owned by patch_lifecycle, but required learner_state/runtime signal IDs must
         be selected explicitly before this decision can become approved.
