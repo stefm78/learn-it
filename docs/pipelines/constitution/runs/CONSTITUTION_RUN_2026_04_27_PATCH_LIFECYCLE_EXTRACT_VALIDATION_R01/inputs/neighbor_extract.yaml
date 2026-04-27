@@ -1,0 +1,42 @@
+neighbor_extract:
+  schema_version: 0.1
+  extract_type: neighbor
+  run_id: CONSTITUTION_RUN_2026_04_27_PATCH_LIFECYCLE_EXTRACT_VALIDATION_R01
+  source:
+    scope_manifest_fingerprint: 668d4a40eac82a7b1cce13e4b5071aa6d19035ef649f4555aefb120fb21b054b
+    impact_bundle_fingerprint: 562b8b5f861f423f88c44a3d84573bd19cd1b4ba26f57e24188f8bd9fc8d52e9
+    core_fingerprints:
+      constitution: a76170fccf48fccab96facc65fd6acab11e3de157e6a29434110ebc8fbc23aca
+      referentiel: a118ea0c8cea3c618dbc8be780a9e17b30dbf9b9ca2d6546217e9d18c8b9bc30
+      link: 4676ee949a59583d47e12948698ad5f204e9d3fb89dbac8194b16f92ba4326a5
+  target_ids:
+  - REF_CORE_LEARNIT_REFERENTIEL_V4_0_IN_CONSTITUTION
+  found_ids:
+  - REF_CORE_LEARNIT_REFERENTIEL_V4_0_IN_CONSTITUTION
+  missing_ids: []
+  entries:
+  - _source_core: constitution
+    _source_section: TYPES
+    _matched_id: REF_CORE_LEARNIT_REFERENTIEL_V4_0_IN_CONSTITUTION
+    entry:
+      id: REF_CORE_LEARNIT_REFERENTIEL_V4_0_IN_CONSTITUTION
+      authority: reference
+      core_type: CONSTITUTION
+      source_anchor: '[INTERCORE]'
+      depends_on: []
+      relations: []
+      patchable: false
+      parameterizable: false
+      human_readable: Référence explicite vers le Core Référentiel Learn-it V4.0.
+      logic:
+        trigger: null
+        condition: null
+        effect: Référence externe explicite matérialisant une dépendance inter-Core.
+        scope: intercore_reference
+  fallback_rule: If missing_ids is non-empty, the AI must explicitly signal each missing ID and fall back
+    to reading the full canonical Core file for that ID only. It must NOT silently ignore missing IDs.
+  notes:
+  - Généré déterministiquement par extract_scope_slice.py depuis les Core canoniques.
+  - Ce fichier est une vue dérivée. Les Core canoniques restent la source de vérité.
+  - En mode bounded_local_run, l'IA doit lire ce fichier en priorité sur les Core complets.
+  - Le champ _source_core indique l'origine canonique de chaque entrée.
