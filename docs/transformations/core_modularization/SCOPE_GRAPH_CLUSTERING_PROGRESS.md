@@ -28,14 +28,14 @@ This tracker reflects the current Scope Lab execution state after:
 
 ```yaml
 current_phase:
-  phase_id: PHASE_12
-  label: extract_validation
+  phase_id: PHASE_13
+  label: pilot_bounded_local_run
   status: pending
   summary: >-
-    ID-level ownership bijection and normalized structural reconstruction now
-    pass. The next gate is extract validation: prove that scope_extract.yaml and
-    neighbor_extract.yaml can be generated and validated for a synthetic or pilot
-    patch_lifecycle bounded_local_run.
+    Extract validation now passes on a synthetic patch_lifecycle run. The next
+    gate is to decide whether to open one serious pilot bounded_local_run for
+    patch_lifecycle, using the regenerated scope catalog and deterministic
+    extract pipeline.
 ```
 
 ## Phase tracker
@@ -199,9 +199,8 @@ phases:
       reconstruction_readiness_status: PASS
       full_structural_reconstruction_status: PASS
     note: >-
-      The current validator proves ID-level partition readiness. It does not yet
-      prove full structural reconstruction because generated scope_definitions are
-      ownership/index artifacts and do not carry full entry bodies.
+      The ID-level validator proves partition readiness. Full normalized
+      structural reconstruction is validated separately in PHASE_11B.
 
   - phase_id: PHASE_11B
     label: full_structural_reconstruction_validation
@@ -220,14 +219,43 @@ phases:
 
   - phase_id: PHASE_12
     label: extract_validation
-    status: pending
+    status: done
     objective: Validate scope_extract.yaml and neighbor_extract.yaml on a synthetic or pilot patch_lifecycle run.
+    outputs:
+      - tmp/run_phase12_extract_validation.py
+      - tmp/scope_extract_validation_report.yaml
+      - docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_27_PATCH_LIFECYCLE_EXTRACT_VALIDATION_R01/inputs/scope_manifest.yaml
+      - docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_27_PATCH_LIFECYCLE_EXTRACT_VALIDATION_R01/inputs/impact_bundle.yaml
+      - docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_27_PATCH_LIFECYCLE_EXTRACT_VALIDATION_R01/inputs/integration_gate.yaml
+      - docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_27_PATCH_LIFECYCLE_EXTRACT_VALIDATION_R01/inputs/scope_extract.yaml
+      - docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_27_PATCH_LIFECYCLE_EXTRACT_VALIDATION_R01/inputs/neighbor_extract.yaml
+    result:
+      status: PASS
+      validation_target: synthetic_patch_lifecycle_run
+      scope_extract:
+        target_count: 22
+        found_count: 22
+        missing_count: 0
+      neighbor_extract:
+        target_count: 1
+        found_count: 1
+        missing_count: 0
+      integration_gate:
+        status: open
+        gate_check_count: 6
+      blocking_findings: []
 
   - phase_id: PHASE_13
     label: pilot_bounded_local_run
-    status: not_started
+    status: pending
     objective: Open one serious pilot bounded_local_run after all scoping gates pass.
     recommended_scope: patch_lifecycle
+    preconditions:
+      - PHASE_09 policy/decisions patch passed
+      - PHASE_10 scope catalog regeneration passed
+      - PHASE_11 ID-level bijection passed
+      - PHASE_11B normalized structural reconstruction passed
+      - PHASE_12 synthetic extract validation passed
 ```
 
 ## Implementation checklist
@@ -257,7 +285,7 @@ implementation_tracking:
   neighbor_validation_passed: true
   id_level_reconstruction_readiness_passed: true
   full_reconstruction_passed: true
-  extract_tests_passed: false
+  extract_tests_passed: true
   pilot_bounded_local_run_opened: false
 ```
 
@@ -353,12 +381,12 @@ next_actions:
     phase: PHASE_11B
 
   - action_id: NEXT_002
-    status: next
+    status: done
     label: Validate scope_extract.yaml and neighbor_extract.yaml on a synthetic or pilot patch_lifecycle run
     phase: PHASE_12
 
   - action_id: NEXT_003
-    status: pending
+    status: next
     label: Decide whether extract validation is sufficient for opening a serious patch_lifecycle pilot run
     target: docs/patcher/shared/extract_scope_slice.py
 
