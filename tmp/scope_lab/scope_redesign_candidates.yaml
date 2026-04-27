@@ -1,0 +1,18 @@
+CANDIDATE_001
+  keep patch_lifecycle as canonical scope
+  but formalize internal subclusters
+
+CANDIDATE_002
+  classify referentiel/link unowned areas
+
+CANDIDATE_003
+  split patch_lifecycle into patch_core and patch_triggers
+
+CANDIDATE_004
+  keep patch triggers in patch_lifecycle but declare stronger learner_state neighbors
+
+CANDIDATE_005
+  create bridge/shared treatment for inter-core references
+
+CANDIDATE_006
+  review graph propagation boundary between knowledge_and_design and mastery_evaluation
