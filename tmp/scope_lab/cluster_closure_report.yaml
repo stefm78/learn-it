@@ -1,0 +1,3056 @@
+cluster_closure_report:
+  schema_version: 0.1
+  status: PASS
+  input_cluster_count: 90
+  selected_cluster_count: 28
+  selection:
+    min_size: 3
+    include_weak_components: false
+  summary:
+    recommendation_counts:
+      classify_unowned_core_area: 13
+      declare_or_review_neighbors: 8
+      review_split_merge_or_bridge: 6
+      stable_scope_candidate: 1
+    owner_status_counts:
+      fully_unowned: 13
+      multi_owner_fragmented: 6
+      single_owner: 5
+      single_owner_plus_unowned: 4
+    boundary_pressure_counts:
+      high: 4
+      low: 10
+      medium: 14
+    high_priority_cluster_count: 27
+  high_priority_clusters:
+  - cluster_id: LABEL_CLUSTER_001
+    method: label_propagation
+    node_count: 26
+    owner_status: multi_owner_fragmented
+    boundary_pressure: medium
+    recommendation: review_split_merge_or_bridge
+    candidate_neighbor_scopes: &id001
+    - learner_state
+    - mastery_evaluation
+    - patch_lifecycle
+  - cluster_id: LABEL_CLUSTER_002
+    method: label_propagation
+    node_count: 24
+    owner_status: single_owner_plus_unowned
+    boundary_pressure: medium
+    recommendation: declare_or_review_neighbors
+    candidate_neighbor_scopes: &id002
+    - learner_state
+    - mastery_evaluation
+  - cluster_id: LABEL_CLUSTER_003
+    method: label_propagation
+    node_count: 16
+    owner_status: single_owner_plus_unowned
+    boundary_pressure: medium
+    recommendation: declare_or_review_neighbors
+    candidate_neighbor_scopes: &id003 []
+  - cluster_id: LABEL_CLUSTER_004
+    method: label_propagation
+    node_count: 14
+    owner_status: fully_unowned
+    boundary_pressure: medium
+    recommendation: classify_unowned_core_area
+    candidate_neighbor_scopes: &id004 []
+  - cluster_id: LABEL_CLUSTER_005
+    method: label_propagation
+    node_count: 12
+    owner_status: multi_owner_fragmented
+    boundary_pressure: medium
+    recommendation: review_split_merge_or_bridge
+    candidate_neighbor_scopes: &id005
+    - mastery_evaluation
+  - cluster_id: LABEL_CLUSTER_006
+    method: label_propagation
+    node_count: 11
+    owner_status: single_owner
+    boundary_pressure: medium
+    recommendation: declare_or_review_neighbors
+    candidate_neighbor_scopes: &id006
+    - learner_state
+  - cluster_id: LABEL_CLUSTER_007
+    method: label_propagation
+    node_count: 10
+    owner_status: single_owner
+    boundary_pressure: medium
+    recommendation: declare_or_review_neighbors
+    candidate_neighbor_scopes: &id007
+    - knowledge_and_design
+  - cluster_id: LABEL_CLUSTER_008
+    method: label_propagation
+    node_count: 9
+    owner_status: multi_owner_fragmented
+    boundary_pressure: medium
+    recommendation: review_split_merge_or_bridge
+    candidate_neighbor_scopes: &id008
+    - deployment_governance
+    - knowledge_and_design
+    - mastery_evaluation
+  - cluster_id: LABEL_CLUSTER_009
+    method: label_propagation
+    node_count: 8
+    owner_status: single_owner_plus_unowned
+    boundary_pressure: medium
+    recommendation: declare_or_review_neighbors
+    candidate_neighbor_scopes: &id009
+    - patch_lifecycle
+  - cluster_id: LABEL_CLUSTER_010
+    method: label_propagation
+    node_count: 7
+    owner_status: fully_unowned
+    boundary_pressure: medium
+    recommendation: classify_unowned_core_area
+    candidate_neighbor_scopes: &id010 []
+  - cluster_id: LABEL_CLUSTER_011
+    method: label_propagation
+    node_count: 6
+    owner_status: fully_unowned
+    boundary_pressure: low
+    recommendation: classify_unowned_core_area
+    candidate_neighbor_scopes: &id011 []
+  - cluster_id: LABEL_CLUSTER_012
+    method: label_propagation
+    node_count: 6
+    owner_status: multi_owner_fragmented
+    boundary_pressure: low
+    recommendation: review_split_merge_or_bridge
+    candidate_neighbor_scopes: &id012 []
+  - cluster_id: LABEL_CLUSTER_013
+    method: label_propagation
+    node_count: 6
+    owner_status: multi_owner_fragmented
+    boundary_pressure: high
+    recommendation: review_split_merge_or_bridge
+    candidate_neighbor_scopes: &id013
+    - deployment_governance
+    - knowledge_and_design
+    - patch_lifecycle
+  - cluster_id: LABEL_CLUSTER_014
+    method: label_propagation
+    node_count: 5
+    owner_status: fully_unowned
+    boundary_pressure: high
+    recommendation: classify_unowned_core_area
+    candidate_neighbor_scopes: &id014
+    - patch_lifecycle
+  - cluster_id: LABEL_CLUSTER_015
+    method: label_propagation
+    node_count: 5
+    owner_status: fully_unowned
+    boundary_pressure: medium
+    recommendation: classify_unowned_core_area
+    candidate_neighbor_scopes: &id015 []
+  - cluster_id: LABEL_CLUSTER_016
+    method: label_propagation
+    node_count: 5
+    owner_status: single_owner_plus_unowned
+    boundary_pressure: high
+    recommendation: declare_or_review_neighbors
+    candidate_neighbor_scopes: &id016
+    - learner_state
+    - patch_lifecycle
+  - cluster_id: LABEL_CLUSTER_017
+    method: label_propagation
+    node_count: 5
+    owner_status: fully_unowned
+    boundary_pressure: medium
+    recommendation: classify_unowned_core_area
+    candidate_neighbor_scopes: &id017
+    - knowledge_and_design
+  - cluster_id: LABEL_CLUSTER_018
+    method: label_propagation
+    node_count: 4
+    owner_status: fully_unowned
+    boundary_pressure: low
+    recommendation: classify_unowned_core_area
+    candidate_neighbor_scopes: &id018 []
+  - cluster_id: LABEL_CLUSTER_019
+    method: label_propagation
+    node_count: 4
+    owner_status: fully_unowned
+    boundary_pressure: low
+    recommendation: classify_unowned_core_area
+    candidate_neighbor_scopes: &id019 []
+  - cluster_id: LABEL_CLUSTER_020
+    method: label_propagation
+    node_count: 4
+    owner_status: single_owner
+    boundary_pressure: high
+    recommendation: declare_or_review_neighbors
+    candidate_neighbor_scopes: &id020 []
+  - cluster_id: LABEL_CLUSTER_022
+    method: label_propagation
+    node_count: 4
+    owner_status: fully_unowned
+    boundary_pressure: low
+    recommendation: classify_unowned_core_area
+    candidate_neighbor_scopes: &id021 []
+  - cluster_id: LABEL_CLUSTER_023
+    method: label_propagation
+    node_count: 4
+    owner_status: fully_unowned
+    boundary_pressure: low
+    recommendation: classify_unowned_core_area
+    candidate_neighbor_scopes: &id022 []
+  - cluster_id: LABEL_CLUSTER_024
+    method: label_propagation
+    node_count: 4
+    owner_status: fully_unowned
+    boundary_pressure: low
+    recommendation: classify_unowned_core_area
+    candidate_neighbor_scopes: &id023 []
+  - cluster_id: LABEL_CLUSTER_025
+    method: label_propagation
+    node_count: 3
+    owner_status: multi_owner_fragmented
+    boundary_pressure: low
+    recommendation: review_split_merge_or_bridge
+    candidate_neighbor_scopes: &id024 []
+  - cluster_id: LABEL_CLUSTER_026
+    method: label_propagation
+    node_count: 3
+    owner_status: single_owner
+    boundary_pressure: medium
+    recommendation: declare_or_review_neighbors
+    candidate_neighbor_scopes: &id025
+    - mastery_evaluation
+  - cluster_id: LABEL_CLUSTER_027
+    method: label_propagation
+    node_count: 3
+    owner_status: fully_unowned
+    boundary_pressure: medium
+    recommendation: classify_unowned_core_area
+    candidate_neighbor_scopes: &id026 []
+  - cluster_id: LABEL_CLUSTER_028
+    method: label_propagation
+    node_count: 3
+    owner_status: fully_unowned
+    boundary_pressure: low
+    recommendation: classify_unowned_core_area
+    candidate_neighbor_scopes: &id027 []
+  clusters:
+  - cluster_id: LABEL_CLUSTER_001
+    method: label_propagation
+    node_count: 26
+    owner_status: multi_owner_fragmented
+    boundary_pressure: medium
+    nodes_by_owner_scope:
+      UNOWNED: 4
+      deployment_governance: 5
+      learner_state: 10
+      mastery_evaluation: 3
+      patch_lifecycle: 4
+    nodes_by_core:
+      constitution: 23
+      link: 1
+      referentiel: 2
+    nodes_by_section:
+      ACTIONS: 3
+      EVENTS: 6
+      INVARIANTS: 2
+      PARAMETERS: 2
+      RULES: 9
+      TYPES: 4
+    internal_edge_count: 45
+    outgoing_edge_count: 12
+    incoming_edge_count: 24
+    missing_target_edge_count: 0
+    candidate_neighbor_ids:
+    - ACTION_ESCALATE_PERSISTENT_DRIFT_OFFSESSION
+    - ACTION_TRIGGER_AR_SOLLICITATION_PATCH
+    - ACTION_TRIGGER_RELEVANCE_PATCH
+    - LINK_REF_CORE_LEARNIT_CONSTITUTION_V4_0
+    - PARAM_REFERENTIEL_MSC_PERCEPTION_DIVERGENCE_THRESHOLD
+    - PARAM_REFERENTIEL_SYSTEMIC_INVESTIGATION_SESSION_THRESHOLD
+    - TYPE_LEARNER_STATE_MODEL
+    - TYPE_MASTERY_MODEL
+    - TYPE_STATE_AXIS_VALUE_COST
+    candidate_neighbor_scopes: *id001
+    inbound_source_ids:
+    - EVENT_CONSERVATIVE_SCAFFOLDING_ESCALATION
+    - EVENT_SYSTEMIC_INVESTIGATION_AUTO_OPENED
+    - INV_CONSERVATIVE_RULE_WITHOUT_AR_N1
+    - INV_INVALID_PATCH_REJECTED
+    - INV_REFERENTIEL_VALIDITY_REQUIRED_FOR_DELEGATED_THRESHOLD_EVALUATION
+    - RULE_LEARNER_STATE_AXIS_UNKNOWN_ALLOWED
+    - RULE_MSC_DOWNGRADE_MARKS_DEPENDENTS
+    - RULE_MULTI_AXIS_UNKNOWN_OR_UNOBSERVABLE_SAFE_ENTRY
+    - RULE_PROVISIONAL_MASTERY_WINDOW_EXPIRY_SAFE_FALLBACK
+    - RULE_SYSTEMIC_INVESTIGATION_OPEN_CLOSE_WINDOW
+    - RULE_T_EVALUATION_OVERDUE_REQUIRES_SIGNAL_OR_FOLLOWUP
+    - TYPE_BINDING_LEARNER_STATE_SIGNAL_AUTHORITY_CHAIN
+    - TYPE_BINDING_MSC_PERCEPTION_DIVERGENCE_THRESHOLD_CHAIN
+    - TYPE_LEARNER_STATE_MODEL
+    - TYPE_MASTERY_COMPONENT_A
+    - TYPE_MASTERY_COMPONENT_P
+    - TYPE_MASTERY_COMPONENT_R
+    - TYPE_PATCH_ARTIFACT
+    inbound_source_scopes:
+    - learner_state
+    - mastery_evaluation
+    - patch_lifecycle
+    recommendation: review_split_merge_or_bridge
+    sample_internal_edges:
+    - source: EVENT_ACTIVATION_DISTRESS_PERSISTENCE_ESCALATION
+      target: REF_CORE_LEARNIT_REFERENTIEL_V4_0_IN_CONSTITUTION
+      edge_type: depends_on
+      source_scope: learner_state
+      target_scope: null
+    - source: EVENT_ACTIVATION_DISTRESS_PERSISTENCE_ESCALATION
+      target: RULE_ACTIVATION_DISTRESS_PERSISTENCE_ESCALATION_OFFSESSION
+      edge_type: relations.target
+      source_scope: learner_state
+      target_scope: learner_state
+    - source: EVENT_ACTIVATION_DISTRESS_PERSISTENCE_ESCALATION
+      target: TYPE_STATE_AXIS_ACTIVATION
+      edge_type: depends_on
+      source_scope: learner_state
+      target_scope: learner_state
+    - source: EVENT_AR_REFRACTORY_PROFILE_DETECTED
+      target: REF_CORE_LEARNIT_REFERENTIEL_V4_0_IN_CONSTITUTION
+      edge_type: depends_on
+      source_scope: patch_lifecycle
+      target_scope: null
+    - source: EVENT_AR_REFRACTORY_PROFILE_DETECTED
+      target: RULE_AR_REFRACTORY_PROFILE_TRIGGERS_SOLLICITATION_PATCH
+      edge_type: relations.target
+      source_scope: patch_lifecycle
+      target_scope: patch_lifecycle
+    - source: EVENT_AR_REFRACTORY_PROFILE_DETECTED
+      target: TYPE_SELF_REPORT_AR_N1
+      edge_type: depends_on
+      source_scope: patch_lifecycle
+      target_scope: learner_state
+    - source: EVENT_GAMIFICATION_PROBATION_MAX_DURATION_REACHED
+      target: REF_CORE_LEARNIT_REFERENTIEL_V4_0_IN_CONSTITUTION
+      edge_type: depends_on
+      source_scope: deployment_governance
+      target_scope: null
+    - source: EVENT_GAMIFICATION_PROBATION_MAX_DURATION_REACHED
+      target: RULE_GAMIFICATION_PROBATION_MUST_CLOSE
+      edge_type: relations.target
+      source_scope: deployment_governance
+      target_scope: deployment_governance
+    - source: EVENT_GAMIFICATION_PROBATION_MAX_DURATION_REACHED
+      target: RULE_UNVERIFIED_GAMIFICATION_PROBATION
+      edge_type: depends_on
+      source_scope: deployment_governance
+      target_scope: deployment_governance
+    - source: EVENT_LONG_INTERRUPTION
+      target: REF_CORE_LEARNIT_REFERENTIEL_V4_0_IN_CONSTITUTION
+      edge_type: depends_on
+      source_scope: learner_state
+      target_scope: null
+    sample_outgoing_edges:
+    - source: EVENT_MSC_PERCEPTION_DIVERGENCE_DETECTED
+      target: TYPE_MASTERY_MODEL
+      edge_type: depends_on
+      source_scope: mastery_evaluation
+      target_scope: mastery_evaluation
+    - source: EVENT_PERSISTENT_LOW_VC
+      target: TYPE_STATE_AXIS_VALUE_COST
+      edge_type: depends_on
+      source_scope: patch_lifecycle
+      target_scope: learner_state
+    - source: INV_DISTRESS_REGIME_PRIORITY_CANNOT_BE_OVERRIDDEN
+      target: TYPE_LEARNER_STATE_MODEL
+      edge_type: relations.target
+      source_scope: learner_state
+      target_scope: learner_state
+    - source: RULE_ACTIVATION_DISTRESS_PERSISTENCE_ESCALATION_OFFSESSION
+      target: ACTION_ESCALATE_PERSISTENT_DRIFT_OFFSESSION
+      edge_type: depends_on
+      source_scope: learner_state
+      target_scope: patch_lifecycle
+    - source: RULE_ACTIVATION_DISTRESS_PERSISTENCE_ESCALATION_OFFSESSION
+      target: ACTION_ESCALATE_PERSISTENT_DRIFT_OFFSESSION
+      edge_type: relations.target
+      source_scope: learner_state
+      target_scope: patch_lifecycle
+    - source: RULE_AR_REFRACTORY_PROFILE_TRIGGERS_SOLLICITATION_PATCH
+      target: ACTION_TRIGGER_AR_SOLLICITATION_PATCH
+      edge_type: relations.target
+      source_scope: patch_lifecycle
+      target_scope: patch_lifecycle
+    - source: RULE_PERSISTENT_LOW_VC_TRIGGERS_RELEVANCE_PATCH
+      target: ACTION_TRIGGER_RELEVANCE_PATCH
+      edge_type: relations.target
+      source_scope: patch_lifecycle
+      target_scope: patch_lifecycle
+    - source: RULE_PERSISTENT_LOW_VC_TRIGGERS_RELEVANCE_PATCH
+      target: TYPE_STATE_AXIS_VALUE_COST
+      edge_type: depends_on
+      source_scope: patch_lifecycle
+      target_scope: learner_state
+    - source: RULE_REFERENTIEL_ESCALATION_PRIORITY_ORDER
+      target: PARAM_REFERENTIEL_MSC_PERCEPTION_DIVERGENCE_THRESHOLD
+      edge_type: depends_on
+      source_scope: null
+      target_scope: null
+    - source: RULE_REFERENTIEL_ESCALATION_PRIORITY_ORDER
+      target: PARAM_REFERENTIEL_SYSTEMIC_INVESTIGATION_SESSION_THRESHOLD
+      edge_type: depends_on
+      source_scope: null
+      target_scope: null
+    sample_incoming_edges:
+    - source: EVENT_CONSERVATIVE_SCAFFOLDING_ESCALATION
+      target: REF_CORE_LEARNIT_REFERENTIEL_V4_0_IN_CONSTITUTION
+      edge_type: depends_on
+      source_scope: learner_state
+      target_scope: null
+    - source: EVENT_SYSTEMIC_INVESTIGATION_AUTO_OPENED
+      target: REF_CORE_LEARNIT_REFERENTIEL_V4_0_IN_CONSTITUTION
+      edge_type: depends_on
+      source_scope: mastery_evaluation
+      target_scope: null
+    - source: INV_CONSERVATIVE_RULE_WITHOUT_AR_N1
+      target: TYPE_SELF_REPORT_AR_N1
+      edge_type: depends_on
+      source_scope: learner_state
+      target_scope: learner_state
+    - source: INV_CONSERVATIVE_RULE_WITHOUT_AR_N1
+      target: TYPE_STATE_AXIS_ACTIVATION
+      edge_type: relations.target
+      source_scope: learner_state
+      target_scope: learner_state
+    - source: INV_INVALID_PATCH_REJECTED
+      target: REF_CORE_LEARNIT_REFERENTIEL_V4_0_IN_CONSTITUTION
+      edge_type: depends_on
+      source_scope: patch_lifecycle
+      target_scope: null
+    - source: INV_REFERENTIEL_VALIDITY_REQUIRED_FOR_DELEGATED_THRESHOLD_EVALUATION
+      target: REF_CORE_LEARNIT_REFERENTIEL_V4_0_IN_CONSTITUTION
+      edge_type: depends_on
+      source_scope: mastery_evaluation
+      target_scope: null
+    - source: RULE_LEARNER_STATE_AXIS_UNKNOWN_ALLOWED
+      target: TYPE_SELF_REPORT_AR_N1
+      edge_type: depends_on
+      source_scope: learner_state
+      target_scope: learner_state
+    - source: RULE_LEARNER_STATE_AXIS_UNKNOWN_ALLOWED
+      target: TYPE_STATE_AXIS_ACTIVATION
+      edge_type: depends_on
+      source_scope: learner_state
+      target_scope: learner_state
+    - source: RULE_MSC_DOWNGRADE_MARKS_DEPENDENTS
+      target: ACTION_PLAN_SHORT_DIAGNOSTIC_TASK
+      edge_type: relations.target
+      source_scope: mastery_evaluation
+      target_scope: mastery_evaluation
+    - source: RULE_MULTI_AXIS_UNKNOWN_OR_UNOBSERVABLE_SAFE_ENTRY
+      target: TYPE_STATE_AXIS_ACTIVATION
+      edge_type: depends_on
+      source_scope: learner_state
+      target_scope: learner_state
+    sample_missing_target_edges: []
+    node_ids:
+    - ACTION_INFORM_LEARNER
+    - ACTION_LOG_AR_PROXY_DISCORDANCE
+    - ACTION_PLAN_SHORT_DIAGNOSTIC_TASK
+    - EVENT_ACTIVATION_DISTRESS_PERSISTENCE_ESCALATION
+    - EVENT_AR_REFRACTORY_PROFILE_DETECTED
+    - EVENT_GAMIFICATION_PROBATION_MAX_DURATION_REACHED
+    - EVENT_LONG_INTERRUPTION
+    - EVENT_MSC_PERCEPTION_DIVERGENCE_DETECTED
+    - EVENT_PERSISTENT_LOW_VC
+    - INV_CONSTITUTION_REFERENTIAL_SEPARATION
+    - INV_DISTRESS_REGIME_PRIORITY_CANNOT_BE_OVERRIDDEN
+    - PARAM_AR_N1_INTERACTION_BUDGET
+    - PARAM_REFERENTIEL_ACTIVATION_DISTRESS_PERSISTENCE_SESSIONS
+    - REF_CORE_LEARNIT_REFERENTIEL_V4_0_IN_CONSTITUTION
+    - RULE_ACTIVATION_DISTRESS_PERSISTENCE_ESCALATION_OFFSESSION
+    - RULE_AR_N1_OVERRIDES_PROXY
+    - RULE_AR_REFRACTORY_PROFILE_TRIGGERS_SOLLICITATION_PATCH
+    - RULE_GAMIFICATION_PROBATION_MUST_CLOSE
+    - RULE_LONG_INTERRUPTION_REQUIRES_DIAGNOSTIC_RESUME
+    - RULE_MSC_PERCEPTION_DIVERGENCE_PROTOCOL
+    - RULE_PERSISTENT_LOW_VC_TRIGGERS_RELEVANCE_PATCH
+    - RULE_REFERENTIEL_ESCALATION_PRIORITY_ORDER
+    - RULE_UNVERIFIED_GAMIFICATION_PROBATION
+    - TYPE_BINDING_ACTIVATION_DISTRESS_PERSISTENCE_ESCALATION_CHAIN
+    - TYPE_SELF_REPORT_AR_N1
+    - TYPE_STATE_AXIS_ACTIVATION
+  - cluster_id: LABEL_CLUSTER_002
+    method: label_propagation
+    node_count: 24
+    owner_status: single_owner_plus_unowned
+    boundary_pressure: medium
+    nodes_by_owner_scope:
+      UNOWNED: 22
+      learner_state: 2
+    nodes_by_core:
+      constitution: 2
+      link: 8
+      referentiel: 14
+    nodes_by_section:
+      CONSTRAINTS: 1
+      INVARIANTS: 2
+      PARAMETERS: 8
+      RULES: 2
+      TYPES: 11
+    internal_edge_count: 45
+    outgoing_edge_count: 15
+    incoming_edge_count: 15
+    missing_target_edge_count: 0
+    candidate_neighbor_ids:
+    - EVENT_MSC_PERCEPTION_DIVERGENCE_DETECTED
+    - REF_CORE_LEARNIT_CONSTITUTION_V4_0_IN_REFERENTIEL
+    - RULE_MSC_PERCEPTION_DIVERGENCE_PROTOCOL
+    - TYPE_MASTERY_COMPONENT_A
+    - TYPE_MASTERY_COMPONENT_P
+    - TYPE_MASTERY_COMPONENT_R
+    - TYPE_REFERENTIEL_AR_N3_CONFIGURATION
+    - TYPE_REFERENTIEL_VC_PARAMETER_BLOCK
+    - TYPE_SELF_REPORT_AR_N1
+    - TYPE_SELF_REPORT_AR_N2
+    - TYPE_STATE_AXIS_ACTIVATION
+    - TYPE_STATE_AXIS_CALIBRATION
+    - TYPE_STATE_AXIS_VALUE_COST
+    candidate_neighbor_scopes: *id002
+    inbound_source_ids:
+    - RULE_REFERENTIEL_ESCALATION_PRIORITY_ORDER
+    - TYPE_BINDING_ACTIVATION_DISTRESS_PERSISTENCE_ESCALATION_CHAIN
+    - TYPE_BINDING_CONSERVATIVE_SCAFFOLDING_ESCALATION_CHAIN
+    - TYPE_BINDING_FEEDBACK_COVERAGE_TO_REFERENTIEL_THRESHOLD
+    - TYPE_BINDING_PATCH_TRIGGER_GOVERNANCE_CHAIN
+    - TYPE_BINDING_REFERENTIEL_TO_CONSTITUTION_GOVERNING_INVARIANTS
+    - TYPE_BINDING_SYSTEMIC_INVESTIGATION_CHAIN
+    inbound_source_scopes: []
+    recommendation: declare_or_review_neighbors
+    sample_internal_edges:
+    - source: CONSTRAINT_LINK_NO_BUSINESS_LOGIC
+      target: LINK_REF_CORE_LEARNIT_CONSTITUTION_V4_0
+      edge_type: depends_on
+      source_scope: null
+      target_scope: null
+    - source: CONSTRAINT_LINK_NO_BUSINESS_LOGIC
+      target: TYPE_BINDING_CONSTITUTION_REFERENTIEL_LAYER_SEPARATION
+      edge_type: relations.target
+      source_scope: null
+      target_scope: null
+    - source: INV_REFERENTIEL_CONSTITUTIONAL_AND_LOGIC_NOT_MODIFIABLE_HERE
+      target: PARAM_REFERENTIEL_MSC_PRECISION_THRESHOLD
+      edge_type: relations.target
+      source_scope: null
+      target_scope: null
+    - source: PARAM_AR_N3_INTERACTION_BUDGET
+      target: TYPE_SELF_REPORT_AR_N3
+      edge_type: relations.target
+      source_scope: learner_state
+      target_scope: learner_state
+    - source: PARAM_REFERENTIEL_DEGRADATION_FAILURE_COUNT
+      target: PARAM_REFERENTIEL_MSC_ROBUSTNESS_DELAY_SHORT
+      edge_type: depends_on
+      source_scope: null
+      target_scope: null
+    - source: RULE_REFERENTIEL_LOW_AR_CALIBRATION_TEMPORARILY_REWEIGHTS_SIGNALS
+      target: PARAM_REFERENTIEL_PROXY_MIN_WEIGHT
+      edge_type: depends_on
+      source_scope: null
+      target_scope: null
+    - source: RULE_REFERENTIEL_LOW_AR_CALIBRATION_TEMPORARILY_REWEIGHTS_SIGNALS
+      target: TYPE_REFERENTIEL_SIGNAL_CONFIDENCE_HIERARCHY
+      edge_type: depends_on
+      source_scope: null
+      target_scope: null
+    - source: RULE_REFERENTIEL_SIGNAL_PRECEDENCE_ORDER
+      target: TYPE_REFERENTIEL_SIGNAL_CONFIDENCE_HIERARCHY
+      edge_type: depends_on
+      source_scope: null
+      target_scope: null
+    - source: TYPE_BINDING_AR_N3_CALIBRATION_TO_SIGNAL_REWEIGHTING
+      target: LINK_REF_CORE_LEARNIT_CONSTITUTION_V4_0
+      edge_type: depends_on
+      source_scope: null
+      target_scope: null
+    - source: TYPE_BINDING_AR_N3_CALIBRATION_TO_SIGNAL_REWEIGHTING
+      target: LINK_REF_CORE_LEARNIT_CONSTITUTION_V4_0
+      edge_type: relations.target.core_ref
+      source_scope: null
+      target_scope: null
+    sample_outgoing_edges:
+    - source: INV_REFERENTIEL_CONSTITUTIONAL_AND_LOGIC_NOT_MODIFIABLE_HERE
+      target: REF_CORE_LEARNIT_CONSTITUTION_V4_0_IN_REFERENTIEL
+      edge_type: depends_on
+      source_scope: null
+      target_scope: null
+    - source: INV_REFERENTIEL_VC_UNKNOWN_MEANS_NO_INFERENCE
+      target: TYPE_REFERENTIEL_VC_PARAMETER_BLOCK
+      edge_type: depends_on
+      source_scope: null
+      target_scope: null
+    - source: RULE_REFERENTIEL_LOW_AR_CALIBRATION_TEMPORARILY_REWEIGHTS_SIGNALS
+      target: TYPE_REFERENTIEL_AR_N3_CONFIGURATION
+      edge_type: depends_on
+      source_scope: null
+      target_scope: null
+    - source: TYPE_BINDING_AR_N3_CALIBRATION_TO_SIGNAL_REWEIGHTING
+      target: TYPE_STATE_AXIS_CALIBRATION
+      edge_type: relations.target
+      source_scope: null
+      target_scope: learner_state
+    - source: TYPE_BINDING_LEARNER_STATE_SIGNAL_AUTHORITY_CHAIN
+      target: TYPE_SELF_REPORT_AR_N1
+      edge_type: relations.target
+      source_scope: null
+      target_scope: learner_state
+    - source: TYPE_BINDING_LEARNER_STATE_SIGNAL_AUTHORITY_CHAIN
+      target: TYPE_SELF_REPORT_AR_N2
+      edge_type: relations.target
+      source_scope: null
+      target_scope: learner_state
+    - source: TYPE_BINDING_LEARNER_STATE_SIGNAL_AUTHORITY_CHAIN
+      target: TYPE_STATE_AXIS_ACTIVATION
+      edge_type: relations.target
+      source_scope: null
+      target_scope: learner_state
+    - source: TYPE_BINDING_LEARNER_STATE_SIGNAL_AUTHORITY_CHAIN
+      target: TYPE_STATE_AXIS_VALUE_COST
+      edge_type: relations.target
+      source_scope: null
+      target_scope: learner_state
+    - source: TYPE_BINDING_MSC_COMPONENTS_TO_REFERENTIEL_PARAMETERS
+      target: TYPE_MASTERY_COMPONENT_A
+      edge_type: relations.target
+      source_scope: null
+      target_scope: mastery_evaluation
+    - source: TYPE_BINDING_MSC_COMPONENTS_TO_REFERENTIEL_PARAMETERS
+      target: TYPE_MASTERY_COMPONENT_P
+      edge_type: relations.target
+      source_scope: null
+      target_scope: mastery_evaluation
+    sample_incoming_edges:
+    - source: RULE_REFERENTIEL_ESCALATION_PRIORITY_ORDER
+      target: PARAM_REFERENTIEL_MSC_PERCEPTION_DIVERGENCE_THRESHOLD
+      edge_type: depends_on
+      source_scope: null
+      target_scope: null
+    - source: TYPE_BINDING_ACTIVATION_DISTRESS_PERSISTENCE_ESCALATION_CHAIN
+      target: LINK_REF_CORE_LEARNIT_CONSTITUTION_V4_0
+      edge_type: depends_on
+      source_scope: null
+      target_scope: null
+    - source: TYPE_BINDING_ACTIVATION_DISTRESS_PERSISTENCE_ESCALATION_CHAIN
+      target: LINK_REF_CORE_LEARNIT_CONSTITUTION_V4_0
+      edge_type: relations.target.core_ref
+      source_scope: null
+      target_scope: null
+    - source: TYPE_BINDING_CONSERVATIVE_SCAFFOLDING_ESCALATION_CHAIN
+      target: LINK_REF_CORE_LEARNIT_CONSTITUTION_V4_0
+      edge_type: depends_on
+      source_scope: null
+      target_scope: null
+    - source: TYPE_BINDING_CONSERVATIVE_SCAFFOLDING_ESCALATION_CHAIN
+      target: LINK_REF_CORE_LEARNIT_CONSTITUTION_V4_0
+      edge_type: relations.target.core_ref
+      source_scope: null
+      target_scope: null
+    - source: TYPE_BINDING_CONSERVATIVE_SCAFFOLDING_ESCALATION_CHAIN
+      target: TYPE_BINDING_LEARNER_STATE_SIGNAL_AUTHORITY_CHAIN
+      edge_type: depends_on
+      source_scope: null
+      target_scope: null
+    - source: TYPE_BINDING_FEEDBACK_COVERAGE_TO_REFERENTIEL_THRESHOLD
+      target: LINK_REF_CORE_LEARNIT_CONSTITUTION_V4_0
+      edge_type: depends_on
+      source_scope: null
+      target_scope: null
+    - source: TYPE_BINDING_FEEDBACK_COVERAGE_TO_REFERENTIEL_THRESHOLD
+      target: LINK_REF_CORE_LEARNIT_CONSTITUTION_V4_0
+      edge_type: relations.target.core_ref
+      source_scope: null
+      target_scope: null
+    - source: TYPE_BINDING_FEEDBACK_COVERAGE_TO_REFERENTIEL_THRESHOLD
+      target: TYPE_BINDING_CONSTITUTION_REFERENTIEL_LAYER_SEPARATION
+      edge_type: depends_on
+      source_scope: null
+      target_scope: null
+    - source: TYPE_BINDING_PATCH_TRIGGER_GOVERNANCE_CHAIN
+      target: LINK_REF_CORE_LEARNIT_CONSTITUTION_V4_0
+      edge_type: depends_on
+      source_scope: null
+      target_scope: null
+    sample_missing_target_edges: []
+    node_ids:
+    - CONSTRAINT_LINK_NO_BUSINESS_LOGIC
+    - INV_REFERENTIEL_CONSTITUTIONAL_AND_LOGIC_NOT_MODIFIABLE_HERE
+    - INV_REFERENTIEL_VC_UNKNOWN_MEANS_NO_INFERENCE
+    - LINK_REF_CORE_LEARNIT_CONSTITUTION_V4_0
+    - PARAM_AR_N3_INTERACTION_BUDGET
+    - PARAM_REFERENTIEL_DEGRADATION_FAILURE_COUNT
+    - PARAM_REFERENTIEL_LOW_AR_CALIBRATION_CONSECUTIVE_BILANS
+    - PARAM_REFERENTIEL_MSC_AUTONOMY_SUCCESS_COUNT
+    - PARAM_REFERENTIEL_MSC_PERCEPTION_DIVERGENCE_THRESHOLD
+    - PARAM_REFERENTIEL_MSC_PRECISION_THRESHOLD
+    - PARAM_REFERENTIEL_MSC_ROBUSTNESS_DELAY_SHORT
+    - PARAM_REFERENTIEL_PROXY_MIN_WEIGHT
+    - RULE_REFERENTIEL_LOW_AR_CALIBRATION_TEMPORARILY_REWEIGHTS_SIGNALS
+    - RULE_REFERENTIEL_SIGNAL_PRECEDENCE_ORDER
+    - TYPE_BINDING_AR_N3_CALIBRATION_TO_SIGNAL_REWEIGHTING
+    - TYPE_BINDING_CONSTITUTION_REFERENTIEL_LAYER_SEPARATION
+    - TYPE_BINDING_CONSTITUTION_TO_REFERENTIEL_OPERATIONAL_PARAMETERS
+    - TYPE_BINDING_LEARNER_STATE_SIGNAL_AUTHORITY_CHAIN
+    - TYPE_BINDING_MSC_COMPONENTS_TO_REFERENTIEL_PARAMETERS
+    - TYPE_BINDING_MSC_PERCEPTION_DIVERGENCE_THRESHOLD_CHAIN
+    - TYPE_REFERENTIEL_MINIMAL_BEHAVIORAL_PROXY_SET
+    - TYPE_REFERENTIEL_REFERENTIAL_PARAMETER_LAYER
+    - TYPE_REFERENTIEL_SIGNAL_CONFIDENCE_HIERARCHY
+    - TYPE_SELF_REPORT_AR_N3
+  - cluster_id: LABEL_CLUSTER_003
+    method: label_propagation
+    node_count: 16
+    owner_status: single_owner_plus_unowned
+    boundary_pressure: medium
+    nodes_by_owner_scope:
+      UNOWNED: 1
+      patch_lifecycle: 15
+    nodes_by_core:
+      constitution: 16
+    nodes_by_section:
+      ACTIONS: 4
+      CONSTRAINTS: 2
+      EVENTS: 1
+      INVARIANTS: 4
+      RULES: 2
+      TYPES: 3
+    internal_edge_count: 31
+    outgoing_edge_count: 2
+    incoming_edge_count: 13
+    missing_target_edge_count: 0
+    candidate_neighbor_ids:
+    - REF_CORE_LEARNIT_REFERENTIEL_V4_0_IN_CONSTITUTION
+    candidate_neighbor_scopes: *id003
+    inbound_source_ids:
+    - INV_PATCH_ARTIFACTS_MUST_BE_PRECOMPUTED_OFF_SESSION
+    - RULE_ACTIVATION_DISTRESS_PERSISTENCE_ESCALATION_OFFSESSION
+    - RULE_AR_REFRACTORY_PROFILE_TRIGGERS_SOLLICITATION_PATCH
+    - RULE_CONSERVATIVE_SCAFFOLDING_ESCALATION_REQUIRES_OFFSESSION_REVIEW
+    - RULE_PERSISTENT_LOW_VC_TRIGGERS_RELEVANCE_PATCH
+    - RULE_SYSTEMIC_INVESTIGATION_OPEN_CLOSE_WINDOW
+    - TYPE_BINDING_PATCH_TRIGGER_GOVERNANCE_CHAIN
+    inbound_source_scopes:
+    - learner_state
+    - mastery_evaluation
+    - patch_lifecycle
+    recommendation: declare_or_review_neighbors
+    sample_internal_edges:
+    - source: ACTION_ROLLBACK_PATCH
+      target: TYPE_PATCH_ARTIFACT
+      edge_type: depends_on
+      source_scope: patch_lifecycle
+      target_scope: patch_lifecycle
+    - source: ACTION_TRIGGER_AR_SOLLICITATION_PATCH
+      target: TYPE_PATCH_ARTIFACT
+      edge_type: depends_on
+      source_scope: patch_lifecycle
+      target_scope: patch_lifecycle
+    - source: ACTION_TRIGGER_RELEVANCE_PATCH
+      target: TYPE_PATCH_ARTIFACT
+      edge_type: depends_on
+      source_scope: patch_lifecycle
+      target_scope: patch_lifecycle
+    - source: CONSTRAINT_NO_ADAPTIVE_PHILOSOPHY_CHANGE
+      target: TYPE_PATCH_ARTIFACT
+      edge_type: depends_on
+      source_scope: patch_lifecycle
+      target_scope: patch_lifecycle
+    - source: CONSTRAINT_NO_ADAPTIVE_PHILOSOPHY_CHANGE
+      target: TYPE_PATCH_IMPACT_SCOPE
+      edge_type: relations.target
+      source_scope: patch_lifecycle
+      target_scope: patch_lifecycle
+    - source: CONSTRAINT_NO_AUTONOMOUS_PSYCHOLOGICAL_INFERENCE
+      target: TYPE_PATCH_ARTIFACT
+      edge_type: depends_on
+      source_scope: patch_lifecycle
+      target_scope: patch_lifecycle
+    - source: CONSTRAINT_NO_AUTONOMOUS_PSYCHOLOGICAL_INFERENCE
+      target: TYPE_PATCH_QUALITY_GATE
+      edge_type: relations.target
+      source_scope: patch_lifecycle
+      target_scope: patch_lifecycle
+    - source: EVENT_PATCH_INVALID
+      target: ACTION_ROLLBACK_PATCH
+      edge_type: relations.target
+      source_scope: patch_lifecycle
+      target_scope: patch_lifecycle
+    - source: EVENT_PATCH_INVALID
+      target: TYPE_PATCH_ARTIFACT
+      edge_type: depends_on
+      source_scope: patch_lifecycle
+      target_scope: patch_lifecycle
+    - source: INV_INVALID_PATCH_REJECTED
+      target: TYPE_PATCH_IMPACT_SCOPE
+      edge_type: depends_on
+      source_scope: patch_lifecycle
+      target_scope: patch_lifecycle
+    sample_outgoing_edges:
+    - source: INV_INVALID_PATCH_REJECTED
+      target: REF_CORE_LEARNIT_REFERENTIEL_V4_0_IN_CONSTITUTION
+      edge_type: depends_on
+      source_scope: patch_lifecycle
+      target_scope: null
+    - source: TYPE_PATCH_ARTIFACT
+      target: REF_CORE_LEARNIT_REFERENTIEL_V4_0_IN_CONSTITUTION
+      edge_type: depends_on
+      source_scope: patch_lifecycle
+      target_scope: null
+    sample_incoming_edges:
+    - source: INV_PATCH_ARTIFACTS_MUST_BE_PRECOMPUTED_OFF_SESSION
+      target: TYPE_PATCH_ARTIFACT
+      edge_type: depends_on
+      source_scope: patch_lifecycle
+      target_scope: patch_lifecycle
+    - source: INV_PATCH_ARTIFACTS_MUST_BE_PRECOMPUTED_OFF_SESSION
+      target: TYPE_PATCH_ARTIFACT
+      edge_type: relations.target
+      source_scope: patch_lifecycle
+      target_scope: patch_lifecycle
+    - source: RULE_ACTIVATION_DISTRESS_PERSISTENCE_ESCALATION_OFFSESSION
+      target: ACTION_ESCALATE_PERSISTENT_DRIFT_OFFSESSION
+      edge_type: depends_on
+      source_scope: learner_state
+      target_scope: patch_lifecycle
+    - source: RULE_ACTIVATION_DISTRESS_PERSISTENCE_ESCALATION_OFFSESSION
+      target: ACTION_ESCALATE_PERSISTENT_DRIFT_OFFSESSION
+      edge_type: relations.target
+      source_scope: learner_state
+      target_scope: patch_lifecycle
+    - source: RULE_AR_REFRACTORY_PROFILE_TRIGGERS_SOLLICITATION_PATCH
+      target: ACTION_TRIGGER_AR_SOLLICITATION_PATCH
+      edge_type: relations.target
+      source_scope: patch_lifecycle
+      target_scope: patch_lifecycle
+    - source: RULE_CONSERVATIVE_SCAFFOLDING_ESCALATION_REQUIRES_OFFSESSION_REVIEW
+      target: ACTION_ESCALATE_PERSISTENT_DRIFT_OFFSESSION
+      edge_type: depends_on
+      source_scope: learner_state
+      target_scope: patch_lifecycle
+    - source: RULE_CONSERVATIVE_SCAFFOLDING_ESCALATION_REQUIRES_OFFSESSION_REVIEW
+      target: ACTION_ESCALATE_PERSISTENT_DRIFT_OFFSESSION
+      edge_type: relations.target
+      source_scope: learner_state
+      target_scope: patch_lifecycle
+    - source: RULE_PERSISTENT_LOW_VC_TRIGGERS_RELEVANCE_PATCH
+      target: ACTION_TRIGGER_RELEVANCE_PATCH
+      edge_type: relations.target
+      source_scope: patch_lifecycle
+      target_scope: patch_lifecycle
+    - source: RULE_SYSTEMIC_INVESTIGATION_OPEN_CLOSE_WINDOW
+      target: ACTION_ESCALATE_PERSISTENT_DRIFT_OFFSESSION
+      edge_type: depends_on
+      source_scope: mastery_evaluation
+      target_scope: patch_lifecycle
+    - source: RULE_SYSTEMIC_INVESTIGATION_OPEN_CLOSE_WINDOW
+      target: ACTION_ESCALATE_PERSISTENT_DRIFT_OFFSESSION
+      edge_type: relations.target
+      source_scope: mastery_evaluation
+      target_scope: patch_lifecycle
+    sample_missing_target_edges: []
+    node_ids:
+    - ACTION_ESCALATE_PERSISTENT_DRIFT_OFFSESSION
+    - ACTION_ROLLBACK_PATCH
+    - ACTION_TRIGGER_AR_SOLLICITATION_PATCH
+    - ACTION_TRIGGER_RELEVANCE_PATCH
+    - CONSTRAINT_NO_ADAPTIVE_PHILOSOPHY_CHANGE
+    - CONSTRAINT_NO_AUTONOMOUS_PSYCHOLOGICAL_INFERENCE
+    - EVENT_PATCH_INVALID
+    - INV_INVALID_PATCH_REJECTED
+    - INV_NO_PARTIAL_PATCH_STATE
+    - INV_PATCH_LOCAL_VALIDATION_MUST_BE_DETERMINISTIC
+    - INV_PERSISTENT_DRIFT_REQUIRES_ESCALATION_IF_PATCH_BLOCKED
+    - RULE_PATCH_SERIALIZATION
+    - RULE_PERSISTENT_DRIFT_BLOCKED_PATCH_ESCALATES_OFFSESSION
+    - TYPE_PATCH_ARTIFACT
+    - TYPE_PATCH_IMPACT_SCOPE
+    - TYPE_PATCH_QUALITY_GATE
+  - cluster_id: LABEL_CLUSTER_004
+    method: label_propagation
+    node_count: 14
+    owner_status: fully_unowned
+    boundary_pressure: medium
+    nodes_by_owner_scope:
+      UNOWNED: 14
+    nodes_by_core:
+      referentiel: 14
+    nodes_by_section:
+      INVARIANTS: 2
+      PARAMETERS: 3
+      RULES: 4
+      TYPES: 5
+    internal_edge_count: 15
+    outgoing_edge_count: 0
+    incoming_edge_count: 14
+    missing_target_edge_count: 0
+    candidate_neighbor_ids: []
+    candidate_neighbor_scopes: *id004
+    inbound_source_ids:
+    - INV_REFERENTIEL_CONSTITUTIONAL_AND_LOGIC_NOT_MODIFIABLE_HERE
+    - RULE_REFERENTIEL_LOW_AR_CALIBRATION_TEMPORARILY_REWEIGHTS_SIGNALS
+    - RULE_REFERENTIEL_OSCILLATION_EXIT_AND_ESCALATION
+    - RULE_REFERENTIEL_SYSTEMIC_INVESTIGATION_RUNTIME_BEHAVIOR
+    - TYPE_REFERENTIEL_AR_N2_CONFIGURATION
+    - TYPE_REFERENTIEL_AR_REFRACTORY_PARAMETER_BLOCK
+    - TYPE_REFERENTIEL_FEEDBACK_COVERAGE_METRIC
+    - TYPE_REFERENTIEL_PATCH_SCOPE_TABLE
+    - TYPE_REFERENTIEL_PATCH_TRIGGER_TABLE
+    - TYPE_REFERENTIEL_REFERENTIAL_PARAMETER_LAYER
+    - TYPE_REFERENTIEL_SESSION_INTENTION_CONFIGURATION
+    - TYPE_REFERENTIEL_SIGNAL_CONFIDENCE_HIERARCHY
+    - TYPE_REFERENTIEL_TEMPORAL_MULTIPLIER_TABLE
+    - TYPE_REFERENTIEL_VC_PARAMETER_BLOCK
+    inbound_source_scopes: []
+    recommendation: classify_unowned_core_area
+    sample_internal_edges:
+    - source: INV_REFERENTIEL_GRAPH_ONE_HOP_NOT_MODIFIABLE_HERE
+      target: REF_CORE_LEARNIT_CONSTITUTION_V4_0_IN_REFERENTIEL
+      edge_type: depends_on
+      source_scope: null
+      target_scope: null
+    - source: INV_REFERENTIEL_GRAPH_ONE_HOP_NOT_MODIFIABLE_HERE
+      target: TYPE_REFERENTIEL_GRAPH_PROPAGATION_OPERATIONAL_NOTE
+      edge_type: relations.target
+      source_scope: null
+      target_scope: null
+    - source: INV_REFERENTIEL_PATCH_QUALITY_CHECKLIST_NOT_MODIFIABLE_HERE
+      target: REF_CORE_LEARNIT_CONSTITUTION_V4_0_IN_REFERENTIEL
+      edge_type: depends_on
+      source_scope: null
+      target_scope: null
+    - source: RULE_REFERENTIEL_ADAPTIVE_REGIME_CONFLICT_RESOLUTION
+      target: TYPE_REFERENTIEL_ADAPTIVE_REGIME_MATRIX
+      edge_type: depends_on
+      source_scope: null
+      target_scope: null
+    - source: RULE_REFERENTIEL_CURRENT_RETROGRADATION_VS_POSTMASTERY_REVOCATION
+      target: REF_CORE_LEARNIT_CONSTITUTION_V4_0_IN_REFERENTIEL
+      edge_type: depends_on
+      source_scope: null
+      target_scope: null
+    - source: RULE_REFERENTIEL_INTERLEAVING_CONTENT_REQUIRES_A
+      target: REF_CORE_LEARNIT_CONSTITUTION_V4_0_IN_REFERENTIEL
+      edge_type: depends_on
+      source_scope: null
+      target_scope: null
+    - source: RULE_REFERENTIEL_SECONDARY_RETROGRADATION_DEFERRED_REENTRY
+      target: TYPE_REFERENTIEL_GRAPH_PROPAGATION_OPERATIONAL_NOTE
+      edge_type: depends_on
+      source_scope: null
+      target_scope: null
+    - source: TYPE_REFERENTIEL_ADAPTIVE_REGIME_MATRIX
+      target: PARAM_REFERENTIEL_ADAPTIVE_REGIME_TARGET_STATES
+      edge_type: relations.target
+      source_scope: null
+      target_scope: null
+    - source: TYPE_REFERENTIEL_ADAPTIVE_REGIME_MATRIX
+      target: REF_CORE_LEARNIT_CONSTITUTION_V4_0_IN_REFERENTIEL
+      edge_type: depends_on
+      source_scope: null
+      target_scope: null
+    - source: TYPE_REFERENTIEL_AR_N3_CONFIGURATION
+      target: PARAM_REFERENTIEL_AR_N3_FREQUENCY_REFERENCE
+      edge_type: relations.target
+      source_scope: null
+      target_scope: null
+    sample_outgoing_edges: []
+    sample_incoming_edges:
+    - source: INV_REFERENTIEL_CONSTITUTIONAL_AND_LOGIC_NOT_MODIFIABLE_HERE
+      target: REF_CORE_LEARNIT_CONSTITUTION_V4_0_IN_REFERENTIEL
+      edge_type: depends_on
+      source_scope: null
+      target_scope: null
+    - source: RULE_REFERENTIEL_LOW_AR_CALIBRATION_TEMPORARILY_REWEIGHTS_SIGNALS
+      target: TYPE_REFERENTIEL_AR_N3_CONFIGURATION
+      edge_type: depends_on
+      source_scope: null
+      target_scope: null
+    - source: RULE_REFERENTIEL_OSCILLATION_EXIT_AND_ESCALATION
+      target: RULE_REFERENTIEL_ADAPTIVE_REGIME_CONFLICT_RESOLUTION
+      edge_type: depends_on
+      source_scope: null
+      target_scope: null
+    - source: RULE_REFERENTIEL_SYSTEMIC_INVESTIGATION_RUNTIME_BEHAVIOR
+      target: REF_CORE_LEARNIT_CONSTITUTION_V4_0_IN_REFERENTIEL
+      edge_type: depends_on
+      source_scope: null
+      target_scope: null
+    - source: TYPE_REFERENTIEL_AR_N2_CONFIGURATION
+      target: REF_CORE_LEARNIT_CONSTITUTION_V4_0_IN_REFERENTIEL
+      edge_type: depends_on
+      source_scope: null
+      target_scope: null
+    - source: TYPE_REFERENTIEL_AR_REFRACTORY_PARAMETER_BLOCK
+      target: REF_CORE_LEARNIT_CONSTITUTION_V4_0_IN_REFERENTIEL
+      edge_type: depends_on
+      source_scope: null
+      target_scope: null
+    - source: TYPE_REFERENTIEL_FEEDBACK_COVERAGE_METRIC
+      target: REF_CORE_LEARNIT_CONSTITUTION_V4_0_IN_REFERENTIEL
+      edge_type: depends_on
+      source_scope: null
+      target_scope: null
+    - source: TYPE_REFERENTIEL_PATCH_SCOPE_TABLE
+      target: REF_CORE_LEARNIT_CONSTITUTION_V4_0_IN_REFERENTIEL
+      edge_type: depends_on
+      source_scope: null
+      target_scope: null
+    - source: TYPE_REFERENTIEL_PATCH_TRIGGER_TABLE
+      target: REF_CORE_LEARNIT_CONSTITUTION_V4_0_IN_REFERENTIEL
+      edge_type: depends_on
+      source_scope: null
+      target_scope: null
+    - source: TYPE_REFERENTIEL_REFERENTIAL_PARAMETER_LAYER
+      target: REF_CORE_LEARNIT_CONSTITUTION_V4_0_IN_REFERENTIEL
+      edge_type: depends_on
+      source_scope: null
+      target_scope: null
+    sample_missing_target_edges: []
+    node_ids:
+    - INV_REFERENTIEL_GRAPH_ONE_HOP_NOT_MODIFIABLE_HERE
+    - INV_REFERENTIEL_PATCH_QUALITY_CHECKLIST_NOT_MODIFIABLE_HERE
+    - PARAM_REFERENTIEL_ADAPTIVE_REGIME_TARGET_STATES
+    - PARAM_REFERENTIEL_AR_N3_FREQUENCY_REFERENCE
+    - PARAM_REFERENTIEL_CALIBRATION_UNITS_MAX
+    - REF_CORE_LEARNIT_CONSTITUTION_V4_0_IN_REFERENTIEL
+    - RULE_REFERENTIEL_ADAPTIVE_REGIME_CONFLICT_RESOLUTION
+    - RULE_REFERENTIEL_CURRENT_RETROGRADATION_VS_POSTMASTERY_REVOCATION
+    - RULE_REFERENTIEL_INTERLEAVING_CONTENT_REQUIRES_A
+    - RULE_REFERENTIEL_SECONDARY_RETROGRADATION_DEFERRED_REENTRY
+    - TYPE_REFERENTIEL_ADAPTIVE_REGIME_MATRIX
+    - TYPE_REFERENTIEL_AR_N3_CONFIGURATION
+    - TYPE_REFERENTIEL_GRAPH_PROPAGATION_OPERATIONAL_NOTE
+    - TYPE_REFERENTIEL_KU_CALIBRATION_FORMAT_TABLE
+  - cluster_id: LABEL_CLUSTER_005
+    method: label_propagation
+    node_count: 12
+    owner_status: multi_owner_fragmented
+    boundary_pressure: medium
+    nodes_by_owner_scope:
+      deployment_governance: 1
+      mastery_evaluation: 11
+    nodes_by_core:
+      constitution: 12
+    nodes_by_section:
+      CONSTRAINTS: 1
+      EVENTS: 1
+      INVARIANTS: 3
+      RULES: 2
+      TYPES: 5
+    internal_edge_count: 23
+    outgoing_edge_count: 6
+    incoming_edge_count: 5
+    missing_target_edge_count: 0
+    candidate_neighbor_ids:
+    - ACTION_PLAN_SHORT_DIAGNOSTIC_TASK
+    - REF_CORE_LEARNIT_REFERENTIEL_V4_0_IN_CONSTITUTION
+    candidate_neighbor_scopes: *id005
+    inbound_source_ids:
+    - EVENT_MSC_DOWNGRADE
+    - EVENT_MSC_PERCEPTION_DIVERGENCE_DETECTED
+    - TYPE_BINDING_MSC_COMPONENTS_TO_REFERENTIEL_PARAMETERS
+    inbound_source_scopes:
+    - mastery_evaluation
+    recommendation: review_split_merge_or_bridge
+    sample_internal_edges:
+    - source: CONSTRAINT_NO_CHANGE_TO_AND_LOGIC
+      target: INV_MSC_AND_STRICT
+      edge_type: depends_on
+      source_scope: deployment_governance
+      target_scope: mastery_evaluation
+    - source: EVENT_T_EVALUATION_OVERDUE
+      target: RULE_T_EVALUATION_OVERDUE_REQUIRES_SIGNAL_OR_FOLLOWUP
+      edge_type: relations.target
+      source_scope: mastery_evaluation
+      target_scope: mastery_evaluation
+    - source: EVENT_T_EVALUATION_OVERDUE
+      target: TYPE_MASTERY_COMPONENT_T
+      edge_type: depends_on
+      source_scope: mastery_evaluation
+      target_scope: mastery_evaluation
+    - source: INV_MSC_AND_STRICT
+      target: TYPE_MASTERY_COMPONENT_A
+      edge_type: depends_on
+      source_scope: mastery_evaluation
+      target_scope: mastery_evaluation
+    - source: INV_MSC_AND_STRICT
+      target: TYPE_MASTERY_COMPONENT_P
+      edge_type: depends_on
+      source_scope: mastery_evaluation
+      target_scope: mastery_evaluation
+    - source: INV_MSC_AND_STRICT
+      target: TYPE_MASTERY_COMPONENT_R
+      edge_type: depends_on
+      source_scope: mastery_evaluation
+      target_scope: mastery_evaluation
+    - source: INV_MSC_AND_STRICT
+      target: TYPE_MASTERY_MODEL
+      edge_type: relations.target
+      source_scope: mastery_evaluation
+      target_scope: mastery_evaluation
+    - source: INV_REFERENTIEL_VALIDITY_REQUIRED_FOR_DELEGATED_THRESHOLD_EVALUATION
+      target: TYPE_MASTERY_MODEL
+      edge_type: relations.target
+      source_scope: mastery_evaluation
+      target_scope: mastery_evaluation
+    - source: INV_TRANSFER_SEPARATE_FROM_BASE_MASTERY
+      target: TYPE_MASTERY_COMPONENT_T
+      edge_type: depends_on
+      source_scope: mastery_evaluation
+      target_scope: mastery_evaluation
+    - source: INV_TRANSFER_SEPARATE_FROM_BASE_MASTERY
+      target: TYPE_MASTERY_MODEL
+      edge_type: relations.target
+      source_scope: mastery_evaluation
+      target_scope: mastery_evaluation
+    sample_outgoing_edges:
+    - source: INV_REFERENTIEL_VALIDITY_REQUIRED_FOR_DELEGATED_THRESHOLD_EVALUATION
+      target: REF_CORE_LEARNIT_REFERENTIEL_V4_0_IN_CONSTITUTION
+      edge_type: depends_on
+      source_scope: mastery_evaluation
+      target_scope: null
+    - source: RULE_T_EVALUATION_OVERDUE_REQUIRES_SIGNAL_OR_FOLLOWUP
+      target: ACTION_PLAN_SHORT_DIAGNOSTIC_TASK
+      edge_type: depends_on
+      source_scope: mastery_evaluation
+      target_scope: mastery_evaluation
+    - source: RULE_T_EVALUATION_OVERDUE_REQUIRES_SIGNAL_OR_FOLLOWUP
+      target: ACTION_PLAN_SHORT_DIAGNOSTIC_TASK
+      edge_type: relations.target
+      source_scope: mastery_evaluation
+      target_scope: mastery_evaluation
+    - source: TYPE_MASTERY_COMPONENT_A
+      target: REF_CORE_LEARNIT_REFERENTIEL_V4_0_IN_CONSTITUTION
+      edge_type: depends_on
+      source_scope: mastery_evaluation
+      target_scope: null
+    - source: TYPE_MASTERY_COMPONENT_P
+      target: REF_CORE_LEARNIT_REFERENTIEL_V4_0_IN_CONSTITUTION
+      edge_type: depends_on
+      source_scope: mastery_evaluation
+      target_scope: null
+    - source: TYPE_MASTERY_COMPONENT_R
+      target: REF_CORE_LEARNIT_REFERENTIEL_V4_0_IN_CONSTITUTION
+      edge_type: depends_on
+      source_scope: mastery_evaluation
+      target_scope: null
+    sample_incoming_edges:
+    - source: EVENT_MSC_DOWNGRADE
+      target: TYPE_MASTERY_MODEL
+      edge_type: depends_on
+      source_scope: mastery_evaluation
+      target_scope: mastery_evaluation
+    - source: EVENT_MSC_PERCEPTION_DIVERGENCE_DETECTED
+      target: TYPE_MASTERY_MODEL
+      edge_type: depends_on
+      source_scope: mastery_evaluation
+      target_scope: mastery_evaluation
+    - source: TYPE_BINDING_MSC_COMPONENTS_TO_REFERENTIEL_PARAMETERS
+      target: TYPE_MASTERY_COMPONENT_A
+      edge_type: relations.target
+      source_scope: null
+      target_scope: mastery_evaluation
+    - source: TYPE_BINDING_MSC_COMPONENTS_TO_REFERENTIEL_PARAMETERS
+      target: TYPE_MASTERY_COMPONENT_P
+      edge_type: relations.target
+      source_scope: null
+      target_scope: mastery_evaluation
+    - source: TYPE_BINDING_MSC_COMPONENTS_TO_REFERENTIEL_PARAMETERS
+      target: TYPE_MASTERY_COMPONENT_R
+      edge_type: relations.target
+      source_scope: null
+      target_scope: mastery_evaluation
+    sample_missing_target_edges: []
+    node_ids:
+    - CONSTRAINT_NO_CHANGE_TO_AND_LOGIC
+    - EVENT_T_EVALUATION_OVERDUE
+    - INV_MSC_AND_STRICT
+    - INV_REFERENTIEL_VALIDITY_REQUIRED_FOR_DELEGATED_THRESHOLD_EVALUATION
+    - INV_TRANSFER_SEPARATE_FROM_BASE_MASTERY
+    - RULE_MSC_COMPONENT_NON_CALCULABLE_DEFERS_BASE_MASTERY
+    - RULE_T_EVALUATION_OVERDUE_REQUIRES_SIGNAL_OR_FOLLOWUP
+    - TYPE_MASTERY_COMPONENT_A
+    - TYPE_MASTERY_COMPONENT_P
+    - TYPE_MASTERY_COMPONENT_R
+    - TYPE_MASTERY_COMPONENT_T
+    - TYPE_MASTERY_MODEL
+  - cluster_id: LABEL_CLUSTER_006
+    method: label_propagation
+    node_count: 11
+    owner_status: single_owner
+    boundary_pressure: medium
+    nodes_by_owner_scope:
+      learner_state: 11
+    nodes_by_core:
+      constitution: 11
+    nodes_by_section:
+      ACTIONS: 1
+      INVARIANTS: 2
+      PARAMETERS: 1
+      RULES: 3
+      TYPES: 4
+    internal_edge_count: 20
+    outgoing_edge_count: 4
+    incoming_edge_count: 6
+    missing_target_edge_count: 0
+    candidate_neighbor_ids:
+    - TYPE_SELF_REPORT_AR_N1
+    - TYPE_STATE_AXIS_ACTIVATION
+    candidate_neighbor_scopes: *id006
+    inbound_source_ids:
+    - EVENT_PERSISTENT_LOW_VC
+    - INV_DISTRESS_REGIME_PRIORITY_CANNOT_BE_OVERRIDDEN
+    - RULE_PERSISTENT_LOW_VC_TRIGGERS_RELEVANCE_PATCH
+    - TYPE_BINDING_AR_N3_CALIBRATION_TO_SIGNAL_REWEIGHTING
+    - TYPE_BINDING_LEARNER_STATE_SIGNAL_AUTHORITY_CHAIN
+    inbound_source_scopes:
+    - learner_state
+    - patch_lifecycle
+    recommendation: declare_or_review_neighbors
+    sample_internal_edges:
+    - source: INV_AR_N2_SHORT_FORM_REQUIRES_EXPLICIT_PRIORITY
+      target: TYPE_SELF_REPORT_AR_N2
+      edge_type: depends_on
+      source_scope: learner_state
+      target_scope: learner_state
+    - source: INV_AR_N2_SHORT_FORM_REQUIRES_EXPLICIT_PRIORITY
+      target: TYPE_SELF_REPORT_AR_N2
+      edge_type: relations.target
+      source_scope: learner_state
+      target_scope: learner_state
+    - source: INV_AR_N2_SHORT_FORM_REQUIRES_EXPLICIT_PRIORITY
+      target: TYPE_STATE_AXIS_VALUE_COST
+      edge_type: depends_on
+      source_scope: learner_state
+      target_scope: learner_state
+    - source: INV_VC_NOT_GENERAL_MOTIVATION_PROXY
+      target: TYPE_STATE_AXIS_VALUE_COST
+      edge_type: depends_on
+      source_scope: learner_state
+      target_scope: learner_state
+    - source: PARAM_AR_N2_INTERACTION_BUDGET
+      target: TYPE_SELF_REPORT_AR_N2
+      edge_type: relations.target
+      source_scope: learner_state
+      target_scope: learner_state
+    - source: RULE_LEARNER_STATE_AXIS_UNKNOWN_ALLOWED
+      target: TYPE_LEARNER_STATE_MODEL
+      edge_type: depends_on
+      source_scope: learner_state
+      target_scope: learner_state
+    - source: RULE_LEARNER_STATE_AXIS_UNKNOWN_ALLOWED
+      target: TYPE_LEARNER_STATE_MODEL
+      edge_type: relations.target
+      source_scope: learner_state
+      target_scope: learner_state
+    - source: RULE_LEARNER_STATE_AXIS_UNKNOWN_ALLOWED
+      target: TYPE_SELF_REPORT_AR_N2
+      edge_type: depends_on
+      source_scope: learner_state
+      target_scope: learner_state
+    - source: RULE_LEARNER_STATE_AXIS_UNKNOWN_ALLOWED
+      target: TYPE_STATE_AXIS_VALUE_COST
+      edge_type: depends_on
+      source_scope: learner_state
+      target_scope: learner_state
+    - source: RULE_MULTI_AXIS_UNKNOWN_OR_UNOBSERVABLE_SAFE_ENTRY
+      target: ACTION_APPLY_LIGHT_REVERSIBLE_SCAFFOLDING
+      edge_type: relations.target
+      source_scope: learner_state
+      target_scope: learner_state
+    sample_outgoing_edges:
+    - source: RULE_LEARNER_STATE_AXIS_UNKNOWN_ALLOWED
+      target: TYPE_SELF_REPORT_AR_N1
+      edge_type: depends_on
+      source_scope: learner_state
+      target_scope: learner_state
+    - source: RULE_LEARNER_STATE_AXIS_UNKNOWN_ALLOWED
+      target: TYPE_STATE_AXIS_ACTIVATION
+      edge_type: depends_on
+      source_scope: learner_state
+      target_scope: learner_state
+    - source: RULE_MULTI_AXIS_UNKNOWN_OR_UNOBSERVABLE_SAFE_ENTRY
+      target: TYPE_STATE_AXIS_ACTIVATION
+      edge_type: depends_on
+      source_scope: learner_state
+      target_scope: learner_state
+    - source: TYPE_LEARNER_STATE_MODEL
+      target: TYPE_STATE_AXIS_ACTIVATION
+      edge_type: depends_on
+      source_scope: learner_state
+      target_scope: learner_state
+    sample_incoming_edges:
+    - source: EVENT_PERSISTENT_LOW_VC
+      target: TYPE_STATE_AXIS_VALUE_COST
+      edge_type: depends_on
+      source_scope: patch_lifecycle
+      target_scope: learner_state
+    - source: INV_DISTRESS_REGIME_PRIORITY_CANNOT_BE_OVERRIDDEN
+      target: TYPE_LEARNER_STATE_MODEL
+      edge_type: relations.target
+      source_scope: learner_state
+      target_scope: learner_state
+    - source: RULE_PERSISTENT_LOW_VC_TRIGGERS_RELEVANCE_PATCH
+      target: TYPE_STATE_AXIS_VALUE_COST
+      edge_type: depends_on
+      source_scope: patch_lifecycle
+      target_scope: learner_state
+    - source: TYPE_BINDING_AR_N3_CALIBRATION_TO_SIGNAL_REWEIGHTING
+      target: TYPE_STATE_AXIS_CALIBRATION
+      edge_type: relations.target
+      source_scope: null
+      target_scope: learner_state
+    - source: TYPE_BINDING_LEARNER_STATE_SIGNAL_AUTHORITY_CHAIN
+      target: TYPE_SELF_REPORT_AR_N2
+      edge_type: relations.target
+      source_scope: null
+      target_scope: learner_state
+    - source: TYPE_BINDING_LEARNER_STATE_SIGNAL_AUTHORITY_CHAIN
+      target: TYPE_STATE_AXIS_VALUE_COST
+      edge_type: relations.target
+      source_scope: null
+      target_scope: learner_state
+    sample_missing_target_edges: []
+    node_ids:
+    - ACTION_APPLY_LIGHT_REVERSIBLE_SCAFFOLDING
+    - INV_AR_N2_SHORT_FORM_REQUIRES_EXPLICIT_PRIORITY
+    - INV_VC_NOT_GENERAL_MOTIVATION_PROXY
+    - PARAM_AR_N2_INTERACTION_BUDGET
+    - RULE_LEARNER_STATE_AXIS_UNKNOWN_ALLOWED
+    - RULE_MULTI_AXIS_UNKNOWN_OR_UNOBSERVABLE_SAFE_ENTRY
+    - RULE_SESSION_INTENTION_NON_BLOCKING
+    - TYPE_LEARNER_STATE_MODEL
+    - TYPE_SELF_REPORT_AR_N2
+    - TYPE_STATE_AXIS_CALIBRATION
+    - TYPE_STATE_AXIS_VALUE_COST
+  - cluster_id: LABEL_CLUSTER_007
+    method: label_propagation
+    node_count: 10
+    owner_status: single_owner
+    boundary_pressure: medium
+    nodes_by_owner_scope:
+      knowledge_and_design: 10
+    nodes_by_core:
+      constitution: 10
+    nodes_by_section:
+      ACTIONS: 1
+      EVENTS: 1
+      INVARIANTS: 4
+      RULES: 2
+      TYPES: 2
+    internal_edge_count: 16
+    outgoing_edge_count: 1
+    incoming_edge_count: 5
+    missing_target_edge_count: 0
+    candidate_neighbor_ids:
+    - TYPE_KNOWLEDGE_GRAPH
+    candidate_neighbor_scopes: *id007
+    inbound_source_ids:
+    - INV_KNOWLEDGE_GRAPH_MUST_BE_ACYCLIC
+    - INV_NO_RUNTIME_CONTENT_GENERATION
+    - TYPE_BINDING_FEEDBACK_COVERAGE_TO_REFERENTIEL_THRESHOLD
+    - TYPE_KNOWLEDGE_GRAPH
+    inbound_source_scopes:
+    - deployment_governance
+    - knowledge_and_design
+    recommendation: declare_or_review_neighbors
+    sample_internal_edges:
+    - source: EVENT_UNCOVERED_ERROR
+      target: RULE_UNCOVERED_ERROR_GENERIC_FEEDBACK
+      edge_type: relations.target
+      source_scope: knowledge_and_design
+      target_scope: knowledge_and_design
+    - source: EVENT_UNCOVERED_ERROR
+      target: TYPE_FEEDBACK_COVERAGE_MATRIX
+      edge_type: depends_on
+      source_scope: knowledge_and_design
+      target_scope: knowledge_and_design
+    - source: INV_CREATIVE_KU_AUTONOMY_REQUIRES_DETERMINISTIC_FEEDBACK_PATH
+      target: TYPE_FEEDBACK_COVERAGE_MATRIX
+      edge_type: depends_on
+      source_scope: knowledge_and_design
+      target_scope: knowledge_and_design
+    - source: INV_CREATIVE_KU_AUTONOMY_REQUIRES_DETERMINISTIC_FEEDBACK_PATH
+      target: TYPE_KNOWLEDGE_UNIT
+      edge_type: depends_on
+      source_scope: knowledge_and_design
+      target_scope: knowledge_and_design
+    - source: INV_KU_TYPING_REQUIRED
+      target: TYPE_KNOWLEDGE_UNIT
+      edge_type: depends_on
+      source_scope: knowledge_and_design
+      target_scope: knowledge_and_design
+    - source: INV_MISSING_KU_TYPE_FORCES_SAFE_FALLBACK
+      target: INV_KU_TYPING_REQUIRED
+      edge_type: depends_on
+      source_scope: knowledge_and_design
+      target_scope: knowledge_and_design
+    - source: INV_MISSING_KU_TYPE_FORCES_SAFE_FALLBACK
+      target: TYPE_KNOWLEDGE_UNIT
+      edge_type: depends_on
+      source_scope: knowledge_and_design
+      target_scope: knowledge_and_design
+    - source: INV_MISSING_KU_TYPE_FORCES_SAFE_FALLBACK
+      target: TYPE_KNOWLEDGE_UNIT
+      edge_type: relations.target
+      source_scope: knowledge_and_design
+      target_scope: knowledge_and_design
+    - source: INV_NO_TEXT_ONLY_FOR_PROCEDURAL_OR_PERCEPTUAL
+      target: TYPE_KNOWLEDGE_UNIT
+      edge_type: depends_on
+      source_scope: knowledge_and_design
+      target_scope: knowledge_and_design
+    - source: RULE_MISCONCEPTION_REQUIRES_COGNITIVE_CONFLICT
+      target: ACTION_PLAN_COGNITIVE_CONFLICT_MISSION
+      edge_type: relations.target
+      source_scope: knowledge_and_design
+      target_scope: knowledge_and_design
+    sample_outgoing_edges:
+    - source: TYPE_KNOWLEDGE_UNIT
+      target: TYPE_KNOWLEDGE_GRAPH
+      edge_type: relations.target
+      source_scope: knowledge_and_design
+      target_scope: knowledge_and_design
+    sample_incoming_edges:
+    - source: INV_KNOWLEDGE_GRAPH_MUST_BE_ACYCLIC
+      target: TYPE_KNOWLEDGE_UNIT
+      edge_type: depends_on
+      source_scope: knowledge_and_design
+      target_scope: knowledge_and_design
+    - source: INV_NO_RUNTIME_CONTENT_GENERATION
+      target: TYPE_FEEDBACK_COVERAGE_MATRIX
+      edge_type: relations.target
+      source_scope: deployment_governance
+      target_scope: knowledge_and_design
+    - source: TYPE_BINDING_FEEDBACK_COVERAGE_TO_REFERENTIEL_THRESHOLD
+      target: RULE_UNCOVERED_ERROR_GENERIC_FEEDBACK
+      edge_type: relations.target
+      source_scope: null
+      target_scope: knowledge_and_design
+    - source: TYPE_BINDING_FEEDBACK_COVERAGE_TO_REFERENTIEL_THRESHOLD
+      target: TYPE_FEEDBACK_COVERAGE_MATRIX
+      edge_type: relations.target
+      source_scope: null
+      target_scope: knowledge_and_design
+    - source: TYPE_KNOWLEDGE_GRAPH
+      target: TYPE_KNOWLEDGE_UNIT
+      edge_type: depends_on
+      source_scope: knowledge_and_design
+      target_scope: knowledge_and_design
+    sample_missing_target_edges: []
+    node_ids:
+    - ACTION_PLAN_COGNITIVE_CONFLICT_MISSION
+    - EVENT_UNCOVERED_ERROR
+    - INV_CREATIVE_KU_AUTONOMY_REQUIRES_DETERMINISTIC_FEEDBACK_PATH
+    - INV_KU_TYPING_REQUIRED
+    - INV_MISSING_KU_TYPE_FORCES_SAFE_FALLBACK
+    - INV_NO_TEXT_ONLY_FOR_PROCEDURAL_OR_PERCEPTUAL
+    - RULE_MISCONCEPTION_REQUIRES_COGNITIVE_CONFLICT
+    - RULE_UNCOVERED_ERROR_GENERIC_FEEDBACK
+    - TYPE_FEEDBACK_COVERAGE_MATRIX
+    - TYPE_KNOWLEDGE_UNIT
+  - cluster_id: LABEL_CLUSTER_008
+    method: label_propagation
+    node_count: 9
+    owner_status: multi_owner_fragmented
+    boundary_pressure: medium
+    nodes_by_owner_scope:
+      deployment_governance: 1
+      knowledge_and_design: 4
+      mastery_evaluation: 4
+    nodes_by_core:
+      constitution: 9
+    nodes_by_section:
+      CONSTRAINTS: 1
+      EVENTS: 1
+      INVARIANTS: 4
+      RULES: 2
+      TYPES: 1
+    internal_edge_count: 13
+    outgoing_edge_count: 5
+    incoming_edge_count: 1
+    missing_target_edge_count: 0
+    candidate_neighbor_ids:
+    - ACTION_PLAN_SHORT_DIAGNOSTIC_TASK
+    - TYPE_HUMAN_CHECKPOINT
+    - TYPE_KNOWLEDGE_UNIT
+    - TYPE_MASTERY_MODEL
+    candidate_neighbor_scopes: *id008
+    inbound_source_ids:
+    - TYPE_KNOWLEDGE_UNIT
+    inbound_source_scopes:
+    - knowledge_and_design
+    recommendation: review_split_merge_or_bridge
+    sample_internal_edges:
+    - source: CONSTRAINT_NO_CHANGE_TO_GRAPH_PROPAGATION_RULE
+      target: INV_GRAPH_PROPAGATION_ONE_HOP
+      edge_type: depends_on
+      source_scope: deployment_governance
+      target_scope: mastery_evaluation
+    - source: EVENT_MSC_DOWNGRADE
+      target: RULE_MSC_DOWNGRADE_MARKS_DEPENDENTS
+      edge_type: relations.target
+      source_scope: mastery_evaluation
+      target_scope: mastery_evaluation
+    - source: INV_EXPLICIT_DEPENDENCY_EDGES_REQUIRED
+      target: TYPE_KNOWLEDGE_GRAPH
+      edge_type: depends_on
+      source_scope: knowledge_and_design
+      target_scope: knowledge_and_design
+    - source: INV_GRAPH_PROPAGATION_ONE_HOP
+      target: TYPE_KNOWLEDGE_GRAPH
+      edge_type: depends_on
+      source_scope: mastery_evaluation
+      target_scope: knowledge_and_design
+    - source: INV_KNOWLEDGE_GRAPH_MUST_BE_ACYCLIC
+      target: TYPE_KNOWLEDGE_GRAPH
+      edge_type: depends_on
+      source_scope: knowledge_and_design
+      target_scope: knowledge_and_design
+    - source: INV_KNOWLEDGE_GRAPH_MUST_BE_ACYCLIC
+      target: TYPE_KNOWLEDGE_GRAPH
+      edge_type: relations.target
+      source_scope: knowledge_and_design
+      target_scope: knowledge_and_design
+    - source: INV_SECONDARY_RETROGRADATION_IS_NEW_EVENT
+      target: INV_GRAPH_PROPAGATION_ONE_HOP
+      edge_type: depends_on
+      source_scope: mastery_evaluation
+      target_scope: mastery_evaluation
+    - source: INV_SECONDARY_RETROGRADATION_IS_NEW_EVENT
+      target: INV_GRAPH_PROPAGATION_ONE_HOP
+      edge_type: relations.target
+      source_scope: mastery_evaluation
+      target_scope: mastery_evaluation
+    - source: INV_SECONDARY_RETROGRADATION_IS_NEW_EVENT
+      target: TYPE_KNOWLEDGE_GRAPH
+      edge_type: depends_on
+      source_scope: mastery_evaluation
+      target_scope: knowledge_and_design
+    - source: RULE_MSC_DOWNGRADE_MARKS_DEPENDENTS
+      target: INV_EXPLICIT_DEPENDENCY_EDGES_REQUIRED
+      edge_type: depends_on
+      source_scope: mastery_evaluation
+      target_scope: knowledge_and_design
+    sample_outgoing_edges:
+    - source: EVENT_MSC_DOWNGRADE
+      target: TYPE_MASTERY_MODEL
+      edge_type: depends_on
+      source_scope: mastery_evaluation
+      target_scope: mastery_evaluation
+    - source: INV_KNOWLEDGE_GRAPH_MUST_BE_ACYCLIC
+      target: TYPE_KNOWLEDGE_UNIT
+      edge_type: depends_on
+      source_scope: knowledge_and_design
+      target_scope: knowledge_and_design
+    - source: RULE_MSC_DOWNGRADE_MARKS_DEPENDENTS
+      target: ACTION_PLAN_SHORT_DIAGNOSTIC_TASK
+      edge_type: relations.target
+      source_scope: mastery_evaluation
+      target_scope: mastery_evaluation
+    - source: TYPE_KNOWLEDGE_GRAPH
+      target: TYPE_HUMAN_CHECKPOINT
+      edge_type: relations.target
+      source_scope: knowledge_and_design
+      target_scope: deployment_governance
+    - source: TYPE_KNOWLEDGE_GRAPH
+      target: TYPE_KNOWLEDGE_UNIT
+      edge_type: depends_on
+      source_scope: knowledge_and_design
+      target_scope: knowledge_and_design
+    sample_incoming_edges:
+    - source: TYPE_KNOWLEDGE_UNIT
+      target: TYPE_KNOWLEDGE_GRAPH
+      edge_type: relations.target
+      source_scope: knowledge_and_design
+      target_scope: knowledge_and_design
+    sample_missing_target_edges: []
+    node_ids:
+    - CONSTRAINT_NO_CHANGE_TO_GRAPH_PROPAGATION_RULE
+    - EVENT_MSC_DOWNGRADE
+    - INV_EXPLICIT_DEPENDENCY_EDGES_REQUIRED
+    - INV_GRAPH_PROPAGATION_ONE_HOP
+    - INV_KNOWLEDGE_GRAPH_MUST_BE_ACYCLIC
+    - INV_SECONDARY_RETROGRADATION_IS_NEW_EVENT
+    - RULE_MSC_DOWNGRADE_MARKS_DEPENDENTS
+    - RULE_NON_EXAM_CONCEPT_KEPT_IN_GRAPH
+    - TYPE_KNOWLEDGE_GRAPH
+  - cluster_id: LABEL_CLUSTER_009
+    method: label_propagation
+    node_count: 8
+    owner_status: single_owner_plus_unowned
+    boundary_pressure: medium
+    nodes_by_owner_scope:
+      UNOWNED: 5
+      mastery_evaluation: 3
+    nodes_by_core:
+      constitution: 3
+      link: 1
+      referentiel: 4
+    nodes_by_section:
+      EVENTS: 2
+      PARAMETERS: 3
+      RULES: 2
+      TYPES: 1
+    internal_edge_count: 12
+    outgoing_edge_count: 7
+    incoming_edge_count: 1
+    missing_target_edge_count: 0
+    candidate_neighbor_ids:
+    - ACTION_ESCALATE_PERSISTENT_DRIFT_OFFSESSION
+    - LINK_REF_CORE_LEARNIT_CONSTITUTION_V4_0
+    - REF_CORE_LEARNIT_CONSTITUTION_V4_0_IN_REFERENTIEL
+    - REF_CORE_LEARNIT_REFERENTIEL_V4_0_IN_CONSTITUTION
+    candidate_neighbor_scopes: *id009
+    inbound_source_ids:
+    - RULE_REFERENTIEL_ESCALATION_PRIORITY_ORDER
+    inbound_source_scopes: []
+    recommendation: declare_or_review_neighbors
+    sample_internal_edges:
+    - source: EVENT_SYSTEMIC_INVESTIGATION_AUTO_OPENED
+      target: RULE_SYSTEMIC_INVESTIGATION_OPEN_CLOSE_WINDOW
+      edge_type: relations.target
+      source_scope: mastery_evaluation
+      target_scope: mastery_evaluation
+    - source: EVENT_SYSTEMIC_INVESTIGATION_CLOSED
+      target: EVENT_SYSTEMIC_INVESTIGATION_AUTO_OPENED
+      edge_type: depends_on
+      source_scope: mastery_evaluation
+      target_scope: mastery_evaluation
+    - source: PARAM_REFERENTIEL_SYSTEMIC_INVESTIGATION_SESSION_THRESHOLD
+      target: PARAM_REFERENTIEL_SYSTEMIC_INVESTIGATION_TRIGGER_CONDITIONS
+      edge_type: depends_on
+      source_scope: null
+      target_scope: null
+    - source: RULE_SYSTEMIC_INVESTIGATION_OPEN_CLOSE_WINDOW
+      target: EVENT_SYSTEMIC_INVESTIGATION_AUTO_OPENED
+      edge_type: depends_on
+      source_scope: mastery_evaluation
+      target_scope: mastery_evaluation
+    - source: RULE_SYSTEMIC_INVESTIGATION_OPEN_CLOSE_WINDOW
+      target: EVENT_SYSTEMIC_INVESTIGATION_CLOSED
+      edge_type: depends_on
+      source_scope: mastery_evaluation
+      target_scope: mastery_evaluation
+    - source: TYPE_BINDING_SYSTEMIC_INVESTIGATION_CHAIN
+      target: EVENT_SYSTEMIC_INVESTIGATION_AUTO_OPENED
+      edge_type: relations.target
+      source_scope: null
+      target_scope: mastery_evaluation
+    - source: TYPE_BINDING_SYSTEMIC_INVESTIGATION_CHAIN
+      target: EVENT_SYSTEMIC_INVESTIGATION_CLOSED
+      edge_type: relations.target
+      source_scope: null
+      target_scope: mastery_evaluation
+    - source: TYPE_BINDING_SYSTEMIC_INVESTIGATION_CHAIN
+      target: PARAM_REFERENTIEL_SYSTEMIC_INVESTIGATION_MAX_WINDOW_SESSIONS
+      edge_type: relations.target
+      source_scope: null
+      target_scope: null
+    - source: TYPE_BINDING_SYSTEMIC_INVESTIGATION_CHAIN
+      target: PARAM_REFERENTIEL_SYSTEMIC_INVESTIGATION_SESSION_THRESHOLD
+      edge_type: relations.target
+      source_scope: null
+      target_scope: null
+    - source: TYPE_BINDING_SYSTEMIC_INVESTIGATION_CHAIN
+      target: PARAM_REFERENTIEL_SYSTEMIC_INVESTIGATION_TRIGGER_CONDITIONS
+      edge_type: relations.target
+      source_scope: null
+      target_scope: null
+    sample_outgoing_edges:
+    - source: EVENT_SYSTEMIC_INVESTIGATION_AUTO_OPENED
+      target: REF_CORE_LEARNIT_REFERENTIEL_V4_0_IN_CONSTITUTION
+      edge_type: depends_on
+      source_scope: mastery_evaluation
+      target_scope: null
+    - source: RULE_REFERENTIEL_SYSTEMIC_INVESTIGATION_RUNTIME_BEHAVIOR
+      target: REF_CORE_LEARNIT_CONSTITUTION_V4_0_IN_REFERENTIEL
+      edge_type: depends_on
+      source_scope: null
+      target_scope: null
+    - source: RULE_SYSTEMIC_INVESTIGATION_OPEN_CLOSE_WINDOW
+      target: ACTION_ESCALATE_PERSISTENT_DRIFT_OFFSESSION
+      edge_type: depends_on
+      source_scope: mastery_evaluation
+      target_scope: patch_lifecycle
+    - source: RULE_SYSTEMIC_INVESTIGATION_OPEN_CLOSE_WINDOW
+      target: ACTION_ESCALATE_PERSISTENT_DRIFT_OFFSESSION
+      edge_type: relations.target
+      source_scope: mastery_evaluation
+      target_scope: patch_lifecycle
+    - source: RULE_SYSTEMIC_INVESTIGATION_OPEN_CLOSE_WINDOW
+      target: REF_CORE_LEARNIT_REFERENTIEL_V4_0_IN_CONSTITUTION
+      edge_type: depends_on
+      source_scope: mastery_evaluation
+      target_scope: null
+    - source: TYPE_BINDING_SYSTEMIC_INVESTIGATION_CHAIN
+      target: LINK_REF_CORE_LEARNIT_CONSTITUTION_V4_0
+      edge_type: depends_on
+      source_scope: null
+      target_scope: null
+    - source: TYPE_BINDING_SYSTEMIC_INVESTIGATION_CHAIN
+      target: LINK_REF_CORE_LEARNIT_CONSTITUTION_V4_0
+      edge_type: relations.target.core_ref
+      source_scope: null
+      target_scope: null
+    sample_incoming_edges:
+    - source: RULE_REFERENTIEL_ESCALATION_PRIORITY_ORDER
+      target: PARAM_REFERENTIEL_SYSTEMIC_INVESTIGATION_SESSION_THRESHOLD
+      edge_type: depends_on
+      source_scope: null
+      target_scope: null
+    sample_missing_target_edges: []
+    node_ids:
+    - EVENT_SYSTEMIC_INVESTIGATION_AUTO_OPENED
+    - EVENT_SYSTEMIC_INVESTIGATION_CLOSED
+    - PARAM_REFERENTIEL_SYSTEMIC_INVESTIGATION_MAX_WINDOW_SESSIONS
+    - PARAM_REFERENTIEL_SYSTEMIC_INVESTIGATION_SESSION_THRESHOLD
+    - PARAM_REFERENTIEL_SYSTEMIC_INVESTIGATION_TRIGGER_CONDITIONS
+    - RULE_REFERENTIEL_SYSTEMIC_INVESTIGATION_RUNTIME_BEHAVIOR
+    - RULE_SYSTEMIC_INVESTIGATION_OPEN_CLOSE_WINDOW
+    - TYPE_BINDING_SYSTEMIC_INVESTIGATION_CHAIN
+  - cluster_id: LABEL_CLUSTER_010
+    method: label_propagation
+    node_count: 7
+    owner_status: fully_unowned
+    boundary_pressure: medium
+    nodes_by_owner_scope:
+      UNOWNED: 7
+    nodes_by_core:
+      referentiel: 7
+    nodes_by_section:
+      ACTIONS: 1
+      CONSTRAINTS: 2
+      EVENTS: 1
+      PARAMETERS: 1
+      RULES: 1
+      TYPES: 1
+    internal_edge_count: 8
+    outgoing_edge_count: 1
+    incoming_edge_count: 4
+    missing_target_edge_count: 0
+    candidate_neighbor_ids:
+    - REF_CORE_LEARNIT_CONSTITUTION_V4_0_IN_REFERENTIEL
+    candidate_neighbor_scopes: *id010
+    inbound_source_ids:
+    - CONSTRAINT_REFERENTIEL_LOCAL_VERIFICATION_REQUIRED_BEFORE_PATCH_APPLY
+    - TYPE_BINDING_PATCH_TRIGGER_GOVERNANCE_CHAIN
+    - TYPE_REFERENTIEL_VC_PARAMETER_BLOCK
+    inbound_source_scopes: []
+    recommendation: classify_unowned_core_area
+    sample_internal_edges:
+    - source: ACTION_REFERENTIEL_TRIGGER_RELEVANCE_PATCH
+      target: EVENT_REFERENTIEL_VC_PERSISTENT_LOW_DETECTED
+      edge_type: depends_on
+      source_scope: null
+      target_scope: null
+    - source: CONSTRAINT_REFERENTIEL_DOUBLE_BUFFER_REQUIRED_FOR_PATCH
+      target: ACTION_REFERENTIEL_TRIGGER_RELEVANCE_PATCH
+      edge_type: relations.target
+      source_scope: null
+      target_scope: null
+    - source: CONSTRAINT_REFERENTIEL_DOUBLE_BUFFER_REQUIRED_FOR_PATCH
+      target: TYPE_REFERENTIEL_PATCH_SCOPE_TABLE
+      edge_type: depends_on
+      source_scope: null
+      target_scope: null
+    - source: CONSTRAINT_REFERENTIEL_PATCH_SCOPE_MUST_REMAIN_CONSTITUTIONALLY_BOUNDED
+      target: TYPE_REFERENTIEL_PATCH_SCOPE_TABLE
+      edge_type: depends_on
+      source_scope: null
+      target_scope: null
+    - source: EVENT_REFERENTIEL_VC_PERSISTENT_LOW_DETECTED
+      target: PARAM_REFERENTIEL_VC_LOW_PERSISTENCE_SESSIONS_REFERENCE
+      edge_type: depends_on
+      source_scope: null
+      target_scope: null
+    - source: RULE_REFERENTIEL_VC_PERSISTENCE_TRIGGERS_RELEVANCE_PATCH
+      target: EVENT_REFERENTIEL_VC_PERSISTENT_LOW_DETECTED
+      edge_type: relations.target
+      source_scope: null
+      target_scope: null
+    - source: RULE_REFERENTIEL_VC_PERSISTENCE_TRIGGERS_RELEVANCE_PATCH
+      target: PARAM_REFERENTIEL_VC_LOW_PERSISTENCE_SESSIONS_REFERENCE
+      edge_type: depends_on
+      source_scope: null
+      target_scope: null
+    - source: TYPE_REFERENTIEL_PATCH_SCOPE_TABLE
+      target: CONSTRAINT_REFERENTIEL_PATCH_SCOPE_MUST_REMAIN_CONSTITUTIONALLY_BOUNDED
+      edge_type: relations.target
+      source_scope: null
+      target_scope: null
+    sample_outgoing_edges:
+    - source: TYPE_REFERENTIEL_PATCH_SCOPE_TABLE
+      target: REF_CORE_LEARNIT_CONSTITUTION_V4_0_IN_REFERENTIEL
+      edge_type: depends_on
+      source_scope: null
+      target_scope: null
+    sample_incoming_edges:
+    - source: CONSTRAINT_REFERENTIEL_LOCAL_VERIFICATION_REQUIRED_BEFORE_PATCH_APPLY
+      target: TYPE_REFERENTIEL_PATCH_SCOPE_TABLE
+      edge_type: depends_on
+      source_scope: null
+      target_scope: null
+    - source: TYPE_BINDING_PATCH_TRIGGER_GOVERNANCE_CHAIN
+      target: ACTION_REFERENTIEL_TRIGGER_RELEVANCE_PATCH
+      edge_type: relations.target
+      source_scope: null
+      target_scope: null
+    - source: TYPE_BINDING_PATCH_TRIGGER_GOVERNANCE_CHAIN
+      target: CONSTRAINT_REFERENTIEL_PATCH_SCOPE_MUST_REMAIN_CONSTITUTIONALLY_BOUNDED
+      edge_type: relations.target
+      source_scope: null
+      target_scope: null
+    - source: TYPE_REFERENTIEL_VC_PARAMETER_BLOCK
+      target: PARAM_REFERENTIEL_VC_LOW_PERSISTENCE_SESSIONS_REFERENCE
+      edge_type: relations.target
+      source_scope: null
+      target_scope: null
+    sample_missing_target_edges: []
+    node_ids:
+    - ACTION_REFERENTIEL_TRIGGER_RELEVANCE_PATCH
+    - CONSTRAINT_REFERENTIEL_DOUBLE_BUFFER_REQUIRED_FOR_PATCH
+    - CONSTRAINT_REFERENTIEL_PATCH_SCOPE_MUST_REMAIN_CONSTITUTIONALLY_BOUNDED
+    - EVENT_REFERENTIEL_VC_PERSISTENT_LOW_DETECTED
+    - PARAM_REFERENTIEL_VC_LOW_PERSISTENCE_SESSIONS_REFERENCE
+    - RULE_REFERENTIEL_VC_PERSISTENCE_TRIGGERS_RELEVANCE_PATCH
+    - TYPE_REFERENTIEL_PATCH_SCOPE_TABLE
+  - cluster_id: LABEL_CLUSTER_011
+    method: label_propagation
+    node_count: 6
+    owner_status: fully_unowned
+    boundary_pressure: low
+    nodes_by_owner_scope:
+      UNOWNED: 6
+    nodes_by_core:
+      referentiel: 6
+    nodes_by_section:
+      ACTIONS: 1
+      CONSTRAINTS: 1
+      EVENTS: 1
+      PARAMETERS: 1
+      RULES: 1
+      TYPES: 1
+    internal_edge_count: 6
+    outgoing_edge_count: 1
+    incoming_edge_count: 0
+    missing_target_edge_count: 0
+    candidate_neighbor_ids:
+    - REF_CORE_LEARNIT_CONSTITUTION_V4_0_IN_REFERENTIEL
+    candidate_neighbor_scopes: *id011
+    inbound_source_ids: []
+    inbound_source_scopes: []
+    recommendation: classify_unowned_core_area
+    sample_internal_edges:
+    - source: ACTION_REFERENTIEL_TRIGGER_AR_SOLLICITATION_PATCH
+      target: EVENT_REFERENTIEL_AR_REFRACTORY_PROFILE_DETECTED
+      edge_type: depends_on
+      source_scope: null
+      target_scope: null
+    - source: CONSTRAINT_REFERENTIEL_AR_REFRACTORY_NOT_PENALIZED
+      target: TYPE_REFERENTIEL_AR_REFRACTORY_PARAMETER_BLOCK
+      edge_type: depends_on
+      source_scope: null
+      target_scope: null
+    - source: EVENT_REFERENTIEL_AR_REFRACTORY_PROFILE_DETECTED
+      target: PARAM_REFERENTIEL_AR_REFRACTORY_SESSIONS_REFERENCE
+      edge_type: depends_on
+      source_scope: null
+      target_scope: null
+    - source: RULE_REFERENTIEL_AR_REFRACTORY_DETECTION
+      target: EVENT_REFERENTIEL_AR_REFRACTORY_PROFILE_DETECTED
+      edge_type: relations.target
+      source_scope: null
+      target_scope: null
+    - source: RULE_REFERENTIEL_AR_REFRACTORY_DETECTION
+      target: PARAM_REFERENTIEL_AR_REFRACTORY_SESSIONS_REFERENCE
+      edge_type: depends_on
+      source_scope: null
+      target_scope: null
+    - source: TYPE_REFERENTIEL_AR_REFRACTORY_PARAMETER_BLOCK
+      target: PARAM_REFERENTIEL_AR_REFRACTORY_SESSIONS_REFERENCE
+      edge_type: relations.target
+      source_scope: null
+      target_scope: null
+    sample_outgoing_edges:
+    - source: TYPE_REFERENTIEL_AR_REFRACTORY_PARAMETER_BLOCK
+      target: REF_CORE_LEARNIT_CONSTITUTION_V4_0_IN_REFERENTIEL
+      edge_type: depends_on
+      source_scope: null
+      target_scope: null
+    sample_incoming_edges: []
+    sample_missing_target_edges: []
+    node_ids:
+    - ACTION_REFERENTIEL_TRIGGER_AR_SOLLICITATION_PATCH
+    - CONSTRAINT_REFERENTIEL_AR_REFRACTORY_NOT_PENALIZED
+    - EVENT_REFERENTIEL_AR_REFRACTORY_PROFILE_DETECTED
+    - PARAM_REFERENTIEL_AR_REFRACTORY_SESSIONS_REFERENCE
+    - RULE_REFERENTIEL_AR_REFRACTORY_DETECTION
+    - TYPE_REFERENTIEL_AR_REFRACTORY_PARAMETER_BLOCK
+  - cluster_id: LABEL_CLUSTER_012
+    method: label_propagation
+    node_count: 6
+    owner_status: multi_owner_fragmented
+    boundary_pressure: low
+    nodes_by_owner_scope:
+      deployment_governance: 1
+      mastery_evaluation: 5
+    nodes_by_core:
+      constitution: 6
+    nodes_by_section:
+      CONSTRAINTS: 1
+      EVENTS: 1
+      RULES: 1
+      TYPES: 3
+    internal_edge_count: 8
+    outgoing_edge_count: 0
+    incoming_edge_count: 0
+    missing_target_edge_count: 0
+    candidate_neighbor_ids: []
+    candidate_neighbor_scopes: *id012
+    inbound_source_ids: []
+    inbound_source_scopes: []
+    recommendation: review_split_merge_or_bridge
+    sample_internal_edges:
+    - source: CONSTRAINT_NO_BIOMETRICS_OR_OFFSESSION_SURVEILLANCE
+      target: TYPE_INTEGRITY_MODES
+      edge_type: depends_on
+      source_scope: mastery_evaluation
+      target_scope: deployment_governance
+    - source: CONSTRAINT_NO_BIOMETRICS_OR_OFFSESSION_SURVEILLANCE
+      target: TYPE_SESSION_INTEGRITY_SCORE
+      edge_type: relations.target
+      source_scope: mastery_evaluation
+      target_scope: mastery_evaluation
+    - source: EVENT_LOW_SIS
+      target: RULE_LOW_SIS_NEVER_AUTO_PENALIZES
+      edge_type: relations.target
+      source_scope: mastery_evaluation
+      target_scope: mastery_evaluation
+    - source: EVENT_LOW_SIS
+      target: TYPE_SESSION_INTEGRITY_SCORE
+      edge_type: depends_on
+      source_scope: mastery_evaluation
+      target_scope: mastery_evaluation
+    - source: RULE_LOW_SIS_NEVER_AUTO_PENALIZES
+      target: TYPE_SESSION_INTEGRITY_SCORE
+      edge_type: depends_on
+      source_scope: mastery_evaluation
+      target_scope: mastery_evaluation
+    - source: TYPE_INTEGRITY_MODES
+      target: TYPE_SESSION_INTEGRITY_SCORE
+      edge_type: depends_on
+      source_scope: deployment_governance
+      target_scope: mastery_evaluation
+    - source: TYPE_NC_MSC
+      target: TYPE_SESSION_INTEGRITY_SCORE
+      edge_type: depends_on
+      source_scope: mastery_evaluation
+      target_scope: mastery_evaluation
+    - source: TYPE_SESSION_INTEGRITY_SCORE
+      target: TYPE_NC_MSC
+      edge_type: relations.target
+      source_scope: mastery_evaluation
+      target_scope: mastery_evaluation
+    sample_outgoing_edges: []
+    sample_incoming_edges: []
+    sample_missing_target_edges: []
+    node_ids:
+    - CONSTRAINT_NO_BIOMETRICS_OR_OFFSESSION_SURVEILLANCE
+    - EVENT_LOW_SIS
+    - RULE_LOW_SIS_NEVER_AUTO_PENALIZES
+    - TYPE_INTEGRITY_MODES
+    - TYPE_NC_MSC
+    - TYPE_SESSION_INTEGRITY_SCORE
+  - cluster_id: LABEL_CLUSTER_013
+    method: label_propagation
+    node_count: 6
+    owner_status: multi_owner_fragmented
+    boundary_pressure: high
+    nodes_by_owner_scope:
+      deployment_governance: 3
+      knowledge_and_design: 2
+      patch_lifecycle: 1
+    nodes_by_core:
+      constitution: 6
+    nodes_by_section:
+      CONSTRAINTS: 1
+      INVARIANTS: 4
+      TYPES: 1
+    internal_edge_count: 6
+    outgoing_edge_count: 6
+    incoming_edge_count: 0
+    missing_target_edge_count: 0
+    candidate_neighbor_ids:
+    - TYPE_AUTHENTIC_CONTEXT
+    - TYPE_AUTONOMY_REGIME
+    - TYPE_FEEDBACK_COVERAGE_MATRIX
+    - TYPE_PATCH_ARTIFACT
+    candidate_neighbor_scopes: *id013
+    inbound_source_ids: []
+    inbound_source_scopes: []
+    recommendation: review_split_merge_or_bridge
+    sample_internal_edges:
+    - source: CONSTRAINT_NO_RUNTIME_FEEDBACK_GENERATION
+      target: INV_NO_RUNTIME_CONTENT_GENERATION
+      edge_type: depends_on
+      source_scope: knowledge_and_design
+      target_scope: deployment_governance
+    - source: INV_PATCH_ARTIFACTS_MUST_BE_PRECOMPUTED_OFF_SESSION
+      target: INV_NO_RUNTIME_CONTENT_GENERATION
+      edge_type: depends_on
+      source_scope: patch_lifecycle
+      target_scope: deployment_governance
+    - source: INV_PATCH_ARTIFACTS_MUST_BE_PRECOMPUTED_OFF_SESSION
+      target: INV_RUNTIME_FULLY_LOCAL
+      edge_type: depends_on
+      source_scope: patch_lifecycle
+      target_scope: deployment_governance
+    - source: INV_RUNTIME_QUALIFICATION_SIGNALS_MUST_BE_EXPLICIT_OR_OFFSESSION
+      target: INV_NO_RUNTIME_CONTENT_GENERATION
+      edge_type: depends_on
+      source_scope: deployment_governance
+      target_scope: deployment_governance
+    - source: INV_RUNTIME_QUALIFICATION_SIGNALS_MUST_BE_EXPLICIT_OR_OFFSESSION
+      target: INV_RUNTIME_FULLY_LOCAL
+      edge_type: depends_on
+      source_scope: deployment_governance
+      target_scope: deployment_governance
+    - source: INV_RUNTIME_QUALIFICATION_SIGNALS_MUST_BE_EXPLICIT_OR_OFFSESSION
+      target: TYPE_CORPUS_CONFIDENCE_ICC
+      edge_type: depends_on
+      source_scope: deployment_governance
+      target_scope: knowledge_and_design
+    sample_outgoing_edges:
+    - source: INV_NO_RUNTIME_CONTENT_GENERATION
+      target: TYPE_FEEDBACK_COVERAGE_MATRIX
+      edge_type: relations.target
+      source_scope: deployment_governance
+      target_scope: knowledge_and_design
+    - source: INV_PATCH_ARTIFACTS_MUST_BE_PRECOMPUTED_OFF_SESSION
+      target: TYPE_PATCH_ARTIFACT
+      edge_type: depends_on
+      source_scope: patch_lifecycle
+      target_scope: patch_lifecycle
+    - source: INV_PATCH_ARTIFACTS_MUST_BE_PRECOMPUTED_OFF_SESSION
+      target: TYPE_PATCH_ARTIFACT
+      edge_type: relations.target
+      source_scope: patch_lifecycle
+      target_scope: patch_lifecycle
+    - source: INV_RUNTIME_FULLY_LOCAL
+      target: TYPE_AUTONOMY_REGIME
+      edge_type: depends_on
+      source_scope: deployment_governance
+      target_scope: deployment_governance
+    - source: INV_RUNTIME_FULLY_LOCAL
+      target: TYPE_AUTONOMY_REGIME
+      edge_type: relations.target
+      source_scope: deployment_governance
+      target_scope: deployment_governance
+    - source: INV_RUNTIME_QUALIFICATION_SIGNALS_MUST_BE_EXPLICIT_OR_OFFSESSION
+      target: TYPE_AUTHENTIC_CONTEXT
+      edge_type: depends_on
+      source_scope: deployment_governance
+      target_scope: knowledge_and_design
+    sample_incoming_edges: []
+    sample_missing_target_edges: []
+    node_ids:
+    - CONSTRAINT_NO_RUNTIME_FEEDBACK_GENERATION
+    - INV_NO_RUNTIME_CONTENT_GENERATION
+    - INV_PATCH_ARTIFACTS_MUST_BE_PRECOMPUTED_OFF_SESSION
+    - INV_RUNTIME_FULLY_LOCAL
+    - INV_RUNTIME_QUALIFICATION_SIGNALS_MUST_BE_EXPLICIT_OR_OFFSESSION
+    - TYPE_CORPUS_CONFIDENCE_ICC
+  - cluster_id: LABEL_CLUSTER_014
+    method: label_propagation
+    node_count: 5
+    owner_status: fully_unowned
+    boundary_pressure: high
+    nodes_by_owner_scope:
+      UNOWNED: 5
+    nodes_by_core:
+      link: 2
+      referentiel: 3
+    nodes_by_section:
+      CONSTRAINTS: 1
+      EVENTS: 1
+      TYPES: 3
+    internal_edge_count: 7
+    outgoing_edge_count: 11
+    incoming_edge_count: 0
+    missing_target_edge_count: 0
+    candidate_neighbor_ids:
+    - ACTION_REFERENTIEL_TRIGGER_RELEVANCE_PATCH
+    - CONSTRAINT_REFERENTIEL_PATCH_SCOPE_MUST_REMAIN_CONSTITUTIONALLY_BOUNDED
+    - LINK_REF_CORE_LEARNIT_CONSTITUTION_V4_0
+    - REF_CORE_LEARNIT_CONSTITUTION_V4_0_IN_REFERENTIEL
+    - TYPE_PATCH_ARTIFACT
+    - TYPE_PATCH_IMPACT_SCOPE
+    - TYPE_PATCH_QUALITY_GATE
+    - TYPE_REFERENTIEL_PATCH_SCOPE_TABLE
+    candidate_neighbor_scopes: *id014
+    inbound_source_ids: []
+    inbound_source_scopes: []
+    recommendation: classify_unowned_core_area
+    sample_internal_edges:
+    - source: CONSTRAINT_REFERENTIEL_LOCAL_VERIFICATION_REQUIRED_BEFORE_PATCH_APPLY
+      target: EVENT_REFERENTIEL_PATCH_TRIGGER_THRESHOLD_CROSSED
+      edge_type: relations.target
+      source_scope: null
+      target_scope: null
+    - source: EVENT_REFERENTIEL_PATCH_TRIGGER_THRESHOLD_CROSSED
+      target: TYPE_REFERENTIEL_PATCH_TRIGGER_TABLE
+      edge_type: depends_on
+      source_scope: null
+      target_scope: null
+    - source: TYPE_BINDING_PATCH_TRIGGER_GOVERNANCE_CHAIN
+      target: CONSTRAINT_REFERENTIEL_LOCAL_VERIFICATION_REQUIRED_BEFORE_PATCH_APPLY
+      edge_type: relations.target
+      source_scope: null
+      target_scope: null
+    - source: TYPE_BINDING_PATCH_TRIGGER_GOVERNANCE_CHAIN
+      target: EVENT_REFERENTIEL_PATCH_TRIGGER_THRESHOLD_CROSSED
+      edge_type: relations.target
+      source_scope: null
+      target_scope: null
+    - source: TYPE_BINDING_PATCH_TRIGGER_GOVERNANCE_CHAIN
+      target: TYPE_BINDING_REFERENTIEL_TO_CONSTITUTION_GOVERNING_INVARIANTS
+      edge_type: depends_on
+      source_scope: null
+      target_scope: null
+    - source: TYPE_BINDING_PATCH_TRIGGER_GOVERNANCE_CHAIN
+      target: TYPE_REFERENTIEL_PATCH_TRIGGER_TABLE
+      edge_type: relations.target
+      source_scope: null
+      target_scope: null
+    - source: TYPE_REFERENTIEL_PATCH_TRIGGER_TABLE
+      target: EVENT_REFERENTIEL_PATCH_TRIGGER_THRESHOLD_CROSSED
+      edge_type: relations.target
+      source_scope: null
+      target_scope: null
+    sample_outgoing_edges:
+    - source: CONSTRAINT_REFERENTIEL_LOCAL_VERIFICATION_REQUIRED_BEFORE_PATCH_APPLY
+      target: TYPE_REFERENTIEL_PATCH_SCOPE_TABLE
+      edge_type: depends_on
+      source_scope: null
+      target_scope: null
+    - source: TYPE_BINDING_PATCH_TRIGGER_GOVERNANCE_CHAIN
+      target: ACTION_REFERENTIEL_TRIGGER_RELEVANCE_PATCH
+      edge_type: relations.target
+      source_scope: null
+      target_scope: null
+    - source: TYPE_BINDING_PATCH_TRIGGER_GOVERNANCE_CHAIN
+      target: CONSTRAINT_REFERENTIEL_PATCH_SCOPE_MUST_REMAIN_CONSTITUTIONALLY_BOUNDED
+      edge_type: relations.target
+      source_scope: null
+      target_scope: null
+    - source: TYPE_BINDING_PATCH_TRIGGER_GOVERNANCE_CHAIN
+      target: LINK_REF_CORE_LEARNIT_CONSTITUTION_V4_0
+      edge_type: depends_on
+      source_scope: null
+      target_scope: null
+    - source: TYPE_BINDING_PATCH_TRIGGER_GOVERNANCE_CHAIN
+      target: LINK_REF_CORE_LEARNIT_CONSTITUTION_V4_0
+      edge_type: relations.target.core_ref
+      source_scope: null
+      target_scope: null
+    - source: TYPE_BINDING_PATCH_TRIGGER_GOVERNANCE_CHAIN
+      target: TYPE_PATCH_ARTIFACT
+      edge_type: relations.target
+      source_scope: null
+      target_scope: patch_lifecycle
+    - source: TYPE_BINDING_PATCH_TRIGGER_GOVERNANCE_CHAIN
+      target: TYPE_PATCH_IMPACT_SCOPE
+      edge_type: relations.target
+      source_scope: null
+      target_scope: patch_lifecycle
+    - source: TYPE_BINDING_PATCH_TRIGGER_GOVERNANCE_CHAIN
+      target: TYPE_PATCH_QUALITY_GATE
+      edge_type: relations.target
+      source_scope: null
+      target_scope: patch_lifecycle
+    - source: TYPE_BINDING_REFERENTIEL_TO_CONSTITUTION_GOVERNING_INVARIANTS
+      target: LINK_REF_CORE_LEARNIT_CONSTITUTION_V4_0
+      edge_type: depends_on
+      source_scope: null
+      target_scope: null
+    - source: TYPE_BINDING_REFERENTIEL_TO_CONSTITUTION_GOVERNING_INVARIANTS
+      target: LINK_REF_CORE_LEARNIT_CONSTITUTION_V4_0
+      edge_type: relations.target
+      source_scope: null
+      target_scope: null
+    sample_incoming_edges: []
+    sample_missing_target_edges: []
+    node_ids:
+    - CONSTRAINT_REFERENTIEL_LOCAL_VERIFICATION_REQUIRED_BEFORE_PATCH_APPLY
+    - EVENT_REFERENTIEL_PATCH_TRIGGER_THRESHOLD_CROSSED
+    - TYPE_BINDING_PATCH_TRIGGER_GOVERNANCE_CHAIN
+    - TYPE_BINDING_REFERENTIEL_TO_CONSTITUTION_GOVERNING_INVARIANTS
+    - TYPE_REFERENTIEL_PATCH_TRIGGER_TABLE
+  - cluster_id: LABEL_CLUSTER_015
+    method: label_propagation
+    node_count: 5
+    owner_status: fully_unowned
+    boundary_pressure: medium
+    nodes_by_owner_scope:
+      UNOWNED: 5
+    nodes_by_core:
+      referentiel: 5
+    nodes_by_section:
+      CONSTRAINTS: 2
+      INVARIANTS: 1
+      RULES: 1
+      TYPES: 1
+    internal_edge_count: 5
+    outgoing_edge_count: 2
+    incoming_edge_count: 1
+    missing_target_edge_count: 0
+    candidate_neighbor_ids:
+    - PARAM_REFERENTIEL_VC_LOW_PERSISTENCE_SESSIONS_REFERENCE
+    - REF_CORE_LEARNIT_CONSTITUTION_V4_0_IN_REFERENTIEL
+    candidate_neighbor_scopes: *id015
+    inbound_source_ids:
+    - INV_REFERENTIEL_VC_UNKNOWN_MEANS_NO_INFERENCE
+    inbound_source_scopes: []
+    recommendation: classify_unowned_core_area
+    sample_internal_edges:
+    - source: CONSTRAINT_REFERENTIEL_NO_BEHAVIORAL_PROXY_FOR_VC
+      target: TYPE_REFERENTIEL_VC_PARAMETER_BLOCK
+      edge_type: depends_on
+      source_scope: null
+      target_scope: null
+    - source: CONSTRAINT_REFERENTIEL_NO_DIFFICULTY_ADJUSTMENT_FROM_VC_PATCH
+      target: TYPE_REFERENTIEL_VC_PARAMETER_BLOCK
+      edge_type: depends_on
+      source_scope: null
+      target_scope: null
+    - source: INVARIANT_ISOLATED_LOW_VC_MEANS_NO_ACTION
+      target: TYPE_REFERENTIEL_VC_PARAMETER_BLOCK
+      edge_type: depends_on
+      source_scope: null
+      target_scope: null
+    - source: RULE_REFERENTIEL_VC_UNOBSERVABLE_DISABLING
+      target: CONSTRAINT_REFERENTIEL_NO_BEHAVIORAL_PROXY_FOR_VC
+      edge_type: depends_on
+      source_scope: null
+      target_scope: null
+    - source: RULE_REFERENTIEL_VC_UNOBSERVABLE_DISABLING
+      target: TYPE_REFERENTIEL_VC_PARAMETER_BLOCK
+      edge_type: depends_on
+      source_scope: null
+      target_scope: null
+    sample_outgoing_edges:
+    - source: TYPE_REFERENTIEL_VC_PARAMETER_BLOCK
+      target: PARAM_REFERENTIEL_VC_LOW_PERSISTENCE_SESSIONS_REFERENCE
+      edge_type: relations.target
+      source_scope: null
+      target_scope: null
+    - source: TYPE_REFERENTIEL_VC_PARAMETER_BLOCK
+      target: REF_CORE_LEARNIT_CONSTITUTION_V4_0_IN_REFERENTIEL
+      edge_type: depends_on
+      source_scope: null
+      target_scope: null
+    sample_incoming_edges:
+    - source: INV_REFERENTIEL_VC_UNKNOWN_MEANS_NO_INFERENCE
+      target: TYPE_REFERENTIEL_VC_PARAMETER_BLOCK
+      edge_type: depends_on
+      source_scope: null
+      target_scope: null
+    sample_missing_target_edges: []
+    node_ids:
+    - CONSTRAINT_REFERENTIEL_NO_BEHAVIORAL_PROXY_FOR_VC
+    - CONSTRAINT_REFERENTIEL_NO_DIFFICULTY_ADJUSTMENT_FROM_VC_PATCH
+    - INVARIANT_ISOLATED_LOW_VC_MEANS_NO_ACTION
+    - RULE_REFERENTIEL_VC_UNOBSERVABLE_DISABLING
+    - TYPE_REFERENTIEL_VC_PARAMETER_BLOCK
+  - cluster_id: LABEL_CLUSTER_016
+    method: label_propagation
+    node_count: 5
+    owner_status: single_owner_plus_unowned
+    boundary_pressure: high
+    nodes_by_owner_scope:
+      UNOWNED: 2
+      learner_state: 3
+    nodes_by_core:
+      constitution: 3
+      link: 1
+      referentiel: 1
+    nodes_by_section:
+      EVENTS: 1
+      INVARIANTS: 1
+      PARAMETERS: 1
+      RULES: 1
+      TYPES: 1
+    internal_edge_count: 7
+    outgoing_edge_count: 8
+    incoming_edge_count: 0
+    missing_target_edge_count: 0
+    candidate_neighbor_ids:
+    - ACTION_ESCALATE_PERSISTENT_DRIFT_OFFSESSION
+    - LINK_REF_CORE_LEARNIT_CONSTITUTION_V4_0
+    - REF_CORE_LEARNIT_REFERENTIEL_V4_0_IN_CONSTITUTION
+    - TYPE_BINDING_LEARNER_STATE_SIGNAL_AUTHORITY_CHAIN
+    - TYPE_SELF_REPORT_AR_N1
+    - TYPE_STATE_AXIS_ACTIVATION
+    candidate_neighbor_scopes: *id016
+    inbound_source_ids: []
+    inbound_source_scopes: []
+    recommendation: declare_or_review_neighbors
+    sample_internal_edges:
+    - source: EVENT_CONSERVATIVE_SCAFFOLDING_ESCALATION
+      target: INV_CONSERVATIVE_RULE_WITHOUT_AR_N1
+      edge_type: depends_on
+      source_scope: learner_state
+      target_scope: learner_state
+    - source: EVENT_CONSERVATIVE_SCAFFOLDING_ESCALATION
+      target: RULE_CONSERVATIVE_SCAFFOLDING_ESCALATION_REQUIRES_OFFSESSION_REVIEW
+      edge_type: relations.target
+      source_scope: learner_state
+      target_scope: learner_state
+    - source: RULE_CONSERVATIVE_SCAFFOLDING_ESCALATION_REQUIRES_OFFSESSION_REVIEW
+      target: EVENT_CONSERVATIVE_SCAFFOLDING_ESCALATION
+      edge_type: depends_on
+      source_scope: learner_state
+      target_scope: learner_state
+    - source: TYPE_BINDING_CONSERVATIVE_SCAFFOLDING_ESCALATION_CHAIN
+      target: EVENT_CONSERVATIVE_SCAFFOLDING_ESCALATION
+      edge_type: relations.target
+      source_scope: null
+      target_scope: learner_state
+    - source: TYPE_BINDING_CONSERVATIVE_SCAFFOLDING_ESCALATION_CHAIN
+      target: INV_CONSERVATIVE_RULE_WITHOUT_AR_N1
+      edge_type: relations.target
+      source_scope: null
+      target_scope: learner_state
+    - source: TYPE_BINDING_CONSERVATIVE_SCAFFOLDING_ESCALATION_CHAIN
+      target: PARAM_REFERENTIEL_CONSERVATIVE_SCAFFOLDING_ESCALATION_SESSIONS
+      edge_type: relations.target
+      source_scope: null
+      target_scope: null
+    - source: TYPE_BINDING_CONSERVATIVE_SCAFFOLDING_ESCALATION_CHAIN
+      target: RULE_CONSERVATIVE_SCAFFOLDING_ESCALATION_REQUIRES_OFFSESSION_REVIEW
+      edge_type: relations.target
+      source_scope: null
+      target_scope: learner_state
+    sample_outgoing_edges:
+    - source: EVENT_CONSERVATIVE_SCAFFOLDING_ESCALATION
+      target: REF_CORE_LEARNIT_REFERENTIEL_V4_0_IN_CONSTITUTION
+      edge_type: depends_on
+      source_scope: learner_state
+      target_scope: null
+    - source: INV_CONSERVATIVE_RULE_WITHOUT_AR_N1
+      target: TYPE_SELF_REPORT_AR_N1
+      edge_type: depends_on
+      source_scope: learner_state
+      target_scope: learner_state
+    - source: INV_CONSERVATIVE_RULE_WITHOUT_AR_N1
+      target: TYPE_STATE_AXIS_ACTIVATION
+      edge_type: relations.target
+      source_scope: learner_state
+      target_scope: learner_state
+    - source: RULE_CONSERVATIVE_SCAFFOLDING_ESCALATION_REQUIRES_OFFSESSION_REVIEW
+      target: ACTION_ESCALATE_PERSISTENT_DRIFT_OFFSESSION
+      edge_type: depends_on
+      source_scope: learner_state
+      target_scope: patch_lifecycle
+    - source: RULE_CONSERVATIVE_SCAFFOLDING_ESCALATION_REQUIRES_OFFSESSION_REVIEW
+      target: ACTION_ESCALATE_PERSISTENT_DRIFT_OFFSESSION
+      edge_type: relations.target
+      source_scope: learner_state
+      target_scope: patch_lifecycle
+    - source: TYPE_BINDING_CONSERVATIVE_SCAFFOLDING_ESCALATION_CHAIN
+      target: LINK_REF_CORE_LEARNIT_CONSTITUTION_V4_0
+      edge_type: depends_on
+      source_scope: null
+      target_scope: null
+    - source: TYPE_BINDING_CONSERVATIVE_SCAFFOLDING_ESCALATION_CHAIN
+      target: LINK_REF_CORE_LEARNIT_CONSTITUTION_V4_0
+      edge_type: relations.target.core_ref
+      source_scope: null
+      target_scope: null
+    - source: TYPE_BINDING_CONSERVATIVE_SCAFFOLDING_ESCALATION_CHAIN
+      target: TYPE_BINDING_LEARNER_STATE_SIGNAL_AUTHORITY_CHAIN
+      edge_type: depends_on
+      source_scope: null
+      target_scope: null
+    sample_incoming_edges: []
+    sample_missing_target_edges: []
+    node_ids:
+    - EVENT_CONSERVATIVE_SCAFFOLDING_ESCALATION
+    - INV_CONSERVATIVE_RULE_WITHOUT_AR_N1
+    - PARAM_REFERENTIEL_CONSERVATIVE_SCAFFOLDING_ESCALATION_SESSIONS
+    - RULE_CONSERVATIVE_SCAFFOLDING_ESCALATION_REQUIRES_OFFSESSION_REVIEW
+    - TYPE_BINDING_CONSERVATIVE_SCAFFOLDING_ESCALATION_CHAIN
+  - cluster_id: LABEL_CLUSTER_017
+    method: label_propagation
+    node_count: 5
+    owner_status: fully_unowned
+    boundary_pressure: medium
+    nodes_by_owner_scope:
+      UNOWNED: 5
+    nodes_by_core:
+      link: 1
+      referentiel: 4
+    nodes_by_section:
+      EVENTS: 1
+      PARAMETERS: 1
+      RULES: 1
+      TYPES: 2
+    internal_edge_count: 7
+    outgoing_edge_count: 6
+    incoming_edge_count: 0
+    missing_target_edge_count: 0
+    candidate_neighbor_ids:
+    - LINK_REF_CORE_LEARNIT_CONSTITUTION_V4_0
+    - REF_CORE_LEARNIT_CONSTITUTION_V4_0_IN_REFERENTIEL
+    - RULE_UNCOVERED_ERROR_GENERIC_FEEDBACK
+    - TYPE_BINDING_CONSTITUTION_REFERENTIEL_LAYER_SEPARATION
+    - TYPE_FEEDBACK_COVERAGE_MATRIX
+    candidate_neighbor_scopes: *id017
+    inbound_source_ids: []
+    inbound_source_scopes: []
+    recommendation: classify_unowned_core_area
+    sample_internal_edges:
+    - source: EVENT_REFERENTIEL_FEEDBACK_COVERAGE_LOW
+      target: PARAM_REFERENTIEL_FEEDBACK_COVERAGE_REFERENCE_THRESHOLD
+      edge_type: depends_on
+      source_scope: null
+      target_scope: null
+    - source: RULE_REFERENTIEL_LOW_FEEDBACK_COVERAGE_SIGNALS_REVISION
+      target: EVENT_REFERENTIEL_FEEDBACK_COVERAGE_LOW
+      edge_type: relations.target
+      source_scope: null
+      target_scope: null
+    - source: RULE_REFERENTIEL_LOW_FEEDBACK_COVERAGE_SIGNALS_REVISION
+      target: PARAM_REFERENTIEL_FEEDBACK_COVERAGE_REFERENCE_THRESHOLD
+      edge_type: depends_on
+      source_scope: null
+      target_scope: null
+    - source: TYPE_BINDING_FEEDBACK_COVERAGE_TO_REFERENTIEL_THRESHOLD
+      target: EVENT_REFERENTIEL_FEEDBACK_COVERAGE_LOW
+      edge_type: relations.target
+      source_scope: null
+      target_scope: null
+    - source: TYPE_BINDING_FEEDBACK_COVERAGE_TO_REFERENTIEL_THRESHOLD
+      target: PARAM_REFERENTIEL_FEEDBACK_COVERAGE_REFERENCE_THRESHOLD
+      edge_type: relations.target
+      source_scope: null
+      target_scope: null
+    - source: TYPE_BINDING_FEEDBACK_COVERAGE_TO_REFERENTIEL_THRESHOLD
+      target: RULE_REFERENTIEL_LOW_FEEDBACK_COVERAGE_SIGNALS_REVISION
+      edge_type: relations.target
+      source_scope: null
+      target_scope: null
+    - source: TYPE_REFERENTIEL_FEEDBACK_COVERAGE_METRIC
+      target: EVENT_REFERENTIEL_FEEDBACK_COVERAGE_LOW
+      edge_type: relations.target
+      source_scope: null
+      target_scope: null
+    sample_outgoing_edges:
+    - source: TYPE_BINDING_FEEDBACK_COVERAGE_TO_REFERENTIEL_THRESHOLD
+      target: LINK_REF_CORE_LEARNIT_CONSTITUTION_V4_0
+      edge_type: depends_on
+      source_scope: null
+      target_scope: null
+    - source: TYPE_BINDING_FEEDBACK_COVERAGE_TO_REFERENTIEL_THRESHOLD
+      target: LINK_REF_CORE_LEARNIT_CONSTITUTION_V4_0
+      edge_type: relations.target.core_ref
+      source_scope: null
+      target_scope: null
+    - source: TYPE_BINDING_FEEDBACK_COVERAGE_TO_REFERENTIEL_THRESHOLD
+      target: RULE_UNCOVERED_ERROR_GENERIC_FEEDBACK
+      edge_type: relations.target
+      source_scope: null
+      target_scope: knowledge_and_design
+    - source: TYPE_BINDING_FEEDBACK_COVERAGE_TO_REFERENTIEL_THRESHOLD
+      target: TYPE_BINDING_CONSTITUTION_REFERENTIEL_LAYER_SEPARATION
+      edge_type: depends_on
+      source_scope: null
+      target_scope: null
+    - source: TYPE_BINDING_FEEDBACK_COVERAGE_TO_REFERENTIEL_THRESHOLD
+      target: TYPE_FEEDBACK_COVERAGE_MATRIX
+      edge_type: relations.target
+      source_scope: null
+      target_scope: knowledge_and_design
+    - source: TYPE_REFERENTIEL_FEEDBACK_COVERAGE_METRIC
+      target: REF_CORE_LEARNIT_CONSTITUTION_V4_0_IN_REFERENTIEL
+      edge_type: depends_on
+      source_scope: null
+      target_scope: null
+    sample_incoming_edges: []
+    sample_missing_target_edges: []
+    node_ids:
+    - EVENT_REFERENTIEL_FEEDBACK_COVERAGE_LOW
+    - PARAM_REFERENTIEL_FEEDBACK_COVERAGE_REFERENCE_THRESHOLD
+    - RULE_REFERENTIEL_LOW_FEEDBACK_COVERAGE_SIGNALS_REVISION
+    - TYPE_BINDING_FEEDBACK_COVERAGE_TO_REFERENTIEL_THRESHOLD
+    - TYPE_REFERENTIEL_FEEDBACK_COVERAGE_METRIC
+  - cluster_id: LABEL_CLUSTER_018
+    method: label_propagation
+    node_count: 4
+    owner_status: fully_unowned
+    boundary_pressure: low
+    nodes_by_owner_scope:
+      UNOWNED: 4
+    nodes_by_core:
+      referentiel: 4
+    nodes_by_section:
+      ACTIONS: 1
+      PARAMETERS: 2
+      TYPES: 1
+    internal_edge_count: 3
+    outgoing_edge_count: 1
+    incoming_edge_count: 0
+    missing_target_edge_count: 0
+    candidate_neighbor_ids:
+    - REF_CORE_LEARNIT_CONSTITUTION_V4_0_IN_REFERENTIEL
+    candidate_neighbor_scopes: *id018
+    inbound_source_ids: []
+    inbound_source_scopes: []
+    recommendation: classify_unowned_core_area
+    sample_internal_edges:
+    - source: ACTION_REFERENTIEL_REDUCE_AR_N2_FREQUENCY
+      target: PARAM_REFERENTIEL_AR_N2_FREQUENCY_REFERENCE
+      edge_type: depends_on
+      source_scope: null
+      target_scope: null
+    - source: TYPE_REFERENTIEL_AR_N2_CONFIGURATION
+      target: PARAM_REFERENTIEL_AR_N2_FREQUENCY_REFERENCE
+      edge_type: relations.target
+      source_scope: null
+      target_scope: null
+    - source: TYPE_REFERENTIEL_AR_N2_CONFIGURATION
+      target: PARAM_REFERENTIEL_AR_N2_MAX_ITEMS
+      edge_type: relations.target
+      source_scope: null
+      target_scope: null
+    sample_outgoing_edges:
+    - source: TYPE_REFERENTIEL_AR_N2_CONFIGURATION
+      target: REF_CORE_LEARNIT_CONSTITUTION_V4_0_IN_REFERENTIEL
+      edge_type: depends_on
+      source_scope: null
+      target_scope: null
+    sample_incoming_edges: []
+    sample_missing_target_edges: []
+    node_ids:
+    - ACTION_REFERENTIEL_REDUCE_AR_N2_FREQUENCY
+    - PARAM_REFERENTIEL_AR_N2_FREQUENCY_REFERENCE
+    - PARAM_REFERENTIEL_AR_N2_MAX_ITEMS
+    - TYPE_REFERENTIEL_AR_N2_CONFIGURATION
+  - cluster_id: LABEL_CLUSTER_019
+    method: label_propagation
+    node_count: 4
+    owner_status: fully_unowned
+    boundary_pressure: low
+    nodes_by_owner_scope:
+      UNOWNED: 4
+    nodes_by_core:
+      referentiel: 4
+    nodes_by_section:
+      ACTIONS: 1
+      INVARIANTS: 1
+      PARAMETERS: 1
+      TYPES: 1
+    internal_edge_count: 3
+    outgoing_edge_count: 1
+    incoming_edge_count: 0
+    missing_target_edge_count: 0
+    candidate_neighbor_ids:
+    - REF_CORE_LEARNIT_CONSTITUTION_V4_0_IN_REFERENTIEL
+    candidate_neighbor_scopes: *id019
+    inbound_source_ids: []
+    inbound_source_scopes: []
+    recommendation: classify_unowned_core_area
+    sample_internal_edges:
+    - source: ACTION_REFERENTIEL_REDUCE_SESSION_INTENTION_FREQUENCY
+      target: PARAM_REFERENTIEL_SESSION_INTENTION_FREQUENCY_REFERENCE
+      edge_type: depends_on
+      source_scope: null
+      target_scope: null
+    - source: INV_REFERENTIEL_SESSION_INTENTION_NON_PENALIZED
+      target: TYPE_REFERENTIEL_SESSION_INTENTION_CONFIGURATION
+      edge_type: depends_on
+      source_scope: null
+      target_scope: null
+    - source: TYPE_REFERENTIEL_SESSION_INTENTION_CONFIGURATION
+      target: PARAM_REFERENTIEL_SESSION_INTENTION_FREQUENCY_REFERENCE
+      edge_type: relations.target
+      source_scope: null
+      target_scope: null
+    sample_outgoing_edges:
+    - source: TYPE_REFERENTIEL_SESSION_INTENTION_CONFIGURATION
+      target: REF_CORE_LEARNIT_CONSTITUTION_V4_0_IN_REFERENTIEL
+      edge_type: depends_on
+      source_scope: null
+      target_scope: null
+    sample_incoming_edges: []
+    sample_missing_target_edges: []
+    node_ids:
+    - ACTION_REFERENTIEL_REDUCE_SESSION_INTENTION_FREQUENCY
+    - INV_REFERENTIEL_SESSION_INTENTION_NON_PENALIZED
+    - PARAM_REFERENTIEL_SESSION_INTENTION_FREQUENCY_REFERENCE
+    - TYPE_REFERENTIEL_SESSION_INTENTION_CONFIGURATION
+  - cluster_id: LABEL_CLUSTER_020
+    method: label_propagation
+    node_count: 4
+    owner_status: single_owner
+    boundary_pressure: high
+    nodes_by_owner_scope:
+      deployment_governance: 4
+    nodes_by_core:
+      constitution: 4
+    nodes_by_section:
+      CONSTRAINTS: 1
+      INVARIANTS: 1
+      TYPES: 2
+    internal_edge_count: 3
+    outgoing_edge_count: 0
+    incoming_edge_count: 3
+    missing_target_edge_count: 0
+    candidate_neighbor_ids: []
+    candidate_neighbor_scopes: *id020
+    inbound_source_ids:
+    - INV_RUNTIME_FULLY_LOCAL
+    - TYPE_KNOWLEDGE_GRAPH
+    inbound_source_scopes:
+    - deployment_governance
+    - knowledge_and_design
+    recommendation: declare_or_review_neighbors
+    sample_internal_edges:
+    - source: CONSTRAINT_NO_ASSISTED_DEPLOYMENT_WITHOUT_TUTORING
+      target: INV_ASSISTED_MODE_REQUIRES_TUTORING
+      edge_type: depends_on
+      source_scope: deployment_governance
+      target_scope: deployment_governance
+    - source: INV_ASSISTED_MODE_REQUIRES_TUTORING
+      target: TYPE_AUTONOMY_REGIME
+      edge_type: depends_on
+      source_scope: deployment_governance
+      target_scope: deployment_governance
+    - source: TYPE_HUMAN_CHECKPOINT
+      target: TYPE_AUTONOMY_REGIME
+      edge_type: relations.target
+      source_scope: deployment_governance
+      target_scope: deployment_governance
+    sample_outgoing_edges: []
+    sample_incoming_edges:
+    - source: INV_RUNTIME_FULLY_LOCAL
+      target: TYPE_AUTONOMY_REGIME
+      edge_type: depends_on
+      source_scope: deployment_governance
+      target_scope: deployment_governance
+    - source: INV_RUNTIME_FULLY_LOCAL
+      target: TYPE_AUTONOMY_REGIME
+      edge_type: relations.target
+      source_scope: deployment_governance
+      target_scope: deployment_governance
+    - source: TYPE_KNOWLEDGE_GRAPH
+      target: TYPE_HUMAN_CHECKPOINT
+      edge_type: relations.target
+      source_scope: knowledge_and_design
+      target_scope: deployment_governance
+    sample_missing_target_edges: []
+    node_ids:
+    - CONSTRAINT_NO_ASSISTED_DEPLOYMENT_WITHOUT_TUTORING
+    - INV_ASSISTED_MODE_REQUIRES_TUTORING
+    - TYPE_AUTONOMY_REGIME
+    - TYPE_HUMAN_CHECKPOINT
+  - cluster_id: LABEL_CLUSTER_021
+    method: label_propagation
+    node_count: 4
+    owner_status: single_owner
+    boundary_pressure: low
+    nodes_by_owner_scope:
+      knowledge_and_design: 4
+    nodes_by_core:
+      constitution: 4
+    nodes_by_section:
+      CONSTRAINTS: 1
+      EVENTS: 1
+      INVARIANTS: 1
+      TYPES: 1
+    internal_edge_count: 5
+    outgoing_edge_count: 0
+    incoming_edge_count: 1
+    missing_target_edge_count: 0
+    candidate_neighbor_ids: []
+    candidate_neighbor_scopes: []
+    inbound_source_ids:
+    - INV_RUNTIME_QUALIFICATION_SIGNALS_MUST_BE_EXPLICIT_OR_OFFSESSION
+    inbound_source_scopes:
+    - deployment_governance
+    recommendation: stable_scope_candidate
+    sample_internal_edges:
+    - source: CONSTRAINT_NO_HIGH_BLOOM_WITHOUT_AUTHENTIC_CONTEXT
+      target: INV_AUTHENTIC_CONTEXT_REQUIRED_FOR_BLOOM4
+      edge_type: depends_on
+      source_scope: knowledge_and_design
+      target_scope: knowledge_and_design
+    - source: EVENT_HIGH_BLOOM_WITHOUT_AUTHENTIC_CONTEXT
+      target: TYPE_AUTHENTIC_CONTEXT
+      edge_type: depends_on
+      source_scope: knowledge_and_design
+      target_scope: knowledge_and_design
+    - source: INV_AUTHENTIC_CONTEXT_REQUIRED_FOR_BLOOM4
+      target: EVENT_HIGH_BLOOM_WITHOUT_AUTHENTIC_CONTEXT
+      edge_type: relations.target
+      source_scope: knowledge_and_design
+      target_scope: knowledge_and_design
+    - source: INV_AUTHENTIC_CONTEXT_REQUIRED_FOR_BLOOM4
+      target: TYPE_AUTHENTIC_CONTEXT
+      edge_type: depends_on
+      source_scope: knowledge_and_design
+      target_scope: knowledge_and_design
+    - source: TYPE_AUTHENTIC_CONTEXT
+      target: INV_AUTHENTIC_CONTEXT_REQUIRED_FOR_BLOOM4
+      edge_type: relations.target
+      source_scope: knowledge_and_design
+      target_scope: knowledge_and_design
+    sample_outgoing_edges: []
+    sample_incoming_edges:
+    - source: INV_RUNTIME_QUALIFICATION_SIGNALS_MUST_BE_EXPLICIT_OR_OFFSESSION
+      target: TYPE_AUTHENTIC_CONTEXT
+      edge_type: depends_on
+      source_scope: deployment_governance
+      target_scope: knowledge_and_design
+    sample_missing_target_edges: []
+    node_ids:
+    - CONSTRAINT_NO_HIGH_BLOOM_WITHOUT_AUTHENTIC_CONTEXT
+    - EVENT_HIGH_BLOOM_WITHOUT_AUTHENTIC_CONTEXT
+    - INV_AUTHENTIC_CONTEXT_REQUIRED_FOR_BLOOM4
+    - TYPE_AUTHENTIC_CONTEXT
+  - cluster_id: LABEL_CLUSTER_022
+    method: label_propagation
+    node_count: 4
+    owner_status: fully_unowned
+    boundary_pressure: low
+    nodes_by_owner_scope:
+      UNOWNED: 4
+    nodes_by_core:
+      referentiel: 4
+    nodes_by_section:
+      EVENTS: 1
+      PARAMETERS: 2
+      RULES: 1
+    internal_edge_count: 3
+    outgoing_edge_count: 0
+    incoming_edge_count: 0
+    missing_target_edge_count: 0
+    candidate_neighbor_ids: []
+    candidate_neighbor_scopes: *id021
+    inbound_source_ids: []
+    inbound_source_scopes: []
+    recommendation: classify_unowned_core_area
+    sample_internal_edges:
+    - source: EVENT_REFERENTIEL_LOW_AR_N2_COMPLETION
+      target: PARAM_REFERENTIEL_AR_N2_COMPLETION_THRESHOLD
+      edge_type: depends_on
+      source_scope: null
+      target_scope: null
+    - source: RULE_REFERENTIEL_REDUCE_AR_N2_FREQUENCY_ON_LOW_COMPLETION
+      target: PARAM_REFERENTIEL_AR_N2_COMPLETION_THRESHOLD
+      edge_type: depends_on
+      source_scope: null
+      target_scope: null
+    - source: RULE_REFERENTIEL_REDUCE_AR_N2_FREQUENCY_ON_LOW_COMPLETION
+      target: PARAM_REFERENTIEL_AR_N2_COMPLETION_WINDOW_SESSIONS
+      edge_type: depends_on
+      source_scope: null
+      target_scope: null
+    sample_outgoing_edges: []
+    sample_incoming_edges: []
+    sample_missing_target_edges: []
+    node_ids:
+    - EVENT_REFERENTIEL_LOW_AR_N2_COMPLETION
+    - PARAM_REFERENTIEL_AR_N2_COMPLETION_THRESHOLD
+    - PARAM_REFERENTIEL_AR_N2_COMPLETION_WINDOW_SESSIONS
+    - RULE_REFERENTIEL_REDUCE_AR_N2_FREQUENCY_ON_LOW_COMPLETION
+  - cluster_id: LABEL_CLUSTER_023
+    method: label_propagation
+    node_count: 4
+    owner_status: fully_unowned
+    boundary_pressure: low
+    nodes_by_owner_scope:
+      UNOWNED: 4
+    nodes_by_core:
+      referentiel: 4
+    nodes_by_section:
+      EVENTS: 1
+      PARAMETERS: 2
+      RULES: 1
+    internal_edge_count: 3
+    outgoing_edge_count: 0
+    incoming_edge_count: 0
+    missing_target_edge_count: 0
+    candidate_neighbor_ids: []
+    candidate_neighbor_scopes: *id022
+    inbound_source_ids: []
+    inbound_source_scopes: []
+    recommendation: classify_unowned_core_area
+    sample_internal_edges:
+    - source: EVENT_REFERENTIEL_LOW_SESSION_INTENTION_COMPLETION
+      target: PARAM_REFERENTIEL_SESSION_INTENTION_COMPLETION_THRESHOLD
+      edge_type: depends_on
+      source_scope: null
+      target_scope: null
+    - source: RULE_REFERENTIEL_REDUCE_SESSION_INTENTION_FREQUENCY_ON_LOW_COMPLETION
+      target: PARAM_REFERENTIEL_SESSION_INTENTION_COMPLETION_THRESHOLD
+      edge_type: depends_on
+      source_scope: null
+      target_scope: null
+    - source: RULE_REFERENTIEL_REDUCE_SESSION_INTENTION_FREQUENCY_ON_LOW_COMPLETION
+      target: PARAM_REFERENTIEL_SESSION_INTENTION_COMPLETION_WINDOW
+      edge_type: depends_on
+      source_scope: null
+      target_scope: null
+    sample_outgoing_edges: []
+    sample_incoming_edges: []
+    sample_missing_target_edges: []
+    node_ids:
+    - EVENT_REFERENTIEL_LOW_SESSION_INTENTION_COMPLETION
+    - PARAM_REFERENTIEL_SESSION_INTENTION_COMPLETION_THRESHOLD
+    - PARAM_REFERENTIEL_SESSION_INTENTION_COMPLETION_WINDOW
+    - RULE_REFERENTIEL_REDUCE_SESSION_INTENTION_FREQUENCY_ON_LOW_COMPLETION
+  - cluster_id: LABEL_CLUSTER_024
+    method: label_propagation
+    node_count: 4
+    owner_status: fully_unowned
+    boundary_pressure: low
+    nodes_by_owner_scope:
+      UNOWNED: 4
+    nodes_by_core:
+      referentiel: 4
+    nodes_by_section:
+      INVARIANTS: 1
+      PARAMETERS: 2
+      TYPES: 1
+    internal_edge_count: 3
+    outgoing_edge_count: 1
+    incoming_edge_count: 0
+    missing_target_edge_count: 0
+    candidate_neighbor_ids:
+    - REF_CORE_LEARNIT_CONSTITUTION_V4_0_IN_REFERENTIEL
+    candidate_neighbor_scopes: *id023
+    inbound_source_ids: []
+    inbound_source_scopes: []
+    recommendation: classify_unowned_core_area
+    sample_internal_edges:
+    - source: INV_REFERENTIEL_CREATIVE_R_FALLBACK_IS_X1
+      target: PARAM_REFERENTIEL_R_MULTIPLIER_CREATIVE_FALLBACK
+      edge_type: relations.target
+      source_scope: null
+      target_scope: null
+    - source: TYPE_REFERENTIEL_TEMPORAL_MULTIPLIER_TABLE
+      target: PARAM_REFERENTIEL_R_MULTIPLIER_CREATIVE_FALLBACK
+      edge_type: relations.target
+      source_scope: null
+      target_scope: null
+    - source: TYPE_REFERENTIEL_TEMPORAL_MULTIPLIER_TABLE
+      target: PARAM_REFERENTIEL_R_MULTIPLIER_DECLARATIVE
+      edge_type: relations.target
+      source_scope: null
+      target_scope: null
+    sample_outgoing_edges:
+    - source: TYPE_REFERENTIEL_TEMPORAL_MULTIPLIER_TABLE
+      target: REF_CORE_LEARNIT_CONSTITUTION_V4_0_IN_REFERENTIEL
+      edge_type: depends_on
+      source_scope: null
+      target_scope: null
+    sample_incoming_edges: []
+    sample_missing_target_edges: []
+    node_ids:
+    - INV_REFERENTIEL_CREATIVE_R_FALLBACK_IS_X1
+    - PARAM_REFERENTIEL_R_MULTIPLIER_CREATIVE_FALLBACK
+    - PARAM_REFERENTIEL_R_MULTIPLIER_DECLARATIVE
+    - TYPE_REFERENTIEL_TEMPORAL_MULTIPLIER_TABLE
+  - cluster_id: LABEL_CLUSTER_025
+    method: label_propagation
+    node_count: 3
+    owner_status: multi_owner_fragmented
+    boundary_pressure: low
+    nodes_by_owner_scope:
+      deployment_governance: 2
+      patch_lifecycle: 1
+    nodes_by_core:
+      constitution: 3
+    nodes_by_section:
+      ACTIONS: 1
+      EVENTS: 1
+      RULES: 1
+    internal_edge_count: 2
+    outgoing_edge_count: 0
+    incoming_edge_count: 0
+    missing_target_edge_count: 0
+    candidate_neighbor_ids: []
+    candidate_neighbor_scopes: *id024
+    inbound_source_ids: []
+    inbound_source_scopes: []
+    recommendation: review_split_merge_or_bridge
+    sample_internal_edges:
+    - source: EVENT_GF08_UNCOVERED_CONFLICT
+      target: RULE_GF08_UNCOVERED_CONFLICT_CONSERVATIVE_RESPONSE
+      edge_type: relations.target
+      source_scope: deployment_governance
+      target_scope: deployment_governance
+    - source: RULE_GF08_UNCOVERED_CONFLICT_CONSERVATIVE_RESPONSE
+      target: ACTION_LOG_UNCOVERED_CONFLICT
+      edge_type: relations.target
+      source_scope: deployment_governance
+      target_scope: patch_lifecycle
+    sample_outgoing_edges: []
+    sample_incoming_edges: []
+    sample_missing_target_edges: []
+    node_ids:
+    - ACTION_LOG_UNCOVERED_CONFLICT
+    - EVENT_GF08_UNCOVERED_CONFLICT
+    - RULE_GF08_UNCOVERED_CONFLICT_CONSERVATIVE_RESPONSE
+  - cluster_id: LABEL_CLUSTER_026
+    method: label_propagation
+    node_count: 3
+    owner_status: single_owner
+    boundary_pressure: medium
+    nodes_by_owner_scope:
+      mastery_evaluation: 3
+    nodes_by_core:
+      constitution: 3
+    nodes_by_section:
+      EVENTS: 1
+      PARAMETERS: 1
+      RULES: 1
+    internal_edge_count: 3
+    outgoing_edge_count: 2
+    incoming_edge_count: 0
+    missing_target_edge_count: 0
+    candidate_neighbor_ids:
+    - ACTION_PLAN_SHORT_DIAGNOSTIC_TASK
+    candidate_neighbor_scopes: *id025
+    inbound_source_ids: []
+    inbound_source_scopes: []
+    recommendation: declare_or_review_neighbors
+    sample_internal_edges:
+    - source: EVENT_PROVISIONAL_MASTERY_WINDOW_EXPIRED
+      target: PARAM_PROVISIONAL_MASTERY_VERIFICATION_WINDOW
+      edge_type: depends_on
+      source_scope: mastery_evaluation
+      target_scope: mastery_evaluation
+    - source: EVENT_PROVISIONAL_MASTERY_WINDOW_EXPIRED
+      target: RULE_PROVISIONAL_MASTERY_WINDOW_EXPIRY_SAFE_FALLBACK
+      edge_type: relations.target
+      source_scope: mastery_evaluation
+      target_scope: mastery_evaluation
+    - source: RULE_PROVISIONAL_MASTERY_WINDOW_EXPIRY_SAFE_FALLBACK
+      target: EVENT_PROVISIONAL_MASTERY_WINDOW_EXPIRED
+      edge_type: depends_on
+      source_scope: mastery_evaluation
+      target_scope: mastery_evaluation
+    sample_outgoing_edges:
+    - source: RULE_PROVISIONAL_MASTERY_WINDOW_EXPIRY_SAFE_FALLBACK
+      target: ACTION_PLAN_SHORT_DIAGNOSTIC_TASK
+      edge_type: depends_on
+      source_scope: mastery_evaluation
+      target_scope: mastery_evaluation
+    - source: RULE_PROVISIONAL_MASTERY_WINDOW_EXPIRY_SAFE_FALLBACK
+      target: ACTION_PLAN_SHORT_DIAGNOSTIC_TASK
+      edge_type: relations.target
+      source_scope: mastery_evaluation
+      target_scope: mastery_evaluation
+    sample_incoming_edges: []
+    sample_missing_target_edges: []
+    node_ids:
+    - EVENT_PROVISIONAL_MASTERY_WINDOW_EXPIRED
+    - PARAM_PROVISIONAL_MASTERY_VERIFICATION_WINDOW
+    - RULE_PROVISIONAL_MASTERY_WINDOW_EXPIRY_SAFE_FALLBACK
+  - cluster_id: LABEL_CLUSTER_027
+    method: label_propagation
+    node_count: 3
+    owner_status: fully_unowned
+    boundary_pressure: medium
+    nodes_by_owner_scope:
+      UNOWNED: 3
+    nodes_by_core:
+      referentiel: 3
+    nodes_by_section:
+      PARAMETERS: 2
+      RULES: 1
+    internal_edge_count: 2
+    outgoing_edge_count: 1
+    incoming_edge_count: 0
+    missing_target_edge_count: 0
+    candidate_neighbor_ids:
+    - RULE_REFERENTIEL_ADAPTIVE_REGIME_CONFLICT_RESOLUTION
+    candidate_neighbor_scopes: *id026
+    inbound_source_ids: []
+    inbound_source_scopes: []
+    recommendation: classify_unowned_core_area
+    sample_internal_edges:
+    - source: RULE_REFERENTIEL_OSCILLATION_EXIT_AND_ESCALATION
+      target: PARAM_REFERENTIEL_CONSOLIDATION_SATISFACTORY_SESSION_CRITERION
+      edge_type: depends_on
+      source_scope: null
+      target_scope: null
+    - source: RULE_REFERENTIEL_OSCILLATION_EXIT_AND_ESCALATION
+      target: PARAM_REFERENTIEL_OSCILLATION_MAX_CYCLES_BEFORE_ESCALATION
+      edge_type: depends_on
+      source_scope: null
+      target_scope: null
+    sample_outgoing_edges:
+    - source: RULE_REFERENTIEL_OSCILLATION_EXIT_AND_ESCALATION
+      target: RULE_REFERENTIEL_ADAPTIVE_REGIME_CONFLICT_RESOLUTION
+      edge_type: depends_on
+      source_scope: null
+      target_scope: null
+    sample_incoming_edges: []
+    sample_missing_target_edges: []
+    node_ids:
+    - PARAM_REFERENTIEL_CONSOLIDATION_SATISFACTORY_SESSION_CRITERION
+    - PARAM_REFERENTIEL_OSCILLATION_MAX_CYCLES_BEFORE_ESCALATION
+    - RULE_REFERENTIEL_OSCILLATION_EXIT_AND_ESCALATION
+  - cluster_id: LABEL_CLUSTER_028
+    method: label_propagation
+    node_count: 3
+    owner_status: fully_unowned
+    boundary_pressure: low
+    nodes_by_owner_scope:
+      UNOWNED: 3
+    nodes_by_core:
+      referentiel: 3
+    nodes_by_section:
+      PARAMETERS: 2
+      RULES: 1
+    internal_edge_count: 2
+    outgoing_edge_count: 0
+    incoming_edge_count: 0
+    missing_target_edge_count: 0
+    candidate_neighbor_ids: []
+    candidate_neighbor_scopes: *id027
+    inbound_source_ids: []
+    inbound_source_scopes: []
+    recommendation: classify_unowned_core_area
+    sample_internal_edges:
+    - source: RULE_REFERENTIEL_INTERLEAVING_ACTIVATION
+      target: PARAM_REFERENTIEL_INTERLEAVING_DISTINCT_TASKS_MIN
+      edge_type: depends_on
+      source_scope: null
+      target_scope: null
+    - source: RULE_REFERENTIEL_INTERLEAVING_ACTIVATION
+      target: PARAM_REFERENTIEL_INTERLEAVING_SUCCESS_STREAK
+      edge_type: depends_on
+      source_scope: null
+      target_scope: null
+    sample_outgoing_edges: []
+    sample_incoming_edges: []
+    sample_missing_target_edges: []
+    node_ids:
+    - PARAM_REFERENTIEL_INTERLEAVING_DISTINCT_TASKS_MIN
+    - PARAM_REFERENTIEL_INTERLEAVING_SUCCESS_STREAK
+    - RULE_REFERENTIEL_INTERLEAVING_ACTIVATION
+  notes:
+  - This report is diagnostic only.
+  - Clusters do not become scopes automatically.
+  - Outgoing edges suggest neighbor needs or boundary pressure.
+  - Multi-owner clusters require split, merge, bridge, or ownership review.
+  - Fully unowned clusters likely correspond to referentiel/link areas not yet scoped.
