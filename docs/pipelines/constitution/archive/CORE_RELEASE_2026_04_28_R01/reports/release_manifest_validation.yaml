@@ -1,0 +1,10 @@
+RELEASE_MANIFEST_VALIDATION:
+  status: PASS
+  scope: release_manifest
+  schema_id: RELEASE_MANIFEST_SCHEMA_V1
+  anomalies_count: 0
+  warnings_count: 0
+  anomalies:
+    - none
+  warnings:
+    - none
