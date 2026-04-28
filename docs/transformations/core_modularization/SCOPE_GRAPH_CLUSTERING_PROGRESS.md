@@ -32,14 +32,13 @@ This tracker reflects the current Scope Lab execution state after:
 
 ```yaml
 current_phase:
-  phase_id: PHASE_17
-  label: scope_maturity_score_authority_migration
-  status: active
+  phase_id: PHASE_18
+  label: macro_005_neighbor_declaration_review
+  status: planned
   summary: >-
-    PHASE_17 upgrades the maturity scoring authority model. The scorer remains
-    deterministic and non-mutating, but the computed maturity becomes the publishable
-    authority candidate. Publication into policy.yaml must happen through a separate
-    gated deterministic patcher, followed by scope catalog regeneration and scoring rerun.
+    PHASE_18 is the recommended next post-pilot follow-up. It will review the generic
+    neighbor declaration model after PHASE_16 and PHASE_17 stabilized Constitution
+    neighbor IDs, maturity scoring, score publication, and scope catalog convergence.
 ```
 
 
@@ -527,51 +526,103 @@ phases:
 
   - phase_id: PHASE_17
     label: scope_maturity_score_authority_migration
-    status: active
+    status: done
     objective: >-
       Migrate maturity score authority from diagnostic-only reporting to a governed
       deterministic publication chain where computed scores can be applied to
       scope_generation/policy.yaml through a gated patcher.
     rationale: >-
       PHASE_15 implemented deterministic scoring and PHASE_16 resolved the blocking
-      neighbor-ID coverage issue. The remaining mismatch is doctrinal: policy.yaml
-      still carries manually published maturity while the deterministic scorer now
-      produces auditable computed maturity. PHASE_17 makes computed maturity publishable
-      without allowing the scorer to mutate canonical files directly.
+      neighbor-ID coverage issue. PHASE_17 closes the remaining doctrinal gap by
+      allowing computed maturity to become the published canonical maturity through a
+      separate deterministic patcher, without allowing the scorer to mutate canonical
+      files directly.
     authority_position:
       scorer_role: compute_and_prove_only
       policy_yaml_role: canonical_published_maturity_store
       publication_mechanism: gated_deterministic_patcher
       catalog_role: generated_output_from_policy_and_decisions
-    planned_subtasks:
+    completed_subtasks:
       - subtask_id: PHASE_17A_SPEC_AND_STAGE00_AUTHORITY_UPDATE
         status: done
-        objective: >-
-          Update the scoring spec, STAGE_00 doctrine and progress tracker so computed
-          maturity is recognized as the publishable authority candidate.
         evidence:
           - docs/specs/constitution_scope_maturity_scoring.md
           - docs/pipelines/constitution/STAGE_00_SCOPE_PARTITION_REVIEW_AND_REGEN.md
           - docs/transformations/core_modularization/SCOPE_GRAPH_CLUSTERING_PROGRESS.md
+        result:
+          scoring_spec_version: V0.2
+          computed_maturity_authority: computed_score_candidate
+          scorer_mutation_policy: non_mutating
+          publication_mechanism: gated_policy_patcher
       - subtask_id: PHASE_17B_SCORE_POLICY_PATCHER
-        status: pending
-        objective: >-
-          Install apply_constitution_scope_maturity_scores.py as a dry-run-by-default
-          deterministic patcher for policy.yaml maturity fields.
+        status: done
+        evidence:
+          - docs/patcher/shared/apply_constitution_scope_maturity_scores.py
+          - docs/pipelines/constitution/reports/scope_maturity_policy_patch_report.yaml
+        result:
+          patcher_installed: true
+          default_mode: dry_run
+          writes_policy_only_with_apply: true
+          dry_run_status: PASS
       - subtask_id: PHASE_17C_APPLY_COMPUTED_SCORES
-        status: pending_after_patcher
-        objective: >-
-          Apply computed scores to policy.yaml through the gated patcher, regenerate
-          the scope catalog, and rerun scoring to verify convergence.
+        status: done
+        evidence:
+          - docs/pipelines/constitution/policies/scope_generation/policy.yaml
+          - docs/pipelines/constitution/scope_catalog/manifest.yaml
+          - docs/pipelines/constitution/scope_catalog/scope_definitions/*.yaml
+          - docs/pipelines/constitution/reports/scope_maturity_scoring_report.yaml
+          - docs/pipelines/constitution/reports/scope_maturity_policy_patch_report.yaml
+          - tmp/constitution_scope_generation_report.yaml
+        result:
+          policy_scores_applied: true
+          scope_generation_status: PASS
+          scoring_status: PASS
+          blocking_finding_count: 0
+          warning_count: 0
+          computed_lower_than_published_count: 0
+          computed_delta_non_blocking_count: 0
+          policy_patch_dry_run_changed: false
+          final_published_scores:
+            deployment_governance:
+              score_total: 18
+              level: L3_operational
+            knowledge_and_design:
+              score_total: 22
+              level: L4_strong
+            learner_state:
+              score_total: 19
+              level: L3_operational
+            mastery_evaluation:
+              score_total: 22
+              level: L4_strong
+            patch_lifecycle:
+              score_total: 17
+              level: L3_operational
       - subtask_id: PHASE_17D_CLOSEOUT_AND_HANDOFF
-        status: pending
-        objective: >-
-          Close PHASE_17 and select the next post-pilot follow-up, likely MACRO_005
-          neighbor declaration review before MACRO_004 multi-owner cluster review.
-    pending_subtasks:
-      - PHASE_17B_SCORE_POLICY_PATCHER
-      - PHASE_17C_APPLY_COMPUTED_SCORES
-      - PHASE_17D_CLOSEOUT_AND_HANDOFF
+        status: done
+        evidence:
+          - docs/transformations/core_modularization/SCOPE_GRAPH_CLUSTERING_PROGRESS.md
+        result:
+          next_follow_up_selected: MACRO_005_NEIGHBOR_DECLARATION_REVIEW
+          next_phase_id: PHASE_18
+          rationale: >-
+            MACRO_005 should precede MACRO_004 because the repo just stabilized the
+            neighbor declaration and scoring publication loop. Reviewing the generic
+            neighbor declaration model is lower risk and more directly continuous than
+            reopening multi-owner cluster boundaries immediately.
+    pending_subtasks: []
+    closure:
+      status: closed
+      closed_reason: >-
+        The maturity score authority migration is complete. The scorer remains
+        non-mutating, computed scores are publishable through a gated deterministic
+        policy patcher, policy.yaml has been synchronized to computed maturity, the
+        catalog has been regenerated, scoring now returns PASS, and the policy patcher
+        dry-run is idempotent with changed=false.
+      residual_signals:
+        - governance_backlog entries remain open where they represent broader scope design questions
+        - MACRO_005 neighbor declaration review remains to generalize the declaration model
+        - MACRO_004 multi-owner cluster review remains pending after MACRO_005
 
 ```
 
@@ -651,12 +702,18 @@ implementation_tracking:
   constitution_neighbor_ids_scoring_rerun_status: WARN
   constitution_neighbor_ids_scoring_blocking_finding_count: 0
   constitution_neighbor_ids_uncovered_outgoing_dependency_count_all_scopes: 0
-  phase17_scope_maturity_score_authority_migration_active: true
+  phase17_scope_maturity_score_authority_migration_active: false
   phase17_spec_and_stage00_authority_update_done: true
   score_maturity_computed_authority_candidate_doctrine_defined: true
   score_maturity_policy_patcher_required: true
-  score_maturity_policy_patcher_created: false
-  score_maturity_policy_scores_applied: false
+  score_maturity_policy_patcher_created: true
+  score_maturity_policy_scores_applied: true
+  phase17_scope_maturity_score_authority_migration_done: true
+  phase17_score_policy_patcher_idempotent: true
+  scope_maturity_scoring_report_final_status: PASS
+  scope_maturity_policy_patch_report_final_changed: false
+  phase18_macro_005_neighbor_declaration_review_planned: true
+  phase18_selected_before_macro_004: true
 ```
 
 ## Key decisions recorded
@@ -773,6 +830,24 @@ decision_log:
       deterministic patcher, followed by scope catalog regeneration and scoring rerun.
 
 
+  - decision_id: DECISION_017
+    date: 2026-04-28
+    status: accepted
+    decision: >-
+      Close PHASE_17 after computed maturity scores were published into policy.yaml
+      through a gated deterministic patcher, the scope catalog was regenerated, scoring
+      returned PASS, and the score policy patcher became idempotent with changed=false.
+
+
+  - decision_id: DECISION_018
+    date: 2026-04-28
+    status: accepted
+    decision: >-
+      Select MACRO_005_NEIGHBOR_DECLARATION_REVIEW as the next post-pilot follow-up
+      before MACRO_004_MULTI_OWNER_CLUSTER_REVIEW. Neighbor declaration review is the
+      safer and more continuous next step after PHASE_16 and PHASE_17.
+
+
 ```
 
 ## Open risks
@@ -859,6 +934,16 @@ risks:
       PHASE_16 is planned as a separate content-governance phase. PHASE_14 remains
       focused on generic backlog production, export, reporting, launcher surfacing,
       and lifecycle rules.
+
+  - risk_id: RISK_012
+    label: neighbor_declaration_model_still_fragmented
+    severity: medium
+    status: open
+    mitigation: >-
+      PHASE_18 / MACRO_005 is planned to review and stabilize neighbor declaration
+      surfaces across default neighbor IDs, external read-only files, cross-core
+      parameters, scope extracts and neighbor extracts.
+
 
 ```
 
