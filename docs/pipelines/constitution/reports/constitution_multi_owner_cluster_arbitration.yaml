@@ -2,7 +2,7 @@ constitution_multi_owner_cluster_arbitration:
   schema_version: '0.1'
   phase_id: PHASE_19B
   generated_at: '2026-04-28T16:15:37Z'
-  status: PENDING_HUMAN_ARBITRATION
+  status: HUMAN_ARBITRATION_COMPLETED
   source_inventory_report: docs/pipelines/constitution/reports/constitution_multi_owner_cluster_inventory_report.yaml
   source_inventory_sha256: baf6a5f4c7f7177d9e64474083f3d2668e8ddad6877e891ca7b839e50b2cb2f2
   scope: true_ownership_ambiguity_candidates_only
@@ -23,8 +23,8 @@ constitution_multi_owner_cluster_arbitration:
   - wont_fix_with_rationale
   summary:
     candidate_count: 3
-    pending_count: 3
-    accepted_count: 0
+    pending_count: 0
+    accepted_count: 3
     requires_policy_decisions_patch_count: 0
     requires_catalog_regeneration_count: 0
   items:
@@ -73,12 +73,18 @@ constitution_multi_owner_cluster_arbitration:
       - preserve_existing_diagnostic_subcluster
       - review_existing_governance_backlog_refs_before opening any new backlog item
     human_arbitration:
-      decision: pending
-      accepted: false
-      requires_policy_decisions_patch: null
-      requires_catalog_regeneration: null
-      rationale: TO_BE_COMPLETED_BY_HUMAN_ARBITRATION
-      follow_up_actions: []
+      decision: keep_current_ownership_with_existing_governance
+      accepted: true
+      requires_policy_decisions_patch: false
+      requires_catalog_regeneration: false
+      rationale: Accepted PHASE_19B recommendation. LABEL_CLUSTER_001 is broad and mixed, but the actionable signals are already
+        governed as read-neighbors, diagnostic subcluster evidence, bridge/external material, and existing governance backlog
+        items. No ownership transfer is justified by this cluster alone.
+      follow_up_actions:
+      - keep_current_ownership
+      - preserve_existing_read_neighbors
+      - preserve_existing_diagnostic_subcluster
+      - reuse_existing_governance_backlog_refs_for_residual_design_questions
     allowed_human_decisions: *id001
   - candidate_id: CAND_MULTI_OWNER_CLUSTER_008
     cluster_id: LABEL_CLUSTER_008
@@ -114,12 +120,17 @@ constitution_multi_owner_cluster_arbitration:
       - preserve_existing_read_neighbors
       - optionally revisit as diagnostic_subcluster only if future runs show repeated ambiguity
     human_arbitration:
-      decision: pending
-      accepted: false
-      requires_policy_decisions_patch: null
-      requires_catalog_regeneration: null
-      rationale: TO_BE_COMPLETED_BY_HUMAN_ARBITRATION
-      follow_up_actions: []
+      decision: keep_current_ownership_with_explicit_neighbors
+      accepted: true
+      requires_policy_decisions_patch: false
+      requires_catalog_regeneration: false
+      rationale: Accepted PHASE_19B recommendation. LABEL_CLUSTER_008 represents semantic dependency bridges across deployment_governance,
+        knowledge_and_design and mastery_evaluation. The relevant cross-scope links are already represented as explicit read-neighbor
+        relations; they do not justify ownership movement.
+      follow_up_actions:
+      - keep_current_ownership
+      - preserve_existing_read_neighbors
+      - revisit_as_diagnostic_subcluster_only_if_future_runs_show_repeated_ambiguity
     allowed_human_decisions: *id001
   - candidate_id: CAND_MULTI_OWNER_CLUSTER_010
     cluster_id: LABEL_CLUSTER_013
@@ -162,12 +173,18 @@ constitution_multi_owner_cluster_arbitration:
       - preserve_patch_trigger_governance_diagnostic_subcluster
       - do_not_move runtime/no-generation invariants solely because of graph proximity
     human_arbitration:
-      decision: pending
-      accepted: false
-      requires_policy_decisions_patch: null
-      requires_catalog_regeneration: null
-      rationale: TO_BE_COMPLETED_BY_HUMAN_ARBITRATION
-      follow_up_actions: []
+      decision: keep_current_ownership_with_existing_governance
+      accepted: true
+      requires_policy_decisions_patch: false
+      requires_catalog_regeneration: false
+      rationale: Accepted PHASE_19B recommendation. LABEL_CLUSTER_013 has high boundary pressure, but PHASE_16/18 already
+        separate read-neighbor governance from ownership. Runtime/no-generation invariants and patch trigger governance remain
+        governed read/diagnostic surfaces, not ownership transfer evidence.
+      follow_up_actions:
+      - keep_current_ownership
+      - preserve_existing_read_neighbors
+      - preserve_patch_trigger_governance_diagnostic_subcluster
+      - do_not_move_runtime_or_no_generation_invariants_based_on_graph_proximity_only
     allowed_human_decisions: *id001
   human_instructions:
   - For each item, replace human_arbitration.decision with one allowed value.
