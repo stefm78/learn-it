@@ -249,6 +249,7 @@ Sorties déterministes conditionnelles — gouvernance neighbor IDs Constitution
 - `docs/pipelines/constitution/reports/constitution_neighbor_ids_arbitration.yaml`
 - `docs/pipelines/constitution/reports/constitution_neighbor_ids_arbitration.md`
 - `docs/pipelines/constitution/reports/constitution_neighbor_ids_arbitration_validation.yaml`
+- `docs/pipelines/constitution/reports/constitution_neighbor_ids_decisions_patch_report.yaml`
 
 Mise à jour obligatoire en fin de STAGE_00 :
 - `docs/pipelines/constitution/scope_catalog/governance_backlog.yaml`
