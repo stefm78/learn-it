@@ -42,17 +42,6 @@ current_phase:
     six governance backlog entries to docs/pipelines/constitution/scope_catalog/governance_backlog.yaml.
     Current work is to triage those entries and decide which items feed STAGE_00 scope
     partition review, cross-core follow-up, or future bounded patch_lifecycle design runs.
-  - action_id: NEXT_007
-    status: next
-    label: Implement deterministic post-scoping scope maturity scoring report
-    phase: PHASE_15
-    target: docs/patcher/shared/score_constitution_scope_maturity.py
-    expected_output: docs/pipelines/constitution/reports/scope_maturity_scoring_report.yaml
-    constraints:
-      - do_not_modify_policy_yaml
-      - do_not_modify_decisions_yaml
-      - do_not_modify_generated_scope_catalog
-      - keep_policy_yaml_authoritative_for_published_maturity
 
 ```
 
@@ -553,4 +542,16 @@ next_actions:
       - feed_stage00_scope_partition_review
       - feed_external_read_only_follow_up
       - defer_to_future_bounded_run_or_design_backlog
+  - action_id: NEXT_007
+    status: next
+    label: Implement deterministic post-scoping scope maturity scoring report
+    phase: PHASE_15
+    target: docs/patcher/shared/score_constitution_scope_maturity.py
+    expected_output: docs/pipelines/constitution/reports/scope_maturity_scoring_report.yaml
+    constraints:
+      - do_not_modify_policy_yaml
+      - do_not_modify_decisions_yaml
+      - do_not_modify_generated_scope_catalog
+      - keep_policy_yaml_authoritative_for_published_maturity
+
 ```
