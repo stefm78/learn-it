@@ -1,6 +1,6 @@
 constitution_neighbor_ids_arbitration_validation:
   schema_version: '0.1'
-  generated_at: '2026-04-28T11:59:30Z'
+  generated_at: '2026-04-28T12:06:49Z'
   status: PENDING_HUMAN_ARBITRATION
   source: docs/pipelines/constitution/reports/constitution_neighbor_ids_arbitration.yaml
   allowed_decisions:

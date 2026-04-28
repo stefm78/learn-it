@@ -1,6 +1,6 @@
 constitution_neighbor_ids_arbitration:
   schema_version: '0.1'
-  generated_at: '2026-04-28T11:54:29Z'
+  generated_at: '2026-04-28T12:06:48Z'
   phase: PHASE_16B
   status: PENDING_HUMAN_ARBITRATION
   source_report: docs/pipelines/constitution/reports/constitution_neighbor_ids_governance_report.yaml

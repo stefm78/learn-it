@@ -448,7 +448,7 @@ Report rationale: ID is owned by learner_state and used by mastery_evaluation; d
 
 ## How to complete
 
-Edit `docs/pipelines/constitution/reports/constitution_neighbor_ids_arbitration.yaml`.
+Edit the arbitration YAML file.
 
 For every item:
 
