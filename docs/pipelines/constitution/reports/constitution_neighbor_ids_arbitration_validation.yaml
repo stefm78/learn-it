@@ -1,0 +1,34 @@
+constitution_neighbor_ids_arbitration_validation:
+  schema_version: '0.1'
+  generated_at: '2026-04-28T11:59:30Z'
+  status: PENDING_HUMAN_ARBITRATION
+  source: docs/pipelines/constitution/reports/constitution_neighbor_ids_arbitration.yaml
+  allowed_decisions:
+  - add_as_default_neighbor
+  - defer_to_governance_backlog
+  - wont_fix_with_rationale
+  summary:
+    item_count: 18
+    pending_count: 18
+    completed_count: 0
+    patch_ready_count: 0
+    counts_by_human_decision:
+      pending: 18
+    counts_by_priority:
+      P1_blocking_scoring_delta: 9
+      P2_non_blocking_scoring_delta: 4
+      P3_dependency_explicitness_hygiene: 5
+    counts_by_scope:
+      deployment_governance: 7
+      knowledge_and_design: 2
+      learner_state: 2
+      mastery_evaluation: 3
+      patch_lifecycle: 4
+  blocking_findings: []
+  warnings:
+  - warning_id: NID_ARB_PENDING_ITEMS_REMAIN
+    severity: informational
+    pending_count: 18
+    message: Arbitration is structurally valid but not complete.
+  next_step: Complete human_decision, human_rationale and patch_policy_decisions_after_approval
+    for every item.
