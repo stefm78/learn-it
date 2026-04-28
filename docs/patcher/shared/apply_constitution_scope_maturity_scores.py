@@ -206,6 +206,13 @@ def build_computed_maturity(result: Dict[str, Any]) -> Dict[str, Any]:
 
 
 def merge_rationale(existing: Any, scope_key: str, scoring_status: str) -> List[str]:
+    """Return a stable PHASE_17 rationale list.
+
+    The note intentionally does not embed the current scoring status. Otherwise, the
+    patcher would keep proposing rationale-only rewrites when the scoring report moves
+    from WARN to PASS after publication and rerun.
+    """
+
     if isinstance(existing, list):
         rationale = [str(item) for item in existing]
     elif existing:
@@ -213,12 +220,11 @@ def merge_rationale(existing: Any, scope_key: str, scoring_status: str) -> List[
     else:
         rationale = []
 
-    note = (
-        f"{SOURCE_NOTE} Scope={scope_key}; scoring_status={scoring_status}; "
-        "blocking_finding_count=0."
-    )
-    if note not in rationale:
-        rationale.append(note)
+    stable_prefix = f"{SOURCE_NOTE} Scope={scope_key};"
+    rationale = [item for item in rationale if not item.startswith(stable_prefix)]
+
+    note = f"{stable_prefix} published_by=apply_constitution_scope_maturity_scores.py; blocking_finding_count=0."
+    rationale.append(note)
     return rationale
 
 
