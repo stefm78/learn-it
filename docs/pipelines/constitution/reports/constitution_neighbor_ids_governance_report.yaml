@@ -1,0 +1,471 @@
+constitution_neighbor_ids_governance_report:
+  schema_version: '0.1'
+  generated_at: '2026-04-28T11:43:00Z'
+  phase: PHASE_16
+  status: READY_FOR_HUMAN_ARBITRATION
+  authority: diagnostic_governance_report_only
+  mutation_policy:
+    policy_yaml: not_modified
+    decisions_yaml: not_modified
+    governance_backlog_yaml: not_modified
+    scope_catalog: not_modified
+    maturity_scores: not_modified
+    scorer_v1_1_rules: not_modified
+  inputs:
+    scoring_report: docs/pipelines/constitution/reports/scope_maturity_scoring_report.yaml
+    policy: docs/pipelines/constitution/policies/scope_generation/policy.yaml
+    decisions: docs/pipelines/constitution/policies/scope_generation/decisions.yaml
+    governance_backlog: docs/pipelines/constitution/scope_catalog/governance_backlog.yaml
+  summary:
+    scope_count: 5
+    candidate_count: 18
+    candidate_counts_by_recommended_decision:
+      add_as_default_neighbor: 18
+    scope_counts_by_delta_severity:
+      fail: 2
+      none: 2
+      warn: 1
+    blocking_scopes_from_scoring:
+    - deployment_governance
+    - learner_state
+    warning_scopes_from_scoring:
+    - patch_lifecycle
+  scope_summaries:
+  - scope_key: deployment_governance
+    scope_delta_severity: fail
+    published_level: L3_operational
+    computed_level: L2_usable_with_care
+    score_delta: -6
+    dependency_metrics:
+      dependency_axis_score: 0
+      outgoing_dependency_count: 7
+      covered_outgoing_dependency_count: 0
+      uncovered_outgoing_dependency_count: 7
+      coverage_ratio: 0.0
+    uncovered_id_count: 7
+    recommended_decision_counts:
+      add_as_default_neighbor: 7
+    related_open_backlog_count: 2
+    related_open_backlog_entries:
+    - entry_id: GB_2026_04_27_PATCH_LIFECYCLE_R01_GBC_PATCH_LIFECYCLE_ESCALATION_BOUNDARY_R01
+      type: scope_extension_needed
+      title: Review broad escalation triggers crossing patch_lifecycle and learner_state/governance
+      candidate_id: GBC_PATCH_LIFECYCLE_ESCALATION_BOUNDARY_R01
+    - entry_id: GB_2026_04_27_PATCH_LIFECYCLE_R01_GBC_PATCH_LIFECYCLE_UNCOVERED_CONFLICT_LOGGING_R01
+      type: partition_angle_mort
+      title: Review ACTION_LOG_UNCOVERED_CONFLICT ownership boundary
+      candidate_id: GBC_PATCH_LIFECYCLE_UNCOVERED_CONFLICT_LOGGING_R01
+  - scope_key: knowledge_and_design
+    scope_delta_severity: none
+    published_level: L3_operational
+    computed_level: L3_operational
+    score_delta: 0
+    dependency_metrics:
+      dependency_axis_score: 0
+      outgoing_dependency_count: 2
+      covered_outgoing_dependency_count: 0
+      uncovered_outgoing_dependency_count: 2
+      coverage_ratio: 0.0
+    uncovered_id_count: 2
+    recommended_decision_counts:
+      add_as_default_neighbor: 2
+    related_open_backlog_count: 0
+    related_open_backlog_entries: []
+  - scope_key: learner_state
+    scope_delta_severity: fail
+    published_level: L3_operational
+    computed_level: L2_usable_with_care
+    score_delta: -2
+    dependency_metrics:
+      dependency_axis_score: 0
+      outgoing_dependency_count: 3
+      covered_outgoing_dependency_count: 0
+      uncovered_outgoing_dependency_count: 3
+      coverage_ratio: 0.0
+    uncovered_id_count: 2
+    recommended_decision_counts:
+      add_as_default_neighbor: 2
+    related_open_backlog_count: 2
+    related_open_backlog_entries:
+    - entry_id: GB_2026_04_27_PATCH_LIFECYCLE_R01_GBC_PATCH_LIFECYCLE_LEARNER_STATE_NEIGHBORS_R01
+      type: scope_extension_needed
+      title: Review explicit learner_state read neighbors for patch_lifecycle triggers
+      candidate_id: GBC_PATCH_LIFECYCLE_LEARNER_STATE_NEIGHBORS_R01
+    - entry_id: GB_2026_04_27_PATCH_LIFECYCLE_R01_GBC_PATCH_LIFECYCLE_ESCALATION_BOUNDARY_R01
+      type: scope_extension_needed
+      title: Review broad escalation triggers crossing patch_lifecycle and learner_state/governance
+      candidate_id: GBC_PATCH_LIFECYCLE_ESCALATION_BOUNDARY_R01
+  - scope_key: mastery_evaluation
+    scope_delta_severity: none
+    published_level: L3_operational
+    computed_level: L3_operational
+    score_delta: 0
+    dependency_metrics:
+      dependency_axis_score: 2
+      outgoing_dependency_count: 6
+      covered_outgoing_dependency_count: 3
+      uncovered_outgoing_dependency_count: 3
+      coverage_ratio: 0.5
+    uncovered_id_count: 3
+    recommended_decision_counts:
+      add_as_default_neighbor: 3
+    related_open_backlog_count: 0
+    related_open_backlog_entries: []
+  - scope_key: patch_lifecycle
+    scope_delta_severity: warn
+    published_level: L2_usable_with_care
+    computed_level: L2_usable_with_care
+    score_delta: -3
+    dependency_metrics:
+      dependency_axis_score: 0
+      outgoing_dependency_count: 6
+      covered_outgoing_dependency_count: 0
+      uncovered_outgoing_dependency_count: 6
+      coverage_ratio: 0.0
+    uncovered_id_count: 4
+    recommended_decision_counts:
+      add_as_default_neighbor: 4
+    related_open_backlog_count: 6
+    related_open_backlog_entries:
+    - entry_id: GB_2026_04_27_PATCH_LIFECYCLE_R01_GBC_PATCH_LIFECYCLE_LEARNER_STATE_NEIGHBORS_R01
+      type: scope_extension_needed
+      title: Review explicit learner_state read neighbors for patch_lifecycle triggers
+      candidate_id: GBC_PATCH_LIFECYCLE_LEARNER_STATE_NEIGHBORS_R01
+    - entry_id: GB_2026_04_27_PATCH_LIFECYCLE_R01_GBC_PATCH_LIFECYCLE_REFERENTIEL_PARAMETER_R01
+      type: scope_gap
+      title: Track external_read_only referentiel parameter dependency for patch escalation
+        threshold
+      candidate_id: GBC_PATCH_LIFECYCLE_REFERENTIEL_PARAMETER_R01
+    - entry_id: GB_2026_04_27_PATCH_LIFECYCLE_R01_GBC_PATCH_LIFECYCLE_ESCALATION_BOUNDARY_R01
+      type: scope_extension_needed
+      title: Review broad escalation triggers crossing patch_lifecycle and learner_state/governance
+      candidate_id: GBC_PATCH_LIFECYCLE_ESCALATION_BOUNDARY_R01
+    - entry_id: GB_2026_04_27_PATCH_LIFECYCLE_R01_GBC_PATCH_LIFECYCLE_UNCOVERED_CONFLICT_LOGGING_R01
+      type: partition_angle_mort
+      title: Review ACTION_LOG_UNCOVERED_CONFLICT ownership boundary
+      candidate_id: GBC_PATCH_LIFECYCLE_UNCOVERED_CONFLICT_LOGGING_R01
+    - entry_id: GB_2026_04_27_PATCH_LIFECYCLE_R01_GBC_PATCH_LIFECYCLE_PRIORITY_QUEUE_R01
+      type: scope_gap
+      title: Decide whether patch serialization requires deterministic priority lanes
+      candidate_id: GBC_PATCH_LIFECYCLE_PRIORITY_QUEUE_R01
+    - entry_id: GB_2026_04_27_PATCH_LIFECYCLE_R01_GBC_PATCH_LIFECYCLE_FULL_STATE_MACHINE_R01
+      type: scope_gap
+      title: Decide whether patch_lifecycle needs a canonical patch state machine
+      candidate_id: GBC_PATCH_LIFECYCLE_FULL_STATE_MACHINE_R01
+  decision_candidates:
+  - candidate_id: NIDG_DEPLOYMENT_GOVERNANCE__ACTION_LOG_UNCOVERED_CONFLICT
+    scope_key: deployment_governance
+    uncovered_id: ACTION_LOG_UNCOVERED_CONFLICT
+    owner_scope_key: patch_lifecycle
+    owner_decision_id: SGEN_DECISION_005
+    source_signal:
+      report: docs/pipelines/constitution/reports/scope_maturity_scoring_report.yaml
+      axis: dependency_explicitness
+      scope_delta_severity: fail
+      computed_score_total: 13
+      computed_level: L2_usable_with_care
+      published_score_total: 19
+      published_level: L3_operational
+    recommended_decision: add_as_default_neighbor
+    requires_human_arbitration: true
+    rationale: ID is owned by patch_lifecycle and used by deployment_governance; declare
+      it as an explicit Constitution read neighbor if the dependency is legitimate.
+  - candidate_id: NIDG_DEPLOYMENT_GOVERNANCE__INV_GRAPH_PROPAGATION_ONE_HOP
+    scope_key: deployment_governance
+    uncovered_id: INV_GRAPH_PROPAGATION_ONE_HOP
+    owner_scope_key: mastery_evaluation
+    owner_decision_id: SGEN_DECISION_004
+    source_signal:
+      report: docs/pipelines/constitution/reports/scope_maturity_scoring_report.yaml
+      axis: dependency_explicitness
+      scope_delta_severity: fail
+      computed_score_total: 13
+      computed_level: L2_usable_with_care
+      published_score_total: 19
+      published_level: L3_operational
+    recommended_decision: add_as_default_neighbor
+    requires_human_arbitration: true
+    rationale: ID is owned by mastery_evaluation and used by deployment_governance;
+      declare it as an explicit Constitution read neighbor if the dependency is legitimate.
+  - candidate_id: NIDG_DEPLOYMENT_GOVERNANCE__INV_MSC_AND_STRICT
+    scope_key: deployment_governance
+    uncovered_id: INV_MSC_AND_STRICT
+    owner_scope_key: mastery_evaluation
+    owner_decision_id: SGEN_DECISION_004
+    source_signal:
+      report: docs/pipelines/constitution/reports/scope_maturity_scoring_report.yaml
+      axis: dependency_explicitness
+      scope_delta_severity: fail
+      computed_score_total: 13
+      computed_level: L2_usable_with_care
+      published_score_total: 19
+      published_level: L3_operational
+    recommended_decision: add_as_default_neighbor
+    requires_human_arbitration: true
+    rationale: ID is owned by mastery_evaluation and used by deployment_governance;
+      declare it as an explicit Constitution read neighbor if the dependency is legitimate.
+  - candidate_id: NIDG_DEPLOYMENT_GOVERNANCE__TYPE_AUTHENTIC_CONTEXT
+    scope_key: deployment_governance
+    uncovered_id: TYPE_AUTHENTIC_CONTEXT
+    owner_scope_key: knowledge_and_design
+    owner_decision_id: SGEN_DECISION_002
+    source_signal:
+      report: docs/pipelines/constitution/reports/scope_maturity_scoring_report.yaml
+      axis: dependency_explicitness
+      scope_delta_severity: fail
+      computed_score_total: 13
+      computed_level: L2_usable_with_care
+      published_score_total: 19
+      published_level: L3_operational
+    recommended_decision: add_as_default_neighbor
+    requires_human_arbitration: true
+    rationale: ID is owned by knowledge_and_design and used by deployment_governance;
+      declare it as an explicit Constitution read neighbor if the dependency is legitimate.
+  - candidate_id: NIDG_DEPLOYMENT_GOVERNANCE__TYPE_CORPUS_CONFIDENCE_ICC
+    scope_key: deployment_governance
+    uncovered_id: TYPE_CORPUS_CONFIDENCE_ICC
+    owner_scope_key: knowledge_and_design
+    owner_decision_id: SGEN_DECISION_002
+    source_signal:
+      report: docs/pipelines/constitution/reports/scope_maturity_scoring_report.yaml
+      axis: dependency_explicitness
+      scope_delta_severity: fail
+      computed_score_total: 13
+      computed_level: L2_usable_with_care
+      published_score_total: 19
+      published_level: L3_operational
+    recommended_decision: add_as_default_neighbor
+    requires_human_arbitration: true
+    rationale: ID is owned by knowledge_and_design and used by deployment_governance;
+      declare it as an explicit Constitution read neighbor if the dependency is legitimate.
+  - candidate_id: NIDG_DEPLOYMENT_GOVERNANCE__TYPE_FEEDBACK_COVERAGE_MATRIX
+    scope_key: deployment_governance
+    uncovered_id: TYPE_FEEDBACK_COVERAGE_MATRIX
+    owner_scope_key: knowledge_and_design
+    owner_decision_id: SGEN_DECISION_002
+    source_signal:
+      report: docs/pipelines/constitution/reports/scope_maturity_scoring_report.yaml
+      axis: dependency_explicitness
+      scope_delta_severity: fail
+      computed_score_total: 13
+      computed_level: L2_usable_with_care
+      published_score_total: 19
+      published_level: L3_operational
+    recommended_decision: add_as_default_neighbor
+    requires_human_arbitration: true
+    rationale: ID is owned by knowledge_and_design and used by deployment_governance;
+      declare it as an explicit Constitution read neighbor if the dependency is legitimate.
+  - candidate_id: NIDG_DEPLOYMENT_GOVERNANCE__TYPE_SESSION_INTEGRITY_SCORE
+    scope_key: deployment_governance
+    uncovered_id: TYPE_SESSION_INTEGRITY_SCORE
+    owner_scope_key: mastery_evaluation
+    owner_decision_id: SGEN_DECISION_004
+    source_signal:
+      report: docs/pipelines/constitution/reports/scope_maturity_scoring_report.yaml
+      axis: dependency_explicitness
+      scope_delta_severity: fail
+      computed_score_total: 13
+      computed_level: L2_usable_with_care
+      published_score_total: 19
+      published_level: L3_operational
+    recommended_decision: add_as_default_neighbor
+    requires_human_arbitration: true
+    rationale: ID is owned by mastery_evaluation and used by deployment_governance;
+      declare it as an explicit Constitution read neighbor if the dependency is legitimate.
+  - candidate_id: NIDG_KNOWLEDGE_AND_DESIGN__INV_NO_RUNTIME_CONTENT_GENERATION
+    scope_key: knowledge_and_design
+    uncovered_id: INV_NO_RUNTIME_CONTENT_GENERATION
+    owner_scope_key: deployment_governance
+    owner_decision_id: SGEN_DECISION_001
+    source_signal:
+      report: docs/pipelines/constitution/reports/scope_maturity_scoring_report.yaml
+      axis: dependency_explicitness
+      scope_delta_severity: none
+      computed_score_total: 17
+      computed_level: L3_operational
+      published_score_total: 17
+      published_level: L3_operational
+    recommended_decision: add_as_default_neighbor
+    requires_human_arbitration: true
+    rationale: ID is owned by deployment_governance and used by knowledge_and_design;
+      declare it as an explicit Constitution read neighbor if the dependency is legitimate.
+  - candidate_id: NIDG_KNOWLEDGE_AND_DESIGN__TYPE_HUMAN_CHECKPOINT
+    scope_key: knowledge_and_design
+    uncovered_id: TYPE_HUMAN_CHECKPOINT
+    owner_scope_key: deployment_governance
+    owner_decision_id: SGEN_DECISION_001
+    source_signal:
+      report: docs/pipelines/constitution/reports/scope_maturity_scoring_report.yaml
+      axis: dependency_explicitness
+      scope_delta_severity: none
+      computed_score_total: 17
+      computed_level: L3_operational
+      published_score_total: 17
+      published_level: L3_operational
+    recommended_decision: add_as_default_neighbor
+    requires_human_arbitration: true
+    rationale: ID is owned by deployment_governance and used by knowledge_and_design;
+      declare it as an explicit Constitution read neighbor if the dependency is legitimate.
+  - candidate_id: NIDG_LEARNER_STATE__ACTION_ESCALATE_PERSISTENT_DRIFT_OFFSESSION
+    scope_key: learner_state
+    uncovered_id: ACTION_ESCALATE_PERSISTENT_DRIFT_OFFSESSION
+    owner_scope_key: patch_lifecycle
+    owner_decision_id: SGEN_DECISION_005
+    source_signal:
+      report: docs/pipelines/constitution/reports/scope_maturity_scoring_report.yaml
+      axis: dependency_explicitness
+      scope_delta_severity: fail
+      computed_score_total: 15
+      computed_level: L2_usable_with_care
+      published_score_total: 17
+      published_level: L3_operational
+    recommended_decision: add_as_default_neighbor
+    requires_human_arbitration: true
+    rationale: ID is owned by patch_lifecycle and used by learner_state; declare it
+      as an explicit Constitution read neighbor if the dependency is legitimate.
+  - candidate_id: NIDG_LEARNER_STATE__ACTION_PLAN_SHORT_DIAGNOSTIC_TASK
+    scope_key: learner_state
+    uncovered_id: ACTION_PLAN_SHORT_DIAGNOSTIC_TASK
+    owner_scope_key: mastery_evaluation
+    owner_decision_id: SGEN_DECISION_004
+    source_signal:
+      report: docs/pipelines/constitution/reports/scope_maturity_scoring_report.yaml
+      axis: dependency_explicitness
+      scope_delta_severity: fail
+      computed_score_total: 15
+      computed_level: L2_usable_with_care
+      published_score_total: 17
+      published_level: L3_operational
+    recommended_decision: add_as_default_neighbor
+    requires_human_arbitration: true
+    rationale: ID is owned by mastery_evaluation and used by learner_state; declare
+      it as an explicit Constitution read neighbor if the dependency is legitimate.
+  - candidate_id: NIDG_MASTERY_EVALUATION__ACTION_ESCALATE_PERSISTENT_DRIFT_OFFSESSION
+    scope_key: mastery_evaluation
+    uncovered_id: ACTION_ESCALATE_PERSISTENT_DRIFT_OFFSESSION
+    owner_scope_key: patch_lifecycle
+    owner_decision_id: SGEN_DECISION_005
+    source_signal:
+      report: docs/pipelines/constitution/reports/scope_maturity_scoring_report.yaml
+      axis: dependency_explicitness
+      scope_delta_severity: none
+      computed_score_total: 18
+      computed_level: L3_operational
+      published_score_total: 18
+      published_level: L3_operational
+    recommended_decision: add_as_default_neighbor
+    requires_human_arbitration: true
+    rationale: ID is owned by patch_lifecycle and used by mastery_evaluation; declare
+      it as an explicit Constitution read neighbor if the dependency is legitimate.
+  - candidate_id: NIDG_MASTERY_EVALUATION__TYPE_INTEGRITY_MODES
+    scope_key: mastery_evaluation
+    uncovered_id: TYPE_INTEGRITY_MODES
+    owner_scope_key: deployment_governance
+    owner_decision_id: SGEN_DECISION_001
+    source_signal:
+      report: docs/pipelines/constitution/reports/scope_maturity_scoring_report.yaml
+      axis: dependency_explicitness
+      scope_delta_severity: none
+      computed_score_total: 18
+      computed_level: L3_operational
+      published_score_total: 18
+      published_level: L3_operational
+    recommended_decision: add_as_default_neighbor
+    requires_human_arbitration: true
+    rationale: ID is owned by deployment_governance and used by mastery_evaluation;
+      declare it as an explicit Constitution read neighbor if the dependency is legitimate.
+  - candidate_id: NIDG_MASTERY_EVALUATION__TYPE_SELF_REPORT_AR_N1
+    scope_key: mastery_evaluation
+    uncovered_id: TYPE_SELF_REPORT_AR_N1
+    owner_scope_key: learner_state
+    owner_decision_id: SGEN_DECISION_003
+    source_signal:
+      report: docs/pipelines/constitution/reports/scope_maturity_scoring_report.yaml
+      axis: dependency_explicitness
+      scope_delta_severity: none
+      computed_score_total: 18
+      computed_level: L3_operational
+      published_score_total: 18
+      published_level: L3_operational
+    recommended_decision: add_as_default_neighbor
+    requires_human_arbitration: true
+    rationale: ID is owned by learner_state and used by mastery_evaluation; declare
+      it as an explicit Constitution read neighbor if the dependency is legitimate.
+  - candidate_id: NIDG_PATCH_LIFECYCLE__INV_NO_RUNTIME_CONTENT_GENERATION
+    scope_key: patch_lifecycle
+    uncovered_id: INV_NO_RUNTIME_CONTENT_GENERATION
+    owner_scope_key: deployment_governance
+    owner_decision_id: SGEN_DECISION_001
+    source_signal:
+      report: docs/pipelines/constitution/reports/scope_maturity_scoring_report.yaml
+      axis: dependency_explicitness
+      scope_delta_severity: warn
+      computed_score_total: 13
+      computed_level: L2_usable_with_care
+      published_score_total: 16
+      published_level: L2_usable_with_care
+    recommended_decision: add_as_default_neighbor
+    requires_human_arbitration: true
+    rationale: ID is owned by deployment_governance and used by patch_lifecycle; declare
+      it as an explicit Constitution read neighbor if the dependency is legitimate.
+  - candidate_id: NIDG_PATCH_LIFECYCLE__INV_RUNTIME_FULLY_LOCAL
+    scope_key: patch_lifecycle
+    uncovered_id: INV_RUNTIME_FULLY_LOCAL
+    owner_scope_key: deployment_governance
+    owner_decision_id: SGEN_DECISION_001
+    source_signal:
+      report: docs/pipelines/constitution/reports/scope_maturity_scoring_report.yaml
+      axis: dependency_explicitness
+      scope_delta_severity: warn
+      computed_score_total: 13
+      computed_level: L2_usable_with_care
+      published_score_total: 16
+      published_level: L2_usable_with_care
+    recommended_decision: add_as_default_neighbor
+    requires_human_arbitration: true
+    rationale: ID is owned by deployment_governance and used by patch_lifecycle; declare
+      it as an explicit Constitution read neighbor if the dependency is legitimate.
+  - candidate_id: NIDG_PATCH_LIFECYCLE__TYPE_SELF_REPORT_AR_N1
+    scope_key: patch_lifecycle
+    uncovered_id: TYPE_SELF_REPORT_AR_N1
+    owner_scope_key: learner_state
+    owner_decision_id: SGEN_DECISION_003
+    source_signal:
+      report: docs/pipelines/constitution/reports/scope_maturity_scoring_report.yaml
+      axis: dependency_explicitness
+      scope_delta_severity: warn
+      computed_score_total: 13
+      computed_level: L2_usable_with_care
+      published_score_total: 16
+      published_level: L2_usable_with_care
+    recommended_decision: add_as_default_neighbor
+    requires_human_arbitration: true
+    rationale: ID is owned by learner_state and used by patch_lifecycle; declare it
+      as an explicit Constitution read neighbor if the dependency is legitimate.
+  - candidate_id: NIDG_PATCH_LIFECYCLE__TYPE_STATE_AXIS_VALUE_COST
+    scope_key: patch_lifecycle
+    uncovered_id: TYPE_STATE_AXIS_VALUE_COST
+    owner_scope_key: learner_state
+    owner_decision_id: SGEN_DECISION_003
+    source_signal:
+      report: docs/pipelines/constitution/reports/scope_maturity_scoring_report.yaml
+      axis: dependency_explicitness
+      scope_delta_severity: warn
+      computed_score_total: 13
+      computed_level: L2_usable_with_care
+      published_score_total: 16
+      published_level: L2_usable_with_care
+    recommended_decision: add_as_default_neighbor
+    requires_human_arbitration: true
+    rationale: ID is owned by learner_state and used by patch_lifecycle; declare it
+      as an explicit Constitution read neighbor if the dependency is legitimate.
+  next_step:
+    recommended_action: human_arbitration
+    allowed_decisions:
+    - add_as_default_neighbor
+    - defer_to_governance_backlog
+    - wont_fix_with_rationale
+    after_arbitration:
+    - patch policy.yaml / decisions.yaml only for accepted explicit neighbor IDs
+    - regenerate scope catalog only if policy/decisions change
+    - rerun scope maturity scoring after regeneration
