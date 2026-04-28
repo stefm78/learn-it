@@ -1,0 +1,64 @@
+governance_backlog_phase20b_patch_report:
+  schema_version: '0.1'
+  phase_id: PHASE_20B
+  generated_at: '2026-04-28T16:28:30Z'
+  status: PASS
+  apply_mode: true
+  mutation_policy:
+    governance_backlog_yaml: modified
+    policy_yaml: not_modified
+    decisions_yaml: not_modified
+    scope_catalog: not_modified
+    cores: not_modified
+  inputs:
+    source_report: docs/pipelines/constitution/reports/post_macro_closeout_review_report.yaml
+    source_report_sha256: b97c0409f6bb4d0353378c9889aeef0b734e8b1ea8fdbe162db564c2a4771f3d
+    backlog_path: docs/pipelines/constitution/scope_catalog/governance_backlog.yaml
+  summary:
+    before_status_counts:
+      open: 6
+    after_status_counts:
+      addressed: 2
+      open: 4
+    changed_entry_count: 6
+    marked_addressed_count: 2
+    kept_open_with_review_metadata_count: 4
+    policy_decisions_patch_required: false
+    catalog_regeneration_required: false
+    lifecycle_validation_status: PASS
+    governance_backlog_report_status: PASS
+    open_entries_after_patch: 4
+  changed_entries:
+  - entry_id: GB_2026_04_27_PATCH_LIFECYCLE_R01_GBC_PATCH_LIFECYCLE_ESCALATION_BOUNDARY_R01
+    action: keep_open_with_review_metadata
+    status_after: open
+    review_note: Keep open. PHASE_19 removed the immediate ownership-transfer pressure, but the broader escalation-trigger
+      boundary still requires design when escalation semantics are revisited.
+    next_review_trigger: next patch_lifecycle run touching escalation triggers or dedicated escalation-boundary design run
+  - entry_id: GB_2026_04_27_PATCH_LIFECYCLE_R01_GBC_PATCH_LIFECYCLE_FULL_STATE_MACHINE_R01
+    action: keep_open_with_review_metadata
+    status_after: open
+    review_note: Keep open. A full patch state machine remains a future patch_lifecycle design extension.
+    next_review_trigger: future patch_lifecycle run requiring explicit state transitions beyond current terminal semantics
+  - entry_id: GB_2026_04_27_PATCH_LIFECYCLE_R01_GBC_PATCH_LIFECYCLE_LEARNER_STATE_NEIGHBORS_R01
+    action: mark_addressed
+    status_after: addressed
+    resolution_note: Addressed by PHASE_16/17. Explicit learner_state read-neighbor IDs for patch_lifecycle triggers were
+      governed, applied through decisions.yaml, regenerated into the scope catalog, and scoring now converges to PASS.
+  - entry_id: GB_2026_04_27_PATCH_LIFECYCLE_R01_GBC_PATCH_LIFECYCLE_PRIORITY_QUEUE_R01
+    action: keep_open_with_review_metadata
+    status_after: open
+    review_note: Keep open. Priority queue semantics remain a future patch_lifecycle design extension and should not be silently
+      added.
+    next_review_trigger: future run requiring escalation/rollback priority semantics or dedicated patch queue design
+  - entry_id: GB_2026_04_27_PATCH_LIFECYCLE_R01_GBC_PATCH_LIFECYCLE_REFERENTIEL_PARAMETER_R01
+    action: keep_open_with_review_metadata
+    status_after: open
+    review_note: Keep open. PHASE_18 clarified the model, but did not select or govern the specific referentiel parameter
+      as a concrete external read neighbor.
+    next_review_trigger: referentiel/link external-read-only follow-up or patch escalation threshold design
+  - entry_id: GB_2026_04_27_PATCH_LIFECYCLE_R01_GBC_PATCH_LIFECYCLE_UNCOVERED_CONFLICT_LOGGING_R01
+    action: mark_addressed
+    status_after: addressed
+    resolution_note: Addressed by PHASE_19. Multi-owner review concluded no ownership transfer is required; ACTION_LOG_UNCOVERED_CONFLICT
+      can remain governed by existing patch_lifecycle/diagnostic governance unless a future concrete node-level defect appears.

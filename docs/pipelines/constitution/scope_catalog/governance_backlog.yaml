@@ -1,10 +1,9 @@
 governance_backlog:
   schema_version: 0.1
-  description: 'Artefact vivant inter-runs. Collecte les décisions reportées, angles
-    morts de scope, IDs orphelins et conflits de policy découverts pendant les runs
-    constitution. Relu obligatoirement au STAGE_00 (révision de partition) et signalé
-    au launcher si des entrées open concernent le scope d''un run en cours d''ouverture.
-    Alimenté en clôture de run (STAGE_09) via closeout_pipeline_run.py --export-backlog-entries.
+  description: 'Artefact vivant inter-runs. Collecte les décisions reportées, angles morts de scope, IDs orphelins et conflits
+    de policy découverts pendant les runs constitution. Relu obligatoirement au STAGE_00 (révision de partition) et signalé
+    au launcher si des entrées open concernent le scope d''un run en cours d''ouverture. Alimenté en clôture de run (STAGE_09)
+    via closeout_pipeline_run.py --export-backlog-entries.
 
     '
   authoritative_path: docs/pipelines/constitution/scope_catalog/governance_backlog.yaml
@@ -13,17 +12,15 @@ governance_backlog:
     scope_extension_needed: Le scope devrait inclure des IDs actuellement hors périmètre.
     orphan_id: Un ID existe dans les Core mais n'appartient à aucun scope publié.
     policy_conflict: Conflit détecté entre une règle du run et une policy canonique.
-    partition_angle_mort: Zone sémantique non couverte par la partition actuelle des
-      scopes.
+    partition_angle_mort: Zone sémantique non couverte par la partition actuelle des scopes.
   statuses:
-    open: Entrée active — doit être traitée ou explicitement reportée au prochain
-      STAGE_00.
+    open: Entrée active — doit être traitée ou explicitement reportée au prochain STAGE_00.
     addressed: Traitée dans un run ou un STAGE_00 ultérieur (lier au run_id de résolution).
     wont_fix: Décision explicite de ne pas traiter (justification obligatoire).
   entries:
   - entry_id: GB_2026_04_27_PATCH_LIFECYCLE_R01_GBC_PATCH_LIFECYCLE_LEARNER_STATE_NEIGHBORS_R01
     type: scope_extension_needed
-    status: open
+    status: addressed
     source_run_id: CONSTITUTION_RUN_2026_04_27_PATCH_LIFECYCLE_R01
     source_stage: STAGE_09_CLOSEOUT_AND_ARCHIVE
     scope_key: patch_lifecycle
@@ -33,18 +30,19 @@ governance_backlog:
     candidate_id: GBC_PATCH_LIFECYCLE_LEARNER_STATE_NEIGHBORS_R01
     source_finding_id: ARB-F02
     title: Review explicit learner_state read neighbors for patch_lifecycle triggers
-    description: Patch lifecycle trigger rules consume learner-state signals such
-      as value-cost and AR non-response, but the current bounded extract exposes only
-      the generic referential inter-core reference as neighbor. The ownership must
-      remain in learner_state, but explicit read-neighbor selection should be reviewed
-      through scope generation.
-    recommended_action: Review scope_generation policy/decisions to decide whether
-      TYPE_STATE_AXIS_VALUE_COST and TYPE_SELF_REPORT_AR_N1, or equivalent signal
-      IDs, should be declared as explicit read neighbors for patch_lifecycle. Regenerate
-      the scope catalog deterministically if approved.
-    candidate_status: candidate_open
+    description: Patch lifecycle trigger rules consume learner-state signals such as value-cost and AR non-response, but the
+      current bounded extract exposes only the generic referential inter-core reference as neighbor. The ownership must remain
+      in learner_state, but explicit read-neighbor selection should be reviewed through scope generation.
+    recommended_action: Review scope_generation policy/decisions to decide whether TYPE_STATE_AXIS_VALUE_COST and TYPE_SELF_REPORT_AR_N1,
+      or equivalent signal IDs, should be declared as explicit read neighbors for patch_lifecycle. Regenerate the scope catalog
+      deterministically if approved.
+    candidate_status: addressed_by_phase20b
     recorded_at: '2026-04-28T09:43:30Z'
     source_arbitrage_path: docs/pipelines/constitution/archive/CORE_RELEASE_2026_04_28_R01/work/02_arbitrage/arbitrage.md
+    resolved_at: '2026-04-28T16:30:00Z'
+    resolved_by: PHASE_20B_POST_MACRO_CLOSEOUT_REVIEW
+    resolution_note: Addressed by PHASE_16/17. Explicit learner_state read-neighbor IDs for patch_lifecycle triggers were
+      governed, applied through decisions.yaml, regenerated into the scope catalog, and scoring now converges to PASS.
   - entry_id: GB_2026_04_27_PATCH_LIFECYCLE_R01_GBC_PATCH_LIFECYCLE_REFERENTIEL_PARAMETER_R01
     type: scope_gap
     status: open
@@ -55,19 +53,20 @@ governance_backlog:
     - patch_lifecycle
     candidate_id: GBC_PATCH_LIFECYCLE_REFERENTIEL_PARAMETER_R01
     source_finding_id: ARB-F07
-    title: Track external_read_only referentiel parameter dependency for patch escalation
-      threshold
-    description: INV_PERSISTENT_DRIFT_REQUIRES_ESCALATION_IF_PATCH_BLOCKED mentions
-      a referential parameter controlling the maximum number of ineffective patch
-      iterations before escalation, but the bounded neighbor extract only includes
-      the generic Constitution inter-core reference. This must not be solved by patching
-      referentiel from this Constitution run.
-    recommended_action: Coordinate with the external-read-only referentiel/link follow-up
-      and decide whether the specific parameter should become a concrete external
-      read neighbor or a cross_core_change_request.
-    candidate_status: candidate_open
+    title: Track external_read_only referentiel parameter dependency for patch escalation threshold
+    description: INV_PERSISTENT_DRIFT_REQUIRES_ESCALATION_IF_PATCH_BLOCKED mentions a referential parameter controlling the
+      maximum number of ineffective patch iterations before escalation, but the bounded neighbor extract only includes the
+      generic Constitution inter-core reference. This must not be solved by patching referentiel from this Constitution run.
+    recommended_action: Coordinate with the external-read-only referentiel/link follow-up and decide whether the specific
+      parameter should become a concrete external read neighbor or a cross_core_change_request.
+    candidate_status: reviewed_keep_open_phase20b
     recorded_at: '2026-04-28T09:43:30Z'
     source_arbitrage_path: docs/pipelines/constitution/archive/CORE_RELEASE_2026_04_28_R01/work/02_arbitrage/arbitrage.md
+    last_reviewed_at: '2026-04-28T16:30:00Z'
+    last_reviewed_by: PHASE_20B_POST_MACRO_CLOSEOUT_REVIEW
+    review_note: Keep open. PHASE_18 clarified the model, but did not select or govern the specific referentiel parameter
+      as a concrete external read neighbor.
+    next_review_trigger: referentiel/link external-read-only follow-up or patch escalation threshold design
   - entry_id: GB_2026_04_27_PATCH_LIFECYCLE_R01_GBC_PATCH_LIFECYCLE_ESCALATION_BOUNDARY_R01
     type: scope_extension_needed
     status: open
@@ -81,19 +80,22 @@ governance_backlog:
     candidate_id: GBC_PATCH_LIFECYCLE_ESCALATION_BOUNDARY_R01
     source_finding_id: ARB-F08
     title: Review broad escalation triggers crossing patch_lifecycle and learner_state/governance
-    description: Patch-blocked and ineffective-patch escalation belong in patch_lifecycle,
-      but broader distress, conservatism-without-exit, and systemic-investigation
-      triggers may belong to learner_state or governance boundaries. The pilot should
-      not silently own all such cases.
-    recommended_action: Revisit escalation ownership during scope partition review,
-      decide explicit owners and neighbors, and regenerate scope catalog if boundaries
-      change.
-    candidate_status: candidate_open
+    description: Patch-blocked and ineffective-patch escalation belong in patch_lifecycle, but broader distress, conservatism-without-exit,
+      and systemic-investigation triggers may belong to learner_state or governance boundaries. The pilot should not silently
+      own all such cases.
+    recommended_action: Revisit escalation ownership during scope partition review, decide explicit owners and neighbors,
+      and regenerate scope catalog if boundaries change.
+    candidate_status: reviewed_keep_open_phase20b
     recorded_at: '2026-04-28T09:43:30Z'
     source_arbitrage_path: docs/pipelines/constitution/archive/CORE_RELEASE_2026_04_28_R01/work/02_arbitrage/arbitrage.md
+    last_reviewed_at: '2026-04-28T16:30:00Z'
+    last_reviewed_by: PHASE_20B_POST_MACRO_CLOSEOUT_REVIEW
+    review_note: Keep open. PHASE_19 removed the immediate ownership-transfer pressure, but the broader escalation-trigger
+      boundary still requires design when escalation semantics are revisited.
+    next_review_trigger: next patch_lifecycle run touching escalation triggers or dedicated escalation-boundary design run
   - entry_id: GB_2026_04_27_PATCH_LIFECYCLE_R01_GBC_PATCH_LIFECYCLE_UNCOVERED_CONFLICT_LOGGING_R01
     type: partition_angle_mort
-    status: open
+    status: addressed
     source_run_id: CONSTITUTION_RUN_2026_04_27_PATCH_LIFECYCLE_R01
     source_stage: STAGE_09_CLOSEOUT_AND_ARCHIVE
     scope_key: patch_lifecycle
@@ -103,15 +105,17 @@ governance_backlog:
     candidate_id: GBC_PATCH_LIFECYCLE_UNCOVERED_CONFLICT_LOGGING_R01
     source_finding_id: ARB-F09
     title: Review ACTION_LOG_UNCOVERED_CONFLICT ownership boundary
-    description: ACTION_LOG_UNCOVERED_CONFLICT is owned by the patch_lifecycle writable
-      perimeter, but its internal logic scope is runtime_governance. This may be historical
-      or valid, but should not be silently reinforced by the pilot patch.
-    recommended_action: Review whether ACTION_LOG_UNCOVERED_CONFLICT should remain
-      patch_lifecycle-owned, become a governance neighbor, or be split into generic
-      and patch-specific logging actions.
-    candidate_status: candidate_needs_human_review
+    description: ACTION_LOG_UNCOVERED_CONFLICT is owned by the patch_lifecycle writable perimeter, but its internal logic
+      scope is runtime_governance. This may be historical or valid, but should not be silently reinforced by the pilot patch.
+    recommended_action: Review whether ACTION_LOG_UNCOVERED_CONFLICT should remain patch_lifecycle-owned, become a governance
+      neighbor, or be split into generic and patch-specific logging actions.
+    candidate_status: addressed_by_phase20b
     recorded_at: '2026-04-28T09:43:30Z'
     source_arbitrage_path: docs/pipelines/constitution/archive/CORE_RELEASE_2026_04_28_R01/work/02_arbitrage/arbitrage.md
+    resolved_at: '2026-04-28T16:30:00Z'
+    resolved_by: PHASE_20B_POST_MACRO_CLOSEOUT_REVIEW
+    resolution_note: Addressed by PHASE_19. Multi-owner review concluded no ownership transfer is required; ACTION_LOG_UNCOVERED_CONFLICT
+      can remain governed by existing patch_lifecycle/diagnostic governance unless a future concrete node-level defect appears.
   - entry_id: GB_2026_04_27_PATCH_LIFECYCLE_R01_GBC_PATCH_LIFECYCLE_PRIORITY_QUEUE_R01
     type: scope_gap
     status: open
@@ -123,15 +127,18 @@ governance_backlog:
     candidate_id: GBC_PATCH_LIFECYCLE_PRIORITY_QUEUE_R01
     source_finding_id: ARB-F05
     title: Decide whether patch serialization requires deterministic priority lanes
-    description: FIFO serialization is deterministic but may be unsafe if escalation
-      or rollback-related work can starve behind low-priority relevance or solicitation
-      patches. A full priority model should not be introduced silently in the pilot.
-    recommended_action: Evaluate whether patch queue semantics require deterministic
-      priority lanes, and if so define them through a governed scope update rather
-      than ad hoc patch synthesis.
-    candidate_status: candidate_open
+    description: FIFO serialization is deterministic but may be unsafe if escalation or rollback-related work can starve behind
+      low-priority relevance or solicitation patches. A full priority model should not be introduced silently in the pilot.
+    recommended_action: Evaluate whether patch queue semantics require deterministic priority lanes, and if so define them
+      through a governed scope update rather than ad hoc patch synthesis.
+    candidate_status: reviewed_keep_open_phase20b
     recorded_at: '2026-04-28T09:43:30Z'
     source_arbitrage_path: docs/pipelines/constitution/archive/CORE_RELEASE_2026_04_28_R01/work/02_arbitrage/arbitrage.md
+    last_reviewed_at: '2026-04-28T16:30:00Z'
+    last_reviewed_by: PHASE_20B_POST_MACRO_CLOSEOUT_REVIEW
+    review_note: Keep open. Priority queue semantics remain a future patch_lifecycle design extension and should not be silently
+      added.
+    next_review_trigger: future run requiring escalation/rollback priority semantics or dedicated patch queue design
   - entry_id: GB_2026_04_27_PATCH_LIFECYCLE_R01_GBC_PATCH_LIFECYCLE_FULL_STATE_MACHINE_R01
     type: scope_gap
     status: open
@@ -143,22 +150,23 @@ governance_backlog:
     candidate_id: GBC_PATCH_LIFECYCLE_FULL_STATE_MACHINE_R01
     source_finding_id: ARB-F03
     title: Decide whether patch_lifecycle needs a canonical patch state machine
-    description: Minimal terminal semantics can be patched locally, but a full patch
-      state machine with states such as pending, active, applied, rejected, rollbacked,
-      failed, expired, or escalated may require dedicated canonical design.
-    recommended_action: Review whether a future patch_lifecycle scope iteration should
-      introduce an explicit patch state model.
-    candidate_status: candidate_open
+    description: Minimal terminal semantics can be patched locally, but a full patch state machine with states such as pending,
+      active, applied, rejected, rollbacked, failed, expired, or escalated may require dedicated canonical design.
+    recommended_action: Review whether a future patch_lifecycle scope iteration should introduce an explicit patch state model.
+    candidate_status: reviewed_keep_open_phase20b
     recorded_at: '2026-04-28T09:43:30Z'
     source_arbitrage_path: docs/pipelines/constitution/archive/CORE_RELEASE_2026_04_28_R01/work/02_arbitrage/arbitrage.md
+    last_reviewed_at: '2026-04-28T16:30:00Z'
+    last_reviewed_by: PHASE_20B_POST_MACRO_CLOSEOUT_REVIEW
+    review_note: Keep open. A full patch state machine remains a future patch_lifecycle design extension.
+    next_review_trigger: future patch_lifecycle run requiring explicit state transitions beyond current terminal semantics
   notes:
   - Fichier vivant — ne pas archiver avec les runs.
   - Les entrées addressed et wont_fix sont conservées pour traçabilité.
-  - La création d'entrées pendant un run est autorisée (annotation dans le rapport
-    d'arbitrage du run), mais l'export canonique vers ce fichier se fait uniquement
-    en clôture (STAGE_09).
-  - Ce fichier est la source de vérité du backlog inter-runs ; les notes dans l'arbitrage_report
-    et run_manifest.notes sont des copies locales de run.
+  - La création d'entrées pendant un run est autorisée (annotation dans le rapport d'arbitrage du run), mais l'export canonique
+    vers ce fichier se fait uniquement en clôture (STAGE_09).
+  - Ce fichier est la source de vérité du backlog inter-runs ; les notes dans l'arbitrage_report et run_manifest.notes sont
+    des copies locales de run.
   - Deferred/reporté is not a status; deferred entries remain open with review metadata.
   lifecycle:
     allowed_status_values:

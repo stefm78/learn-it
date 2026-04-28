@@ -1,6 +1,6 @@
 governance_backlog_lifecycle_validation:
   schema_version: '0.1'
-  generated_at: '2026-04-28T11:35:51Z'
+  generated_at: '2026-04-28T16:29:18Z'
   status: PASS
   source: docs/pipelines/constitution/scope_catalog/governance_backlog.yaml
   allowed_statuses:
@@ -15,7 +15,8 @@ governance_backlog_lifecycle_validation:
   - reporté
   entry_count: 6
   status_counts:
-    open: 6
+    addressed: 2
+    open: 4
   type_counts:
     partition_angle_mort: 1
     scope_extension_needed: 2
@@ -26,4 +27,4 @@ governance_backlog_lifecycle_validation:
     severity: informational
     message: Open entries remain active and must continue to surface in STAGE_00 and
       launcher warnings.
-    open_count: 6
+    open_count: 4
