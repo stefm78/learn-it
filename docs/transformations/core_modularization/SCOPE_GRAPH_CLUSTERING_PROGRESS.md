@@ -37,9 +37,11 @@ current_phase:
   status: active
   summary: >-
     PHASE_16 governs explicit Constitution-to-Constitution neighbor IDs surfaced by
-    maturity scoring V1.1. PHASE_16A produced a deterministic non-mutating decision
-    report. The next step is human arbitration of each candidate before any policy.yaml
-    or decisions.yaml update.
+    maturity scoring V1.1. The generic mechanism is now wired into STAGE_00 through
+    a non-mutating governance report, arbitration preparation, and arbitration validation.
+    Human arbitration of the current candidates remains pending before any decisions.yaml
+    patch. The decisions patcher is intentionally deferred until validation reaches
+    PASS_READY_TO_PATCH.
 ```
 
 
@@ -456,6 +458,34 @@ phases:
       - do_not_change_scorer_v1_1_rules
       - update_scope_generation_policy_only_after_human_arbitration
       - regenerate_scope_catalog_only_if_policy_decisions_change
+    policy_domain_review:
+      status: done
+      reviewed_domains:
+        - docs/pipelines/constitution/policies/scope_generation/
+        - docs/pipelines/constitution/policies/integration/
+        - docs/pipelines/constitution/policies/canonical_rebuild/
+      conclusion: >-
+        scope_generation is the correct policy domain for published scope maturity
+        and explicit Constitution neighbor IDs. integration governs local-run results
+        into integrated changesets. canonical_rebuild governs deterministic rebuild
+        from integrated structured inputs. No migration of neighbor ID governance to
+        integration or canonical_rebuild is required at this point.
+      scope_generation_role:
+        published_maturity_authority: docs/pipelines/constitution/policies/scope_generation/policy.yaml
+        neighbor_ids_authority: docs/pipelines/constitution/policies/scope_generation/decisions.yaml
+        neighbor_decision_type: force_logical_neighbors
+      integration_role:
+        status: not_primary_for_neighbor_ids
+        rationale: >-
+          The integration policy handles run admission, collision resolution,
+          integration gates and integrated changeset publication. It does not currently
+          own published maturity or explicit neighbor IDs.
+      canonical_rebuild_role:
+        status: not_primary_for_neighbor_ids
+        rationale: >-
+          The canonical rebuild policy handles deterministic rebuild rules and
+          serialization decisions. It does not currently own published maturity or
+          explicit neighbor IDs.
     completed_subtasks:
       - subtask_id: PHASE_16A_NEIGHBOR_IDS_GOVERNANCE_REPORT
         status: done
@@ -467,12 +497,33 @@ phases:
           from scope_maturity_scoring_report.yaml, maps each ID to its current owner scope
           using approved assign_ids_to_scope decisions, and proposes a human-arbitrable
           decision value per candidate.
+      - subtask_id: PHASE_16B_GENERIC_PIPELINE_MECHANISM
+        status: done
+        evidence:
+          - docs/pipelines/constitution/STAGE_00_SCOPE_PARTITION_REVIEW_AND_REGEN.md
+          - docs/patcher/shared/prepare_constitution_neighbor_ids_arbitration.py
+          - docs/patcher/shared/validate_constitution_neighbor_ids_arbitration.py
+          - docs/pipelines/constitution/reports/constitution_neighbor_ids_arbitration_validation.yaml
+        summary: >-
+          STAGE_00 now documents the generic post-scoring neighbor IDs governance
+          sequence: governance report, arbitration preparation, arbitration validation,
+          and only after PASS_READY_TO_PATCH an optional decisions.yaml patch followed
+          by scope catalog regeneration and scoring rerun. The current validation state
+          is PENDING_HUMAN_ARBITRATION, which is valid but not patch-ready.
     pending_subtasks:
-      - subtask_id: PHASE_16B_HUMAN_ARBITRATION
+      - subtask_id: PHASE_16C_HUMAN_ARBITRATION
         status: pending
         objective: >-
           Decide each candidate as add_as_default_neighbor, defer_to_governance_backlog,
           or wont_fix_with_rationale before any policy/decisions update.
+      - subtask_id: PHASE_16D_DECISIONS_PATCHER
+        status: deferred
+        objective: >-
+          Install and use a gated deterministic patcher for decisions.yaml only after
+          constitution_neighbor_ids_arbitration_validation.yaml reaches PASS_READY_TO_PATCH.
+        expected_script: docs/patcher/shared/apply_constitution_neighbor_ids_arbitration.py
+        target_policy_domain: docs/pipelines/constitution/policies/scope_generation/
+        target_file: docs/pipelines/constitution/policies/scope_generation/decisions.yaml
 
 ```
 
@@ -534,6 +585,11 @@ implementation_tracking:
   phase16_constitution_neighbor_ids_governance_planned: true
   phase16_constitution_neighbor_ids_governance_active: true
   constitution_neighbor_ids_governance_report_created: true
+  constitution_neighbor_ids_arbitration_prepared: true
+  constitution_neighbor_ids_arbitration_validator_created: true
+  constitution_neighbor_ids_arbitration_status: PENDING_HUMAN_ARBITRATION
+  constitution_neighbor_ids_decisions_patcher_deferred_until_pass_ready: true
+  policy_domain_review_for_scores_and_neighbor_ids_done: true
   published_maturity_authority_unchanged: true
 ```
 
@@ -819,10 +875,18 @@ next_actions:
     completed_outputs:
       - docs/patcher/shared/report_constitution_neighbor_ids_governance.py
       - docs/pipelines/constitution/reports/constitution_neighbor_ids_governance_report.yaml
+    completed_outputs:
+      - docs/patcher/shared/report_constitution_neighbor_ids_governance.py
+      - docs/pipelines/constitution/reports/constitution_neighbor_ids_governance_report.yaml
+      - docs/patcher/shared/prepare_constitution_neighbor_ids_arbitration.py
+      - docs/patcher/shared/validate_constitution_neighbor_ids_arbitration.py
+      - docs/pipelines/constitution/reports/constitution_neighbor_ids_arbitration_validation.yaml
     expected_decisions:
       - decide_neighbor_ids_to_add_per_scope
       - decide_entries_to_defer_to_governance_backlog
       - keep_policy_yaml_authoritative_until_arbitrated
+    deferred_outputs:
+      - docs/patcher/shared/apply_constitution_neighbor_ids_arbitration.py
     constraints:
       - do_not_change_published_maturity_scores_in_this_step
       - update_scope_generation_policy_only_after_human_arbitration
