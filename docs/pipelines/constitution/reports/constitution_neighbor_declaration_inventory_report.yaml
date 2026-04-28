@@ -1,8 +1,8 @@
 constitution_neighbor_declaration_inventory_report:
   schema_version: '0.1'
   phase_id: PHASE_18A
-  generated_at: '2026-04-28T15:32:40Z'
-  status: WARN
+  generated_at: '2026-04-28T15:34:09Z'
+  status: PASS
   mutation_policy:
     policy_yaml: not_modified
     decisions_yaml: not_modified
@@ -18,7 +18,7 @@ constitution_neighbor_declaration_inventory_report:
   - ref: docs/pipelines/constitution/scope_catalog/manifest.yaml
     sha256: 3de972b8904b38698d92fb51a63ce0c7273d6a7ec668344c2297bcbaf24b9812
   - ref: docs/pipelines/constitution/pipeline.md
-    sha256: c99fa0ed04ccc8ff2121d86d9475f90190197a1559e882fd42df70ac4e347824
+    sha256: 0335db8a1ffd3bf8cc95631d8cd48406c87dfab9d884c3ca1eef3a6588f79ca3
   - ref: docs/pipelines/constitution/STAGE_00_SCOPE_PARTITION_REVIEW_AND_REGEN.md
     sha256: cd0f3876f86901237586c3b4761c4e7f34a25f89c700bad713ea077f4ba34cc9
   summary:
@@ -27,8 +27,8 @@ constitution_neighbor_declaration_inventory_report:
     external_read_only_core_decision_count: 1
     scope_definition_count: 5
     run_extract_file_count: 8
-    finding_count: 2
-    warning_count: 1
+    finding_count: 1
+    warning_count: 0
     error_count: 0
   surfaces:
     policy:
@@ -377,12 +377,12 @@ constitution_neighbor_declaration_inventory_report:
         counts: {}
     pipeline_docs:
       pipeline_md_script_refs:
-        score_constitution_scope_maturity.py: false
-        apply_constitution_scope_maturity_scores.py: false
-        report_constitution_neighbor_ids_governance.py: false
-        prepare_constitution_neighbor_ids_arbitration.py: false
-        validate_constitution_neighbor_ids_arbitration.py: false
-        apply_constitution_neighbor_ids_arbitration.py: false
+        score_constitution_scope_maturity.py: true
+        apply_constitution_scope_maturity_scores.py: true
+        report_constitution_neighbor_ids_governance.py: true
+        prepare_constitution_neighbor_ids_arbitration.py: true
+        validate_constitution_neighbor_ids_arbitration.py: true
+        apply_constitution_neighbor_ids_arbitration.py: true
         extract_scope_slice.py: true
         materialize_run_inputs.py: true
       stage00_script_refs:
@@ -394,7 +394,7 @@ constitution_neighbor_declaration_inventory_report:
         apply_constitution_neighbor_ids_arbitration.py: true
         extract_scope_slice.py: false
         materialize_run_inputs.py: false
-      pipeline_md_needs_resource_index_update: true
+      pipeline_md_needs_resource_index_update: false
       stage00_contains_score_publication_chain: true
       stage00_contains_neighbor_ids_governance_chain: true
   findings:
@@ -405,17 +405,6 @@ constitution_neighbor_declaration_inventory_report:
     - decision_id: SGEN_DECISION_011
       status: proposed
       requires_exact_id_selection_before_approval: true
-  - finding_id: PIPELINE_RESOURCE_INDEX_MISSING_RECENT_STAGE00_SCRIPTS
-    severity: warning
-    message: pipeline.md does not list all recent STAGE_00 scoring and neighbor-governance scripts, although STAGE_00 itself
-      is updated.
-    items:
-    - score_constitution_scope_maturity.py
-    - apply_constitution_scope_maturity_scores.py
-    - report_constitution_neighbor_ids_governance.py
-    - prepare_constitution_neighbor_ids_arbitration.py
-    - validate_constitution_neighbor_ids_arbitration.py
-    - apply_constitution_neighbor_ids_arbitration.py
   recommended_next_steps:
   - Patch pipeline.md canonical resources to list recent STAGE_00 scoring and neighbor-governance scripts.
   - Arbitrate whether proposed SGEN_DECISION_011 remains a placeholder, is superseded by PHASE_16, or should be closed.
