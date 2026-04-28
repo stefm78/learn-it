@@ -70,7 +70,9 @@ Avant toute analyse sémantique de la partition, l'IA DOIT :
    - Les `partition_angle_mort` signalent des zones sémantiques à couvrir par un nouveau scope.
 
 Interdiction : l'IA ne peut pas déclarer le STAGE_00 terminé si des entrées `open` n'ont pas
-été explicitement traitées (addressed) ou reportées avec justification (wont_fix ou report décidé).
+été explicitement revues. Une entrée peut soit passer à `addressed`, soit passer à `wont_fix`,
+soit rester `open` avec justification de report. `deferred` / `reporté` n'est pas un statut
+canonique : le report conserve `status: open` et ajoute les métadonnées de revue prévues.
 
 ## Format attendu en provenance des runs
 
@@ -112,7 +114,8 @@ Rôle de l'IA :
 - proposer des ajustements sémantiques de partition intégrant les signaux du backlog ;
 - identifier les coupes dangereuses ou les regroupements nécessaires ;
 - proposer des évolutions des fichiers de policy/decisions ;
-- marquer chaque entrée open du backlog comme `addressed` ou `wont_fix` avec justification.
+- marquer chaque entrée open du backlog comme `addressed`, `wont_fix`, ou la laisser `open`
+  avec justification de report et métadonnées de revue complètes.
 
 Interdictions :
 - l'IA ne décide pas seule la nouvelle partition publiée ;
@@ -175,10 +178,12 @@ Sortie déterministe obligatoire — scoring post-scoping :
 
 Mise à jour obligatoire en fin de STAGE_00 :
 - `docs/pipelines/constitution/scope_catalog/governance_backlog.yaml`
-  Chaque entrée `open` traitée doit passer en `addressed` ou `wont_fix` avec :
-  - `resolved_at` : date ISO 8601
-  - `resolved_by` : run_id ou 'STAGE_00_<date>'
-  - `resolution_note` : justification courte
+  Chaque entrée `open` revue doit suivre l'un des chemins suivants :
+  - passage en `addressed` avec `resolved_at`, `resolved_by`, `resolution_note` ;
+  - passage en `wont_fix` avec `resolved_at`, `resolved_by`, `resolution_note` ;
+  - maintien en `open` avec `last_reviewed_at`, `last_reviewed_by`, `review_note`,
+    `next_review_trigger`.
+  `deferred` / `reporté` ne doit jamais être utilisé comme statut.
 
 ## Règles opératoires
 
@@ -201,8 +206,9 @@ Mise à jour obligatoire en fin de STAGE_00 :
 10. Le Stage 00 ne doit jamais être utilisé pour contourner un run en cours ou requalifier
     rétroactivement son scope.
 11. Le `governance_backlog.yaml` DOIT être lu avant toute analyse sémantique. Chaque entrée
-    `open` doit être traitée ou explicitement reportée avant que le STAGE_00 puisse être
-    déclaré `done`.
+    `open` doit être traitée ou explicitement revue avant que le STAGE_00 puisse être
+    déclaré `done`. Une entrée reportée reste `open` avec métadonnées de revue ; `deferred`
+    n'est pas un statut.
 
 12. Le scoring post-scoping doit être exécuté après régénération du catalogue.
 13. Le rapport de scoring post-scoping ne remplace pas la policy canonique.
@@ -216,7 +222,8 @@ Le Stage 00 est réussi lorsque :
 - le rapport déterministe `scope_partition_review_report.yaml` a été produit par exécution
   réelle du script d'analyse ;
 - le `governance_backlog.yaml` a été lu et toutes les entrées `open` ont été traitées
-  (addressed) ou explicitement reportées (wont_fix / décision documentée) ;
+  (`addressed`), rejetées explicitement (`wont_fix`) ou maintenues `open` avec justification
+  de report et métadonnées de revue complètes ;
 - l'analyse sémantique a été discutée en intégrant les signaux du backlog ;
 - les arbitrages humains nécessaires ont été capturés dans les fichiers canonisés ;
 - le catalogue de scopes a été régénéré de façon déterministe par exécution réelle de

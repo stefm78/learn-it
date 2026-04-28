@@ -159,3 +159,53 @@ governance_backlog:
     en clôture (STAGE_09).
   - Ce fichier est la source de vérité du backlog inter-runs ; les notes dans l'arbitrage_report
     et run_manifest.notes sont des copies locales de run.
+  - Deferred/reporté is not a status; deferred entries remain open with review metadata.
+  lifecycle:
+    allowed_status_values:
+    - open
+    - addressed
+    - wont_fix
+    deferred_policy:
+      is_status: false
+      rule: A deferred item remains status=open and may carry atomic review metadata.
+      forbidden_status_values:
+      - deferred
+      - reported
+      - report_decided
+      - postponed
+    required_resolution_fields:
+      addressed:
+      - resolved_at
+      - resolved_by
+      - resolution_note
+      wont_fix:
+      - resolved_at
+      - resolved_by
+      - resolution_note
+    open_review_metadata_group:
+    - last_reviewed_at
+    - last_reviewed_by
+    - review_note
+    - next_review_trigger
+    transition_rules:
+    - from: open
+      to: addressed
+      requires:
+      - resolved_at
+      - resolved_by
+      - resolution_note
+    - from: open
+      to: wont_fix
+      requires:
+      - resolved_at
+      - resolved_by
+      - resolution_note
+    - from: open
+      to: open
+      meaning: deferred_after_review
+      requires_if_review_metadata_present:
+      - last_reviewed_at
+      - last_reviewed_by
+      - review_note
+      - next_review_trigger
+    validator: docs/patcher/shared/validate_governance_backlog_lifecycle.py
