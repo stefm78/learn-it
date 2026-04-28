@@ -22,20 +22,24 @@ This tracker reflects the current Scope Lab execution state after:
 - human arbitration;
 - policy/decisions patching;
 - deterministic scope catalog regeneration;
-- ID-level bijection validation.
+- ID-level bijection validation;
+- successful patch_lifecycle bounded pilot run;
+- canonical export of pilot governance backlog entries.
 
 ## Current phase
 
 ```yaml
 current_phase:
   phase_id: PHASE_14
-  label: post_pilot_follow_up
+  label: pilot_backlog_triage
   status: active
   summary: >-
     The serious patch_lifecycle pilot bounded_local_run is complete. Run
     CONSTITUTION_RUN_2026_04_27_PATCH_LIFECYCLE_R01 reached STAGE_09_CLOSEOUT_AND_ARCHIVE,
-    is closed, and promoted CORE_RELEASE_2026_04_28_R01 to docs/cores/current.
-    Remaining work is now follow-up governance, especially MACRO_004 and MACRO_005.
+    is closed, promoted CORE_RELEASE_2026_04_28_R01 to docs/cores/current, and exported
+    six governance backlog entries to docs/pipelines/constitution/scope_catalog/governance_backlog.yaml.
+    Current work is to triage those entries and decide which items feed STAGE_00 scope
+    partition review, cross-core follow-up, or future bounded patch_lifecycle design runs.
 ```
 
 ## Phase tracker
@@ -261,6 +265,9 @@ phases:
       active_constitution_version: V5_0_FINAL
       promotion_report: docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_27_PATCH_LIFECYCLE_R01/reports/promotion_report.yaml
       current_manifest: docs/cores/current/manifest.yaml
+      governance_backlog_exported: true
+      governance_backlog_path: docs/pipelines/constitution/scope_catalog/governance_backlog.yaml
+      exported_governance_backlog_count: 6
       blocking_findings: []
     preconditions:
       - PHASE_09 policy/decisions patch passed
@@ -270,17 +277,49 @@ phases:
       - PHASE_12 synthetic extract validation passed
 
   - phase_id: PHASE_14
-    label: post_pilot_follow_up
+    label: pilot_backlog_triage
     status: active
-    objective: Track remaining governance follow-ups after the successful patch_lifecycle pilot.
-    follow_up_candidates:
+    objective: >-
+      Ingest governance backlog entries exported by the patch_lifecycle pilot,
+      classify them into scope-neighbor review, scope-boundary review, external_read_only
+      follow-up, or future bounded patch_lifecycle design work, and decide which entries
+      should feed STAGE_00 scope partition review.
+    primary_inputs:
+      - docs/pipelines/constitution/scope_catalog/governance_backlog.yaml
+      - docs/transformations/core_modularization/SCOPE_GRAPH_CLUSTERING_APPROACH.md
+      - docs/transformations/core_modularization/SCOPE_GRAPH_CLUSTERING_PROGRESS.md
+      - docs/pipelines/constitution/policies/scope_generation/policy.yaml
+      - docs/pipelines/constitution/policies/scope_generation/decisions.yaml
+    backlog_entries_in_scope:
+      - GBC_PATCH_LIFECYCLE_LEARNER_STATE_NEIGHBORS_R01
+      - GBC_PATCH_LIFECYCLE_REFERENTIEL_PARAMETER_R01
+      - GBC_PATCH_LIFECYCLE_ESCALATION_BOUNDARY_R01
+      - GBC_PATCH_LIFECYCLE_UNCOVERED_CONFLICT_LOGGING_R01
+      - GBC_PATCH_LIFECYCLE_PRIORITY_QUEUE_R01
+      - GBC_PATCH_LIFECYCLE_FULL_STATE_MACHINE_R01
+    expected_triage_buckets:
+      stage00_scope_partition_review:
+        - learner_state_neighbor_review
+        - escalation_boundary_review
+        - uncovered_conflict_logging_ownership_review
+      external_read_only_follow_up:
+        - referentiel_parameter_dependency
+      future_bounded_run_or_design_backlog:
+        - patch_priority_queue_semantics
+        - patch_lifecycle_full_state_machine
+    related_open_macro_decisions:
       - MACRO_004_MULTI_OWNER_CLUSTER_REVIEW
       - MACRO_005_NEIGHBOR_DECLARATION_REVIEW
       - external_read_only_referentiel_link_follow_up
+    expected_outputs:
+      - backlog triage decision report
+      - explicit mapping from each open backlog entry to next treatment path
+      - optional accepted updates to scope_generation policy/decisions
+      - regenerated scope catalog only if policy/decisions are changed
     note: >-
-      PHASE_13 validated the graph-based scoping approach on patch_lifecycle.
-      The next work is not to reopen this run, but to decide the next bounded
-      governance item or scope-level cleanup.
+      PHASE_14 does not reopen CONSTITUTION_RUN_2026_04_27_PATCH_LIFECYCLE_R01.
+      It uses the exported inter-run governance backlog as an input to decide the
+      next re-scoping or follow-up work.
 ```
 
 ## Implementation checklist
@@ -314,6 +353,9 @@ implementation_tracking:
   pilot_bounded_local_run_opened: true
   pilot_bounded_local_run_closed: true
   pilot_bounded_local_run_promoted_to_current: true
+  pilot_governance_backlog_exported: true
+  pilot_governance_backlog_count: 6
+  phase_14_backlog_triage_opened: true
 ```
 
 ## Key decisions recorded
@@ -354,6 +396,16 @@ decision_log:
     date: 2026-04-27
     status: accepted
     decision: Keep governed patch trigger IDs in patch_lifecycle and represent learner_state/runtime signals as explicit read neighbors where needed.
+
+  - decision_id: DECISION_008
+    date: 2026-04-28
+    status: accepted
+    decision: Export STAGE_02 governance backlog candidates canonically to docs/pipelines/constitution/scope_catalog/governance_backlog.yaml during STAGE_09 closeout.
+
+  - decision_id: DECISION_009
+    date: 2026-04-28
+    status: accepted
+    decision: Treat exported pilot backlog entries as inputs to PHASE_14 pilot_backlog_triage before any further re-scoping or future bounded design run.
 ```
 
 ## Open risks
@@ -388,13 +440,19 @@ risks:
     label: global_multi_owner_clusters_unresolved
     severity: medium
     status: open
-    mitigation: MACRO_004 remains pending; resolve after patch_lifecycle pilot.
+    mitigation: MACRO_004 remains pending; resolve through PHASE_14 / STAGE_00 follow-up.
 
   - risk_id: RISK_006
     label: global_neighbor_review_unresolved
     severity: medium
     status: open
-    mitigation: MACRO_005 remains pending; resolve after patch_lifecycle pilot.
+    mitigation: MACRO_005 remains pending; resolve through PHASE_14 / STAGE_00 follow-up.
+
+  - risk_id: RISK_007
+    label: exported_backlog_entries_not_triaged
+    severity: medium
+    status: open
+    mitigation: PHASE_14 is now active and must map each open backlog entry to a next treatment path.
 ```
 
 ## Next actions
@@ -425,11 +483,18 @@ next_actions:
     run_id: CONSTITUTION_RUN_2026_04_27_PATCH_LIFECYCLE_R01
 
   - action_id: NEXT_005
+    status: done
+    label: Export governance backlog candidates from the patch_lifecycle pilot into the canonical inter-run governance backlog
+    phase: PHASE_13
+    target: docs/pipelines/constitution/scope_catalog/governance_backlog.yaml
+
+  - action_id: NEXT_006
     status: next
-    label: Decide next post-pilot governance follow-up after successful patch_lifecycle validation
+    label: Triage exported patch_lifecycle pilot governance backlog entries
     phase: PHASE_14
-    candidates:
-      - MACRO_004_MULTI_OWNER_CLUSTER_REVIEW
-      - MACRO_005_NEIGHBOR_DECLARATION_REVIEW
-      - external_read_only_referentiel_link_follow_up
+    input: docs/pipelines/constitution/scope_catalog/governance_backlog.yaml
+    expected_decisions:
+      - feed_stage00_scope_partition_review
+      - feed_external_read_only_follow_up
+      - defer_to_future_bounded_run_or_design_backlog
 ```
