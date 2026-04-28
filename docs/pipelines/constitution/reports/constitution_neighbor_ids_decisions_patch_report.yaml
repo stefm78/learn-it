@@ -1,8 +1,8 @@
 constitution_neighbor_ids_decisions_patch_report:
   schema_version: '0.1'
-  generated_at: '2026-04-28T14:02:29Z'
+  generated_at: '2026-04-28T14:06:05Z'
   status: PASS
-  apply_mode: false
+  apply_mode: true
   changed: true
   inputs:
     arbitration: docs/pipelines/constitution/reports/constitution_neighbor_ids_arbitration.yaml
@@ -80,4 +80,7 @@ constitution_neighbor_ids_decisions_patch_report:
       - NIDG_PATCH_LIFECYCLE__INV_RUNTIME_FULLY_LOCAL
       - NIDG_PATCH_LIFECYCLE__TYPE_SELF_REPORT_AR_N1
       - NIDG_PATCH_LIFECYCLE__TYPE_STATE_AXIS_VALUE_COST
-  next_steps_after_apply: []
+  next_steps_after_apply:
+  - run generate_constitution_scopes.py --apply
+  - rerun scope maturity scoring
+  - validate that dependency_explicitness deltas are reduced or explicitly accepted

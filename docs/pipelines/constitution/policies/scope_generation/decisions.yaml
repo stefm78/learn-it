@@ -362,3 +362,165 @@ scope_generation_decisions:
     challenged_with_ai: true
     justification: This placeholder records the accepted arbitration direction without silently selecting neighbor IDs. Exact
       learner_state/runtime neighbors must be reviewed before approval.
+  - decision_id: SGEN_DECISION_PHASE16_NEIGHBOR_IDS__DEPLOYMENT_GOVERNANCE
+    status: approved
+    decision_type: force_logical_neighbors
+    scope_keys_affected:
+    - deployment_governance
+    target_ids:
+    - ACTION_LOG_UNCOVERED_CONFLICT
+    - INV_GRAPH_PROPAGATION_ONE_HOP
+    - INV_MSC_AND_STRICT
+    - TYPE_AUTHENTIC_CONTEXT
+    - TYPE_CORPUS_CONFIDENCE_ICC
+    - TYPE_FEEDBACK_COVERAGE_MATRIX
+    - TYPE_SESSION_INTEGRITY_SCORE
+    target_patterns: []
+    decision_payload:
+      neighbor_class: explicit_constitution_dependency_from_scoring_v1_1
+      read_mode: primary
+      source_phase: PHASE_16
+      source_report: docs/pipelines/constitution/reports/constitution_neighbor_ids_governance_report.yaml
+      source_arbitration: docs/pipelines/constitution/reports/constitution_neighbor_ids_arbitration.yaml
+      source_validation: docs/pipelines/constitution/reports/constitution_neighbor_ids_arbitration_validation.yaml
+      source_candidate_ids:
+      - NIDG_DEPLOYMENT_GOVERNANCE__ACTION_LOG_UNCOVERED_CONFLICT
+      - NIDG_DEPLOYMENT_GOVERNANCE__INV_GRAPH_PROPAGATION_ONE_HOP
+      - NIDG_DEPLOYMENT_GOVERNANCE__INV_MSC_AND_STRICT
+      - NIDG_DEPLOYMENT_GOVERNANCE__TYPE_AUTHENTIC_CONTEXT
+      - NIDG_DEPLOYMENT_GOVERNANCE__TYPE_CORPUS_CONFIDENCE_ICC
+      - NIDG_DEPLOYMENT_GOVERNANCE__TYPE_FEEDBACK_COVERAGE_MATRIX
+      - NIDG_DEPLOYMENT_GOVERNANCE__TYPE_SESSION_INTEGRITY_SCORE
+      owner_scope_keys:
+      - knowledge_and_design
+      - mastery_evaluation
+      - patch_lifecycle
+      note: Approved by human arbitration after scope maturity scoring V1.1 surfaced under-declared Constitution neighbor
+        IDs.
+    applies_from: '2026-04-28'
+    decided_by: human
+    challenged_with_ai: true
+    justification: Human arbitration accepted these uncovered Constitution IDs as explicit read neighbors for scope deployment_governance.
+      The change declares read dependencies only; ownership remains unchanged.
+  - decision_id: SGEN_DECISION_PHASE16_NEIGHBOR_IDS__KNOWLEDGE_AND_DESIGN
+    status: approved
+    decision_type: force_logical_neighbors
+    scope_keys_affected:
+    - knowledge_and_design
+    target_ids:
+    - INV_NO_RUNTIME_CONTENT_GENERATION
+    - TYPE_HUMAN_CHECKPOINT
+    target_patterns: []
+    decision_payload:
+      neighbor_class: explicit_constitution_dependency_from_scoring_v1_1
+      read_mode: primary
+      source_phase: PHASE_16
+      source_report: docs/pipelines/constitution/reports/constitution_neighbor_ids_governance_report.yaml
+      source_arbitration: docs/pipelines/constitution/reports/constitution_neighbor_ids_arbitration.yaml
+      source_validation: docs/pipelines/constitution/reports/constitution_neighbor_ids_arbitration_validation.yaml
+      source_candidate_ids:
+      - NIDG_KNOWLEDGE_AND_DESIGN__INV_NO_RUNTIME_CONTENT_GENERATION
+      - NIDG_KNOWLEDGE_AND_DESIGN__TYPE_HUMAN_CHECKPOINT
+      owner_scope_keys:
+      - deployment_governance
+      note: Approved by human arbitration after scope maturity scoring V1.1 surfaced under-declared Constitution neighbor
+        IDs.
+    applies_from: '2026-04-28'
+    decided_by: human
+    challenged_with_ai: true
+    justification: Human arbitration accepted these uncovered Constitution IDs as explicit read neighbors for scope knowledge_and_design.
+      The change declares read dependencies only; ownership remains unchanged.
+  - decision_id: SGEN_DECISION_PHASE16_NEIGHBOR_IDS__LEARNER_STATE
+    status: approved
+    decision_type: force_logical_neighbors
+    scope_keys_affected:
+    - learner_state
+    target_ids:
+    - ACTION_ESCALATE_PERSISTENT_DRIFT_OFFSESSION
+    - ACTION_PLAN_SHORT_DIAGNOSTIC_TASK
+    target_patterns: []
+    decision_payload:
+      neighbor_class: explicit_constitution_dependency_from_scoring_v1_1
+      read_mode: primary
+      source_phase: PHASE_16
+      source_report: docs/pipelines/constitution/reports/constitution_neighbor_ids_governance_report.yaml
+      source_arbitration: docs/pipelines/constitution/reports/constitution_neighbor_ids_arbitration.yaml
+      source_validation: docs/pipelines/constitution/reports/constitution_neighbor_ids_arbitration_validation.yaml
+      source_candidate_ids:
+      - NIDG_LEARNER_STATE__ACTION_ESCALATE_PERSISTENT_DRIFT_OFFSESSION
+      - NIDG_LEARNER_STATE__ACTION_PLAN_SHORT_DIAGNOSTIC_TASK
+      owner_scope_keys:
+      - mastery_evaluation
+      - patch_lifecycle
+      note: Approved by human arbitration after scope maturity scoring V1.1 surfaced under-declared Constitution neighbor
+        IDs.
+    applies_from: '2026-04-28'
+    decided_by: human
+    challenged_with_ai: true
+    justification: Human arbitration accepted these uncovered Constitution IDs as explicit read neighbors for scope learner_state.
+      The change declares read dependencies only; ownership remains unchanged.
+  - decision_id: SGEN_DECISION_PHASE16_NEIGHBOR_IDS__MASTERY_EVALUATION
+    status: approved
+    decision_type: force_logical_neighbors
+    scope_keys_affected:
+    - mastery_evaluation
+    target_ids:
+    - ACTION_ESCALATE_PERSISTENT_DRIFT_OFFSESSION
+    - TYPE_INTEGRITY_MODES
+    - TYPE_SELF_REPORT_AR_N1
+    target_patterns: []
+    decision_payload:
+      neighbor_class: explicit_constitution_dependency_from_scoring_v1_1
+      read_mode: primary
+      source_phase: PHASE_16
+      source_report: docs/pipelines/constitution/reports/constitution_neighbor_ids_governance_report.yaml
+      source_arbitration: docs/pipelines/constitution/reports/constitution_neighbor_ids_arbitration.yaml
+      source_validation: docs/pipelines/constitution/reports/constitution_neighbor_ids_arbitration_validation.yaml
+      source_candidate_ids:
+      - NIDG_MASTERY_EVALUATION__ACTION_ESCALATE_PERSISTENT_DRIFT_OFFSESSION
+      - NIDG_MASTERY_EVALUATION__TYPE_INTEGRITY_MODES
+      - NIDG_MASTERY_EVALUATION__TYPE_SELF_REPORT_AR_N1
+      owner_scope_keys:
+      - deployment_governance
+      - learner_state
+      - patch_lifecycle
+      note: Approved by human arbitration after scope maturity scoring V1.1 surfaced under-declared Constitution neighbor
+        IDs.
+    applies_from: '2026-04-28'
+    decided_by: human
+    challenged_with_ai: true
+    justification: Human arbitration accepted these uncovered Constitution IDs as explicit read neighbors for scope mastery_evaluation.
+      The change declares read dependencies only; ownership remains unchanged.
+  - decision_id: SGEN_DECISION_PHASE16_NEIGHBOR_IDS__PATCH_LIFECYCLE
+    status: approved
+    decision_type: force_logical_neighbors
+    scope_keys_affected:
+    - patch_lifecycle
+    target_ids:
+    - INV_NO_RUNTIME_CONTENT_GENERATION
+    - INV_RUNTIME_FULLY_LOCAL
+    - TYPE_SELF_REPORT_AR_N1
+    - TYPE_STATE_AXIS_VALUE_COST
+    target_patterns: []
+    decision_payload:
+      neighbor_class: explicit_constitution_dependency_from_scoring_v1_1
+      read_mode: primary
+      source_phase: PHASE_16
+      source_report: docs/pipelines/constitution/reports/constitution_neighbor_ids_governance_report.yaml
+      source_arbitration: docs/pipelines/constitution/reports/constitution_neighbor_ids_arbitration.yaml
+      source_validation: docs/pipelines/constitution/reports/constitution_neighbor_ids_arbitration_validation.yaml
+      source_candidate_ids:
+      - NIDG_PATCH_LIFECYCLE__INV_NO_RUNTIME_CONTENT_GENERATION
+      - NIDG_PATCH_LIFECYCLE__INV_RUNTIME_FULLY_LOCAL
+      - NIDG_PATCH_LIFECYCLE__TYPE_SELF_REPORT_AR_N1
+      - NIDG_PATCH_LIFECYCLE__TYPE_STATE_AXIS_VALUE_COST
+      owner_scope_keys:
+      - deployment_governance
+      - learner_state
+      note: Approved by human arbitration after scope maturity scoring V1.1 surfaced under-declared Constitution neighbor
+        IDs.
+    applies_from: '2026-04-28'
+    decided_by: human
+    challenged_with_ai: true
+    justification: Human arbitration accepted these uncovered Constitution IDs as explicit read neighbors for scope patch_lifecycle.
+      The change declares read dependencies only; ownership remains unchanged.
