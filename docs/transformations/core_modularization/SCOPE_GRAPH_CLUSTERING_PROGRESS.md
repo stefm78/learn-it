@@ -32,15 +32,14 @@ This tracker reflects the current Scope Lab execution state after:
 
 ```yaml
 current_phase:
-  phase_id: PHASE_14
-  label: governance_backlog_pipeline_integration
-  status: planned
+  phase_id: PHASE_16
+  label: constitution_neighbor_ids_governance
+  status: active
   summary: >-
-    PHASE_14 governance_backlog_pipeline_integration is complete. The generic backlog
-    mechanism now covers STAGE_02 candidate production, STAGE_09 canonical export,
-    governance_backlog.yaml storage, STAGE_00 consumption, deterministic reporting,
-    launcher / entry-resolution surfacing, and explicit open/addressed/wont_fix lifecycle rules.
-    The next planned governance content phase is PHASE_16 constitution_neighbor_ids_governance.
+    PHASE_16 governs explicit Constitution-to-Constitution neighbor IDs surfaced by
+    maturity scoring V1.1. PHASE_16A produced a deterministic non-mutating decision
+    report. The next step is human arbitration of each candidate before any policy.yaml
+    or decisions.yaml update.
 ```
 
 
@@ -418,7 +417,7 @@ phases:
 
   - phase_id: PHASE_16
     label: constitution_neighbor_ids_governance
-    status: planned
+    status: active
     objective: >-
       Govern explicit Constitution-to-Constitution neighbor IDs surfaced by the
       maturity scoring V1.1 diagnostic baseline, without merging this content-specific
@@ -457,6 +456,23 @@ phases:
       - do_not_change_scorer_v1_1_rules
       - update_scope_generation_policy_only_after_human_arbitration
       - regenerate_scope_catalog_only_if_policy_decisions_change
+    completed_subtasks:
+      - subtask_id: PHASE_16A_NEIGHBOR_IDS_GOVERNANCE_REPORT
+        status: done
+        evidence:
+          - docs/patcher/shared/report_constitution_neighbor_ids_governance.py
+          - docs/pipelines/constitution/reports/constitution_neighbor_ids_governance_report.yaml
+        summary: >-
+          A deterministic non-mutating report extracts uncovered Constitution neighbor IDs
+          from scope_maturity_scoring_report.yaml, maps each ID to its current owner scope
+          using approved assign_ids_to_scope decisions, and proposes a human-arbitrable
+          decision value per candidate.
+    pending_subtasks:
+      - subtask_id: PHASE_16B_HUMAN_ARBITRATION
+        status: pending
+        objective: >-
+          Decide each candidate as add_as_default_neighbor, defer_to_governance_backlog,
+          or wont_fix_with_rationale before any policy/decisions update.
 
 ```
 
@@ -516,6 +532,8 @@ implementation_tracking:
   scorer_v1_1_accepted_as_current_diagnostic_baseline: true
   neighbor_ids_governance_follow_up_required: true
   phase16_constitution_neighbor_ids_governance_planned: true
+  phase16_constitution_neighbor_ids_governance_active: true
+  constitution_neighbor_ids_governance_report_created: true
   published_maturity_authority_unchanged: true
 ```
 
@@ -791,13 +809,16 @@ next_actions:
       - keep_policy_yaml_authoritative_until_arbitrated
 
   - action_id: NEXT_010
-    status: next
+    status: in_progress
     label: Govern explicit Constitution neighbor IDs surfaced by maturity scoring V1.1
     phase: PHASE_16
     inputs:
       - docs/pipelines/constitution/reports/scope_maturity_scoring_report.yaml
       - docs/pipelines/constitution/policies/scope_generation/policy.yaml
       - docs/pipelines/constitution/policies/scope_generation/decisions.yaml
+    completed_outputs:
+      - docs/patcher/shared/report_constitution_neighbor_ids_governance.py
+      - docs/pipelines/constitution/reports/constitution_neighbor_ids_governance_report.yaml
     expected_decisions:
       - decide_neighbor_ids_to_add_per_scope
       - decide_entries_to_defer_to_governance_backlog
