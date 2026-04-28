@@ -345,13 +345,13 @@ constitution_neighbor_ids_arbitration:
       published_score_total: 17
       published_level: L3_operational
     recommended_decision: add_as_default_neighbor
-    human_decision: pending
+    human_decision: add_as_default_neighbor
     allowed_human_decisions:
     - add_as_default_neighbor
     - defer_to_governance_backlog
     - wont_fix_with_rationale
-    human_rationale: TODO
-    patch_policy_decisions_after_approval: false
+    human_rationale: Accepted as explicit Constitution read neighbor for knowledge_and_design. knowledge_and_design legitimately reads the no-runtime-content-generation invariant because design and feedback coverage must remain compatible with deployment/runtime architecture constraints, while ownership remains in deployment_governance. This decision declares a read dependency only and does not transfer ownership.
+    patch_policy_decisions_after_approval: true
     rationale_from_report: ID is owned by deployment_governance and used by knowledge_and_design; declare it as an explicit Constitution read neighbor if the dependency is legitimate.
   - candidate_id: NIDG_KNOWLEDGE_AND_DESIGN__TYPE_HUMAN_CHECKPOINT
     scope_key: knowledge_and_design
@@ -368,13 +368,13 @@ constitution_neighbor_ids_arbitration:
       published_score_total: 17
       published_level: L3_operational
     recommended_decision: add_as_default_neighbor
-    human_decision: pending
+    human_decision: add_as_default_neighbor
     allowed_human_decisions:
     - add_as_default_neighbor
     - defer_to_governance_backlog
     - wont_fix_with_rationale
-    human_rationale: TODO
-    patch_policy_decisions_after_approval: false
+    human_rationale: Accepted as explicit Constitution read neighbor for knowledge_and_design. knowledge_and_design legitimately reads human checkpoint configuration because design-time learning paths and validation points must remain compatible with deployment governance, while ownership remains in deployment_governance. This decision declares a read dependency only and does not transfer ownership.
+    patch_policy_decisions_after_approval: true
     rationale_from_report: ID is owned by deployment_governance and used by knowledge_and_design; declare it as an explicit Constitution read neighbor if the dependency is legitimate.
   - candidate_id: NIDG_MASTERY_EVALUATION__ACTION_ESCALATE_PERSISTENT_DRIFT_OFFSESSION
     scope_key: mastery_evaluation
@@ -391,13 +391,13 @@ constitution_neighbor_ids_arbitration:
       published_score_total: 18
       published_level: L3_operational
     recommended_decision: add_as_default_neighbor
-    human_decision: pending
+    human_decision: add_as_default_neighbor
     allowed_human_decisions:
     - add_as_default_neighbor
     - defer_to_governance_backlog
     - wont_fix_with_rationale
-    human_rationale: TODO
-    patch_policy_decisions_after_approval: false
+    human_rationale: Accepted as explicit Constitution read neighbor for mastery_evaluation. mastery_evaluation legitimately reads the off-session escalation action because persistent evaluation or mastery drift may trigger governed escalation, while ownership remains in patch_lifecycle. This decision declares a read dependency only and does not close any escalation-boundary backlog item.
+    patch_policy_decisions_after_approval: true
     rationale_from_report: ID is owned by patch_lifecycle and used by mastery_evaluation; declare it as an explicit Constitution read neighbor if the dependency is legitimate.
   - candidate_id: NIDG_MASTERY_EVALUATION__TYPE_INTEGRITY_MODES
     scope_key: mastery_evaluation
@@ -414,13 +414,13 @@ constitution_neighbor_ids_arbitration:
       published_score_total: 18
       published_level: L3_operational
     recommended_decision: add_as_default_neighbor
-    human_decision: pending
+    human_decision: add_as_default_neighbor
     allowed_human_decisions:
     - add_as_default_neighbor
     - defer_to_governance_backlog
     - wont_fix_with_rationale
-    human_rationale: TODO
-    patch_policy_decisions_after_approval: false
+    human_rationale: Accepted as explicit Constitution read neighbor for mastery_evaluation. mastery_evaluation legitimately reads integrity modes because session integrity and evaluation confidence depend on deployment-governed integrity configurations, while ownership remains in deployment_governance. This decision declares a read dependency only and does not transfer ownership.
+    patch_policy_decisions_after_approval: true
     rationale_from_report: ID is owned by deployment_governance and used by mastery_evaluation; declare it as an explicit Constitution read neighbor if the dependency is legitimate.
   - candidate_id: NIDG_MASTERY_EVALUATION__TYPE_SELF_REPORT_AR_N1
     scope_key: mastery_evaluation
@@ -437,11 +437,11 @@ constitution_neighbor_ids_arbitration:
       published_score_total: 18
       published_level: L3_operational
     recommended_decision: add_as_default_neighbor
-    human_decision: pending
+    human_decision: add_as_default_neighbor
     allowed_human_decisions:
     - add_as_default_neighbor
     - defer_to_governance_backlog
     - wont_fix_with_rationale
-    human_rationale: TODO
-    patch_policy_decisions_after_approval: false
+    human_rationale: Accepted as explicit Constitution read neighbor for mastery_evaluation. mastery_evaluation legitimately reads AR-N1 self-report signals because perceived mastery, session interpretation, or divergence protocols may consume learner-state signals, while ownership remains in learner_state. This decision declares a read dependency only and does not transfer ownership.
+    patch_policy_decisions_after_approval: true
     rationale_from_report: ID is owned by learner_state and used by mastery_evaluation; declare it as an explicit Constitution read neighbor if the dependency is legitimate.

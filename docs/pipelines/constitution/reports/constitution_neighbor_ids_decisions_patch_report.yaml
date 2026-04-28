@@ -1,17 +1,83 @@
 constitution_neighbor_ids_decisions_patch_report:
   schema_version: '0.1'
-  generated_at: '2026-04-28T13:58:31Z'
-  status: BLOCKED
+  generated_at: '2026-04-28T14:02:29Z'
+  status: PASS
   apply_mode: false
-  blocking_reason: arbitration_validation_not_pass_ready_to_patch
-  validation_status: PENDING_HUMAN_ARBITRATION
+  changed: true
   inputs:
     arbitration: docs/pipelines/constitution/reports/constitution_neighbor_ids_arbitration.yaml
     validation: docs/pipelines/constitution/reports/constitution_neighbor_ids_arbitration_validation.yaml
     decisions: docs/pipelines/constitution/policies/scope_generation/decisions.yaml
   mutation_policy:
     policy_yaml: not_modified
-    decisions_yaml: not_modified
+    decisions_yaml: modified_if_apply_true_and_changed
     scope_catalog: not_modified
     maturity_scores: not_modified
     scorer_rules: not_modified
+  patch_summary:
+    scope_count: 5
+    patch_ready_item_count: 18
+    decision_count_to_append_or_merge: 5
+    actions:
+    - action: append_decision
+      decision_id: SGEN_DECISION_PHASE16_NEIGHBOR_IDS__DEPLOYMENT_GOVERNANCE
+      scope_key: deployment_governance
+      target_ids:
+      - ACTION_LOG_UNCOVERED_CONFLICT
+      - INV_GRAPH_PROPAGATION_ONE_HOP
+      - INV_MSC_AND_STRICT
+      - TYPE_AUTHENTIC_CONTEXT
+      - TYPE_CORPUS_CONFIDENCE_ICC
+      - TYPE_FEEDBACK_COVERAGE_MATRIX
+      - TYPE_SESSION_INTEGRITY_SCORE
+      candidate_ids:
+      - NIDG_DEPLOYMENT_GOVERNANCE__ACTION_LOG_UNCOVERED_CONFLICT
+      - NIDG_DEPLOYMENT_GOVERNANCE__INV_GRAPH_PROPAGATION_ONE_HOP
+      - NIDG_DEPLOYMENT_GOVERNANCE__INV_MSC_AND_STRICT
+      - NIDG_DEPLOYMENT_GOVERNANCE__TYPE_AUTHENTIC_CONTEXT
+      - NIDG_DEPLOYMENT_GOVERNANCE__TYPE_CORPUS_CONFIDENCE_ICC
+      - NIDG_DEPLOYMENT_GOVERNANCE__TYPE_FEEDBACK_COVERAGE_MATRIX
+      - NIDG_DEPLOYMENT_GOVERNANCE__TYPE_SESSION_INTEGRITY_SCORE
+    - action: append_decision
+      decision_id: SGEN_DECISION_PHASE16_NEIGHBOR_IDS__KNOWLEDGE_AND_DESIGN
+      scope_key: knowledge_and_design
+      target_ids:
+      - INV_NO_RUNTIME_CONTENT_GENERATION
+      - TYPE_HUMAN_CHECKPOINT
+      candidate_ids:
+      - NIDG_KNOWLEDGE_AND_DESIGN__INV_NO_RUNTIME_CONTENT_GENERATION
+      - NIDG_KNOWLEDGE_AND_DESIGN__TYPE_HUMAN_CHECKPOINT
+    - action: append_decision
+      decision_id: SGEN_DECISION_PHASE16_NEIGHBOR_IDS__LEARNER_STATE
+      scope_key: learner_state
+      target_ids:
+      - ACTION_ESCALATE_PERSISTENT_DRIFT_OFFSESSION
+      - ACTION_PLAN_SHORT_DIAGNOSTIC_TASK
+      candidate_ids:
+      - NIDG_LEARNER_STATE__ACTION_ESCALATE_PERSISTENT_DRIFT_OFFSESSION
+      - NIDG_LEARNER_STATE__ACTION_PLAN_SHORT_DIAGNOSTIC_TASK
+    - action: append_decision
+      decision_id: SGEN_DECISION_PHASE16_NEIGHBOR_IDS__MASTERY_EVALUATION
+      scope_key: mastery_evaluation
+      target_ids:
+      - ACTION_ESCALATE_PERSISTENT_DRIFT_OFFSESSION
+      - TYPE_INTEGRITY_MODES
+      - TYPE_SELF_REPORT_AR_N1
+      candidate_ids:
+      - NIDG_MASTERY_EVALUATION__ACTION_ESCALATE_PERSISTENT_DRIFT_OFFSESSION
+      - NIDG_MASTERY_EVALUATION__TYPE_INTEGRITY_MODES
+      - NIDG_MASTERY_EVALUATION__TYPE_SELF_REPORT_AR_N1
+    - action: append_decision
+      decision_id: SGEN_DECISION_PHASE16_NEIGHBOR_IDS__PATCH_LIFECYCLE
+      scope_key: patch_lifecycle
+      target_ids:
+      - INV_NO_RUNTIME_CONTENT_GENERATION
+      - INV_RUNTIME_FULLY_LOCAL
+      - TYPE_SELF_REPORT_AR_N1
+      - TYPE_STATE_AXIS_VALUE_COST
+      candidate_ids:
+      - NIDG_PATCH_LIFECYCLE__INV_NO_RUNTIME_CONTENT_GENERATION
+      - NIDG_PATCH_LIFECYCLE__INV_RUNTIME_FULLY_LOCAL
+      - NIDG_PATCH_LIFECYCLE__TYPE_SELF_REPORT_AR_N1
+      - NIDG_PATCH_LIFECYCLE__TYPE_STATE_AXIS_VALUE_COST
+  next_steps_after_apply: []
