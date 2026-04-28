@@ -1,0 +1,71 @@
+governance_backlog_stage00_consumption_audit:
+  schema_version: '0.1'
+  generated_at: '2026-04-28T10:28:17Z'
+  phase: PHASE_14C_STAGE00_BACKLOG_CONSUMPTION
+  status: PASS
+  scope: backlog_consumption_only_no_maturity_scoring_audit
+  inputs:
+    stage00: docs\pipelines\constitution\STAGE_00_SCOPE_PARTITION_REVIEW_AND_REGEN.md
+    governance_backlog: docs\pipelines\constitution\scope_catalog\governance_backlog.yaml
+    run_index: docs\pipelines\constitution\runs\index.yaml
+  explicitly_out_of_scope:
+  - scope_maturity_scoring
+  - score_constitution_scope_maturity.py
+  - scope_maturity_scoring_report.yaml
+  - policy_score_authority
+  checks:
+    stage00_declares_governance_backlog_as_required_input:
+      status: PASS
+      evidence: Required input path is present in STAGE_00.
+    stage00_requires_backlog_read_before_semantic_analysis:
+      status: PASS
+      evidence: STAGE_00 states governance_backlog must be read before semantic partition
+        analysis.
+    stage00_requires_filtering_open_entries:
+      status: PASS
+      evidence: STAGE_00 explicitly requires filtering status=open entries.
+    stage00_blocks_done_if_open_entries_unhandled:
+      status: PASS
+      evidence: STAGE_00 forbids completion while open entries are not addressed or
+        justified.
+    stage00_requires_resolution_metadata:
+      status: PASS
+      evidence: STAGE_00 requires resolved_at, resolved_by and resolution_note on
+        treated entries.
+    stage00_forbids_direct_catalog_authority_bypass:
+      status: PASS
+      evidence: STAGE_00 preserves generated catalog authority boundaries.
+    stage00_success_criteria_mentions_backlog:
+      status: PASS
+      evidence: Stage success criteria include backlog handling.
+  current_backlog_snapshot:
+    total_entries: 6
+    open_entries: 6
+    open_entries_by_type:
+      partition_angle_mort: 1
+      scope_extension_needed: 2
+      scope_gap: 3
+    open_entries_by_scope_key:
+      patch_lifecycle: 6
+    open_entries_by_related_scope_key:
+      deployment_governance: 2
+      learner_state: 2
+      patch_lifecycle: 6
+  current_execution_precondition:
+    run_index_path: docs\pipelines\constitution\runs\index.yaml
+    active_run_count: 0
+    active_runs: []
+    stage00_execution_allowed_now: true
+  warnings:
+  - warning_id: WARN_BACKLOG_REPORT_DECIDED_NOT_STATUS
+    severity: low
+    message: STAGE_00 mentions 'report décidé' while governance_backlog.yaml currently
+      defines statuses open/addressed/wont_fix. This is acceptable wording for now,
+      but PHASE_14F should decide whether 'deferred/reported' is a status, a note,
+      or a resolution_note convention.
+  recommendation:
+    phase14c_status: can_be_marked_done
+    next_phase14_subtask: PHASE_14D_DETERMINISTIC_BACKLOG_REPORT
+    rationale: STAGE_00 already contains the necessary governance backlog consumption
+      contract. Remaining generic backlog integration work should move to deterministic
+      reporting, launcher surfacing, and status lifecycle clarification.
