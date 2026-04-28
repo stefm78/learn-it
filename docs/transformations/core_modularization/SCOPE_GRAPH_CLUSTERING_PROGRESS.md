@@ -317,12 +317,16 @@ phases:
           blocks completion while open entries are unresolved or unjustified, and requires
           resolution metadata. The audit is scoped to backlog consumption only and explicitly
           excludes maturity scoring.
-    pending_subtasks:
       - subtask_id: PHASE_14D_DETERMINISTIC_BACKLOG_REPORT
-        status: pending
-        objective: >-
-          Add a deterministic report script that summarizes open governance backlog entries
-          by scope, type, source run, age, and recommended Stage 00 action.
+        status: done
+        evidence:
+          - docs/patcher/shared/report_governance_backlog.py
+          - docs/pipelines/constitution/reports/governance_backlog_report.yaml
+        summary: >-
+          A deterministic read-only report now summarizes governance backlog entries by
+          status, type, scope, related scope, source run, candidate status, Stage 00
+          relevance, and launcher-facing impacted scopes.
+    pending_subtasks:
       - subtask_id: PHASE_14E_LAUNCHER_BACKLOG_WARNING
         status: pending
         objective: >-
@@ -478,7 +482,8 @@ implementation_tracking:
   governance_backlog_pipeline_integration_opened: true
   stage00_backlog_consumption_integrated: true
   stage00_backlog_consumption_audit_report_created: true
-  governance_backlog_report_script_created: false
+  governance_backlog_report_script_created: true
+  governance_backlog_report_generated: true
   launcher_backlog_warning_integrated: false
   backlog_status_lifecycle_defined: false
   scope_maturity_scoring_spec_created: true
@@ -580,7 +585,8 @@ decision_log:
       Accept score_constitution_scope_maturity.py V1.1 as the current diagnostic
       baseline. Stop further scorer calibration for now: the remaining FAIL is
       treated as a governance signal about under-declared Constitution neighbor
-      IDs, not as an automatic reason to rewrite policy.yaml maturity values.  - decision_id: DECISION_014
+      IDs, not as an automatic reason to rewrite policy.yaml maturity values.
+  - decision_id: DECISION_014
     date: 2026-04-28
     status: accepted
     decision: >-
@@ -663,7 +669,8 @@ risks:
     mitigation: >-
       Open a governed follow-up to decide which Constitution-to-Constitution
       dependencies must be declared as explicit neighbor IDs in scope_generation
-      policy/decisions. Do not rewrite maturity scores until this arbitration is done.  - risk_id: RISK_011
+      policy/decisions. Do not rewrite maturity scores until this arbitration is done.
+  - risk_id: RISK_011
     label: phase14_absorbs_scoring_neighbor_ids_content
     severity: medium
     status: mitigated_by_phase16_planning
@@ -714,10 +721,12 @@ next_actions:
     input: docs/pipelines/constitution/scope_catalog/governance_backlog.yaml
     completed_decisions:
       - stage00_consumption_contract
+      - deterministic_backlog_report_script
     completed_outputs:
       - docs/pipelines/constitution/reports/governance_backlog_stage00_consumption_audit.yaml
+      - docs/patcher/shared/report_governance_backlog.py
+      - docs/pipelines/constitution/reports/governance_backlog_report.yaml
     remaining_decisions:
-      - deterministic_backlog_report_script
       - launcher_backlog_warning_behavior
       - open_addressed_wont_fix_status_lifecycle
   - action_id: NEXT_007

@@ -1,6 +1,6 @@
 governance_backlog_report:
   schema_version: '0.1'
-  generated_at: '2026-04-28T10:57:23Z'
+  generated_at: '2026-04-28T11:04:11Z'
   status: PASS
   source:
     backlog_path: docs/pipelines/constitution/scope_catalog/governance_backlog.yaml
@@ -61,7 +61,7 @@ governance_backlog_report:
       warning: open_governance_backlog_entries
     patch_lifecycle:
       direct_open_count: 6
-      related_open_count: 6
+      related_open_count: 0
       open_entry_ids:
       - GB_2026_04_27_PATCH_LIFECYCLE_R01_GBC_PATCH_LIFECYCLE_ESCALATION_BOUNDARY_R01
       - GB_2026_04_27_PATCH_LIFECYCLE_R01_GBC_PATCH_LIFECYCLE_FULL_STATE_MACHINE_R01
@@ -70,9 +70,9 @@ governance_backlog_report:
       - GB_2026_04_27_PATCH_LIFECYCLE_R01_GBC_PATCH_LIFECYCLE_REFERENTIEL_PARAMETER_R01
       - GB_2026_04_27_PATCH_LIFECYCLE_R01_GBC_PATCH_LIFECYCLE_UNCOVERED_CONFLICT_LOGGING_R01
       open_types:
-        partition_angle_mort: 2
-        scope_extension_needed: 4
-        scope_gap: 6
+        partition_angle_mort: 1
+        scope_extension_needed: 2
+        scope_gap: 3
       warning: open_governance_backlog_entries
   selected_entries_detail:
   - entry_id: GB_2026_04_27_PATCH_LIFECYCLE_R01_GBC_PATCH_LIFECYCLE_UNCOVERED_CONFLICT_LOGGING_R01

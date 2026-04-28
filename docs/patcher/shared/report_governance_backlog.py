@@ -153,6 +153,11 @@ def build_launcher_scope_summary(entries: List[Dict[str, Any]]) -> Dict[str, Any
         direct_bucket["open_types"][entry_type] = direct_bucket["open_types"].get(entry_type, 0) + 1
 
         for related_scope in as_list(entry.get("related_scope_keys")):
+            # Avoid double-counting a direct scope when related_scope_keys redundantly
+            # contains the same scope_key, which is common in exported backlog entries.
+            if related_scope == direct_scope:
+                continue
+
             related_bucket = ensure(related_scope)
             related_bucket["related_open_count"] += 1
             if entry_id not in related_bucket["open_entry_ids"]:
