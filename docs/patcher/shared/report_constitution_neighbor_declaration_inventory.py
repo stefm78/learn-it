@@ -137,12 +137,17 @@ def collect_decision_surfaces(decisions_doc: Dict[str, Any]) -> Dict[str, Any]:
                 "neighbor_class": payload.get("neighbor_class") if isinstance(payload, dict) else None,
                 "read_mode": payload.get("read_mode") if isinstance(payload, dict) else None,
                 "source_phase": payload.get("source_phase") if isinstance(payload, dict) else None,
+                "superseded_by_decision_id": payload.get("superseded_by_decision_id") if isinstance(payload, dict) else None,
+                "superseded_by_phase": payload.get("superseded_by_phase") if isinstance(payload, dict) else None,
                 "requires_exact_id_selection_before_approval": bool(
                     isinstance(payload, dict) and payload.get("requires_exact_id_selection_before_approval") is True
                 ),
             }
             force_neighbor_decisions.append(entry)
-            if status != "approved" or entry["requires_exact_id_selection_before_approval"]:
+            is_superseded = status.startswith("superseded")
+            if (status != "approved" and not is_superseded) or (
+                entry["requires_exact_id_selection_before_approval"] and not is_superseded
+            ):
                 proposed_neighbor_placeholders.append(entry)
 
         if decision_type == "classify_external_read_only_cores":

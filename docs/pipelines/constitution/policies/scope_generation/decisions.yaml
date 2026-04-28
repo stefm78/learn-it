@@ -340,7 +340,7 @@ scope_generation_decisions:
     justification: Patch trigger nodes are close to learner_state/runtime signals, but they represent governed patch lifecycle
       decisions. They remain in patch_lifecycle and are recorded as a diagnostic subcluster.
   - decision_id: SGEN_DECISION_011
-    status: proposed
+    status: superseded_by_phase16
     decision_type: force_logical_neighbors
     scope_keys_affected:
     - patch_lifecycle
@@ -354,14 +354,21 @@ scope_generation_decisions:
       - LABEL_CLUSTER_001
       - LABEL_CLUSTER_013
       - LABEL_CLUSTER_025
-      requires_exact_id_selection_before_approval: true
+      requires_exact_id_selection_before_approval: false
       note: Patch trigger governance remains owned by patch_lifecycle, but required learner_state/runtime signal IDs must
         be selected explicitly before this decision can become approved.
+      superseded_by_phase: PHASE_16
+      superseded_by_decision_id: SGEN_DECISION_PHASE16_NEIGHBOR_IDS__PATCH_LIFECYCLE
+      superseded_by_report: docs/pipelines/constitution/reports/constitution_neighbor_ids_arbitration_validation.yaml
+      superseded_reason: PHASE_16 human arbitration selected and approved the exact patch_lifecycle read-neighbor IDs for
+        the patch trigger governance area. This placeholder no longer requires separate exact ID selection.
     applies_from: '2026-04-27'
     decided_by: human
     challenged_with_ai: true
-    justification: This placeholder records the accepted arbitration direction without silently selecting neighbor IDs. Exact
-      learner_state/runtime neighbors must be reviewed before approval.
+    justification: Superseded by PHASE_16. The earlier placeholder intentionally avoided silently selecting learner_state/runtime
+      neighbor IDs. PHASE_16 later governed the exact selection and approved TYPE_SELF_REPORT_AR_N1, TYPE_STATE_AXIS_VALUE_COST,
+      INV_NO_RUNTIME_CONTENT_GENERATION, and INV_RUNTIME_FULLY_LOCAL as explicit patch_lifecycle read neighbors without changing
+      ownership.
   - decision_id: SGEN_DECISION_PHASE16_NEIGHBOR_IDS__DEPLOYMENT_GOVERNANCE
     status: approved
     decision_type: force_logical_neighbors

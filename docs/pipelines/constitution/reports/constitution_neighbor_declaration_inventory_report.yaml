@@ -1,7 +1,7 @@
 constitution_neighbor_declaration_inventory_report:
   schema_version: '0.1'
   phase_id: PHASE_18A
-  generated_at: '2026-04-28T15:34:09Z'
+  generated_at: '2026-04-28T15:38:02Z'
   status: PASS
   mutation_policy:
     policy_yaml: not_modified
@@ -14,7 +14,7 @@ constitution_neighbor_declaration_inventory_report:
   - ref: docs/pipelines/constitution/policies/scope_generation/policy.yaml
     sha256: c70c0aabcdaa1acf096eb86d4ea95671d0b367840c99b44e6a2262e24ffc36da
   - ref: docs/pipelines/constitution/policies/scope_generation/decisions.yaml
-    sha256: d2612a859940d5d95837078a96e8bf18d41731eb7cb3906ff3aeeef7d8552fc2
+    sha256: ef2a6dd19ae7d9d8d5a29f5ed6e07d4593e0f92da33732480300144b90029104
   - ref: docs/pipelines/constitution/scope_catalog/manifest.yaml
     sha256: 3de972b8904b38698d92fb51a63ce0c7273d6a7ec668344c2297bcbaf24b9812
   - ref: docs/pipelines/constitution/pipeline.md
@@ -27,7 +27,7 @@ constitution_neighbor_declaration_inventory_report:
     external_read_only_core_decision_count: 1
     scope_definition_count: 5
     run_extract_file_count: 8
-    finding_count: 1
+    finding_count: 0
     warning_count: 0
     error_count: 0
   surfaces:
@@ -97,7 +97,7 @@ constitution_neighbor_declaration_inventory_report:
         record_diagnostic_subcluster: 2
       decision_count_by_status:
         approved: 15
-        proposed: 1
+        superseded_by_phase16: 1
       force_logical_neighbors:
       - decision_id: SGEN_DECISION_006
         status: approved
@@ -113,6 +113,8 @@ constitution_neighbor_declaration_inventory_report:
         neighbor_class: intercore_reference_forced
         read_mode: primary
         source_phase: null
+        superseded_by_decision_id: null
+        superseded_by_phase: null
         requires_exact_id_selection_before_approval: false
       - decision_id: SGEN_DECISION_007
         status: approved
@@ -127,10 +129,11 @@ constitution_neighbor_declaration_inventory_report:
         neighbor_class: primary_read_neighbor
         read_mode: primary
         source_phase: null
+        superseded_by_decision_id: null
+        superseded_by_phase: null
         requires_exact_id_selection_before_approval: false
-      - &id001
-        decision_id: SGEN_DECISION_011
-        status: proposed
+      - decision_id: SGEN_DECISION_011
+        status: superseded_by_phase16
         scope_keys_affected:
         - patch_lifecycle
         target_id_count: 0
@@ -138,7 +141,9 @@ constitution_neighbor_declaration_inventory_report:
         neighbor_class: patch_trigger_governance_required_read_neighbor
         read_mode: primary
         source_phase: null
-        requires_exact_id_selection_before_approval: true
+        superseded_by_decision_id: SGEN_DECISION_PHASE16_NEIGHBOR_IDS__PATCH_LIFECYCLE
+        superseded_by_phase: PHASE_16
+        requires_exact_id_selection_before_approval: false
       - decision_id: SGEN_DECISION_PHASE16_NEIGHBOR_IDS__DEPLOYMENT_GOVERNANCE
         status: approved
         scope_keys_affected:
@@ -155,6 +160,8 @@ constitution_neighbor_declaration_inventory_report:
         neighbor_class: explicit_constitution_dependency_from_scoring_v1_1
         read_mode: primary
         source_phase: PHASE_16
+        superseded_by_decision_id: null
+        superseded_by_phase: null
         requires_exact_id_selection_before_approval: false
       - decision_id: SGEN_DECISION_PHASE16_NEIGHBOR_IDS__KNOWLEDGE_AND_DESIGN
         status: approved
@@ -167,6 +174,8 @@ constitution_neighbor_declaration_inventory_report:
         neighbor_class: explicit_constitution_dependency_from_scoring_v1_1
         read_mode: primary
         source_phase: PHASE_16
+        superseded_by_decision_id: null
+        superseded_by_phase: null
         requires_exact_id_selection_before_approval: false
       - decision_id: SGEN_DECISION_PHASE16_NEIGHBOR_IDS__LEARNER_STATE
         status: approved
@@ -179,6 +188,8 @@ constitution_neighbor_declaration_inventory_report:
         neighbor_class: explicit_constitution_dependency_from_scoring_v1_1
         read_mode: primary
         source_phase: PHASE_16
+        superseded_by_decision_id: null
+        superseded_by_phase: null
         requires_exact_id_selection_before_approval: false
       - decision_id: SGEN_DECISION_PHASE16_NEIGHBOR_IDS__MASTERY_EVALUATION
         status: approved
@@ -192,6 +203,8 @@ constitution_neighbor_declaration_inventory_report:
         neighbor_class: explicit_constitution_dependency_from_scoring_v1_1
         read_mode: primary
         source_phase: PHASE_16
+        superseded_by_decision_id: null
+        superseded_by_phase: null
         requires_exact_id_selection_before_approval: false
       - decision_id: SGEN_DECISION_PHASE16_NEIGHBOR_IDS__PATCH_LIFECYCLE
         status: approved
@@ -206,6 +219,8 @@ constitution_neighbor_declaration_inventory_report:
         neighbor_class: explicit_constitution_dependency_from_scoring_v1_1
         read_mode: primary
         source_phase: PHASE_16
+        superseded_by_decision_id: null
+        superseded_by_phase: null
         requires_exact_id_selection_before_approval: false
       external_read_only_core_decisions:
       - decision_id: SGEN_DECISION_008
@@ -224,8 +239,7 @@ constitution_neighbor_declaration_inventory_report:
         - external_read_only_referentiel
         read_mode: neighbor_or_fallback
         write_policy: forbidden_without_explicit_cross_core_run_contract
-      non_approved_or_placeholder_neighbor_decisions:
-      - *id001
+      non_approved_or_placeholder_neighbor_decisions: []
     generated_scope_definitions:
       scope_definition_count: 5
       surface_key_presence_count:
@@ -397,14 +411,7 @@ constitution_neighbor_declaration_inventory_report:
       pipeline_md_needs_resource_index_update: false
       stage00_contains_score_publication_chain: true
       stage00_contains_neighbor_ids_governance_chain: true
-  findings:
-  - finding_id: NEIGHBOR_DECISION_PLACEHOLDER_PRESENT
-    severity: info
-    message: At least one force_logical_neighbors decision is not approved or still requires exact ID selection.
-    items:
-    - decision_id: SGEN_DECISION_011
-      status: proposed
-      requires_exact_id_selection_before_approval: true
+  findings: []
   recommended_next_steps:
   - Patch pipeline.md canonical resources to list recent STAGE_00 scoring and neighbor-governance scripts.
   - Arbitrate whether proposed SGEN_DECISION_011 remains a placeholder, is superseded by PHASE_16, or should be closed.
