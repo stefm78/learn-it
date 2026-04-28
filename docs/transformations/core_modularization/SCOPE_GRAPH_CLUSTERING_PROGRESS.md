@@ -32,13 +32,14 @@ This tracker reflects the current Scope Lab execution state after:
 
 ```yaml
 current_phase:
-  phase_id: PHASE_20
-  label: post_macro_closeout_review
+  phase_id: PHASE_21
+  label: remaining_patch_lifecycle_backlog_decision
   status: planned
   summary: >-
-    PHASE_19 / MACRO_004 is closed with no ownership changes and no policy/decisions
-    patch required. PHASE_20 is reserved for post-macro closeout review, cleanup, or
-    deciding whether a new bounded run should be opened.
+    PHASE_20 is closed. Four governance backlog entries remain open after PHASE_20B:
+    escalation boundary, referentiel parameter dependency, priority queue semantics,
+    and full patch state machine. PHASE_21 is reserved to decide whether to open a
+    new bounded run or defer these entries to normal STAGE_00 backlog review.
 ```
 
 
@@ -797,6 +798,100 @@ phases:
         - no policy/decisions patch is required
         - existing governance backlog entries may still be handled by their normal backlog lifecycle
 
+  - phase_id: PHASE_20
+    label: post_macro_closeout_review
+    status: done
+    objective: >-
+      Reconcile the post-pilot macro work with the canonical governance backlog and
+      decide whether the scope modularization effort needs cleanup, documentation
+      consolidation, another bounded pilot run, or a new independent macro decision.
+    rationale: >-
+      PHASE_13 through PHASE_19 closed the pilot, backlog pipeline integration,
+      maturity scoring publication, neighbor declaration model, and multi-owner review.
+      PHASE_20 performs the post-macro reconciliation pass over the canonical backlog.
+    completed_subtasks:
+      - subtask_id: PHASE_20A_REVIEW_OPEN_BACKLOG_AND_TRACKER
+        status: done
+        evidence:
+          - docs/patcher/shared/report_post_macro_closeout_review.py
+          - docs/pipelines/constitution/reports/post_macro_closeout_review_report.yaml
+          - docs/pipelines/constitution/reports/post_macro_closeout_review_report.md
+        result:
+          report_status: PASS
+          open_backlog_entry_count_before_review: 6
+          recommended_mark_addressed_count: 2
+          recommended_keep_open_count: 4
+          requires_policy_decisions_patch_count: 0
+          requires_catalog_regeneration_count: 0
+      - subtask_id: PHASE_20B_APPLY_BACKLOG_LIFECYCLE_PATCH
+        status: done
+        evidence:
+          - docs/pipelines/constitution/scope_catalog/governance_backlog.yaml
+          - docs/pipelines/constitution/reports/governance_backlog_phase20b_patch_report.yaml
+          - docs/pipelines/constitution/reports/governance_backlog_lifecycle_validation.yaml
+          - docs/pipelines/constitution/reports/governance_backlog_report.yaml
+        result:
+          patch_report_status: PASS
+          lifecycle_validation_status: PASS
+          marked_addressed_count: 2
+          kept_open_with_review_metadata_count: 4
+          status_counts_after_patch:
+            addressed: 2
+            open: 4
+          open_entries_after_patch:
+            - GBC_PATCH_LIFECYCLE_ESCALATION_BOUNDARY_R01
+            - GBC_PATCH_LIFECYCLE_FULL_STATE_MACHINE_R01
+            - GBC_PATCH_LIFECYCLE_PRIORITY_QUEUE_R01
+            - GBC_PATCH_LIFECYCLE_REFERENTIEL_PARAMETER_R01
+          policy_decisions_patch_required: false
+          catalog_regeneration_required: false
+    pending_subtasks: []
+    closure:
+      status: closed
+      closed_reason: >-
+        PHASE_20 reconciled the six pilot backlog entries after PHASE_16 through
+        PHASE_19. Two entries were marked addressed and four remain open with atomic
+        review metadata. No policy.yaml or decisions.yaml patch and no scope catalog
+        regeneration were required.
+      residual_signals:
+        - four governance backlog entries remain open and must continue to surface in STAGE_00 and launcher warnings
+        - remaining open entries are design follow-ups, not unresolved macro gating issues
+        - PHASE_21 must decide whether to open a new bounded run or defer to normal backlog lifecycle
+
+  - phase_id: PHASE_21
+    label: remaining_patch_lifecycle_backlog_decision
+    status: planned
+    objective: >-
+      Decide the operational treatment of the four remaining open patch_lifecycle
+      backlog entries after PHASE_20B.
+    rationale: >-
+      The macro cleanup is complete, but four reviewed backlog entries remain open.
+      They should either become the scope of a new bounded run or remain open for the
+      next normal STAGE_00 partition/backlog review.
+    open_backlog_entries:
+      - candidate_id: GBC_PATCH_LIFECYCLE_ESCALATION_BOUNDARY_R01
+        topic: escalation boundary across patch_lifecycle, learner_state and deployment_governance
+      - candidate_id: GBC_PATCH_LIFECYCLE_REFERENTIEL_PARAMETER_R01
+        topic: external-read-only referentiel parameter dependency for patch escalation threshold
+      - candidate_id: GBC_PATCH_LIFECYCLE_PRIORITY_QUEUE_R01
+        topic: deterministic priority lanes for patch serialization
+      - candidate_id: GBC_PATCH_LIFECYCLE_FULL_STATE_MACHINE_R01
+        topic: canonical patch lifecycle state machine
+    planned_subtasks:
+      - subtask_id: PHASE_21A_DECIDE_NEXT_OPERATIONAL_STEP
+        status: pending
+        objective: >-
+          Choose between opening a new bounded run, creating a design note, or leaving
+          the four entries to normal STAGE_00 backlog review.
+      - subtask_id: PHASE_21B_PREPARE_HANDOFF_OR_RUN_PROMPT
+        status: pending
+        objective: >-
+          If a new run is selected, prepare the zero-context handoff prompt and
+          deterministic preflight commands.
+    pending_subtasks:
+      - PHASE_21A_DECIDE_NEXT_OPERATIONAL_STEP
+      - PHASE_21B_PREPARE_HANDOFF_OR_RUN_PROMPT
+
 ```
 
 ## Implementation checklist
@@ -909,6 +1004,13 @@ implementation_tracking:
   phase19c_policy_decisions_alignment_done_not_required: true
   phase19_macro_004_multi_owner_cluster_review_done: true
   phase20_post_macro_closeout_review_planned: true
+  phase20a_post_macro_closeout_review_done: true
+  phase20b_governance_backlog_lifecycle_patch_done: true
+  phase20b_governance_backlog_lifecycle_validation_status: PASS
+  phase20b_governance_backlog_open_entries_after_patch: 4
+  phase20_post_macro_closeout_review_done: true
+  phase21_remaining_patch_lifecycle_backlog_decision_planned: true
+
 ```
 
 ## Key decisions recorded
@@ -1101,6 +1203,32 @@ decision_log:
       PASS_NO_PATCH_REQUIRED.
 
 
+  - decision_id: DECISION_025
+    date: 2026-04-28
+    status: accepted
+    decision: >-
+      Close PHASE_20A as PASS. The post-macro closeout review reconciled six open
+      pilot backlog entries and recommended marking two addressed while keeping four
+      open with review metadata. No policy/decisions patch or catalog regeneration was
+      required.
+
+  - decision_id: DECISION_026
+    date: 2026-04-28
+    status: accepted
+    decision: >-
+      Close PHASE_20B as PASS. governance_backlog.yaml was updated through lifecycle
+      metadata only: two entries are addressed and four remain open with atomic review
+      metadata. The backlog lifecycle validator and backlog report both return PASS.
+
+  - decision_id: DECISION_027
+    date: 2026-04-28
+    status: accepted
+    decision: >-
+      Plan PHASE_21 as the operational decision point for the four remaining
+      patch_lifecycle backlog entries. PHASE_21 must decide whether to open a new
+      bounded run, create a design note, or leave them to normal STAGE_00 backlog review.
+
+
 ```
 
 ## Open risks
@@ -1204,6 +1332,17 @@ risks:
     mitigation: >-
       PHASE_19 / MACRO_004 is closed. The multi-owner candidates were
       arbitrated with no ownership changes and no policy/decisions patch required.
+
+  - risk_id: RISK_014
+    label: remaining_patch_lifecycle_design_backlog
+    severity: medium
+    status: open
+    mitigation: >-
+      Four reviewed backlog entries remain open after PHASE_20B. They are explicit
+      design follow-ups, not unresolved macro blockers. They continue to surface in
+      STAGE_00 and launcher warnings, and PHASE_21 is planned to decide whether a new
+      bounded run should be opened.
+
 
 ```
 
