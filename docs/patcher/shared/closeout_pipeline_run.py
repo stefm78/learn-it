@@ -168,10 +168,11 @@ def normalize_candidate_entry(
     run_id: str,
     fallback_scope_key: str,
     current_stage: str,
+    source_arbitrage_path: Optional[Path] = None,
 ) -> Dict[str, Any]:
     candidate_id = str(candidate.get("candidate_id") or "CANDIDATE").strip()
     entry_id = build_entry_id(run_id, candidate_id)
-    return {
+    entry = {
         "entry_id": entry_id,
         "type": str(candidate.get("backlog_entry_type") or "scope_gap"),
         "status": "open",
@@ -187,6 +188,38 @@ def normalize_candidate_entry(
         "candidate_status": str(candidate.get("candidate_status") or "candidate_open"),
         "recorded_at": utc_now_iso(),
     }
+    if source_arbitrage_path is not None:
+        entry["source_arbitrage_path"] = repo_path(source_arbitrage_path)
+    return entry
+
+
+def resolve_arbitrage_paths(arbitrage_path: Optional[Path], work_root: Path) -> List[Path]:
+    """Resolve arbitration reports using the STAGE_02 contract.
+
+    Rules:
+    - explicit file path: use that file only;
+    - explicit directory path: read every arbitrage*.md in that directory;
+    - absent path: read every <work_root>/02_arbitrage/arbitrage*.md;
+    - deterministic lexical ordering;
+    - no broad *.md scan, because unrelated notes may exist in the directory.
+    """
+    if arbitrage_path is not None:
+        if arbitrage_path.is_file():
+            return [arbitrage_path]
+        if arbitrage_path.is_dir():
+            return sorted(arbitrage_path.glob("arbitrage*.md"))
+        return []
+
+    default_dir = work_root / "02_arbitrage"
+    if default_dir.is_dir():
+        return sorted(default_dir.glob("arbitrage*.md"))
+
+    # Legacy fallback for older pipeline-level layouts.
+    legacy_file = work_root / "arbitrage.md"
+    if legacy_file.is_file():
+        return [legacy_file]
+
+    return []
 
 
 def export_backlog_entries(
@@ -196,7 +229,7 @@ def export_backlog_entries(
     backlog_path: Path,
     current_stage: str,
 ) -> List[Dict[str, Any]]:
-    """Export governance backlog entries from arbitrage report.
+    """Export governance backlog entries from a single arbitrage report.
 
     Preferred mode: extract a structured YAML fenced block rooted at
     governance_backlog_candidates.
@@ -223,10 +256,12 @@ def export_backlog_entries(
                 run_id=run_id,
                 fallback_scope_key=scope_key,
                 current_stage=current_stage,
+                source_arbitrage_path=arbitrage_path,
             )
             if entry["entry_id"] in existing_ids:
                 continue
             entries.append(entry)
+            existing_ids.add(entry["entry_id"])
             added.append(entry)
     else:
         for note in legacy_notes:
@@ -240,17 +275,40 @@ def export_backlog_entries(
                 "source_run_id": run_id,
                 "source_stage": current_stage,
                 "scope_key": scope_key,
+                "source_arbitrage_path": repo_path(arbitrage_path),
                 "note_ref": note["note_id"],
                 "description": note["description"],
                 "recommended_action": "review_at_stage_00",
                 "recorded_at": utc_now_iso(),
             }
             entries.append(entry)
+            existing_ids.add(entry_id)
             added.append(entry)
 
     if added:
         save_governance_backlog(backlog_path, doc)
 
+    return added
+
+
+def export_backlog_entries_from_paths(
+    run_id: str,
+    scope_key: str,
+    arbitrage_paths: List[Path],
+    backlog_path: Path,
+    current_stage: str,
+) -> List[Dict[str, Any]]:
+    added: List[Dict[str, Any]] = []
+    for path in arbitrage_paths:
+        added.extend(
+            export_backlog_entries(
+                run_id=run_id,
+                scope_key=scope_key,
+                arbitrage_path=path,
+                backlog_path=backlog_path,
+                current_stage=current_stage,
+            )
+        )
     return added
 
 
@@ -527,7 +585,10 @@ def main() -> None:
     parser.add_argument(
         "--arbitrage-path",
         default=None,
-        help="Path to arbitrage report (default: <work-root>/arbitrage.md)",
+        help=(
+            "Path to an arbitrage report file or to a directory containing arbitrage*.md. "
+            "Default: <work-root>/02_arbitrage/arbitrage*.md, with legacy fallback to <work-root>/arbitrage.md."
+        ),
     )
     parser.add_argument(
         "--backlog-path",
@@ -579,27 +640,28 @@ def main() -> None:
         run_id_for_backlog = args.run_id or promotion_report.get("run_id") or release_id
         scope_key_for_backlog = args.scope_key or promotion_report.get("scope_key") or "unknown"
 
-        # --export-backlog-entries : extract entries from arbitrage report
+        # --export-backlog-entries : extract entries from one or more arbitrage reports
         if args.export_backlog_entries:
-            arbitrage_path = Path(
-                args.arbitrage_path
-                if args.arbitrage_path
-                else str(work_root / "arbitrage.md")
-            )
+            explicit_arbitrage_path = Path(args.arbitrage_path) if args.arbitrage_path else None
+            arbitrage_paths = resolve_arbitrage_paths(explicit_arbitrage_path, work_root)
             backlog_path = Path(args.backlog_path)
-            added = export_backlog_entries(
+            added = export_backlog_entries_from_paths(
                 run_id=run_id_for_backlog,
                 scope_key=scope_key_for_backlog,
-                arbitrage_path=arbitrage_path,
+                arbitrage_paths=arbitrage_paths,
                 backlog_path=backlog_path,
                 current_stage=args.current_stage,
             )
             backlog_entries_exported = len(added)
+            print(f"[backlog] {len(arbitrage_paths)} fichier(s) d'arbitrage résolu(s).")
+            for path in arbitrage_paths:
+                print(f"  - {repo_path(path)}")
             if added:
                 print(f"[backlog] {backlog_entries_exported} entrée(s) exportée(s) vers {args.backlog_path}:")
                 for e in added:
                     title = e.get("title") or e.get("description") or e.get("entry_id")
-                    print(f"  + {e['entry_id']} [{e['type']}] — {str(title)[:80]}")
+                    source = e.get("source_arbitrage_path", "unknown_source")
+                    print(f"  + {e['entry_id']} [{e['type']}] — {str(title)[:80]} ({source})")
             else:
                 print("[backlog] Aucune nouvelle entrée à exporter (aucun candidat structuré, aucune note legacy, ou déjà présentes).")
 
