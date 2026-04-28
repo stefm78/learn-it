@@ -326,12 +326,17 @@ phases:
           A deterministic read-only report now summarizes governance backlog entries by
           status, type, scope, related scope, source run, candidate status, Stage 00
           relevance, and launcher-facing impacted scopes.
-    pending_subtasks:
       - subtask_id: PHASE_14E_LAUNCHER_BACKLOG_WARNING
-        status: pending
-        objective: >-
-          Surface open backlog entries in launcher / entry resolution when a user opens
-          or continues a run for an impacted scope.
+        status: done
+        evidence:
+          - tmp/pipeline_launcher.py
+          - docs/pipelines/constitution/reports/governance_backlog_report.yaml
+        summary: >-
+          The experimental launcher now reads the canonical governance backlog,
+          computes open backlog warnings by impacted scope, annotates published scopes
+          and active runs with governance_backlog_signal, and propagates the signal into
+          OPEN_NEW_RUN entry action prompt bindings.
+    pending_subtasks:
       - subtask_id: PHASE_14F_BACKLOG_STATUS_LIFECYCLE
         status: pending
         objective: >-
@@ -484,7 +489,7 @@ implementation_tracking:
   stage00_backlog_consumption_audit_report_created: true
   governance_backlog_report_script_created: true
   governance_backlog_report_generated: true
-  launcher_backlog_warning_integrated: false
+  launcher_backlog_warning_integrated: true
   backlog_status_lifecycle_defined: false
   scope_maturity_scoring_spec_created: true
   stage00_maturity_scoring_integrated: true
@@ -722,12 +727,13 @@ next_actions:
     completed_decisions:
       - stage00_consumption_contract
       - deterministic_backlog_report_script
+      - launcher_backlog_warning_behavior
     completed_outputs:
       - docs/pipelines/constitution/reports/governance_backlog_stage00_consumption_audit.yaml
       - docs/patcher/shared/report_governance_backlog.py
       - docs/pipelines/constitution/reports/governance_backlog_report.yaml
+      - tmp/pipeline_launcher.py
     remaining_decisions:
-      - launcher_backlog_warning_behavior
       - open_addressed_wont_fix_status_lifecycle
   - action_id: NEXT_007
     status: done
