@@ -80,7 +80,7 @@ scope_maturity_scoring_report:
     scope_count: 5
     blocking_finding_count: 1
     warning_count: 1
-    computed_lower_than_published_count: 4
+    computed_lower_than_published_count: 2
     computed_delta_non_blocking_count: 1
   scope_results:
   - scope_key: deployment_governance
@@ -131,6 +131,8 @@ scope_maturity_scoring_report:
           internal_owned_edge_count: 11
           external_owned_edge_count: 7
           internal_owned_edge_ratio: 0.611
+          v1_1_reason: moderate_dominant_logic_scope
+        calibration: v1_1
       inter_scope_boundaries:
         score: 1
         evidence:
@@ -147,6 +149,26 @@ scope_maturity_scoring_report:
           covered_outgoing_dependency_count: 0
           uncovered_outgoing_dependency_count: 7
           coverage_ratio: 0.0
+          constitution_neighbor_id_coverage:
+            outgoing_count: 7
+            covered_by_neighbor_id_count: 0
+            uncovered_count: 7
+            uncovered_ids:
+            - ACTION_LOG_UNCOVERED_CONFLICT
+            - INV_GRAPH_PROPAGATION_ONE_HOP
+            - INV_MSC_AND_STRICT
+            - TYPE_AUTHENTIC_CONTEXT
+            - TYPE_CORPUS_CONFIDENCE_ICC
+            - TYPE_FEEDBACK_COVERAGE_MATRIX
+            - TYPE_SESSION_INTEGRITY_SCORE
+          external_core_coverage:
+            outgoing_count: 0
+            covered_by_neighbor_file_count: 0
+            covered_by_neighbor_id_count: 0
+            uncovered_count: 0
+            uncovered_ids: []
+          v1_1_position: strict_score_preserved_evidence_granularity_improved
+        calibration: v1_1
       bounded_run_executability:
         score: 4
         evidence:
@@ -157,12 +179,17 @@ scope_maturity_scoring_report:
           related_severe_open_backlog_count: 2
       inter_release_stability:
         score: 2
+        confidence: limited_with_backlog_pressure
         evidence:
-        - 'evidence_limited: no dedicated release-to-release scope maturity history is consumed in V1'
+        - 'evidence_confidence: no dedicated release-to-release scope maturity history is consumed in
+          V1.1'
         - published_axis_used_as_bounded_prior: 4
           score_cap_without_history: 3
           related_severe_open_backlog_count: 2
           generation_changed_files_count: 5
+          confidence: limited_with_backlog_pressure
+          v1_1_position: missing_history_limits_confidence_not_score_by_itself
+        calibration: v1_1
     diagnostic_metrics:
       target_id_count: 19
       neighbor_id_count: 1
@@ -212,8 +239,8 @@ scope_maturity_scoring_report:
       score_total: 17
       level: L3_operational
     computed_maturity:
-      score_total: 15
-      level: L2_usable_with_care
+      score_total: 17
+      level: L3_operational
       max_score: 24
     axis_scores:
       clarity_of_scope:
@@ -225,7 +252,7 @@ scope_maturity_scoring_report:
         - watchpoints, rationale, or notes present
         published_axis_score: 3
       internal_coherence:
-        score: 2
+        score: 3
         evidence:
         - logic_scope_distribution:
             analysis: 1
@@ -241,6 +268,8 @@ scope_maturity_scoring_report:
           internal_owned_edge_count: 27
           external_owned_edge_count: 2
           internal_owned_edge_ratio: 0.931
+          v1_1_reason: composite_scope_with_high_internal_edge_cohesion
+        calibration: v1_1
       inter_scope_boundaries:
         score: 3
         evidence:
@@ -257,6 +286,21 @@ scope_maturity_scoring_report:
           covered_outgoing_dependency_count: 0
           uncovered_outgoing_dependency_count: 2
           coverage_ratio: 0.0
+          constitution_neighbor_id_coverage:
+            outgoing_count: 2
+            covered_by_neighbor_id_count: 0
+            uncovered_count: 2
+            uncovered_ids:
+            - INV_NO_RUNTIME_CONTENT_GENERATION
+            - TYPE_HUMAN_CHECKPOINT
+          external_core_coverage:
+            outgoing_count: 0
+            covered_by_neighbor_file_count: 0
+            covered_by_neighbor_id_count: 0
+            uncovered_count: 0
+            uncovered_ids: []
+          v1_1_position: strict_score_preserved_evidence_granularity_improved
+        calibration: v1_1
       bounded_run_executability:
         score: 4
         evidence:
@@ -266,13 +310,18 @@ scope_maturity_scoring_report:
           watchpoint_count: 5
           related_severe_open_backlog_count: 0
       inter_release_stability:
-        score: 2
+        score: 3
+        confidence: limited
         evidence:
-        - 'evidence_limited: no dedicated release-to-release scope maturity history is consumed in V1'
+        - 'evidence_confidence: no dedicated release-to-release scope maturity history is consumed in
+          V1.1'
         - published_axis_used_as_bounded_prior: 3
           score_cap_without_history: 3
           related_severe_open_backlog_count: 0
           generation_changed_files_count: 5
+          confidence: limited
+          v1_1_position: missing_history_limits_confidence_not_score_by_itself
+        calibration: v1_1
     diagnostic_metrics:
       target_id_count: 20
       neighbor_id_count: 1
@@ -287,12 +336,12 @@ scope_maturity_scoring_report:
       duplicate_owned_ids: *id004
     related_open_backlog_entries: []
     delta:
-      score_delta: -2
-      level_delta: computed_lower_than_published
-      action_required: true
-      severity: fail
+      score_delta: 0
+      level_delta: none
+      action_required: false
+      severity: none
     recommendations:
-    - review_published_maturity_before_authority_change
+    - keep_published_score
   - scope_key: learner_state
     scope_id: CONSTITUTION_SCOPE_LEARNER_STATE
     published_maturity:
@@ -314,7 +363,7 @@ scope_maturity_scoring_report:
       score_total: 17
       level: L3_operational
     computed_maturity:
-      score_total: 14
+      score_total: 15
       level: L2_usable_with_care
       max_score: 24
     axis_scores:
@@ -327,7 +376,7 @@ scope_maturity_scoring_report:
         - watchpoints, rationale, or notes present
         published_axis_score: 3
       internal_coherence:
-        score: 2
+        score: 3
         evidence:
         - logic_scope_distribution:
             runtime: 1
@@ -339,6 +388,8 @@ scope_maturity_scoring_report:
           internal_owned_edge_count: 39
           external_owned_edge_count: 3
           internal_owned_edge_ratio: 0.929
+          v1_1_reason: composite_scope_with_high_internal_edge_cohesion
+        calibration: v1_1
       inter_scope_boundaries:
         score: 2
         evidence:
@@ -355,6 +406,21 @@ scope_maturity_scoring_report:
           covered_outgoing_dependency_count: 0
           uncovered_outgoing_dependency_count: 3
           coverage_ratio: 0.0
+          constitution_neighbor_id_coverage:
+            outgoing_count: 3
+            covered_by_neighbor_id_count: 0
+            uncovered_count: 3
+            uncovered_ids:
+            - ACTION_ESCALATE_PERSISTENT_DRIFT_OFFSESSION
+            - ACTION_PLAN_SHORT_DIAGNOSTIC_TASK
+          external_core_coverage:
+            outgoing_count: 0
+            covered_by_neighbor_file_count: 0
+            covered_by_neighbor_id_count: 0
+            uncovered_count: 0
+            uncovered_ids: []
+          v1_1_position: strict_score_preserved_evidence_granularity_improved
+        calibration: v1_1
       bounded_run_executability:
         score: 4
         evidence:
@@ -365,12 +431,17 @@ scope_maturity_scoring_report:
           related_severe_open_backlog_count: 2
       inter_release_stability:
         score: 2
+        confidence: limited_with_backlog_pressure
         evidence:
-        - 'evidence_limited: no dedicated release-to-release scope maturity history is consumed in V1'
+        - 'evidence_confidence: no dedicated release-to-release scope maturity history is consumed in
+          V1.1'
         - published_axis_used_as_bounded_prior: 3
           score_cap_without_history: 3
           related_severe_open_backlog_count: 2
           generation_changed_files_count: 5
+          confidence: limited_with_backlog_pressure
+          v1_1_position: missing_history_limits_confidence_not_score_by_itself
+        calibration: v1_1
     diagnostic_metrics:
       target_id_count: 26
       neighbor_id_count: 1
@@ -393,7 +464,7 @@ scope_maturity_scoring_report:
       status: open
       title: Review explicit learner_state read neighbors for patch_lifecycle triggers
     delta:
-      score_delta: -3
+      score_delta: -2
       level_delta: computed_lower_than_published
       action_required: true
       severity: fail
@@ -420,7 +491,7 @@ scope_maturity_scoring_report:
       score_total: 18
       level: L3_operational
     computed_maturity:
-      score_total: 17
+      score_total: 18
       level: L3_operational
       max_score: 24
     axis_scores:
@@ -445,6 +516,8 @@ scope_maturity_scoring_report:
           internal_owned_edge_count: 45
           external_owned_edge_count: 6
           internal_owned_edge_ratio: 0.882
+          v1_1_reason: dominant_logic_scope_good
+        calibration: v1_1
       inter_scope_boundaries:
         score: 2
         evidence:
@@ -461,6 +534,22 @@ scope_maturity_scoring_report:
           covered_outgoing_dependency_count: 3
           uncovered_outgoing_dependency_count: 3
           coverage_ratio: 0.5
+          constitution_neighbor_id_coverage:
+            outgoing_count: 6
+            covered_by_neighbor_id_count: 3
+            uncovered_count: 3
+            uncovered_ids:
+            - ACTION_ESCALATE_PERSISTENT_DRIFT_OFFSESSION
+            - TYPE_INTEGRITY_MODES
+            - TYPE_SELF_REPORT_AR_N1
+          external_core_coverage:
+            outgoing_count: 0
+            covered_by_neighbor_file_count: 0
+            covered_by_neighbor_id_count: 0
+            uncovered_count: 0
+            uncovered_ids: []
+          v1_1_position: strict_score_preserved_evidence_granularity_improved
+        calibration: v1_1
       bounded_run_executability:
         score: 4
         evidence:
@@ -470,13 +559,18 @@ scope_maturity_scoring_report:
           watchpoint_count: 6
           related_severe_open_backlog_count: 0
       inter_release_stability:
-        score: 2
+        score: 3
+        confidence: limited
         evidence:
-        - 'evidence_limited: no dedicated release-to-release scope maturity history is consumed in V1'
+        - 'evidence_confidence: no dedicated release-to-release scope maturity history is consumed in
+          V1.1'
         - published_axis_used_as_bounded_prior: 3
           score_cap_without_history: 3
           related_severe_open_backlog_count: 0
           generation_changed_files_count: 5
+          confidence: limited
+          v1_1_position: missing_history_limits_confidence_not_score_by_itself
+        calibration: v1_1
     diagnostic_metrics:
       target_id_count: 29
       neighbor_id_count: 5
@@ -491,12 +585,12 @@ scope_maturity_scoring_report:
       duplicate_owned_ids: *id008
     related_open_backlog_entries: []
     delta:
-      score_delta: -1
+      score_delta: 0
       level_delta: none
       action_required: false
-      severity: warn
+      severity: none
     recommendations:
-    - record_delta_as_non_blocking_or_arbitrate
+    - keep_published_score
   - scope_key: patch_lifecycle
     scope_id: CONSTITUTION_SCOPE_PATCH_LIFECYCLE
     published_maturity:
@@ -518,8 +612,8 @@ scope_maturity_scoring_report:
       score_total: 16
       level: L2_usable_with_care
     computed_maturity:
-      score_total: 12
-      level: L1_fragile
+      score_total: 13
+      level: L2_usable_with_care
       max_score: 24
     axis_scores:
       clarity_of_scope:
@@ -531,7 +625,7 @@ scope_maturity_scoring_report:
         - watchpoints, rationale, or notes present
         published_axis_score: 3
       internal_coherence:
-        score: 2
+        score: 3
         evidence:
         - logic_scope_distribution:
             governance: 1
@@ -544,6 +638,8 @@ scope_maturity_scoring_report:
           internal_owned_edge_count: 33
           external_owned_edge_count: 6
           internal_owned_edge_ratio: 0.846
+          v1_1_reason: composite_scope_with_high_internal_edge_cohesion
+        calibration: v1_1
       inter_scope_boundaries:
         score: 1
         evidence:
@@ -560,6 +656,23 @@ scope_maturity_scoring_report:
           covered_outgoing_dependency_count: 0
           uncovered_outgoing_dependency_count: 6
           coverage_ratio: 0.0
+          constitution_neighbor_id_coverage:
+            outgoing_count: 6
+            covered_by_neighbor_id_count: 0
+            uncovered_count: 6
+            uncovered_ids:
+            - INV_NO_RUNTIME_CONTENT_GENERATION
+            - INV_RUNTIME_FULLY_LOCAL
+            - TYPE_SELF_REPORT_AR_N1
+            - TYPE_STATE_AXIS_VALUE_COST
+          external_core_coverage:
+            outgoing_count: 0
+            covered_by_neighbor_file_count: 0
+            covered_by_neighbor_id_count: 0
+            uncovered_count: 0
+            uncovered_ids: []
+          v1_1_position: strict_score_preserved_evidence_granularity_improved
+        calibration: v1_1
       bounded_run_executability:
         score: 3
         evidence:
@@ -570,12 +683,17 @@ scope_maturity_scoring_report:
           related_severe_open_backlog_count: 6
       inter_release_stability:
         score: 2
+        confidence: limited_with_backlog_pressure
         evidence:
-        - 'evidence_limited: no dedicated release-to-release scope maturity history is consumed in V1'
+        - 'evidence_confidence: no dedicated release-to-release scope maturity history is consumed in
+          V1.1'
         - published_axis_used_as_bounded_prior: 3
           score_cap_without_history: 3
           related_severe_open_backlog_count: 6
           generation_changed_files_count: 5
+          confidence: limited_with_backlog_pressure
+          v1_1_position: missing_history_limits_confidence_not_score_by_itself
+        calibration: v1_1
     diagnostic_metrics:
       target_id_count: 22
       neighbor_id_count: 1
@@ -614,10 +732,10 @@ scope_maturity_scoring_report:
       status: open
       title: Review ACTION_LOG_UNCOVERED_CONFLICT ownership boundary
     delta:
-      score_delta: -4
-      level_delta: computed_lower_than_published
+      score_delta: -3
+      level_delta: none
       action_required: true
-      severity: fail
+      severity: warn
     recommendations:
     - review_published_maturity_before_authority_change
   blocking_findings:
@@ -629,27 +747,19 @@ scope_maturity_scoring_report:
       published_level: L3_operational
       computed_level: L2_usable_with_care
       score_delta: -6
-    - scope_key: knowledge_and_design
-      published_level: L3_operational
-      computed_level: L2_usable_with_care
-      score_delta: -2
     - scope_key: learner_state
       published_level: L3_operational
       computed_level: L2_usable_with_care
-      score_delta: -3
-    - scope_key: patch_lifecycle
-      published_level: L2_usable_with_care
-      computed_level: L1_fragile
-      score_delta: -4
+      score_delta: -2
   warnings:
   - finding_id: COMPUTED_MATURITY_DELTA_NON_BLOCKING
     severity: warning
     message: At least one computed score differs from the published score without lowering the level.
     items:
-    - scope_key: mastery_evaluation
-      published_level: L3_operational
-      computed_level: L3_operational
-      score_delta: -1
+    - scope_key: patch_lifecycle
+      published_level: L2_usable_with_care
+      computed_level: L2_usable_with_care
+      score_delta: -3
   notes:
   - This report is deterministic and non-publishing.
   - policy.yaml remains authoritative for published maturity in V1.

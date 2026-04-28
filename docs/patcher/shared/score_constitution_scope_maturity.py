@@ -4,7 +4,7 @@
 This script is intentionally non-publishing:
 - it writes only the report path passed with --report;
 - it never rewrites policy.yaml, decisions.yaml, the scope catalog, or scope definitions;
-- in V1, policy.yaml remains authoritative for published maturity.
+- in V1.1, policy.yaml remains authoritative for published maturity.
 
 The report compares published governed maturity with a deterministic diagnostic score
 computed from generated scope definitions, canon IDs, ownership coverage, explicit
@@ -365,6 +365,9 @@ def score_internal_coherence(
     owners_by_id: Dict[str, str],
     scope_key: str,
 ) -> Dict[str, Any]:
+    # V1.1: score internal coherence using both label concentration and edge cohesion.
+    # Composite scopes may cover several logic.scope values and still be coherent
+    # when their owned IDs are strongly linked internally.
     logic_scopes = [
         all_entries[id_]["logic_scope"]
         for id_ in target_ids
@@ -377,6 +380,7 @@ def score_internal_coherence(
         return {
             "score": 0,
             "evidence": evidence + ["no target ids"],
+            "calibration": "v1_1_no_target_ids",
         }
 
     dominant_ratio = 0.0
@@ -398,27 +402,37 @@ def score_internal_coherence(
 
     total_owned_edges = internal_edges + external_edges
     internal_ratio = 1.0 if total_owned_edges == 0 else internal_edges / total_owned_edges
+
+    if dominant_ratio >= 0.75 and internal_ratio >= 0.70:
+        score = 4
+        reason = "dominant_logic_scope_and_internal_edges_strong"
+    elif dominant_ratio >= 0.55 and internal_ratio >= 0.50:
+        score = 3
+        reason = "dominant_logic_scope_good"
+    elif internal_ratio >= 0.80 and internal_edges >= 10:
+        score = 3
+        reason = "composite_scope_with_high_internal_edge_cohesion"
+    elif dominant_ratio >= 0.35:
+        score = 2
+        reason = "moderate_dominant_logic_scope"
+    elif logic_scopes:
+        score = 1
+        reason = "weak_logic_scope_concentration"
+    else:
+        score = 0
+        reason = "no_logic_scope_evidence"
+
     evidence.append(
         {
             "dominant_logic_scope_ratio": round(dominant_ratio, 3),
             "internal_owned_edge_count": internal_edges,
             "external_owned_edge_count": external_edges,
             "internal_owned_edge_ratio": round(internal_ratio, 3),
+            "v1_1_reason": reason,
         }
     )
 
-    if dominant_ratio >= 0.75 and internal_ratio >= 0.70:
-        score = 4
-    elif dominant_ratio >= 0.55 and internal_ratio >= 0.50:
-        score = 3
-    elif dominant_ratio >= 0.35:
-        score = 2
-    elif logic_scopes:
-        score = 1
-    else:
-        score = 0
-
-    return {"score": clamp_score(score), "evidence": evidence}
+    return {"score": clamp_score(score), "evidence": evidence, "calibration": "v1_1"}
 
 
 def compute_scope_edges(
@@ -522,9 +536,37 @@ def score_boundaries(
 
 
 def score_dependency_explicitness(edges: Dict[str, Any]) -> Dict[str, Any]:
-    outgoing_count = len(edges["outgoing_edges"])
-    covered_count = len(edges["covered_outgoing_edges"])
-    uncovered_count = len(edges["uncovered_outgoing_edges"])
+    # V1.1 keeps strict scoring but improves diagnostic granularity.
+    outgoing_edges = edges["outgoing_edges"]
+    covered_edges = edges["covered_outgoing_edges"]
+    uncovered_edges = edges["uncovered_outgoing_edges"]
+
+    outgoing_count = len(outgoing_edges)
+    covered_count = len(covered_edges)
+    uncovered_count = len(uncovered_edges)
+
+    constitution_edges = [edge for edge in outgoing_edges if edge.get("target_core") == "constitution"]
+    external_edges = [edge for edge in outgoing_edges if edge.get("target_core") != "constitution"]
+
+    constitution_covered = [
+        edge for edge in covered_edges
+        if edge.get("target_core") == "constitution" and edge.get("coverage") == "neighbor_id"
+    ]
+    external_file_covered = [
+        edge for edge in covered_edges
+        if edge.get("target_core") != "constitution" and edge.get("coverage") == "neighbor_file"
+    ]
+    external_id_covered = [
+        edge for edge in covered_edges
+        if edge.get("target_core") != "constitution" and edge.get("coverage") == "neighbor_id"
+    ]
+
+    uncovered_constitution = [
+        edge for edge in uncovered_edges if edge.get("target_core") == "constitution"
+    ]
+    uncovered_external = [
+        edge for edge in uncovered_edges if edge.get("target_core") != "constitution"
+    ]
 
     if outgoing_count == 0:
         coverage_ratio = 1.0
@@ -550,8 +592,23 @@ def score_dependency_explicitness(edges: Dict[str, Any]) -> Dict[str, Any]:
                 "covered_outgoing_dependency_count": covered_count,
                 "uncovered_outgoing_dependency_count": uncovered_count,
                 "coverage_ratio": round(coverage_ratio, 3),
+                "constitution_neighbor_id_coverage": {
+                    "outgoing_count": len(constitution_edges),
+                    "covered_by_neighbor_id_count": len(constitution_covered),
+                    "uncovered_count": len(uncovered_constitution),
+                    "uncovered_ids": sorted({edge["target"] for edge in uncovered_constitution}),
+                },
+                "external_core_coverage": {
+                    "outgoing_count": len(external_edges),
+                    "covered_by_neighbor_file_count": len(external_file_covered),
+                    "covered_by_neighbor_id_count": len(external_id_covered),
+                    "uncovered_count": len(uncovered_external),
+                    "uncovered_ids": sorted({edge["target"] for edge in uncovered_external}),
+                },
+                "v1_1_position": "strict_score_preserved_evidence_granularity_improved",
             }
         ],
+        "calibration": "v1_1",
     }
 
 
@@ -603,12 +660,9 @@ def score_inter_release_stability(
     backlog_entries: List[Dict[str, Any]],
     generation_report: Dict[str, Any],
 ) -> Dict[str, Any]:
-    """V1 stability scoring is deliberately conservative.
-
-    Without a canonical release-to-release scope history, the script uses the
-    published governed axis as a bounded prior, caps it to 3, and marks evidence
-    as limited. Open backlog entries reduce confidence.
-    """
+    # V1.1 separates stability score from evidence confidence.
+    # Missing release-to-release scope history limits confidence; it is not by
+    # itself an automatic maturity penalty. Severe backlog remains a real penalty.
     published_axis = published_axes.get("inter_release_stability")
     if isinstance(published_axis, int):
         base = min(published_axis, 3)
@@ -630,20 +684,29 @@ def score_inter_release_stability(
     score = base
     if severe_backlog_count > 0:
         score = min(score, 2)
-    if changed_files_count > 3:
-        score = min(score, 2)
+
+    confidence = "limited"
+    confidence_reason = "no dedicated release-to-release scope maturity history is consumed in V1.1"
+    if severe_backlog_count > 0:
+        confidence = "limited_with_backlog_pressure"
+    elif changed_files_count == 0:
+        confidence = "moderate"
 
     return {
         "score": clamp_score(score),
+        "confidence": confidence,
         "evidence": [
-            "evidence_limited: no dedicated release-to-release scope maturity history is consumed in V1",
+            f"evidence_confidence: {confidence_reason}",
             {
                 "published_axis_used_as_bounded_prior": published_axis,
                 "score_cap_without_history": 3,
                 "related_severe_open_backlog_count": severe_backlog_count,
                 "generation_changed_files_count": changed_files_count,
+                "confidence": confidence,
+                "v1_1_position": "missing_history_limits_confidence_not_score_by_itself",
             },
         ],
+        "calibration": "v1_1",
     }
 
 
