@@ -75,18 +75,20 @@ scope_definition:
   maturity:
     scoring_model_ref: docs/transformations/core_modularization/CONSTITUTION_SCOPE_MATURITY_MODEL.md
     axes:
-      clarity_of_scope: 3
+      clarity_of_scope: 4
       internal_coherence: 3
-      inter_scope_boundaries: 2
-      dependency_explicitness: 3
-      bounded_run_executability: 2
-      inter_release_stability: 3
-    score_total: 16
-    level: L2_usable_with_care
+      inter_scope_boundaries: 1
+      dependency_explicitness: 4
+      bounded_run_executability: 3
+      inter_release_stability: 2
+    score_total: 17
+    level: L3_operational
     rationale:
     - Scope bien défini conceptuellement mais encore en rodage opérationnel.
     - Frontières à surveiller avec learner_state sur les déclencheurs AR/VC.
     - Architecture off-session solide mais exécutabilité bornée encore à valider.
+    - Maturity synchronized from docs/pipelines/constitution/reports/scope_maturity_scoring_report.yaml
+      by PHASE_17 computed-score authority migration. Scope=patch_lifecycle; scoring_status=WARN; blocking_finding_count=0.
   notes:
   - 'Scope généré patch_lifecycle. Couvre le cycle complet de vie des patches : structure, validation
     déterministe, architecture off-session, déclencheurs gouvernés (VC, AR-réfractaire) et escalade dérive

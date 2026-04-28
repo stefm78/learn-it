@@ -85,18 +85,20 @@ scope_definition:
   maturity:
     scoring_model_ref: docs/transformations/core_modularization/CONSTITUTION_SCOPE_MATURITY_MODEL.md
     axes:
-      clarity_of_scope: 3
-      internal_coherence: 4
-      inter_scope_boundaries: 2
-      dependency_explicitness: 3
-      bounded_run_executability: 3
+      clarity_of_scope: 4
+      internal_coherence: 3
+      inter_scope_boundaries: 4
+      dependency_explicitness: 4
+      bounded_run_executability: 4
       inter_release_stability: 3
-    score_total: 18
-    level: L3_operational
+    score_total: 22
+    level: L4_strong
     rationale:
     - Scope très cohérent autour du cycle complet d'évaluation de maîtrise.
     - Intègre intégrité session et sécurité runtime liée à l'évaluation.
     - Dépendances explicites mais frontières à surveiller avec knowledge_and_design et learner_state.
+    - Maturity synchronized from docs/pipelines/constitution/reports/scope_maturity_scoring_report.yaml
+      by PHASE_17 computed-score authority migration. Scope=mastery_evaluation; scoring_status=WARN; blocking_finding_count=0.
   notes:
   - Scope généré mastery_evaluation (ex mastery_model élargi). Couvre le modèle MSC (P/R/A/T), la propagation
     graphe, l'intégrité de session, la sécurité runtime liée à l'évaluation et les investigations systémiques.

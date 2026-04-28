@@ -1,7 +1,7 @@
 scope_maturity_scoring_report:
   schema_version: 0.1
   pipeline_id: constitution
-  status: WARN
+  status: PASS
   authority: diagnostic_report_only
   does_not_update_policy: true
   mutation_policy:
@@ -29,7 +29,7 @@ scope_maturity_scoring_report:
   - ref: docs/pipelines/constitution/policies/scope_generation/policy.yaml
     required: true
     present: true
-    sha256: 1ad5c943a784e0959cb5dfbf67557e02e211dea9f59c2186d978cecf08a05919
+    sha256: 718c85091ceff1acadb7dce692d7dc5d894c09621d9e2faa705bbeda5ca6ade3
   - ref: docs/pipelines/constitution/policies/scope_generation/decisions.yaml
     required: true
     present: true
@@ -37,7 +37,7 @@ scope_maturity_scoring_report:
   - ref: docs/pipelines/constitution/scope_catalog/manifest.yaml
     required: true
     present: true
-    sha256: 97ca7fb3b9134ecdd5c1cef7e69e4aa8288eec0b83be5f568d2109e37adb1841
+    sha256: 3de972b8904b38698d92fb51a63ce0c7273d6a7ec668344c2297bcbaf24b9812
   - ref: docs/pipelines/constitution/reports/scope_partition_review_report.yaml
     required: true
     present: true
@@ -79,29 +79,32 @@ scope_maturity_scoring_report:
   summary:
     scope_count: 5
     blocking_finding_count: 0
-    warning_count: 1
+    warning_count: 0
     computed_lower_than_published_count: 0
-    computed_delta_non_blocking_count: 5
+    computed_delta_non_blocking_count: 0
   scope_results:
   - scope_key: deployment_governance
     scope_id: CONSTITUTION_SCOPE_DEPLOYMENT_GOVERNANCE
     published_maturity:
       source: policy.yaml
       axes:
-        clarity_of_scope: 3
-        internal_coherence: 3
-        inter_scope_boundaries: 3
-        dependency_explicitness: 3
-        bounded_run_executability: 3
-        inter_release_stability: 4
-      score_total: 19
+        clarity_of_scope: 4
+        internal_coherence: 2
+        inter_scope_boundaries: 2
+        dependency_explicitness: 4
+        bounded_run_executability: 4
+        inter_release_stability: 2
+      score_total: 18
       level: L3_operational
       rationale:
       - Périmètre bien borné sur les contraintes architecturales et de gouvernance invariantes.
       - Forte stabilité inter-release, ces règles ne varient pas au fil des sessions.
       - Frontières claires avec learner_state et patch_lifecycle.
+      - Maturity synchronized from docs/pipelines/constitution/reports/scope_maturity_scoring_report.yaml
+        by PHASE_17 computed-score authority migration. Scope=deployment_governance; scoring_status=WARN;
+        blocking_finding_count=0.
     catalog_maturity:
-      score_total: 19
+      score_total: 18
       level: L3_operational
     computed_maturity:
       score_total: 18
@@ -115,7 +118,7 @@ scope_maturity_scoring_report:
         - target.modules present
         - target.ids present
         - watchpoints, rationale, or notes present
-        published_axis_score: 3
+        published_axis_score: 4
       internal_coherence:
         score: 2
         evidence:
@@ -176,7 +179,7 @@ scope_maturity_scoring_report:
         evidence:
         - 'evidence_confidence: no dedicated release-to-release scope maturity history is consumed in
           V1.1'
-        - published_axis_used_as_bounded_prior: 4
+        - published_axis_used_as_bounded_prior: 2
           score_cap_without_history: 3
           related_severe_open_backlog_count: 2
           generation_changed_files_count: 6
@@ -205,32 +208,35 @@ scope_maturity_scoring_report:
       status: open
       title: Review ACTION_LOG_UNCOVERED_CONFLICT ownership boundary
     delta:
-      score_delta: -1
+      score_delta: 0
       level_delta: none
       action_required: false
-      severity: warn
+      severity: none
     recommendations:
-    - record_delta_as_non_blocking_or_arbitrate
+    - keep_published_score
   - scope_key: knowledge_and_design
     scope_id: CONSTITUTION_SCOPE_KNOWLEDGE_AND_DESIGN
     published_maturity:
       source: policy.yaml
       axes:
-        clarity_of_scope: 3
+        clarity_of_scope: 4
         internal_coherence: 3
-        inter_scope_boundaries: 2
-        dependency_explicitness: 3
-        bounded_run_executability: 3
+        inter_scope_boundaries: 4
+        dependency_explicitness: 4
+        bounded_run_executability: 4
         inter_release_stability: 3
-      score_total: 17
-      level: L3_operational
+      score_total: 22
+      level: L4_strong
       rationale:
       - Scope couvrant la totalité de la phase Analyse/Design du domaine.
       - Consolidation de knowledge_model et content_design en un scope cohérent de pré-déploiement.
       - Frontières à surveiller avec mastery_evaluation sur les règles de propagation graphe.
+      - Maturity synchronized from docs/pipelines/constitution/reports/scope_maturity_scoring_report.yaml
+        by PHASE_17 computed-score authority migration. Scope=knowledge_and_design; scoring_status=WARN;
+        blocking_finding_count=0.
     catalog_maturity:
-      score_total: 17
-      level: L3_operational
+      score_total: 22
+      level: L4_strong
     computed_maturity:
       score_total: 22
       level: L4_strong
@@ -243,7 +249,7 @@ scope_maturity_scoring_report:
         - target.modules present
         - target.ids present
         - watchpoints, rationale, or notes present
-        published_axis_score: 3
+        published_axis_score: 4
       internal_coherence:
         score: 3
         evidence:
@@ -327,31 +333,33 @@ scope_maturity_scoring_report:
       duplicate_owned_ids: *id004
     related_open_backlog_entries: []
     delta:
-      score_delta: 5
-      level_delta: computed_higher_than_published
-      action_required: true
-      severity: warn
+      score_delta: 0
+      level_delta: none
+      action_required: false
+      severity: none
     recommendations:
-    - review_published_maturity_before_authority_change
+    - keep_published_score
   - scope_key: learner_state
     scope_id: CONSTITUTION_SCOPE_LEARNER_STATE
     published_maturity:
       source: policy.yaml
       axes:
-        clarity_of_scope: 3
+        clarity_of_scope: 4
         internal_coherence: 3
         inter_scope_boundaries: 2
-        dependency_explicitness: 3
-        bounded_run_executability: 3
-        inter_release_stability: 3
-      score_total: 17
+        dependency_explicitness: 4
+        bounded_run_executability: 4
+        inter_release_stability: 2
+      score_total: 19
       level: L3_operational
       rationale:
       - Périmètre élargi par rapport à l'ancienne version pour couvrir feedback AR et reprise.
       - Frontières encore perfectibles avec mastery_evaluation et patch_lifecycle.
       - Suffisamment stable et exécutable pour un pilote borné prudent.
+      - Maturity synchronized from docs/pipelines/constitution/reports/scope_maturity_scoring_report.yaml
+        by PHASE_17 computed-score authority migration. Scope=learner_state; scoring_status=WARN; blocking_finding_count=0.
     catalog_maturity:
-      score_total: 17
+      score_total: 19
       level: L3_operational
     computed_maturity:
       score_total: 19
@@ -365,7 +373,7 @@ scope_maturity_scoring_report:
         - target.modules present
         - target.ids present
         - watchpoints, rationale, or notes present
-        published_axis_score: 3
+        published_axis_score: 4
       internal_coherence:
         score: 3
         evidence:
@@ -424,7 +432,7 @@ scope_maturity_scoring_report:
         evidence:
         - 'evidence_confidence: no dedicated release-to-release scope maturity history is consumed in
           V1.1'
-        - published_axis_used_as_bounded_prior: 3
+        - published_axis_used_as_bounded_prior: 2
           score_cap_without_history: 3
           related_severe_open_backlog_count: 2
           generation_changed_files_count: 6
@@ -453,32 +461,35 @@ scope_maturity_scoring_report:
       status: open
       title: Review explicit learner_state read neighbors for patch_lifecycle triggers
     delta:
-      score_delta: 2
+      score_delta: 0
       level_delta: none
-      action_required: true
-      severity: warn
+      action_required: false
+      severity: none
     recommendations:
-    - review_published_maturity_before_authority_change
+    - keep_published_score
   - scope_key: mastery_evaluation
     scope_id: CONSTITUTION_SCOPE_MASTERY_EVALUATION
     published_maturity:
       source: policy.yaml
       axes:
-        clarity_of_scope: 3
-        internal_coherence: 4
-        inter_scope_boundaries: 2
-        dependency_explicitness: 3
-        bounded_run_executability: 3
+        clarity_of_scope: 4
+        internal_coherence: 3
+        inter_scope_boundaries: 4
+        dependency_explicitness: 4
+        bounded_run_executability: 4
         inter_release_stability: 3
-      score_total: 18
-      level: L3_operational
+      score_total: 22
+      level: L4_strong
       rationale:
       - Scope très cohérent autour du cycle complet d'évaluation de maîtrise.
       - Intègre intégrité session et sécurité runtime liée à l'évaluation.
       - Dépendances explicites mais frontières à surveiller avec knowledge_and_design et learner_state.
+      - Maturity synchronized from docs/pipelines/constitution/reports/scope_maturity_scoring_report.yaml
+        by PHASE_17 computed-score authority migration. Scope=mastery_evaluation; scoring_status=WARN;
+        blocking_finding_count=0.
     catalog_maturity:
-      score_total: 18
-      level: L3_operational
+      score_total: 22
+      level: L4_strong
     computed_maturity:
       score_total: 22
       level: L4_strong
@@ -491,7 +502,7 @@ scope_maturity_scoring_report:
         - target.modules present
         - target.ids present
         - watchpoints, rationale, or notes present
-        published_axis_score: 3
+        published_axis_score: 4
       internal_coherence:
         score: 3
         evidence:
@@ -571,32 +582,34 @@ scope_maturity_scoring_report:
       duplicate_owned_ids: *id008
     related_open_backlog_entries: []
     delta:
-      score_delta: 4
-      level_delta: computed_higher_than_published
-      action_required: true
-      severity: warn
+      score_delta: 0
+      level_delta: none
+      action_required: false
+      severity: none
     recommendations:
-    - review_published_maturity_before_authority_change
+    - keep_published_score
   - scope_key: patch_lifecycle
     scope_id: CONSTITUTION_SCOPE_PATCH_LIFECYCLE
     published_maturity:
       source: policy.yaml
       axes:
-        clarity_of_scope: 3
+        clarity_of_scope: 4
         internal_coherence: 3
-        inter_scope_boundaries: 2
-        dependency_explicitness: 3
-        bounded_run_executability: 2
-        inter_release_stability: 3
-      score_total: 16
-      level: L2_usable_with_care
+        inter_scope_boundaries: 1
+        dependency_explicitness: 4
+        bounded_run_executability: 3
+        inter_release_stability: 2
+      score_total: 17
+      level: L3_operational
       rationale:
       - Scope bien défini conceptuellement mais encore en rodage opérationnel.
       - Frontières à surveiller avec learner_state sur les déclencheurs AR/VC.
       - Architecture off-session solide mais exécutabilité bornée encore à valider.
+      - Maturity synchronized from docs/pipelines/constitution/reports/scope_maturity_scoring_report.yaml
+        by PHASE_17 computed-score authority migration. Scope=patch_lifecycle; scoring_status=WARN; blocking_finding_count=0.
     catalog_maturity:
-      score_total: 16
-      level: L2_usable_with_care
+      score_total: 17
+      level: L3_operational
     computed_maturity:
       score_total: 17
       level: L3_operational
@@ -609,7 +622,7 @@ scope_maturity_scoring_report:
         - target.modules present
         - target.ids present
         - watchpoints, rationale, or notes present
-        published_axis_score: 3
+        published_axis_score: 4
       internal_coherence:
         score: 3
         evidence:
@@ -669,7 +682,7 @@ scope_maturity_scoring_report:
         evidence:
         - 'evidence_confidence: no dedicated release-to-release scope maturity history is consumed in
           V1.1'
-        - published_axis_used_as_bounded_prior: 3
+        - published_axis_used_as_bounded_prior: 2
           score_cap_without_history: 3
           related_severe_open_backlog_count: 6
           generation_changed_files_count: 6
@@ -714,38 +727,14 @@ scope_maturity_scoring_report:
       status: open
       title: Review ACTION_LOG_UNCOVERED_CONFLICT ownership boundary
     delta:
-      score_delta: 1
-      level_delta: computed_higher_than_published
+      score_delta: 0
+      level_delta: none
       action_required: false
-      severity: warn
+      severity: none
     recommendations:
-    - record_delta_as_non_blocking_or_arbitrate
+    - keep_published_score
   blocking_findings: []
-  warnings:
-  - finding_id: COMPUTED_MATURITY_DELTA_NON_BLOCKING
-    severity: warning
-    message: At least one computed score differs from the published score without lowering the level.
-    items:
-    - scope_key: deployment_governance
-      published_level: L3_operational
-      computed_level: L3_operational
-      score_delta: -1
-    - scope_key: knowledge_and_design
-      published_level: L3_operational
-      computed_level: L4_strong
-      score_delta: 5
-    - scope_key: learner_state
-      published_level: L3_operational
-      computed_level: L3_operational
-      score_delta: 2
-    - scope_key: mastery_evaluation
-      published_level: L3_operational
-      computed_level: L4_strong
-      score_delta: 4
-    - scope_key: patch_lifecycle
-      published_level: L2_usable_with_care
-      computed_level: L3_operational
-      score_delta: 1
+  warnings: []
   notes:
   - This report is deterministic and non-publishing.
   - policy.yaml remains authoritative for published maturity in V1.

@@ -1,7 +1,7 @@
 scope_maturity_policy_patch_report:
   schema_version: '0.1'
   phase_id: PHASE_17
-  generated_at: '2026-04-28T15:08:16Z'
+  generated_at: '2026-04-28T15:16:23Z'
   status: PASS
   apply_mode: false
   changed: true
@@ -10,9 +10,9 @@ scope_maturity_policy_patch_report:
     scoring_report: docs/pipelines/constitution/reports/scope_maturity_scoring_report.yaml
     policy: docs/pipelines/constitution/policies/scope_generation/policy.yaml
   input_hashes:
-    scoring_report_sha256: 3337d0ab840c2aed43446e97bbd0823814e50a5837b8258a5c0cb00fbae3705a
-    policy_sha256_before: 1ad5c943a784e0959cb5dfbf67557e02e211dea9f59c2186d978cecf08a05919
-    policy_sha256_after: 1ad5c943a784e0959cb5dfbf67557e02e211dea9f59c2186d978cecf08a05919
+    scoring_report_sha256: 246667cebecb805a4e55d8b4035e46c0b724252d1de40444b22af91ed70ad5b2
+    policy_sha256_before: 718c85091ceff1acadb7dce692d7dc5d894c09621d9e2faa705bbeda5ca6ade3
+    policy_sha256_after: 718c85091ceff1acadb7dce692d7dc5d894c09621d9e2faa705bbeda5ca6ade3
   mutation_policy:
     policy_yaml: modified_if_apply_true_and_changed
     decisions_yaml: not_modified
@@ -23,23 +23,23 @@ scope_maturity_policy_patch_report:
     scorer_rules: not_modified
   patch_summary:
     scope_count: 5
-    changed_scope_count: 5
-    unchanged_scope_count: 0
+    changed_scope_count: 0
+    unchanged_scope_count: 5
     actions:
     - scope_key: deployment_governance
-      old_score_total: 19
+      old_score_total: 18
       new_score_total: 18
-      score_delta: -1
+      score_delta: 0
       old_level: L3_operational
       new_level: L3_operational
       level_delta: none
       old_axes:
-        clarity_of_scope: 3
-        internal_coherence: 3
-        inter_scope_boundaries: 3
-        dependency_explicitness: 3
-        bounded_run_executability: 3
-        inter_release_stability: 4
+        clarity_of_scope: 4
+        internal_coherence: 2
+        inter_scope_boundaries: 2
+        dependency_explicitness: 4
+        bounded_run_executability: 4
+        inter_release_stability: 2
       new_axes:
         clarity_of_scope: 4
         internal_coherence: 2
@@ -48,18 +48,18 @@ scope_maturity_policy_patch_report:
         bounded_run_executability: 4
         inter_release_stability: 2
     - scope_key: knowledge_and_design
-      old_score_total: 17
+      old_score_total: 22
       new_score_total: 22
-      score_delta: 5
-      old_level: L3_operational
+      score_delta: 0
+      old_level: L4_strong
       new_level: L4_strong
-      level_delta: computed_higher_than_published
+      level_delta: none
       old_axes:
-        clarity_of_scope: 3
+        clarity_of_scope: 4
         internal_coherence: 3
-        inter_scope_boundaries: 2
-        dependency_explicitness: 3
-        bounded_run_executability: 3
+        inter_scope_boundaries: 4
+        dependency_explicitness: 4
+        bounded_run_executability: 4
         inter_release_stability: 3
       new_axes:
         clarity_of_scope: 4
@@ -69,19 +69,19 @@ scope_maturity_policy_patch_report:
         bounded_run_executability: 4
         inter_release_stability: 3
     - scope_key: learner_state
-      old_score_total: 17
+      old_score_total: 19
       new_score_total: 19
-      score_delta: 2
+      score_delta: 0
       old_level: L3_operational
       new_level: L3_operational
       level_delta: none
       old_axes:
-        clarity_of_scope: 3
+        clarity_of_scope: 4
         internal_coherence: 3
         inter_scope_boundaries: 2
-        dependency_explicitness: 3
-        bounded_run_executability: 3
-        inter_release_stability: 3
+        dependency_explicitness: 4
+        bounded_run_executability: 4
+        inter_release_stability: 2
       new_axes:
         clarity_of_scope: 4
         internal_coherence: 3
@@ -90,18 +90,18 @@ scope_maturity_policy_patch_report:
         bounded_run_executability: 4
         inter_release_stability: 2
     - scope_key: mastery_evaluation
-      old_score_total: 18
+      old_score_total: 22
       new_score_total: 22
-      score_delta: 4
-      old_level: L3_operational
+      score_delta: 0
+      old_level: L4_strong
       new_level: L4_strong
-      level_delta: computed_higher_than_published
+      level_delta: none
       old_axes:
-        clarity_of_scope: 3
-        internal_coherence: 4
-        inter_scope_boundaries: 2
-        dependency_explicitness: 3
-        bounded_run_executability: 3
+        clarity_of_scope: 4
+        internal_coherence: 3
+        inter_scope_boundaries: 4
+        dependency_explicitness: 4
+        bounded_run_executability: 4
         inter_release_stability: 3
       new_axes:
         clarity_of_scope: 4
@@ -111,19 +111,19 @@ scope_maturity_policy_patch_report:
         bounded_run_executability: 4
         inter_release_stability: 3
     - scope_key: patch_lifecycle
-      old_score_total: 16
+      old_score_total: 17
       new_score_total: 17
-      score_delta: 1
-      old_level: L2_usable_with_care
+      score_delta: 0
+      old_level: L3_operational
       new_level: L3_operational
-      level_delta: computed_higher_than_published
+      level_delta: none
       old_axes:
-        clarity_of_scope: 3
+        clarity_of_scope: 4
         internal_coherence: 3
-        inter_scope_boundaries: 2
-        dependency_explicitness: 3
-        bounded_run_executability: 2
-        inter_release_stability: 3
+        inter_scope_boundaries: 1
+        dependency_explicitness: 4
+        bounded_run_executability: 3
+        inter_release_stability: 2
       new_axes:
         clarity_of_scope: 4
         internal_coherence: 3

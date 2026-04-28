@@ -77,18 +77,21 @@ scope_definition:
   maturity:
     scoring_model_ref: docs/transformations/core_modularization/CONSTITUTION_SCOPE_MATURITY_MODEL.md
     axes:
-      clarity_of_scope: 3
-      internal_coherence: 3
-      inter_scope_boundaries: 3
-      dependency_explicitness: 3
-      bounded_run_executability: 3
-      inter_release_stability: 4
-    score_total: 19
+      clarity_of_scope: 4
+      internal_coherence: 2
+      inter_scope_boundaries: 2
+      dependency_explicitness: 4
+      bounded_run_executability: 4
+      inter_release_stability: 2
+    score_total: 18
     level: L3_operational
     rationale:
     - Périmètre bien borné sur les contraintes architecturales et de gouvernance invariantes.
     - Forte stabilité inter-release, ces règles ne varient pas au fil des sessions.
     - Frontières claires avec learner_state et patch_lifecycle.
+    - Maturity synchronized from docs/pipelines/constitution/reports/scope_maturity_scoring_report.yaml
+      by PHASE_17 computed-score authority migration. Scope=deployment_governance; scoring_status=WARN;
+      blocking_finding_count=0.
   notes:
   - Scope généré deployment_governance. Couvre l'architecture runtime locale, les régimes d'autonomie,
     la gouvernance top-level, la séparation Constitution/Référentiel et l'initialisation conservative.

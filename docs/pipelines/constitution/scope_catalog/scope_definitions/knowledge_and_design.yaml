@@ -73,18 +73,21 @@ scope_definition:
   maturity:
     scoring_model_ref: docs/transformations/core_modularization/CONSTITUTION_SCOPE_MATURITY_MODEL.md
     axes:
-      clarity_of_scope: 3
+      clarity_of_scope: 4
       internal_coherence: 3
-      inter_scope_boundaries: 2
-      dependency_explicitness: 3
-      bounded_run_executability: 3
+      inter_scope_boundaries: 4
+      dependency_explicitness: 4
+      bounded_run_executability: 4
       inter_release_stability: 3
-    score_total: 17
-    level: L3_operational
+    score_total: 22
+    level: L4_strong
     rationale:
     - Scope couvrant la totalité de la phase Analyse/Design du domaine.
     - Consolidation de knowledge_model et content_design en un scope cohérent de pré-déploiement.
     - Frontières à surveiller avec mastery_evaluation sur les règles de propagation graphe.
+    - Maturity synchronized from docs/pipelines/constitution/reports/scope_maturity_scoring_report.yaml
+      by PHASE_17 computed-score authority migration. Scope=knowledge_and_design; scoring_status=WARN;
+      blocking_finding_count=0.
   notes:
   - Scope généré knowledge_and_design. Couvre la structure du domaine (graphe, KU, acyclicité, contexte
     authentique, Bloom), la matrice de feedback et les règles de design pédagogique (misconception, modal,

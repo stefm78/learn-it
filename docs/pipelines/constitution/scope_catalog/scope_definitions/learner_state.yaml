@@ -78,18 +78,20 @@ scope_definition:
   maturity:
     scoring_model_ref: docs/transformations/core_modularization/CONSTITUTION_SCOPE_MATURITY_MODEL.md
     axes:
-      clarity_of_scope: 3
+      clarity_of_scope: 4
       internal_coherence: 3
       inter_scope_boundaries: 2
-      dependency_explicitness: 3
-      bounded_run_executability: 3
-      inter_release_stability: 3
-    score_total: 17
+      dependency_explicitness: 4
+      bounded_run_executability: 4
+      inter_release_stability: 2
+    score_total: 19
     level: L3_operational
     rationale:
     - Périmètre élargi par rapport à l'ancienne version pour couvrir feedback AR et reprise.
     - Frontières encore perfectibles avec mastery_evaluation et patch_lifecycle.
     - Suffisamment stable et exécutable pour un pilote borné prudent.
+    - Maturity synchronized from docs/pipelines/constitution/reports/scope_maturity_scoring_report.yaml
+      by PHASE_17 computed-score authority migration. Scope=learner_state; scoring_status=WARN; blocking_finding_count=0.
   notes:
   - Scope généré learner_state (périmètre élargi). Couvre l'état apprenant 3 axes, les auto-rapports AR-N1/N2/N3,
     la détresse, la VC, le scaffolding conservateur, la reprise diagnostique et la transparence apprenant.

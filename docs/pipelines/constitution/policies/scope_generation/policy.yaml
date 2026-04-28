@@ -76,18 +76,20 @@ scope_generation_policy:
     - Ne pas confondre contraintes constitutionnelles invariantes et paramètres référentiels.
     maturity:
       axes:
-        clarity_of_scope: 3
-        internal_coherence: 3
-        inter_scope_boundaries: 3
-        dependency_explicitness: 3
-        bounded_run_executability: 3
-        inter_release_stability: 4
-      score_total: 19
+        clarity_of_scope: 4
+        internal_coherence: 2
+        inter_scope_boundaries: 2
+        dependency_explicitness: 4
+        bounded_run_executability: 4
+        inter_release_stability: 2
+      score_total: 18
       level: L3_operational
       rationale:
       - Périmètre bien borné sur les contraintes architecturales et de gouvernance invariantes.
       - Forte stabilité inter-release, ces règles ne varient pas au fil des sessions.
       - Frontières claires avec learner_state et patch_lifecycle.
+      - Maturity synchronized from docs/pipelines/constitution/reports/scope_maturity_scoring_report.yaml by PHASE_17 computed-score
+        authority migration. Scope=deployment_governance; scoring_status=WARN; blocking_finding_count=0.
     notes:
     - Scope généré deployment_governance. Couvre l'architecture runtime locale, les régimes d'autonomie, la gouvernance top-level,
       la séparation Constitution/Référentiel et l'initialisation conservative.
@@ -115,18 +117,20 @@ scope_generation_policy:
     - Vérifier que les règles de misconception restent dans la phase design et ne glissent pas vers learner_state.
     maturity:
       axes:
-        clarity_of_scope: 3
+        clarity_of_scope: 4
         internal_coherence: 3
-        inter_scope_boundaries: 2
-        dependency_explicitness: 3
-        bounded_run_executability: 3
+        inter_scope_boundaries: 4
+        dependency_explicitness: 4
+        bounded_run_executability: 4
         inter_release_stability: 3
-      score_total: 17
-      level: L3_operational
+      score_total: 22
+      level: L4_strong
       rationale:
       - Scope couvrant la totalité de la phase Analyse/Design du domaine.
       - Consolidation de knowledge_model et content_design en un scope cohérent de pré-déploiement.
       - Frontières à surveiller avec mastery_evaluation sur les règles de propagation graphe.
+      - Maturity synchronized from docs/pipelines/constitution/reports/scope_maturity_scoring_report.yaml by PHASE_17 computed-score
+        authority migration. Scope=knowledge_and_design; scoring_status=WARN; blocking_finding_count=0.
     notes:
     - Scope généré knowledge_and_design. Couvre la structure du domaine (graphe, KU, acyclicité, contexte authentique, Bloom),
       la matrice de feedback et les règles de design pédagogique (misconception, modal, créativité). Phase Analyse/Design
@@ -154,18 +158,20 @@ scope_generation_policy:
     - Ne pas confondre les AR comme sources d'état (ce scope) et comme déclencheurs de patch (patch_lifecycle).
     maturity:
       axes:
-        clarity_of_scope: 3
+        clarity_of_scope: 4
         internal_coherence: 3
         inter_scope_boundaries: 2
-        dependency_explicitness: 3
-        bounded_run_executability: 3
-        inter_release_stability: 3
-      score_total: 17
+        dependency_explicitness: 4
+        bounded_run_executability: 4
+        inter_release_stability: 2
+      score_total: 19
       level: L3_operational
       rationale:
       - Périmètre élargi par rapport à l'ancienne version pour couvrir feedback AR et reprise.
       - Frontières encore perfectibles avec mastery_evaluation et patch_lifecycle.
       - Suffisamment stable et exécutable pour un pilote borné prudent.
+      - Maturity synchronized from docs/pipelines/constitution/reports/scope_maturity_scoring_report.yaml by PHASE_17 computed-score
+        authority migration. Scope=learner_state; scoring_status=WARN; blocking_finding_count=0.
     notes:
     - Scope généré learner_state (périmètre élargi). Couvre l'état apprenant 3 axes, les auto-rapports AR-N1/N2/N3, la détresse,
       la VC, le scaffolding conservateur, la reprise diagnostique et la transparence apprenant.
@@ -191,18 +197,20 @@ scope_generation_policy:
     - Ne pas laisser les règles d'intégrité session (SIS, NC_MSC) glisser vers learner_state.
     maturity:
       axes:
-        clarity_of_scope: 3
-        internal_coherence: 4
-        inter_scope_boundaries: 2
-        dependency_explicitness: 3
-        bounded_run_executability: 3
+        clarity_of_scope: 4
+        internal_coherence: 3
+        inter_scope_boundaries: 4
+        dependency_explicitness: 4
+        bounded_run_executability: 4
         inter_release_stability: 3
-      score_total: 18
-      level: L3_operational
+      score_total: 22
+      level: L4_strong
       rationale:
       - Scope très cohérent autour du cycle complet d'évaluation de maîtrise.
       - Intègre intégrité session et sécurité runtime liée à l'évaluation.
       - Dépendances explicites mais frontières à surveiller avec knowledge_and_design et learner_state.
+      - Maturity synchronized from docs/pipelines/constitution/reports/scope_maturity_scoring_report.yaml by PHASE_17 computed-score
+        authority migration. Scope=mastery_evaluation; scoring_status=WARN; blocking_finding_count=0.
     notes:
     - Scope généré mastery_evaluation (ex mastery_model élargi). Couvre le modèle MSC (P/R/A/T), la propagation graphe, l'intégrité
       de session, la sécurité runtime liée à l'évaluation et les investigations systémiques.
@@ -227,18 +235,20 @@ scope_generation_policy:
     - Ne pas confondre escalade hors session (patch_lifecycle) et escalade d'état (learner_state).
     maturity:
       axes:
-        clarity_of_scope: 3
+        clarity_of_scope: 4
         internal_coherence: 3
-        inter_scope_boundaries: 2
-        dependency_explicitness: 3
-        bounded_run_executability: 2
-        inter_release_stability: 3
-      score_total: 16
-      level: L2_usable_with_care
+        inter_scope_boundaries: 1
+        dependency_explicitness: 4
+        bounded_run_executability: 3
+        inter_release_stability: 2
+      score_total: 17
+      level: L3_operational
       rationale:
       - Scope bien défini conceptuellement mais encore en rodage opérationnel.
       - Frontières à surveiller avec learner_state sur les déclencheurs AR/VC.
       - Architecture off-session solide mais exécutabilité bornée encore à valider.
+      - Maturity synchronized from docs/pipelines/constitution/reports/scope_maturity_scoring_report.yaml by PHASE_17 computed-score
+        authority migration. Scope=patch_lifecycle; scoring_status=WARN; blocking_finding_count=0.
     notes:
     - 'Scope généré patch_lifecycle. Couvre le cycle complet de vie des patches : structure, validation déterministe, architecture
       off-session, déclencheurs gouvernés (VC, AR-réfractaire) et escalade dérive persistante.'
