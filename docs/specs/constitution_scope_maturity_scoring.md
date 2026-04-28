@@ -1,29 +1,44 @@
-# Constitution scope maturity scoring — spécification V0.1
+# Constitution scope maturity scoring — spécification V0.2
 
 ## Objectif
 
-Définir le futur script déterministe de scoring de maturité post-scoping pour les scopes du pipeline `constitution`.
+Définir la chaîne déterministe de scoring de maturité post-scoping pour les scopes du pipeline `constitution`, puis la publication gouvernée des scores calculés dans `policy.yaml`.
 
-Le scoring visé intervient **après** la régénération déterministe du catalogue de scopes. Il observe le catalogue effectivement généré, calcule un score déterministe par scope, puis compare ce score au score gouverné actuellement publié.
+Le scoring visé intervient **après** la régénération déterministe du catalogue de scopes. Il observe le catalogue effectivement généré, calcule un score déterministe par scope, puis compare ce score au score actuellement publié. En V0.2, ce score calculé devient le candidat d'autorité publiable : il n'est pas écrit directement par le scorer, mais peut être appliqué à `policy.yaml` par un patcher déterministe gated.
 
 ## Position d'autorité
 
-En V0.1 :
+En V0.2 :
 
-- `docs/pipelines/constitution/policies/scope_generation/policy.yaml` reste la source d'autorité pour `maturity.axes`, `score_total`, `level` et `rationale` ;
-- `docs/patcher/shared/generate_constitution_scopes.py` continue de propager cette maturité gouvernée vers `scope_catalog/manifest.yaml` et `scope_definitions/*.yaml` ;
-- le futur script `score_constitution_scope_maturity.py` produit un **rapport déterministe non publiant** ;
-- le rapport peut signaler un écart ou recommander un arbitrage, mais il ne modifie jamais directement la policy canonique.
+- `score_constitution_scope_maturity.py` reste un script de calcul et de preuve : il produit un rapport déterministe et ne modifie jamais directement les fichiers canoniques ;
+- le score calculé dans `scope_maturity_scoring_report.yaml` devient le **candidat d'autorité publiable** pour `maturity.axes`, `score_total` et `level` ;
+- la publication dans `docs/pipelines/constitution/policies/scope_generation/policy.yaml` passe par un patcher séparé, explicite et gated : `docs/patcher/shared/apply_constitution_scope_maturity_scores.py` ;
+- `policy.yaml` reste le fichier canonique publié, mais son contenu de maturité doit être synchronisable depuis le rapport calculé dès que les gates structurels sont satisfaits ;
+- `docs/patcher/shared/generate_constitution_scopes.py` continue de propager la maturité publiée dans `policy.yaml` vers `scope_catalog/manifest.yaml` et `scope_definitions/*.yaml`.
 
-Cette règle évite deux vérités concurrentes : le score publié reste gouverné, le score calculé devient une preuve déterministe d'audit.
+Cette règle évite deux vérités concurrentes : le scorer calcule, le patcher publie, puis le catalogue est régénéré depuis la policy canonique.
 
-## Script cible
+## Scripts cibles
 
-Emplacement canonique :
+Calcul non-mutating :
 
 ```text
 docs/patcher/shared/score_constitution_scope_maturity.py
 ```
+
+Publication gouvernée des scores calculés :
+
+```text
+docs/patcher/shared/apply_constitution_scope_maturity_scores.py
+```
+
+Le patcher de publication doit :
+- lire `scope_maturity_scoring_report.yaml` ;
+- lire `policy.yaml` ;
+- refuser toute écriture si le rapport contient des `blocking_findings` structurels ;
+- publier les scores calculés par scope dans `policy.yaml` uniquement en mode `--apply` ;
+- produire un rapport déterministe `docs/pipelines/constitution/reports/scope_maturity_policy_patch_report.yaml` ;
+- ne jamais modifier `decisions.yaml`, le catalogue généré ou les cores.
 
 ## Place dans STAGE_00
 
@@ -39,10 +54,13 @@ Chaîne cible :
 2. analyse déterministe de partition ;
 3. analyse sémantique IA ;
 4. arbitrage humain ;
-5. mise à jour gouvernée de `policy.yaml` / `decisions.yaml` ;
+5. mise à jour gouvernée de `policy.yaml` / `decisions.yaml` pour les décisions de partition ;
 6. régénération déterministe du catalogue ;
 7. scoring déterministe post-scoping ;
-8. arbitrage ou report explicite des écarts éventuels.
+8. validation des gates de publication du score calculé ;
+9. publication déterministe des scores calculés dans `policy.yaml` via `apply_constitution_scope_maturity_scores.py --apply` ;
+10. régénération déterministe du catalogue ;
+11. rerun du scoring pour vérifier convergence entre score publié et score calculé.
 
 ## Inputs
 
@@ -78,7 +96,7 @@ scope_maturity_scoring_report:
   schema_version: 0.1
   pipeline_id: constitution
   status: PASS | WARN | FAIL
-  authority: diagnostic_report_only
+  authority: computed_score_candidate
   does_not_update_policy: true
   scoring_model:
     ref: docs/transformations/core_modularization/CONSTITUTION_SCOPE_MATURITY_MODEL.md
@@ -153,21 +171,31 @@ Si un axe ne peut pas être évalué avec une preuve suffisante, le rapport doit
 - niveau calculé inférieur au niveau publié sans arbitrage explicite ;
 - preuve déterministe manquante sur un axe critique.
 
-## Non-objectifs V0.1
+## Non-objectifs V0.2
 
-Le script ne doit pas :
+Le scorer ne doit pas :
 
 - modifier `policy.yaml` ;
 - modifier `decisions.yaml` ;
 - modifier `manifest.yaml` ;
 - modifier `scope_definitions/*.yaml` ;
-- recalculer silencieusement le gating utilisé par le launcher ;
-- remplacer l'arbitrage humain.
+- recalculer silencieusement le gating utilisé par le launcher.
+
+Le patcher de publication des scores ne doit pas :
+
+- recalculer les scores lui-même ;
+- modifier `decisions.yaml` ;
+- modifier le catalogue généré ;
+- modifier les cores ;
+- publier si le rapport de scoring contient des findings structurels bloquants ;
+- remplacer l'arbitrage humain sur les règles de calcul du scorer.
 
 ## Trajectoire cible
 
-Phase 1 : rapport déterministe non publiant.
+Phase 1 : rapport déterministe non-mutating.
 
-Phase 2 : rapport utilisé comme input obligatoire d'arbitrage STAGE_00.
+Phase 2 : rapport utilisé comme input obligatoire de STAGE_00.
 
-Phase 3 : publication gouvernée d'un score accepté, avec trace explicite de l'écart éventuel entre score calculé et score validé.
+Phase 3 : publication déterministe des scores calculés dans `policy.yaml` via un patcher séparé, gated et auditable.
+
+Phase 4 : régénération du catalogue et rerun scoring pour vérifier convergence entre maturité publiée et maturité calculée.

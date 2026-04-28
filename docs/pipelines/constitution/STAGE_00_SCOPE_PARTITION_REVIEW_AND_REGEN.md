@@ -10,14 +10,17 @@ Chaîne gouvernée attendue :
 2. analyse déterministe obligatoire ;
 3. analyse sémantique assistée par IA sur la base du rapport déterministe et du backlog ;
 4. arbitrage humain ;
-5. mise à jour des fichiers de policy/decisions canonisés ;
+5. mise à jour des fichiers de policy/decisions canonisés pour les décisions de partition ;
 6. régénération déterministe du catalogue de scopes ;
 7. scoring déterministe post-scoping du catalogue généré ;
-8. si le scoring expose des neighbor IDs Constitution sous-déclarés, génération
-   déterministe d'un rapport de gouvernance neighbor IDs, préparation d'une surface
-   d'arbitrage humain, validation de l'arbitrage, puis seulement après arbitrage
-   complet : éventuelle mise à jour de `policy.yaml` / `decisions.yaml`, régénération
-   du catalogue et rerun du scoring.
+8. publication gouvernée des scores calculés dans `policy.yaml` via un patcher déterministe gated ;
+9. régénération déterministe du catalogue de scopes après publication des scores ;
+10. rerun du scoring pour vérifier la convergence score publié / score calculé ;
+11. si le scoring expose des neighbor IDs Constitution sous-déclarés, génération
+    déterministe d'un rapport de gouvernance neighbor IDs, préparation d'une surface
+    d'arbitrage humain, validation de l'arbitrage, puis seulement après arbitrage
+    complet : éventuelle mise à jour de `policy.yaml` / `decisions.yaml`, régénération
+    du catalogue et rerun du scoring.
 
 ## Précondition bloquante
 
@@ -159,9 +162,35 @@ Le script doit :
 - ne jamais modifier directement `policy.yaml`, `decisions.yaml`, `manifest.yaml` ou les `scope_definitions/*.yaml`.
 
 Règle d'autorité :
-- En V1, `policy.yaml` reste la source d'autorité du score publié.
-- Le rapport post-scoping est un diagnostic déterministe.
-- Toute correction du score publié doit passer par arbitrage humain et modification explicite de la policy.
+- En V2, le score calculé devient le candidat d'autorité publiable.
+- Le scorer reste non-mutating : il calcule et prouve, mais n'écrit pas `policy.yaml`.
+- La publication du score calculé dans `policy.yaml` passe par un patcher déterministe séparé, gated et explicite.
+- Après publication dans `policy.yaml`, le catalogue doit être régénéré et le scoring rejoué.
+
+## Script déterministe conditionnel — publication des scores calculés
+
+Script canonique cible :
+- `docs/patcher/shared/apply_constitution_scope_maturity_scores.py`
+
+Commande dry-run de référence :
+- `python docs/patcher/shared/apply_constitution_scope_maturity_scores.py --report docs/pipelines/constitution/reports/scope_maturity_policy_patch_report.yaml`
+
+Commande apply de référence :
+- `python docs/patcher/shared/apply_constitution_scope_maturity_scores.py --apply --report docs/pipelines/constitution/reports/scope_maturity_policy_patch_report.yaml`
+
+Le patcher doit :
+- lire `docs/pipelines/constitution/reports/scope_maturity_scoring_report.yaml` ;
+- lire `docs/pipelines/constitution/policies/scope_generation/policy.yaml` ;
+- refuser toute écriture si le rapport de scoring contient des `blocking_findings` structurels ;
+- copier les `axis_scores.*.score`, `computed_maturity.score_total` et `computed_maturity.level` vers la maturité publiée de chaque scope ;
+- préserver ou enrichir la rationale publiée avec une trace de source calculée ;
+- écrire uniquement `policy.yaml` en mode `--apply` ;
+- produire `docs/pipelines/constitution/reports/scope_maturity_policy_patch_report.yaml`.
+
+Après tout `--apply`, exécuter obligatoirement :
+1. `generate_constitution_scopes.py --apply`
+2. `score_constitution_scope_maturity.py`
+3. validation que les scores publiés et calculés convergent, ou que tout écart restant est explicite et justifié.
 
 ## Gouvernance générique des neighbor IDs Constitution après scoring
 
@@ -244,6 +273,10 @@ Sortie déterministe obligatoire — scoring post-scoping :
 - `docs/pipelines/constitution/reports/scope_maturity_scoring_report.yaml`
   (produit par `score_constitution_scope_maturity.py`)
 
+Sortie déterministe conditionnelle — publication des scores calculés :
+- `docs/pipelines/constitution/reports/scope_maturity_policy_patch_report.yaml`
+  (produit par `apply_constitution_scope_maturity_scores.py`)
+
 Sorties déterministes conditionnelles — gouvernance neighbor IDs Constitution :
 - `docs/pipelines/constitution/reports/constitution_neighbor_ids_governance_report.yaml`
 - `docs/pipelines/constitution/reports/constitution_neighbor_ids_arbitration.yaml`
@@ -286,13 +319,13 @@ Mise à jour obligatoire en fin de STAGE_00 :
     n'est pas un statut.
 
 12. Le scoring post-scoping doit être exécuté après régénération du catalogue.
-13. Le rapport de scoring post-scoping ne remplace pas la policy canonique.
-14. Les écarts entre score calculé et score publié doivent être arbitrés ou reportés explicitement ;
-    ils ne doivent pas être auto-appliqués.
-15. Les neighbor IDs Constitution sous-déclarés révélés par le scoring doivent passer par
+13. Le scorer ne modifie jamais directement la policy canonique.
+14. Le score calculé doit être publié dans `policy.yaml` via `apply_constitution_scope_maturity_scores.py --apply` lorsque les gates structurels du rapport de scoring sont satisfaits.
+15. Après publication des scores calculés, le catalogue doit être régénéré et le scoring rejoué.
+16. Les neighbor IDs Constitution sous-déclarés révélés par le scoring doivent passer par
     `report_constitution_neighbor_ids_governance.py`, `prepare_constitution_neighbor_ids_arbitration.py`
     et `validate_constitution_neighbor_ids_arbitration.py` avant toute modification canonique.
-16. Toute modification de `decisions.yaml` issue de cette gouvernance doit passer par
+17. Toute modification de `decisions.yaml` issue de cette gouvernance doit passer par
     `apply_constitution_neighbor_ids_arbitration.py --apply`, et seulement si le rapport
     de validation est `PASS_READY_TO_PATCH`.
 
@@ -311,8 +344,9 @@ Le Stage 00 est réussi lorsque :
   `generate_constitution_scopes.py` ;
 - le rapport `constitution_scope_generation_report.yaml` a été produit ;
 - le rapport `scope_maturity_scoring_report.yaml` a été produit ;
-- les écarts éventuels entre maturité calculée et maturité publiée ont été explicitement
-  acceptés, arbitrés ou reportés ;
+- si les gates structurels du scoring sont satisfaits, les scores calculés ont été publiés
+  dans `policy.yaml` via `apply_constitution_scope_maturity_scores.py --apply` ;
+- après publication des scores, le catalogue a été régénéré et le scoring rejoué ;
 - si le scoring expose des neighbor IDs Constitution sous-déclarés, le rapport de gouvernance
   neighbor IDs, la surface d'arbitrage, le rapport de validation et le rapport de patch gated
   ont été produits ;
