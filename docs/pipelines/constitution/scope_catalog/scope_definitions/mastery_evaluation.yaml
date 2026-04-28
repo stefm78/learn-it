@@ -10,7 +10,7 @@ scope_definition:
     - docs/cores/current/constitution.yaml
     - docs/cores/current/referentiel.yaml
     - docs/cores/current/link.yaml
-    source_fingerprint: ec47bdb4cfe8e4ab891552dd105e8384eb80e90445a407e451ba655fefe9c695
+    source_fingerprint: 16cdaca1a6d296f466ec8ea176417c4e5036f1c4b823e1ac106b5fb9dbce6fb3
   target:
     artifact_family: constitution
     files:
@@ -55,10 +55,13 @@ scope_definition:
     - docs/cores/current/referentiel.yaml
     - docs/cores/current/link.yaml
     ids:
+    - ACTION_ESCALATE_PERSISTENT_DRIFT_OFFSESSION
     - INV_EXPLICIT_DEPENDENCY_EDGES_REQUIRED
     - REF_CORE_LEARNIT_REFERENTIEL_V4_0_IN_CONSTITUTION
+    - TYPE_INTEGRITY_MODES
     - TYPE_KNOWLEDGE_GRAPH
     - TYPE_LEARNER_STATE_MODEL
+    - TYPE_SELF_REPORT_AR_N1
     - TYPE_STATE_AXIS_ACTIVATION
   governance:
     default_allowed_operations:

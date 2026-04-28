@@ -10,7 +10,7 @@ scope_definition:
     - docs/cores/current/constitution.yaml
     - docs/cores/current/referentiel.yaml
     - docs/cores/current/link.yaml
-    source_fingerprint: ec47bdb4cfe8e4ab891552dd105e8384eb80e90445a407e451ba655fefe9c695
+    source_fingerprint: 16cdaca1a6d296f466ec8ea176417c4e5036f1c4b823e1ac106b5fb9dbce6fb3
   target:
     artifact_family: constitution
     files:
@@ -47,7 +47,14 @@ scope_definition:
     - docs/cores/current/referentiel.yaml
     - docs/cores/current/link.yaml
     ids:
+    - ACTION_LOG_UNCOVERED_CONFLICT
+    - INV_GRAPH_PROPAGATION_ONE_HOP
+    - INV_MSC_AND_STRICT
     - REF_CORE_LEARNIT_REFERENTIEL_V4_0_IN_CONSTITUTION
+    - TYPE_AUTHENTIC_CONTEXT
+    - TYPE_CORPUS_CONFIDENCE_ICC
+    - TYPE_FEEDBACK_COVERAGE_MATRIX
+    - TYPE_SESSION_INTEGRITY_SCORE
   governance:
     default_allowed_operations:
     - challenge
