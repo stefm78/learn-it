@@ -3,6 +3,7 @@
 Status: active tracker  
 Related approach: `docs/transformations/core_modularization/SCOPE_GRAPH_CLUSTERING_APPROACH.md`  
 Related clarification: `docs/transformations/core_modularization/REFERENTIEL_LINK_EXTERNAL_READ_ONLY_TREATMENT.md`  
+Related maturity scoring spec: `docs/specs/constitution_scope_maturity_scoring.md`  
 Pipeline: `constitution`  
 Branch: `feat/core-modularization-bootstrap`
 
@@ -24,7 +25,8 @@ This tracker reflects the current Scope Lab execution state after:
 - deterministic scope catalog regeneration;
 - ID-level bijection validation;
 - successful patch_lifecycle bounded pilot run;
-- canonical export of pilot governance backlog entries.
+- canonical export of pilot governance backlog entries;
+- post-scoping maturity scoring governance design.
 
 ## Current phase
 
@@ -40,6 +42,18 @@ current_phase:
     six governance backlog entries to docs/pipelines/constitution/scope_catalog/governance_backlog.yaml.
     Current work is to triage those entries and decide which items feed STAGE_00 scope
     partition review, cross-core follow-up, or future bounded patch_lifecycle design runs.
+  - action_id: NEXT_007
+    status: next
+    label: Implement deterministic post-scoping scope maturity scoring report
+    phase: PHASE_15
+    target: docs/patcher/shared/score_constitution_scope_maturity.py
+    expected_output: docs/pipelines/constitution/reports/scope_maturity_scoring_report.yaml
+    constraints:
+      - do_not_modify_policy_yaml
+      - do_not_modify_decisions_yaml
+      - do_not_modify_generated_scope_catalog
+      - keep_policy_yaml_authoritative_for_published_maturity
+
 ```
 
 ## Phase tracker
@@ -320,6 +334,28 @@ phases:
       PHASE_14 does not reopen CONSTITUTION_RUN_2026_04_27_PATCH_LIFECYCLE_R01.
       It uses the exported inter-run governance backlog as an input to decide the
       next re-scoping or follow-up work.
+  - phase_id: PHASE_15
+    label: scope_maturity_post_scoping_governance
+    status: planned
+    objective: >-
+      Implement the deterministic post-scoping maturity scoring report introduced
+      by docs/specs/constitution_scope_maturity_scoring.md and integrated into
+      STAGE_00_SCOPE_PARTITION_REVIEW_AND_REGEN.md.
+    governance_position:
+      published_authority: docs/pipelines/constitution/policies/scope_generation/policy.yaml
+      computed_report: docs/pipelines/constitution/reports/scope_maturity_scoring_report.yaml
+      mutation_policy: diagnostic_report_only_no_policy_rewrite
+    completed_design_outputs:
+      - docs/specs/constitution_scope_maturity_scoring.md
+      - docs/pipelines/constitution/STAGE_00_SCOPE_PARTITION_REVIEW_AND_REGEN.md
+    pending_outputs:
+      - docs/patcher/shared/score_constitution_scope_maturity.py
+      - docs/pipelines/constitution/reports/scope_maturity_scoring_report.yaml
+    note: >-
+      PHASE_15 must not introduce a second source of truth. In V1, policy.yaml
+      remains authoritative for published maturity. The deterministic scorer
+      produces an auditable post-scoping diagnostic report only.
+
 ```
 
 ## Implementation checklist
@@ -356,6 +392,9 @@ implementation_tracking:
   pilot_governance_backlog_exported: true
   pilot_governance_backlog_count: 6
   phase_14_backlog_triage_opened: true
+  scope_maturity_scoring_spec_created: true
+  stage00_maturity_scoring_integrated: true
+  score_constitution_scope_maturity_script_created: false
 ```
 
 ## Key decisions recorded
@@ -406,6 +445,14 @@ decision_log:
     date: 2026-04-28
     status: accepted
     decision: Treat exported pilot backlog entries as inputs to PHASE_14 pilot_backlog_triage before any further re-scoping or future bounded design run.
+  - decision_id: DECISION_010
+    date: 2026-04-28
+    status: accepted
+    decision: >-
+      Introduce deterministic post-scoping maturity scoring as a diagnostic report
+      after scope catalog generation, while keeping policy.yaml authoritative for
+      published maturity until an explicit future authority migration is governed.
+
 ```
 
 ## Open risks
@@ -453,6 +500,15 @@ risks:
     severity: medium
     status: open
     mitigation: PHASE_14 is now active and must map each open backlog entry to a next treatment path.
+  - risk_id: RISK_008
+    label: maturity_scoring_creates_two_truths
+    severity: high
+    status: mitigated_by_design
+    mitigation: >-
+      The scoring script is specified as diagnostic_report_only. It must compare
+      computed maturity with published maturity but must not rewrite policy.yaml
+      or override launcher gating until a future authority migration is explicitly governed.
+
 ```
 
 ## Next actions
