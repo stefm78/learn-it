@@ -136,3 +136,27 @@ Chaque entrée doit rester courte, factuelle, datée, et permettre une reprise s
 ### Prochaine action
 
 - **J2 étape 4** : amender `docs/prompts/shared/Challenge_constitution.md` pour qu'en mode `bounded_local_run` l'IA lise en priorité `inputs/scope_extract.yaml` + `inputs/neighbor_extract.yaml` et ne consulte les Core complets que si un ID est signalé manquant.
+
+---
+
+## 2026-04-28 — archivage partiel des journaux J2/J3/J4
+
+- Mode : `human+ai`
+- Les journaux intermédiaires J2, J3 et J4 ont été déplacés vers `docs/transformations/core_modularization/archive/journals/`.
+- Les fichiers conservés au premier niveau sont ceux encore actifs ou encore référencés par des artefacts pipeline :
+  - `J1_SCOPED_RUN_CONTRACT.md`
+  - `J1_CONSTITUTION_PIPELINE_MINIMAL_DELTA.md`
+  - `J5_PARALLEL_SCOPED_RUNS_AND_CANONICAL_CONSOLIDATION.md`
+
+### Décisions prises
+
+1. Les journaux J2/J3/J4 sont conservés pour traçabilité, mais ne sont plus des documents actifs de pilotage.
+2. Les décisions stabilisées de J2/J3/J4 sont désormais portées par les artefacts pipeline, les scripts déterministes, les specs et le scope catalog.
+3. Les anciens liens dans le worklog restent historiques ; le nouvel emplacement autoritatif d'archive est `archive/journals/`.
+
+### Artefacts déplacés
+
+- `J2_EFFECTIVE_READ_SURFACE_REDUCTION.md`
+- `J3_CANONICAL_RECONSTRUCTION_FROM_INTEGRATED_SCOPED_RESULTS.md`
+- `J4_DERIVED_RUNTIME_TASK_VIEW_AND_STAGE_SKILLS.md`
+- `J4_GENERATED_SCOPES_FROM_CANON_AND_POLICY.md`
