@@ -189,6 +189,19 @@ python docs/patcher/shared/prepare_constitution_neighbor_ids_arbitration.py
 python docs/patcher/shared/validate_constitution_neighbor_ids_arbitration.py   --report docs/pipelines/constitution/reports/constitution_neighbor_ids_arbitration_validation.yaml
 ```
 
+4. Patch déterministe gated de `decisions.yaml` après validation `PASS_READY_TO_PATCH` :
+
+```bash
+python docs/patcher/shared/apply_constitution_neighbor_ids_arbitration.py   --report docs/pipelines/constitution/reports/constitution_neighbor_ids_decisions_patch_report.yaml
+```
+
+Par défaut, ce script est en dry-run. Il produit `BLOCKED` tant que l'arbitrage n'est pas
+`PASS_READY_TO_PATCH`. L'écriture réelle de `decisions.yaml` nécessite explicitement `--apply` :
+
+```bash
+python docs/patcher/shared/apply_constitution_neighbor_ids_arbitration.py   --apply   --report docs/pipelines/constitution/reports/constitution_neighbor_ids_decisions_patch_report.yaml
+```
+
 Sémantique de validation :
 
 - `PENDING_HUMAN_ARBITRATION` : état valide intermédiaire ; aucun patch de policy/decisions
@@ -273,6 +286,9 @@ Mise à jour obligatoire en fin de STAGE_00 :
 15. Les neighbor IDs Constitution sous-déclarés révélés par le scoring doivent passer par
     `report_constitution_neighbor_ids_governance.py`, `prepare_constitution_neighbor_ids_arbitration.py`
     et `validate_constitution_neighbor_ids_arbitration.py` avant toute modification canonique.
+16. Toute modification de `decisions.yaml` issue de cette gouvernance doit passer par
+    `apply_constitution_neighbor_ids_arbitration.py --apply`, et seulement si le rapport
+    de validation est `PASS_READY_TO_PATCH`.
 
 ## Critère de succès
 
@@ -292,5 +308,6 @@ Le Stage 00 est réussi lorsque :
 - les écarts éventuels entre maturité calculée et maturité publiée ont été explicitement
   acceptés, arbitrés ou reportés ;
 - si le scoring expose des neighbor IDs Constitution sous-déclarés, le rapport de gouvernance
-  neighbor IDs, la surface d'arbitrage et le rapport de validation ont été produits ;
+  neighbor IDs, la surface d'arbitrage, le rapport de validation et le rapport de patch gated
+  ont été produits ;
 - le nouveau partitionnement est traçable et reproductible.

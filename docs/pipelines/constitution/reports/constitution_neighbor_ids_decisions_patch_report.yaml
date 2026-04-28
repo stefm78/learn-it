@@ -1,0 +1,17 @@
+constitution_neighbor_ids_decisions_patch_report:
+  schema_version: '0.1'
+  generated_at: '2026-04-28T12:26:52Z'
+  status: BLOCKED
+  apply_mode: false
+  blocking_reason: arbitration_validation_not_pass_ready_to_patch
+  validation_status: PENDING_HUMAN_ARBITRATION
+  inputs:
+    arbitration: docs/pipelines/constitution/reports/constitution_neighbor_ids_arbitration.yaml
+    validation: docs/pipelines/constitution/reports/constitution_neighbor_ids_arbitration_validation.yaml
+    decisions: docs/pipelines/constitution/policies/scope_generation/decisions.yaml
+  mutation_policy:
+    policy_yaml: not_modified
+    decisions_yaml: not_modified
+    scope_catalog: not_modified
+    maturity_scores: not_modified
+    scorer_rules: not_modified
