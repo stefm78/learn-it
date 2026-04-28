@@ -1,0 +1,162 @@
+core_validation:
+  schema_version: 0.1
+  run_id: CONSTITUTION_RUN_2026_04_27_PATCH_LIFECYCLE_R01
+  pipeline_id: constitution
+  stage_id: STAGE_06_CORE_VALIDATION
+  mode: bounded_local_run
+  scope_key: patch_lifecycle
+
+  validation_scope:
+    status: PASS
+    validated_state: sandbox_from_stage_05
+    sandbox_root: docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_27_PATCH_LIFECYCLE_R01/work/05_apply/sandbox
+    primary_reads:
+      - docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_27_PATCH_LIFECYCLE_R01/inputs/run_context.yaml
+      - docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_27_PATCH_LIFECYCLE_R01/reports/patch_execution_report.yaml
+      - docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_27_PATCH_LIFECYCLE_R01/work/05_apply/sandbox/docs/cores/current/constitution.yaml
+      - docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_27_PATCH_LIFECYCLE_R01/work/05_apply/sandbox/docs/cores/current/referentiel.yaml
+      - docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_27_PATCH_LIFECYCLE_R01/work/05_apply/sandbox/docs/cores/current/link.yaml
+      - docs/prompts/shared/Make02CoreValidation.md
+    fallback_reads_used: []
+    note: >-
+      Validation is limited to the real sandbox state produced by STAGE_05_APPLY.
+      No current Core was rewritten, no promotion was performed, and no release was materialized.
+
+  execution_evidence:
+    patch_execution_report_ref: docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_27_PATCH_LIFECYCLE_R01/reports/patch_execution_report.yaml
+    patch_execution_status: PASS
+    patch_id: PATCHSET_CONSTITUTION_PATCH_LIFECYCLE_R01_STAGE03
+    patch_dsl_version: "4.0"
+    applied_file:
+      file: docs/cores/current/constitution.yaml
+      expected_core_id: CORE_LEARNIT_CONSTITUTION_V4_0
+      actual_core_id: CORE_LEARNIT_CONSTITUTION_V4_0
+    errors: []
+
+  logical_validation_summary:
+    status: PASS
+    blocking_anomalies_count: 0
+    non_blocking_findings_count: 2
+    checks:
+      duplicate_rules_and_id_collisions:
+        status: PASS
+        rationale: >-
+          The patch replaced fields on existing IDs only and did not append, rename or remove canonical IDs.
+      orphan_dependencies:
+        status: PASS
+        rationale: >-
+          The patch did not introduce new dependencies or relations. Existing references are therefore not expanded
+          by the patched content.
+      implicit_relations:
+        status: PASS
+        rationale: >-
+          Patched logic clarifies existing semantic boundaries without adding implicit relation edges.
+      invariant_integrity:
+        status: PASS
+        rationale: >-
+          Patched invariants strengthen deterministic validation, rollback safety and escalation boundaries without
+          making non-patchable invariants operationally mutable at runtime.
+      logical_consistency:
+        status: PASS
+        rationale: >-
+          The patch consistently separates local deterministic verification from off-session pedagogical QA, and
+          separates patch_lifecycle signal consumption from learner_state signal production.
+      source_anchor_completeness:
+        status: PASS
+        rationale: >-
+          The patch modifies fields on existing objects and preserves their existing source_anchor values.
+      relation_coherence:
+        status: PASS
+        rationale: >-
+          No new relations were introduced. Existing relations remain unchanged.
+      graph_connectivity:
+        status: PASS
+        rationale: >-
+          No object was added, removed or renamed, so graph connectivity is not degraded by this patch.
+      reinflation_readiness:
+        status: PASS
+        rationale: >-
+          The sandbox Constitution remains a structured Core YAML with CORE id CORE_LEARNIT_CONSTITUTION_V4_0.
+      core_type_alignment:
+        status: PASS
+        rationale: >-
+          The applied file is Constitution and the execution report confirms actual_core_id CORE_LEARNIT_CONSTITUTION_V4_0.
+      inter_core_reference_clarity:
+        status: PASS_WITH_NON_BLOCKING_FOLLOW_UP
+        rationale: >-
+          The patch did not modify referentiel.yaml or link.yaml and did not add cross-core references. Known external
+          read-only follow-ups around referentiel/link alignment remain outside this bounded Constitution patch and
+          must continue through the dedicated follow-up path rather than by local patch_lifecycle correction.
+      bounded_run_release_readiness:
+        status: PASS
+        rationale: >-
+          No multi-run consolidation is detected for this run. The validated sandbox can proceed to release
+          materialization for this run, subject to normal STAGE_07 materialization checks.
+
+  anomalies_and_corrections:
+    blocking_anomalies: []
+    corrections_required_before_stage_07: []
+    non_blocking_findings:
+      - finding_id: CV-NB-001
+        title: External-read-only referentiel/link follow-up remains open
+        severity: non_blocking_for_this_bounded_patch
+        related_context:
+          - referentiel.yaml and link.yaml are external_read_only for Constitution runs
+          - issue_4_follow_up: Track referentiel/link external-read-only follow-up after Constitution scoping pilot
+        rationale: >-
+          The patch intentionally avoided referentiel.yaml, link.yaml, generated scope catalog files and learner_state
+          ownership. Remaining external-read-only alignment work is a governance follow-up, not a STAGE_06 blocker
+          for this patch_lifecycle sandbox validation.
+        correction: >-
+          Preserve as follow-up/backlog; do not correct in this run unless an explicit cross-core change request
+          or dedicated run is opened.
+      - finding_id: CV-NB-002
+        title: Integration gate remains open for broader governance watchpoints
+        severity: non_blocking_for_core_validation
+        related_context:
+          - integration_gate.status: open
+          - cleared_checks: 0
+        rationale: >-
+          STAGE_06 validates the sandbox Core state after patch application. Broader watchpoints such as neighbor
+          selection, referentiel parameter extraction and scope-boundary backlog are intentionally deferred and do
+          not invalidate the local patched Constitution state.
+        correction: >-
+          Carry the watchpoints into downstream release notes / closeout and preserve governance backlog candidates
+          from STAGE_02 for STAGE_09 export.
+
+  downstream_decision:
+    decision: direct_release_materialization
+    next_stage: STAGE_07_RELEASE_MATERIALIZATION
+    rationale: >-
+      Validation status is PASS, no blocking logical issue is detected in the sandbox state, and no parallel
+      multi-run consolidation need is detected for this run. Proceed to STAGE_07_RELEASE_MATERIALIZATION after
+      human tracking update.
+
+  completion_evidence:
+    sandbox_cores_read: true
+    validation_status_emitted: true
+    every_blocking_issue_explicitly_listed_if_any: true
+    downstream_decision_emitted: true
+    fallback_reads_declared_if_any: true
+    human_actions_explicitly_stated_in_output: true
+
+  human_actions_to_execute:
+    - label: Update tracking to STAGE_07_RELEASE_MATERIALIZATION
+      mandatory: true
+      command: >-
+        python docs/patcher/shared/update_run_tracking.py --pipeline constitution
+        --run-id CONSTITUTION_RUN_2026_04_27_PATCH_LIFECYCLE_R01
+        --stage-id STAGE_06_CORE_VALIDATION --stage-status done --run-status active
+        --next-stage STAGE_07_RELEASE_MATERIALIZATION
+        --summary "Core validation passed; run ready for release materialization."
+    - label: Continue to release materialization
+      mandatory: true
+      next_prompt: >-
+        Continue le run CONSTITUTION_RUN_2026_04_27_PATCH_LIFECYCLE_R01 — STAGE_06 est done,
+        démarre STAGE_07_RELEASE_MATERIALIZATION.
+
+  stage_boundary_statement:
+    no_promotion_performed: true
+    no_current_rewrite_performed: true
+    no_release_materialization_performed: true
+    no_consolidation_bypass: true
