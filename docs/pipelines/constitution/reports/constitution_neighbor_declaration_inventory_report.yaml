@@ -1,0 +1,423 @@
+constitution_neighbor_declaration_inventory_report:
+  schema_version: '0.1'
+  phase_id: PHASE_18A
+  generated_at: '2026-04-28T15:32:40Z'
+  status: WARN
+  mutation_policy:
+    policy_yaml: not_modified
+    decisions_yaml: not_modified
+    catalog_manifest: not_modified
+    scope_definitions: not_modified
+    pipeline_docs: not_modified
+    cores: not_modified
+  inputs:
+  - ref: docs/pipelines/constitution/policies/scope_generation/policy.yaml
+    sha256: c70c0aabcdaa1acf096eb86d4ea95671d0b367840c99b44e6a2262e24ffc36da
+  - ref: docs/pipelines/constitution/policies/scope_generation/decisions.yaml
+    sha256: d2612a859940d5d95837078a96e8bf18d41731eb7cb3906ff3aeeef7d8552fc2
+  - ref: docs/pipelines/constitution/scope_catalog/manifest.yaml
+    sha256: 3de972b8904b38698d92fb51a63ce0c7273d6a7ec668344c2297bcbaf24b9812
+  - ref: docs/pipelines/constitution/pipeline.md
+    sha256: c99fa0ed04ccc8ff2121d86d9475f90190197a1559e882fd42df70ac4e347824
+  - ref: docs/pipelines/constitution/STAGE_00_SCOPE_PARTITION_REVIEW_AND_REGEN.md
+    sha256: cd0f3876f86901237586c3b4761c4e7f34a25f89c700bad713ea077f4ba34cc9
+  summary:
+    policy_declared_scope_count: 5
+    force_logical_neighbor_decision_count: 8
+    external_read_only_core_decision_count: 1
+    scope_definition_count: 5
+    run_extract_file_count: 8
+    finding_count: 2
+    warning_count: 1
+    error_count: 0
+  surfaces:
+    policy:
+      shared_read_surface:
+        mode: ids_first_with_explicit_file_fallback
+        fallback_files:
+        - docs/cores/current/constitution.yaml
+        - docs/cores/current/link.yaml
+        - docs/cores/current/referentiel.yaml
+        fallback_trigger_conditions:
+        - collision_detected
+        - integration_gate_requires_wider_reread
+        - unresolved_ambiguity
+        - unresolved_cross_core_dependency
+      declared_scope_neighbor_files:
+      - scope_key: deployment_governance
+        neighbor_files:
+        - docs/cores/current/link.yaml
+        - docs/cores/current/referentiel.yaml
+        target_files:
+        - docs/cores/current/constitution.yaml
+      - scope_key: knowledge_and_design
+        neighbor_files:
+        - docs/cores/current/link.yaml
+        - docs/cores/current/referentiel.yaml
+        target_files:
+        - docs/cores/current/constitution.yaml
+      - scope_key: learner_state
+        neighbor_files:
+        - docs/cores/current/link.yaml
+        - docs/cores/current/referentiel.yaml
+        target_files:
+        - docs/cores/current/constitution.yaml
+      - scope_key: mastery_evaluation
+        neighbor_files:
+        - docs/cores/current/link.yaml
+        - docs/cores/current/referentiel.yaml
+        target_files:
+        - docs/cores/current/constitution.yaml
+      - scope_key: patch_lifecycle
+        neighbor_files:
+        - docs/cores/current/link.yaml
+        - docs/cores/current/referentiel.yaml
+        target_files:
+        - docs/cores/current/constitution.yaml
+      core_role_classification:
+        owned_core_family: constitution
+        owned_core_files:
+        - docs/cores/current/constitution.yaml
+        external_read_only_core_files:
+        - docs/cores/current/link.yaml
+        - docs/cores/current/referentiel.yaml
+        default_cross_core_write_policy: forbidden_without_explicit_cross_core_run_contract
+      id_classification_contract_keys:
+      - constitution_owned
+      - external_read_only_link
+      - external_read_only_referentiel
+      - missing_or_invalid
+      - shared_or_global
+    decisions:
+      decision_count: 16
+      decision_count_by_type:
+        assign_ids_to_scope: 5
+        classify_external_read_only_cores: 1
+        force_logical_neighbors: 8
+        record_diagnostic_subcluster: 2
+      decision_count_by_status:
+        approved: 15
+        proposed: 1
+      force_logical_neighbors:
+      - decision_id: SGEN_DECISION_006
+        status: approved
+        scope_keys_affected:
+        - deployment_governance
+        - knowledge_and_design
+        - learner_state
+        - mastery_evaluation
+        - patch_lifecycle
+        target_id_count: 1
+        target_ids:
+        - REF_CORE_LEARNIT_REFERENTIEL_V4_0_IN_CONSTITUTION
+        neighbor_class: intercore_reference_forced
+        read_mode: primary
+        source_phase: null
+        requires_exact_id_selection_before_approval: false
+      - decision_id: SGEN_DECISION_007
+        status: approved
+        scope_keys_affected:
+        - mastery_evaluation
+        target_id_count: 4
+        target_ids:
+        - INV_EXPLICIT_DEPENDENCY_EDGES_REQUIRED
+        - TYPE_KNOWLEDGE_GRAPH
+        - TYPE_LEARNER_STATE_MODEL
+        - TYPE_STATE_AXIS_ACTIVATION
+        neighbor_class: primary_read_neighbor
+        read_mode: primary
+        source_phase: null
+        requires_exact_id_selection_before_approval: false
+      - &id001
+        decision_id: SGEN_DECISION_011
+        status: proposed
+        scope_keys_affected:
+        - patch_lifecycle
+        target_id_count: 0
+        target_ids: []
+        neighbor_class: patch_trigger_governance_required_read_neighbor
+        read_mode: primary
+        source_phase: null
+        requires_exact_id_selection_before_approval: true
+      - decision_id: SGEN_DECISION_PHASE16_NEIGHBOR_IDS__DEPLOYMENT_GOVERNANCE
+        status: approved
+        scope_keys_affected:
+        - deployment_governance
+        target_id_count: 7
+        target_ids:
+        - ACTION_LOG_UNCOVERED_CONFLICT
+        - INV_GRAPH_PROPAGATION_ONE_HOP
+        - INV_MSC_AND_STRICT
+        - TYPE_AUTHENTIC_CONTEXT
+        - TYPE_CORPUS_CONFIDENCE_ICC
+        - TYPE_FEEDBACK_COVERAGE_MATRIX
+        - TYPE_SESSION_INTEGRITY_SCORE
+        neighbor_class: explicit_constitution_dependency_from_scoring_v1_1
+        read_mode: primary
+        source_phase: PHASE_16
+        requires_exact_id_selection_before_approval: false
+      - decision_id: SGEN_DECISION_PHASE16_NEIGHBOR_IDS__KNOWLEDGE_AND_DESIGN
+        status: approved
+        scope_keys_affected:
+        - knowledge_and_design
+        target_id_count: 2
+        target_ids:
+        - INV_NO_RUNTIME_CONTENT_GENERATION
+        - TYPE_HUMAN_CHECKPOINT
+        neighbor_class: explicit_constitution_dependency_from_scoring_v1_1
+        read_mode: primary
+        source_phase: PHASE_16
+        requires_exact_id_selection_before_approval: false
+      - decision_id: SGEN_DECISION_PHASE16_NEIGHBOR_IDS__LEARNER_STATE
+        status: approved
+        scope_keys_affected:
+        - learner_state
+        target_id_count: 2
+        target_ids:
+        - ACTION_ESCALATE_PERSISTENT_DRIFT_OFFSESSION
+        - ACTION_PLAN_SHORT_DIAGNOSTIC_TASK
+        neighbor_class: explicit_constitution_dependency_from_scoring_v1_1
+        read_mode: primary
+        source_phase: PHASE_16
+        requires_exact_id_selection_before_approval: false
+      - decision_id: SGEN_DECISION_PHASE16_NEIGHBOR_IDS__MASTERY_EVALUATION
+        status: approved
+        scope_keys_affected:
+        - mastery_evaluation
+        target_id_count: 3
+        target_ids:
+        - ACTION_ESCALATE_PERSISTENT_DRIFT_OFFSESSION
+        - TYPE_INTEGRITY_MODES
+        - TYPE_SELF_REPORT_AR_N1
+        neighbor_class: explicit_constitution_dependency_from_scoring_v1_1
+        read_mode: primary
+        source_phase: PHASE_16
+        requires_exact_id_selection_before_approval: false
+      - decision_id: SGEN_DECISION_PHASE16_NEIGHBOR_IDS__PATCH_LIFECYCLE
+        status: approved
+        scope_keys_affected:
+        - patch_lifecycle
+        target_id_count: 4
+        target_ids:
+        - INV_NO_RUNTIME_CONTENT_GENERATION
+        - INV_RUNTIME_FULLY_LOCAL
+        - TYPE_SELF_REPORT_AR_N1
+        - TYPE_STATE_AXIS_VALUE_COST
+        neighbor_class: explicit_constitution_dependency_from_scoring_v1_1
+        read_mode: primary
+        source_phase: PHASE_16
+        requires_exact_id_selection_before_approval: false
+      external_read_only_core_decisions:
+      - decision_id: SGEN_DECISION_008
+        status: approved
+        scope_keys_affected:
+        - deployment_governance
+        - knowledge_and_design
+        - learner_state
+        - mastery_evaluation
+        - patch_lifecycle
+        target_core_files:
+        - docs/cores/current/link.yaml
+        - docs/cores/current/referentiel.yaml
+        external_id_classes:
+        - external_read_only_link
+        - external_read_only_referentiel
+        read_mode: neighbor_or_fallback
+        write_policy: forbidden_without_explicit_cross_core_run_contract
+      non_approved_or_placeholder_neighbor_decisions:
+      - *id001
+    generated_scope_definitions:
+      scope_definition_count: 5
+      surface_key_presence_count:
+        default_neighbors_to_read: 5
+      total_generated_neighbor_id_references: 27
+      total_generated_neighbor_file_references: 10
+      scopes:
+      - scope_key: deployment_governance
+        path: docs/pipelines/constitution/scope_catalog/scope_definitions/deployment_governance.yaml
+        declared_surface_keys:
+        - default_neighbors_to_read
+        default_neighbor_id_count: 8
+        default_neighbor_ids:
+        - ACTION_LOG_UNCOVERED_CONFLICT
+        - INV_GRAPH_PROPAGATION_ONE_HOP
+        - INV_MSC_AND_STRICT
+        - REF_CORE_LEARNIT_REFERENTIEL_V4_0_IN_CONSTITUTION
+        - TYPE_AUTHENTIC_CONTEXT
+        - TYPE_CORPUS_CONFIDENCE_ICC
+        - TYPE_FEEDBACK_COVERAGE_MATRIX
+        - TYPE_SESSION_INTEGRITY_SCORE
+        neighbor_id_count: 0
+        neighbor_ids: []
+        default_neighbor_file_count: 2
+        default_neighbor_files:
+        - docs/cores/current/link.yaml
+        - docs/cores/current/referentiel.yaml
+        neighbor_file_count: 0
+        neighbor_files: []
+      - scope_key: knowledge_and_design
+        path: docs/pipelines/constitution/scope_catalog/scope_definitions/knowledge_and_design.yaml
+        declared_surface_keys:
+        - default_neighbors_to_read
+        default_neighbor_id_count: 3
+        default_neighbor_ids:
+        - INV_NO_RUNTIME_CONTENT_GENERATION
+        - REF_CORE_LEARNIT_REFERENTIEL_V4_0_IN_CONSTITUTION
+        - TYPE_HUMAN_CHECKPOINT
+        neighbor_id_count: 0
+        neighbor_ids: []
+        default_neighbor_file_count: 2
+        default_neighbor_files:
+        - docs/cores/current/link.yaml
+        - docs/cores/current/referentiel.yaml
+        neighbor_file_count: 0
+        neighbor_files: []
+      - scope_key: learner_state
+        path: docs/pipelines/constitution/scope_catalog/scope_definitions/learner_state.yaml
+        declared_surface_keys:
+        - default_neighbors_to_read
+        default_neighbor_id_count: 3
+        default_neighbor_ids:
+        - ACTION_ESCALATE_PERSISTENT_DRIFT_OFFSESSION
+        - ACTION_PLAN_SHORT_DIAGNOSTIC_TASK
+        - REF_CORE_LEARNIT_REFERENTIEL_V4_0_IN_CONSTITUTION
+        neighbor_id_count: 0
+        neighbor_ids: []
+        default_neighbor_file_count: 2
+        default_neighbor_files:
+        - docs/cores/current/link.yaml
+        - docs/cores/current/referentiel.yaml
+        neighbor_file_count: 0
+        neighbor_files: []
+      - scope_key: mastery_evaluation
+        path: docs/pipelines/constitution/scope_catalog/scope_definitions/mastery_evaluation.yaml
+        declared_surface_keys:
+        - default_neighbors_to_read
+        default_neighbor_id_count: 8
+        default_neighbor_ids:
+        - ACTION_ESCALATE_PERSISTENT_DRIFT_OFFSESSION
+        - INV_EXPLICIT_DEPENDENCY_EDGES_REQUIRED
+        - REF_CORE_LEARNIT_REFERENTIEL_V4_0_IN_CONSTITUTION
+        - TYPE_INTEGRITY_MODES
+        - TYPE_KNOWLEDGE_GRAPH
+        - TYPE_LEARNER_STATE_MODEL
+        - TYPE_SELF_REPORT_AR_N1
+        - TYPE_STATE_AXIS_ACTIVATION
+        neighbor_id_count: 0
+        neighbor_ids: []
+        default_neighbor_file_count: 2
+        default_neighbor_files:
+        - docs/cores/current/link.yaml
+        - docs/cores/current/referentiel.yaml
+        neighbor_file_count: 0
+        neighbor_files: []
+      - scope_key: patch_lifecycle
+        path: docs/pipelines/constitution/scope_catalog/scope_definitions/patch_lifecycle.yaml
+        declared_surface_keys:
+        - default_neighbors_to_read
+        default_neighbor_id_count: 5
+        default_neighbor_ids:
+        - INV_NO_RUNTIME_CONTENT_GENERATION
+        - INV_RUNTIME_FULLY_LOCAL
+        - REF_CORE_LEARNIT_REFERENTIEL_V4_0_IN_CONSTITUTION
+        - TYPE_SELF_REPORT_AR_N1
+        - TYPE_STATE_AXIS_VALUE_COST
+        neighbor_id_count: 0
+        neighbor_ids: []
+        default_neighbor_file_count: 2
+        default_neighbor_files:
+        - docs/cores/current/link.yaml
+        - docs/cores/current/referentiel.yaml
+        neighbor_file_count: 0
+        neighbor_files: []
+    run_extracts:
+      run_extract_file_count: 8
+      scope_extract_count: 4
+      neighbor_extract_count: 4
+      files:
+      - path: docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_13_PATCH_LIFECYCLE_R01/inputs/neighbor_extract.yaml
+        kind: neighbor_extract
+        top_level_keys:
+        - neighbor_extract
+        counts: {}
+      - path: docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_13_PATCH_LIFECYCLE_R01/inputs/scope_extract.yaml
+        kind: scope_extract
+        top_level_keys:
+        - scope_extract
+        counts: {}
+      - path: docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_16_DEPLOYMENT_GOVERNANCE_R01/inputs/neighbor_extract.yaml
+        kind: neighbor_extract
+        top_level_keys:
+        - neighbor_extract
+        counts: {}
+      - path: docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_16_DEPLOYMENT_GOVERNANCE_R01/inputs/scope_extract.yaml
+        kind: scope_extract
+        top_level_keys:
+        - scope_extract
+        counts: {}
+      - path: docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_27_PATCH_LIFECYCLE_EXTRACT_VALIDATION_R01/inputs/neighbor_extract.yaml
+        kind: neighbor_extract
+        top_level_keys:
+        - neighbor_extract
+        counts: {}
+      - path: docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_27_PATCH_LIFECYCLE_EXTRACT_VALIDATION_R01/inputs/scope_extract.yaml
+        kind: scope_extract
+        top_level_keys:
+        - scope_extract
+        counts: {}
+      - path: docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_27_PATCH_LIFECYCLE_R01/inputs/neighbor_extract.yaml
+        kind: neighbor_extract
+        top_level_keys:
+        - neighbor_extract
+        counts: {}
+      - path: docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_27_PATCH_LIFECYCLE_R01/inputs/scope_extract.yaml
+        kind: scope_extract
+        top_level_keys:
+        - scope_extract
+        counts: {}
+    pipeline_docs:
+      pipeline_md_script_refs:
+        score_constitution_scope_maturity.py: false
+        apply_constitution_scope_maturity_scores.py: false
+        report_constitution_neighbor_ids_governance.py: false
+        prepare_constitution_neighbor_ids_arbitration.py: false
+        validate_constitution_neighbor_ids_arbitration.py: false
+        apply_constitution_neighbor_ids_arbitration.py: false
+        extract_scope_slice.py: true
+        materialize_run_inputs.py: true
+      stage00_script_refs:
+        score_constitution_scope_maturity.py: true
+        apply_constitution_scope_maturity_scores.py: true
+        report_constitution_neighbor_ids_governance.py: true
+        prepare_constitution_neighbor_ids_arbitration.py: true
+        validate_constitution_neighbor_ids_arbitration.py: true
+        apply_constitution_neighbor_ids_arbitration.py: true
+        extract_scope_slice.py: false
+        materialize_run_inputs.py: false
+      pipeline_md_needs_resource_index_update: true
+      stage00_contains_score_publication_chain: true
+      stage00_contains_neighbor_ids_governance_chain: true
+  findings:
+  - finding_id: NEIGHBOR_DECISION_PLACEHOLDER_PRESENT
+    severity: info
+    message: At least one force_logical_neighbors decision is not approved or still requires exact ID selection.
+    items:
+    - decision_id: SGEN_DECISION_011
+      status: proposed
+      requires_exact_id_selection_before_approval: true
+  - finding_id: PIPELINE_RESOURCE_INDEX_MISSING_RECENT_STAGE00_SCRIPTS
+    severity: warning
+    message: pipeline.md does not list all recent STAGE_00 scoring and neighbor-governance scripts, although STAGE_00 itself
+      is updated.
+    items:
+    - score_constitution_scope_maturity.py
+    - apply_constitution_scope_maturity_scores.py
+    - report_constitution_neighbor_ids_governance.py
+    - prepare_constitution_neighbor_ids_arbitration.py
+    - validate_constitution_neighbor_ids_arbitration.py
+    - apply_constitution_neighbor_ids_arbitration.py
+  recommended_next_steps:
+  - Patch pipeline.md canonical resources to list recent STAGE_00 scoring and neighbor-governance scripts.
+  - Arbitrate whether proposed SGEN_DECISION_011 remains a placeholder, is superseded by PHASE_16, or should be closed.
+  - Define which neighbor declaration surfaces are canonical inputs versus generated outputs.
+  - Align validators and materialization scripts with the accepted declaration model after arbitration.
