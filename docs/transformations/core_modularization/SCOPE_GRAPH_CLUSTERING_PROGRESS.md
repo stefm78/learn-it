@@ -32,16 +32,14 @@ This tracker reflects the current Scope Lab execution state after:
 
 ```yaml
 current_phase:
-  phase_id: PHASE_16
-  label: constitution_neighbor_ids_governance
-  status: done
+  phase_id: PHASE_17
+  label: scope_maturity_score_authority_migration
+  status: active
   summary: >-
-    PHASE_16 is closed. The Constitution neighbor IDs surfaced by maturity scoring
-    V1.1 were governed through a deterministic report, human arbitration, validation,
-    a gated decisions.yaml patcher, deterministic scope catalog regeneration, and a
-    scoring rerun. The initial blocking FAIL signal is resolved: scope maturity scoring
-    now reports WARN only, with zero blocking findings and zero uncovered outgoing
-    Constitution dependencies.
+    PHASE_17 upgrades the maturity scoring authority model. The scorer remains
+    deterministic and non-mutating, but the computed maturity becomes the publishable
+    authority candidate. Publication into policy.yaml must happen through a separate
+    gated deterministic patcher, followed by scope catalog regeneration and scoring rerun.
 ```
 
 
@@ -527,6 +525,54 @@ phases:
         - governance_backlog entries remain open where they represent broader scope design questions
         - no published maturity score migration is performed in PHASE_16
 
+  - phase_id: PHASE_17
+    label: scope_maturity_score_authority_migration
+    status: active
+    objective: >-
+      Migrate maturity score authority from diagnostic-only reporting to a governed
+      deterministic publication chain where computed scores can be applied to
+      scope_generation/policy.yaml through a gated patcher.
+    rationale: >-
+      PHASE_15 implemented deterministic scoring and PHASE_16 resolved the blocking
+      neighbor-ID coverage issue. The remaining mismatch is doctrinal: policy.yaml
+      still carries manually published maturity while the deterministic scorer now
+      produces auditable computed maturity. PHASE_17 makes computed maturity publishable
+      without allowing the scorer to mutate canonical files directly.
+    authority_position:
+      scorer_role: compute_and_prove_only
+      policy_yaml_role: canonical_published_maturity_store
+      publication_mechanism: gated_deterministic_patcher
+      catalog_role: generated_output_from_policy_and_decisions
+    planned_subtasks:
+      - subtask_id: PHASE_17A_SPEC_AND_STAGE00_AUTHORITY_UPDATE
+        status: done
+        objective: >-
+          Update the scoring spec, STAGE_00 doctrine and progress tracker so computed
+          maturity is recognized as the publishable authority candidate.
+        evidence:
+          - docs/specs/constitution_scope_maturity_scoring.md
+          - docs/pipelines/constitution/STAGE_00_SCOPE_PARTITION_REVIEW_AND_REGEN.md
+          - docs/transformations/core_modularization/SCOPE_GRAPH_CLUSTERING_PROGRESS.md
+      - subtask_id: PHASE_17B_SCORE_POLICY_PATCHER
+        status: pending
+        objective: >-
+          Install apply_constitution_scope_maturity_scores.py as a dry-run-by-default
+          deterministic patcher for policy.yaml maturity fields.
+      - subtask_id: PHASE_17C_APPLY_COMPUTED_SCORES
+        status: pending_after_patcher
+        objective: >-
+          Apply computed scores to policy.yaml through the gated patcher, regenerate
+          the scope catalog, and rerun scoring to verify convergence.
+      - subtask_id: PHASE_17D_CLOSEOUT_AND_HANDOFF
+        status: pending
+        objective: >-
+          Close PHASE_17 and select the next post-pilot follow-up, likely MACRO_005
+          neighbor declaration review before MACRO_004 multi-owner cluster review.
+    pending_subtasks:
+      - PHASE_17B_SCORE_POLICY_PATCHER
+      - PHASE_17C_APPLY_COMPUTED_SCORES
+      - PHASE_17D_CLOSEOUT_AND_HANDOFF
+
 ```
 
 ## Implementation checklist
@@ -605,6 +651,12 @@ implementation_tracking:
   constitution_neighbor_ids_scoring_rerun_status: WARN
   constitution_neighbor_ids_scoring_blocking_finding_count: 0
   constitution_neighbor_ids_uncovered_outgoing_dependency_count_all_scopes: 0
+  phase17_scope_maturity_score_authority_migration_active: true
+  phase17_spec_and_stage00_authority_update_done: true
+  score_maturity_computed_authority_candidate_doctrine_defined: true
+  score_maturity_policy_patcher_required: true
+  score_maturity_policy_patcher_created: false
+  score_maturity_policy_scores_applied: false
 ```
 
 ## Key decisions recorded
@@ -711,6 +763,16 @@ decision_log:
       transferred by these neighbor declarations.
 
 
+  - decision_id: DECISION_016
+    date: 2026-04-28
+    status: accepted
+    decision: >-
+      Open PHASE_17 to migrate maturity score authority. The deterministic scorer
+      remains non-mutating, but computed maturity becomes the publishable authority
+      candidate. Publication into policy.yaml must be performed by a separate gated
+      deterministic patcher, followed by scope catalog regeneration and scoring rerun.
+
+
 ```
 
 ## Open risks
@@ -764,11 +826,11 @@ risks:
   - risk_id: RISK_008
     label: maturity_scoring_creates_two_truths
     severity: high
-    status: mitigated_by_design
+    status: mitigated_by_phase17_doctrine
     mitigation: >-
-      The scoring script is specified as diagnostic_report_only. It must compare
-      computed maturity with published maturity but must not rewrite policy.yaml
-      or override launcher gating until a future authority migration is explicitly governed.
+      The scorer remains non-mutating, but PHASE_17 governs how computed maturity
+      can be published into policy.yaml through a separate gated deterministic
+      patcher. This avoids two truths while preserving auditability.
 
   - risk_id: RISK_009
     label: maturity_scoring_v1_over_penalizes_dependency_explicitness
