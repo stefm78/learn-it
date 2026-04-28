@@ -1,0 +1,134 @@
+scope_maturity_policy_patch_report:
+  schema_version: '0.1'
+  phase_id: PHASE_17
+  generated_at: '2026-04-28T15:08:16Z'
+  status: PASS
+  apply_mode: false
+  changed: true
+  gate_findings: []
+  inputs:
+    scoring_report: docs/pipelines/constitution/reports/scope_maturity_scoring_report.yaml
+    policy: docs/pipelines/constitution/policies/scope_generation/policy.yaml
+  input_hashes:
+    scoring_report_sha256: 3337d0ab840c2aed43446e97bbd0823814e50a5837b8258a5c0cb00fbae3705a
+    policy_sha256_before: 1ad5c943a784e0959cb5dfbf67557e02e211dea9f59c2186d978cecf08a05919
+    policy_sha256_after: 1ad5c943a784e0959cb5dfbf67557e02e211dea9f59c2186d978cecf08a05919
+  mutation_policy:
+    policy_yaml: modified_if_apply_true_and_changed
+    decisions_yaml: not_modified
+    catalog_manifest: not_modified
+    scope_definitions: not_modified
+    cores: not_modified
+    scoring_report: not_modified
+    scorer_rules: not_modified
+  patch_summary:
+    scope_count: 5
+    changed_scope_count: 5
+    unchanged_scope_count: 0
+    actions:
+    - scope_key: deployment_governance
+      old_score_total: 19
+      new_score_total: 18
+      score_delta: -1
+      old_level: L3_operational
+      new_level: L3_operational
+      level_delta: none
+      old_axes:
+        clarity_of_scope: 3
+        internal_coherence: 3
+        inter_scope_boundaries: 3
+        dependency_explicitness: 3
+        bounded_run_executability: 3
+        inter_release_stability: 4
+      new_axes:
+        clarity_of_scope: 4
+        internal_coherence: 2
+        inter_scope_boundaries: 2
+        dependency_explicitness: 4
+        bounded_run_executability: 4
+        inter_release_stability: 2
+    - scope_key: knowledge_and_design
+      old_score_total: 17
+      new_score_total: 22
+      score_delta: 5
+      old_level: L3_operational
+      new_level: L4_strong
+      level_delta: computed_higher_than_published
+      old_axes:
+        clarity_of_scope: 3
+        internal_coherence: 3
+        inter_scope_boundaries: 2
+        dependency_explicitness: 3
+        bounded_run_executability: 3
+        inter_release_stability: 3
+      new_axes:
+        clarity_of_scope: 4
+        internal_coherence: 3
+        inter_scope_boundaries: 4
+        dependency_explicitness: 4
+        bounded_run_executability: 4
+        inter_release_stability: 3
+    - scope_key: learner_state
+      old_score_total: 17
+      new_score_total: 19
+      score_delta: 2
+      old_level: L3_operational
+      new_level: L3_operational
+      level_delta: none
+      old_axes:
+        clarity_of_scope: 3
+        internal_coherence: 3
+        inter_scope_boundaries: 2
+        dependency_explicitness: 3
+        bounded_run_executability: 3
+        inter_release_stability: 3
+      new_axes:
+        clarity_of_scope: 4
+        internal_coherence: 3
+        inter_scope_boundaries: 2
+        dependency_explicitness: 4
+        bounded_run_executability: 4
+        inter_release_stability: 2
+    - scope_key: mastery_evaluation
+      old_score_total: 18
+      new_score_total: 22
+      score_delta: 4
+      old_level: L3_operational
+      new_level: L4_strong
+      level_delta: computed_higher_than_published
+      old_axes:
+        clarity_of_scope: 3
+        internal_coherence: 4
+        inter_scope_boundaries: 2
+        dependency_explicitness: 3
+        bounded_run_executability: 3
+        inter_release_stability: 3
+      new_axes:
+        clarity_of_scope: 4
+        internal_coherence: 3
+        inter_scope_boundaries: 4
+        dependency_explicitness: 4
+        bounded_run_executability: 4
+        inter_release_stability: 3
+    - scope_key: patch_lifecycle
+      old_score_total: 16
+      new_score_total: 17
+      score_delta: 1
+      old_level: L2_usable_with_care
+      new_level: L3_operational
+      level_delta: computed_higher_than_published
+      old_axes:
+        clarity_of_scope: 3
+        internal_coherence: 3
+        inter_scope_boundaries: 2
+        dependency_explicitness: 3
+        bounded_run_executability: 2
+        inter_release_stability: 3
+      new_axes:
+        clarity_of_scope: 4
+        internal_coherence: 3
+        inter_scope_boundaries: 1
+        dependency_explicitness: 4
+        bounded_run_executability: 3
+        inter_release_stability: 2
+  next_steps_after_apply: []
