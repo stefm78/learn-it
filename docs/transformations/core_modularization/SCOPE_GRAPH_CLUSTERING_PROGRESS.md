@@ -28,14 +28,14 @@ This tracker reflects the current Scope Lab execution state after:
 
 ```yaml
 current_phase:
-  phase_id: PHASE_13
-  label: pilot_bounded_local_run
-  status: pending
+  phase_id: PHASE_14
+  label: post_pilot_follow_up
+  status: active
   summary: >-
-    Extract validation now passes on a synthetic patch_lifecycle run. The next
-    gate is to decide whether to open one serious pilot bounded_local_run for
-    patch_lifecycle, using the regenerated scope catalog and deterministic
-    extract pipeline.
+    The serious patch_lifecycle pilot bounded_local_run is complete. Run
+    CONSTITUTION_RUN_2026_04_27_PATCH_LIFECYCLE_R01 reached STAGE_09_CLOSEOUT_AND_ARCHIVE,
+    is closed, and promoted CORE_RELEASE_2026_04_28_R01 to docs/cores/current.
+    Remaining work is now follow-up governance, especially MACRO_004 and MACRO_005.
 ```
 
 ## Phase tracker
@@ -247,15 +247,40 @@ phases:
 
   - phase_id: PHASE_13
     label: pilot_bounded_local_run
-    status: pending
-    objective: Open one serious pilot bounded_local_run after all scoping gates pass.
+    status: done
+    objective: Open, execute, promote, close, and archive one serious pilot bounded_local_run after all scoping gates pass.
     recommended_scope: patch_lifecycle
+    run_id: CONSTITUTION_RUN_2026_04_27_PATCH_LIFECYCLE_R01
+    result:
+      status: PASS
+      run_status: closed
+      final_stage: STAGE_09_CLOSEOUT_AND_ARCHIVE
+      release_id: CORE_RELEASE_2026_04_28_R01
+      promoted_to_current: true
+      active_constitution_core_id: CORE_LEARNIT_CONSTITUTION_V5_0
+      active_constitution_version: V5_0_FINAL
+      promotion_report: docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_27_PATCH_LIFECYCLE_R01/reports/promotion_report.yaml
+      current_manifest: docs/cores/current/manifest.yaml
+      blocking_findings: []
     preconditions:
       - PHASE_09 policy/decisions patch passed
       - PHASE_10 scope catalog regeneration passed
       - PHASE_11 ID-level bijection passed
       - PHASE_11B normalized structural reconstruction passed
       - PHASE_12 synthetic extract validation passed
+
+  - phase_id: PHASE_14
+    label: post_pilot_follow_up
+    status: active
+    objective: Track remaining governance follow-ups after the successful patch_lifecycle pilot.
+    follow_up_candidates:
+      - MACRO_004_MULTI_OWNER_CLUSTER_REVIEW
+      - MACRO_005_NEIGHBOR_DECLARATION_REVIEW
+      - external_read_only_referentiel_link_follow_up
+    note: >-
+      PHASE_13 validated the graph-based scoping approach on patch_lifecycle.
+      The next work is not to reopen this run, but to decide the next bounded
+      governance item or scope-level cleanup.
 ```
 
 ## Implementation checklist
@@ -286,7 +311,9 @@ implementation_tracking:
   id_level_reconstruction_readiness_passed: true
   full_reconstruction_passed: true
   extract_tests_passed: true
-  pilot_bounded_local_run_opened: false
+  pilot_bounded_local_run_opened: true
+  pilot_bounded_local_run_closed: true
+  pilot_bounded_local_run_promoted_to_current: true
 ```
 
 ## Key decisions recorded
@@ -386,13 +413,23 @@ next_actions:
     phase: PHASE_12
 
   - action_id: NEXT_003
-    status: next
+    status: done
     label: Decide whether extract validation is sufficient for opening a serious patch_lifecycle pilot run
     target: docs/patcher/shared/extract_scope_slice.py
 
   - action_id: NEXT_004
-    status: pending
-    label: Open one serious pilot bounded_local_run after reconstruction and extract gates pass
+    status: done
+    label: Open, execute, promote, close, and archive one serious pilot bounded_local_run after reconstruction and extract gates pass
     recommended_scope: patch_lifecycle
     phase: PHASE_13
+    run_id: CONSTITUTION_RUN_2026_04_27_PATCH_LIFECYCLE_R01
+
+  - action_id: NEXT_005
+    status: next
+    label: Decide next post-pilot governance follow-up after successful patch_lifecycle validation
+    phase: PHASE_14
+    candidates:
+      - MACRO_004_MULTI_OWNER_CLUSTER_REVIEW
+      - MACRO_005_NEIGHBOR_DECLARATION_REVIEW
+      - external_read_only_referentiel_link_follow_up
 ```

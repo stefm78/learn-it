@@ -1,6 +1,6 @@
 # Scope graph clustering approach
 
-Status: draft implementation note  
+Status: implemented and pilot-validated approach note  
 Pipeline: `constitution`  
 Scope: core modularization / scope partitioning
 
@@ -399,25 +399,33 @@ docs/patcher/shared/validate_scope_partition_bijection.py
 
 ## 14. Tracking checklist
 
+This checklist is retained as the high-level implementation summary of the approach.
+The detailed execution tracker is maintained in
+`docs/transformations/core_modularization/SCOPE_GRAPH_CLUSTERING_PROGRESS.md`.
+
 ```yaml
 implementation_tracking:
-  scope_lab_workspace_created: false
-  disposable_runs_cleaned_or_abandoned: false
-  full_graph_script_created: false
-  graph_nodes_edges_generated: false
-  cluster_detection_generated: false
-  cluster_closure_report_generated: false
-  scope_alignment_report_generated: false
-  redesign_candidates_generated: false
-  human_arbitration_recorded: false
+  scope_lab_workspace_created: true
+  disposable_runs_cleaned_or_abandoned: deferred_not_blocking
+  full_graph_script_created: true
+  graph_nodes_edges_generated: true
+  cluster_detection_generated: true
+  cluster_closure_report_generated: true
+  scope_alignment_report_generated: true
+  redesign_candidates_generated: true
+  human_arbitration_recorded: true
   canonical_core_patches_applied_if_needed: false
-  scope_generation_decisions_updated: false
-  scope_catalog_regenerated: false
-  bijection_validator_created: false
-  ownership_bijection_passed: false
-  full_reconstruction_passed: false
-  extract_tests_passed: false
-  pilot_bounded_local_run_opened: false
+  scope_generation_decisions_updated: true
+  scope_catalog_regenerated: true
+  bijection_validator_created: true
+  ownership_bijection_passed: true
+  full_reconstruction_passed: true
+  extract_tests_passed: true
+  pilot_bounded_local_run_opened: true
+  pilot_bounded_local_run_closed: true
+  pilot_bounded_local_run_promoted_to_current: true
+  promoted_release_id: CORE_RELEASE_2026_04_28_R01
+  active_constitution_version_after_pilot: V5_0_FINAL
 ```
 
 ## 15. Non-goals
