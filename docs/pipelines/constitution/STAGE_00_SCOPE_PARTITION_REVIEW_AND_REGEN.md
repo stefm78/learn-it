@@ -12,7 +12,12 @@ Chaîne gouvernée attendue :
 4. arbitrage humain ;
 5. mise à jour des fichiers de policy/decisions canonisés ;
 6. régénération déterministe du catalogue de scopes ;
-7. scoring déterministe post-scoping du catalogue généré.
+7. scoring déterministe post-scoping du catalogue généré ;
+8. si le scoring expose des neighbor IDs Constitution sous-déclarés, génération
+   déterministe d'un rapport de gouvernance neighbor IDs, préparation d'une surface
+   d'arbitrage humain, validation de l'arbitrage, puis seulement après arbitrage
+   complet : éventuelle mise à jour de `policy.yaml` / `decisions.yaml`, régénération
+   du catalogue et rerun du scoring.
 
 ## Précondition bloquante
 
@@ -158,6 +163,51 @@ Règle d'autorité :
 - Le rapport post-scoping est un diagnostic déterministe.
 - Toute correction du score publié doit passer par arbitrage humain et modification explicite de la policy.
 
+## Gouvernance générique des neighbor IDs Constitution après scoring
+
+Si `scope_maturity_scoring_report.yaml` révèle des dépendances Constitution-to-Constitution
+non déclarées dans les neighbor IDs de scopes, le STAGE_00 DOIT traiter ce signal comme une
+gouvernance générique, et non comme un cas particulier lié à un run pilote.
+
+Scripts canoniques :
+
+1. Rapport déterministe non-mutating :
+
+```bash
+python docs/patcher/shared/report_constitution_neighbor_ids_governance.py   --report docs/pipelines/constitution/reports/constitution_neighbor_ids_governance_report.yaml
+```
+
+2. Préparation de la surface d'arbitrage humain :
+
+```bash
+python docs/patcher/shared/prepare_constitution_neighbor_ids_arbitration.py
+```
+
+3. Validation de l'arbitrage :
+
+```bash
+python docs/patcher/shared/validate_constitution_neighbor_ids_arbitration.py   --report docs/pipelines/constitution/reports/constitution_neighbor_ids_arbitration_validation.yaml
+```
+
+Sémantique de validation :
+
+- `PENDING_HUMAN_ARBITRATION` : état valide intermédiaire ; aucun patch de policy/decisions
+  ne doit être appliqué ;
+- `PASS_READY_TO_PATCH` : tous les candidats sont arbitrés, les rationales sont présentes,
+  et les flags `patch_policy_decisions_after_approval` sont cohérents ;
+- `FAIL` : blocage structurel à corriger avant toute suite.
+
+Règles :
+
+- aucune mise à jour de `policy.yaml` ou `decisions.yaml` n'est autorisée tant que le rapport
+  de validation n'est pas `PASS_READY_TO_PATCH` ;
+- les scores publiés dans `policy.yaml` ne sont pas modifiés par cette séquence ;
+- le scorer V1.1 n'est pas recalibré dans cette séquence ;
+- le catalogue de scopes n'est régénéré que si l'arbitrage humain approuve une modification
+  canonique de `policy.yaml` ou `decisions.yaml` ;
+- après toute modification canonique acceptée, `generate_constitution_scopes.py --apply`
+  puis `score_constitution_scope_maturity.py` doivent être rejoués.
+
 ## Sorties attendues
 
 Sortie déterministe obligatoire — analyse :
@@ -175,6 +225,12 @@ Sortie déterministe obligatoire — régénération :
 Sortie déterministe obligatoire — scoring post-scoping :
 - `docs/pipelines/constitution/reports/scope_maturity_scoring_report.yaml`
   (produit par `score_constitution_scope_maturity.py`)
+
+Sorties déterministes conditionnelles — gouvernance neighbor IDs Constitution :
+- `docs/pipelines/constitution/reports/constitution_neighbor_ids_governance_report.yaml`
+- `docs/pipelines/constitution/reports/constitution_neighbor_ids_arbitration.yaml`
+- `docs/pipelines/constitution/reports/constitution_neighbor_ids_arbitration.md`
+- `docs/pipelines/constitution/reports/constitution_neighbor_ids_arbitration_validation.yaml`
 
 Mise à jour obligatoire en fin de STAGE_00 :
 - `docs/pipelines/constitution/scope_catalog/governance_backlog.yaml`
@@ -214,6 +270,9 @@ Mise à jour obligatoire en fin de STAGE_00 :
 13. Le rapport de scoring post-scoping ne remplace pas la policy canonique.
 14. Les écarts entre score calculé et score publié doivent être arbitrés ou reportés explicitement ;
     ils ne doivent pas être auto-appliqués.
+15. Les neighbor IDs Constitution sous-déclarés révélés par le scoring doivent passer par
+    `report_constitution_neighbor_ids_governance.py`, `prepare_constitution_neighbor_ids_arbitration.py`
+    et `validate_constitution_neighbor_ids_arbitration.py` avant toute modification canonique.
 
 ## Critère de succès
 
@@ -232,4 +291,6 @@ Le Stage 00 est réussi lorsque :
 - le rapport `scope_maturity_scoring_report.yaml` a été produit ;
 - les écarts éventuels entre maturité calculée et maturité publiée ont été explicitement
   acceptés, arbitrés ou reportés ;
+- si le scoring expose des neighbor IDs Constitution sous-déclarés, le rapport de gouvernance
+  neighbor IDs, la surface d'arbitrage et le rapport de validation ont été produits ;
 - le nouveau partitionnement est traçable et reproductible.
