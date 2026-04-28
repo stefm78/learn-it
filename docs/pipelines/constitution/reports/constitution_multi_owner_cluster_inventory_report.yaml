@@ -1,0 +1,387 @@
+constitution_multi_owner_cluster_inventory_report:
+  schema_version: '0.1'
+  phase_id: PHASE_19A
+  generated_at: '2026-04-28T16:05:44Z'
+  status: PASS
+  mutation_policy:
+    policy_yaml: not_modified
+    decisions_yaml: not_modified
+    scope_catalog: not_modified
+    scope_lab_reports: not_modified
+    cores: not_modified
+  doctrine_refs:
+  - docs/specs/constitution_neighbor_declaration_model.md
+  - docs/pipelines/constitution/reports/constitution_neighbor_declaration_inventory_report.yaml
+  inputs:
+  - ref: tmp/scope_lab/scope_redesign_candidates.yaml
+    sha256: 0f27606736ef8234eebbc6462e984589984c783ae33bb8ec282a91118c96c635
+  - ref: docs/pipelines/constitution/policies/scope_generation/decisions.yaml
+    sha256: ef2a6dd19ae7d9d8d5a29f5ed6e07d4593e0f92da33732480300144b90029104
+  - ref: docs/specs/constitution_neighbor_declaration_model.md
+    sha256: ac86cc0b3a95ca382bd0df6bf75e9d20dcf743ca98bee3f5806ec0fca92275f9
+  - ref: docs/pipelines/constitution/reports/constitution_neighbor_declaration_inventory_report.yaml
+    sha256: 8a1f3e8cbfcb643f5847075914afb16f3d286904f232ded7f56403632c646626
+  summary:
+    candidate_count: 6
+    primary_classification_counts:
+      diagnostic_subcluster: 1
+      read_neighbor_relation: 2
+      true_ownership_ambiguity: 3
+    classification_tag_counts:
+      bridge_edge: 1
+      diagnostic_subcluster: 3
+      read_neighbor_relation: 6
+      true_ownership_ambiguity: 3
+    recommended_next_action_counts:
+      human_arbitration_required: 3
+      likely_keep_current_ownership_with_existing_governance: 1
+      likely_keep_current_ownership_with_explicit_neighbors: 2
+    boundary_pressure_counts:
+      high: 1
+      low: 2
+      medium: 3
+    human_arbitration_required_count: 3
+    finding_count: 0
+    warning_count: 0
+    error_count: 0
+  classification_rules:
+    true_ownership_ambiguity:
+    - boundary_pressure is high
+    - or cluster spans at least three owned scopes without a dominant owner above 65%
+    - or cluster spans multiple owned scopes and is not already covered by read-neighbor or diagnostic-subcluster governance
+    read_neighbor_relation:
+    - one or more affected IDs are already governed by approved force_logical_neighbors decisions
+    - read-neighbor declarations do not transfer ownership
+    diagnostic_subcluster:
+    - cluster is referenced by approved record_diagnostic_subcluster decisions
+    - diagnostic subclusters do not transfer ownership
+    bridge_edge:
+    - cluster includes UNOWNED/external material
+    - external or bridge material must be classified before ownership changes
+    generated_view_artifact:
+    - fallback category for traceability when no ownership action signal remains
+  decision_context:
+    approved_read_neighbor_decision_count: 7
+    diagnostic_subcluster_cluster_count: 4
+    open_governance_backlog_count: 6
+  candidates:
+  - candidate_id: CAND_MULTI_OWNER_CLUSTER_006
+    cluster_id: LABEL_CLUSTER_001
+    title: Review multi-owner cluster LABEL_CLUSTER_001
+    priority: high
+    affected_scope_keys:
+    - deployment_governance
+    - learner_state
+    - mastery_evaluation
+    - patch_lifecycle
+    affected_node_count: 26
+    boundary_pressure: medium
+    owner_scope_count: 4
+    nodes_by_owner_scope:
+      UNOWNED: 4
+      deployment_governance: 5
+      learner_state: 10
+      mastery_evaluation: 3
+      patch_lifecycle: 4
+    dominant_scope: learner_state
+    dominance_ratio: 0.3846
+    unowned_count: 4
+    classification_tags:
+    - bridge_edge
+    - diagnostic_subcluster
+    - read_neighbor_relation
+    - true_ownership_ambiguity
+    primary_classification: true_ownership_ambiguity
+    approved_read_neighbor_hits_by_scope:
+      deployment_governance:
+      - REF_CORE_LEARNIT_REFERENTIEL_V4_0_IN_CONSTITUTION
+      learner_state:
+      - ACTION_PLAN_SHORT_DIAGNOSTIC_TASK
+      - REF_CORE_LEARNIT_REFERENTIEL_V4_0_IN_CONSTITUTION
+      mastery_evaluation:
+      - REF_CORE_LEARNIT_REFERENTIEL_V4_0_IN_CONSTITUTION
+      - TYPE_SELF_REPORT_AR_N1
+      - TYPE_STATE_AXIS_ACTIVATION
+      patch_lifecycle:
+      - REF_CORE_LEARNIT_REFERENTIEL_V4_0_IN_CONSTITUTION
+      - TYPE_SELF_REPORT_AR_N1
+    approved_read_neighbor_hit_count: 4
+    diagnostic_subcluster_decisions:
+    - decision_id: SGEN_DECISION_010
+      scope_keys_affected: &id001
+      - patch_lifecycle
+      target_ids: &id002
+      - ACTION_LOG_UNCOVERED_CONFLICT
+      - EVENT_AR_REFRACTORY_PROFILE_DETECTED
+      - EVENT_PERSISTENT_LOW_VC
+      - INV_PATCH_ARTIFACTS_MUST_BE_PRECOMPUTED_OFF_SESSION
+      - RULE_AR_REFRACTORY_PROFILE_TRIGGERS_SOLLICITATION_PATCH
+      - RULE_PERSISTENT_LOW_VC_TRIGGERS_RELEVANCE_PATCH
+      subcluster_key: patch_trigger_governance
+      ownership_effect: none
+    diagnostic_subcluster_hit_count: 4
+    open_governance_backlog_refs_for_affected_scopes:
+    - GB_2026_04_27_PATCH_LIFECYCLE_R01_GBC_PATCH_LIFECYCLE_ESCALATION_BOUNDARY_R01
+    - GB_2026_04_27_PATCH_LIFECYCLE_R01_GBC_PATCH_LIFECYCLE_FULL_STATE_MACHINE_R01
+    - GB_2026_04_27_PATCH_LIFECYCLE_R01_GBC_PATCH_LIFECYCLE_LEARNER_STATE_NEIGHBORS_R01
+    - GB_2026_04_27_PATCH_LIFECYCLE_R01_GBC_PATCH_LIFECYCLE_PRIORITY_QUEUE_R01
+    - GB_2026_04_27_PATCH_LIFECYCLE_R01_GBC_PATCH_LIFECYCLE_REFERENTIEL_PARAMETER_R01
+    - GB_2026_04_27_PATCH_LIFECYCLE_R01_GBC_PATCH_LIFECYCLE_UNCOVERED_CONFLICT_LOGGING_R01
+    evidence:
+    - LABEL_CLUSTER_001 is referenced by approved record_diagnostic_subcluster decision(s).
+    - Some affected IDs are already governed as explicit read-neighbors; this is not ownership transfer.
+    - Cluster includes UNOWNED/external material; this should be treated as bridge or external-read signal before ownership
+      changes.
+    - Cluster spans at least three owned scopes with no dominant owner above 65%.
+    recommended_next_action: human_arbitration_required
+    arbitration_options:
+    - keep_current_ownership
+    - record_or_keep_diagnostic_subcluster
+    - declare_or_keep_read_neighbors
+    - move_node_ownership
+    - split_scope
+    - merge_scope_fragments
+    - open_or_update_governance_backlog
+  - candidate_id: CAND_MULTI_OWNER_CLUSTER_007
+    cluster_id: LABEL_CLUSTER_005
+    title: Review multi-owner cluster LABEL_CLUSTER_005
+    priority: high
+    affected_scope_keys:
+    - deployment_governance
+    - mastery_evaluation
+    affected_node_count: 12
+    boundary_pressure: medium
+    owner_scope_count: 2
+    nodes_by_owner_scope:
+      deployment_governance: 1
+      mastery_evaluation: 11
+    dominant_scope: mastery_evaluation
+    dominance_ratio: 0.9167
+    unowned_count: 0
+    classification_tags:
+    - read_neighbor_relation
+    primary_classification: read_neighbor_relation
+    approved_read_neighbor_hits_by_scope:
+      deployment_governance:
+      - INV_MSC_AND_STRICT
+    approved_read_neighbor_hit_count: 1
+    diagnostic_subcluster_decisions: []
+    diagnostic_subcluster_hit_count: 0
+    open_governance_backlog_refs_for_affected_scopes:
+    - GB_2026_04_27_PATCH_LIFECYCLE_R01_GBC_PATCH_LIFECYCLE_ESCALATION_BOUNDARY_R01
+    - GB_2026_04_27_PATCH_LIFECYCLE_R01_GBC_PATCH_LIFECYCLE_UNCOVERED_CONFLICT_LOGGING_R01
+    evidence:
+    - Some affected IDs are already governed as explicit read-neighbors; this is not ownership transfer.
+    recommended_next_action: likely_keep_current_ownership_with_explicit_neighbors
+    arbitration_options:
+    - keep_current_ownership
+    - record_or_keep_diagnostic_subcluster
+    - declare_or_keep_read_neighbors
+    - move_node_ownership
+    - split_scope
+    - merge_scope_fragments
+    - open_or_update_governance_backlog
+  - candidate_id: CAND_MULTI_OWNER_CLUSTER_008
+    cluster_id: LABEL_CLUSTER_008
+    title: Review multi-owner cluster LABEL_CLUSTER_008
+    priority: high
+    affected_scope_keys:
+    - deployment_governance
+    - knowledge_and_design
+    - mastery_evaluation
+    affected_node_count: 9
+    boundary_pressure: medium
+    owner_scope_count: 3
+    nodes_by_owner_scope:
+      deployment_governance: 1
+      knowledge_and_design: 4
+      mastery_evaluation: 4
+    dominant_scope: knowledge_and_design
+    dominance_ratio: 0.4444
+    unowned_count: 0
+    classification_tags:
+    - read_neighbor_relation
+    - true_ownership_ambiguity
+    primary_classification: true_ownership_ambiguity
+    approved_read_neighbor_hits_by_scope:
+      deployment_governance:
+      - INV_GRAPH_PROPAGATION_ONE_HOP
+      mastery_evaluation:
+      - INV_EXPLICIT_DEPENDENCY_EDGES_REQUIRED
+      - TYPE_KNOWLEDGE_GRAPH
+    approved_read_neighbor_hit_count: 3
+    diagnostic_subcluster_decisions: []
+    diagnostic_subcluster_hit_count: 0
+    open_governance_backlog_refs_for_affected_scopes:
+    - GB_2026_04_27_PATCH_LIFECYCLE_R01_GBC_PATCH_LIFECYCLE_ESCALATION_BOUNDARY_R01
+    - GB_2026_04_27_PATCH_LIFECYCLE_R01_GBC_PATCH_LIFECYCLE_UNCOVERED_CONFLICT_LOGGING_R01
+    evidence:
+    - Some affected IDs are already governed as explicit read-neighbors; this is not ownership transfer.
+    - Cluster spans at least three owned scopes with no dominant owner above 65%.
+    recommended_next_action: human_arbitration_required
+    arbitration_options:
+    - keep_current_ownership
+    - record_or_keep_diagnostic_subcluster
+    - declare_or_keep_read_neighbors
+    - move_node_ownership
+    - split_scope
+    - merge_scope_fragments
+    - open_or_update_governance_backlog
+  - candidate_id: CAND_MULTI_OWNER_CLUSTER_009
+    cluster_id: LABEL_CLUSTER_012
+    title: Review multi-owner cluster LABEL_CLUSTER_012
+    priority: high
+    affected_scope_keys:
+    - deployment_governance
+    - mastery_evaluation
+    affected_node_count: 6
+    boundary_pressure: low
+    owner_scope_count: 2
+    nodes_by_owner_scope:
+      deployment_governance: 1
+      mastery_evaluation: 5
+    dominant_scope: mastery_evaluation
+    dominance_ratio: 0.8333
+    unowned_count: 0
+    classification_tags:
+    - read_neighbor_relation
+    primary_classification: read_neighbor_relation
+    approved_read_neighbor_hits_by_scope:
+      deployment_governance:
+      - TYPE_SESSION_INTEGRITY_SCORE
+      mastery_evaluation:
+      - TYPE_INTEGRITY_MODES
+    approved_read_neighbor_hit_count: 2
+    diagnostic_subcluster_decisions: []
+    diagnostic_subcluster_hit_count: 0
+    open_governance_backlog_refs_for_affected_scopes:
+    - GB_2026_04_27_PATCH_LIFECYCLE_R01_GBC_PATCH_LIFECYCLE_ESCALATION_BOUNDARY_R01
+    - GB_2026_04_27_PATCH_LIFECYCLE_R01_GBC_PATCH_LIFECYCLE_UNCOVERED_CONFLICT_LOGGING_R01
+    evidence:
+    - Some affected IDs are already governed as explicit read-neighbors; this is not ownership transfer.
+    recommended_next_action: likely_keep_current_ownership_with_explicit_neighbors
+    arbitration_options:
+    - keep_current_ownership
+    - record_or_keep_diagnostic_subcluster
+    - declare_or_keep_read_neighbors
+    - move_node_ownership
+    - split_scope
+    - merge_scope_fragments
+    - open_or_update_governance_backlog
+  - candidate_id: CAND_MULTI_OWNER_CLUSTER_010
+    cluster_id: LABEL_CLUSTER_013
+    title: Review multi-owner cluster LABEL_CLUSTER_013
+    priority: high
+    affected_scope_keys:
+    - deployment_governance
+    - knowledge_and_design
+    - patch_lifecycle
+    affected_node_count: 6
+    boundary_pressure: high
+    owner_scope_count: 3
+    nodes_by_owner_scope:
+      deployment_governance: 3
+      knowledge_and_design: 2
+      patch_lifecycle: 1
+    dominant_scope: deployment_governance
+    dominance_ratio: 0.5
+    unowned_count: 0
+    classification_tags:
+    - diagnostic_subcluster
+    - read_neighbor_relation
+    - true_ownership_ambiguity
+    primary_classification: true_ownership_ambiguity
+    approved_read_neighbor_hits_by_scope:
+      deployment_governance:
+      - TYPE_CORPUS_CONFIDENCE_ICC
+      knowledge_and_design:
+      - INV_NO_RUNTIME_CONTENT_GENERATION
+      patch_lifecycle:
+      - INV_NO_RUNTIME_CONTENT_GENERATION
+      - INV_RUNTIME_FULLY_LOCAL
+    approved_read_neighbor_hit_count: 3
+    diagnostic_subcluster_decisions:
+    - decision_id: SGEN_DECISION_010
+      scope_keys_affected: *id001
+      target_ids: *id002
+      subcluster_key: patch_trigger_governance
+      ownership_effect: none
+    diagnostic_subcluster_hit_count: 1
+    open_governance_backlog_refs_for_affected_scopes:
+    - GB_2026_04_27_PATCH_LIFECYCLE_R01_GBC_PATCH_LIFECYCLE_ESCALATION_BOUNDARY_R01
+    - GB_2026_04_27_PATCH_LIFECYCLE_R01_GBC_PATCH_LIFECYCLE_FULL_STATE_MACHINE_R01
+    - GB_2026_04_27_PATCH_LIFECYCLE_R01_GBC_PATCH_LIFECYCLE_LEARNER_STATE_NEIGHBORS_R01
+    - GB_2026_04_27_PATCH_LIFECYCLE_R01_GBC_PATCH_LIFECYCLE_PRIORITY_QUEUE_R01
+    - GB_2026_04_27_PATCH_LIFECYCLE_R01_GBC_PATCH_LIFECYCLE_REFERENTIEL_PARAMETER_R01
+    - GB_2026_04_27_PATCH_LIFECYCLE_R01_GBC_PATCH_LIFECYCLE_UNCOVERED_CONFLICT_LOGGING_R01
+    evidence:
+    - LABEL_CLUSTER_013 is referenced by approved record_diagnostic_subcluster decision(s).
+    - Some affected IDs are already governed as explicit read-neighbors; this is not ownership transfer.
+    - Boundary pressure is high and requires human ownership arbitration.
+    recommended_next_action: human_arbitration_required
+    arbitration_options:
+    - keep_current_ownership
+    - record_or_keep_diagnostic_subcluster
+    - declare_or_keep_read_neighbors
+    - move_node_ownership
+    - split_scope
+    - merge_scope_fragments
+    - open_or_update_governance_backlog
+  - candidate_id: CAND_MULTI_OWNER_CLUSTER_011
+    cluster_id: LABEL_CLUSTER_025
+    title: Review multi-owner cluster LABEL_CLUSTER_025
+    priority: high
+    affected_scope_keys:
+    - deployment_governance
+    - patch_lifecycle
+    affected_node_count: 3
+    boundary_pressure: low
+    owner_scope_count: 2
+    nodes_by_owner_scope:
+      deployment_governance: 2
+      patch_lifecycle: 1
+    dominant_scope: deployment_governance
+    dominance_ratio: 0.6667
+    unowned_count: 0
+    classification_tags:
+    - diagnostic_subcluster
+    - read_neighbor_relation
+    primary_classification: diagnostic_subcluster
+    approved_read_neighbor_hits_by_scope:
+      deployment_governance:
+      - ACTION_LOG_UNCOVERED_CONFLICT
+    approved_read_neighbor_hit_count: 1
+    diagnostic_subcluster_decisions:
+    - decision_id: SGEN_DECISION_010
+      scope_keys_affected: *id001
+      target_ids: *id002
+      subcluster_key: patch_trigger_governance
+      ownership_effect: none
+    diagnostic_subcluster_hit_count: 1
+    open_governance_backlog_refs_for_affected_scopes:
+    - GB_2026_04_27_PATCH_LIFECYCLE_R01_GBC_PATCH_LIFECYCLE_ESCALATION_BOUNDARY_R01
+    - GB_2026_04_27_PATCH_LIFECYCLE_R01_GBC_PATCH_LIFECYCLE_FULL_STATE_MACHINE_R01
+    - GB_2026_04_27_PATCH_LIFECYCLE_R01_GBC_PATCH_LIFECYCLE_LEARNER_STATE_NEIGHBORS_R01
+    - GB_2026_04_27_PATCH_LIFECYCLE_R01_GBC_PATCH_LIFECYCLE_PRIORITY_QUEUE_R01
+    - GB_2026_04_27_PATCH_LIFECYCLE_R01_GBC_PATCH_LIFECYCLE_REFERENTIEL_PARAMETER_R01
+    - GB_2026_04_27_PATCH_LIFECYCLE_R01_GBC_PATCH_LIFECYCLE_UNCOVERED_CONFLICT_LOGGING_R01
+    evidence:
+    - LABEL_CLUSTER_025 is referenced by approved record_diagnostic_subcluster decision(s).
+    - Some affected IDs are already governed as explicit read-neighbors; this is not ownership transfer.
+    recommended_next_action: likely_keep_current_ownership_with_existing_governance
+    arbitration_options:
+    - keep_current_ownership
+    - record_or_keep_diagnostic_subcluster
+    - declare_or_keep_read_neighbors
+    - move_node_ownership
+    - split_scope
+    - merge_scope_fragments
+    - open_or_update_governance_backlog
+  findings: []
+  recommended_next_steps:
+  - Use this report as PHASE_19B human arbitration input.
+  - Start arbitration with candidates whose primary_classification is true_ownership_ambiguity.
+  - Do not move ownership for candidates classified only as read_neighbor_relation or diagnostic_subcluster without a separate
+    explicit human decision.
+  - If an ownership change is accepted, apply it later through policy/decisions patching, then regenerate the scope catalog
+    and rerun validators.
