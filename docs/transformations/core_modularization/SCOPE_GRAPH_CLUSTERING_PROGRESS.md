@@ -325,7 +325,7 @@ phases:
       next re-scoping or follow-up work.
   - phase_id: PHASE_15
     label: scope_maturity_post_scoping_governance
-    status: planned
+    status: active
     objective: >-
       Implement the deterministic post-scoping maturity scoring report introduced
       by docs/specs/constitution_scope_maturity_scoring.md and integrated into
@@ -337,13 +337,25 @@ phases:
     completed_design_outputs:
       - docs/specs/constitution_scope_maturity_scoring.md
       - docs/pipelines/constitution/STAGE_00_SCOPE_PARTITION_REVIEW_AND_REGEN.md
-    pending_outputs:
+    completed_implementation_outputs:
       - docs/patcher/shared/score_constitution_scope_maturity.py
       - docs/pipelines/constitution/reports/scope_maturity_scoring_report.yaml
+    result:
+      first_report_status: FAIL
+      scope_count: 5
+      computed_lower_than_published_count: 4
+      computed_delta_non_blocking_count: 1
+      calibration_required: true
+      publication_authority_unchanged: true
+    pending_outputs:
+      - maturity scoring calibration decision report
+      - optional scorer rule adjustment if deterministic evidence proves too severe
     note: >-
-      PHASE_15 must not introduce a second source of truth. In V1, policy.yaml
-      remains authoritative for published maturity. The deterministic scorer
-      produces an auditable post-scoping diagnostic report only.
+      PHASE_15 has produced its first non-publishing diagnostic report. The FAIL
+      status is not an execution failure: it signals that computed maturity is
+      lower than published governed maturity for several scopes. No policy score
+      must be rewritten until calibration and human arbitration explicitly decide
+      the treatment path.
 
 ```
 
@@ -383,7 +395,11 @@ implementation_tracking:
   phase_14_backlog_triage_opened: true
   scope_maturity_scoring_spec_created: true
   stage00_maturity_scoring_integrated: true
-  score_constitution_scope_maturity_script_created: false
+  score_constitution_scope_maturity_script_created: true
+  scope_maturity_scoring_report_generated: true
+  scope_maturity_scoring_report_status: FAIL
+  scope_maturity_scoring_calibration_required: true
+  published_maturity_authority_unchanged: true
 ```
 
 ## Key decisions recorded
@@ -442,6 +458,14 @@ decision_log:
       after scope catalog generation, while keeping policy.yaml authoritative for
       published maturity until an explicit future authority migration is governed.
 
+  - decision_id: DECISION_011
+    date: 2026-04-28
+    status: accepted
+    decision: >-
+      Treat the first scope_maturity_scoring_report.yaml status FAIL as a
+      diagnostic calibration signal, not as an automatic reason to rewrite
+      policy.yaml maturity values. The next step is scorer calibration and
+      human arbitration of deltas.
 ```
 
 ## Open risks
@@ -498,6 +522,13 @@ risks:
       computed maturity with published maturity but must not rewrite policy.yaml
       or override launcher gating until a future authority migration is explicitly governed.
 
+  - risk_id: RISK_009
+    label: maturity_scoring_v1_over_penalizes_dependency_explicitness
+    severity: medium
+    status: open
+    mitigation: >-
+      PHASE_15 calibration must distinguish true missing explicit neighbors from
+      overly severe V1 scoring rules before any published maturity score changes.
 ```
 
 ## Next actions
@@ -543,7 +574,7 @@ next_actions:
       - feed_external_read_only_follow_up
       - defer_to_future_bounded_run_or_design_backlog
   - action_id: NEXT_007
-    status: next
+    status: done
     label: Implement deterministic post-scoping scope maturity scoring report
     phase: PHASE_15
     target: docs/patcher/shared/score_constitution_scope_maturity.py
@@ -554,4 +585,13 @@ next_actions:
       - do_not_modify_generated_scope_catalog
       - keep_policy_yaml_authoritative_for_published_maturity
 
+  - action_id: NEXT_008
+    status: next
+    label: Calibrate first deterministic scope maturity scoring report
+    phase: PHASE_15
+    input: docs/pipelines/constitution/reports/scope_maturity_scoring_report.yaml
+    expected_decisions:
+      - confirm_true_maturity_delta
+      - adjust_v1_scoring_rules_if_too_severe
+      - keep_policy_yaml_authoritative_until_arbitrated
 ```
