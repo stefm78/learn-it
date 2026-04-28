@@ -160,3 +160,40 @@ Chaque entrée doit rester courte, factuelle, datée, et permettre une reprise s
 - `J3_CANONICAL_RECONSTRUCTION_FROM_INTEGRATED_SCOPED_RESULTS.md`
 - `J4_DERIVED_RUNTIME_TASK_VIEW_AND_STAGE_SKILLS.md`
 - `J4_GENERATED_SCOPES_FROM_CANON_AND_POLICY.md`
+
+---
+
+## 2026-04-28 — réduction de la surface documentaire active
+
+- Mode : `human+ai`
+- Le répertoire `docs/transformations/core_modularization/` a été clarifié pour réduire la surface de reprise active.
+- Les journaux J2, J3 et J4 ont été déplacés vers `docs/transformations/core_modularization/archive/journals/`.
+- Le README principal a été remplacé par un index de reprise actuel distinguant documents actifs, documents de référence, analyses historiques et journaux archivés.
+
+### Décisions prises
+
+1. Les fichiers J2/J3/J4 sont conservés pour traçabilité mais ne sont plus des documents actifs de pilotage.
+2. Les fichiers J1 restent visibles car ils sont encore liés au contrat de run borné.
+3. Le fichier J5 reste visible tant que le chemin de consolidation multi-scopes n'a pas été validé par un vrai run multi-scopes.
+4. `SCOPE_GRAPH_CLUSTERING_PROGRESS.md` reste le tracker principal de la transformation.
+5. La prochaine phase macro reste `PHASE_18 — MACRO_005_NEIGHBOR_DECLARATION_REVIEW`.
+
+### Artefacts concernés
+
+Actifs au premier niveau :
+
+- `README.md`
+- `SCOPE_GRAPH_CLUSTERING_PROGRESS.md`
+- `SCOPE_GRAPH_CLUSTERING_APPROACH.md`
+- `REFERENTIEL_LINK_EXTERNAL_READ_ONLY_TREATMENT.md`
+- `POST_PILOT_PATCH_LIFECYCLE_BACKLOG_TRIAGE.md`
+- `J1_SCOPED_RUN_CONTRACT.md`
+- `J1_CONSTITUTION_PIPELINE_MINIMAL_DELTA.md`
+- `J5_PARALLEL_SCOPED_RUNS_AND_CANONICAL_CONSOLIDATION.md`
+
+Archivés :
+
+- `archive/journals/J2_EFFECTIVE_READ_SURFACE_REDUCTION.md`
+- `archive/journals/J3_CANONICAL_RECONSTRUCTION_FROM_INTEGRATED_SCOPED_RESULTS.md`
+- `archive/journals/J4_DERIVED_RUNTIME_TASK_VIEW_AND_STAGE_SKILLS.md`
+- `archive/journals/J4_GENERATED_SCOPES_FROM_CANON_AND_POLICY.md`

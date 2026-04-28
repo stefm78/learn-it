@@ -1,83 +1,130 @@
-# Transformation — modularisation des Core et adaptation des pipelines
+# Core modularization transformation
 
-## Objet
+Status: active transformation index  
+Branch: `feat/core-modularization-bootstrap`  
+Pipeline primarily concerned: `constitution`
 
-Ce répertoire porte le pilotage minimal de la transformation visant à :
-- rendre les artefacts canoniques plus maniables sans diminuer la rigueur ;
-- introduire un régime **sources modulaires -> bundle canonique compilé -> projections dérivées validées** ;
-- faire évoluer les pipelines `constitution` et `platform_factory` pour qu'ils puissent traiter des **sous-ensembles bornés** ;
-- préparer un mode de travail plus parallèle entre IA, sans perdre la cohérence canonique globale.
+## Purpose
 
-## Branche de travail
+This directory tracks the core modularization and scope partitioning transformation.
 
-- Branche dédiée : `feat/core-modularization-bootstrap`
-- Point de départ : baseline `main` active au moment de l'initialisation de cette transformation.
+It is not the canonical execution source of the Constitution pipeline. Canonical
+pipeline behavior lives under:
 
-## Point d'entrée unique pour reprise
+- `docs/pipelines/constitution/`
+- `docs/patcher/shared/`
+- `docs/specs/`
+- `docs/cores/current/`
+- `docs/pipelines/constitution/scope_catalog/`
 
-Toute IA ou tout opérateur qui reprend ce chantier doit lire dans cet ordre :
-1. `docs/transformations/core_modularization/README.md`
-2. `docs/transformations/core_modularization/ROADMAP.md`
-3. `docs/transformations/core_modularization/STATUS.yaml`
-4. `docs/transformations/core_modularization/WORKLOG.md`
+This directory exists to preserve the transformation rationale, progress tracker,
+open follow-ups, and historical design notes.
 
-Ce répertoire doit suffire à comprendre :
-- où en est le chantier ;
-- ce qui a été décidé ;
-- ce qui reste à faire ;
-- la prochaine action utile et sûre.
+## Current reading order
 
-## Artefacts de pilotage
+For a human or AI resuming the transformation, read in this order:
 
-| Fichier | Rôle |
-|---|---|
-| `ROADMAP.md` | Vision d'ensemble, phases, livrables, critères de sortie, concepts structurants. |
-| `STATUS.yaml` | État machine-readable du chantier — **source unique de vérité sur l'avancement**. |
-| `WORKLOG.md` | Journal append-only de continuité/handover. |
-| `CONSTITUTION_SCOPES_AND_RUNS_MODEL.md` | Modèle de référence scopes + runs. |
-| `CONSTITUTION_SCOPE_MATURITY_MODEL.md` | Modèle de maturité des scopes. |
-| `PILOT_01_CONSTITUTION_LEARNER_STATE.md` | Premier pilote borné (learner_state). |
-| `J1_*` à `J5_*` | Journaux de transformation (append-only par jalon). |
-| `policies/` | Politiques de génération des scopes. |
-| `templates/` | Templates de contrats (scope, changeset, etc.). |
+1. `SCOPE_GRAPH_CLUSTERING_PROGRESS.md`
+2. `SCOPE_GRAPH_CLUSTERING_APPROACH.md`
+3. `REFERENTIEL_LINK_EXTERNAL_READ_ONLY_TREATMENT.md`
+4. `POST_PILOT_PATCH_LIFECYCLE_BACKLOG_TRIAGE.md`
+5. Active J-files only if needed:
+   - `J1_SCOPED_RUN_CONTRACT.md`
+   - `J1_CONSTITUTION_PIPELINE_MINIMAL_DELTA.md`
+   - `J5_PARALLEL_SCOPED_RUNS_AND_CANONICAL_CONSOLIDATION.md`
 
-## Principes de transformation
+Archived journals under `archive/journals/` are historical and non-canonical.
 
-1. **Le canon publié reste unique** tant que la nouvelle chaîne de compilation n'est pas fiabilisée.
-2. **Aucune baisse de rigueur** : modularisation ne signifie pas relâchement de la validation.
-3. **Les pipelines actuels restent la référence opérationnelle** tant qu'un nouveau régime n'est pas explicitement validé.
-4. **Le parallélisme porte sur les scopes de travail**, pas sur la vérité canonique finale.
-5. **La promotion reste centralisée** : une seule vue active promue à la fois.
-6. **Toute reprise doit s'appuyer sur le repo, pas sur un contexte implicite de conversation.**
+## Active transformation documents
 
-## Règles minimales de continuité
+| File | Role | Status |
+|---|---|---|
+| `SCOPE_GRAPH_CLUSTERING_PROGRESS.md` | Main phase tracker and handoff state | active |
+| `SCOPE_GRAPH_CLUSTERING_APPROACH.md` | Implemented graph-based scoping doctrine | reference |
+| `REFERENTIEL_LINK_EXTERNAL_READ_ONLY_TREATMENT.md` | Doctrine for treating `referentiel` and `link` as read-only external cores during Constitution runs | open doctrine |
+| `POST_PILOT_PATCH_LIFECYCLE_BACKLOG_TRIAGE.md` | Non-canonical triage of backlog entries exported by the patch_lifecycle pilot | historical analysis, still useful |
+| `J1_SCOPED_RUN_CONTRACT.md` | Bounded run contract: `scope_manifest`, `impact_bundle`, `integration_gate` | active because still referenced |
+| `J1_CONSTITUTION_PIPELINE_MINIMAL_DELTA.md` | Minimal Constitution pipeline delta for bounded runs | active supporting note |
+| `J5_PARALLEL_SCOPED_RUNS_AND_CANONICAL_CONSOLIDATION.md` | Parallel scoped run consolidation model | active until first real multi-scope consolidation validation |
 
-À chaque étape significative, mettre à jour :
-- `STATUS.yaml` pour l'état courant ;
-- `WORKLOG.md` avec une entrée datée, concise et factuelle.
+## Archived transformation journals
 
-**Règle de gouvernance documentaire — à respecter impérativement :**
-> `STATUS.yaml` est le seul fichier de statut vivant de ce répertoire.
-> Il est mis à jour **in-place** à chaque étape significative.
-> **Aucun fichier `STATUS_*` daté ne doit être créé** : les snapshots intermédiaires
-> n'ont pas de valeur opérationnelle et fragmentent le pilotage.
-> L'historique chronologique appartient à `WORKLOG.md` (append-only), pas à des fichiers STATUS ad hoc.
+The following intermediate journals have been archived under:
 
-Ne pas disperser l'état du chantier dans des messages ad hoc ou des notes non référencées.
+```text
+docs/transformations/core_modularization/archive/journals/
+```
 
-## Strict nécessaire posé par ce bootstrap
+Archived files:
 
-Ce bootstrap ne fait volontairement pas encore :
-- la refonte complète des pipelines ;
-- la modularisation effective des Core ;
-- l'implémentation des validateurs et compileurs.
+- `J2_EFFECTIVE_READ_SURFACE_REDUCTION.md`
+- `J3_CANONICAL_RECONSTRUCTION_FROM_INTEGRATED_SCOPED_RESULTS.md`
+- `J4_DERIVED_RUNTIME_TASK_VIEW_AND_STAGE_SKILLS.md`
+- `J4_GENERATED_SCOPES_FROM_CANON_AND_POLICY.md`
 
-Il pose seulement le socle minimal de pilotage pour rendre la transformation :
-- traçable ;
-- reprenable ;
-- découpable ;
-- gouvernable par plusieurs IA successives.
+They are preserved for traceability only. Their stabilized decisions are now carried
+by pipeline specs, stage skills, deterministic scripts, generated scope catalog
+artifacts, and validation reports.
 
-## Prochaine cible immédiate
+## Current macro state
 
-Voir `STATUS.yaml` → section `immediate_next_step`.
+The graph-based scope partitioning approach has been implemented, pilot-validated,
+and promoted through the `patch_lifecycle` bounded run.
+
+PHASE_17 is closed:
+
+- deterministic maturity scoring exists;
+- computed maturity scores are publishable through a gated policy patcher;
+- `policy.yaml` has been synchronized;
+- scope catalog regeneration passes;
+- final maturity scoring passes;
+- the score patcher dry-run is idempotent.
+
+The next selected follow-up is:
+
+```text
+PHASE_18 — MACRO_005_NEIGHBOR_DECLARATION_REVIEW
+```
+
+This should normally run before:
+
+```text
+MACRO_004_MULTI_OWNER_CLUSTER_REVIEW
+```
+
+because the repository has just stabilized the neighbor declaration and maturity
+score publication loop.
+
+## Governance rules
+
+1. Do not treat archived journals as active inputs.
+2. Do not edit generated scope catalog files manually.
+3. Treat `docs/pipelines/constitution/policies/scope_generation/policy.yaml` and
+   `decisions.yaml` as governed inputs for scope generation.
+4. Treat `docs/pipelines/constitution/scope_catalog/` as generated output.
+5. Use deterministic scripts for generation, validation, score publication, and run
+   lifecycle transitions.
+6. Keep this README as the entry index, not as a replacement for the active tracker.
+
+## Cleanup policy
+
+The first-level directory should remain small.
+
+Keep active:
+
+- current tracker;
+- current approach / doctrine documents;
+- active open follow-up documents;
+- still-referenced J-files.
+
+Archive:
+
+- intermediate design journals once their decisions are implemented elsewhere;
+- post-analysis documents once their backlog entries are resolved;
+- J-files once they have been absorbed into specs or stage contracts.
+
+Delete only when:
+
+- the file is unreferenced;
+- the content is fully absorbed elsewhere;
+- a worklog entry records the removal rationale.

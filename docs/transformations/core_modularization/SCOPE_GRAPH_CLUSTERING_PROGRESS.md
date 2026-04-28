@@ -34,11 +34,12 @@ This tracker reflects the current Scope Lab execution state after:
 current_phase:
   phase_id: PHASE_18
   label: macro_005_neighbor_declaration_review
-  status: planned
+  status: active
   summary: >-
-    PHASE_18 is the recommended next post-pilot follow-up. It will review the generic
-    neighbor declaration model after PHASE_16 and PHASE_17 stabilized Constitution
-    neighbor IDs, maturity scoring, score publication, and scope catalog convergence.
+    PHASE_18 is active. PHASE_18A inventoried neighbor declaration surfaces, PHASE_18B
+    closed the remaining placeholder SGEN_DECISION_011 as superseded by PHASE_16, and
+    PHASE_18C formalizes the canonical neighbor declaration model before closeout and
+    handoff to MACRO_004.
 ```
 
 
@@ -624,6 +625,66 @@ phases:
         - MACRO_005 neighbor declaration review remains to generalize the declaration model
         - MACRO_004 multi-owner cluster review remains pending after MACRO_005
 
+  - phase_id: PHASE_18
+    label: macro_005_neighbor_declaration_review
+    status: active
+    source_macro_decision: MACRO_005_NEIGHBOR_DECLARATION_REVIEW
+    objective: >-
+      Review and stabilize the generic neighbor declaration model after post-pilot
+      learnings from scope extraction, Constitution neighbor IDs governance, maturity
+      scoring, and score publication.
+    rationale: >-
+      PHASE_16 handled concrete Constitution-to-Constitution neighbor IDs and PHASE_17
+      made maturity scoring publishable. PHASE_18 generalizes the neighbor declaration
+      doctrine before MACRO_004 reopens broader multi-owner cluster questions.
+    completed_subtasks:
+      - subtask_id: PHASE_18A_NEIGHBOR_DECLARATION_INVENTORY
+        status: done
+        evidence:
+          - docs/patcher/shared/report_constitution_neighbor_declaration_inventory.py
+          - docs/pipelines/constitution/reports/constitution_neighbor_declaration_inventory_report.yaml
+        result:
+          inventory_status: PASS
+          finding_count_after_pipeline_update: 1
+          finding_count_after_phase18b: 0
+          pipeline_resource_index_updated: true
+      - subtask_id: PHASE_18B_SGEN_DECISION_011_ARBITRATION
+        status: done
+        evidence:
+          - docs/pipelines/constitution/policies/scope_generation/decisions.yaml
+          - docs/pipelines/constitution/reports/constitution_neighbor_declaration_inventory_report.yaml
+          - tmp/constitution_scope_generation_report.yaml
+        result:
+          decision_id: SGEN_DECISION_011
+          final_status: superseded_by_phase16
+          superseded_by_decision_id: SGEN_DECISION_PHASE16_NEIGHBOR_IDS__PATCH_LIFECYCLE
+          generated_catalog_changed_files:
+            - none
+      - subtask_id: PHASE_18C_CANONICAL_NEIGHBOR_DECLARATION_MODEL
+        status: done
+        evidence:
+          - docs/specs/constitution_neighbor_declaration_model.md
+          - docs/pipelines/constitution/pipeline.md
+          - docs/patcher/shared/report_constitution_neighbor_declaration_inventory.py
+          - docs/pipelines/constitution/reports/constitution_neighbor_declaration_inventory_report.yaml
+        result:
+          model_spec_created: true
+          canonical_inputs:
+            - policy.yaml
+            - decisions.yaml
+          generated_outputs:
+            - scope_catalog/manifest.yaml
+            - scope_catalog/scope_definitions/*.yaml
+          run_materialized_views:
+            - scope_manifest.yaml
+            - impact_bundle.yaml
+            - scope_extract.yaml
+            - neighbor_extract.yaml
+          final_inventory_status: PASS
+          final_inventory_finding_count: 0
+    pending_subtasks:
+      - PHASE_18D_CLOSEOUT_AND_HANDOFF_TO_MACRO_004
+
 ```
 
 ## Implementation checklist
@@ -714,6 +775,12 @@ implementation_tracking:
   scope_maturity_policy_patch_report_final_changed: false
   phase18_macro_005_neighbor_declaration_review_planned: true
   phase18_selected_before_macro_004: true
+  phase18_neighbor_declaration_inventory_done: true
+  phase18_pipeline_resource_index_updated: true
+  phase18_sgen_decision_011_superseded: true
+  phase18_neighbor_declaration_model_spec_created: true
+  phase18_neighbor_declaration_inventory_final_status: PASS
+  phase18_neighbor_declaration_inventory_final_finding_count: 0
 ```
 
 ## Key decisions recorded
@@ -848,6 +915,17 @@ decision_log:
       safer and more continuous next step after PHASE_16 and PHASE_17.
 
 
+  - decision_id: DECISION_019
+    date: 2026-04-28
+    status: accepted
+    decision: >-
+      Accept docs/specs/constitution_neighbor_declaration_model.md as the canonical
+      PHASE_18 / MACRO_005 doctrine. Neighbor declarations are read authority, not
+      ownership authority; policy.yaml and decisions.yaml are canonical inputs,
+      scope definitions are generated outputs, and scope/neighbor extracts are
+      run-materialized derived views.
+
+
 ```
 
 ## Open risks
@@ -938,12 +1016,12 @@ risks:
   - risk_id: RISK_012
     label: neighbor_declaration_model_still_fragmented
     severity: medium
-    status: open
+    status: mitigated_by_phase18c
     mitigation: >-
-      PHASE_18 / MACRO_005 is planned to review and stabilize neighbor declaration
-      surfaces across default neighbor IDs, external read-only files, cross-core
-      parameters, scope extracts and neighbor extracts.
-
+      PHASE_18C formalizes the canonical neighbor declaration model, closes the remaining
+      SGEN_DECISION_011 placeholder as superseded by PHASE_16, and makes the inventory
+      report PASS with zero findings. PHASE_18D remains to close the phase and hand off
+      to MACRO_004.
 
 ```
 
