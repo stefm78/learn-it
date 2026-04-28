@@ -306,12 +306,18 @@ phases:
         summary: >-
           STAGE_09 exports candidates canonically, supports multiple arbitrage*.md files,
           and preserves source_arbitrage_path.
-    pending_subtasks:
       - subtask_id: PHASE_14C_STAGE00_BACKLOG_CONSUMPTION
-        status: pending
-        objective: >-
-          Make STAGE_00 read governance_backlog.yaml, classify open entries by scope_key
-          and related_scope_keys, and decide whether they feed scope partition review.
+        status: done
+        evidence:
+          - docs/pipelines/constitution/STAGE_00_SCOPE_PARTITION_REVIEW_AND_REGEN.md
+          - docs/pipelines/constitution/reports/governance_backlog_stage00_consumption_audit.yaml
+        summary: >-
+          STAGE_00 already declares governance_backlog.yaml as a required input,
+          requires reading and filtering open entries before semantic partition analysis,
+          blocks completion while open entries are unresolved or unjustified, and requires
+          resolution metadata. The audit is scoped to backlog consumption only and explicitly
+          excludes maturity scoring.
+    pending_subtasks:
       - subtask_id: PHASE_14D_DETERMINISTIC_BACKLOG_REPORT
         status: pending
         objective: >-
@@ -428,7 +434,8 @@ implementation_tracking:
   pilot_governance_backlog_exported: true
   pilot_governance_backlog_count: 6
   governance_backlog_pipeline_integration_opened: true
-  stage00_backlog_consumption_integrated: false
+  stage00_backlog_consumption_integrated: true
+  stage00_backlog_consumption_audit_report_created: true
   governance_backlog_report_script_created: false
   launcher_backlog_warning_integrated: false
   backlog_status_lifecycle_defined: false
@@ -642,12 +649,15 @@ next_actions:
     target: docs/pipelines/constitution/scope_catalog/governance_backlog.yaml
 
   - action_id: NEXT_006
-    status: next
+    status: in_progress
     label: Integrate governance backlog consumption into the Constitution pipeline
     phase: PHASE_14
     input: docs/pipelines/constitution/scope_catalog/governance_backlog.yaml
-    expected_decisions:
+    completed_decisions:
       - stage00_consumption_contract
+    completed_outputs:
+      - docs/pipelines/constitution/reports/governance_backlog_stage00_consumption_audit.yaml
+    remaining_decisions:
       - deterministic_backlog_report_script
       - launcher_backlog_warning_behavior
       - open_addressed_wont_fix_status_lifecycle
