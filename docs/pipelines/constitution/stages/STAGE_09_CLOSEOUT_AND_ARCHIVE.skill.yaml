@@ -12,7 +12,9 @@ mission: >-
   run unique, soit au niveau pipeline-level après consolidation, avec
   exécution réelle du script de closeout et vérification de la cohérence
   des artefacts finaux. Ce stage termine proprement le cycle opératoire
-  sans réécrire les Core métier eux-mêmes.
+  sans réécrire les Core métier eux-mêmes, et exporte les candidats de backlog
+  de gouvernance du run vers le backlog inter-runs canonique lorsque de tels
+  candidats existent.
 
 model_requirements:
   reasoning_level: advanced
@@ -20,7 +22,8 @@ model_requirements:
     Ce stage clôt un cycle opératoire déjà promu, soit au niveau d'un run,
     soit au niveau pipeline-level. Le modèle doit vérifier que les artefacts
     de promotion sont cohérents, que le closeout scripté a bien été exécuté,
-    et que la clôture est propre et sans ambiguïté dans le mode courant.
+    que les candidats de backlog ont été exportés ou explicitement déclarés
+    absents, et que la clôture est propre et sans ambiguïté dans le mode courant.
   recommended_models:
     - o3
     - claude-opus-4
@@ -40,12 +43,13 @@ runtime_binding:
     Il ne remplace pas la preuve d'exécution réelle du closeout.
   execution_evidence_role: >-
     closeout_pipeline_run.py doit être réellement exécuté. L'IA ne doit jamais
-    simuler la clôture matérielle du run.
+    simuler la clôture matérielle du run ni l'export de backlog.
   artifact_ownership_rule: >-
     Les artefacts bruts produits par script (closeout_report.yaml,
-    final_run_summary.md et archive de run) restent les sources de vérité du
-    stage. L'IA ne doit pas inventer de flags CLI inexistants ni réécrire un
-    artefact brut produit par script.
+    final_run_summary.md, archive de run et éventuelle mise à jour de
+    governance_backlog.yaml) restent les sources de vérité du stage. L'IA ne
+    doit pas inventer de flags CLI inexistants ni réécrire un artefact brut
+    produit par script.
   tracking_closure_rule: >-
     En bounded_local_run, le closeout scripté ne ferme pas à lui seul le tracking
     du run. Après un PASS du stage, l'humain doit exécuter update_run_tracking.py
@@ -54,20 +58,58 @@ runtime_binding:
     run-level supplémentaire n'est requis : le stage est convergent dès que les
     artefacts pipeline-level de closeout sont validés.
 
+backlog_export_rule:
+  canonical_backlog_path: docs/pipelines/constitution/scope_catalog/governance_backlog.yaml
+  source_resolution:
+    bounded_local_run:
+      default_arbitrage_dir: docs/pipelines/constitution/runs/<run_id>/work/02_arbitrage
+      file_pattern: arbitrage*.md
+    pipeline_level_modes:
+      default_arbitrage_dir: docs/pipelines/constitution/work/02_arbitrage
+      file_pattern: arbitrage*.md
+  rule: >-
+    If one or more STAGE_02 arbitration reports contain a fenced YAML block rooted
+    at governance_backlog_candidates, STAGE_09 must export those candidates to the
+    canonical inter-run governance backlog before closing the run. STAGE_09 must
+    not resolve, arbitrate, patch or mark addressed those entries. It only preserves
+    them with status=open unless they already exist by entry_id.
+  multi_file_rule: >-
+    STAGE_09 must support multiple arbitration reports. It must not assume that the
+    report is named arbitrage.md. It must resolve all arbitrage*.md files in the
+    stage arbitration directory, in deterministic lexical order, and the exported
+    entries must preserve source_arbitrage_path for traceability.
+  absence_rule: >-
+    If no arbitrage*.md file exists, or if arbitration reports contain no backlog
+    candidates, the closeout report must still expose governance_backlog_entries_exported
+    as 0 when backlog export was requested.
+  forbidden:
+    - direct_manual_edit_to_governance_backlog_by_ai
+    - resolving_backlog_entries_in_stage_09
+    - silently_omitting_backlog_candidates
+    - assuming_single_arbitrage_report_name
+
 primary_reads:
   bounded_local_run:
     - docs/pipelines/constitution/runs/<run_id>/inputs/run_context.yaml
     - docs/pipelines/constitution/runs/<run_id>/reports/promotion_report.yaml
+    - docs/pipelines/constitution/runs/<run_id>/work/02_arbitrage/arbitrage*.md
     - docs/cores/current/manifest.yaml
+    - docs/pipelines/constitution/scope_catalog/governance_backlog.yaml
   parallel_consolidation:
     - docs/pipelines/constitution/reports/promotion_report.yaml
+    - docs/pipelines/constitution/work/02_arbitrage/arbitrage*.md
     - docs/cores/current/manifest.yaml
+    - docs/pipelines/constitution/scope_catalog/governance_backlog.yaml
   nominal_global:
     - docs/pipelines/constitution/reports/promotion_report.yaml
+    - docs/pipelines/constitution/work/02_arbitrage/arbitrage*.md
     - docs/cores/current/manifest.yaml
+    - docs/pipelines/constitution/scope_catalog/governance_backlog.yaml
   bounded_transition:
     - docs/pipelines/constitution/reports/promotion_report.yaml
+    - docs/pipelines/constitution/work/02_arbitrage/arbitrage*.md
     - docs/cores/current/manifest.yaml
+    - docs/pipelines/constitution/scope_catalog/governance_backlog.yaml
 
 required_scripts:
   mandatory_closeout:
@@ -77,22 +119,26 @@ required_scripts:
     commande exacte, déclarer le stage BLOCKED, et attendre les artefacts.
     L'interface réelle actuelle est :
     closeout_pipeline_run.py <promotion_report.yaml> <current_manifest.yaml> [options]
-    Le script ne supporte pas les flags --pipeline ou --run-id décrits dans les
-    versions antérieures du skill.
+    Le script ne supporte pas les flags --pipeline décrits dans les versions
+    antérieures du skill. Pour l'export backlog, il supporte --export-backlog-entries,
+    --arbitrage-path, --backlog-path, --run-id, --scope-key et --current-stage.
 
 script_execution_contract:
   required_before_pass_or_fail:
     - closeout_pipeline_run_executed_for_real
     - closeout_report_materialized
     - final_run_summary_materialized
+    - backlog_candidates_exported_or_absence_declared
   blocked_if_missing_evidence: true
   blocked_status_value: BLOCKED
   pass_requires:
     - closeout_chain_passed
     - no_blocking_final_consistency_issue
+    - governance_backlog_export_performed_or_no_candidates_found
   fail_requires:
     - closeout_script_failed
     - or_blocking_final_consistency_issue_after_real_execution
+    - or_backlog_candidates_detected_but_not_exported
 
 deterministic_command_templates:
   bounded_local_run:
@@ -105,6 +151,12 @@ deterministic_command_templates:
       --work-root docs/pipelines/constitution/runs/<run_id>/work
       --reports-root docs/pipelines/constitution/runs/<run_id>/reports
       --outputs-root docs/pipelines/constitution/runs/<run_id>/outputs
+      --export-backlog-entries
+      --arbitrage-path docs/pipelines/constitution/runs/<run_id>/work/02_arbitrage
+      --backlog-path docs/pipelines/constitution/scope_catalog/governance_backlog.yaml
+      --run-id <RUN_ID>
+      --scope-key <scope_key>
+      --current-stage STAGE_09_CLOSEOUT_AND_ARCHIVE
     close_tracking: >-
       python docs/patcher/shared/update_run_tracking.py
       --pipeline constitution
@@ -112,7 +164,7 @@ deterministic_command_templates:
       --stage-id STAGE_09_CLOSEOUT_AND_ARCHIVE
       --stage-status done
       --run-status closed
-      --summary "Run closeout completed with archive and final summary; pipeline run is closed."
+      --summary "Run closeout completed with archive, final summary and governance backlog export; pipeline run is closed."
       --close-run
   parallel_consolidation:
     closeout: >-
@@ -121,6 +173,10 @@ deterministic_command_templates:
       docs/cores/current/manifest.yaml
       --closeout-report docs/pipelines/constitution/reports/closeout_report.yaml
       --final-summary docs/pipelines/constitution/outputs/final_run_summary.md
+      --export-backlog-entries
+      --arbitrage-path docs/pipelines/constitution/work/02_arbitrage
+      --backlog-path docs/pipelines/constitution/scope_catalog/governance_backlog.yaml
+      --current-stage STAGE_09_CLOSEOUT_AND_ARCHIVE
   nominal_global:
     closeout: >-
       python docs/patcher/shared/closeout_pipeline_run.py
@@ -128,6 +184,10 @@ deterministic_command_templates:
       docs/cores/current/manifest.yaml
       --closeout-report docs/pipelines/constitution/reports/closeout_report.yaml
       --final-summary docs/pipelines/constitution/outputs/final_run_summary.md
+      --export-backlog-entries
+      --arbitrage-path docs/pipelines/constitution/work/02_arbitrage
+      --backlog-path docs/pipelines/constitution/scope_catalog/governance_backlog.yaml
+      --current-stage STAGE_09_CLOSEOUT_AND_ARCHIVE
   bounded_transition:
     closeout: >-
       python docs/patcher/shared/closeout_pipeline_run.py
@@ -135,6 +195,10 @@ deterministic_command_templates:
       docs/cores/current/manifest.yaml
       --closeout-report docs/pipelines/constitution/reports/closeout_report.yaml
       --final-summary docs/pipelines/constitution/outputs/final_run_summary.md
+      --export-backlog-entries
+      --arbitrage-path docs/pipelines/constitution/work/02_arbitrage
+      --backlog-path docs/pipelines/constitution/scope_catalog/governance_backlog.yaml
+      --current-stage STAGE_09_CLOSEOUT_AND_ARCHIVE
 
 required_output_sections:
   - execution_evidence
@@ -148,18 +212,26 @@ expected_outputs:
     primary_output_path_pattern: docs/pipelines/constitution/runs/<run_id>/reports/closeout_report.yaml
     required_raw_artifacts:
       - docs/pipelines/constitution/runs/<run_id>/outputs/final_run_summary.md
+    conditional_raw_artifacts_if_backlog_candidates_exist:
+      - docs/pipelines/constitution/scope_catalog/governance_backlog.yaml
   parallel_consolidation:
     primary_output_path_pattern: docs/pipelines/constitution/reports/closeout_report.yaml
     required_raw_artifacts:
       - docs/pipelines/constitution/outputs/final_run_summary.md
+    conditional_raw_artifacts_if_backlog_candidates_exist:
+      - docs/pipelines/constitution/scope_catalog/governance_backlog.yaml
   nominal_global:
     primary_output_path_pattern: docs/pipelines/constitution/reports/closeout_report.yaml
     required_raw_artifacts:
       - docs/pipelines/constitution/outputs/final_run_summary.md
+    conditional_raw_artifacts_if_backlog_candidates_exist:
+      - docs/pipelines/constitution/scope_catalog/governance_backlog.yaml
   bounded_transition:
     primary_output_path_pattern: docs/pipelines/constitution/reports/closeout_report.yaml
     required_raw_artifacts:
       - docs/pipelines/constitution/outputs/final_run_summary.md
+    conditional_raw_artifacts_if_backlog_candidates_exist:
+      - docs/pipelines/constitution/scope_catalog/governance_backlog.yaml
 
 completion_evidence:
   required:
@@ -167,12 +239,14 @@ completion_evidence:
     - real_execution_evidence_declared
     - closeout_report_materialized
     - final_run_summary_materialized
+    - governance_backlog_export_performed_or_absence_declared
     - final_status_is_pass_fail_or_blocked
     - human_actions_explicitly_stated_in_output
   not_sufficient:
     - informal_chat_summary_only
     - closeout_reasoning_without_script_evidence
     - pass_without_materialized_closeout_artifacts
+    - pass_without_backlog_export_status
     - simulated_script_execution
 
 status_values:
@@ -189,7 +263,7 @@ human_actions_required:
     aucune fermeture de tracking run-level supplémentaire n'est requise.
   on_blocked:
     step: 1
-    label: Exécuter le closeout puis relancer ce stage
+    label: Exécuter le closeout avec export backlog puis relancer ce stage
     mandatory: true
   on_pass:
     step: 1
@@ -202,7 +276,7 @@ human_actions_required:
       --stage-id STAGE_09_CLOSEOUT_AND_ARCHIVE
       --stage-status done
       --run-status closed
-      --summary "Run closeout completed with archive and final summary; pipeline run is closed."
+      --summary "Run closeout completed with archive, final summary and governance backlog export; pipeline run is closed."
       --close-run
     note_pipeline_level_modes: >-
       En modes parallel_consolidation, nominal_global et bounded_transition,
@@ -210,7 +284,9 @@ human_actions_required:
       Le closeout pipeline-level est convergent dès que les artefacts de closeout
       sont validés. Le prochain point d'entrée redevient la résolution d'entrée du pipeline.
     note: >-
-      Aucun stage supplémentaire n'est requis après cette clôture.
+      Aucun stage supplémentaire n'est requis après cette clôture. Les entrées open
+      exportées dans governance_backlog.yaml seront relues par STAGE_00 / phase de
+      re-scoping ultérieure ; STAGE_09 ne les résout pas.
   on_fail:
     step: 1
     label: Corriger les anomalies finales avant nouvelle tentative
@@ -230,11 +306,18 @@ allowed_transitions:
 
 forbidden_actions:
   - simulated_closeout_execution
+  - simulated_backlog_export
   - pass_without_real_execution_evidence
+  - pass_without_backlog_export_status
   - reopening_pipeline_state_silently
   - omitting_human_actions_from_output
   - using_nonexistent_closeout_cli_flags
+  - assuming_single_arbitrage_report_name
+  - resolving_or_marking_backlog_entries_addressed_in_stage_09
 
 migration_note: >-
   Premier skill STAGE_09 pour le pipeline constitution.
   Consolide en YAML machine-readable les règles de closeout final du run.
+  Mise à jour: STAGE_09 devient le point d'export canonique des candidats de
+  backlog de gouvernance vers docs/pipelines/constitution/scope_catalog/governance_backlog.yaml,
+  avec support explicite de plusieurs fichiers arbitrage*.md.
