@@ -32,14 +32,13 @@ This tracker reflects the current Scope Lab execution state after:
 
 ```yaml
 current_phase:
-  phase_id: PHASE_18
-  label: macro_005_neighbor_declaration_review
-  status: active
+  phase_id: PHASE_19
+  label: macro_004_multi_owner_cluster_review
+  status: planned
   summary: >-
-    PHASE_18 is active. PHASE_18A inventoried neighbor declaration surfaces, PHASE_18B
-    closed the remaining placeholder SGEN_DECISION_011 as superseded by PHASE_16, and
-    PHASE_18C formalizes the canonical neighbor declaration model before closeout and
-    handoff to MACRO_004.
+    PHASE_19 is the next post-pilot follow-up. It will address
+    MACRO_004_MULTI_OWNER_CLUSTER_REVIEW after PHASE_18/MACRO_005 clarified that
+    neighbor declarations are read authority, not ownership authority.
 ```
 
 
@@ -627,7 +626,7 @@ phases:
 
   - phase_id: PHASE_18
     label: macro_005_neighbor_declaration_review
-    status: active
+    status: done
     source_macro_decision: MACRO_005_NEIGHBOR_DECLARATION_REVIEW
     objective: >-
       Review and stabilize the generic neighbor declaration model after post-pilot
@@ -635,7 +634,7 @@ phases:
       scoring, and score publication.
     rationale: >-
       PHASE_16 handled concrete Constitution-to-Constitution neighbor IDs and PHASE_17
-      made maturity scoring publishable. PHASE_18 generalizes the neighbor declaration
+      made maturity scoring publishable. PHASE_18 generalized the neighbor declaration
       doctrine before MACRO_004 reopens broader multi-owner cluster questions.
     completed_subtasks:
       - subtask_id: PHASE_18A_NEIGHBOR_DECLARATION_INVENTORY
@@ -682,8 +681,32 @@ phases:
             - neighbor_extract.yaml
           final_inventory_status: PASS
           final_inventory_finding_count: 0
-    pending_subtasks:
-      - PHASE_18D_CLOSEOUT_AND_HANDOFF_TO_MACRO_004
+      - subtask_id: PHASE_18D_CLOSEOUT_AND_HANDOFF_TO_MACRO_004
+        status: done
+        evidence:
+          - docs/transformations/core_modularization/SCOPE_GRAPH_CLUSTERING_PROGRESS.md
+        result:
+          macro_005_status: done
+          next_macro_decision: MACRO_004_MULTI_OWNER_CLUSTER_REVIEW
+          next_phase_id: PHASE_19
+          handoff_position: >-
+            Neighbor declarations are now separated from ownership. MACRO_004 can
+            review multi-owner clusters without treating read-neighbor edges,
+            diagnostic subclusters, or generated default_neighbors_to_read entries
+            as ownership transfers.
+    pending_subtasks: []
+    closure:
+      status: closed
+      closed_reason: >-
+        MACRO_005 is complete. The repository now has a deterministic inventory report,
+        a clean PASS state with zero neighbor declaration findings, a closed
+        SGEN_DECISION_011 placeholder superseded by PHASE_16, and a canonical
+        neighbor declaration model distinguishing canonical inputs, generated outputs,
+        and run-materialized derived views.
+      residual_signals:
+        - MACRO_004_MULTI_OWNER_CLUSTER_REVIEW remains pending
+        - multi-owner cluster questions must not infer ownership from read-neighbor declarations
+        - governance_backlog entries may still require separate triage where they concern ownership boundaries
 
 ```
 
@@ -773,7 +796,7 @@ implementation_tracking:
   phase17_score_policy_patcher_idempotent: true
   scope_maturity_scoring_report_final_status: PASS
   scope_maturity_policy_patch_report_final_changed: false
-  phase18_macro_005_neighbor_declaration_review_planned: true
+  phase18_macro_005_neighbor_declaration_review_planned: false
   phase18_selected_before_macro_004: true
   phase18_neighbor_declaration_inventory_done: true
   phase18_pipeline_resource_index_updated: true
@@ -781,6 +804,10 @@ implementation_tracking:
   phase18_neighbor_declaration_model_spec_created: true
   phase18_neighbor_declaration_inventory_final_status: PASS
   phase18_neighbor_declaration_inventory_final_finding_count: 0
+  phase18_macro_005_neighbor_declaration_review_done: true
+  phase18_closeout_done: true
+  phase19_macro_004_multi_owner_cluster_review_planned: true
+  phase19_started: false
 ```
 
 ## Key decisions recorded
@@ -926,6 +953,25 @@ decision_log:
       run-materialized derived views.
 
 
+  - decision_id: DECISION_020
+    date: 2026-04-28
+    status: accepted
+    decision: >-
+      Close PHASE_18 / MACRO_005_NEIGHBOR_DECLARATION_REVIEW. The canonical neighbor
+      declaration model is accepted: neighbor declarations are read authority, not
+      ownership authority; policy.yaml and decisions.yaml are canonical inputs;
+      generated scope definitions are outputs; scope_extract and neighbor_extract are
+      run-materialized derived views.
+
+  - decision_id: DECISION_021
+    date: 2026-04-28
+    status: accepted
+    decision: >-
+      Hand off to PHASE_19 / MACRO_004_MULTI_OWNER_CLUSTER_REVIEW. MACRO_004 must
+      review true ownership ambiguity without inferring ownership from read-neighbor
+      declarations, diagnostic subclusters, or generated default_neighbors_to_read entries.
+
+
 ```
 
 ## Open risks
@@ -1016,12 +1062,21 @@ risks:
   - risk_id: RISK_012
     label: neighbor_declaration_model_still_fragmented
     severity: medium
-    status: mitigated_by_phase18c
+    status: closed_by_phase18
     mitigation: >-
-      PHASE_18C formalizes the canonical neighbor declaration model, closes the remaining
-      SGEN_DECISION_011 placeholder as superseded by PHASE_16, and makes the inventory
-      report PASS with zero findings. PHASE_18D remains to close the phase and hand off
-      to MACRO_004.
+      PHASE_18 closed MACRO_005 by accepting the canonical neighbor declaration
+      model, closing SGEN_DECISION_011 as superseded, and reaching a PASS
+      inventory report with zero findings.
+
+  - risk_id: RISK_013
+    label: multi_owner_cluster_review_pending
+    severity: medium
+    status: open
+    mitigation: >-
+      PHASE_19 / MACRO_004 is planned. It must review true ownership ambiguity while
+      excluding read-neighbor declarations, diagnostic subclusters and generated run
+      views from ownership inference.
+
 
 ```
 
