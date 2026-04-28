@@ -38,10 +38,10 @@ current_phase:
   summary: >-
     PHASE_16 governs explicit Constitution-to-Constitution neighbor IDs surfaced by
     maturity scoring V1.1. The generic mechanism is now wired into STAGE_00 through
-    a non-mutating governance report, arbitration preparation, and arbitration validation.
-    Human arbitration of the current candidates remains pending before any decisions.yaml
-    patch. The decisions patcher is intentionally deferred until validation reaches
-    PASS_READY_TO_PATCH.
+    a non-mutating governance report, arbitration preparation, arbitration validation,
+    and a gated decisions.yaml patcher. Human arbitration of the current candidates
+    remains pending; the patcher is installed and integrated, but its current report
+    is BLOCKED until validation reaches PASS_READY_TO_PATCH.
 ```
 
 
@@ -510,18 +510,29 @@ phases:
           and only after PASS_READY_TO_PATCH an optional decisions.yaml patch followed
           by scope catalog regeneration and scoring rerun. The current validation state
           is PENDING_HUMAN_ARBITRATION, which is valid but not patch-ready.
+      - subtask_id: PHASE_16D_GENERIC_DECISIONS_PATCHER
+        status: done
+        evidence:
+          - docs/patcher/shared/apply_constitution_neighbor_ids_arbitration.py
+          - docs/pipelines/constitution/STAGE_00_SCOPE_PARTITION_REVIEW_AND_REGEN.md
+          - docs/pipelines/constitution/reports/constitution_neighbor_ids_decisions_patch_report.yaml
+        summary: >-
+          The generic decisions.yaml patcher is installed and wired into STAGE_00.
+          It targets scope_generation/decisions.yaml only, defaults to dry-run,
+          refuses to patch unless arbitration validation is PASS_READY_TO_PATCH,
+          and currently reports BLOCKED because human arbitration is still pending.
     pending_subtasks:
       - subtask_id: PHASE_16C_HUMAN_ARBITRATION
         status: pending
         objective: >-
           Decide each candidate as add_as_default_neighbor, defer_to_governance_backlog,
           or wont_fix_with_rationale before any policy/decisions update.
-      - subtask_id: PHASE_16D_DECISIONS_PATCHER
-        status: deferred
+      - subtask_id: PHASE_16E_APPLY_ARBITRATED_DECISIONS
+        status: pending_after_human_arbitration
         objective: >-
-          Install and use a gated deterministic patcher for decisions.yaml only after
-          constitution_neighbor_ids_arbitration_validation.yaml reaches PASS_READY_TO_PATCH.
-        expected_script: docs/patcher/shared/apply_constitution_neighbor_ids_arbitration.py
+          Run apply_constitution_neighbor_ids_arbitration.py --apply only after
+          constitution_neighbor_ids_arbitration_validation.yaml reaches PASS_READY_TO_PATCH,
+          then regenerate the scope catalog and rerun maturity scoring.
         target_policy_domain: docs/pipelines/constitution/policies/scope_generation/
         target_file: docs/pipelines/constitution/policies/scope_generation/decisions.yaml
 
@@ -588,7 +599,10 @@ implementation_tracking:
   constitution_neighbor_ids_arbitration_prepared: true
   constitution_neighbor_ids_arbitration_validator_created: true
   constitution_neighbor_ids_arbitration_status: PENDING_HUMAN_ARBITRATION
-  constitution_neighbor_ids_decisions_patcher_deferred_until_pass_ready: true
+  constitution_neighbor_ids_decisions_patcher_created: true
+  constitution_neighbor_ids_decisions_patcher_integrated_in_stage00: true
+  constitution_neighbor_ids_decisions_patch_report_status: BLOCKED
+  constitution_neighbor_ids_decisions_patch_application_deferred_until_pass_ready: true
   policy_domain_review_for_scores_and_neighbor_ids_done: true
   published_maturity_authority_unchanged: true
 ```
