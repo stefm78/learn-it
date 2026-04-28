@@ -340,16 +340,24 @@ phases:
     completed_implementation_outputs:
       - docs/patcher/shared/score_constitution_scope_maturity.py
       - docs/pipelines/constitution/reports/scope_maturity_scoring_report.yaml
+      - docs/pipelines/constitution/reports/scope_maturity_scoring_calibration_report.md
     result:
       first_report_status: FAIL
       scope_count: 5
       computed_lower_than_published_count: 4
       computed_delta_non_blocking_count: 1
+      calibration_report_created: true
+      calibration_report_status: calibration_required
       calibration_required: true
       publication_authority_unchanged: true
+      calibration_decisions:
+        keep_policy_authority: accepted
+        keep_dependency_explicitness_strict: accepted
+        adjust_internal_coherence: candidate
+        split_stability_score_and_confidence: candidate
     pending_outputs:
-      - maturity scoring calibration decision report
-      - optional scorer rule adjustment if deterministic evidence proves too severe
+      - optional scorer V1.1 rule adjustment if deterministic evidence proves too severe
+      - rerun docs/pipelines/constitution/reports/scope_maturity_scoring_report.yaml after V1.1
     note: >-
       PHASE_15 has produced its first non-publishing diagnostic report. The FAIL
       status is not an execution failure: it signals that computed maturity is
@@ -399,6 +407,8 @@ implementation_tracking:
   scope_maturity_scoring_report_generated: true
   scope_maturity_scoring_report_status: FAIL
   scope_maturity_scoring_calibration_required: true
+  scope_maturity_scoring_calibration_report_created: true
+  scope_maturity_scoring_v1_1_candidate_required: true
   published_maturity_authority_unchanged: true
 ```
 
@@ -466,6 +476,14 @@ decision_log:
       diagnostic calibration signal, not as an automatic reason to rewrite
       policy.yaml maturity values. The next step is scorer calibration and
       human arbitration of deltas.
+  - decision_id: DECISION_012
+    date: 2026-04-28
+    status: accepted
+    decision: >-
+      Record the first maturity scoring calibration pass as a documentary
+      arbitration input. Dependency explicitness remains a real governance
+      signal; internal coherence and inter-release stability require V1.1
+      calibration before any maturity authority migration.
 ```
 
 ## Open risks
@@ -525,10 +543,11 @@ risks:
   - risk_id: RISK_009
     label: maturity_scoring_v1_over_penalizes_dependency_explicitness
     severity: medium
-    status: open
+    status: partially_mitigated_by_calibration
     mitigation: >-
-      PHASE_15 calibration must distinguish true missing explicit neighbors from
-      overly severe V1 scoring rules before any published maturity score changes.
+      The calibration report distinguishes dependency explicitness as a likely
+      real governance signal from internal coherence and stability rules that
+      require V1.1 calibration before any published maturity score changes.
 ```
 
 ## Next actions
@@ -586,12 +605,28 @@ next_actions:
       - keep_policy_yaml_authoritative_for_published_maturity
 
   - action_id: NEXT_008
-    status: next
+    status: done
     label: Calibrate first deterministic scope maturity scoring report
     phase: PHASE_15
     input: docs/pipelines/constitution/reports/scope_maturity_scoring_report.yaml
-    expected_decisions:
-      - confirm_true_maturity_delta
-      - adjust_v1_scoring_rules_if_too_severe
+    output: docs/pipelines/constitution/reports/scope_maturity_scoring_calibration_report.md
+    decisions:
       - keep_policy_yaml_authoritative_until_arbitrated
+      - keep_dependency_explicitness_strict
+      - adjust_internal_coherence_in_v1_1_candidate
+      - split_or_qualify_inter_release_stability_confidence_in_v1_1_candidate
+  - action_id: NEXT_009
+    status: next
+    label: Implement scorer V1.1 candidate and rerun maturity report
+    phase: PHASE_15
+    target: docs/patcher/shared/score_constitution_scope_maturity.py
+    expected_outputs:
+      - docs/pipelines/constitution/reports/scope_maturity_scoring_report.yaml
+      - comparison against docs/pipelines/constitution/reports/scope_maturity_scoring_calibration_report.md
+    constraints:
+      - keep_dependency_explicitness_as_governance_signal
+      - do_not_modify_policy_yaml
+      - do_not_modify_generated_scope_catalog
+      - keep_policy_yaml_authoritative_until_arbitrated
+
 ```
