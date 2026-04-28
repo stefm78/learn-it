@@ -1,7 +1,7 @@
 constitution_neighbor_declaration_inventory_report:
   schema_version: '0.1'
   phase_id: PHASE_18A
-  generated_at: '2026-04-28T15:38:02Z'
+  generated_at: '2026-04-28T15:45:03Z'
   status: PASS
   mutation_policy:
     policy_yaml: not_modified
@@ -10,6 +10,7 @@ constitution_neighbor_declaration_inventory_report:
     scope_definitions: not_modified
     pipeline_docs: not_modified
     cores: not_modified
+  model_ref: docs/specs/constitution_neighbor_declaration_model.md
   inputs:
   - ref: docs/pipelines/constitution/policies/scope_generation/policy.yaml
     sha256: c70c0aabcdaa1acf096eb86d4ea95671d0b367840c99b44e6a2262e24ffc36da
@@ -18,7 +19,7 @@ constitution_neighbor_declaration_inventory_report:
   - ref: docs/pipelines/constitution/scope_catalog/manifest.yaml
     sha256: 3de972b8904b38698d92fb51a63ce0c7273d6a7ec668344c2297bcbaf24b9812
   - ref: docs/pipelines/constitution/pipeline.md
-    sha256: 0335db8a1ffd3bf8cc95631d8cd48406c87dfab9d884c3ca1eef3a6588f79ca3
+    sha256: ba910cac9c56c1dd5059bf2dcee1ec89c286e0e5c1381f3e1a93cfd65a5c7001
   - ref: docs/pipelines/constitution/STAGE_00_SCOPE_PARTITION_REVIEW_AND_REGEN.md
     sha256: cd0f3876f86901237586c3b4761c4e7f34a25f89c700bad713ea077f4ba34cc9
   summary:
@@ -413,7 +414,6 @@ constitution_neighbor_declaration_inventory_report:
       stage00_contains_neighbor_ids_governance_chain: true
   findings: []
   recommended_next_steps:
-  - Patch pipeline.md canonical resources to list recent STAGE_00 scoring and neighbor-governance scripts.
-  - Arbitrate whether proposed SGEN_DECISION_011 remains a placeholder, is superseded by PHASE_16, or should be closed.
-  - Define which neighbor declaration surfaces are canonical inputs versus generated outputs.
-  - Align validators and materialization scripts with the accepted declaration model after arbitration.
+  - Use docs/specs/constitution_neighbor_declaration_model.md as the canonical doctrine for future neighbor declaration changes.
+  - Keep rerunning this inventory report after any policy/decisions, scope generation, or run materialization change.
+  - Proceed to MACRO_004_MULTI_OWNER_CLUSTER_REVIEW only after PHASE_18 closeout confirms zero open neighbor declaration findings.

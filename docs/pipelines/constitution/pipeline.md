@@ -79,6 +79,7 @@ Règle structurante :
 - Validate Constitution neighbor IDs arbitration: `docs/patcher/shared/validate_constitution_neighbor_ids_arbitration.py`
 - Apply Constitution neighbor IDs arbitration: `docs/patcher/shared/apply_constitution_neighbor_ids_arbitration.py`
 - Report Constitution neighbor declaration inventory: `docs/patcher/shared/report_constitution_neighbor_declaration_inventory.py`
+- Neighbor declaration model: `docs/specs/constitution_neighbor_declaration_model.md`
 - **Materialize run inputs: `docs/patcher/shared/materialize_run_inputs.py`** ← à exécuter pendant MATERIALIZE_NEW_RUN et avant STAGE_01_CHALLENGE
 - **Extract ids-first scope slices: `docs/patcher/shared/extract_scope_slice.py`** ← à exécuter pendant MATERIALIZE_NEW_RUN après `materialize_run_inputs.py` et avant `build_run_context.py`
 - **Build run context: `docs/patcher/shared/build_run_context.py`** ← à exécuter pendant MATERIALIZE_NEW_RUN après génération des extraits ids-first

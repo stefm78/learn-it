@@ -408,6 +408,7 @@ def main() -> int:
                 "pipeline_docs": "not_modified",
                 "cores": "not_modified",
             },
+            "model_ref": "docs/specs/constitution_neighbor_declaration_model.md",
             "inputs": [{"ref": normalize_path(path), "sha256": sha256_file(path)} for path in required],
             "summary": {
                 "policy_declared_scope_count": len(policy_surfaces.get("declared_scope_neighbor_files", [])),
@@ -428,10 +429,9 @@ def main() -> int:
             },
             "findings": findings,
             "recommended_next_steps": [
-                "Patch pipeline.md canonical resources to list recent STAGE_00 scoring and neighbor-governance scripts.",
-                "Arbitrate whether proposed SGEN_DECISION_011 remains a placeholder, is superseded by PHASE_16, or should be closed.",
-                "Define which neighbor declaration surfaces are canonical inputs versus generated outputs.",
-                "Align validators and materialization scripts with the accepted declaration model after arbitration.",
+                "Use docs/specs/constitution_neighbor_declaration_model.md as the canonical doctrine for future neighbor declaration changes.",
+                "Keep rerunning this inventory report after any policy/decisions, scope generation, or run materialization change.",
+                "Proceed to MACRO_004_MULTI_OWNER_CLUSTER_REVIEW only after PHASE_18 closeout confirms zero open neighbor declaration findings.",
             ],
         }
     }
