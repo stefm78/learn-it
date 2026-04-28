@@ -1,0 +1,177 @@
+constitution_multi_owner_cluster_arbitration:
+  schema_version: '0.1'
+  phase_id: PHASE_19B
+  generated_at: '2026-04-28T16:15:37Z'
+  status: PENDING_HUMAN_ARBITRATION
+  source_inventory_report: docs/pipelines/constitution/reports/constitution_multi_owner_cluster_inventory_report.yaml
+  source_inventory_sha256: baf6a5f4c7f7177d9e64474083f3d2668e8ddad6877e891ca7b839e50b2cb2f2
+  scope: true_ownership_ambiguity_candidates_only
+  mutation_policy:
+    policy_yaml: not_modified
+    decisions_yaml: not_modified
+    scope_catalog: not_modified
+    cores: not_modified
+  allowed_human_decisions: &id001
+  - keep_current_ownership_with_existing_governance
+  - keep_current_ownership_with_explicit_neighbors
+  - record_diagnostic_subcluster
+  - move_node_ownership
+  - split_scope
+  - merge_scope_fragments
+  - open_or_update_governance_backlog
+  - defer_to_governance_backlog
+  - wont_fix_with_rationale
+  summary:
+    candidate_count: 3
+    pending_count: 3
+    accepted_count: 0
+    requires_policy_decisions_patch_count: 0
+    requires_catalog_regeneration_count: 0
+  items:
+  - candidate_id: CAND_MULTI_OWNER_CLUSTER_006
+    cluster_id: LABEL_CLUSTER_001
+    title: Review multi-owner cluster LABEL_CLUSTER_001
+    affected_scope_keys:
+    - deployment_governance
+    - learner_state
+    - mastery_evaluation
+    - patch_lifecycle
+    boundary_pressure: medium
+    nodes_by_owner_scope:
+      UNOWNED: 4
+      deployment_governance: 5
+      learner_state: 10
+      mastery_evaluation: 3
+      patch_lifecycle: 4
+    dominant_scope: learner_state
+    dominance_ratio: 0.3846
+    classification_tags:
+    - bridge_edge
+    - diagnostic_subcluster
+    - read_neighbor_relation
+    - true_ownership_ambiguity
+    approved_read_neighbor_hit_count: 4
+    diagnostic_subcluster_hit_count: 4
+    open_governance_backlog_refs_for_affected_scopes:
+    - GB_2026_04_27_PATCH_LIFECYCLE_R01_GBC_PATCH_LIFECYCLE_ESCALATION_BOUNDARY_R01
+    - GB_2026_04_27_PATCH_LIFECYCLE_R01_GBC_PATCH_LIFECYCLE_FULL_STATE_MACHINE_R01
+    - GB_2026_04_27_PATCH_LIFECYCLE_R01_GBC_PATCH_LIFECYCLE_LEARNER_STATE_NEIGHBORS_R01
+    - GB_2026_04_27_PATCH_LIFECYCLE_R01_GBC_PATCH_LIFECYCLE_PRIORITY_QUEUE_R01
+    - GB_2026_04_27_PATCH_LIFECYCLE_R01_GBC_PATCH_LIFECYCLE_REFERENTIEL_PARAMETER_R01
+    - GB_2026_04_27_PATCH_LIFECYCLE_R01_GBC_PATCH_LIFECYCLE_UNCOVERED_CONFLICT_LOGGING_R01
+    recommendation:
+      recommended_human_decision: keep_current_ownership_with_existing_governance
+      recommended_requires_policy_decisions_patch: false
+      recommended_requires_catalog_regeneration: false
+      recommended_rationale: 'Cluster LABEL_CLUSTER_001 is broad and mixed, but the strongest signals are already filtered
+        by PHASE_18 doctrine: explicit read-neighbors exist, patch_trigger_governance is already a diagnostic subcluster with
+        ownership_effect none, and UNOWNED/external material is a bridge/read signal rather than ownership transfer. Keep
+        current ownership and use existing backlog items for residual design questions.'
+      recommended_follow_up:
+      - keep_current_ownership
+      - preserve_existing_read_neighbors
+      - preserve_existing_diagnostic_subcluster
+      - review_existing_governance_backlog_refs_before opening any new backlog item
+    human_arbitration:
+      decision: pending
+      accepted: false
+      requires_policy_decisions_patch: null
+      requires_catalog_regeneration: null
+      rationale: TO_BE_COMPLETED_BY_HUMAN_ARBITRATION
+      follow_up_actions: []
+    allowed_human_decisions: *id001
+  - candidate_id: CAND_MULTI_OWNER_CLUSTER_008
+    cluster_id: LABEL_CLUSTER_008
+    title: Review multi-owner cluster LABEL_CLUSTER_008
+    affected_scope_keys:
+    - deployment_governance
+    - knowledge_and_design
+    - mastery_evaluation
+    boundary_pressure: medium
+    nodes_by_owner_scope:
+      deployment_governance: 1
+      knowledge_and_design: 4
+      mastery_evaluation: 4
+    dominant_scope: knowledge_and_design
+    dominance_ratio: 0.4444
+    classification_tags:
+    - read_neighbor_relation
+    - true_ownership_ambiguity
+    approved_read_neighbor_hit_count: 3
+    diagnostic_subcluster_hit_count: 0
+    open_governance_backlog_refs_for_affected_scopes:
+    - GB_2026_04_27_PATCH_LIFECYCLE_R01_GBC_PATCH_LIFECYCLE_ESCALATION_BOUNDARY_R01
+    - GB_2026_04_27_PATCH_LIFECYCLE_R01_GBC_PATCH_LIFECYCLE_UNCOVERED_CONFLICT_LOGGING_R01
+    recommendation:
+      recommended_human_decision: keep_current_ownership_with_explicit_neighbors
+      recommended_requires_policy_decisions_patch: false
+      recommended_requires_catalog_regeneration: false
+      recommended_rationale: Cluster LABEL_CLUSTER_008 spans deployment_governance, knowledge_and_design and mastery_evaluation,
+        but the concrete cross-scope links are already represented as explicit read-neighbors around graph propagation, explicit
+        dependencies and knowledge graph usage. This looks like a semantic dependency bridge, not an ownership move.
+      recommended_follow_up:
+      - keep_current_ownership
+      - preserve_existing_read_neighbors
+      - optionally revisit as diagnostic_subcluster only if future runs show repeated ambiguity
+    human_arbitration:
+      decision: pending
+      accepted: false
+      requires_policy_decisions_patch: null
+      requires_catalog_regeneration: null
+      rationale: TO_BE_COMPLETED_BY_HUMAN_ARBITRATION
+      follow_up_actions: []
+    allowed_human_decisions: *id001
+  - candidate_id: CAND_MULTI_OWNER_CLUSTER_010
+    cluster_id: LABEL_CLUSTER_013
+    title: Review multi-owner cluster LABEL_CLUSTER_013
+    affected_scope_keys:
+    - deployment_governance
+    - knowledge_and_design
+    - patch_lifecycle
+    boundary_pressure: high
+    nodes_by_owner_scope:
+      deployment_governance: 3
+      knowledge_and_design: 2
+      patch_lifecycle: 1
+    dominant_scope: deployment_governance
+    dominance_ratio: 0.5
+    classification_tags:
+    - diagnostic_subcluster
+    - read_neighbor_relation
+    - true_ownership_ambiguity
+    approved_read_neighbor_hit_count: 3
+    diagnostic_subcluster_hit_count: 1
+    open_governance_backlog_refs_for_affected_scopes:
+    - GB_2026_04_27_PATCH_LIFECYCLE_R01_GBC_PATCH_LIFECYCLE_ESCALATION_BOUNDARY_R01
+    - GB_2026_04_27_PATCH_LIFECYCLE_R01_GBC_PATCH_LIFECYCLE_FULL_STATE_MACHINE_R01
+    - GB_2026_04_27_PATCH_LIFECYCLE_R01_GBC_PATCH_LIFECYCLE_LEARNER_STATE_NEIGHBORS_R01
+    - GB_2026_04_27_PATCH_LIFECYCLE_R01_GBC_PATCH_LIFECYCLE_PRIORITY_QUEUE_R01
+    - GB_2026_04_27_PATCH_LIFECYCLE_R01_GBC_PATCH_LIFECYCLE_REFERENTIEL_PARAMETER_R01
+    - GB_2026_04_27_PATCH_LIFECYCLE_R01_GBC_PATCH_LIFECYCLE_UNCOVERED_CONFLICT_LOGGING_R01
+    recommendation:
+      recommended_human_decision: keep_current_ownership_with_existing_governance
+      recommended_requires_policy_decisions_patch: false
+      recommended_requires_catalog_regeneration: false
+      recommended_rationale: 'Cluster LABEL_CLUSTER_013 has high boundary pressure, but PHASE_16 and PHASE_18 already separate
+        the concerns: runtime/no-generation invariants are governed read-neighbors, patch trigger governance is already a
+        diagnostic subcluster, and read-neighbor edges must not be interpreted as ownership transfer. Keep current ownership
+        unless a future run identifies a concrete node-level ownership defect.'
+      recommended_follow_up:
+      - keep_current_ownership
+      - preserve_existing_read_neighbors
+      - preserve_patch_trigger_governance_diagnostic_subcluster
+      - do_not_move runtime/no-generation invariants solely because of graph proximity
+    human_arbitration:
+      decision: pending
+      accepted: false
+      requires_policy_decisions_patch: null
+      requires_catalog_regeneration: null
+      rationale: TO_BE_COMPLETED_BY_HUMAN_ARBITRATION
+      follow_up_actions: []
+    allowed_human_decisions: *id001
+  human_instructions:
+  - For each item, replace human_arbitration.decision with one allowed value.
+  - Set human_arbitration.accepted to true when the decision is final.
+  - Set requires_policy_decisions_patch and requires_catalog_regeneration explicitly.
+  - Do not infer ownership changes from read-neighbor or diagnostic-subcluster evidence.
+  - If any item requires ownership changes, PHASE_19C must apply through policy/decisions patching and regenerate the catalog.

@@ -1,0 +1,22 @@
+constitution_multi_owner_cluster_arbitration_validation:
+  schema_version: '0.1'
+  phase_id: PHASE_19B
+  generated_at: '2026-04-28T16:15:58Z'
+  status: PENDING_HUMAN_ARBITRATION
+  inputs:
+    arbitration: docs/pipelines/constitution/reports/constitution_multi_owner_cluster_arbitration.yaml
+    arbitration_sha256: b99bd278c63a5dfbae54f3526c37a925efd83f3eb50f65c3dc6afea35da99b7f
+  summary:
+    pending_count: 3
+    accepted_count: 0
+    patch_ready_count: 0
+    error_count: 0
+    warning_count: 0
+  pending_candidate_ids:
+  - CAND_MULTI_OWNER_CLUSTER_006
+  - CAND_MULTI_OWNER_CLUSTER_008
+  - CAND_MULTI_OWNER_CLUSTER_010
+  accepted_candidate_ids: []
+  patch_ready_candidate_ids: []
+  findings: []
+  next_step: complete_human_arbitration
