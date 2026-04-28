@@ -1,0 +1,133 @@
+remaining_patch_lifecycle_backlog_decision_report:
+  schema_version: '0.1'
+  phase_id: PHASE_21A
+  generated_at: '2026-04-28T16:50:33Z'
+  status: PASS
+  mutation_policy:
+    governance_backlog_yaml: not_modified
+    policy_yaml: not_modified
+    decisions_yaml: not_modified
+    scope_catalog: not_modified
+    tracker: not_modified
+    cores: not_modified
+  inputs:
+  - ref: docs/pipelines/constitution/reports/governance_backlog_report.yaml
+    sha256: 7390724712424d998c3679429ec403e78e4d8e6318505d17191b745ff5a5ee94
+  - ref: docs/pipelines/constitution/reports/governance_backlog_lifecycle_validation.yaml
+    sha256: 28adee18e603f63bb3e248ee24e7017fbfdf08bc2c3a7fafb16bb7e773226520
+  - ref: docs/transformations/core_modularization/SCOPE_GRAPH_CLUSTERING_PROGRESS.md
+    sha256: 5accbc1faea7cd2cd930cb31f895bcd244936ea79f3817ea7f678e6f9970d0a9
+  summary:
+    open_backlog_entry_count: 4
+    topic_class_counts:
+      core_patch_lifecycle_design_extension: 1
+      cross_core_external_read_only_follow_up: 1
+      cross_scope_escalation_boundary: 1
+      dependent_patch_lifecycle_design_extension: 1
+    run_fit_counts:
+      conditional_after_state_machine_design: 1
+      good_as_part_of_state_machine_run: 1
+      good_if_design_run_is_opened: 1
+      poor_for_constitution_only_run: 1
+    new_pipeline_run_recommended_now: false
+    recommended_decision: do_not_open_new_bounded_run_now
+    finding_count: 0
+  decision:
+    recommended_decision: do_not_open_new_bounded_run_now
+    recommended_status_for_phase21a: PASS_RECOMMEND_DEFER_TO_NORMAL_STAGE00_REVIEW
+    new_pipeline_run_recommended_now: false
+    reason: 'The four remaining entries are reviewed design follow-ups, not unresolved macro blockers. Opening a new run immediately
+      would mix three different concerns: state-machine design, escalation boundary, and cross-core referentiel parameter
+      governance. Keep the entries open and let STAGE_00/launcher warnings surface them for the next relevant scope decision.'
+    if_human_overrides_and_opens_run:
+      recommended_scope_key: patch_lifecycle
+      recommended_run_theme: patch_lifecycle_state_machine_and_priority_lanes
+      recommended_first_entries:
+      - GBC_PATCH_LIFECYCLE_FULL_STATE_MACHINE_R01
+      - GBC_PATCH_LIFECYCLE_PRIORITY_QUEUE_R01
+      conditional_entries:
+      - GBC_PATCH_LIFECYCLE_ESCALATION_BOUNDARY_R01
+      excluded_or_separate_follow_up:
+      - GBC_PATCH_LIFECYCLE_REFERENTIEL_PARAMETER_R01
+      guardrail: Do not include the referentiel parameter dependency in a Constitution-only run unless a cross-core read-neighbor/change-request
+        contract is explicitly prepared.
+  candidates:
+  - entry_id: GB_2026_04_27_PATCH_LIFECYCLE_R01_GBC_PATCH_LIFECYCLE_FULL_STATE_MACHINE_R01
+    candidate_id: GBC_PATCH_LIFECYCLE_FULL_STATE_MACHINE_R01
+    title: Decide whether patch_lifecycle needs a canonical patch state machine
+    type: scope_gap
+    scope_key: patch_lifecycle
+    related_scope_keys:
+    - patch_lifecycle
+    stage00_relevant: true
+    recommended_action_from_backlog: Review whether a future patch_lifecycle scope iteration should introduce an explicit
+      patch state model.
+    classification:
+      topic_class: core_patch_lifecycle_design_extension
+      run_fit: good_if_design_run_is_opened
+      recommended_treatment: keep_open_until_explicit_design_run
+      priority_rank_if_run_opened: 1
+      rationale: 'This is the most coherent seed for a future patch_lifecycle design run: a canonical patch state machine
+        would provide the backbone for priority lanes and escalation semantics. It is not urgent enough by itself to force
+        a new run immediately after macro closeout.'
+  - entry_id: GB_2026_04_27_PATCH_LIFECYCLE_R01_GBC_PATCH_LIFECYCLE_PRIORITY_QUEUE_R01
+    candidate_id: GBC_PATCH_LIFECYCLE_PRIORITY_QUEUE_R01
+    title: Decide whether patch serialization requires deterministic priority lanes
+    type: scope_gap
+    scope_key: patch_lifecycle
+    related_scope_keys:
+    - patch_lifecycle
+    stage00_relevant: true
+    recommended_action_from_backlog: Evaluate whether patch queue semantics require deterministic priority lanes, and if so
+      define them through a governed scope update rather than ad hoc patch synthesis.
+    classification:
+      topic_class: dependent_patch_lifecycle_design_extension
+      run_fit: good_as_part_of_state_machine_run
+      recommended_treatment: keep_open_until_explicit_design_run
+      priority_rank_if_run_opened: 2
+      rationale: Priority queue semantics should not be added in isolation. They fit naturally after, or inside, a patch state
+        machine design run.
+  - entry_id: GB_2026_04_27_PATCH_LIFECYCLE_R01_GBC_PATCH_LIFECYCLE_ESCALATION_BOUNDARY_R01
+    candidate_id: GBC_PATCH_LIFECYCLE_ESCALATION_BOUNDARY_R01
+    title: Review broad escalation triggers crossing patch_lifecycle and learner_state/governance
+    type: scope_extension_needed
+    scope_key: patch_lifecycle
+    related_scope_keys:
+    - patch_lifecycle
+    - learner_state
+    - deployment_governance
+    stage00_relevant: true
+    recommended_action_from_backlog: Revisit escalation ownership during scope partition review, decide explicit owners and
+      neighbors, and regenerate scope catalog if boundaries change.
+    classification:
+      topic_class: cross_scope_escalation_boundary
+      run_fit: conditional_after_state_machine_design
+      recommended_treatment: keep_open_for_stage00_backlog_review
+      priority_rank_if_run_opened: 3
+      rationale: The escalation boundary spans patch_lifecycle, learner_state and deployment_governance. PHASE_19 removed
+        ownership-transfer pressure. It should be revisited only after patch lifecycle semantics are clearer or when a future
+        run touches escalation triggers.
+  - entry_id: GB_2026_04_27_PATCH_LIFECYCLE_R01_GBC_PATCH_LIFECYCLE_REFERENTIEL_PARAMETER_R01
+    candidate_id: GBC_PATCH_LIFECYCLE_REFERENTIEL_PARAMETER_R01
+    title: Track external_read_only referentiel parameter dependency for patch escalation threshold
+    type: scope_gap
+    scope_key: patch_lifecycle
+    related_scope_keys:
+    - patch_lifecycle
+    stage00_relevant: true
+    recommended_action_from_backlog: Coordinate with the external-read-only referentiel/link follow-up and decide whether
+      the specific parameter should become a concrete external read neighbor or a cross_core_change_request.
+    classification:
+      topic_class: cross_core_external_read_only_follow_up
+      run_fit: poor_for_constitution_only_run
+      recommended_treatment: keep_open_for_referentiel_link_follow_up
+      priority_rank_if_run_opened: 4
+      rationale: The referentiel parameter dependency is a cross-core/external-read-only topic. It should not be silently
+        folded into a Constitution-only patch_lifecycle run unless a cross-core change request or explicit external neighbor
+        decision is prepared.
+  findings: []
+  recommended_next_steps:
+  - Use this report as PHASE_21A decision evidence.
+  - 'If accepted, update the tracker only: PHASE_21A done, no new run opened, PHASE_21B done_not_required or handoff-only.'
+  - Keep the four backlog entries open with their PHASE_20B review metadata.
+  - Do not mutate policy.yaml, decisions.yaml, or the scope catalog for PHASE_21A.
