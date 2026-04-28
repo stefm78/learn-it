@@ -1,6 +1,7 @@
-# PHASE_14 — Pilot backlog triage
+# Post-pilot patch_lifecycle backlog triage
 
-Status: proposed triage report  
+Status: transformation triage report — non-canonical  
+Artifact role: post-pilot analysis report  
 Pipeline: `constitution`  
 Source backlog: `docs/pipelines/constitution/scope_catalog/governance_backlog.yaml`  
 Source run: `CONSTITUTION_RUN_2026_04_27_PATCH_LIFECYCLE_R01`  
@@ -8,18 +9,25 @@ Source release: `CORE_RELEASE_2026_04_28_R01`
 
 ## 1. Purpose
 
-PHASE_14 consumes the governance backlog entries exported by the successful
+This report consumes the governance backlog entries exported by the successful
 `patch_lifecycle` bounded pilot run and classifies each open entry into its next
 safe treatment path.
 
-This phase does not reopen the pilot run and does not directly patch generated scope
+This is not a run artifact, not a generated scope catalog artifact, and not the
+canonical backlog source. The canonical inter-run backlog remains:
+
+```text
+docs/pipelines/constitution/scope_catalog/governance_backlog.yaml
+```
+
+This report does not reopen the pilot run and does not directly patch generated scope
 catalog files. It prepares the decision surface for later Stage 00 / scope partition
 review, cross-core follow-up, or future bounded design runs.
 
 ## 2. Triage summary
 
 ```yaml
-phase_14_triage:
+post_pilot_triage:
   status: READY_FOR_HUMAN_ARBITRATION
   source_run_id: CONSTITUTION_RUN_2026_04_27_PATCH_LIFECYCLE_R01
   source_release_id: CORE_RELEASE_2026_04_28_R01
@@ -173,26 +181,26 @@ entry_triage:
 
 ```yaml
 recommended_immediate_decisions:
-  - decision_id: PHASE14_DECISION_001
+  - decision_id: POST_PILOT_DECISION_001
     title: Route learner_state neighbor review to Stage 00
     candidate_ids:
       - GBC_PATCH_LIFECYCLE_LEARNER_STATE_NEIGHBORS_R01
     recommendation: accept_for_stage00_review
 
-  - decision_id: PHASE14_DECISION_002
+  - decision_id: POST_PILOT_DECISION_002
     title: Route referentiel parameter dependency to external-read-only follow-up
     candidate_ids:
       - GBC_PATCH_LIFECYCLE_REFERENTIEL_PARAMETER_R01
     recommendation: accept_for_cross_core_follow_up
 
-  - decision_id: PHASE14_DECISION_003
+  - decision_id: POST_PILOT_DECISION_003
     title: Route escalation and conflict logging boundary issues to Stage 00
     candidate_ids:
       - GBC_PATCH_LIFECYCLE_ESCALATION_BOUNDARY_R01
       - GBC_PATCH_LIFECYCLE_UNCOVERED_CONFLICT_LOGGING_R01
     recommendation: accept_for_stage00_scope_boundary_review
 
-  - decision_id: PHASE14_DECISION_004
+  - decision_id: POST_PILOT_DECISION_004
     title: Defer priority queue and full state machine to future patch_lifecycle design runs
     candidate_ids:
       - GBC_PATCH_LIFECYCLE_PRIORITY_QUEUE_R01
@@ -214,7 +222,7 @@ backlog_status_handling:
     - GBC_PATCH_LIFECYCLE_PRIORITY_QUEUE_R01
     - GBC_PATCH_LIFECYCLE_FULL_STATE_MACHINE_R01
   reason: >-
-    PHASE_14 triage classifies the entries but does not resolve them. Entries should
+    This report classifies the entries but does not resolve them. Entries should
     only become addressed once a Stage 00 review, cross-core change request, or future
     bounded design run has actually resolved the issue.
 ```
@@ -225,8 +233,8 @@ backlog_status_handling:
 next_operational_step:
   recommended_action: human_arbitration
   prompt: >-
-    Review PHASE_14_PILOT_BACKLOG_TRIAGE.md and accept, revise, or reject the
-    recommended treatment path for each of the six backlog entries. If accepted,
+    Review POST_PILOT_PATCH_LIFECYCLE_BACKLOG_TRIAGE.md and accept, revise, or reject
+    the recommended treatment path for each of the six backlog entries. If accepted,
     prepare the next Stage 00 scope partition review around neighbor declarations,
     scope-boundary ownership, and external-read-only follow-up.
 ```
