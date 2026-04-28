@@ -33,17 +33,16 @@ This tracker reflects the current Scope Lab execution state after:
 ```yaml
 current_phase:
   phase_id: PHASE_14
-  label: pilot_backlog_triage
+  label: governance_backlog_pipeline_integration
   status: active
   summary: >-
-    The serious patch_lifecycle pilot bounded_local_run is complete. Run
-    CONSTITUTION_RUN_2026_04_27_PATCH_LIFECYCLE_R01 reached STAGE_09_CLOSEOUT_AND_ARCHIVE,
-    is closed, promoted CORE_RELEASE_2026_04_28_R01 to docs/cores/current, and exported
-    six governance backlog entries to docs/pipelines/constitution/scope_catalog/governance_backlog.yaml.
-    Current work is to triage those entries and decide which items feed STAGE_00 scope
-    partition review, cross-core follow-up, or future bounded patch_lifecycle design runs.
-
+    The serious patch_lifecycle pilot bounded_local_run is complete and exported
+    governance backlog entries to docs/pipelines/constitution/scope_catalog/governance_backlog.yaml.
+    PHASE_14 is now the generic pipeline integration phase for governance backlog handling:
+    confirm STAGE_02 candidate production, STAGE_09 canonical export, STAGE_00 consumption,
+    launcher / entry-resolution surfacing, deterministic reporting, and backlog status lifecycle.
 ```
+
 
 ## Phase tracker
 
@@ -280,49 +279,61 @@ phases:
       - PHASE_12 synthetic extract validation passed
 
   - phase_id: PHASE_14
-    label: pilot_backlog_triage
+    label: governance_backlog_pipeline_integration
     status: active
     objective: >-
-      Ingest governance backlog entries exported by the patch_lifecycle pilot,
-      classify them into scope-neighbor review, scope-boundary review, external_read_only
-      follow-up, or future bounded patch_lifecycle design work, and decide which entries
-      should feed STAGE_00 scope partition review.
-    primary_inputs:
-      - docs/pipelines/constitution/scope_catalog/governance_backlog.yaml
-      - docs/transformations/core_modularization/SCOPE_GRAPH_CLUSTERING_APPROACH.md
-      - docs/transformations/core_modularization/SCOPE_GRAPH_CLUSTERING_PROGRESS.md
-      - docs/pipelines/constitution/policies/scope_generation/policy.yaml
-      - docs/pipelines/constitution/policies/scope_generation/decisions.yaml
-    backlog_entries_in_scope:
-      - GBC_PATCH_LIFECYCLE_LEARNER_STATE_NEIGHBORS_R01
-      - GBC_PATCH_LIFECYCLE_REFERENTIEL_PARAMETER_R01
-      - GBC_PATCH_LIFECYCLE_ESCALATION_BOUNDARY_R01
-      - GBC_PATCH_LIFECYCLE_UNCOVERED_CONFLICT_LOGGING_R01
-      - GBC_PATCH_LIFECYCLE_PRIORITY_QUEUE_R01
-      - GBC_PATCH_LIFECYCLE_FULL_STATE_MACHINE_R01
-    expected_triage_buckets:
-      stage00_scope_partition_review:
-        - learner_state_neighbor_review
-        - escalation_boundary_review
-        - uncovered_conflict_logging_ownership_review
-      external_read_only_follow_up:
-        - referentiel_parameter_dependency
-      future_bounded_run_or_design_backlog:
-        - patch_priority_queue_semantics
-        - patch_lifecycle_full_state_machine
-    related_open_macro_decisions:
-      - MACRO_004_MULTI_OWNER_CLUSTER_REVIEW
-      - MACRO_005_NEIGHBOR_DECLARATION_REVIEW
-      - external_read_only_referentiel_link_follow_up
-    expected_outputs:
-      - backlog triage decision report
-      - explicit mapping from each open backlog entry to next treatment path
-      - optional accepted updates to scope_generation policy/decisions
-      - regenerated scope catalog only if policy/decisions are changed
+      Complete the generic Constitution pipeline integration of governance backlog entries
+      generated during runs, by ensuring that they are produced in STAGE_02, exported in
+      STAGE_09, stored in governance_backlog.yaml, consumed in STAGE_00, and surfaced by
+      launcher / entry resolution before new runs are opened.
+    scope: pipeline_generic
+    canonical_backlog:
+      path: docs/pipelines/constitution/scope_catalog/governance_backlog.yaml
+      role: inter_run_source_of_truth
+    completed_subtasks:
+      - subtask_id: PHASE_14A_STAGE02_CANDIDATE_GENERATION
+        status: done
+        evidence:
+          - docs/pipelines/constitution/stages/STAGE_02_ARBITRAGE.skill.yaml
+        summary: >-
+          STAGE_02 serializes governance_backlog_candidates locally in arbitrage*.md
+          and never writes governance_backlog.yaml directly.
+      - subtask_id: PHASE_14B_STAGE09_CANONICAL_EXPORT
+        status: done
+        evidence:
+          - docs/pipelines/constitution/stages/STAGE_09_CLOSEOUT_AND_ARCHIVE.skill.yaml
+          - docs/patcher/shared/closeout_pipeline_run.py
+        summary: >-
+          STAGE_09 exports candidates canonically, supports multiple arbitrage*.md files,
+          and preserves source_arbitrage_path.
+    pending_subtasks:
+      - subtask_id: PHASE_14C_STAGE00_BACKLOG_CONSUMPTION
+        status: pending
+        objective: >-
+          Make STAGE_00 read governance_backlog.yaml, classify open entries by scope_key
+          and related_scope_keys, and decide whether they feed scope partition review.
+      - subtask_id: PHASE_14D_DETERMINISTIC_BACKLOG_REPORT
+        status: pending
+        objective: >-
+          Add a deterministic report script that summarizes open governance backlog entries
+          by scope, type, source run, age, and recommended Stage 00 action.
+      - subtask_id: PHASE_14E_LAUNCHER_BACKLOG_WARNING
+        status: pending
+        objective: >-
+          Surface open backlog entries in launcher / entry resolution when a user opens
+          or continues a run for an impacted scope.
+      - subtask_id: PHASE_14F_BACKLOG_STATUS_LIFECYCLE
+        status: pending
+        objective: >-
+          Define how entries move from open to addressed or wont_fix, including required
+          resolution evidence and prohibition of silent status changes.
+    related_reference_artifacts:
+      - docs/transformations/core_modularization/POST_PILOT_PATCH_LIFECYCLE_BACKLOG_TRIAGE.md
     note: >-
-      PHASE_14 does not reopen CONSTITUTION_RUN_2026_04_27_PATCH_LIFECYCLE_R01.
-      It uses the exported inter-run governance backlog as an input to decide the
-      next re-scoping or follow-up work.
+      The post-pilot patch_lifecycle triage report remains a non-canonical example /
+      analysis artifact. PHASE_14 itself is now generic pipeline integration work,
+      not a pilot-specific triage phase.
+
   - phase_id: PHASE_15
     label: scope_maturity_post_scoping_governance
     status: active
@@ -400,7 +411,11 @@ implementation_tracking:
   pilot_bounded_local_run_promoted_to_current: true
   pilot_governance_backlog_exported: true
   pilot_governance_backlog_count: 6
-  phase_14_backlog_triage_opened: true
+  governance_backlog_pipeline_integration_opened: true
+  stage00_backlog_consumption_integrated: false
+  governance_backlog_report_script_created: false
+  launcher_backlog_warning_integrated: false
+  backlog_status_lifecycle_defined: false
   scope_maturity_scoring_spec_created: true
   stage00_maturity_scoring_integrated: true
   score_constitution_scope_maturity_script_created: true
@@ -459,7 +474,10 @@ decision_log:
   - decision_id: DECISION_009
     date: 2026-04-28
     status: accepted
-    decision: Treat exported pilot backlog entries as inputs to PHASE_14 pilot_backlog_triage before any further re-scoping or future bounded design run.
+    decision: >-
+      Treat exported governance backlog entries as inter-run inputs to the generic
+      PHASE_14 governance_backlog_pipeline_integration phase, before STAGE_00
+      scope partition review, launcher surfacing, or future bounded design runs.
   - decision_id: DECISION_010
     date: 2026-04-28
     status: accepted
@@ -527,10 +545,13 @@ risks:
     mitigation: MACRO_005 remains pending; resolve through PHASE_14 / STAGE_00 follow-up.
 
   - risk_id: RISK_007
-    label: exported_backlog_entries_not_triaged
+    label: governance_backlog_not_consumed_by_stage00_or_launcher
     severity: medium
     status: open
-    mitigation: PHASE_14 is now active and must map each open backlog entry to a next treatment path.
+    mitigation: >-
+      PHASE_14 is now active and must integrate governance_backlog.yaml into
+      STAGE_00 consumption, deterministic reporting, launcher surfacing, and
+      explicit open/addressed/wont_fix lifecycle rules.
   - risk_id: RISK_008
     label: maturity_scoring_creates_two_truths
     severity: high
@@ -585,13 +606,14 @@ next_actions:
 
   - action_id: NEXT_006
     status: next
-    label: Triage exported patch_lifecycle pilot governance backlog entries
+    label: Integrate governance backlog consumption into the Constitution pipeline
     phase: PHASE_14
     input: docs/pipelines/constitution/scope_catalog/governance_backlog.yaml
     expected_decisions:
-      - feed_stage00_scope_partition_review
-      - feed_external_read_only_follow_up
-      - defer_to_future_bounded_run_or_design_backlog
+      - stage00_consumption_contract
+      - deterministic_backlog_report_script
+      - launcher_backlog_warning_behavior
+      - open_addressed_wont_fix_status_lifecycle
   - action_id: NEXT_007
     status: done
     label: Implement deterministic post-scoping scope maturity scoring report
