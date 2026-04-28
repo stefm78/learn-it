@@ -34,11 +34,11 @@ This tracker reflects the current Scope Lab execution state after:
 current_phase:
   phase_id: PHASE_19
   label: macro_004_multi_owner_cluster_review
-  status: planned
+  status: active
   summary: >-
-    PHASE_19 is the next post-pilot follow-up. It will address
-    MACRO_004_MULTI_OWNER_CLUSTER_REVIEW after PHASE_18/MACRO_005 clarified that
-    neighbor declarations are read authority, not ownership authority.
+    PHASE_19 is active. PHASE_19A produced a deterministic multi-owner cluster
+    inventory and PHASE_19B is ready for human arbitration, starting with the
+    three candidates classified as true ownership ambiguity.
 ```
 
 
@@ -710,7 +710,7 @@ phases:
 
   - phase_id: PHASE_19
     label: macro_004_multi_owner_cluster_review
-    status: planned
+    status: active
     source_macro_decision: MACRO_004_MULTI_OWNER_CLUSTER_REVIEW
     objective: >-
       Review clusters or scope fragments that may appear to span multiple owners,
@@ -726,13 +726,31 @@ phases:
       - docs/specs/constitution_neighbor_declaration_model.md accepted
       - constitution_neighbor_declaration_inventory_report status PASS
       - SGEN_DECISION_011 closed as superseded_by_phase16
-    planned_subtasks:
+    completed_subtasks:
       - subtask_id: PHASE_19A_MULTI_OWNER_CLUSTER_INVENTORY
-        status: pending
-        objective: >-
-          Produce or refresh a deterministic inventory of candidate multi-owner
-          clusters and classify whether each signal is true ownership ambiguity,
-          bridge edge, read-neighbor relation, diagnostic subcluster, or generated-view artifact.
+        status: done
+        evidence:
+          - docs/patcher/shared/report_constitution_multi_owner_cluster_inventory.py
+          - docs/pipelines/constitution/reports/constitution_multi_owner_cluster_inventory_report.yaml
+        result:
+          inventory_status: PASS
+          candidate_count: 6
+          human_arbitration_required_count: 3
+          primary_classification_counts:
+            diagnostic_subcluster: 1
+            read_neighbor_relation: 2
+            true_ownership_ambiguity: 3
+          recommended_arbitration_start:
+            - CAND_MULTI_OWNER_CLUSTER_006
+            - CAND_MULTI_OWNER_CLUSTER_008
+            - CAND_MULTI_OWNER_CLUSTER_010
+          no_mutation:
+            - policy.yaml
+            - decisions.yaml
+            - scope_catalog
+            - scope_lab_reports
+            - cores
+    planned_subtasks:
       - subtask_id: PHASE_19B_HUMAN_ARBITRATION
         status: pending
         objective: >-
@@ -744,7 +762,6 @@ phases:
           Apply accepted ownership-related decisions through canonical policy/decisions
           patches, then regenerate catalog and rerun validators.
     pending_subtasks:
-      - PHASE_19A_MULTI_OWNER_CLUSTER_INVENTORY
       - PHASE_19B_HUMAN_ARBITRATION
       - PHASE_19C_POLICY_DECISIONS_ALIGNMENT
 
@@ -847,7 +864,12 @@ implementation_tracking:
   phase18_macro_005_neighbor_declaration_review_done: true
   phase18_closeout_done: true
   phase19_macro_004_multi_owner_cluster_review_planned: true
-  phase19_started: false
+  phase19_started: true
+  phase19a_multi_owner_cluster_inventory_done: true
+  phase19a_multi_owner_cluster_inventory_report_status: PASS
+  phase19a_multi_owner_candidate_count: 6
+  phase19a_human_arbitration_required_count: 3
+  phase19b_human_arbitration_ready: true
 ```
 
 ## Key decisions recorded
@@ -1010,6 +1032,16 @@ decision_log:
       Hand off to PHASE_19 / MACRO_004_MULTI_OWNER_CLUSTER_REVIEW. MACRO_004 must
       review true ownership ambiguity without inferring ownership from read-neighbor
       declarations, diagnostic subclusters, or generated default_neighbors_to_read entries.
+
+
+  - decision_id: DECISION_022
+    date: 2026-04-28
+    status: accepted
+    decision: >-
+      Accept docs/pipelines/constitution/reports/constitution_multi_owner_cluster_inventory_report.yaml
+      as the PHASE_19A input for MACRO_004 human arbitration. The report classifies
+      six historical multi-owner candidates and identifies three requiring human
+      ownership arbitration.
 
 
 ```
