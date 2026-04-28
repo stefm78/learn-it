@@ -32,14 +32,14 @@ This tracker reflects the current Scope Lab execution state after:
 
 ```yaml
 current_phase:
-  phase_id: PHASE_21
-  label: remaining_patch_lifecycle_backlog_decision
-  status: planned
+  phase_id: NO_ACTIVE_PHASE
+  label: awaiting_next_human_decision
+  status: paused
   summary: >-
-    PHASE_20 is closed. Four governance backlog entries remain open after PHASE_20B:
-    escalation boundary, referentiel parameter dependency, priority queue semantics,
-    and full patch state machine. PHASE_21 is reserved to decide whether to open a
-    new bounded run or defer these entries to normal STAGE_00 backlog review.
+    The scope modularization post-pilot control-plane work is paused cleanly.
+    PHASE_21 accepted the decision not to open a new bounded pipeline run now.
+    Four reviewed patch_lifecycle backlog entries remain open and will continue to
+    surface through STAGE_00 and launcher governance backlog warnings.
 ```
 
 
@@ -860,37 +860,60 @@ phases:
 
   - phase_id: PHASE_21
     label: remaining_patch_lifecycle_backlog_decision
-    status: planned
+    status: done
     objective: >-
       Decide the operational treatment of the four remaining open patch_lifecycle
       backlog entries after PHASE_20B.
     rationale: >-
       The macro cleanup is complete, but four reviewed backlog entries remain open.
-      They should either become the scope of a new bounded run or remain open for the
-      next normal STAGE_00 partition/backlog review.
-    open_backlog_entries:
-      - candidate_id: GBC_PATCH_LIFECYCLE_ESCALATION_BOUNDARY_R01
-        topic: escalation boundary across patch_lifecycle, learner_state and deployment_governance
-      - candidate_id: GBC_PATCH_LIFECYCLE_REFERENTIEL_PARAMETER_R01
-        topic: external-read-only referentiel parameter dependency for patch escalation threshold
-      - candidate_id: GBC_PATCH_LIFECYCLE_PRIORITY_QUEUE_R01
-        topic: deterministic priority lanes for patch serialization
-      - candidate_id: GBC_PATCH_LIFECYCLE_FULL_STATE_MACHINE_R01
-        topic: canonical patch lifecycle state machine
-    planned_subtasks:
+      PHASE_21 decides whether to open a new bounded run now or keep those entries
+      open for the next normal STAGE_00 partition/backlog review.
+    completed_subtasks:
       - subtask_id: PHASE_21A_DECIDE_NEXT_OPERATIONAL_STEP
-        status: pending
-        objective: >-
-          Choose between opening a new bounded run, creating a design note, or leaving
-          the four entries to normal STAGE_00 backlog review.
+        status: done
+        evidence:
+          - docs/patcher/shared/report_remaining_patch_lifecycle_backlog_decision.py
+          - docs/pipelines/constitution/reports/remaining_patch_lifecycle_backlog_decision_report.yaml
+          - docs/pipelines/constitution/reports/remaining_patch_lifecycle_backlog_decision_report.md
+        result:
+          report_status: PASS
+          open_backlog_entry_count: 4
+          recommended_decision: do_not_open_new_bounded_run_now
+          new_pipeline_run_recommended_now: false
+          finding_count: 0
+          future_run_if_human_overrides:
+            scope_key: patch_lifecycle
+            theme: patch_lifecycle_state_machine_and_priority_lanes
+            first_entries:
+              - GBC_PATCH_LIFECYCLE_FULL_STATE_MACHINE_R01
+              - GBC_PATCH_LIFECYCLE_PRIORITY_QUEUE_R01
+            conditional_entries:
+              - GBC_PATCH_LIFECYCLE_ESCALATION_BOUNDARY_R01
+            separate_follow_up:
+              - GBC_PATCH_LIFECYCLE_REFERENTIEL_PARAMETER_R01
       - subtask_id: PHASE_21B_PREPARE_HANDOFF_OR_RUN_PROMPT
-        status: pending
-        objective: >-
-          If a new run is selected, prepare the zero-context handoff prompt and
-          deterministic preflight commands.
-    pending_subtasks:
-      - PHASE_21A_DECIDE_NEXT_OPERATIONAL_STEP
-      - PHASE_21B_PREPARE_HANDOFF_OR_RUN_PROMPT
+        status: done_not_required
+        evidence:
+          - docs/pipelines/constitution/reports/remaining_patch_lifecycle_backlog_decision_report.yaml
+        result:
+          reason: >-
+            PHASE_21A recommended not opening a new bounded pipeline run now.
+            Therefore no run handoff prompt or OPEN_NEW_RUN preparation is required.
+          run_opened: false
+          tracker_pause_required: true
+    pending_subtasks: []
+    closure:
+      status: closed
+      closed_reason: >-
+        PHASE_21 is closed with no new bounded pipeline run. The remaining four
+        patch_lifecycle backlog entries are reviewed design follow-ups, not unresolved
+        macro blockers. They remain open with PHASE_20B review metadata and will
+        continue to surface through STAGE_00 and launcher warnings.
+      residual_signals:
+        - GBC_PATCH_LIFECYCLE_FULL_STATE_MACHINE_R01 remains open for a future explicit design run
+        - GBC_PATCH_LIFECYCLE_PRIORITY_QUEUE_R01 remains open as a dependent design extension
+        - GBC_PATCH_LIFECYCLE_ESCALATION_BOUNDARY_R01 remains open for STAGE_00 backlog review
+        - GBC_PATCH_LIFECYCLE_REFERENTIEL_PARAMETER_R01 remains open for referentiel/link or cross-core follow-up
 
 ```
 
@@ -1010,6 +1033,12 @@ implementation_tracking:
   phase20b_governance_backlog_open_entries_after_patch: 4
   phase20_post_macro_closeout_review_done: true
   phase21_remaining_patch_lifecycle_backlog_decision_planned: true
+  phase21a_remaining_backlog_decision_done: true
+  phase21a_recommended_decision: do_not_open_new_bounded_run_now
+  phase21a_new_pipeline_run_recommended_now: false
+  phase21b_handoff_or_run_prompt_done_not_required: true
+  phase21_remaining_patch_lifecycle_backlog_decision_done: true
+  scope_modularization_post_pilot_control_plane_paused: true
 
 ```
 
@@ -1227,6 +1256,23 @@ decision_log:
       Plan PHASE_21 as the operational decision point for the four remaining
       patch_lifecycle backlog entries. PHASE_21 must decide whether to open a new
       bounded run, create a design note, or leave them to normal STAGE_00 backlog review.
+
+
+  - decision_id: DECISION_028
+    date: 2026-04-28
+    status: accepted
+    decision: >-
+      Accept PHASE_21A decision report. Do not open a new bounded pipeline run now.
+      The four remaining patch_lifecycle backlog entries are reviewed design follow-ups
+      and should remain open for normal STAGE_00 / launcher backlog surfacing.
+
+  - decision_id: DECISION_029
+    date: 2026-04-28
+    status: accepted
+    decision: >-
+      Close PHASE_21 and pause the scope modularization post-pilot control-plane
+      chantier. PHASE_21B is done_not_required because no new run is opened and no
+      zero-context run handoff prompt is needed.
 
 
 ```
