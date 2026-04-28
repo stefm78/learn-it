@@ -1,0 +1,71 @@
+CLOSEOUT_REPORT:
+  status: PASS
+  pipeline_id: constitution
+  closeout_scope: run
+  closed_at: '2026-04-28T09:07:47Z'
+  run_closed: true
+  release_id: CORE_RELEASE_2026_04_28_R01
+  source_release_path: docs/cores/releases/CORE_RELEASE_2026_04_28_R01/
+  promotion_mode: applied
+  archive_path: docs/pipelines/constitution/archive/CORE_RELEASE_2026_04_28_R01
+  archived_paths:
+  - docs/pipelines/constitution/archive/CORE_RELEASE_2026_04_28_R01/work/01_challenge
+  - docs/pipelines/constitution/archive/CORE_RELEASE_2026_04_28_R01/work/01_challenge/challenge_report_patch_lifecycle_r01.md
+  - docs/pipelines/constitution/archive/CORE_RELEASE_2026_04_28_R01/work/01_challenge/challenge_report_patch_lifecycle_r02.md
+  - docs/pipelines/constitution/archive/CORE_RELEASE_2026_04_28_R01/work/02_arbitrage
+  - docs/pipelines/constitution/archive/CORE_RELEASE_2026_04_28_R01/work/02_arbitrage/arbitrage.md
+  - docs/pipelines/constitution/archive/CORE_RELEASE_2026_04_28_R01/work/03_patch
+  - docs/pipelines/constitution/archive/CORE_RELEASE_2026_04_28_R01/work/03_patch/patchset.yaml
+  - docs/pipelines/constitution/archive/CORE_RELEASE_2026_04_28_R01/work/04_patch_validation
+  - docs/pipelines/constitution/archive/CORE_RELEASE_2026_04_28_R01/work/04_patch_validation/patch_validation.yaml
+  - docs/pipelines/constitution/archive/CORE_RELEASE_2026_04_28_R01/work/05_apply
+  - docs/pipelines/constitution/archive/CORE_RELEASE_2026_04_28_R01/work/05_apply/sandbox
+  - docs/pipelines/constitution/archive/CORE_RELEASE_2026_04_28_R01/work/05_apply/sandbox/docs
+  - docs/pipelines/constitution/archive/CORE_RELEASE_2026_04_28_R01/work/05_apply/sandbox/docs/cores
+  - docs/pipelines/constitution/archive/CORE_RELEASE_2026_04_28_R01/work/05_apply/sandbox/docs/cores/current
+  - docs/pipelines/constitution/archive/CORE_RELEASE_2026_04_28_R01/work/05_apply/sandbox/docs/cores/current/constitution.yaml
+  - docs/pipelines/constitution/archive/CORE_RELEASE_2026_04_28_R01/work/05_apply/sandbox/docs/cores/current/constitution.yaml.bak
+  - docs/pipelines/constitution/archive/CORE_RELEASE_2026_04_28_R01/work/05_apply/sandbox/docs/cores/current/link.yaml
+  - docs/pipelines/constitution/archive/CORE_RELEASE_2026_04_28_R01/work/05_apply/sandbox/docs/cores/current/referentiel.yaml
+  - docs/pipelines/constitution/archive/CORE_RELEASE_2026_04_28_R01/work/06_core_validation
+  - docs/pipelines/constitution/archive/CORE_RELEASE_2026_04_28_R01/work/06_core_validation/core_validation.yaml
+  - docs/pipelines/constitution/archive/CORE_RELEASE_2026_04_28_R01/work/07_release
+  - docs/pipelines/constitution/archive/CORE_RELEASE_2026_04_28_R01/work/07_release/release_plan.yaml
+  - docs/pipelines/constitution/archive/CORE_RELEASE_2026_04_28_R01/reports/closeout_report.yaml
+  - docs/pipelines/constitution/archive/CORE_RELEASE_2026_04_28_R01/reports/current_manifest_validation.yaml
+  - docs/pipelines/constitution/archive/CORE_RELEASE_2026_04_28_R01/reports/patch_execution_report.yaml
+  - docs/pipelines/constitution/archive/CORE_RELEASE_2026_04_28_R01/reports/promotion_report.yaml
+  - docs/pipelines/constitution/archive/CORE_RELEASE_2026_04_28_R01/reports/promotion_report_validation.yaml
+  - docs/pipelines/constitution/archive/CORE_RELEASE_2026_04_28_R01/reports/release_candidate_notes.md
+  - docs/pipelines/constitution/archive/CORE_RELEASE_2026_04_28_R01/reports/release_manifest_validation.yaml
+  - docs/pipelines/constitution/archive/CORE_RELEASE_2026_04_28_R01/reports/release_materialization_report.yaml
+  - docs/pipelines/constitution/archive/CORE_RELEASE_2026_04_28_R01/reports/release_plan_validation.yaml
+  - docs/pipelines/constitution/archive/CORE_RELEASE_2026_04_28_R01/reports/stage_completion_RUN_BOOTSTRAP.yaml
+  - docs/pipelines/constitution/archive/CORE_RELEASE_2026_04_28_R01/reports/stage_completion_STAGE_01_CHALLENGE.yaml
+  - docs/pipelines/constitution/archive/CORE_RELEASE_2026_04_28_R01/reports/stage_completion_STAGE_02_ARBITRAGE.yaml
+  - docs/pipelines/constitution/archive/CORE_RELEASE_2026_04_28_R01/reports/stage_completion_STAGE_03_PATCH_SYNTHESIS.yaml
+  - docs/pipelines/constitution/archive/CORE_RELEASE_2026_04_28_R01/reports/stage_completion_STAGE_04_PATCH_VALIDATION.yaml
+  - docs/pipelines/constitution/archive/CORE_RELEASE_2026_04_28_R01/reports/stage_completion_STAGE_05_APPLY.yaml
+  - docs/pipelines/constitution/archive/CORE_RELEASE_2026_04_28_R01/reports/stage_completion_STAGE_06_CORE_VALIDATION.yaml
+  - docs/pipelines/constitution/archive/CORE_RELEASE_2026_04_28_R01/reports/stage_completion_STAGE_07_RELEASE_MATERIALIZATION.yaml
+  - docs/pipelines/constitution/archive/CORE_RELEASE_2026_04_28_R01/reports/stage_completion_STAGE_08_PROMOTE_CURRENT.yaml
+  - docs/pipelines/constitution/archive/CORE_RELEASE_2026_04_28_R01/outputs/final_run_summary.md
+  work_reset: true
+  active_cores:
+  - role: constitution
+    file: constitution.yaml
+    core_id: CORE_LEARNIT_CONSTITUTION_V5_0
+    version: V5_0_FINAL
+  - role: referentiel
+    file: referentiel.yaml
+    core_id: CORE_LEARNIT_REFERENTIEL_v3.0
+    version: V3_0_FINAL
+  - role: link
+    file: link.yaml
+    core_id: CORE_LINK_LEARNIT_CONSTITUTION_V5_0__REFERENTIEL_v3.0
+    version: V5_0__V3_0_FINAL
+  notes:
+  - closeout validé après promotion active vérifiée
+  - état opératoire archivé sous docs/pipelines/constitution/archive/CORE_RELEASE_2026_04_28_R01
+  - workspace docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_27_PATCH_LIFECYCLE_R01/work
+    réinitialisé pour une nouvelle exécution
