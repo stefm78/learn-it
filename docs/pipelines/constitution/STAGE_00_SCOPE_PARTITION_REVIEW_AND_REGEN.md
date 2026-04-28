@@ -11,7 +11,8 @@ Chaîne gouvernée attendue :
 3. analyse sémantique assistée par IA sur la base du rapport déterministe et du backlog ;
 4. arbitrage humain ;
 5. mise à jour des fichiers de policy/decisions canonisés ;
-6. régénération déterministe du catalogue de scopes.
+6. régénération déterministe du catalogue de scopes ;
+7. scoring déterministe post-scoping du catalogue généré.
 
 ## Précondition bloquante
 
@@ -129,6 +130,31 @@ Commande de référence :
 Le script doit être exécuté après arbitrage humain et mise à jour des fichiers canonisés de
 policy/decisions. Il produit le nouveau catalogue de scopes de façon déterministe.
 
+## Script déterministe obligatoire — scoring post-scoping
+
+Script canonique :
+- `docs/patcher/shared/score_constitution_scope_maturity.py`
+
+Commande de référence :
+- `python docs/patcher/shared/score_constitution_scope_maturity.py --report docs/pipelines/constitution/reports/scope_maturity_scoring_report.yaml`
+
+Le script doit être exécuté après `generate_constitution_scopes.py --apply`.
+
+Le script doit :
+- lire le catalogue de scopes généré ;
+- lire les `scope_definitions/*.yaml` générées ;
+- lire la policy et les décisions canonisées ;
+- lire le rapport déterministe `scope_partition_review_report.yaml` ;
+- calculer un scoring déterministe post-scoping par scope ;
+- comparer ce scoring calculé au score publié dans `policy.yaml` ;
+- produire un rapport structuré avec preuves, deltas et recommandations ;
+- ne jamais modifier directement `policy.yaml`, `decisions.yaml`, `manifest.yaml` ou les `scope_definitions/*.yaml`.
+
+Règle d'autorité :
+- En V1, `policy.yaml` reste la source d'autorité du score publié.
+- Le rapport post-scoping est un diagnostic déterministe.
+- Toute correction du score publié doit passer par arbitrage humain et modification explicite de la policy.
+
 ## Sorties attendues
 
 Sortie déterministe obligatoire — analyse :
@@ -142,6 +168,10 @@ Sorties analytiques optionnelles :
 Sortie déterministe obligatoire — régénération :
 - `tmp/constitution_scope_generation_report.yaml`
   (produit par `generate_constitution_scopes.py --apply`)
+
+Sortie déterministe obligatoire — scoring post-scoping :
+- `docs/pipelines/constitution/reports/scope_maturity_scoring_report.yaml`
+  (produit par `score_constitution_scope_maturity.py`)
 
 Mise à jour obligatoire en fin de STAGE_00 :
 - `docs/pipelines/constitution/scope_catalog/governance_backlog.yaml`
@@ -174,6 +204,11 @@ Mise à jour obligatoire en fin de STAGE_00 :
     `open` doit être traitée ou explicitement reportée avant que le STAGE_00 puisse être
     déclaré `done`.
 
+12. Le scoring post-scoping doit être exécuté après régénération du catalogue.
+13. Le rapport de scoring post-scoping ne remplace pas la policy canonique.
+14. Les écarts entre score calculé et score publié doivent être arbitrés ou reportés explicitement ;
+    ils ne doivent pas être auto-appliqués.
+
 ## Critère de succès
 
 Le Stage 00 est réussi lorsque :
@@ -187,4 +222,7 @@ Le Stage 00 est réussi lorsque :
 - le catalogue de scopes a été régénéré de façon déterministe par exécution réelle de
   `generate_constitution_scopes.py` ;
 - le rapport `constitution_scope_generation_report.yaml` a été produit ;
+- le rapport `scope_maturity_scoring_report.yaml` a été produit ;
+- les écarts éventuels entre maturité calculée et maturité publiée ont été explicitement
+  acceptés, arbitrés ou reportés ;
 - le nouveau partitionnement est traçable et reproductible.
