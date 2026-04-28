@@ -98,7 +98,8 @@ scope_definition:
     - Intègre intégrité session et sécurité runtime liée à l'évaluation.
     - Dépendances explicites mais frontières à surveiller avec knowledge_and_design et learner_state.
     - Maturity synchronized from docs/pipelines/constitution/reports/scope_maturity_scoring_report.yaml
-      by PHASE_17 computed-score authority migration. Scope=mastery_evaluation; scoring_status=WARN; blocking_finding_count=0.
+      by PHASE_17 computed-score authority migration. Scope=mastery_evaluation; published_by=apply_constitution_scope_maturity_scores.py;
+      blocking_finding_count=0.
   notes:
   - Scope généré mastery_evaluation (ex mastery_model élargi). Couvre le modèle MSC (P/R/A/T), la propagation
     graphe, l'intégrité de session, la sécurité runtime liée à l'évaluation et les investigations systémiques.

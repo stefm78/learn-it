@@ -88,7 +88,8 @@ scope_definition:
     - Frontières à surveiller avec learner_state sur les déclencheurs AR/VC.
     - Architecture off-session solide mais exécutabilité bornée encore à valider.
     - Maturity synchronized from docs/pipelines/constitution/reports/scope_maturity_scoring_report.yaml
-      by PHASE_17 computed-score authority migration. Scope=patch_lifecycle; scoring_status=WARN; blocking_finding_count=0.
+      by PHASE_17 computed-score authority migration. Scope=patch_lifecycle; published_by=apply_constitution_scope_maturity_scores.py;
+      blocking_finding_count=0.
   notes:
   - 'Scope généré patch_lifecycle. Couvre le cycle complet de vie des patches : structure, validation
     déterministe, architecture off-session, déclencheurs gouvernés (VC, AR-réfractaire) et escalade dérive

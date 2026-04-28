@@ -91,7 +91,8 @@ scope_definition:
     - Frontières encore perfectibles avec mastery_evaluation et patch_lifecycle.
     - Suffisamment stable et exécutable pour un pilote borné prudent.
     - Maturity synchronized from docs/pipelines/constitution/reports/scope_maturity_scoring_report.yaml
-      by PHASE_17 computed-score authority migration. Scope=learner_state; scoring_status=WARN; blocking_finding_count=0.
+      by PHASE_17 computed-score authority migration. Scope=learner_state; published_by=apply_constitution_scope_maturity_scores.py;
+      blocking_finding_count=0.
   notes:
   - Scope généré learner_state (périmètre élargi). Couvre l'état apprenant 3 axes, les auto-rapports AR-N1/N2/N3,
     la détresse, la VC, le scaffolding conservateur, la reprise diagnostique et la transparence apprenant.

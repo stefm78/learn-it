@@ -86,7 +86,7 @@ scope_definition:
     - Consolidation de knowledge_model et content_design en un scope cohérent de pré-déploiement.
     - Frontières à surveiller avec mastery_evaluation sur les règles de propagation graphe.
     - Maturity synchronized from docs/pipelines/constitution/reports/scope_maturity_scoring_report.yaml
-      by PHASE_17 computed-score authority migration. Scope=knowledge_and_design; scoring_status=WARN;
+      by PHASE_17 computed-score authority migration. Scope=knowledge_and_design; published_by=apply_constitution_scope_maturity_scores.py;
       blocking_finding_count=0.
   notes:
   - Scope généré knowledge_and_design. Couvre la structure du domaine (graphe, KU, acyclicité, contexte

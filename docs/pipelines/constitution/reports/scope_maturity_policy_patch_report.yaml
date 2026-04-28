@@ -1,18 +1,18 @@
 scope_maturity_policy_patch_report:
   schema_version: '0.1'
   phase_id: PHASE_17
-  generated_at: '2026-04-28T15:19:42Z'
+  generated_at: '2026-04-28T15:23:06Z'
   status: PASS
   apply_mode: false
-  changed: true
+  changed: false
   gate_findings: []
   inputs:
     scoring_report: docs/pipelines/constitution/reports/scope_maturity_scoring_report.yaml
     policy: docs/pipelines/constitution/policies/scope_generation/policy.yaml
   input_hashes:
-    scoring_report_sha256: 246667cebecb805a4e55d8b4035e46c0b724252d1de40444b22af91ed70ad5b2
-    policy_sha256_before: 718c85091ceff1acadb7dce692d7dc5d894c09621d9e2faa705bbeda5ca6ade3
-    policy_sha256_after: 718c85091ceff1acadb7dce692d7dc5d894c09621d9e2faa705bbeda5ca6ade3
+    scoring_report_sha256: 7843091fd48bae5ba82a2d331de12e348ea5dfdd53dd9123265f3deac8adf9d2
+    policy_sha256_before: c70c0aabcdaa1acf096eb86d4ea95671d0b367840c99b44e6a2262e24ffc36da
+    policy_sha256_after: c70c0aabcdaa1acf096eb86d4ea95671d0b367840c99b44e6a2262e24ffc36da
   mutation_policy:
     policy_yaml: modified_if_apply_true_and_changed
     decisions_yaml: not_modified

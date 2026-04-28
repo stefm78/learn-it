@@ -89,7 +89,7 @@ scope_generation_policy:
       - Forte stabilité inter-release, ces règles ne varient pas au fil des sessions.
       - Frontières claires avec learner_state et patch_lifecycle.
       - Maturity synchronized from docs/pipelines/constitution/reports/scope_maturity_scoring_report.yaml by PHASE_17 computed-score
-        authority migration. Scope=deployment_governance; scoring_status=WARN; blocking_finding_count=0.
+        authority migration. Scope=deployment_governance; published_by=apply_constitution_scope_maturity_scores.py; blocking_finding_count=0.
     notes:
     - Scope généré deployment_governance. Couvre l'architecture runtime locale, les régimes d'autonomie, la gouvernance top-level,
       la séparation Constitution/Référentiel et l'initialisation conservative.
@@ -130,7 +130,7 @@ scope_generation_policy:
       - Consolidation de knowledge_model et content_design en un scope cohérent de pré-déploiement.
       - Frontières à surveiller avec mastery_evaluation sur les règles de propagation graphe.
       - Maturity synchronized from docs/pipelines/constitution/reports/scope_maturity_scoring_report.yaml by PHASE_17 computed-score
-        authority migration. Scope=knowledge_and_design; scoring_status=WARN; blocking_finding_count=0.
+        authority migration. Scope=knowledge_and_design; published_by=apply_constitution_scope_maturity_scores.py; blocking_finding_count=0.
     notes:
     - Scope généré knowledge_and_design. Couvre la structure du domaine (graphe, KU, acyclicité, contexte authentique, Bloom),
       la matrice de feedback et les règles de design pédagogique (misconception, modal, créativité). Phase Analyse/Design
@@ -171,7 +171,7 @@ scope_generation_policy:
       - Frontières encore perfectibles avec mastery_evaluation et patch_lifecycle.
       - Suffisamment stable et exécutable pour un pilote borné prudent.
       - Maturity synchronized from docs/pipelines/constitution/reports/scope_maturity_scoring_report.yaml by PHASE_17 computed-score
-        authority migration. Scope=learner_state; scoring_status=WARN; blocking_finding_count=0.
+        authority migration. Scope=learner_state; published_by=apply_constitution_scope_maturity_scores.py; blocking_finding_count=0.
     notes:
     - Scope généré learner_state (périmètre élargi). Couvre l'état apprenant 3 axes, les auto-rapports AR-N1/N2/N3, la détresse,
       la VC, le scaffolding conservateur, la reprise diagnostique et la transparence apprenant.
@@ -210,7 +210,7 @@ scope_generation_policy:
       - Intègre intégrité session et sécurité runtime liée à l'évaluation.
       - Dépendances explicites mais frontières à surveiller avec knowledge_and_design et learner_state.
       - Maturity synchronized from docs/pipelines/constitution/reports/scope_maturity_scoring_report.yaml by PHASE_17 computed-score
-        authority migration. Scope=mastery_evaluation; scoring_status=WARN; blocking_finding_count=0.
+        authority migration. Scope=mastery_evaluation; published_by=apply_constitution_scope_maturity_scores.py; blocking_finding_count=0.
     notes:
     - Scope généré mastery_evaluation (ex mastery_model élargi). Couvre le modèle MSC (P/R/A/T), la propagation graphe, l'intégrité
       de session, la sécurité runtime liée à l'évaluation et les investigations systémiques.
@@ -248,7 +248,7 @@ scope_generation_policy:
       - Frontières à surveiller avec learner_state sur les déclencheurs AR/VC.
       - Architecture off-session solide mais exécutabilité bornée encore à valider.
       - Maturity synchronized from docs/pipelines/constitution/reports/scope_maturity_scoring_report.yaml by PHASE_17 computed-score
-        authority migration. Scope=patch_lifecycle; scoring_status=WARN; blocking_finding_count=0.
+        authority migration. Scope=patch_lifecycle; published_by=apply_constitution_scope_maturity_scores.py; blocking_finding_count=0.
     notes:
     - 'Scope généré patch_lifecycle. Couvre le cycle complet de vie des patches : structure, validation déterministe, architecture
       off-session, déclencheurs gouvernés (VC, AR-réfractaire) et escalade dérive persistante.'
