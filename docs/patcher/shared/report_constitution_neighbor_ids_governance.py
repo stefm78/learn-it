@@ -1,15 +1,14 @@
 #!/usr/bin/env python3
 """Report explicit Constitution neighbor IDs surfaced by maturity scoring V1.1.
 
-This is a deterministic, non-mutating governance report.
+Deterministic, non-mutating governance report.
 
-It reads:
-- docs/pipelines/constitution/reports/scope_maturity_scoring_report.yaml
-- docs/pipelines/constitution/policies/scope_generation/policy.yaml
-- docs/pipelines/constitution/policies/scope_generation/decisions.yaml
-- docs/pipelines/constitution/scope_catalog/governance_backlog.yaml
-
-It writes only the requested report path.
+V1.1 hardening:
+- no hard-coded scope list;
+- compares policy.yaml declared scopes with scoring_report scope_results;
+- reports policy/scoring drift without changing policy, decisions, catalog, backlog, scores,
+  or scorer rules;
+- builds owner and existing-neighbor maps from decisions.yaml dynamically.
 
 Default output:
 - docs/pipelines/constitution/reports/constitution_neighbor_ids_governance_report.yaml
@@ -22,7 +21,7 @@ import re
 from collections import Counter, defaultdict
 from datetime import datetime, timezone
 from pathlib import Path
-from typing import Any, Dict, Iterable, List
+from typing import Any, Dict, List
 
 import yaml
 
@@ -64,6 +63,46 @@ def as_list(value: Any) -> List[str]:
     return []
 
 
+def policy_scope_keys(policy_doc: Dict[str, Any]) -> List[str]:
+    scopes = policy_doc.get("scope_generation_policy", {}).get("declared_scopes", []) or []
+    result = []
+    for scope in scopes:
+        if isinstance(scope, dict) and scope.get("scope_key"):
+            result.append(str(scope["scope_key"]))
+    return sorted(set(result))
+
+
+def scoring_scope_keys(scoring_root: Dict[str, Any]) -> List[str]:
+    results = scoring_root.get("scope_results", []) or []
+    result = []
+    for scope_result in results:
+        if isinstance(scope_result, dict) and scope_result.get("scope_key"):
+            result.append(str(scope_result["scope_key"]))
+    return sorted(set(result))
+
+
+def build_scope_consistency(policy_doc: Dict[str, Any], scoring_root: Dict[str, Any]) -> Dict[str, Any]:
+    p_scopes = set(policy_scope_keys(policy_doc))
+    s_scopes = set(scoring_scope_keys(scoring_root))
+    in_scoring_not_policy = sorted(s_scopes - p_scopes)
+    in_policy_not_scoring = sorted(p_scopes - s_scopes)
+    status = "PASS" if not in_scoring_not_policy and not in_policy_not_scoring else "REVIEW"
+    return {
+        "status": status,
+        "policy_scope_count": len(p_scopes),
+        "scoring_scope_count": len(s_scopes),
+        "declared_scope_keys_from_policy": sorted(p_scopes),
+        "scope_keys_from_scoring_report": sorted(s_scopes),
+        "scopes_in_scoring_not_in_policy": in_scoring_not_policy,
+        "scopes_in_policy_not_in_scoring": in_policy_not_scoring,
+        "note": (
+            "Scope sets match. Candidate extraction can be interpreted against current policy."
+            if status == "PASS"
+            else "Scope sets differ. Treat candidate extraction as provisional until policy/scoring alignment is reviewed."
+        ),
+    }
+
+
 def build_owner_map(decisions_doc: Dict[str, Any]) -> Dict[str, Dict[str, Any]]:
     owner_map: Dict[str, Dict[str, Any]] = {}
     decisions = decisions_doc.get("scope_generation_decisions", {}).get("decisions", []) or []
@@ -72,7 +111,9 @@ def build_owner_map(decisions_doc: Dict[str, Any]) -> Dict[str, Dict[str, Any]]:
             continue
         if decision.get("decision_type") != "assign_ids_to_scope":
             continue
-        status = decision.get("status")
+        status = str(decision.get("status") or "unknown")
+        if status != "approved":
+            continue
         scopes = as_list(decision.get("scope_keys_affected"))
         if len(scopes) != 1:
             continue
@@ -191,7 +232,7 @@ def recommend_decision(
     if not owner_info:
         return {
             "recommended_decision": "defer_to_governance_backlog",
-            "rationale": "No Constitution owner scope was found for this uncovered ID in approved assign_ids_to_scope decisions.",
+            "rationale": "No approved Constitution owner scope was found for this uncovered ID in assign_ids_to_scope decisions.",
             "requires_human_arbitration": True,
         }
 
@@ -232,6 +273,17 @@ def recommend_decision(
     }
 
 
+def collect_scoring_items(scoring_root: Dict[str, Any], field: str) -> List[str]:
+    values = []
+    for item_group in scoring_root.get(field, []) or []:
+        if not isinstance(item_group, dict):
+            continue
+        for item in item_group.get("items", []) or []:
+            if isinstance(item, dict) and item.get("scope_key"):
+                values.append(str(item["scope_key"]))
+    return sorted(set(values))
+
+
 def build_report(
     scoring_path: Path,
     policy_path: Path,
@@ -239,9 +291,7 @@ def build_report(
     backlog_path: Path,
 ) -> Dict[str, Any]:
     scoring_doc = load_yaml(scoring_path)
-    # Policy is loaded to bind the report to the published authority even though this
-    # V1 report does not need fields beyond its presence and fingerprint in git.
-    _policy_doc = load_yaml(policy_path)
+    policy_doc = load_yaml(policy_path)
     decisions_doc = load_yaml(decisions_path)
     backlog_doc = load_yaml(backlog_path)
 
@@ -249,6 +299,7 @@ def build_report(
     if not isinstance(scoring_root, dict):
         raise SystemExit(f"Missing scope_maturity_scoring_report root in {scoring_path}")
 
+    scope_consistency = build_scope_consistency(policy_doc, scoring_root)
     owner_map = build_owner_map(decisions_doc)
     existing_neighbor_map = build_existing_neighbor_map(decisions_doc)
     backlog_by_scope = open_backlog_by_scope(backlog_doc)
@@ -317,25 +368,9 @@ def build_report(
 
     candidates.sort(key=lambda x: (x["scope_key"], x["uncovered_id"]))
 
-    blocking_scopes = []
-    for finding in scoring_root.get("blocking_findings", []) or []:
-        if not isinstance(finding, dict):
-            continue
-        for item in finding.get("items", []) or []:
-            if isinstance(item, dict) and item.get("scope_key"):
-                blocking_scopes.append(item.get("scope_key"))
-
-    warning_scopes = []
-    for warning in scoring_root.get("warnings", []) or []:
-        if not isinstance(warning, dict):
-            continue
-        for item in warning.get("items", []) or []:
-            if isinstance(item, dict) and item.get("scope_key"):
-                warning_scopes.append(item.get("scope_key"))
-
     return {
         "constitution_neighbor_ids_governance_report": {
-            "schema_version": "0.1",
+            "schema_version": "0.2",
             "generated_at": iso_now(),
             "phase": "PHASE_16",
             "status": "READY_FOR_HUMAN_ARBITRATION",
@@ -354,13 +389,14 @@ def build_report(
                 "decisions": str(decisions_path).replace("\\", "/"),
                 "governance_backlog": str(backlog_path).replace("\\", "/"),
             },
+            "policy_scoring_scope_consistency": scope_consistency,
             "summary": {
                 "scope_count": len(scope_summaries),
                 "candidate_count": len(candidates),
                 "candidate_counts_by_recommended_decision": dict(sorted(decision_counts.items())),
                 "scope_counts_by_delta_severity": dict(sorted(severity_counts.items())),
-                "blocking_scopes_from_scoring": sorted(set(blocking_scopes)),
-                "warning_scopes_from_scoring": sorted(set(warning_scopes)),
+                "blocking_scopes_from_scoring": collect_scoring_items(scoring_root, "blocking_findings"),
+                "warning_scopes_from_scoring": collect_scoring_items(scoring_root, "warnings"),
             },
             "scope_summaries": scope_summaries,
             "decision_candidates": candidates,
@@ -404,6 +440,7 @@ def main() -> int:
     print(f"Wrote {args.report}")
     print(f"Status: {root['status']}")
     print(f"Candidate count: {root['summary']['candidate_count']}")
+    print(f"Policy/scoring scope consistency: {root['policy_scoring_scope_consistency']['status']}")
     return 0
 
 

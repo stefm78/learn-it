@@ -1,6 +1,6 @@
 constitution_neighbor_ids_governance_report:
-  schema_version: '0.1'
-  generated_at: '2026-04-28T11:43:00Z'
+  schema_version: '0.2'
+  generated_at: '2026-04-28T11:49:59Z'
   phase: PHASE_16
   status: READY_FOR_HUMAN_ARBITRATION
   authority: diagnostic_governance_report_only
@@ -16,6 +16,26 @@ constitution_neighbor_ids_governance_report:
     policy: docs/pipelines/constitution/policies/scope_generation/policy.yaml
     decisions: docs/pipelines/constitution/policies/scope_generation/decisions.yaml
     governance_backlog: docs/pipelines/constitution/scope_catalog/governance_backlog.yaml
+  policy_scoring_scope_consistency:
+    status: PASS
+    policy_scope_count: 5
+    scoring_scope_count: 5
+    declared_scope_keys_from_policy:
+    - deployment_governance
+    - knowledge_and_design
+    - learner_state
+    - mastery_evaluation
+    - patch_lifecycle
+    scope_keys_from_scoring_report:
+    - deployment_governance
+    - knowledge_and_design
+    - learner_state
+    - mastery_evaluation
+    - patch_lifecycle
+    scopes_in_scoring_not_in_policy: []
+    scopes_in_policy_not_in_scoring: []
+    note: Scope sets match. Candidate extraction can be interpreted against current
+      policy.
   summary:
     scope_count: 5
     candidate_count: 18
