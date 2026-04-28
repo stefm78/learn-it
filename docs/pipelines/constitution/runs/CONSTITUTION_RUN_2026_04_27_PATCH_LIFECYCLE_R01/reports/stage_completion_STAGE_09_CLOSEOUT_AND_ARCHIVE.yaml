@@ -1,0 +1,12 @@
+stage_completion_record:
+  schema_version: 0.1
+  pipeline_id: constitution
+  run_id: CONSTITUTION_RUN_2026_04_27_PATCH_LIFECYCLE_R01
+  stage_id: STAGE_09_CLOSEOUT_AND_ARCHIVE
+  stage_status: done
+  run_status: closed
+  next_stage: ''
+  scope_status: ''
+  summary: Run closeout completed with archive and final summary; pipeline run is
+    closed.
+  recorded_at: '2026-04-28T09:10:44Z'
