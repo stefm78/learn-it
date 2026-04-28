@@ -253,13 +253,13 @@ constitution_neighbor_ids_arbitration:
       published_score_total: 16
       published_level: L2_usable_with_care
     recommended_decision: add_as_default_neighbor
-    human_decision: pending
+    human_decision: add_as_default_neighbor
     allowed_human_decisions:
     - add_as_default_neighbor
     - defer_to_governance_backlog
     - wont_fix_with_rationale
-    human_rationale: TODO
-    patch_policy_decisions_after_approval: false
+    human_rationale: Accepted as explicit Constitution read neighbor for patch_lifecycle. patch_lifecycle legitimately reads the no-runtime-content-generation invariant because patch artifacts and patch validation must preserve the off-session / precomputed-content boundary, while ownership remains in deployment_governance. This decision declares a read dependency only and does not transfer ownership.
+    patch_policy_decisions_after_approval: true
     rationale_from_report: ID is owned by deployment_governance and used by patch_lifecycle; declare it as an explicit Constitution read neighbor if the dependency is legitimate.
   - candidate_id: NIDG_PATCH_LIFECYCLE__INV_RUNTIME_FULLY_LOCAL
     scope_key: patch_lifecycle
@@ -276,13 +276,13 @@ constitution_neighbor_ids_arbitration:
       published_score_total: 16
       published_level: L2_usable_with_care
     recommended_decision: add_as_default_neighbor
-    human_decision: pending
+    human_decision: add_as_default_neighbor
     allowed_human_decisions:
     - add_as_default_neighbor
     - defer_to_governance_backlog
     - wont_fix_with_rationale
-    human_rationale: TODO
-    patch_policy_decisions_after_approval: false
+    human_rationale: Accepted as explicit Constitution read neighbor for patch_lifecycle. patch_lifecycle legitimately reads the fully-local-runtime invariant because patch application and validation must remain compatible with the local runtime architecture, while ownership remains in deployment_governance. This decision declares a read dependency only and does not transfer ownership.
+    patch_policy_decisions_after_approval: true
     rationale_from_report: ID is owned by deployment_governance and used by patch_lifecycle; declare it as an explicit Constitution read neighbor if the dependency is legitimate.
   - candidate_id: NIDG_PATCH_LIFECYCLE__TYPE_SELF_REPORT_AR_N1
     scope_key: patch_lifecycle
@@ -299,13 +299,13 @@ constitution_neighbor_ids_arbitration:
       published_score_total: 16
       published_level: L2_usable_with_care
     recommended_decision: add_as_default_neighbor
-    human_decision: pending
+    human_decision: add_as_default_neighbor
     allowed_human_decisions:
     - add_as_default_neighbor
     - defer_to_governance_backlog
     - wont_fix_with_rationale
-    human_rationale: TODO
-    patch_policy_decisions_after_approval: false
+    human_rationale: Accepted as explicit Constitution read neighbor for patch_lifecycle. patch_lifecycle legitimately reads AR-N1 self-report signals because AR-refractory or solicitation patch triggers consume learner-state signals, while ownership remains in learner_state. This arbitration does not close the existing backlog item about explicit learner_state read neighbors for patch_lifecycle triggers.
+    patch_policy_decisions_after_approval: true
     rationale_from_report: ID is owned by learner_state and used by patch_lifecycle; declare it as an explicit Constitution read neighbor if the dependency is legitimate.
   - candidate_id: NIDG_PATCH_LIFECYCLE__TYPE_STATE_AXIS_VALUE_COST
     scope_key: patch_lifecycle
@@ -322,13 +322,13 @@ constitution_neighbor_ids_arbitration:
       published_score_total: 16
       published_level: L2_usable_with_care
     recommended_decision: add_as_default_neighbor
-    human_decision: pending
+    human_decision: add_as_default_neighbor
     allowed_human_decisions:
     - add_as_default_neighbor
     - defer_to_governance_backlog
     - wont_fix_with_rationale
-    human_rationale: TODO
-    patch_policy_decisions_after_approval: false
+    human_rationale: Accepted as explicit Constitution read neighbor for patch_lifecycle. patch_lifecycle legitimately reads the value-cost state axis because relevance patch triggers consume learner-state VC signals, while ownership remains in learner_state. This arbitration does not close the existing backlog item about explicit learner_state read neighbors for patch_lifecycle triggers.
+    patch_policy_decisions_after_approval: true
     rationale_from_report: ID is owned by learner_state and used by patch_lifecycle; declare it as an explicit Constitution read neighbor if the dependency is legitimate.
   - candidate_id: NIDG_KNOWLEDGE_AND_DESIGN__INV_NO_RUNTIME_CONTENT_GENERATION
     scope_key: knowledge_and_design
