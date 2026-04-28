@@ -354,27 +354,43 @@ phases:
       - docs/pipelines/constitution/reports/scope_maturity_scoring_calibration_report.md
     result:
       first_report_status: FAIL
-      scope_count: 5
-      computed_lower_than_published_count: 4
-      computed_delta_non_blocking_count: 1
+      first_report_computed_lower_than_published_count: 4
+      first_report_computed_delta_non_blocking_count: 1
       calibration_report_created: true
       calibration_report_status: calibration_required
-      calibration_required: true
+      v1_1_candidate_applied: true
+      v1_1_report_status: FAIL
+      v1_1_scope_count: 5
+      v1_1_computed_lower_than_published_count: 2
+      v1_1_computed_delta_non_blocking_count: 1
+      v1_1_remaining_blocking_scopes:
+        - deployment_governance
+        - learner_state
+      v1_1_non_blocking_delta_scopes:
+        - patch_lifecycle
+      v1_1_aligned_scopes:
+        - knowledge_and_design
+        - mastery_evaluation
+      v1_1_accepted_as_current_diagnostic_baseline: true
+      neighbor_ids_governance_required: true
       publication_authority_unchanged: true
       calibration_decisions:
         keep_policy_authority: accepted
         keep_dependency_explicitness_strict: accepted
-        adjust_internal_coherence: candidate
-        split_stability_score_and_confidence: candidate
+        adjust_internal_coherence: accepted_in_v1_1
+        split_stability_score_and_confidence: accepted_in_v1_1
+        stop_scorer_calibration_loop: accepted
+        open_neighbor_ids_governance_follow_up: accepted
     pending_outputs:
-      - optional scorer V1.1 rule adjustment if deterministic evidence proves too severe
-      - rerun docs/pipelines/constitution/reports/scope_maturity_scoring_report.yaml after V1.1
+      - neighbor_ids governance decision report for Constitution-to-Constitution dependencies
+      - optional scope_generation policy/decisions updates after human arbitration
+      - rerun scope maturity scoring report after explicit neighbor declarations are governed
     note: >-
-      PHASE_15 has produced its first non-publishing diagnostic report. The FAIL
-      status is not an execution failure: it signals that computed maturity is
-      lower than published governed maturity for several scopes. No policy score
-      must be rewritten until calibration and human arbitration explicitly decide
-      the treatment path.
+      PHASE_15 V1.1 is accepted as the current diagnostic baseline. The remaining
+      FAIL status is no longer treated as scorer over-severity by default. It is a
+      governance signal that explicit Constitution neighbor IDs are under-declared
+      for some scopes. policy.yaml remains authoritative until a future governed
+      authority migration.
 
 ```
 
@@ -423,7 +439,12 @@ implementation_tracking:
   scope_maturity_scoring_report_status: FAIL
   scope_maturity_scoring_calibration_required: true
   scope_maturity_scoring_calibration_report_created: true
-  scope_maturity_scoring_v1_1_candidate_required: true
+  scope_maturity_scoring_v1_1_candidate_required: false
+  scorer_v1_1_candidate_applied: true
+  scope_maturity_scoring_report_v1_1_status: FAIL
+  scope_maturity_scoring_report_v1_1_lower_than_published_count: 2
+  scorer_v1_1_accepted_as_current_diagnostic_baseline: true
+  neighbor_ids_governance_follow_up_required: true
   published_maturity_authority_unchanged: true
 ```
 
@@ -502,6 +523,14 @@ decision_log:
       arbitration input. Dependency explicitness remains a real governance
       signal; internal coherence and inter-release stability require V1.1
       calibration before any maturity authority migration.
+  - decision_id: DECISION_013
+    date: 2026-04-28
+    status: accepted
+    decision: >-
+      Accept score_constitution_scope_maturity.py V1.1 as the current diagnostic
+      baseline. Stop further scorer calibration for now: the remaining FAIL is
+      treated as a governance signal about under-declared Constitution neighbor
+      IDs, not as an automatic reason to rewrite policy.yaml maturity values.
 ```
 
 ## Open risks
@@ -564,11 +593,19 @@ risks:
   - risk_id: RISK_009
     label: maturity_scoring_v1_over_penalizes_dependency_explicitness
     severity: medium
-    status: partially_mitigated_by_calibration
+    status: mitigated_by_v1_1_calibration
     mitigation: >-
-      The calibration report distinguishes dependency explicitness as a likely
-      real governance signal from internal coherence and stability rules that
-      require V1.1 calibration before any published maturity score changes.
+      V1.1 keeps dependency explicitness strict but improves evidence granularity.
+      Remaining low dependency_explicitness scores are treated as governance signals,
+      not as scorer over-penalization by default.
+  - risk_id: RISK_010
+    label: constitution_neighbor_ids_under_declared
+    severity: medium
+    status: open
+    mitigation: >-
+      Open a governed follow-up to decide which Constitution-to-Constitution
+      dependencies must be declared as explicit neighbor IDs in scope_generation
+      policy/decisions. Do not rewrite maturity scores until this arbitration is done.
 ```
 
 ## Next actions
@@ -638,17 +675,39 @@ next_actions:
       - adjust_internal_coherence_in_v1_1_candidate
       - split_or_qualify_inter_release_stability_confidence_in_v1_1_candidate
   - action_id: NEXT_009
-    status: next
+    status: done
     label: Implement scorer V1.1 candidate and rerun maturity report
     phase: PHASE_15
     target: docs/patcher/shared/score_constitution_scope_maturity.py
     expected_outputs:
       - docs/pipelines/constitution/reports/scope_maturity_scoring_report.yaml
       - comparison against docs/pipelines/constitution/reports/scope_maturity_scoring_calibration_report.md
+    result:
+      v1_1_report_status: FAIL
+      computed_lower_than_published_count: 2
+      non_blocking_delta_count: 1
+      accepted_as_current_diagnostic_baseline: true
     constraints:
       - keep_dependency_explicitness_as_governance_signal
       - do_not_modify_policy_yaml
       - do_not_modify_generated_scope_catalog
       - keep_policy_yaml_authoritative_until_arbitrated
+
+  - action_id: NEXT_010
+    status: next
+    label: Govern explicit Constitution neighbor IDs surfaced by maturity scoring V1.1
+    phase: PHASE_15
+    inputs:
+      - docs/pipelines/constitution/reports/scope_maturity_scoring_report.yaml
+      - docs/pipelines/constitution/policies/scope_generation/policy.yaml
+      - docs/pipelines/constitution/policies/scope_generation/decisions.yaml
+    expected_decisions:
+      - decide_neighbor_ids_to_add_per_scope
+      - decide_entries_to_defer_to_governance_backlog
+      - keep_policy_yaml_authoritative_until_arbitrated
+    constraints:
+      - do_not_change_published_maturity_scores_in_this_step
+      - update_scope_generation_policy_only_after_human_arbitration
+      - regenerate_scope_catalog_only_if_policy_decisions_change
 
 ```
