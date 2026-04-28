@@ -1,0 +1,658 @@
+scope_maturity_scoring_report:
+  schema_version: 0.1
+  pipeline_id: constitution
+  status: FAIL
+  authority: diagnostic_report_only
+  does_not_update_policy: true
+  mutation_policy:
+    policy_yaml: not_modified
+    decisions_yaml: not_modified
+    catalog_manifest: not_modified
+    scope_definitions: not_modified
+  inputs:
+  - ref: docs/pipelines/constitution/runs/index.yaml
+    required: true
+    present: true
+    sha256: 62520152fd7757ff175af3d409152de1fcbef74e83de129bd0053488d103aae5
+  - ref: docs/cores/current/constitution.yaml
+    required: true
+    present: true
+    sha256: 05cff42e5ef534e3329edc745449ec88e18645d6a22894b12fd89d2e8b3aed76
+  - ref: docs/cores/current/referentiel.yaml
+    required: true
+    present: true
+    sha256: b129d4f049554a105f5a38c0366eb6bc69bf0df0dd20350bad67e466ca7e642b
+  - ref: docs/cores/current/link.yaml
+    required: true
+    present: true
+    sha256: 708de85a05c7d05691d257e948f53aa7b4627e1a221331283ca0c5ade6b6eb26
+  - ref: docs/pipelines/constitution/policies/scope_generation/policy.yaml
+    required: true
+    present: true
+    sha256: 1ad5c943a784e0959cb5dfbf67557e02e211dea9f59c2186d978cecf08a05919
+  - ref: docs/pipelines/constitution/policies/scope_generation/decisions.yaml
+    required: true
+    present: true
+    sha256: f8872316ffc8528f1ed00190cc1e81a8114925f78f390274e713fa8a92fc8363
+  - ref: docs/pipelines/constitution/scope_catalog/manifest.yaml
+    required: true
+    present: true
+    sha256: 97d41448fd78c318b0af07928e390ca936c7a50d4ac73c8297a41be36ee628ed
+  - ref: docs/pipelines/constitution/reports/scope_partition_review_report.yaml
+    required: true
+    present: true
+    sha256: f44c7aee9f451d0dee24ddbf46d20be29db8fc99ea95db3baf35fb70a9a8b5b5
+  - ref: tmp/constitution_scope_generation_report.yaml
+    required: true
+    present: true
+    sha256: f81e31c603202a30c3717f8e80ec8c790e8821007820b58e36c3e76a3505477a
+  - ref: docs/pipelines/constitution/scope_catalog/governance_backlog.yaml
+    required: false
+    present: true
+    sha256: 4c6b85b17d9a172da882f3321fdf01180373ec4eddc28d533f0fcd1a1c69295f
+  scoring_model:
+    ref: docs/transformations/core_modularization/CONSTITUTION_SCOPE_MATURITY_MODEL.md
+    max_score: 24
+    axes:
+    - clarity_of_scope
+    - internal_coherence
+    - inter_scope_boundaries
+    - dependency_explicitness
+    - bounded_run_executability
+    - inter_release_stability
+    levels:
+    - level: L4_strong
+      min: 21
+      max: 24
+    - level: L3_operational
+      min: 17
+      max: 20
+    - level: L2_usable_with_care
+      min: 13
+      max: 16
+    - level: L1_fragile
+      min: 9
+      max: 12
+    - level: L0_experimental
+      min: 0
+      max: 8
+  summary:
+    scope_count: 5
+    blocking_finding_count: 1
+    warning_count: 1
+    computed_lower_than_published_count: 4
+    computed_delta_non_blocking_count: 1
+  scope_results:
+  - scope_key: deployment_governance
+    scope_id: CONSTITUTION_SCOPE_DEPLOYMENT_GOVERNANCE
+    published_maturity:
+      source: policy.yaml
+      axes:
+        clarity_of_scope: 3
+        internal_coherence: 3
+        inter_scope_boundaries: 3
+        dependency_explicitness: 3
+        bounded_run_executability: 3
+        inter_release_stability: 4
+      score_total: 19
+      level: L3_operational
+      rationale:
+      - Périmètre bien borné sur les contraintes architecturales et de gouvernance invariantes.
+      - Forte stabilité inter-release, ces règles ne varient pas au fil des sessions.
+      - Frontières claires avec learner_state et patch_lifecycle.
+    catalog_maturity:
+      score_total: 19
+      level: L3_operational
+    computed_maturity:
+      score_total: 13
+      level: L2_usable_with_care
+      max_score: 24
+    axis_scores:
+      clarity_of_scope:
+        score: 4
+        evidence:
+        - target.files present
+        - target.modules present
+        - target.ids present
+        - watchpoints, rationale, or notes present
+        published_axis_score: 3
+      internal_coherence:
+        score: 2
+        evidence:
+        - logic_scope_distribution:
+            deployment: 7
+            governance: 3
+            initialization: 1
+            runtime_architecture: 3
+            runtime_governance: 3
+            runtime_transparency: 1
+            system: 1
+        - dominant_logic_scope_ratio: 0.368
+          internal_owned_edge_count: 11
+          external_owned_edge_count: 7
+          internal_owned_edge_ratio: 0.611
+      inter_scope_boundaries:
+        score: 1
+        evidence:
+        - missing_target_ids: &id001 []
+        - duplicate_owned_ids: &id002 {}
+        - uncovered_outgoing_edge_count: 7
+        - missing_target_edge_count: 0
+        - related_open_backlog_count: 2
+        - related_severe_open_backlog_count: 2
+      dependency_explicitness:
+        score: 0
+        evidence:
+        - outgoing_dependency_count: 7
+          covered_outgoing_dependency_count: 0
+          uncovered_outgoing_dependency_count: 7
+          coverage_ratio: 0.0
+      bounded_run_executability:
+        score: 4
+        evidence:
+        - target_id_count: 19
+          neighbor_id_count: 1
+          neighbor_file_count: 2
+          watchpoint_count: 5
+          related_severe_open_backlog_count: 2
+      inter_release_stability:
+        score: 2
+        evidence:
+        - 'evidence_limited: no dedicated release-to-release scope maturity history is consumed in V1'
+        - published_axis_used_as_bounded_prior: 4
+          score_cap_without_history: 3
+          related_severe_open_backlog_count: 2
+          generation_changed_files_count: 5
+    diagnostic_metrics:
+      target_id_count: 19
+      neighbor_id_count: 1
+      neighbor_file_count: 2
+      watchpoint_count: 5
+      internal_edge_count: 11
+      outgoing_edge_count: 7
+      covered_outgoing_edge_count: 0
+      uncovered_outgoing_edge_count: 7
+      missing_target_edge_count: 0
+      missing_target_ids: *id001
+      duplicate_owned_ids: *id002
+    related_open_backlog_entries:
+    - entry_id: GB_2026_04_27_PATCH_LIFECYCLE_R01_GBC_PATCH_LIFECYCLE_ESCALATION_BOUNDARY_R01
+      type: scope_extension_needed
+      status: open
+      title: Review broad escalation triggers crossing patch_lifecycle and learner_state/governance
+    - entry_id: GB_2026_04_27_PATCH_LIFECYCLE_R01_GBC_PATCH_LIFECYCLE_UNCOVERED_CONFLICT_LOGGING_R01
+      type: partition_angle_mort
+      status: open
+      title: Review ACTION_LOG_UNCOVERED_CONFLICT ownership boundary
+    delta:
+      score_delta: -6
+      level_delta: computed_lower_than_published
+      action_required: true
+      severity: fail
+    recommendations:
+    - review_published_maturity_before_authority_change
+  - scope_key: knowledge_and_design
+    scope_id: CONSTITUTION_SCOPE_KNOWLEDGE_AND_DESIGN
+    published_maturity:
+      source: policy.yaml
+      axes:
+        clarity_of_scope: 3
+        internal_coherence: 3
+        inter_scope_boundaries: 2
+        dependency_explicitness: 3
+        bounded_run_executability: 3
+        inter_release_stability: 3
+      score_total: 17
+      level: L3_operational
+      rationale:
+      - Scope couvrant la totalité de la phase Analyse/Design du domaine.
+      - Consolidation de knowledge_model et content_design en un scope cohérent de pré-déploiement.
+      - Frontières à surveiller avec mastery_evaluation sur les règles de propagation graphe.
+    catalog_maturity:
+      score_total: 17
+      level: L3_operational
+    computed_maturity:
+      score_total: 15
+      level: L2_usable_with_care
+      max_score: 24
+    axis_scores:
+      clarity_of_scope:
+        score: 4
+        evidence:
+        - target.files present
+        - target.modules present
+        - target.ids present
+        - watchpoints, rationale, or notes present
+        published_axis_score: 3
+      internal_coherence:
+        score: 2
+        evidence:
+        - logic_scope_distribution:
+            analysis: 1
+            analysis_design: 7
+            analysis_runtime_graph: 1
+            design: 2
+            design_governance: 1
+            design_runtime: 2
+            knowledge_model: 2
+            runtime_feedback: 3
+            runtime_safety: 1
+        - dominant_logic_scope_ratio: 0.35
+          internal_owned_edge_count: 27
+          external_owned_edge_count: 2
+          internal_owned_edge_ratio: 0.931
+      inter_scope_boundaries:
+        score: 3
+        evidence:
+        - missing_target_ids: &id003 []
+        - duplicate_owned_ids: &id004 {}
+        - uncovered_outgoing_edge_count: 2
+        - missing_target_edge_count: 0
+        - related_open_backlog_count: 0
+        - related_severe_open_backlog_count: 0
+      dependency_explicitness:
+        score: 0
+        evidence:
+        - outgoing_dependency_count: 2
+          covered_outgoing_dependency_count: 0
+          uncovered_outgoing_dependency_count: 2
+          coverage_ratio: 0.0
+      bounded_run_executability:
+        score: 4
+        evidence:
+        - target_id_count: 20
+          neighbor_id_count: 1
+          neighbor_file_count: 2
+          watchpoint_count: 5
+          related_severe_open_backlog_count: 0
+      inter_release_stability:
+        score: 2
+        evidence:
+        - 'evidence_limited: no dedicated release-to-release scope maturity history is consumed in V1'
+        - published_axis_used_as_bounded_prior: 3
+          score_cap_without_history: 3
+          related_severe_open_backlog_count: 0
+          generation_changed_files_count: 5
+    diagnostic_metrics:
+      target_id_count: 20
+      neighbor_id_count: 1
+      neighbor_file_count: 2
+      watchpoint_count: 5
+      internal_edge_count: 27
+      outgoing_edge_count: 2
+      covered_outgoing_edge_count: 0
+      uncovered_outgoing_edge_count: 2
+      missing_target_edge_count: 0
+      missing_target_ids: *id003
+      duplicate_owned_ids: *id004
+    related_open_backlog_entries: []
+    delta:
+      score_delta: -2
+      level_delta: computed_lower_than_published
+      action_required: true
+      severity: fail
+    recommendations:
+    - review_published_maturity_before_authority_change
+  - scope_key: learner_state
+    scope_id: CONSTITUTION_SCOPE_LEARNER_STATE
+    published_maturity:
+      source: policy.yaml
+      axes:
+        clarity_of_scope: 3
+        internal_coherence: 3
+        inter_scope_boundaries: 2
+        dependency_explicitness: 3
+        bounded_run_executability: 3
+        inter_release_stability: 3
+      score_total: 17
+      level: L3_operational
+      rationale:
+      - Périmètre élargi par rapport à l'ancienne version pour couvrir feedback AR et reprise.
+      - Frontières encore perfectibles avec mastery_evaluation et patch_lifecycle.
+      - Suffisamment stable et exécutable pour un pilote borné prudent.
+    catalog_maturity:
+      score_total: 17
+      level: L3_operational
+    computed_maturity:
+      score_total: 14
+      level: L2_usable_with_care
+      max_score: 24
+    axis_scores:
+      clarity_of_scope:
+        score: 4
+        evidence:
+        - target.files present
+        - target.modules present
+        - target.ids present
+        - watchpoints, rationale, or notes present
+        published_axis_score: 3
+      internal_coherence:
+        score: 2
+        evidence:
+        - logic_scope_distribution:
+            runtime: 1
+            runtime_feedback: 8
+            runtime_observability: 1
+            runtime_resume: 2
+            runtime_state: 14
+        - dominant_logic_scope_ratio: 0.538
+          internal_owned_edge_count: 39
+          external_owned_edge_count: 3
+          internal_owned_edge_ratio: 0.929
+      inter_scope_boundaries:
+        score: 2
+        evidence:
+        - missing_target_ids: &id005 []
+        - duplicate_owned_ids: &id006 {}
+        - uncovered_outgoing_edge_count: 3
+        - missing_target_edge_count: 0
+        - related_open_backlog_count: 2
+        - related_severe_open_backlog_count: 2
+      dependency_explicitness:
+        score: 0
+        evidence:
+        - outgoing_dependency_count: 3
+          covered_outgoing_dependency_count: 0
+          uncovered_outgoing_dependency_count: 3
+          coverage_ratio: 0.0
+      bounded_run_executability:
+        score: 4
+        evidence:
+        - target_id_count: 26
+          neighbor_id_count: 1
+          neighbor_file_count: 2
+          watchpoint_count: 6
+          related_severe_open_backlog_count: 2
+      inter_release_stability:
+        score: 2
+        evidence:
+        - 'evidence_limited: no dedicated release-to-release scope maturity history is consumed in V1'
+        - published_axis_used_as_bounded_prior: 3
+          score_cap_without_history: 3
+          related_severe_open_backlog_count: 2
+          generation_changed_files_count: 5
+    diagnostic_metrics:
+      target_id_count: 26
+      neighbor_id_count: 1
+      neighbor_file_count: 2
+      watchpoint_count: 6
+      internal_edge_count: 39
+      outgoing_edge_count: 3
+      covered_outgoing_edge_count: 0
+      uncovered_outgoing_edge_count: 3
+      missing_target_edge_count: 0
+      missing_target_ids: *id005
+      duplicate_owned_ids: *id006
+    related_open_backlog_entries:
+    - entry_id: GB_2026_04_27_PATCH_LIFECYCLE_R01_GBC_PATCH_LIFECYCLE_ESCALATION_BOUNDARY_R01
+      type: scope_extension_needed
+      status: open
+      title: Review broad escalation triggers crossing patch_lifecycle and learner_state/governance
+    - entry_id: GB_2026_04_27_PATCH_LIFECYCLE_R01_GBC_PATCH_LIFECYCLE_LEARNER_STATE_NEIGHBORS_R01
+      type: scope_extension_needed
+      status: open
+      title: Review explicit learner_state read neighbors for patch_lifecycle triggers
+    delta:
+      score_delta: -3
+      level_delta: computed_lower_than_published
+      action_required: true
+      severity: fail
+    recommendations:
+    - review_published_maturity_before_authority_change
+  - scope_key: mastery_evaluation
+    scope_id: CONSTITUTION_SCOPE_MASTERY_EVALUATION
+    published_maturity:
+      source: policy.yaml
+      axes:
+        clarity_of_scope: 3
+        internal_coherence: 4
+        inter_scope_boundaries: 2
+        dependency_explicitness: 3
+        bounded_run_executability: 3
+        inter_release_stability: 3
+      score_total: 18
+      level: L3_operational
+      rationale:
+      - Scope très cohérent autour du cycle complet d'évaluation de maîtrise.
+      - Intègre intégrité session et sécurité runtime liée à l'évaluation.
+      - Dépendances explicites mais frontières à surveiller avec knowledge_and_design et learner_state.
+    catalog_maturity:
+      score_total: 18
+      level: L3_operational
+    computed_maturity:
+      score_total: 17
+      level: L3_operational
+      max_score: 24
+    axis_scores:
+      clarity_of_scope:
+        score: 4
+        evidence:
+        - target.files present
+        - target.modules present
+        - target.ids present
+        - watchpoints, rationale, or notes present
+        published_axis_score: 3
+      internal_coherence:
+        score: 3
+        evidence:
+        - logic_scope_distribution:
+            runtime: 1
+            runtime_evaluation: 16
+            runtime_graph: 3
+            runtime_integrity: 5
+            runtime_safety: 4
+        - dominant_logic_scope_ratio: 0.552
+          internal_owned_edge_count: 45
+          external_owned_edge_count: 6
+          internal_owned_edge_ratio: 0.882
+      inter_scope_boundaries:
+        score: 2
+        evidence:
+        - missing_target_ids: &id007 []
+        - duplicate_owned_ids: &id008 {}
+        - uncovered_outgoing_edge_count: 3
+        - missing_target_edge_count: 0
+        - related_open_backlog_count: 0
+        - related_severe_open_backlog_count: 0
+      dependency_explicitness:
+        score: 2
+        evidence:
+        - outgoing_dependency_count: 6
+          covered_outgoing_dependency_count: 3
+          uncovered_outgoing_dependency_count: 3
+          coverage_ratio: 0.5
+      bounded_run_executability:
+        score: 4
+        evidence:
+        - target_id_count: 29
+          neighbor_id_count: 5
+          neighbor_file_count: 2
+          watchpoint_count: 6
+          related_severe_open_backlog_count: 0
+      inter_release_stability:
+        score: 2
+        evidence:
+        - 'evidence_limited: no dedicated release-to-release scope maturity history is consumed in V1'
+        - published_axis_used_as_bounded_prior: 3
+          score_cap_without_history: 3
+          related_severe_open_backlog_count: 0
+          generation_changed_files_count: 5
+    diagnostic_metrics:
+      target_id_count: 29
+      neighbor_id_count: 5
+      neighbor_file_count: 2
+      watchpoint_count: 6
+      internal_edge_count: 45
+      outgoing_edge_count: 6
+      covered_outgoing_edge_count: 3
+      uncovered_outgoing_edge_count: 3
+      missing_target_edge_count: 0
+      missing_target_ids: *id007
+      duplicate_owned_ids: *id008
+    related_open_backlog_entries: []
+    delta:
+      score_delta: -1
+      level_delta: none
+      action_required: false
+      severity: warn
+    recommendations:
+    - record_delta_as_non_blocking_or_arbitrate
+  - scope_key: patch_lifecycle
+    scope_id: CONSTITUTION_SCOPE_PATCH_LIFECYCLE
+    published_maturity:
+      source: policy.yaml
+      axes:
+        clarity_of_scope: 3
+        internal_coherence: 3
+        inter_scope_boundaries: 2
+        dependency_explicitness: 3
+        bounded_run_executability: 2
+        inter_release_stability: 3
+      score_total: 16
+      level: L2_usable_with_care
+      rationale:
+      - Scope bien défini conceptuellement mais encore en rodage opérationnel.
+      - Frontières à surveiller avec learner_state sur les déclencheurs AR/VC.
+      - Architecture off-session solide mais exécutabilité bornée encore à valider.
+    catalog_maturity:
+      score_total: 16
+      level: L2_usable_with_care
+    computed_maturity:
+      score_total: 12
+      level: L1_fragile
+      max_score: 24
+    axis_scores:
+      clarity_of_scope:
+        score: 4
+        evidence:
+        - target.files present
+        - target.modules present
+        - target.ids present
+        - watchpoints, rationale, or notes present
+        published_axis_score: 3
+      internal_coherence:
+        score: 2
+        evidence:
+        - logic_scope_distribution:
+            governance: 1
+            patch_architecture: 1
+            patch_governance: 9
+            patch_layer: 5
+            patch_validation: 5
+            runtime_governance: 1
+        - dominant_logic_scope_ratio: 0.409
+          internal_owned_edge_count: 33
+          external_owned_edge_count: 6
+          internal_owned_edge_ratio: 0.846
+      inter_scope_boundaries:
+        score: 1
+        evidence:
+        - missing_target_ids: &id009 []
+        - duplicate_owned_ids: &id010 {}
+        - uncovered_outgoing_edge_count: 6
+        - missing_target_edge_count: 0
+        - related_open_backlog_count: 6
+        - related_severe_open_backlog_count: 6
+      dependency_explicitness:
+        score: 0
+        evidence:
+        - outgoing_dependency_count: 6
+          covered_outgoing_dependency_count: 0
+          uncovered_outgoing_dependency_count: 6
+          coverage_ratio: 0.0
+      bounded_run_executability:
+        score: 3
+        evidence:
+        - target_id_count: 22
+          neighbor_id_count: 1
+          neighbor_file_count: 2
+          watchpoint_count: 5
+          related_severe_open_backlog_count: 6
+      inter_release_stability:
+        score: 2
+        evidence:
+        - 'evidence_limited: no dedicated release-to-release scope maturity history is consumed in V1'
+        - published_axis_used_as_bounded_prior: 3
+          score_cap_without_history: 3
+          related_severe_open_backlog_count: 6
+          generation_changed_files_count: 5
+    diagnostic_metrics:
+      target_id_count: 22
+      neighbor_id_count: 1
+      neighbor_file_count: 2
+      watchpoint_count: 5
+      internal_edge_count: 33
+      outgoing_edge_count: 6
+      covered_outgoing_edge_count: 0
+      uncovered_outgoing_edge_count: 6
+      missing_target_edge_count: 0
+      missing_target_ids: *id009
+      duplicate_owned_ids: *id010
+    related_open_backlog_entries:
+    - entry_id: GB_2026_04_27_PATCH_LIFECYCLE_R01_GBC_PATCH_LIFECYCLE_ESCALATION_BOUNDARY_R01
+      type: scope_extension_needed
+      status: open
+      title: Review broad escalation triggers crossing patch_lifecycle and learner_state/governance
+    - entry_id: GB_2026_04_27_PATCH_LIFECYCLE_R01_GBC_PATCH_LIFECYCLE_FULL_STATE_MACHINE_R01
+      type: scope_gap
+      status: open
+      title: Decide whether patch_lifecycle needs a canonical patch state machine
+    - entry_id: GB_2026_04_27_PATCH_LIFECYCLE_R01_GBC_PATCH_LIFECYCLE_LEARNER_STATE_NEIGHBORS_R01
+      type: scope_extension_needed
+      status: open
+      title: Review explicit learner_state read neighbors for patch_lifecycle triggers
+    - entry_id: GB_2026_04_27_PATCH_LIFECYCLE_R01_GBC_PATCH_LIFECYCLE_PRIORITY_QUEUE_R01
+      type: scope_gap
+      status: open
+      title: Decide whether patch serialization requires deterministic priority lanes
+    - entry_id: GB_2026_04_27_PATCH_LIFECYCLE_R01_GBC_PATCH_LIFECYCLE_REFERENTIEL_PARAMETER_R01
+      type: scope_gap
+      status: open
+      title: Track external_read_only referentiel parameter dependency for patch escalation threshold
+    - entry_id: GB_2026_04_27_PATCH_LIFECYCLE_R01_GBC_PATCH_LIFECYCLE_UNCOVERED_CONFLICT_LOGGING_R01
+      type: partition_angle_mort
+      status: open
+      title: Review ACTION_LOG_UNCOVERED_CONFLICT ownership boundary
+    delta:
+      score_delta: -4
+      level_delta: computed_lower_than_published
+      action_required: true
+      severity: fail
+    recommendations:
+    - review_published_maturity_before_authority_change
+  blocking_findings:
+  - finding_id: COMPUTED_MATURITY_LOWER_THAN_PUBLISHED
+    severity: blocking
+    message: At least one computed maturity level is lower than the published governed level.
+    items:
+    - scope_key: deployment_governance
+      published_level: L3_operational
+      computed_level: L2_usable_with_care
+      score_delta: -6
+    - scope_key: knowledge_and_design
+      published_level: L3_operational
+      computed_level: L2_usable_with_care
+      score_delta: -2
+    - scope_key: learner_state
+      published_level: L3_operational
+      computed_level: L2_usable_with_care
+      score_delta: -3
+    - scope_key: patch_lifecycle
+      published_level: L2_usable_with_care
+      computed_level: L1_fragile
+      score_delta: -4
+  warnings:
+  - finding_id: COMPUTED_MATURITY_DELTA_NON_BLOCKING
+    severity: warning
+    message: At least one computed score differs from the published score without lowering the level.
+    items:
+    - scope_key: mastery_evaluation
+      published_level: L3_operational
+      computed_level: L3_operational
+      score_delta: -1
+  notes:
+  - This report is deterministic and non-publishing.
+  - policy.yaml remains authoritative for published maturity in V1.
+  - Computed maturity is a post-scoping diagnostic signal and must be arbitrated before any authority
+    migration.
+  - The script writes only the report path passed with --report.
