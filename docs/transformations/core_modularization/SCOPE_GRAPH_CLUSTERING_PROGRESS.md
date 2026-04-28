@@ -34,13 +34,13 @@ This tracker reflects the current Scope Lab execution state after:
 current_phase:
   phase_id: PHASE_14
   label: governance_backlog_pipeline_integration
-  status: active
+  status: planned
   summary: >-
-    The serious patch_lifecycle pilot bounded_local_run is complete and exported
-    governance backlog entries to docs/pipelines/constitution/scope_catalog/governance_backlog.yaml.
-    PHASE_14 is now the generic pipeline integration phase for governance backlog handling:
-    confirm STAGE_02 candidate production, STAGE_09 canonical export, STAGE_00 consumption,
-    launcher / entry-resolution surfacing, deterministic reporting, and backlog status lifecycle.
+    PHASE_14 governance_backlog_pipeline_integration is complete. The generic backlog
+    mechanism now covers STAGE_02 candidate production, STAGE_09 canonical export,
+    governance_backlog.yaml storage, STAGE_00 consumption, deterministic reporting,
+    launcher / entry-resolution surfacing, and explicit open/addressed/wont_fix lifecycle rules.
+    The next planned governance content phase is PHASE_16 constitution_neighbor_ids_governance.
 ```
 
 
@@ -280,7 +280,7 @@ phases:
 
   - phase_id: PHASE_14
     label: governance_backlog_pipeline_integration
-    status: active
+    status: done
     objective: >-
       Complete the generic Constitution pipeline integration of governance backlog entries
       generated during runs, by ensuring that they are produced in STAGE_02, exported in
@@ -336,12 +336,21 @@ phases:
           computes open backlog warnings by impacted scope, annotates published scopes
           and active runs with governance_backlog_signal, and propagates the signal into
           OPEN_NEW_RUN entry action prompt bindings.
-    pending_subtasks:
       - subtask_id: PHASE_14F_BACKLOG_STATUS_LIFECYCLE
-        status: pending
-        objective: >-
-          Define how entries move from open to addressed or wont_fix, including required
-          resolution evidence and prohibition of silent status changes.
+        status: done
+        evidence:
+          - docs/specs/constitution_governance_backlog_lifecycle.md
+          - docs/pipelines/constitution/scope_catalog/governance_backlog.yaml
+          - docs/pipelines/constitution/STAGE_00_SCOPE_PARTITION_REVIEW_AND_REGEN.md
+          - docs/patcher/shared/validate_governance_backlog_lifecycle.py
+          - docs/pipelines/constitution/reports/governance_backlog_lifecycle_validation.yaml
+        summary: >-
+          The backlog lifecycle is now explicit: canonical statuses are open,
+          addressed and wont_fix. Deferred/reporté is not a status; deferred entries
+          remain open with atomic review metadata. A deterministic validator verifies
+          status values, resolution metadata, unique entry IDs, known entry types and
+          open review metadata consistency.
+    pending_subtasks: []
     related_reference_artifacts:
       - docs/transformations/core_modularization/POST_PILOT_PATCH_LIFECYCLE_BACKLOG_TRIAGE.md
     note: >-
@@ -490,7 +499,9 @@ implementation_tracking:
   governance_backlog_report_script_created: true
   governance_backlog_report_generated: true
   launcher_backlog_warning_integrated: true
-  backlog_status_lifecycle_defined: false
+  backlog_status_lifecycle_defined: true
+  governance_backlog_lifecycle_validator_created: true
+  governance_backlog_lifecycle_validation_passed: true
   scope_maturity_scoring_spec_created: true
   stage00_maturity_scoring_integrated: true
   score_constitution_scope_maturity_script_created: true
@@ -720,7 +731,7 @@ next_actions:
     target: docs/pipelines/constitution/scope_catalog/governance_backlog.yaml
 
   - action_id: NEXT_006
-    status: in_progress
+    status: done
     label: Integrate governance backlog consumption into the Constitution pipeline
     phase: PHASE_14
     input: docs/pipelines/constitution/scope_catalog/governance_backlog.yaml
@@ -733,8 +744,10 @@ next_actions:
       - docs/patcher/shared/report_governance_backlog.py
       - docs/pipelines/constitution/reports/governance_backlog_report.yaml
       - tmp/pipeline_launcher.py
-    remaining_decisions:
-      - open_addressed_wont_fix_status_lifecycle
+      - docs/specs/constitution_governance_backlog_lifecycle.md
+      - docs/patcher/shared/validate_governance_backlog_lifecycle.py
+      - docs/pipelines/constitution/reports/governance_backlog_lifecycle_validation.yaml
+    remaining_decisions: []
   - action_id: NEXT_007
     status: done
     label: Implement deterministic post-scoping scope maturity scoring report
