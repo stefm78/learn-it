@@ -158,7 +158,6 @@ def compact_governance_backlog_signal(signal: dict[str, Any]) -> str:
     types = signal.get("open_types") or {}
     type_summary = ",".join(f"{k}:{v}" for k, v in sorted(types.items())) if isinstance(types, dict) else "unknown"
     return f"open_entries direct={direct} related={related} types={type_summary}"
-\n
 
 def discover_pipelines_from_registry(registry_path: Path) -> list[dict[str, str]]:
     text = load_text(registry_path)
