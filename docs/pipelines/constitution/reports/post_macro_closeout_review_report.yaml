@@ -1,0 +1,188 @@
+post_macro_closeout_review_report:
+  schema_version: '0.1'
+  phase_id: PHASE_20A
+  generated_at: '2026-04-28T16:25:19Z'
+  status: PASS
+  mutation_policy:
+    governance_backlog_yaml: not_modified
+    policy_yaml: not_modified
+    decisions_yaml: not_modified
+    scope_catalog: not_modified
+    cores: not_modified
+  inputs:
+  - ref: docs/pipelines/constitution/scope_catalog/governance_backlog.yaml
+    sha256: 9c0e13ec477af086b5ec984046e0e51564f96a19b2b062a622c1b75e49ccbe22
+  - ref: docs/pipelines/constitution/reports/governance_backlog_report.yaml
+    sha256: 68f0fa74a7a15d99e8ed5a392d9a2ee32fad4f858552bcd481d0a228b100712d
+  - ref: docs/transformations/core_modularization/SCOPE_GRAPH_CLUSTERING_PROGRESS.md
+    sha256: b2641fb0b7e0c980b4f4ebd79c8276007f5e01d115a267826366c1e19ecd587e
+  - ref: docs/pipelines/constitution/reports/scope_maturity_scoring_report.yaml
+    sha256: 7843091fd48bae5ba82a2d331de12e348ea5dfdd53dd9123265f3deac8adf9d2
+  - ref: docs/pipelines/constitution/reports/constitution_neighbor_ids_arbitration_validation.yaml
+    sha256: cccc59a168db47ab666c28ccd8de71df1ea05403b9fe8921191ff7a20c007954
+  - ref: docs/pipelines/constitution/reports/constitution_neighbor_declaration_inventory_report.yaml
+    sha256: 8a1f3e8cbfcb643f5847075914afb16f3d286904f232ded7f56403632c646626
+  - ref: docs/pipelines/constitution/reports/constitution_multi_owner_cluster_inventory_report.yaml
+    sha256: baf6a5f4c7f7177d9e64474083f3d2668e8ddad6877e891ca7b839e50b2cb2f2
+  - ref: docs/pipelines/constitution/reports/constitution_multi_owner_cluster_arbitration_validation.yaml
+    sha256: 751f35deb479cb94859d58ca2b6c44822a5abd01b6c86776f100b42dd4751c79
+  macro_status_snapshot:
+    scope_maturity_scoring_status: PASS
+    scope_maturity_blocking_finding_count: 0
+    scope_maturity_warning_count: 0
+    neighbor_ids_arbitration_validation_status: PASS_READY_TO_PATCH
+    neighbor_ids_arbitration_pending_count: 0
+    neighbor_declaration_inventory_status: PASS
+    neighbor_declaration_inventory_finding_count: 0
+    multi_owner_inventory_status: PASS
+    multi_owner_human_arbitration_required_count: 3
+    multi_owner_arbitration_validation_status: PASS_NO_PATCH_REQUIRED
+    multi_owner_patch_ready_count: 0
+  summary:
+    open_backlog_entry_count_before_review: 6
+    recommended_mark_addressed_count: 2
+    recommended_keep_open_count: 4
+    recommended_wont_fix_count: 0
+    requires_backlog_patch_count: 6
+    requires_policy_decisions_patch_count: 0
+    requires_catalog_regeneration_count: 0
+    post_macro_classification_counts:
+      addressed_by_phase16_and_phase17: 1
+      partially_reviewed_still_open: 1
+      reviewed_no_ownership_change: 1
+      still_open_cross_core_follow_up: 1
+      still_open_design_extension: 2
+    recommended_resolution_status_counts:
+      addressed: 2
+      open: 4
+  entries:
+  - entry_id: GB_2026_04_27_PATCH_LIFECYCLE_R01_GBC_PATCH_LIFECYCLE_LEARNER_STATE_NEIGHBORS_R01
+    candidate_id: GBC_PATCH_LIFECYCLE_LEARNER_STATE_NEIGHBORS_R01
+    title: Review explicit learner_state read neighbors for patch_lifecycle triggers
+    type: scope_extension_needed
+    status: open
+    scope_key: patch_lifecycle
+    related_scope_keys:
+    - patch_lifecycle
+    - learner_state
+    post_macro_classification: addressed_by_phase16_and_phase17
+    recommended_lifecycle_action: mark_addressed
+    recommended_resolution_status: addressed
+    requires_backlog_patch: true
+    requires_policy_decisions_patch: false
+    requires_catalog_regeneration: false
+    evidence:
+    - PHASE_16 approved exact patch_lifecycle read-neighbor IDs TYPE_STATE_AXIS_VALUE_COST and TYPE_SELF_REPORT_AR_N1.
+    - PHASE_17 scoring publication converged to PASS with dependency coverage 1.0 and no maturity delta.
+    recommended_resolution_note: Addressed by PHASE_16/17. Explicit learner_state read-neighbor IDs for patch_lifecycle triggers
+      were governed, applied through decisions.yaml, regenerated into the scope catalog, and scoring now converges to PASS.
+    next_review_trigger: none; reopen only if future scoring/reporting identifies missing learner_state read-neighbors
+  - entry_id: GB_2026_04_27_PATCH_LIFECYCLE_R01_GBC_PATCH_LIFECYCLE_REFERENTIEL_PARAMETER_R01
+    candidate_id: GBC_PATCH_LIFECYCLE_REFERENTIEL_PARAMETER_R01
+    title: Track external_read_only referentiel parameter dependency for patch escalation threshold
+    type: scope_gap
+    status: open
+    scope_key: patch_lifecycle
+    related_scope_keys:
+    - patch_lifecycle
+    post_macro_classification: still_open_cross_core_follow_up
+    recommended_lifecycle_action: keep_open_with_review_metadata
+    recommended_resolution_status: open
+    requires_backlog_patch: true
+    requires_policy_decisions_patch: false
+    requires_catalog_regeneration: false
+    evidence:
+    - PHASE_18 clarified external read-only core semantics.
+    - The specific referentiel parameter dependency still requires referentiel/link coordination or a cross-core change request.
+    recommended_resolution_note: Keep open. PHASE_18 clarified the model, but did not select or govern the specific referentiel
+      parameter as a concrete external read neighbor.
+    next_review_trigger: referentiel/link external-read-only follow-up or patch escalation threshold design
+  - entry_id: GB_2026_04_27_PATCH_LIFECYCLE_R01_GBC_PATCH_LIFECYCLE_ESCALATION_BOUNDARY_R01
+    candidate_id: GBC_PATCH_LIFECYCLE_ESCALATION_BOUNDARY_R01
+    title: Review broad escalation triggers crossing patch_lifecycle and learner_state/governance
+    type: scope_extension_needed
+    status: open
+    scope_key: patch_lifecycle
+    related_scope_keys:
+    - patch_lifecycle
+    - learner_state
+    - deployment_governance
+    post_macro_classification: partially_reviewed_still_open
+    recommended_lifecycle_action: keep_open_with_review_metadata
+    recommended_resolution_status: open
+    requires_backlog_patch: true
+    requires_policy_decisions_patch: false
+    requires_catalog_regeneration: false
+    evidence:
+    - PHASE_19B rejected ownership moves from current multi-owner signals.
+    - The broader escalation boundary still spans patch_lifecycle, learner_state and deployment_governance and was not fully
+      designed.
+    recommended_resolution_note: Keep open. PHASE_19 removed the immediate ownership-transfer pressure, but the broader escalation-trigger
+      boundary still requires design when escalation semantics are revisited.
+    next_review_trigger: next patch_lifecycle run touching escalation triggers or dedicated escalation-boundary design run
+  - entry_id: GB_2026_04_27_PATCH_LIFECYCLE_R01_GBC_PATCH_LIFECYCLE_UNCOVERED_CONFLICT_LOGGING_R01
+    candidate_id: GBC_PATCH_LIFECYCLE_UNCOVERED_CONFLICT_LOGGING_R01
+    title: Review ACTION_LOG_UNCOVERED_CONFLICT ownership boundary
+    type: partition_angle_mort
+    status: open
+    scope_key: patch_lifecycle
+    related_scope_keys:
+    - patch_lifecycle
+    - deployment_governance
+    post_macro_classification: reviewed_no_ownership_change
+    recommended_lifecycle_action: mark_addressed
+    recommended_resolution_status: addressed
+    requires_backlog_patch: true
+    requires_policy_decisions_patch: false
+    requires_catalog_regeneration: false
+    evidence:
+    - PHASE_19A classified the related multi-owner signal as diagnostic_subcluster/read_neighbor_relation rather than ownership
+      transfer.
+    - PHASE_19B closed MACRO_004 with PASS_NO_PATCH_REQUIRED and no ownership changes.
+    recommended_resolution_note: Addressed by PHASE_19. Multi-owner review concluded no ownership transfer is required; ACTION_LOG_UNCOVERED_CONFLICT
+      can remain governed by existing patch_lifecycle/diagnostic governance unless a future concrete node-level defect appears.
+    next_review_trigger: future concrete ownership defect or repeated patch_lifecycle run issue
+  - entry_id: GB_2026_04_27_PATCH_LIFECYCLE_R01_GBC_PATCH_LIFECYCLE_PRIORITY_QUEUE_R01
+    candidate_id: GBC_PATCH_LIFECYCLE_PRIORITY_QUEUE_R01
+    title: Decide whether patch serialization requires deterministic priority lanes
+    type: scope_gap
+    status: open
+    scope_key: patch_lifecycle
+    related_scope_keys:
+    - patch_lifecycle
+    post_macro_classification: still_open_design_extension
+    recommended_lifecycle_action: keep_open_with_review_metadata
+    recommended_resolution_status: open
+    requires_backlog_patch: true
+    requires_policy_decisions_patch: false
+    requires_catalog_regeneration: false
+    evidence:
+    - No later phase introduced a canonical deterministic priority lane model.
+    - PHASE_19 concerned ownership ambiguity, not patch queue semantics.
+    recommended_resolution_note: Keep open. Priority queue semantics remain a future patch_lifecycle design extension and
+      should not be silently added.
+    next_review_trigger: future run requiring escalation/rollback priority semantics or dedicated patch queue design
+  - entry_id: GB_2026_04_27_PATCH_LIFECYCLE_R01_GBC_PATCH_LIFECYCLE_FULL_STATE_MACHINE_R01
+    candidate_id: GBC_PATCH_LIFECYCLE_FULL_STATE_MACHINE_R01
+    title: Decide whether patch_lifecycle needs a canonical patch state machine
+    type: scope_gap
+    status: open
+    scope_key: patch_lifecycle
+    related_scope_keys:
+    - patch_lifecycle
+    post_macro_classification: still_open_design_extension
+    recommended_lifecycle_action: keep_open_with_review_metadata
+    recommended_resolution_status: open
+    requires_backlog_patch: true
+    requires_policy_decisions_patch: false
+    requires_catalog_regeneration: false
+    evidence:
+    - No later phase introduced a full canonical patch state machine.
+    - Pilot and macro follow-ups stabilized scoping/governance, not a complete patch lifecycle state model.
+    recommended_resolution_note: Keep open. A full patch state machine remains a future patch_lifecycle design extension.
+    next_review_trigger: future patch_lifecycle run requiring explicit state transitions beyond current terminal semantics
+  recommended_next_steps:
+  - Use this report as PHASE_20B input.
+  - If accepted, apply a governance_backlog.yaml lifecycle patch only; do not change policy.yaml or decisions.yaml.
+  - 'Expected PHASE_20B outcome: mark two entries addressed and keep four entries open with review metadata.'
+  - After backlog patch, rerun validate_governance_backlog_lifecycle.py and report_governance_backlog.py.
