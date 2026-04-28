@@ -708,6 +708,46 @@ phases:
         - multi-owner cluster questions must not infer ownership from read-neighbor declarations
         - governance_backlog entries may still require separate triage where they concern ownership boundaries
 
+  - phase_id: PHASE_19
+    label: macro_004_multi_owner_cluster_review
+    status: planned
+    source_macro_decision: MACRO_004_MULTI_OWNER_CLUSTER_REVIEW
+    objective: >-
+      Review clusters or scope fragments that may appear to span multiple owners,
+      without confusing read-neighbor declarations, diagnostic subclusters, or
+      generated run views with ownership transfers.
+    rationale: >-
+      PHASE_18 completed the prerequisite clarification: neighbor declarations are
+      read authority only. MACRO_004 can now focus on true ownership ambiguity,
+      multi-owner cluster pressure, and whether any explicit cross-scope governance
+      rule is needed.
+    preconditions_satisfied:
+      - MACRO_005_NEIGHBOR_DECLARATION_REVIEW done
+      - docs/specs/constitution_neighbor_declaration_model.md accepted
+      - constitution_neighbor_declaration_inventory_report status PASS
+      - SGEN_DECISION_011 closed as superseded_by_phase16
+    planned_subtasks:
+      - subtask_id: PHASE_19A_MULTI_OWNER_CLUSTER_INVENTORY
+        status: pending
+        objective: >-
+          Produce or refresh a deterministic inventory of candidate multi-owner
+          clusters and classify whether each signal is true ownership ambiguity,
+          bridge edge, read-neighbor relation, diagnostic subcluster, or generated-view artifact.
+      - subtask_id: PHASE_19B_HUMAN_ARBITRATION
+        status: pending
+        objective: >-
+          Decide for each candidate whether to keep current ownership, split scope,
+          merge scope, record diagnostic subcluster, add read neighbor, or open backlog.
+      - subtask_id: PHASE_19C_POLICY_DECISIONS_ALIGNMENT
+        status: pending
+        objective: >-
+          Apply accepted ownership-related decisions through canonical policy/decisions
+          patches, then regenerate catalog and rerun validators.
+    pending_subtasks:
+      - PHASE_19A_MULTI_OWNER_CLUSTER_INVENTORY
+      - PHASE_19B_HUMAN_ARBITRATION
+      - PHASE_19C_POLICY_DECISIONS_ALIGNMENT
+
 ```
 
 ## Implementation checklist
