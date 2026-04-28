@@ -398,6 +398,48 @@ phases:
       for some scopes. policy.yaml remains authoritative until a future governed
       authority migration.
 
+  - phase_id: PHASE_16
+    label: constitution_neighbor_ids_governance
+    status: planned
+    objective: >-
+      Govern explicit Constitution-to-Constitution neighbor IDs surfaced by the
+      maturity scoring V1.1 diagnostic baseline, without merging this content-specific
+      arbitration into PHASE_14 governance_backlog_pipeline_integration.
+    source_signal:
+      phase: PHASE_15
+      report: docs/pipelines/constitution/reports/scope_maturity_scoring_report.yaml
+      signal: constitution_neighbor_ids_under_declared
+    governance_position:
+      phase14_relationship: >-
+        Related through STAGE_00, but distinct from the generic governance backlog
+        mechanism. PHASE_14 governs backlog plumbing; PHASE_16 governs the specific
+        neighbor_ids content revealed by scoring.
+      policy_authority: docs/pipelines/constitution/policies/scope_generation/policy.yaml
+      mutation_policy: >-
+        Do not change published maturity scores. Update policy.yaml / decisions.yaml
+        only after human arbitration of explicit neighbor IDs.
+    planned_inputs:
+      - docs/pipelines/constitution/reports/scope_maturity_scoring_report.yaml
+      - docs/pipelines/constitution/policies/scope_generation/policy.yaml
+      - docs/pipelines/constitution/policies/scope_generation/decisions.yaml
+      - docs/pipelines/constitution/scope_catalog/governance_backlog.yaml
+    planned_outputs:
+      - neighbor_ids governance decision report
+      - optional governance_backlog entries for deferred neighbor IDs
+      - optional scope_generation policy/decisions updates after human arbitration
+      - regenerated scope catalog only if policy/decisions change
+      - rerun scope maturity scoring report after explicit neighbor declarations are governed
+    decision_values:
+      - add_as_default_neighbor
+      - defer_to_governance_backlog
+      - wont_fix_with_rationale
+    constraints:
+      - do_not_absorb_into_phase14
+      - do_not_change_published_maturity_scores_in_this_phase
+      - do_not_change_scorer_v1_1_rules
+      - update_scope_generation_policy_only_after_human_arbitration
+      - regenerate_scope_catalog_only_if_policy_decisions_change
+
 ```
 
 ## Implementation checklist
@@ -452,6 +494,7 @@ implementation_tracking:
   scope_maturity_scoring_report_v1_1_lower_than_published_count: 2
   scorer_v1_1_accepted_as_current_diagnostic_baseline: true
   neighbor_ids_governance_follow_up_required: true
+  phase16_constitution_neighbor_ids_governance_planned: true
   published_maturity_authority_unchanged: true
 ```
 
@@ -537,7 +580,15 @@ decision_log:
       Accept score_constitution_scope_maturity.py V1.1 as the current diagnostic
       baseline. Stop further scorer calibration for now: the remaining FAIL is
       treated as a governance signal about under-declared Constitution neighbor
-      IDs, not as an automatic reason to rewrite policy.yaml maturity values.
+      IDs, not as an automatic reason to rewrite policy.yaml maturity values.  - decision_id: DECISION_014
+    date: 2026-04-28
+    status: accepted
+    decision: >-
+      Separate the content-specific constitution_neighbor_ids_under_declared signal
+      surfaced by maturity scoring V1.1 from PHASE_14 governance backlog pipeline
+      integration. PHASE_16 is planned to govern explicit Constitution neighbor IDs,
+      while PHASE_14 remains limited to the generic backlog mechanism.
+
 ```
 
 ## Open risks
@@ -612,7 +663,15 @@ risks:
     mitigation: >-
       Open a governed follow-up to decide which Constitution-to-Constitution
       dependencies must be declared as explicit neighbor IDs in scope_generation
-      policy/decisions. Do not rewrite maturity scores until this arbitration is done.
+      policy/decisions. Do not rewrite maturity scores until this arbitration is done.  - risk_id: RISK_011
+    label: phase14_absorbs_scoring_neighbor_ids_content
+    severity: medium
+    status: mitigated_by_phase16_planning
+    mitigation: >-
+      PHASE_16 is planned as a separate content-governance phase. PHASE_14 remains
+      focused on generic backlog production, export, reporting, launcher surfacing,
+      and lifecycle rules.
+
 ```
 
 ## Next actions
@@ -706,7 +765,7 @@ next_actions:
   - action_id: NEXT_010
     status: next
     label: Govern explicit Constitution neighbor IDs surfaced by maturity scoring V1.1
-    phase: PHASE_15
+    phase: PHASE_16
     inputs:
       - docs/pipelines/constitution/reports/scope_maturity_scoring_report.yaml
       - docs/pipelines/constitution/policies/scope_generation/policy.yaml

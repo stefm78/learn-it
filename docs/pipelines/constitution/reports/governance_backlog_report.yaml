@@ -1,0 +1,196 @@
+governance_backlog_report:
+  schema_version: '0.1'
+  generated_at: '2026-04-28T10:57:23Z'
+  status: PASS
+  source:
+    backlog_path: docs/pipelines/constitution/scope_catalog/governance_backlog.yaml
+    backlog_schema_version: 0.1
+  filters:
+    status: open
+    scope_key: null
+  summary:
+    total_entries: 6
+    selected_entries: 6
+    open_entries: 6
+    counts_by_status_all_entries:
+      open: 6
+    selected_counts_by_type:
+      partition_angle_mort: 1
+      scope_extension_needed: 2
+      scope_gap: 3
+    selected_counts_by_scope_key:
+      patch_lifecycle: 6
+    selected_counts_by_related_scope_key:
+      deployment_governance: 2
+      learner_state: 2
+      patch_lifecycle: 6
+    selected_counts_by_source_run_id:
+      CONSTITUTION_RUN_2026_04_27_PATCH_LIFECYCLE_R01: 6
+    selected_counts_by_candidate_status:
+      candidate_needs_human_review: 1
+      candidate_open: 5
+  stage00_review:
+    open_entries_requiring_review_count: 6
+    review_relevant_types:
+    - orphan_id
+    - partition_angle_mort
+    - policy_conflict
+    - scope_extension_needed
+    - scope_gap
+    note: This report classifies and summarizes backlog entries only. It does not
+      mark entries addressed/wont_fix and does not arbitrate scope changes.
+  launcher_scope_summary:
+    deployment_governance:
+      direct_open_count: 0
+      related_open_count: 2
+      open_entry_ids:
+      - GB_2026_04_27_PATCH_LIFECYCLE_R01_GBC_PATCH_LIFECYCLE_ESCALATION_BOUNDARY_R01
+      - GB_2026_04_27_PATCH_LIFECYCLE_R01_GBC_PATCH_LIFECYCLE_UNCOVERED_CONFLICT_LOGGING_R01
+      open_types:
+        partition_angle_mort: 1
+        scope_extension_needed: 1
+      warning: open_governance_backlog_entries
+    learner_state:
+      direct_open_count: 0
+      related_open_count: 2
+      open_entry_ids:
+      - GB_2026_04_27_PATCH_LIFECYCLE_R01_GBC_PATCH_LIFECYCLE_ESCALATION_BOUNDARY_R01
+      - GB_2026_04_27_PATCH_LIFECYCLE_R01_GBC_PATCH_LIFECYCLE_LEARNER_STATE_NEIGHBORS_R01
+      open_types:
+        scope_extension_needed: 2
+      warning: open_governance_backlog_entries
+    patch_lifecycle:
+      direct_open_count: 6
+      related_open_count: 6
+      open_entry_ids:
+      - GB_2026_04_27_PATCH_LIFECYCLE_R01_GBC_PATCH_LIFECYCLE_ESCALATION_BOUNDARY_R01
+      - GB_2026_04_27_PATCH_LIFECYCLE_R01_GBC_PATCH_LIFECYCLE_FULL_STATE_MACHINE_R01
+      - GB_2026_04_27_PATCH_LIFECYCLE_R01_GBC_PATCH_LIFECYCLE_LEARNER_STATE_NEIGHBORS_R01
+      - GB_2026_04_27_PATCH_LIFECYCLE_R01_GBC_PATCH_LIFECYCLE_PRIORITY_QUEUE_R01
+      - GB_2026_04_27_PATCH_LIFECYCLE_R01_GBC_PATCH_LIFECYCLE_REFERENTIEL_PARAMETER_R01
+      - GB_2026_04_27_PATCH_LIFECYCLE_R01_GBC_PATCH_LIFECYCLE_UNCOVERED_CONFLICT_LOGGING_R01
+      open_types:
+        partition_angle_mort: 2
+        scope_extension_needed: 4
+        scope_gap: 6
+      warning: open_governance_backlog_entries
+  selected_entries_detail:
+  - entry_id: GB_2026_04_27_PATCH_LIFECYCLE_R01_GBC_PATCH_LIFECYCLE_UNCOVERED_CONFLICT_LOGGING_R01
+    candidate_id: GBC_PATCH_LIFECYCLE_UNCOVERED_CONFLICT_LOGGING_R01
+    status: open
+    type: partition_angle_mort
+    scope_key: patch_lifecycle
+    related_scope_keys:
+    - patch_lifecycle
+    - deployment_governance
+    source_run_id: CONSTITUTION_RUN_2026_04_27_PATCH_LIFECYCLE_R01
+    source_stage: STAGE_09_CLOSEOUT_AND_ARCHIVE
+    source_finding_id: ARB-F09
+    candidate_status: candidate_needs_human_review
+    title: Review ACTION_LOG_UNCOVERED_CONFLICT ownership boundary
+    recommended_action: Review whether ACTION_LOG_UNCOVERED_CONFLICT should remain
+      patch_lifecycle-owned, become a governance neighbor, or be split into generic
+      and patch-specific logging actions.
+    stage00_relevant: true
+    source_arbitrage_path: docs/pipelines/constitution/archive/CORE_RELEASE_2026_04_28_R01/work/02_arbitrage/arbitrage.md
+    recorded_at: '2026-04-28T09:43:30Z'
+    age_days: 0
+  - entry_id: GB_2026_04_27_PATCH_LIFECYCLE_R01_GBC_PATCH_LIFECYCLE_ESCALATION_BOUNDARY_R01
+    candidate_id: GBC_PATCH_LIFECYCLE_ESCALATION_BOUNDARY_R01
+    status: open
+    type: scope_extension_needed
+    scope_key: patch_lifecycle
+    related_scope_keys:
+    - patch_lifecycle
+    - learner_state
+    - deployment_governance
+    source_run_id: CONSTITUTION_RUN_2026_04_27_PATCH_LIFECYCLE_R01
+    source_stage: STAGE_09_CLOSEOUT_AND_ARCHIVE
+    source_finding_id: ARB-F08
+    candidate_status: candidate_open
+    title: Review broad escalation triggers crossing patch_lifecycle and learner_state/governance
+    recommended_action: Revisit escalation ownership during scope partition review,
+      decide explicit owners and neighbors, and regenerate scope catalog if boundaries
+      change.
+    stage00_relevant: true
+    source_arbitrage_path: docs/pipelines/constitution/archive/CORE_RELEASE_2026_04_28_R01/work/02_arbitrage/arbitrage.md
+    recorded_at: '2026-04-28T09:43:30Z'
+    age_days: 0
+  - entry_id: GB_2026_04_27_PATCH_LIFECYCLE_R01_GBC_PATCH_LIFECYCLE_LEARNER_STATE_NEIGHBORS_R01
+    candidate_id: GBC_PATCH_LIFECYCLE_LEARNER_STATE_NEIGHBORS_R01
+    status: open
+    type: scope_extension_needed
+    scope_key: patch_lifecycle
+    related_scope_keys:
+    - patch_lifecycle
+    - learner_state
+    source_run_id: CONSTITUTION_RUN_2026_04_27_PATCH_LIFECYCLE_R01
+    source_stage: STAGE_09_CLOSEOUT_AND_ARCHIVE
+    source_finding_id: ARB-F02
+    candidate_status: candidate_open
+    title: Review explicit learner_state read neighbors for patch_lifecycle triggers
+    recommended_action: Review scope_generation policy/decisions to decide whether
+      TYPE_STATE_AXIS_VALUE_COST and TYPE_SELF_REPORT_AR_N1, or equivalent signal
+      IDs, should be declared as explicit read neighbors for patch_lifecycle. Regenerate
+      the scope catalog deterministically if approved.
+    stage00_relevant: true
+    source_arbitrage_path: docs/pipelines/constitution/archive/CORE_RELEASE_2026_04_28_R01/work/02_arbitrage/arbitrage.md
+    recorded_at: '2026-04-28T09:43:30Z'
+    age_days: 0
+  - entry_id: GB_2026_04_27_PATCH_LIFECYCLE_R01_GBC_PATCH_LIFECYCLE_FULL_STATE_MACHINE_R01
+    candidate_id: GBC_PATCH_LIFECYCLE_FULL_STATE_MACHINE_R01
+    status: open
+    type: scope_gap
+    scope_key: patch_lifecycle
+    related_scope_keys:
+    - patch_lifecycle
+    source_run_id: CONSTITUTION_RUN_2026_04_27_PATCH_LIFECYCLE_R01
+    source_stage: STAGE_09_CLOSEOUT_AND_ARCHIVE
+    source_finding_id: ARB-F03
+    candidate_status: candidate_open
+    title: Decide whether patch_lifecycle needs a canonical patch state machine
+    recommended_action: Review whether a future patch_lifecycle scope iteration should
+      introduce an explicit patch state model.
+    stage00_relevant: true
+    source_arbitrage_path: docs/pipelines/constitution/archive/CORE_RELEASE_2026_04_28_R01/work/02_arbitrage/arbitrage.md
+    recorded_at: '2026-04-28T09:43:30Z'
+    age_days: 0
+  - entry_id: GB_2026_04_27_PATCH_LIFECYCLE_R01_GBC_PATCH_LIFECYCLE_PRIORITY_QUEUE_R01
+    candidate_id: GBC_PATCH_LIFECYCLE_PRIORITY_QUEUE_R01
+    status: open
+    type: scope_gap
+    scope_key: patch_lifecycle
+    related_scope_keys:
+    - patch_lifecycle
+    source_run_id: CONSTITUTION_RUN_2026_04_27_PATCH_LIFECYCLE_R01
+    source_stage: STAGE_09_CLOSEOUT_AND_ARCHIVE
+    source_finding_id: ARB-F05
+    candidate_status: candidate_open
+    title: Decide whether patch serialization requires deterministic priority lanes
+    recommended_action: Evaluate whether patch queue semantics require deterministic
+      priority lanes, and if so define them through a governed scope update rather
+      than ad hoc patch synthesis.
+    stage00_relevant: true
+    source_arbitrage_path: docs/pipelines/constitution/archive/CORE_RELEASE_2026_04_28_R01/work/02_arbitrage/arbitrage.md
+    recorded_at: '2026-04-28T09:43:30Z'
+    age_days: 0
+  - entry_id: GB_2026_04_27_PATCH_LIFECYCLE_R01_GBC_PATCH_LIFECYCLE_REFERENTIEL_PARAMETER_R01
+    candidate_id: GBC_PATCH_LIFECYCLE_REFERENTIEL_PARAMETER_R01
+    status: open
+    type: scope_gap
+    scope_key: patch_lifecycle
+    related_scope_keys:
+    - patch_lifecycle
+    source_run_id: CONSTITUTION_RUN_2026_04_27_PATCH_LIFECYCLE_R01
+    source_stage: STAGE_09_CLOSEOUT_AND_ARCHIVE
+    source_finding_id: ARB-F07
+    candidate_status: candidate_open
+    title: Track external_read_only referentiel parameter dependency for patch escalation
+      threshold
+    recommended_action: Coordinate with the external-read-only referentiel/link follow-up
+      and decide whether the specific parameter should become a concrete external
+      read neighbor or a cross_core_change_request.
+    stage00_relevant: true
+    source_arbitrage_path: docs/pipelines/constitution/archive/CORE_RELEASE_2026_04_28_R01/work/02_arbitrage/arbitrage.md
+    recorded_at: '2026-04-28T09:43:30Z'
+    age_days: 0
