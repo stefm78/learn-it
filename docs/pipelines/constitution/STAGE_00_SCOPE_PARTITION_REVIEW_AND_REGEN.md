@@ -174,7 +174,8 @@ Scripts canoniques :
 1. Rapport déterministe non-mutating :
 
 ```bash
-python docs/patcher/shared/report_constitution_neighbor_ids_governance.py   --report docs/pipelines/constitution/reports/constitution_neighbor_ids_governance_report.yaml
+python docs/patcher/shared/report_constitution_neighbor_ids_governance.py \
+  --report docs/pipelines/constitution/reports/constitution_neighbor_ids_governance_report.yaml
 ```
 
 2. Préparation de la surface d'arbitrage humain :
@@ -186,20 +187,24 @@ python docs/patcher/shared/prepare_constitution_neighbor_ids_arbitration.py
 3. Validation de l'arbitrage :
 
 ```bash
-python docs/patcher/shared/validate_constitution_neighbor_ids_arbitration.py   --report docs/pipelines/constitution/reports/constitution_neighbor_ids_arbitration_validation.yaml
+python docs/patcher/shared/validate_constitution_neighbor_ids_arbitration.py \
+  --report docs/pipelines/constitution/reports/constitution_neighbor_ids_arbitration_validation.yaml
 ```
 
 4. Patch déterministe gated de `decisions.yaml` après validation `PASS_READY_TO_PATCH` :
 
 ```bash
-python docs/patcher/shared/apply_constitution_neighbor_ids_arbitration.py   --report docs/pipelines/constitution/reports/constitution_neighbor_ids_decisions_patch_report.yaml
+python docs/patcher/shared/apply_constitution_neighbor_ids_arbitration.py \
+  --report docs/pipelines/constitution/reports/constitution_neighbor_ids_decisions_patch_report.yaml
 ```
 
 Par défaut, ce script est en dry-run. Il produit `BLOCKED` tant que l'arbitrage n'est pas
 `PASS_READY_TO_PATCH`. L'écriture réelle de `decisions.yaml` nécessite explicitement `--apply` :
 
 ```bash
-python docs/patcher/shared/apply_constitution_neighbor_ids_arbitration.py   --apply   --report docs/pipelines/constitution/reports/constitution_neighbor_ids_decisions_patch_report.yaml
+python docs/patcher/shared/apply_constitution_neighbor_ids_arbitration.py \
+  --apply \
+  --report docs/pipelines/constitution/reports/constitution_neighbor_ids_decisions_patch_report.yaml
 ```
 
 Sémantique de validation :
