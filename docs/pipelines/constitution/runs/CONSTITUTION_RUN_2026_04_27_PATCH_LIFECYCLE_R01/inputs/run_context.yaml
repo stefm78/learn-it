@@ -9,13 +9,13 @@ run_context:
   mode: bounded_local_run
   status: active
   scope_key: patch_lifecycle
-  current_stage: STAGE_06_CORE_VALIDATION
-  current_stage_canonical: STAGE_06_CORE_VALIDATION
+  current_stage: STAGE_07_RELEASE_MATERIALIZATION
+  current_stage_canonical: STAGE_07_RELEASE_MATERIALIZATION
   last_stage_status: done
-  next_stage: STAGE_07_RELEASE_MATERIALIZATION
-  next_stage_canonical: STAGE_07_RELEASE_MATERIALIZATION
-  next_executable_stage: STAGE_07_RELEASE_MATERIALIZATION
-  next_executable_stage_canonical: STAGE_07_RELEASE_MATERIALIZATION
+  next_stage: STAGE_08_PROMOTE_CURRENT
+  next_stage_canonical: STAGE_08_PROMOTE_CURRENT
+  next_executable_stage: STAGE_08_PROMOTE_CURRENT
+  next_executable_stage_canonical: STAGE_08_PROMOTE_CURRENT
   terminal_closed: false
   completed_stages:
   - STAGE_01_CHALLENGE
@@ -24,6 +24,7 @@ run_context:
   - STAGE_04_PATCH_VALIDATION
   - STAGE_05_APPLY
   - STAGE_06_CORE_VALIDATION
+  - STAGE_07_RELEASE_MATERIALIZATION
   completed_stages_canonical:
   - STAGE_01_CHALLENGE
   - STAGE_02_ARBITRAGE
@@ -31,6 +32,7 @@ run_context:
   - STAGE_04_PATCH_VALIDATION
   - STAGE_05_APPLY
   - STAGE_06_CORE_VALIDATION
+  - STAGE_07_RELEASE_MATERIALIZATION
   scope_ids:
   - ACTION_ESCALATE_PERSISTENT_DRIFT_OFFSESSION
   - ACTION_LOG_UNCOVERED_CONFLICT
@@ -81,7 +83,7 @@ run_context:
     impact_bundle: docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_27_PATCH_LIFECYCLE_R01/inputs/impact_bundle.yaml
     integration_gate: docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_27_PATCH_LIFECYCLE_R01/inputs/integration_gate.yaml
   source_fingerprints:
-    run_manifest.yaml: e882ef0d10cbce035d9c1cbe0d8b1f278520b654e85716bbfe2291a8c333d9b0
+    run_manifest.yaml: 2ff8f306541ed47b7bfd9848c95f4d2d2a622684e76f59bb58662ceb6716bde0
     scope_manifest.yaml: cf063f489f6f1bc76500413e4fffe9914a52b50859ca3613f09b057e5e46e9dd
     impact_bundle.yaml: 76be484f38f7b316acc569aa15d3271507d32c04e6ad5794b44aec9d4ac7aaea
     integration_gate.yaml: 15b8d6c9e9c265d7c1201e46f39173228b540f7ff7dcdf05a89b61961f65a546
@@ -89,9 +91,9 @@ run_context:
     neighbor_extract.yaml: 7278ab43e51f74f5f45f0d507a95bba5b4b8d6294f5710d205a65d24f1dfcced
   task_view:
     status: executable
-    raw_stage_id: STAGE_07_RELEASE_MATERIALIZATION
-    stage_id: STAGE_07_RELEASE_MATERIALIZATION
-    skill_ref: docs/pipelines/constitution/stages/STAGE_07_RELEASE_MATERIALIZATION.skill.yaml
+    raw_stage_id: STAGE_08_PROMOTE_CURRENT
+    stage_id: STAGE_08_PROMOTE_CURRENT
+    skill_ref: docs/pipelines/constitution/stages/STAGE_08_PROMOTE_CURRENT.skill.yaml
     stage_kind: hybrid
     closure_level: high
     resolved_inputs:
@@ -100,8 +102,8 @@ run_context:
     - docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_27_PATCH_LIFECYCLE_R01/inputs/impact_bundle.yaml
     - docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_27_PATCH_LIFECYCLE_R01/inputs/integration_gate.yaml
     execution_paths:
-      work_dir: docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_27_PATCH_LIFECYCLE_R01/work/07_release/
-      primary_output: docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_27_PATCH_LIFECYCLE_R01/work/07_release/release_plan.yaml
+      work_dir: docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_27_PATCH_LIFECYCLE_R01/work/08_promote/
+      primary_output: docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_27_PATCH_LIFECYCLE_R01/reports/promotion_report.yaml
       reports_dir: docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_27_PATCH_LIFECYCLE_R01/reports/
     required_scripts_status:
       scope_extract_present: true
@@ -111,11 +113,11 @@ run_context:
     forbidden_actions: []
     completion_evidence: []
     allowed_transitions: {}
-    compact_execution_prompt: Dans le repo learn-it, exécute STAGE_07_RELEASE_MATERIALIZATION du pipeline
-      constitution pour run_id=CONSTITUTION_RUN_2026_04_27_PATCH_LIFECYCLE_R01 en mode bounded_local_run.
-      Lis d'abord docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_27_PATCH_LIFECYCLE_R01/inputs/run_context.yaml,
+    compact_execution_prompt: Dans le repo learn-it, exécute STAGE_08_PROMOTE_CURRENT du pipeline constitution
+      pour run_id=CONSTITUTION_RUN_2026_04_27_PATCH_LIFECYCLE_R01 en mode bounded_local_run. Lis d'abord
+      docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_27_PATCH_LIFECYCLE_R01/inputs/run_context.yaml,
       docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_27_PATCH_LIFECYCLE_R01/inputs/scope_manifest.yaml,
       docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_27_PATCH_LIFECYCLE_R01/inputs/impact_bundle.yaml,
       docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_27_PATCH_LIFECYCLE_R01/inputs/integration_gate.yaml.
-      Applique le contrat stable défini dans docs/pipelines/constitution/stages/STAGE_07_RELEASE_MATERIALIZATION.skill.yaml.
+      Applique le contrat stable défini dans docs/pipelines/constitution/stages/STAGE_08_PROMOTE_CURRENT.skill.yaml.
       Ne produis que les livrables du stage courant et ne simule aucun script requis.
