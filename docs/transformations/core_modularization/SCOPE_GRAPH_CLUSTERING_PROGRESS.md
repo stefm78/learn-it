@@ -38,8 +38,8 @@ scope_modularization_post_pilot:
   status: paused_cleanly
   active_pipeline_run: none
   new_bounded_run_opened_now: false
-  last_completed_phase: PHASE_23B
-  last_completed_phase_label: open_new_run_preflight_gate_validation
+  last_completed_phase: PHASE_24
+  last_completed_phase_label: launcher_preflight_display
 ```
 
 ## What is complete
@@ -85,6 +85,7 @@ completed:
       - PHASE_22 bounded_run_preflight_pipeline_integration
       - PHASE_23A active_document_compaction
       - PHASE_23B open_new_run_preflight_gate_validation
+      - PHASE_24 launcher_preflight_display
 ```
 
 ## Current pipeline position
@@ -106,6 +107,8 @@ open_new_run_gate:
   validator: docs/patcher/shared/validate_open_new_run_preflight_gate.py
   validation_report: docs/pipelines/constitution/reports/open_new_run_preflight_gate_validation.yaml
   validation_status: PASS
+  launcher_display_report: docs/pipelines/constitution/reports/launcher_preflight_display_validation.yaml
+  launcher_display_status: PASS
   open_new_run_authorized_by_default_when_defer: false
   recommended_entry_decision_when_defer: partition_refresh_preferred_or_open_new_run_blocked
 ```
@@ -140,6 +143,8 @@ docs/pipelines/constitution/reports/governance_backlog_lifecycle_validation.yaml
 docs/pipelines/constitution/reports/bounded_run_preflight_report.yaml
 docs/pipelines/constitution/reports/bounded_run_preflight.md
 docs/pipelines/constitution/reports/open_new_run_preflight_gate_validation.yaml
+docs/pipelines/constitution/reports/launcher_preflight_display_validation.yaml
+tmp/pipeline_launcher.py
 docs/pipelines/constitution/STAGE_00_SCOPE_PARTITION_REVIEW_AND_REGEN.md
 docs/pipelines/constitution/stages/STAGE_00_SCOPE_PARTITION_REVIEW_AND_REGEN.skill.yaml
 docs/pipelines/constitution/entry_actions/OPEN_NEW_RUN.action.yaml
@@ -178,9 +183,14 @@ option_C_open_future_targeted_run:
     - GBC_PATCH_LIFECYCLE_REFERENTIEL_PARAMETER_R01
 
 option_D_update_launcher_preflight_display:
-  possible_phase: PHASE_24
-  status: optional_future_hardening
+  status: done
+  completed_phase: PHASE_24
+  artifact: tmp/pipeline_launcher.py
+  report: docs/pipelines/constitution/reports/launcher_preflight_display_validation.yaml
+  report_status: PASS
   action: surface bounded-run preflight status and recommendation in launcher output
+  open_new_run_authorized_by_default_when_defer: false
+  recommended_entry_decision_when_defer: partition_refresh_preferred_or_open_new_run_blocked
 ```
 
 ## Guardrails
