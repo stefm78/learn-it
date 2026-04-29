@@ -45,7 +45,7 @@ scope_maturity_scoring_report:
   - ref: tmp/constitution_scope_generation_report.yaml
     required: true
     present: true
-    sha256: 815213ed2d6d5c57b01ed81f3b85bbcf39f385933fe553f2b7bfaaec017aac1a
+    sha256: 4f57ef2137b91603a762ef578cdde320e5a5d53a29dda961cf2cb9e26ce2163b
   - ref: docs/pipelines/constitution/scope_catalog/governance_backlog.yaml
     required: false
     present: true
@@ -182,7 +182,7 @@ scope_maturity_scoring_report:
         - published_axis_used_as_bounded_prior: 2
           score_cap_without_history: 3
           related_severe_open_backlog_count: 1
-          generation_changed_files_count: 0
+          generation_changed_files_count: 5
           confidence: limited_with_backlog_pressure
           v1_1_position: missing_history_limits_confidence_not_score_by_itself
         calibration: v1_1
@@ -304,15 +304,15 @@ scope_maturity_scoring_report:
           related_severe_open_backlog_count: 0
       inter_release_stability:
         score: 3
-        confidence: moderate
+        confidence: limited
         evidence:
         - 'evidence_confidence: no dedicated release-to-release scope maturity history is consumed in
           V1.1'
         - published_axis_used_as_bounded_prior: 3
           score_cap_without_history: 3
           related_severe_open_backlog_count: 0
-          generation_changed_files_count: 0
-          confidence: moderate
+          generation_changed_files_count: 5
+          confidence: limited
           v1_1_position: missing_history_limits_confidence_not_score_by_itself
         calibration: v1_1
     diagnostic_metrics:
@@ -432,7 +432,7 @@ scope_maturity_scoring_report:
         - published_axis_used_as_bounded_prior: 2
           score_cap_without_history: 3
           related_severe_open_backlog_count: 1
-          generation_changed_files_count: 0
+          generation_changed_files_count: 5
           confidence: limited_with_backlog_pressure
           v1_1_position: missing_history_limits_confidence_not_score_by_itself
         calibration: v1_1
@@ -550,15 +550,15 @@ scope_maturity_scoring_report:
           related_severe_open_backlog_count: 0
       inter_release_stability:
         score: 3
-        confidence: moderate
+        confidence: limited
         evidence:
         - 'evidence_confidence: no dedicated release-to-release scope maturity history is consumed in
           V1.1'
         - published_axis_used_as_bounded_prior: 3
           score_cap_without_history: 3
           related_severe_open_backlog_count: 0
-          generation_changed_files_count: 0
-          confidence: moderate
+          generation_changed_files_count: 5
+          confidence: limited
           v1_1_position: missing_history_limits_confidence_not_score_by_itself
         calibration: v1_1
     diagnostic_metrics:
@@ -679,7 +679,7 @@ scope_maturity_scoring_report:
         - published_axis_used_as_bounded_prior: 2
           score_cap_without_history: 3
           related_severe_open_backlog_count: 4
-          generation_changed_files_count: 0
+          generation_changed_files_count: 5
           confidence: limited_with_backlog_pressure
           v1_1_position: missing_history_limits_confidence_not_score_by_itself
         calibration: v1_1

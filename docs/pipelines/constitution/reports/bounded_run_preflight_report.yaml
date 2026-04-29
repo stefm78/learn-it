@@ -2,7 +2,7 @@ bounded_run_preflight_report:
   schema_version: '0.1'
   stage_id: STAGE_00_SCOPE_PARTITION_REVIEW_AND_REGEN
   mode: run_candidate_preflight
-  generated_at: '2026-04-29T14:04:58Z'
+  generated_at: '2026-04-29T14:14:40Z'
   status: PREFLIGHT_KEEP_BACKLOG_OPEN
   mutation_policy:
     runs_index: not_modified

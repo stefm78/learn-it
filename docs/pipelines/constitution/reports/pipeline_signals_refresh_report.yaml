@@ -1,6 +1,6 @@
 pipeline_signals_refresh_report:
   schema_version: '0.1'
-  generated_at: '2026-04-29T14:04:58Z'
+  generated_at: '2026-04-29T14:14:40Z'
   status: PASS_APPLIED
   pipeline_id: constitution
   derived_state: reviewed_open_backlog_keep_open

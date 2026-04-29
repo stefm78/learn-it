@@ -50,7 +50,7 @@ scope_definition:
     - docs/cores/current/link.yaml
     ids:
     - INV_NO_RUNTIME_CONTENT_GENERATION
-    - REF_CORE_LEARNIT_REFERENTIEL_V4_0_IN_CONSTITUTION
+    - REF_CORE_LEARNIT_REFERENTIEL_V5_0_IN_CONSTITUTION
     - TYPE_HUMAN_CHECKPOINT
   governance:
     default_allowed_operations:

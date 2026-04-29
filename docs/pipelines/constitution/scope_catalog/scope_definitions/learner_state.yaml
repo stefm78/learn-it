@@ -55,7 +55,7 @@ scope_definition:
     ids:
     - ACTION_ESCALATE_PERSISTENT_DRIFT_OFFSESSION
     - ACTION_PLAN_SHORT_DIAGNOSTIC_TASK
-    - REF_CORE_LEARNIT_REFERENTIEL_V4_0_IN_CONSTITUTION
+    - REF_CORE_LEARNIT_REFERENTIEL_V5_0_IN_CONSTITUTION
   governance:
     default_allowed_operations:
     - challenge
