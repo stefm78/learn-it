@@ -38,8 +38,8 @@ scope_modularization_post_pilot:
   status: paused_cleanly
   active_pipeline_run: none
   new_bounded_run_opened_now: false
-  last_completed_phase: PHASE_22
-  last_completed_phase_label: bounded_run_preflight_pipeline_integration
+  last_completed_phase: PHASE_23B
+  last_completed_phase_label: open_new_run_preflight_gate_validation
 ```
 
 ## What is complete
@@ -83,6 +83,8 @@ completed:
       - PHASE_20 post_macro_closeout_review
       - PHASE_21 remaining_patch_lifecycle_backlog_decision
       - PHASE_22 bounded_run_preflight_pipeline_integration
+      - PHASE_23A active_document_compaction
+      - PHASE_23B open_new_run_preflight_gate_validation
 ```
 
 ## Current pipeline position
@@ -101,6 +103,11 @@ open_new_run_gate:
   action: docs/pipelines/constitution/entry_actions/OPEN_NEW_RUN.action.yaml
   requires_preflight_when_backlog_impacts_scope: true
   can_ignore_defer_status_without_human_override: false
+  validator: docs/patcher/shared/validate_open_new_run_preflight_gate.py
+  validation_report: docs/pipelines/constitution/reports/open_new_run_preflight_gate_validation.yaml
+  validation_status: PASS
+  open_new_run_authorized_by_default_when_defer: false
+  recommended_entry_decision_when_defer: partition_refresh_preferred_or_open_new_run_blocked
 ```
 
 ## Remaining open backlog entries
@@ -132,6 +139,7 @@ docs/pipelines/constitution/reports/governance_backlog_report.yaml
 docs/pipelines/constitution/reports/governance_backlog_lifecycle_validation.yaml
 docs/pipelines/constitution/reports/bounded_run_preflight_report.yaml
 docs/pipelines/constitution/reports/bounded_run_preflight.md
+docs/pipelines/constitution/reports/open_new_run_preflight_gate_validation.yaml
 docs/pipelines/constitution/STAGE_00_SCOPE_PARTITION_REVIEW_AND_REGEN.md
 docs/pipelines/constitution/stages/STAGE_00_SCOPE_PARTITION_REVIEW_AND_REGEN.skill.yaml
 docs/pipelines/constitution/entry_actions/OPEN_NEW_RUN.action.yaml
@@ -145,10 +153,14 @@ option_A_stop_here:
   action: keep NO_ACTIVE_PHASE
 
 option_B_validate_preflight_gate:
-  possible_phase: PHASE_23B
+  status: done
+  completed_phase: PHASE_23B
   artifact: docs/patcher/shared/validate_open_new_run_preflight_gate.py
   report: docs/pipelines/constitution/reports/open_new_run_preflight_gate_validation.yaml
+  report_status: PASS
   mutation_policy: non_mutating
+  open_new_run_authorized_by_default_when_defer: false
+  recommended_entry_decision_when_defer: partition_refresh_preferred_or_open_new_run_blocked
 
 option_C_open_future_targeted_run:
   requires:
@@ -164,6 +176,11 @@ option_C_open_future_targeted_run:
     - GBC_PATCH_LIFECYCLE_ESCALATION_BOUNDARY_R01
   exclude_or_separate:
     - GBC_PATCH_LIFECYCLE_REFERENTIEL_PARAMETER_R01
+
+option_D_update_launcher_preflight_display:
+  possible_phase: PHASE_24
+  status: optional_future_hardening
+  action: surface bounded-run preflight status and recommendation in launcher output
 ```
 
 ## Guardrails
