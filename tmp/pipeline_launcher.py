@@ -1033,7 +1033,12 @@ def build_continue_actions(
             },
             "reconcile": {
                 "entry_prompt": reconcile_prompt,
-                "status": "available",
+                "status": "entry_resolution_available",
+                "meaning": "OPEN_NEW_RUN entry prompt is available; this launcher does not authorize, materialize, or start a run.",
+                "run_opening_authorized": False,
+                "run_materialization_authorized": False,
+                "requires_open_new_run_decision": True,
+                "requires_human_confirmation_before_materialization": True,
                 "reason": anomaly_detected,
             },
             "new_run": {
