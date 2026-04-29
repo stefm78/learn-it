@@ -18,7 +18,6 @@ Still experimental: kept in tmp/ until hardened and promoted.
 from __future__ import annotations
 
 import argparse
-import re
 import sys
 from pathlib import Path
 from typing import Any
@@ -75,6 +74,9 @@ from docs.patcher.shared.pipeline_launcher.consolidation import (
     probe_integration_gate,
 )
 
+from docs.patcher.shared.pipeline_launcher.registry import discover_pipelines_from_registry
+from docs.patcher.shared.pipeline_launcher.yaml_io import load_yaml
+
 CONSOLIDATION_PENDING_STAGES = {
     "STAGE_06_CORE_VALIDATION",
     "STAGE_06B_CONSOLIDATION",
@@ -82,45 +84,6 @@ CONSOLIDATION_PENDING_STAGES = {
 }
 _IN_PROGRESS_STALE_THRESHOLD_S = 6 * 3600
 
-
-def load_text(path: Path) -> str:
-    if not path.exists():
-        return ""
-    return path.read_text(encoding="utf-8")
-
-
-def load_yaml(path: Path) -> dict[str, Any]:
-    if not path.exists():
-        return {}
-    data = yaml.safe_load(path.read_text(encoding="utf-8"))
-    return data or {}
-
-
-def discover_pipelines_from_registry(registry_path: Path) -> list[dict[str, str]]:
-    text = load_text(registry_path)
-    lines = text.splitlines()
-    pipelines: list[dict[str, str]] = []
-    current: dict[str, str] | None = None
-    for line in lines:
-        stripped = line.strip()
-        if stripped.startswith("### "):
-            if current:
-                pipelines.append(current)
-            current = {"pipeline_id": stripped[4:].strip()}
-            continue
-        if current and stripped.startswith("- Path:"):
-            match = re.search(r"`([^`]+)`", stripped)
-            if match:
-                current["path"] = match.group(1)
-        if current and stripped.startswith("- Canonical state:"):
-            match = re.search(r"`([^`]+)`", stripped)
-            if match:
-                current["canonical_state"] = match.group(1)
-        if current and stripped.startswith("- Goal:"):
-            current["goal"] = stripped[len("- Goal:"):].strip()
-    if current:
-        pipelines.append(current)
-    return pipelines
 
 
 # ---------------------------------------------------------------------------
