@@ -39,9 +39,9 @@ scope_generation_decisions:
     applies_from: 2026-04-13
     decided_by: human
     challenged_with_ai: true
-    justification: Seed du scope deployment_governance. Couvre les contraintes architecturales invariantes du moteur (runtime
-      local, no-generation, séparation Constitution/Référentiel), les régimes d'autonomie, la gouvernance top-level (GF-08,
-      gamification) et l'initialisation conservative.
+    justification: Seed du scope deployment_governance. Couvre les contraintes architecturales invariantes
+      du moteur (runtime local, no-generation, séparation Constitution/Référentiel), les régimes d'autonomie,
+      la gouvernance top-level (GF-08, gamification) et l'initialisation conservative.
   - decision_id: SGEN_DECISION_002
     status: approved
     decision_type: assign_ids_to_scope
@@ -75,8 +75,9 @@ scope_generation_decisions:
     applies_from: 2026-04-13
     decided_by: human
     challenged_with_ai: true
-    justification: Seed du scope knowledge_and_design. Consolide knowledge_model, analysis, analysis_design, analysis_runtime_graph,
-      design, design_governance et design_runtime en un scope unique de phase Analyse/Design. Aucune exécution runtime directe.
+    justification: Seed du scope knowledge_and_design. Consolide knowledge_model, analysis, analysis_design,
+      analysis_runtime_graph, design, design_governance et design_runtime en un scope unique de phase
+      Analyse/Design. Aucune exécution runtime directe.
   - decision_id: SGEN_DECISION_003
     status: approved
     decision_type: assign_ids_to_scope
@@ -116,9 +117,9 @@ scope_generation_decisions:
     applies_from: 2026-04-13
     decided_by: human
     challenged_with_ai: true
-    justification: Seed du scope learner_state (périmètre élargi). Couvre l'état apprenant 3 axes, les auto-rapports AR-N1/N2/N3,
-      la détresse, la VC, le scaffolding conservateur, la reprise diagnostique et la transparence apprenant. runtime_resume
-      absorbé ici (lien état > lien MSC).
+    justification: Seed du scope learner_state (périmètre élargi). Couvre l'état apprenant 3 axes, les
+      auto-rapports AR-N1/N2/N3, la détresse, la VC, le scaffolding conservateur, la reprise diagnostique
+      et la transparence apprenant. runtime_resume absorbé ici (lien état > lien MSC).
   - decision_id: SGEN_DECISION_004
     status: approved
     decision_type: assign_ids_to_scope
@@ -161,9 +162,9 @@ scope_generation_decisions:
     applies_from: 2026-04-13
     decided_by: human
     challenged_with_ai: true
-    justification: Seed du scope mastery_evaluation (ex mastery_model élargi). Couvre le modèle MSC (P/R/A/T), la propagation
-      graphe one-hop, l'intégrité de session (SIS, NC_MSC), la sécurité runtime liée à l'évaluation et les investigations
-      systémiques.
+    justification: Seed du scope mastery_evaluation (ex mastery_model élargi). Couvre le modèle MSC (P/R/A/T),
+      la propagation graphe one-hop, l'intégrité de session (SIS, NC_MSC), la sécurité runtime liée à
+      l'évaluation et les investigations systémiques.
   - decision_id: SGEN_DECISION_005
     status: approved
     decision_type: assign_ids_to_scope
@@ -199,10 +200,11 @@ scope_generation_decisions:
     applies_from: 2026-04-13
     decided_by: human
     challenged_with_ai: true
-    justification: 'Seed du scope patch_lifecycle. Couvre le cycle complet de vie des patches : structure (ARTIFACT, IMPACT_SCOPE,
-      QUALITY_GATE), validation déterministe, architecture off-session (PRECOMPUTED), déclencheurs gouvernés (VC basse persistante,
-      AR-réfractaire) et escalade dérive persistante. RULE_PATCH_SERIALIZATION est ajouté au périmètre patch_lifecycle car
-      la sérialisation des patches relève du cycle de vie patch et de ses garanties de validation/rejouabilité.'
+    justification: 'Seed du scope patch_lifecycle. Couvre le cycle complet de vie des patches : structure
+      (ARTIFACT, IMPACT_SCOPE, QUALITY_GATE), validation déterministe, architecture off-session (PRECOMPUTED),
+      déclencheurs gouvernés (VC basse persistante, AR-réfractaire) et escalade dérive persistante. RULE_PATCH_SERIALIZATION
+      est ajouté au périmètre patch_lifecycle car la sérialisation des patches relève du cycle de vie
+      patch et de ses garanties de validation/rejouabilité.'
   - decision_id: SGEN_DECISION_006
     status: approved
     decision_type: force_logical_neighbors
@@ -213,19 +215,20 @@ scope_generation_decisions:
     - mastery_evaluation
     - patch_lifecycle
     target_ids:
-    - REF_CORE_LEARNIT_REFERENTIEL_V4_0_IN_CONSTITUTION
+    - REF_CORE_LEARNIT_REFERENTIEL_V5_0_IN_CONSTITUTION
     target_patterns: []
     decision_payload:
       neighbor_class: intercore_reference_forced
       read_mode: primary
-      note: 'REF_CORE_LEARNIT_REFERENTIEL_V4_0_IN_CONSTITUTION reçoit 22+ arêtes entrantes depuis la quasi-totalité des scopes.
-        Il est canonisé comme neighbor forcé systématique sur tous les scopes plutôt qu''érigé en scope autonome (masse insuffisante
-        : 1 entrée).'
+      note: 'REF_CORE_LEARNIT_REFERENTIEL_V5_0_IN_CONSTITUTION reçoit 22+ arêtes entrantes depuis la quasi-totalité
+        des scopes. Il est canonisé comme neighbor forcé systématique sur tous les scopes plutôt qu''érigé
+        en scope autonome (masse insuffisante : 1 entrée).'
     applies_from: 2026-04-13
     decided_by: human
     challenged_with_ai: true
-    justification: Canonisation de REF_CORE_LEARNIT_REFERENTIEL_V4_0_IN_CONSTITUTION comme neighbor forcé systématique sur
-      l'ensemble des 5 scopes. Décision explicite de ne pas ériger intercore_reference en scope autonome.
+    justification: Canonisation de REF_CORE_LEARNIT_REFERENTIEL_V5_0_IN_CONSTITUTION comme neighbor forcé
+      systématique sur l'ensemble des 5 scopes. Décision explicite de ne pas ériger intercore_reference
+      en scope autonome.
   - decision_id: SGEN_DECISION_007
     status: approved
     decision_type: force_logical_neighbors
@@ -243,8 +246,8 @@ scope_generation_decisions:
     applies_from: 2026-04-13
     decided_by: human
     challenged_with_ai: true
-    justification: Voisinage logique primaire de mastery_evaluation vers knowledge_and_design (graphe, arêtes explicites)
-      et learner_state (axes d'activation nécessaires à l'interprétation du MSC perçu).
+    justification: Voisinage logique primaire de mastery_evaluation vers knowledge_and_design (graphe,
+      arêtes explicites) et learner_state (axes d'activation nécessaires à l'interprétation du MSC perçu).
   - decision_id: SGEN_DECISION_008
     status: approved
     decision_type: classify_external_read_only_cores
@@ -270,9 +273,9 @@ scope_generation_decisions:
     applies_from: '2026-04-27'
     decided_by: human
     challenged_with_ai: true
-    justification: Referentiel and Link IDs are readable by Constitution bounded runs but are not owned by Constitution scopes.
-      They must be classified explicitly so the bijection validator can distinguish Constitution ownership from external read-only
-      core references.
+    justification: Referentiel and Link IDs are readable by Constitution bounded runs but are not owned
+      by Constitution scopes. They must be classified explicitly so the bijection validator can distinguish
+      Constitution ownership from external read-only core references.
   - decision_id: SGEN_DECISION_009
     status: approved
     decision_type: record_diagnostic_subcluster
@@ -307,9 +310,9 @@ scope_generation_decisions:
     applies_from: '2026-04-27'
     decided_by: human
     challenged_with_ai: true
-    justification: The Scope Lab graph identified a coherent patch_lifecycle structural core around patch artifacts, impact
-      scope, quality gate, rollback, deterministic validation, and invalid patch rejection. This is recorded as a diagnostic
-      subcluster while ownership remains unchanged.
+    justification: The Scope Lab graph identified a coherent patch_lifecycle structural core around patch
+      artifacts, impact scope, quality gate, rollback, deterministic validation, and invalid patch rejection.
+      This is recorded as a diagnostic subcluster while ownership remains unchanged.
   - decision_id: SGEN_DECISION_010
     status: approved
     decision_type: record_diagnostic_subcluster
@@ -337,8 +340,9 @@ scope_generation_decisions:
     applies_from: '2026-04-27'
     decided_by: human
     challenged_with_ai: true
-    justification: Patch trigger nodes are close to learner_state/runtime signals, but they represent governed patch lifecycle
-      decisions. They remain in patch_lifecycle and are recorded as a diagnostic subcluster.
+    justification: Patch trigger nodes are close to learner_state/runtime signals, but they represent
+      governed patch lifecycle decisions. They remain in patch_lifecycle and are recorded as a diagnostic
+      subcluster.
   - decision_id: SGEN_DECISION_011
     status: superseded_by_phase16
     decision_type: force_logical_neighbors
@@ -355,20 +359,21 @@ scope_generation_decisions:
       - LABEL_CLUSTER_013
       - LABEL_CLUSTER_025
       requires_exact_id_selection_before_approval: false
-      note: Patch trigger governance remains owned by patch_lifecycle, but required learner_state/runtime signal IDs must
-        be selected explicitly before this decision can become approved.
+      note: Patch trigger governance remains owned by patch_lifecycle, but required learner_state/runtime
+        signal IDs must be selected explicitly before this decision can become approved.
       superseded_by_phase: PHASE_16
       superseded_by_decision_id: SGEN_DECISION_PHASE16_NEIGHBOR_IDS__PATCH_LIFECYCLE
       superseded_by_report: docs/pipelines/constitution/reports/constitution_neighbor_ids_arbitration_validation.yaml
-      superseded_reason: PHASE_16 human arbitration selected and approved the exact patch_lifecycle read-neighbor IDs for
-        the patch trigger governance area. This placeholder no longer requires separate exact ID selection.
+      superseded_reason: PHASE_16 human arbitration selected and approved the exact patch_lifecycle read-neighbor
+        IDs for the patch trigger governance area. This placeholder no longer requires separate exact
+        ID selection.
     applies_from: '2026-04-27'
     decided_by: human
     challenged_with_ai: true
-    justification: Superseded by PHASE_16. The earlier placeholder intentionally avoided silently selecting learner_state/runtime
-      neighbor IDs. PHASE_16 later governed the exact selection and approved TYPE_SELF_REPORT_AR_N1, TYPE_STATE_AXIS_VALUE_COST,
-      INV_NO_RUNTIME_CONTENT_GENERATION, and INV_RUNTIME_FULLY_LOCAL as explicit patch_lifecycle read neighbors without changing
-      ownership.
+    justification: Superseded by PHASE_16. The earlier placeholder intentionally avoided silently selecting
+      learner_state/runtime neighbor IDs. PHASE_16 later governed the exact selection and approved TYPE_SELF_REPORT_AR_N1,
+      TYPE_STATE_AXIS_VALUE_COST, INV_NO_RUNTIME_CONTENT_GENERATION, and INV_RUNTIME_FULLY_LOCAL as explicit
+      patch_lifecycle read neighbors without changing ownership.
   - decision_id: SGEN_DECISION_PHASE16_NEIGHBOR_IDS__DEPLOYMENT_GOVERNANCE
     status: approved
     decision_type: force_logical_neighbors
@@ -402,13 +407,13 @@ scope_generation_decisions:
       - knowledge_and_design
       - mastery_evaluation
       - patch_lifecycle
-      note: Approved by human arbitration after scope maturity scoring V1.1 surfaced under-declared Constitution neighbor
-        IDs.
+      note: Approved by human arbitration after scope maturity scoring V1.1 surfaced under-declared Constitution
+        neighbor IDs.
     applies_from: '2026-04-28'
     decided_by: human
     challenged_with_ai: true
-    justification: Human arbitration accepted these uncovered Constitution IDs as explicit read neighbors for scope deployment_governance.
-      The change declares read dependencies only; ownership remains unchanged.
+    justification: Human arbitration accepted these uncovered Constitution IDs as explicit read neighbors
+      for scope deployment_governance. The change declares read dependencies only; ownership remains unchanged.
   - decision_id: SGEN_DECISION_PHASE16_NEIGHBOR_IDS__KNOWLEDGE_AND_DESIGN
     status: approved
     decision_type: force_logical_neighbors
@@ -430,13 +435,13 @@ scope_generation_decisions:
       - NIDG_KNOWLEDGE_AND_DESIGN__TYPE_HUMAN_CHECKPOINT
       owner_scope_keys:
       - deployment_governance
-      note: Approved by human arbitration after scope maturity scoring V1.1 surfaced under-declared Constitution neighbor
-        IDs.
+      note: Approved by human arbitration after scope maturity scoring V1.1 surfaced under-declared Constitution
+        neighbor IDs.
     applies_from: '2026-04-28'
     decided_by: human
     challenged_with_ai: true
-    justification: Human arbitration accepted these uncovered Constitution IDs as explicit read neighbors for scope knowledge_and_design.
-      The change declares read dependencies only; ownership remains unchanged.
+    justification: Human arbitration accepted these uncovered Constitution IDs as explicit read neighbors
+      for scope knowledge_and_design. The change declares read dependencies only; ownership remains unchanged.
   - decision_id: SGEN_DECISION_PHASE16_NEIGHBOR_IDS__LEARNER_STATE
     status: approved
     decision_type: force_logical_neighbors
@@ -459,13 +464,13 @@ scope_generation_decisions:
       owner_scope_keys:
       - mastery_evaluation
       - patch_lifecycle
-      note: Approved by human arbitration after scope maturity scoring V1.1 surfaced under-declared Constitution neighbor
-        IDs.
+      note: Approved by human arbitration after scope maturity scoring V1.1 surfaced under-declared Constitution
+        neighbor IDs.
     applies_from: '2026-04-28'
     decided_by: human
     challenged_with_ai: true
-    justification: Human arbitration accepted these uncovered Constitution IDs as explicit read neighbors for scope learner_state.
-      The change declares read dependencies only; ownership remains unchanged.
+    justification: Human arbitration accepted these uncovered Constitution IDs as explicit read neighbors
+      for scope learner_state. The change declares read dependencies only; ownership remains unchanged.
   - decision_id: SGEN_DECISION_PHASE16_NEIGHBOR_IDS__MASTERY_EVALUATION
     status: approved
     decision_type: force_logical_neighbors
@@ -491,13 +496,13 @@ scope_generation_decisions:
       - deployment_governance
       - learner_state
       - patch_lifecycle
-      note: Approved by human arbitration after scope maturity scoring V1.1 surfaced under-declared Constitution neighbor
-        IDs.
+      note: Approved by human arbitration after scope maturity scoring V1.1 surfaced under-declared Constitution
+        neighbor IDs.
     applies_from: '2026-04-28'
     decided_by: human
     challenged_with_ai: true
-    justification: Human arbitration accepted these uncovered Constitution IDs as explicit read neighbors for scope mastery_evaluation.
-      The change declares read dependencies only; ownership remains unchanged.
+    justification: Human arbitration accepted these uncovered Constitution IDs as explicit read neighbors
+      for scope mastery_evaluation. The change declares read dependencies only; ownership remains unchanged.
   - decision_id: SGEN_DECISION_PHASE16_NEIGHBOR_IDS__PATCH_LIFECYCLE
     status: approved
     decision_type: force_logical_neighbors
@@ -524,10 +529,10 @@ scope_generation_decisions:
       owner_scope_keys:
       - deployment_governance
       - learner_state
-      note: Approved by human arbitration after scope maturity scoring V1.1 surfaced under-declared Constitution neighbor
-        IDs.
+      note: Approved by human arbitration after scope maturity scoring V1.1 surfaced under-declared Constitution
+        neighbor IDs.
     applies_from: '2026-04-28'
     decided_by: human
     challenged_with_ai: true
-    justification: Human arbitration accepted these uncovered Constitution IDs as explicit read neighbors for scope patch_lifecycle.
-      The change declares read dependencies only; ownership remains unchanged.
+    justification: Human arbitration accepted these uncovered Constitution IDs as explicit read neighbors
+      for scope patch_lifecycle. The change declares read dependencies only; ownership remains unchanged.
