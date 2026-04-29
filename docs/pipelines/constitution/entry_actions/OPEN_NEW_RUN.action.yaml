@@ -17,6 +17,8 @@ entry_action:
     - docs/pipelines/constitution/runs/index.yaml
     - docs/pipelines/constitution/scope_catalog/manifest.yaml
     - docs/pipelines/constitution/scope_catalog/governance_backlog.yaml
+    - docs/pipelines/constitution/reports/bounded_run_preflight_report.yaml
+    - docs/pipelines/constitution/reports/bounded_run_preflight.md
   forbidden_before_resolution:
     - any_search
     - compare_commits
@@ -27,7 +29,7 @@ entry_action:
     - docs/prompts/shared/Make04ConstitutionArbitrage.md
     - docs/pipelines/constitution/inputs/*
     - docs/pipelines/constitution/work/*
-    - docs/pipelines/constitution/reports/*
+    - docs/pipelines/constitution/reports/* except bounded_run_preflight_report.yaml and bounded_run_preflight.md
     - docs/pipelines/constitution/archive/*
     - docs/patcher/shared/*
     - tmp/*
@@ -35,10 +37,17 @@ entry_action:
     - no_active_run_required_for_recommended_default
     - scope_key_must_be_published
     - scope_maturity_must_be_available_for_run
+    - bounded_run_preflight_required_when_backlog_signal_impacts_target_scope
+    - bounded_run_preflight_must_be_non_mutating
   resolution_rules:
     - confirm no active run from runs/index.yaml
     - confirm target scope is present in scope_catalog/manifest.yaml
     - confirm governance_backlog signal if open entries exist
+    - if governance_backlog_signal impacts target scope, read bounded_run_preflight_report.yaml before authorizing open_new_run
+    - if bounded_run_preflight_report.status == PREFLIGHT_READY_TO_OPEN_RUN, open_new_run_authorized may be emitted after human confirmation
+    - if bounded_run_preflight_report.status == PREFLIGHT_DEFER_TO_STAGE00_REVIEW, prefer partition_refresh_preferred or open_new_run_blocked unless human explicitly overrides
+    - if bounded_run_preflight_report.status == PREFLIGHT_DESIGN_NOTE_ONLY or PREFLIGHT_KEEP_BACKLOG_OPEN, do not authorize run opening from backlog signal alone
+    - if bounded_run_preflight_report.status == BLOCKED or is missing while required, emit open_new_run_blocked
     - do not invent repo-wide bootstrap mechanics beyond what is explicitly documented
     - do not start STAGE_01_CHALLENGE
     - do not emit or apply stage transition commands
@@ -52,6 +61,9 @@ entry_action:
     - archive_read_for_bootstrap_inference
     - launcher_or_script_read_outside_allowed_reads
     - auto_chain_to_next_action_without_confirmation
+    - ignore_required_bounded_run_preflight
+    - mutate_bounded_run_preflight_report_from_open_new_run
+    - authorize_backlog_driven_run_when_preflight_is_missing_or_blocked
   required_outputs:
     decision_payload:
       - entry_decision
@@ -59,6 +71,10 @@ entry_action:
       - scope_publication_status
       - active_runs_count
       - governance_backlog_signal
+      - bounded_run_preflight_required
+      - bounded_run_preflight_status
+      - bounded_run_preflight_recommendation
+      - bounded_run_preflight_report_ref
       - open_materialization_status
       - next_best_action
       - next_action_contract_ref
@@ -69,6 +85,7 @@ entry_action:
     allowed_entry_decision_values:
       - open_new_run_authorized
       - open_new_run_blocked
+      - open_new_run_requires_preflight
       - partition_refresh_preferred
   stop_condition:
     - stop once entry decision is resolved
@@ -84,6 +101,17 @@ entry_action:
       - invented_run_id_as_fact
       - invented_bootstrap_command_as_fact
       - claimed_script_behavior_not_observed_in_allowed_reads
+    preflight_behavior:
+      when: governance_backlog_signal == true AND bounded_run_preflight_required == true
+      must_do:
+        - read bounded_run_preflight_report.yaml if present in allowed_reads
+        - preserve the preflight status and recommendation in decision_payload
+        - block or require preflight if report is missing or BLOCKED
+        - require explicit human override before ignoring PREFLIGHT_DEFER_TO_STAGE00_REVIEW
+      must_not_do:
+        - treat open backlog entries as sufficient authorization by themselves
+        - open a run when preflight recommends design_note_only or keep_backlog_open
+        - mutate bounded_run_preflight_report.yaml from OPEN_NEW_RUN
     post_decision_behavior:
       when: entry_decision == open_new_run_authorized
       must_do:
