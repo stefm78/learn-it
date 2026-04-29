@@ -16,7 +16,7 @@ current_phase:
 
 This handover summarizes the current state of the `core_modularization` / `scope graph clustering`
 work after the bounded pilot run, post-pilot control-plane phases, bounded-run preflight
-integration, and active-document compaction.
+integration, active-document compaction, OPEN_NEW_RUN preflight gate validation, and launcher preflight display hardening.
 
 No Constitution pipeline run is currently open.
 
@@ -29,6 +29,10 @@ scope_modularization:
   new_bounded_run_opened_now: false
   last_completed_pipeline_integration_phase: PHASE_22
   last_completed_cleanup_phase: PHASE_23A
+  last_completed_validation_phase: PHASE_23B
+  last_completed_launcher_hardening_phase: PHASE_24
+  last_completed_phase: PHASE_24
+  last_completed_phase_label: launcher_preflight_display
   current_recommendation: do_not_open_new_bounded_run_now
 ```
 
@@ -103,8 +107,8 @@ governance_backlog_exported: true
 
 This was a real Constitution pipeline run.
 
-The later PHASE_14 through PHASE_23A work was control-plane, governance, tooling,
-validation, or documentation work. It was not another full stage 01 → 09 pipeline run.
+The later PHASE_14 through PHASE_24 work was control-plane, governance, tooling,
+validation, launcher hardening, or documentation work. It was not another full stage 01 → 09 pipeline run.
 
 ### 3. Governance backlog integration
 
@@ -285,6 +289,50 @@ archived_full_snapshots:
 The active files should now remain short. Detailed execution history belongs in the
 archived snapshots unless a specific detail must be promoted back.
 
+### 9. OPEN_NEW_RUN preflight gate validation
+
+PHASE_23B created and validated the deterministic OPEN_NEW_RUN preflight gate validator.
+
+```yaml
+PHASE_23B:
+  label: open_new_run_preflight_gate_validation
+  status: done
+  validator: docs/patcher/shared/validate_open_new_run_preflight_gate.py
+  report: docs/pipelines/constitution/reports/open_new_run_preflight_gate_validation.yaml
+  report_status: PASS
+  open_new_run_authorized_by_default_when_defer: false
+  recommended_entry_decision_when_defer: partition_refresh_preferred_or_open_new_run_blocked
+```
+
+Meaning:
+
+```yaml
+open_new_run_gate:
+  current_preflight_status: PREFLIGHT_DEFER_TO_STAGE00_REVIEW
+  default_authorization: false
+  human_override_required_to_authorize: true
+```
+
+### 10. Launcher preflight display hardening
+
+PHASE_24 updated the experimental launcher so OPEN_NEW_RUN prompts surface the bounded-run
+preflight signal alongside the governance backlog signal.
+
+```yaml
+PHASE_24:
+  label: launcher_preflight_display
+  status: done
+  artifact: tmp/pipeline_launcher.py
+  report: docs/pipelines/constitution/reports/launcher_preflight_display_validation.yaml
+  report_status: PASS
+  launcher_surfaces_preflight_signal: true
+  defer_status_displayed_as_non_authorizing: true
+  open_new_run_authorized_by_default_when_defer: false
+```
+
+The launcher remains experimental under `tmp/`; this phase only prevents ambiguous run-opening
+prompts from hiding the current non-authorizing preflight status.
+
 ## Remaining open backlog entries
 
 Four reviewed backlog entries remain open intentionally:
@@ -317,6 +365,9 @@ These entries remain visible through:
 ```text
 docs/pipelines/constitution/reports/governance_backlog_report.yaml
 docs/pipelines/constitution/reports/bounded_run_preflight_report.yaml
+docs/pipelines/constitution/reports/open_new_run_preflight_gate_validation.yaml
+docs/pipelines/constitution/reports/launcher_preflight_display_validation.yaml
+tmp/pipeline_launcher.py
 STAGE_00 run_candidate_preflight
 OPEN_NEW_RUN preflight gate
 ```
@@ -335,25 +386,14 @@ reason: >-
 
 ### Option B — PHASE_23B validate OPEN_NEW_RUN preflight gate
 
-Recommended next technical hardening step.
-
-Create a deterministic validator:
-
-```text
-docs/patcher/shared/validate_open_new_run_preflight_gate.py
-```
-
-Expected report:
-
-```text
-docs/pipelines/constitution/reports/open_new_run_preflight_gate_validation.yaml
-```
-
-Expected result:
+Completed.
 
 ```yaml
-open_new_run_preflight_gate_validation:
-  status: PASS
+PHASE_23B:
+  status: done
+  artifact: docs/patcher/shared/validate_open_new_run_preflight_gate.py
+  report: docs/pipelines/constitution/reports/open_new_run_preflight_gate_validation.yaml
+  report_status: PASS
   preflight_status: PREFLIGHT_DEFER_TO_STAGE00_REVIEW
   open_new_run_authorized_by_default: false
   recommended_entry_decision: partition_refresh_preferred_or_open_new_run_blocked
@@ -383,8 +423,20 @@ future_run:
 
 ### Option D — Update launcher behavior
 
-After PHASE_23B, optionally connect the launcher so it displays bounded-run preflight
-status and recommendation alongside backlog warnings.
+Completed in PHASE_24.
+
+```yaml
+PHASE_24:
+  status: done
+  artifact: tmp/pipeline_launcher.py
+  report: docs/pipelines/constitution/reports/launcher_preflight_display_validation.yaml
+  report_status: PASS
+  launcher_surfaces_preflight_signal: true
+  defer_status_displayed_as_non_authorizing: true
+  open_new_run_authorized_by_default_when_defer: false
+```
+
+Next default remains Option A — stop here / keep NO_ACTIVE_PHASE.
 
 ## Operational checks for resuming later
 
@@ -404,6 +456,11 @@ python docs/patcher/shared/prepare_bounded_run_preflight.py \
   --scope-key patch_lifecycle \
   --report docs/pipelines/constitution/reports/bounded_run_preflight_report.yaml \
   --markdown docs/pipelines/constitution/reports/bounded_run_preflight.md
+
+python docs/patcher/shared/validate_open_new_run_preflight_gate.py \
+  --report docs/pipelines/constitution/reports/open_new_run_preflight_gate_validation.yaml
+
+python -m py_compile tmp/pipeline_launcher.py
 ```
 
 ## Guardrails
@@ -442,14 +499,16 @@ Read first:
 Important state:
 - The serious bounded pilot run was CONSTITUTION_RUN_2026_04_27_PATCH_LIFECYCLE_R01.
 - It completed and promoted CORE_RELEASE_2026_04_28_R01.
-- PHASE_14 through PHASE_23A were post-pilot control-plane, governance, tooling, validation, or documentation work, not new full pipeline runs.
+- PHASE_14 through PHASE_24 were post-pilot control-plane, governance, tooling, validation, launcher hardening, or documentation work, not new full pipeline runs.
 - PHASE_22 integrated bounded-run preflight into STAGE_00 and OPEN_NEW_RUN.
+- PHASE_23B validated that OPEN_NEW_RUN does not authorize a backlog-driven run by default when preflight is PREFLIGHT_DEFER_TO_STAGE00_REVIEW.
+- PHASE_24 surfaced the bounded-run preflight signal in tmp/pipeline_launcher.py.
 - Current bounded-run preflight status for patch_lifecycle is PREFLIGHT_DEFER_TO_STAGE00_REVIEW.
 - Four patch_lifecycle backlog entries remain open intentionally.
 - Do not mutate policy.yaml, decisions.yaml, scope catalog, or governance_backlog.yaml unless a new explicit phase/run decision is made.
 - Do not open a backlog-driven run without bounded-run preflight and explicit human confirmation/override.
 
 Recommended next step:
-PHASE_23B — create validate_open_new_run_preflight_gate.py and produce
-docs/pipelines/constitution/reports/open_new_run_preflight_gate_validation.yaml.
+Stop here by default. Open a future patch_lifecycle run only after a future PREFLIGHT_READY_TO_OPEN_RUN
+or after explicit human override of the current PREFLIGHT_DEFER_TO_STAGE00_REVIEW recommendation.
 ```
