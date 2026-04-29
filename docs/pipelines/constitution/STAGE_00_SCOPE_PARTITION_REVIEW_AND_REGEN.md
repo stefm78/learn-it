@@ -83,6 +83,45 @@ soit rester `open` avec justification de report. `deferred` / `reporté` n'est p
 canonique : le report conserve `status: open` et ajoute les métadonnées de revue prévues.
 
 
+## Script déterministe — rafraîchissement des signaux pipeline
+
+Script canonique :
+- `docs/patcher/shared/refresh_constitution_pipeline_signals.py`
+
+Commandes de référence :
+
+```bash
+python docs/patcher/shared/refresh_constitution_pipeline_signals.py
+python docs/patcher/shared/refresh_constitution_pipeline_signals.py --apply
+```
+
+Le script doit être exécuté après la revue des entrées ouvertes du `governance_backlog.yaml`
+et après validation du lifecycle backlog.
+
+Le script lit :
+- `docs/pipelines/constitution/runs/index.yaml` ;
+- `docs/pipelines/constitution/scope_catalog/governance_backlog.yaml` ;
+- `docs/pipelines/constitution/reports/governance_backlog_report.yaml` ;
+- `docs/pipelines/constitution/reports/governance_backlog_lifecycle_validation.yaml` ;
+- `docs/pipelines/constitution/signals.yaml` ;
+- `docs/pipelines/constitution/reports/bounded_run_preflight_report.yaml`.
+
+Il écrit uniquement, en mode `--apply` :
+- `docs/pipelines/constitution/signals.yaml` ;
+- `docs/pipelines/constitution/reports/bounded_run_preflight_report.yaml` ;
+- `docs/pipelines/constitution/reports/pipeline_signals_refresh_report.yaml`.
+
+Règles déterministes :
+- si des entrées `open` existent et qu'au moins une n'a pas de métadonnées de revue complètes,
+  le signal recommande `STAGE_00_SCOPE_PARTITION_REVIEW_AND_REGEN` ;
+- si des entrées `open` existent et qu'elles ont toutes des métadonnées de revue complètes,
+  le signal recommande `KEEP_BACKLOG_OPEN_WITH_REVIEW_METADATA` ;
+- dans tous les cas, les signaux ne peuvent pas autoriser l'ouverture ou la matérialisation
+  d'un run ;
+- le script ne modifie jamais `policy.yaml`, `decisions.yaml`, le catalogue de scopes,
+  `governance_backlog.yaml` ou les cores.
+
+
 ## Mode `run_candidate_preflight` — cadrage pré-run
 
 Le `STAGE_00_SCOPE_PARTITION_REVIEW_AND_REGEN` peut aussi être utilisé en mode
@@ -418,6 +457,9 @@ Mise à jour obligatoire en fin de STAGE_00 :
     `policy.yaml`, `decisions.yaml`, le catalogue, les cores ou `governance_backlog.yaml`.
 20. Le mode `run_candidate_preflight` ne peut pas ouvrir un run par lui-même ; il produit
     seulement une recommandation gouvernée pour l'entry action.
+21. Le rafraîchissement des signaux pipeline doit être rejoué après toute revue STAGE_00
+    qui maintient des entrées backlog `open` avec métadonnées de revue, afin que `signals.yaml`
+    distingue les entrées à revoir des entrées déjà revues et maintenues ouvertes.
 
 ## Critère de succès
 
@@ -428,6 +470,7 @@ Le Stage 00 est réussi lorsque :
 - le `governance_backlog.yaml` a été lu et toutes les entrées `open` ont été traitées
   (`addressed`), rejetées explicitement (`wont_fix`) ou maintenues `open` avec justification
   de report et métadonnées de revue complètes ;
+- le rapport `pipeline_signals_refresh_report.yaml` a été produit et les signaux pipeline dérivés reflètent l'état revu du backlog ;
 - l'analyse sémantique a été discutée en intégrant les signaux du backlog ;
 - les arbitrages humains nécessaires ont été capturés dans les fichiers canonisés ;
 - le catalogue de scopes a été régénéré de façon déterministe par exécution réelle de

@@ -1,0 +1,21 @@
+pipeline_signals_refresh_report:
+  schema_version: '0.1'
+  generated_at: '2026-04-29T14:04:58Z'
+  status: PASS_APPLIED
+  pipeline_id: constitution
+  derived_state: reviewed_open_backlog_keep_open
+  open_entry_count: 4
+  reviewed_open_entry_count: 4
+  missing_review_metadata_count: 0
+  active_run_count: 0
+  lifecycle_validation_status: PASS
+  signals_status: attention
+  signals_recommended_action: KEEP_BACKLOG_OPEN_WITH_REVIEW_METADATA
+  preflight_status: PREFLIGHT_KEEP_BACKLOG_OPEN
+  run_opening_authorized_by_signal: false
+  new_bounded_run_recommended_now: false
+  applied: true
+  would_write:
+  - docs/pipelines/constitution/signals.yaml
+  - docs/pipelines/constitution/reports/bounded_run_preflight_report.yaml
+  report_path: docs/pipelines/constitution/reports/pipeline_signals_refresh_report.yaml
