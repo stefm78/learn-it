@@ -38,8 +38,8 @@ scope_modularization_post_pilot:
   status: paused_cleanly
   active_pipeline_run: none
   new_bounded_run_opened_now: false
-  last_completed_phase: PHASE_28D6
-  last_completed_phase_label: pipeline_launcher_engine_modular_extraction_batch_1
+  last_completed_phase: PHASE_29
+  last_completed_phase_label: stage00_signal_refresh_and_scope_catalog_v5_alignment
 ```
 
 ## What is complete
@@ -100,6 +100,7 @@ completed:
       - PHASE_28D4 extract_pipeline_launcher_entry_action_helpers
       - PHASE_28D5 extract_pipeline_launcher_run_context_helpers
       - PHASE_28D6 extract_pipeline_launcher_consolidation_helpers
+      - PHASE_29 stage00_signal_refresh_and_scope_catalog_v5_alignment
 ```
 
 ## Current pipeline position
@@ -110,7 +111,10 @@ bounded_run_preflight:
   mode: run_candidate_preflight
   script: docs/patcher/shared/prepare_bounded_run_preflight.py
   report: docs/pipelines/constitution/reports/bounded_run_preflight_report.yaml
-  current_report_status: PREFLIGHT_DEFER_TO_STAGE00_REVIEW
+  current_report_status: PREFLIGHT_KEEP_BACKLOG_OPEN
+  current_recommendation: keep_backlog_open
+  reviewed_open_entry_count: 4
+  missing_review_metadata_count: 0
   requested_scope_key: patch_lifecycle
   new_bounded_run_recommended_now: false
 
@@ -136,6 +140,17 @@ open_new_run_gate:
     declared_pipeline_count: 4
     constitution_backlog_signal_status: attention
     constitution_backlog_signal_scope: patch_lifecycle
+    constitution_backlog_recommended_action: KEEP_BACKLOG_OPEN_WITH_REVIEW_METADATA
+  stage00_signal_refresh:
+    script: docs/patcher/shared/refresh_constitution_pipeline_signals.py
+    report: docs/pipelines/constitution/reports/pipeline_signals_refresh_report.yaml
+    report_status: PASS_APPLIED
+    derived_state: reviewed_open_backlog_keep_open
+    run_opening_authorized_by_signal: false
+  scope_catalog_refresh:
+    status: PASS
+    report: tmp/constitution_scope_generation_report.yaml
+    reason: align generated scope definitions with REF_CORE_LEARNIT_REFERENTIEL_V5_0_IN_CONSTITUTION
   launcher_modular_runtime:
     package: docs/patcher/shared/pipeline_launcher/
     naming_status: corrected_to_pipeline_launcher
@@ -186,7 +201,8 @@ Current recommendation:
 recommended_next_action: do_not_open_new_bounded_run_now
 reason: >-
   The remaining entries are reviewed design follow-ups, not urgent pipeline blockers.
-  The current bounded run preflight recommends deferring to normal STAGE_00 backlog review.
+  The current bounded run preflight recommends keeping the backlog open with review metadata.
+  Opening a new bounded run requires explicit human override or a future PREFLIGHT_READY_TO_OPEN_RUN.
 ```
 
 ## Active evidence
@@ -403,6 +419,33 @@ option_J_pipeline_launcher_engine_modular_extraction_batch_1:
   blocking_finding_count: 0
   official_command: python docs/patcher/shared/pipeline_launcher/cli.py
   tmp_pipeline_launcher_role: compatibility_wrapper
+  launcher_authorizes_run_from_signals: false
+
+option_K_stage00_signal_refresh_and_scope_catalog_v5_alignment:
+  status: done
+  completed_phase: PHASE_29
+  action: refresh Stage 00 operational signals and regenerate scope catalog after referentiel V5 neighbor alignment
+  artifacts:
+    - docs/patcher/shared/refresh_constitution_pipeline_signals.py
+    - docs/pipelines/constitution/signals.yaml
+    - docs/pipelines/constitution/reports/bounded_run_preflight_report.yaml
+    - docs/pipelines/constitution/reports/pipeline_signals_refresh_report.yaml
+    - docs/pipelines/constitution/scope_catalog/manifest.yaml
+    - docs/pipelines/constitution/scope_catalog/scope_definitions/*.yaml
+  reports:
+    - docs/pipelines/constitution/reports/pipeline_signals_refresh_report.yaml
+    - tmp/constitution_scope_generation_report.yaml
+    - docs/pipelines/constitution/reports/scope_partition_review_report.yaml
+    - docs/pipelines/constitution/reports/scope_maturity_scoring_report.yaml
+    - docs/pipelines/constitution/reports/constitution_neighbor_ids_governance_report.yaml
+    - docs/pipelines/constitution/reports/constitution_neighbor_declaration_inventory_report.yaml
+  report_status:
+    pipeline_signals_refresh: PASS_APPLIED
+    scope_generation: PASS
+    scope_partition_review: READY_FOR_SEMANTIC_REVIEW
+    scope_partition_bijection: PASS
+    neighbor_declaration_inventory: PASS
+  current_recommendation: keep NO_ACTIVE_PHASE unless explicit human override opens a future targeted patch_lifecycle design run
   launcher_authorizes_run_from_signals: false
 ```
 
