@@ -64,7 +64,7 @@ def effective_repo_root(args: argparse.Namespace) -> Path:
 
 
 def run_pipeline_engine(repo_root: Path, launcher_args: list[str]) -> subprocess.CompletedProcess[str]:
-    engine = repo_root / "tmp" / "pipeline_launcher.py"
+    engine = repo_root / "docs" / "patcher" / "shared" / "pipeline_launcher" / "engine.py"
     return subprocess.run(
         [sys.executable, str(engine), *launcher_args],
         cwd=str(repo_root),

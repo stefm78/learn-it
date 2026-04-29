@@ -1,20 +1,21 @@
 pipeline_launcher_with_signals_validation:
-  schema_version: '0.5'
-  generated_at: '2026-04-29T12:36:28Z'
+  schema_version: '0.6'
+  generated_at: '2026-04-29T12:43:08Z'
   status: PASS
-  phase_id: PHASE_28B_COMPAT
-  purpose: Compatibility validation for pipeline_launcher_with_signals.py after official command promotion.
+  phase_id: PHASE_28C_COMPAT
+  purpose: Compatibility validation for pipeline_launcher_with_signals.py after engine promotion.
+  source_validation:
+    ref: docs/registry/reports/pipeline_launcher_engine_promotion_validation.yaml
+    phase_id: PHASE_28C
   mutation_policy:
-    tmp_pipeline_launcher: not_modified
-    compatibility_wrapper: validated
-    official_command: source_of_truth
+    official_command: preserved
+    internal_engine: created_from_previous_tmp_launcher
+    tmp_pipeline_launcher: converted_to_compatibility_wrapper
+    compatibility_wrapper: preserved
     signals_yaml: not_modified
     pipeline_md: not_modified
     state_yaml: not_modified
     run_materialization: not_performed
-  source_validation:
-    ref: docs/registry/reports/pipeline_launcher_official_command_validation.yaml
-    phase_id: PHASE_28B
   blocking_findings: []
   result_summary:
     has_attention_signals: true
@@ -22,5 +23,6 @@ pipeline_launcher_with_signals_validation:
     wrapper_outputs_copyable_prompt: true
     raw_overlay_available_with_flag: true
     launcher_authorizes_run_from_signals: false
-    tmp_pipeline_launcher_behavior_changed: false
+    tmp_pipeline_launcher_behavior_changed: true
+    tmp_pipeline_launcher_new_role: compatibility_wrapper
     blocking_finding_count: 0

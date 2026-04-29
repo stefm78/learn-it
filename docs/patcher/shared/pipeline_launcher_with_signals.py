@@ -1,11 +1,15 @@
 #!/usr/bin/env python3
+"""Compatibility shim for the official pipeline launcher.
+
+Preferred command:
+  python docs/patcher/shared/pipeline_launcher/cli.py
+"""
+
 from __future__ import annotations
 
 from pathlib import Path
 import sys
 
-# Compatibility shim. The official human-facing command is now:
-#   python docs/patcher/shared/pipeline_launcher/cli.py
 REPO_ROOT = Path(__file__).resolve().parents[3]
 if str(REPO_ROOT) not in sys.path:
     sys.path.insert(0, str(REPO_ROOT))
