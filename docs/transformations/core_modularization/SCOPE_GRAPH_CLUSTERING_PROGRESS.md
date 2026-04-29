@@ -38,8 +38,8 @@ scope_modularization_post_pilot:
   status: paused_cleanly
   active_pipeline_run: none
   new_bounded_run_opened_now: false
-  last_completed_phase: PHASE_24
-  last_completed_phase_label: launcher_preflight_display
+  last_completed_phase: PHASE_25
+  last_completed_phase_label: launcher_new_run_semantics_clarification
 ```
 
 ## What is complete
@@ -86,6 +86,7 @@ completed:
       - PHASE_23A active_document_compaction
       - PHASE_23B open_new_run_preflight_gate_validation
       - PHASE_24 launcher_preflight_display
+      - PHASE_25 launcher_new_run_semantics_clarification
 ```
 
 ## Current pipeline position
@@ -109,6 +110,11 @@ open_new_run_gate:
   validation_status: PASS
   launcher_display_report: docs/pipelines/constitution/reports/launcher_preflight_display_validation.yaml
   launcher_display_status: PASS
+  launcher_new_run_semantics_report: docs/pipelines/constitution/reports/launcher_new_run_semantics_validation.yaml
+  launcher_new_run_semantics_status: PASS
+  new_run_status_semantics: entry_resolution_available_not_run_authorization
+  run_opening_authorized_by_launcher: false
+  run_materialization_authorized_by_launcher: false
   open_new_run_authorized_by_default_when_defer: false
   recommended_entry_decision_when_defer: partition_refresh_preferred_or_open_new_run_blocked
 ```
@@ -144,6 +150,7 @@ docs/pipelines/constitution/reports/bounded_run_preflight_report.yaml
 docs/pipelines/constitution/reports/bounded_run_preflight.md
 docs/pipelines/constitution/reports/open_new_run_preflight_gate_validation.yaml
 docs/pipelines/constitution/reports/launcher_preflight_display_validation.yaml
+docs/pipelines/constitution/reports/launcher_new_run_semantics_validation.yaml
 tmp/pipeline_launcher.py
 docs/pipelines/constitution/STAGE_00_SCOPE_PARTITION_REVIEW_AND_REGEN.md
 docs/pipelines/constitution/stages/STAGE_00_SCOPE_PARTITION_REVIEW_AND_REGEN.skill.yaml
@@ -191,6 +198,19 @@ option_D_update_launcher_preflight_display:
   action: surface bounded-run preflight status and recommendation in launcher output
   open_new_run_authorized_by_default_when_defer: false
   recommended_entry_decision_when_defer: partition_refresh_preferred_or_open_new_run_blocked
+
+option_E_clarify_launcher_new_run_semantics:
+  status: done
+  completed_phase: PHASE_25
+  artifact: tmp/pipeline_launcher.py
+  report: docs/pipelines/constitution/reports/launcher_new_run_semantics_validation.yaml
+  report_status: PASS
+  action: clarify that next_best_actions.new_run means entry-resolution availability, not run authorization
+  new_run_status: entry_resolution_available
+  run_opening_authorized_by_launcher: false
+  run_materialization_authorized_by_launcher: false
+  requires_open_new_run_decision: true
+  requires_human_confirmation_before_materialization: true
 ```
 
 ## Guardrails
