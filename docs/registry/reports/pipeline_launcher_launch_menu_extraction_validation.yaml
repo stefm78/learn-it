@@ -1,12 +1,12 @@
-pipeline_launcher_consolidation_extraction_validation:
+pipeline_launcher_launch_menu_extraction_validation:
   schema_version: '0.1'
-  generated_at: '2026-04-29T15:04:19Z'
+  generated_at: '2026-04-29T15:04:14Z'
   status: PASS
-  phase_id: PHASE_28D6
-  purpose: Extract consolidation and anomaly helpers from engine.py into consolidation.py.
+  phase_id: PHASE_28D9
+  purpose: Extract launch menu and parallel slot builders from engine.py into launch_menu.py.
   mutation_policy:
     official_command: preserved
-    internal_engine: consolidation_helpers_extracted
+    internal_engine: launch_menu_helpers_extracted
     tmp_pipeline_launcher: compatibility_wrapper_preserved
     signals_yaml: not_modified
     pipeline_md: not_modified
@@ -15,23 +15,30 @@ pipeline_launcher_consolidation_extraction_validation:
   inputs:
   - ref: docs/patcher/shared/pipeline_launcher/engine.py
     sha256: 22ca82878743abc6eaebeab43bdf270f1195e74bc6a1ce5605a93feaf8657682
-  - ref: docs/patcher/shared/pipeline_launcher/consolidation.py
-    sha256: be7b311d659c7636eb0d51ffbb8d723e7cb9e50161d2b16d8a0b1d56d789adb9
+  - ref: docs/patcher/shared/pipeline_launcher/launch_menu.py
+    sha256: 14ab1f2dc73313f7266cc34ac24127a06fbc8369259b8a160d9d1936845ad74f
   - ref: docs/patcher/shared/pipeline_launcher/cli.py
     sha256: aa4e6244ee1f7ad406a145121b57d34ae5e8d952801e4d42751e48f031a3f8db
   - ref: tmp/pipeline_launcher.py
     sha256: 96a7a1003f2b77e86b06ee2137b5bb9a65a6ca0968095bc5fe9f2f90be38556a
-  bootstrap_command_sample: python docs/patcher/shared/update_run_tracking.py --pipeline constitution --run-id CONSTITUTION_RUN_TEST
-    --stage-id STAGE_01_CHALLENGE --stage-status in_progress --run-status active --summary "manual recovery from run_status=blocked"
+  menu_sample:
+    recommended_default: new_run
+    new_run_status: entry_resolution_available
+    new_run_authorized: false
+  parallel_slots_sample:
+    parallel_slots_requested: 1
+    parallel_slots_available: 1
   blocking_findings: []
   result_summary:
-    consolidation_module_created: true
-    engine_imports_consolidation_module: true
-    engine_defines_consolidation_helpers: false
-    bootstrap_command_contains_update_run_tracking: true
+    launch_menu_module_created: true
+    engine_imports_launch_menu_module: true
+    engine_defines_launch_menu_helpers: false
+    build_menu_returns_next_best_actions: true
+    build_menu_keeps_new_run_non_authorizing: true
+    build_parallel_slots_returns_slots: true
     official_command_outputs_human_review: true
     engine_outputs_raw_launcher_without_human_review: true
     tmp_wrapper_outputs_human_review: true
     raw_overlay_available_with_flag: true
-    recommended_next_phase: PHASE_28D7
+    recommended_next_phase: PHASE_28D10
     blocking_finding_count: 0
