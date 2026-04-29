@@ -16,7 +16,7 @@ current_phase:
 
 This handover summarizes the current state of the `core_modularization` / `scope graph clustering`
 work after the bounded pilot run, post-pilot control-plane phases, bounded-run preflight
-integration, active-document compaction, OPEN_NEW_RUN preflight gate validation, launcher preflight display hardening, launcher new-run semantics clarification, minimal pipeline signals contracts, launcher signals overlay modularization, pipeline launcher naming correction, pipeline launcher promotion out of tmp, pipeline launcher engine modular extraction batch 1, registry extraction, and stage00 signal refresh and scope catalog V5 alignment.
+integration, active-document compaction, OPEN_NEW_RUN preflight gate validation, launcher preflight display hardening, launcher new-run semantics clarification, minimal pipeline signals contracts, launcher signals overlay modularization, pipeline launcher naming correction, pipeline launcher promotion out of tmp, pipeline launcher engine modular extraction batch 1, registry extraction, pipeline state extraction, and stage00 signal refresh and scope catalog V5 alignment.
 
 No Constitution pipeline run is currently open.
 
@@ -39,6 +39,7 @@ scope_modularization:
   last_completed_launcher_promotion_phase: PHASE_28C
   last_completed_launcher_engine_extraction_phase: PHASE_28D6
   last_completed_launcher_registry_extraction_phase: PHASE_28D7
+  last_completed_launcher_pipeline_state_extraction_phase: PHASE_28D8
   last_completed_stage00_signal_refresh_phase: PHASE_29
   last_completed_phase: PHASE_29
   last_completed_phase_label: stage00_signal_refresh_and_scope_catalog_v5_alignment
@@ -528,6 +529,11 @@ PHASE_28D7:
   status: done
   module: docs/patcher/shared/pipeline_launcher/registry.py
   report: docs/registry/reports/pipeline_launcher_registry_extraction_validation.yaml
+
+PHASE_28D8:
+  status: done
+  module: docs/patcher/shared/pipeline_launcher/pipeline_state.py
+  report: docs/registry/reports/pipeline_launcher_pipeline_state_extraction_validation.yaml
 ```
 
 The human-facing launcher remains:
@@ -589,6 +595,13 @@ remaining_open_backlog_entries:
 These entries remain visible through:
 
 ```text
+
+D8 launcher pipeline-state extraction evidence:
+```text
+docs/patcher/shared/pipeline_launcher/pipeline_state.py
+docs/patcher/shared/validate_pipeline_launcher_pipeline_state_extraction.py
+docs/registry/reports/pipeline_launcher_pipeline_state_extraction_validation.yaml
+```
 docs/pipelines/constitution/reports/governance_backlog_report.yaml
 docs/pipelines/constitution/reports/bounded_run_preflight_report.yaml
 docs/pipelines/constitution/reports/open_new_run_preflight_gate_validation.yaml
@@ -790,6 +803,28 @@ blocking_finding_count: 0
 
 Next default remains Option A — stop here / keep NO_ACTIVE_PHASE.
 
+### Option L — Pipeline launcher registry extraction
+
+Completed in PHASE_28D7.
+
+```yaml
+PHASE_28D7: registry.py
+report: docs/registry/reports/pipeline_launcher_registry_extraction_validation.yaml
+report_status: PASS
+```
+
+### Option M — Pipeline launcher pipeline state extraction
+
+Completed in PHASE_28D8.
+
+```yaml
+PHASE_28D8: pipeline_state.py
+report: docs/registry/reports/pipeline_launcher_pipeline_state_extraction_validation.yaml
+report_status: PASS
+constitution_active_runs_count: 0
+constitution_published_scope_count: 5
+```
+
 ## Operational checks for resuming later
 
 ```bash
@@ -885,7 +920,7 @@ Important state:
 - PHASE_27A/27B added a modular pipeline launcher runtime and a non-invasive pipeline signals overlay wrapper.
 - PHASE_27C corrected the runtime name from learnit_launcher to pipeline_launcher.
 - PHASE_28A/28B/28C promoted the official command to docs/patcher/shared/pipeline_launcher/cli.py and made tmp/pipeline_launcher.py a compatibility wrapper.
-- PHASE_28D1 through PHASE_28D6 extracted maturity, governance backlog, bounded preflight, entry actions, run_context, and consolidation helpers from engine.py.
+- PHASE_28D1 through PHASE_28D8 extracted maturity, governance backlog, bounded preflight, entry actions, run_context, consolidation, registry, and pipeline_state helpers from engine.py.
 - Current bounded-run preflight status for patch_lifecycle is PREFLIGHT_KEEP_BACKLOG_OPEN.
 - Four patch_lifecycle backlog entries remain open intentionally.
 - Do not mutate policy.yaml, decisions.yaml, scope catalog, or governance_backlog.yaml unless a new explicit phase/run decision is made.

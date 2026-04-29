@@ -101,6 +101,7 @@ completed:
       - PHASE_28D5 extract_pipeline_launcher_run_context_helpers
       - PHASE_28D6 extract_pipeline_launcher_consolidation_helpers
       - PHASE_28D7 extract_pipeline_launcher_registry_helpers
+      - PHASE_28D8 extract_pipeline_launcher_pipeline_state_helpers
       - PHASE_29 stage00_signal_refresh_and_scope_catalog_v5_alignment
 ```
 
@@ -166,7 +167,7 @@ open_new_run_gate:
     modularization_report: docs/registry/reports/pipeline_launcher_modularization_validation.yaml
     overlay_report: docs/registry/reports/pipeline_launcher_with_signals_validation.yaml
     status: PASS
-    latest_extraction_phase: PHASE_28D7
+    latest_extraction_phase: PHASE_28D8
     extracted_engine_modules:
       - docs/patcher/shared/pipeline_launcher/maturity.py
       - docs/patcher/shared/pipeline_launcher/governance_backlog.py
@@ -175,6 +176,7 @@ open_new_run_gate:
       - docs/patcher/shared/pipeline_launcher/run_context.py
       - docs/patcher/shared/pipeline_launcher/consolidation.py
       - docs/patcher/shared/pipeline_launcher/registry.py
+      - docs/patcher/shared/pipeline_launcher/pipeline_state.py
     extraction_reports:
       - docs/registry/reports/pipeline_launcher_maturity_extraction_validation.yaml
       - docs/registry/reports/pipeline_launcher_governance_backlog_extraction_validation.yaml
@@ -183,6 +185,7 @@ open_new_run_gate:
       - docs/registry/reports/pipeline_launcher_run_context_extraction_validation.yaml
       - docs/registry/reports/pipeline_launcher_consolidation_extraction_validation.yaml
       - docs/registry/reports/pipeline_launcher_registry_extraction_validation.yaml
+      - docs/registry/reports/pipeline_launcher_pipeline_state_extraction_validation.yaml
     recommended_default_hint_when_attention: review_pipeline_signals
   open_new_run_authorized_by_default_when_defer: false
   recommended_entry_decision_when_defer: partition_refresh_preferred_or_open_new_run_blocked
@@ -254,6 +257,7 @@ docs/patcher/shared/validate_pipeline_launcher_entry_actions_extraction.py
 docs/patcher/shared/validate_pipeline_launcher_run_context_extraction.py
 docs/patcher/shared/validate_pipeline_launcher_consolidation_extraction.py
 docs/patcher/shared/validate_pipeline_launcher_registry_extraction.py
+docs/patcher/shared/validate_pipeline_launcher_pipeline_state_extraction.py
 docs/patcher/shared/validate_pipeline_launcher_with_signals.py
 docs/pipelines/constitution/signals.yaml
 docs/pipelines/release/signals.yaml
@@ -436,6 +440,21 @@ option_L_pipeline_launcher_registry_extraction:
     - docs/registry/reports/pipeline_launcher_registry_extraction_validation.yaml
   report_status: PASS
   registry_pipeline_count: 4
+  tmp_pipeline_launcher_role: compatibility_wrapper
+  launcher_authorizes_run_from_signals: false
+
+option_M_pipeline_launcher_pipeline_state_extraction:
+  status: done
+  completed_phase: PHASE_28D8
+  action: extract pipeline state discovery helpers from engine.py
+  artifacts:
+    - docs/patcher/shared/pipeline_launcher/pipeline_state.py
+    - docs/patcher/shared/validate_pipeline_launcher_pipeline_state_extraction.py
+  reports:
+    - docs/registry/reports/pipeline_launcher_pipeline_state_extraction_validation.yaml
+  report_status: PASS
+  constitution_active_runs_count: 0
+  constitution_published_scope_count: 5
   tmp_pipeline_launcher_role: compatibility_wrapper
   launcher_authorizes_run_from_signals: false
 
