@@ -1,6 +1,6 @@
 pipeline_launcher_with_signals_validation:
   schema_version: '0.6'
-  generated_at: '2026-04-29T12:43:08Z'
+  generated_at: '2026-04-29T13:32:30Z'
   status: PASS
   phase_id: PHASE_28C_COMPAT
   purpose: Compatibility validation for pipeline_launcher_with_signals.py after engine promotion.
@@ -9,8 +9,8 @@ pipeline_launcher_with_signals_validation:
     phase_id: PHASE_28C
   mutation_policy:
     official_command: preserved
-    internal_engine: created_from_previous_tmp_launcher
-    tmp_pipeline_launcher: converted_to_compatibility_wrapper
+    internal_engine: promoted_and_may_be_incrementally_modularized
+    tmp_pipeline_launcher: compatibility_wrapper
     compatibility_wrapper: preserved
     signals_yaml: not_modified
     pipeline_md: not_modified

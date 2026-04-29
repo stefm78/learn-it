@@ -1,0 +1,38 @@
+pipeline_launcher_maturity_extraction_validation:
+  schema_version: '0.1'
+  generated_at: '2026-04-29T13:32:32Z'
+  status: PASS
+  phase_id: PHASE_28D1
+  purpose: Extract maturity constants and helpers from the pipeline launcher engine into a dedicated module.
+  mutation_policy:
+    official_command: preserved
+    internal_engine: maturity_helpers_extracted
+    tmp_pipeline_launcher: compatibility_wrapper_preserved
+    signals_yaml: not_modified
+    pipeline_md: not_modified
+    state_yaml: not_modified
+    run_materialization: not_performed
+  artifacts:
+    maturity_module: docs/patcher/shared/pipeline_launcher/maturity.py
+    engine: docs/patcher/shared/pipeline_launcher/engine.py
+    official_command: docs/patcher/shared/pipeline_launcher/cli.py
+    tmp_wrapper: tmp/pipeline_launcher.py
+  inputs:
+  - ref: docs/patcher/shared/pipeline_launcher/engine.py
+    sha256: 4ae38f42df3bc6266841dd4a2f15eadd7344b79c7cba86563f6e51b9e11f7415
+  - ref: docs/patcher/shared/pipeline_launcher/maturity.py
+    sha256: fca7b597a4d38252d516069165dd19d3ac3f962f32dd9b224176474cfb655866
+  - ref: docs/patcher/shared/pipeline_launcher/cli.py
+    sha256: aa4e6244ee1f7ad406a145121b57d34ae5e8d952801e4d42751e48f031a3f8db
+  - ref: tmp/pipeline_launcher.py
+    sha256: 96a7a1003f2b77e86b06ee2137b5bb9a65a6ca0968095bc5fe9f2f90be38556a
+  blocking_findings: []
+  result_summary:
+    maturity_module_created: true
+    engine_imports_maturity_module: true
+    engine_defines_maturity_functions: false
+    official_command_outputs_human_review: true
+    engine_outputs_raw_launcher_without_human_review: true
+    tmp_wrapper_outputs_human_review: true
+    recommended_next_phase: PHASE_28D2
+    blocking_finding_count: 0

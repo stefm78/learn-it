@@ -19,39 +19,34 @@ from __future__ import annotations
 
 import argparse
 import re
+import sys
 from pathlib import Path
 from typing import Any
 
 import yaml
 
-MATURITY_AXES_COUNT = 6
-MATURITY_MAX_SCORE = 24
-MATURITY_LEVELS: list[tuple[str, int, int]] = [
-    ("L4_strong", 21, 24),
-    ("L3_operational", 17, 20),
-    ("L2_usable_with_care", 13, 16),
-    ("L1_fragile", 9, 12),
-    ("L0_experimental", 0, 8),
-]
-MATURITY_MINIMUM_LEVEL = "L2_usable_with_care"
-MATURITY_GATED_LEVELS = {"L0_experimental", "L1_fragile"}
+# Support direct execution as `python docs/patcher/shared/pipeline_launcher/engine.py`
+# while importing modules from the repository root.
+REPO_ROOT = Path(__file__).resolve().parents[4]
+if str(REPO_ROOT) not in sys.path:
+    sys.path.insert(0, str(REPO_ROOT))
+
+from docs.patcher.shared.pipeline_launcher.maturity import (
+    MATURITY_AXES_COUNT,
+    MATURITY_GATED_LEVELS,
+    MATURITY_LEVELS,
+    MATURITY_MAX_SCORE,
+    MATURITY_MINIMUM_LEVEL,
+    maturity_level_from_score,
+    maturity_pct,
+)
+
 CONSOLIDATION_PENDING_STAGES = {
     "STAGE_06_CORE_VALIDATION",
     "STAGE_06B_CONSOLIDATION",
     "STAGE_07_RELEASE_MATERIALIZATION",
 }
 _IN_PROGRESS_STALE_THRESHOLD_S = 6 * 3600
-
-
-def maturity_pct(score: int) -> str:
-    return f"{round(score * 100 / MATURITY_MAX_SCORE)}%"
-
-
-def maturity_level_from_score(score: int) -> str:
-    for level_key, lo, hi in MATURITY_LEVELS:
-        if lo <= score <= hi:
-            return level_key
-    return "L0_experimental"
 
 
 def load_text(path: Path) -> str:

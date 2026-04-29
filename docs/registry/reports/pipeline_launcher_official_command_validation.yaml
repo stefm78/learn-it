@@ -1,22 +1,17 @@
 pipeline_launcher_official_command_validation:
   schema_version: '0.2'
-  generated_at: '2026-04-29T12:43:06Z'
+  generated_at: '2026-04-29T13:32:29Z'
   status: PASS
   phase_id: PHASE_28C_COMPAT
   purpose: Compatibility view of official launcher validation after engine promotion.
   source_validation:
     ref: docs/registry/reports/pipeline_launcher_engine_promotion_validation.yaml
     phase_id: PHASE_28C
-  commands:
-    official_file_command: python docs/patcher/shared/pipeline_launcher/cli.py
-    official_module_command: python -m docs.patcher.shared.pipeline_launcher.cli
-    internal_engine: python docs/patcher/shared/pipeline_launcher/engine.py
-    tmp_compatibility_wrapper: python tmp/pipeline_launcher.py
-    compatibility_command: python docs/patcher/shared/pipeline_launcher_with_signals.py
+  commands: {}
   mutation_policy:
     official_command: preserved
-    internal_engine: created_from_previous_tmp_launcher
-    tmp_pipeline_launcher: converted_to_compatibility_wrapper
+    internal_engine: promoted_and_may_be_incrementally_modularized
+    tmp_pipeline_launcher: compatibility_wrapper
     compatibility_wrapper: preserved
     signals_yaml: not_modified
     pipeline_md: not_modified
