@@ -16,7 +16,7 @@ current_phase:
 
 This handover summarizes the current state of the `core_modularization` / `scope graph clustering`
 work after the bounded pilot run, post-pilot control-plane phases, bounded-run preflight
-integration, active-document compaction, OPEN_NEW_RUN preflight gate validation, launcher preflight display hardening, and launcher new-run semantics clarification.
+integration, active-document compaction, OPEN_NEW_RUN preflight gate validation, launcher preflight display hardening, launcher new-run semantics clarification, and minimal pipeline signals contracts.
 
 No Constitution pipeline run is currently open.
 
@@ -32,8 +32,9 @@ scope_modularization:
   last_completed_validation_phase: PHASE_23B
   last_completed_launcher_hardening_phase: PHASE_24
   last_completed_launcher_semantics_phase: PHASE_25
-  last_completed_phase: PHASE_25
-  last_completed_phase_label: launcher_new_run_semantics_clarification
+  last_completed_pipeline_signals_phase: PHASE_26
+  last_completed_phase: PHASE_26
+  last_completed_phase_label: minimal_pipeline_signals_contract
   current_recommendation: do_not_open_new_bounded_run_now
 ```
 
@@ -108,8 +109,8 @@ governance_backlog_exported: true
 
 This was a real Constitution pipeline run.
 
-The later PHASE_14 through PHASE_25 work was control-plane, governance, tooling,
-validation, launcher hardening, launcher semantics clarification, or documentation work. It was not another full stage 01 → 09 pipeline run.
+The later PHASE_14 through PHASE_26 work was control-plane, governance, tooling,
+validation, launcher hardening, launcher semantics clarification, minimal pipeline signals contracts, or documentation work. It was not another full stage 01 → 09 pipeline run.
 
 ### 3. Governance backlog integration
 
@@ -367,6 +368,36 @@ launcher_boundary:
 The authoritative decision remains in the Constitution entry action and bounded-run preflight
 contracts. The launcher remains intentionally simple.
 
+### 12. Minimal pipeline signals contract
+
+PHASE_26 added a minimal `signals.yaml` contract for each pipeline listed in the registry.
+
+```yaml
+PHASE_26:
+  label: minimal_pipeline_signals_contract
+  status: done
+  validator: docs/patcher/shared/validate_pipeline_signals.py
+  report: docs/registry/reports/pipeline_signals_validation.yaml
+  report_status: PASS
+  launcher_patch: none
+  state_yaml_patch: none
+  providers:
+    constitution: implemented
+    release: not_implemented
+    migration: not_implemented
+    governance: not_implemented
+```
+
+The Constitution pipeline now exposes the backlog signal through:
+
+```text
+docs/pipelines/constitution/signals.yaml
+```
+
+This is intentionally minimal: generic tools can detect that the pipeline has an
+attention signal without embedding Constitution-specific backlog logic. Authority remains
+in STAGE_00, OPEN_NEW_RUN, and the pipeline contracts.
+
 ## Remaining open backlog entries
 
 Four reviewed backlog entries remain open intentionally:
@@ -402,6 +433,12 @@ docs/pipelines/constitution/reports/bounded_run_preflight_report.yaml
 docs/pipelines/constitution/reports/open_new_run_preflight_gate_validation.yaml
 docs/pipelines/constitution/reports/launcher_preflight_display_validation.yaml
 docs/pipelines/constitution/reports/launcher_new_run_semantics_validation.yaml
+docs/registry/reports/pipeline_signals_validation.yaml
+docs/pipelines/constitution/signals.yaml
+docs/pipelines/release/signals.yaml
+docs/pipelines/migration/signals.yaml
+docs/pipelines/governance/signals.yaml
+docs/patcher/shared/validate_pipeline_signals.py
 tmp/pipeline_launcher.py
 STAGE_00 run_candidate_preflight
 OPEN_NEW_RUN preflight gate
@@ -488,6 +525,25 @@ PHASE_25:
   requires_human_confirmation_before_materialization: true
 ```
 
+### Option F — Minimal pipeline signals contract
+
+Completed in PHASE_26.
+
+```yaml
+PHASE_26:
+  status: done
+  artifact:
+    - docs/pipelines/constitution/signals.yaml
+    - docs/pipelines/release/signals.yaml
+    - docs/pipelines/migration/signals.yaml
+    - docs/pipelines/governance/signals.yaml
+    - docs/patcher/shared/validate_pipeline_signals.py
+  report: docs/registry/reports/pipeline_signals_validation.yaml
+  report_status: PASS
+  launcher_patch: none
+  state_yaml_patch: none
+```
+
 Next default remains Option A — stop here / keep NO_ACTIVE_PHASE.
 
 ## Operational checks for resuming later
@@ -515,6 +571,10 @@ python docs/patcher/shared/validate_open_new_run_preflight_gate.py \
 python -m py_compile tmp/pipeline_launcher.py
 
 python tmp/pipeline_launcher.py
+
+python docs/patcher/shared/validate_pipeline_signals.py \
+  --registry docs/registry/pipelines.md \
+  --report docs/registry/reports/pipeline_signals_validation.yaml
 ```
 
 ## Guardrails
@@ -553,11 +613,12 @@ Read first:
 Important state:
 - The serious bounded pilot run was CONSTITUTION_RUN_2026_04_27_PATCH_LIFECYCLE_R01.
 - It completed and promoted CORE_RELEASE_2026_04_28_R01.
-- PHASE_14 through PHASE_25 were post-pilot control-plane, governance, tooling, validation, launcher hardening, launcher semantics clarification, or documentation work, not new full pipeline runs.
+- PHASE_14 through PHASE_26 were post-pilot control-plane, governance, tooling, validation, launcher hardening, launcher semantics clarification, minimal pipeline signals contracts, or documentation work, not new full pipeline runs.
 - PHASE_22 integrated bounded-run preflight into STAGE_00 and OPEN_NEW_RUN.
 - PHASE_23B validated that OPEN_NEW_RUN does not authorize a backlog-driven run by default when preflight is PREFLIGHT_DEFER_TO_STAGE00_REVIEW.
 - PHASE_24 surfaced the bounded-run preflight signal in tmp/pipeline_launcher.py.
 - PHASE_25 clarified that next_best_actions.new_run means entry-resolution availability, not run authorization or run materialization.
+- PHASE_26 added minimal signals.yaml contracts for all registry pipelines; Constitution exposes backlog as an attention signal.
 - Current bounded-run preflight status for patch_lifecycle is PREFLIGHT_DEFER_TO_STAGE00_REVIEW.
 - Four patch_lifecycle backlog entries remain open intentionally.
 - Do not mutate policy.yaml, decisions.yaml, scope catalog, or governance_backlog.yaml unless a new explicit phase/run decision is made.

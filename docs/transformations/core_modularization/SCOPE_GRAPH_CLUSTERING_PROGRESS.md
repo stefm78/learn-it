@@ -38,8 +38,8 @@ scope_modularization_post_pilot:
   status: paused_cleanly
   active_pipeline_run: none
   new_bounded_run_opened_now: false
-  last_completed_phase: PHASE_25
-  last_completed_phase_label: launcher_new_run_semantics_clarification
+  last_completed_phase: PHASE_26
+  last_completed_phase_label: minimal_pipeline_signals_contract
 ```
 
 ## What is complete
@@ -87,6 +87,7 @@ completed:
       - PHASE_23B open_new_run_preflight_gate_validation
       - PHASE_24 launcher_preflight_display
       - PHASE_25 launcher_new_run_semantics_clarification
+      - PHASE_26 minimal_pipeline_signals_contract
 ```
 
 ## Current pipeline position
@@ -115,6 +116,14 @@ open_new_run_gate:
   new_run_status_semantics: entry_resolution_available_not_run_authorization
   run_opening_authorized_by_launcher: false
   run_materialization_authorized_by_launcher: false
+  pipeline_signals_contract:
+    validator: docs/patcher/shared/validate_pipeline_signals.py
+    validation_report: docs/registry/reports/pipeline_signals_validation.yaml
+    validation_status: PASS
+    implemented_pipeline_count: 1
+    declared_pipeline_count: 4
+    constitution_backlog_signal_status: attention
+    constitution_backlog_signal_scope: patch_lifecycle
   open_new_run_authorized_by_default_when_defer: false
   recommended_entry_decision_when_defer: partition_refresh_preferred_or_open_new_run_blocked
 ```
@@ -151,6 +160,12 @@ docs/pipelines/constitution/reports/bounded_run_preflight.md
 docs/pipelines/constitution/reports/open_new_run_preflight_gate_validation.yaml
 docs/pipelines/constitution/reports/launcher_preflight_display_validation.yaml
 docs/pipelines/constitution/reports/launcher_new_run_semantics_validation.yaml
+docs/registry/reports/pipeline_signals_validation.yaml
+docs/pipelines/constitution/signals.yaml
+docs/pipelines/release/signals.yaml
+docs/pipelines/migration/signals.yaml
+docs/pipelines/governance/signals.yaml
+docs/patcher/shared/validate_pipeline_signals.py
 tmp/pipeline_launcher.py
 docs/pipelines/constitution/STAGE_00_SCOPE_PARTITION_REVIEW_AND_REGEN.md
 docs/pipelines/constitution/stages/STAGE_00_SCOPE_PARTITION_REVIEW_AND_REGEN.skill.yaml
@@ -211,6 +226,26 @@ option_E_clarify_launcher_new_run_semantics:
   run_materialization_authorized_by_launcher: false
   requires_open_new_run_decision: true
   requires_human_confirmation_before_materialization: true
+
+option_F_minimal_pipeline_signals_contract:
+  status: done
+  completed_phase: PHASE_26
+  artifact:
+    - docs/pipelines/constitution/signals.yaml
+    - docs/pipelines/release/signals.yaml
+    - docs/pipelines/migration/signals.yaml
+    - docs/pipelines/governance/signals.yaml
+    - docs/patcher/shared/validate_pipeline_signals.py
+  report: docs/registry/reports/pipeline_signals_validation.yaml
+  report_status: PASS
+  action: add a minimal per-pipeline operational signals contract without changing launcher behavior
+  launcher_patch: none
+  state_yaml_patch: none
+  constitution_signal:
+    id: backlog
+    status: attention
+    scope_key: patch_lifecycle
+    run_opening_authorized_by_signal: false
 ```
 
 ## Guardrails
