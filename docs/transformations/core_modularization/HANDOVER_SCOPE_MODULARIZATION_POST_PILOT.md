@@ -16,7 +16,7 @@ current_phase:
 
 This handover summarizes the current state of the `core_modularization` / `scope graph clustering`
 work after the bounded pilot run, post-pilot control-plane phases, bounded-run preflight
-integration, active-document compaction, OPEN_NEW_RUN preflight gate validation, launcher preflight display hardening, launcher new-run semantics clarification, minimal pipeline signals contracts, launcher signals overlay modularization, pipeline launcher naming correction, pipeline launcher promotion out of tmp, pipeline launcher engine modular extraction batch 1, registry extraction, pipeline state extraction, and stage00 signal refresh and scope catalog V5 alignment.
+integration, active-document compaction, OPEN_NEW_RUN preflight gate validation, launcher preflight display hardening, launcher new-run semantics clarification, minimal pipeline signals contracts, launcher signals overlay modularization, pipeline launcher naming correction, pipeline launcher promotion out of tmp, pipeline launcher engine modular extraction batch 1, registry extraction, pipeline state extraction, launch menu extraction, and stage00 signal refresh and scope catalog V5 alignment.
 
 No Constitution pipeline run is currently open.
 
@@ -40,6 +40,7 @@ scope_modularization:
   last_completed_launcher_engine_extraction_phase: PHASE_28D6
   last_completed_launcher_registry_extraction_phase: PHASE_28D7
   last_completed_launcher_pipeline_state_extraction_phase: PHASE_28D8
+  last_completed_launcher_launch_menu_extraction_phase: PHASE_28D9
   last_completed_stage00_signal_refresh_phase: PHASE_29
   last_completed_phase: PHASE_29
   last_completed_phase_label: stage00_signal_refresh_and_scope_catalog_v5_alignment
@@ -144,6 +145,13 @@ docs/pipelines/constitution/scope_catalog/governance_backlog.yaml
 docs/specs/constitution_governance_backlog_lifecycle.md
 docs/patcher/shared/validate_governance_backlog_lifecycle.py
 docs/patcher/shared/report_governance_backlog.py
+
+D9 launcher launch-menu extraction evidence:
+```text
+docs/patcher/shared/pipeline_launcher/launch_menu.py
+docs/patcher/shared/validate_pipeline_launcher_launch_menu_extraction.py
+docs/registry/reports/pipeline_launcher_launch_menu_extraction_validation.yaml
+```
 docs/pipelines/constitution/reports/governance_backlog_report.yaml
 docs/pipelines/constitution/reports/governance_backlog_lifecycle_validation.yaml
 ```
@@ -534,6 +542,11 @@ PHASE_28D8:
   status: done
   module: docs/patcher/shared/pipeline_launcher/pipeline_state.py
   report: docs/registry/reports/pipeline_launcher_pipeline_state_extraction_validation.yaml
+
+PHASE_28D9:
+  status: done
+  module: docs/patcher/shared/pipeline_launcher/launch_menu.py
+  report: docs/registry/reports/pipeline_launcher_launch_menu_extraction_validation.yaml
 ```
 
 The human-facing launcher remains:
@@ -825,6 +838,18 @@ constitution_active_runs_count: 0
 constitution_published_scope_count: 5
 ```
 
+
+### Option N — Pipeline launcher launch menu extraction
+
+Completed in PHASE_28D9.
+
+```yaml
+PHASE_28D9: launch_menu.py
+report: docs/registry/reports/pipeline_launcher_launch_menu_extraction_validation.yaml
+report_status: PASS
+build_menu_keeps_new_run_non_authorizing: true
+build_parallel_slots_returns_slots: true
+```
 ## Operational checks for resuming later
 
 ```bash
@@ -920,7 +945,7 @@ Important state:
 - PHASE_27A/27B added a modular pipeline launcher runtime and a non-invasive pipeline signals overlay wrapper.
 - PHASE_27C corrected the runtime name from learnit_launcher to pipeline_launcher.
 - PHASE_28A/28B/28C promoted the official command to docs/patcher/shared/pipeline_launcher/cli.py and made tmp/pipeline_launcher.py a compatibility wrapper.
-- PHASE_28D1 through PHASE_28D8 extracted maturity, governance backlog, bounded preflight, entry actions, run_context, consolidation, registry, and pipeline_state helpers from engine.py.
+- PHASE_28D1 through PHASE_28D9 extracted maturity, governance backlog, bounded preflight, entry actions, run_context, consolidation, registry, pipeline_state, and launch_menu helpers from engine.py.
 - Current bounded-run preflight status for patch_lifecycle is PREFLIGHT_KEEP_BACKLOG_OPEN.
 - Four patch_lifecycle backlog entries remain open intentionally.
 - Do not mutate policy.yaml, decisions.yaml, scope catalog, or governance_backlog.yaml unless a new explicit phase/run decision is made.
