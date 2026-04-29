@@ -10,13 +10,14 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
-import yaml
-
 REPO_ROOT = Path(__file__).resolve().parents[3]
 if str(REPO_ROOT) not in sys.path:
     sys.path.insert(0, str(REPO_ROOT))
 
-from docs.patcher.shared.pipeline_launcher.overlay import build_pipeline_signals_overlay
+from docs.patcher.shared.pipeline_launcher.overlay import (
+    build_pipeline_signals_overlay,
+    build_pipeline_signals_review,
+)
 from docs.patcher.shared.pipeline_launcher.yaml_io import write_yaml
 
 
@@ -63,6 +64,7 @@ def build_report() -> dict[str, Any]:
 
     tmp_rc, tmp_stdout, tmp_stderr = run_command([sys.executable, str(paths["tmp_launcher"])])
     wrapper_rc, wrapper_stdout, wrapper_stderr = run_command([sys.executable, str(paths["wrapper"])])
+    raw_rc, raw_stdout, raw_stderr = run_command([sys.executable, str(paths["wrapper"]), "--raw-signals-overlay"])
 
     if tmp_rc != 0:
         findings.append({"finding_id": "TMP_LAUNCHER_RUNTIME_FAILED", "severity": "blocking", "returncode": tmp_rc})
@@ -70,72 +72,96 @@ def build_report() -> dict[str, Any]:
         findings.append(
             {"finding_id": "SIGNALS_WRAPPER_RUNTIME_FAILED", "severity": "blocking", "returncode": wrapper_rc}
         )
+    if raw_rc != 0:
+        findings.append(
+            {"finding_id": "SIGNALS_WRAPPER_RAW_RUNTIME_FAILED", "severity": "blocking", "returncode": raw_rc}
+        )
 
     overlay = build_pipeline_signals_overlay(REPO_ROOT)
-    root = overlay.get("pipeline_signals_overlay", {})
-    summary = root.get("signal_summary", {})
-    prompt_binding = root.get("open_new_run_prompt_binding_addition", {})
-    action = root.get("action_menu_addition", {})
-    next_best = root.get("next_best_actions_addition", {}).get("review_pipeline_signals", {})
+    review = build_pipeline_signals_review(REPO_ROOT)
 
-    if root.get("recommended_default_hint") != "review_pipeline_signals":
+    overlay_root = overlay.get("pipeline_signals_overlay", {})
+    review_root = review.get("pipeline_signals_review", {})
+    summary = overlay_root.get("signal_summary", {})
+    prompt = review_root.get("recommended_prompt", "")
+
+    if overlay_root.get("recommended_default_hint") != "review_pipeline_signals":
         findings.append(
             {
                 "finding_id": "UNEXPECTED_RECOMMENDED_DEFAULT_HINT",
                 "severity": "blocking",
-                "actual": root.get("recommended_default_hint"),
+                "actual": overlay_root.get("recommended_default_hint"),
             }
         )
 
     if summary.get("has_attention_signals") is not True:
         findings.append({"finding_id": "MISSING_ATTENTION_SIGNAL", "severity": "blocking"})
 
-    if action.get("key") != "review_pipeline_signals" or action.get("recommended") is not True:
-        findings.append({"finding_id": "INVALID_REVIEW_ACTION_SLOT", "severity": "blocking"})
+    if review_root.get("status") != "attention":
+        findings.append({"finding_id": "HUMAN_REVIEW_STATUS_NOT_ATTENTION", "severity": "blocking"})
 
-    if next_best.get("status") != "attention_review_available":
-        findings.append(
-            {
-                "finding_id": "INVALID_REVIEW_NEXT_BEST_ACTION",
-                "severity": "blocking",
-                "actual": next_best.get("status"),
-            }
-        )
+    if review_root.get("recommended_default") != "review_pipeline_signals":
+        findings.append({"finding_id": "HUMAN_REVIEW_RECOMMENDED_DEFAULT_INVALID", "severity": "blocking"})
 
-    if "attention_signal_must_be_acknowledged" not in prompt_binding.get("pipeline_signals_handling", ""):
-        findings.append({"finding_id": "PROMPT_BINDING_MISSING_ATTENTION_ACK", "severity": "blocking"})
+    if review_root.get("run_opening_authorized_by_signals") is not False:
+        findings.append({"finding_id": "REVIEW_MUST_NOT_AUTHORIZE_RUN_OPENING", "severity": "blocking"})
 
-    if root.get("launcher_authorizes_run_from_signals") is not False:
-        findings.append({"finding_id": "OVERLAY_MUST_NOT_AUTHORIZE_RUN_OPENING", "severity": "blocking"})
+    if "n'ouvre pas de run" not in prompt:
+        findings.append({"finding_id": "PROMPT_MISSING_NO_RUN_CONSTRAINT", "severity": "blocking"})
+
+    if "STAGE_00" not in prompt:
+        findings.append({"finding_id": "PROMPT_MISSING_STAGE00_REFERENCE", "severity": "blocking"})
+
+    if "OPEN_NEW_RUN" not in prompt:
+        findings.append({"finding_id": "PROMPT_MISSING_OPEN_NEW_RUN_REFERENCE", "severity": "blocking"})
 
     runtime_required = [
-        "PIPELINE_SIGNALS_OVERLAY:",
-        "recommended_default_hint: review_pipeline_signals",
-        "key: review_pipeline_signals",
-        "attention_signal_must_be_acknowledged",
-        "launcher_authorizes_run_from_signals: false",
+        "PIPELINE_SIGNALS_REVIEW:",
+        "status: attention",
+        "recommended_default: review_pipeline_signals",
+        "recommended_prompt:",
+        "n'ouvre pas de run",
+        "STAGE_00",
+        "OPEN_NEW_RUN",
+        "run_opening_authorized_by_signals: false",
     ]
     missing_runtime = [snippet for snippet in runtime_required if snippet not in wrapper_stdout]
     if missing_runtime:
         findings.append(
             {
-                "finding_id": "WRAPPER_OUTPUT_MISSING_EXPECTED_SNIPPETS",
+                "finding_id": "WRAPPER_OUTPUT_MISSING_EXPECTED_HUMAN_SNIPPETS",
                 "severity": "blocking",
                 "missing": missing_runtime,
             }
         )
 
+    if "signal_summary: &" in wrapper_stdout or "open_new_run_prompt_binding_addition:" in wrapper_stdout:
+        findings.append(
+            {
+                "finding_id": "WRAPPER_DEFAULT_OUTPUT_STILL_TOO_RAW",
+                "severity": "blocking",
+            }
+        )
+
+    if "PIPELINE_SIGNALS_OVERLAY_RAW:" not in raw_stdout:
+        findings.append(
+            {
+                "finding_id": "RAW_OVERLAY_OPTION_MISSING",
+                "severity": "blocking",
+            }
+        )
+
     return {
         "pipeline_launcher_with_signals_validation": {
-            "schema_version": "0.1",
+            "schema_version": "0.2",
             "generated_at": iso_now(),
             "status": "PASS" if not findings else "FAIL",
-            "phase_id": "PHASE_27B",
-            "purpose": "Provide a non-invasive launcher wrapper that appends pipeline signal overlay to tmp/pipeline_launcher.py output.",
+            "phase_id": "PHASE_27D",
+            "purpose": "Make the pipeline signals wrapper human-readable and provide a copyable review prompt by default.",
             "mutation_policy": {
                 "tmp_pipeline_launcher": "not_modified",
-                "wrapper": "added",
-                "overlay_module": "added",
+                "wrapper": "updated",
+                "overlay_module": "updated",
                 "signals_yaml": "not_modified",
                 "pipeline_md": "not_modified",
                 "state_yaml": "not_modified",
@@ -149,22 +175,30 @@ def build_report() -> dict[str, Any]:
                 for path in paths.values()
                 if path.exists()
             ],
-            "overlay": root,
+            "overlay": overlay_root,
+            "human_review": review_root,
             "tmp_launcher_runtime": {
                 "status": "PASS" if tmp_rc == 0 else "FAIL",
-                "stdout_excerpt": tmp_stdout[:1500],
+                "stdout_excerpt": tmp_stdout[:1200],
                 "stderr_excerpt": tmp_stderr[:800],
             },
             "wrapper_runtime": {
                 "status": "PASS" if wrapper_rc == 0 else "FAIL",
-                "stdout_excerpt": wrapper_stdout[:3000],
+                "stdout_excerpt": wrapper_stdout[-3500:],
                 "stderr_excerpt": wrapper_stderr[:800],
+            },
+            "raw_wrapper_runtime": {
+                "status": "PASS" if raw_rc == 0 else "FAIL",
+                "stdout_excerpt": raw_stdout[-2500:],
+                "stderr_excerpt": raw_stderr[:800],
             },
             "blocking_findings": findings,
             "result_summary": {
                 "has_attention_signals": summary.get("has_attention_signals"),
-                "recommended_default_hint": root.get("recommended_default_hint"),
-                "wrapper_appends_pipeline_signals_overlay": "PIPELINE_SIGNALS_OVERLAY:" in wrapper_stdout,
+                "recommended_default_hint": overlay_root.get("recommended_default_hint"),
+                "wrapper_outputs_human_review": "PIPELINE_SIGNALS_REVIEW:" in wrapper_stdout,
+                "wrapper_outputs_copyable_prompt": "recommended_prompt:" in wrapper_stdout and "n'ouvre pas de run" in wrapper_stdout,
+                "raw_overlay_available_with_flag": "PIPELINE_SIGNALS_OVERLAY_RAW:" in raw_stdout,
                 "launcher_authorizes_run_from_signals": False,
                 "tmp_pipeline_launcher_behavior_changed": False,
                 "blocking_finding_count": len(findings),
@@ -188,7 +222,8 @@ def main() -> int:
     print(f"Status: {root['status']}")
     print(f"Wrote {args.report}")
     print(f"Recommended default hint: {summary['recommended_default_hint']}")
-    print(f"Wrapper appends overlay: {summary['wrapper_appends_pipeline_signals_overlay']}")
+    print(f"Human review output: {summary['wrapper_outputs_human_review']}")
+    print(f"Copyable prompt output: {summary['wrapper_outputs_copyable_prompt']}")
     print(f"Blocking findings: {summary['blocking_finding_count']}")
     return 0 if root["status"] == "PASS" else 1
 
