@@ -1,7 +1,7 @@
 constitution_neighbor_declaration_inventory_report:
   schema_version: '0.1'
   phase_id: PHASE_18A
-  generated_at: '2026-04-28T15:45:03Z'
+  generated_at: '2026-04-29T14:11:55Z'
   status: PASS
   mutation_policy:
     policy_yaml: not_modified
@@ -15,13 +15,13 @@ constitution_neighbor_declaration_inventory_report:
   - ref: docs/pipelines/constitution/policies/scope_generation/policy.yaml
     sha256: c70c0aabcdaa1acf096eb86d4ea95671d0b367840c99b44e6a2262e24ffc36da
   - ref: docs/pipelines/constitution/policies/scope_generation/decisions.yaml
-    sha256: ef2a6dd19ae7d9d8d5a29f5ed6e07d4593e0f92da33732480300144b90029104
+    sha256: 19fef58f137bcd5ddeccaa9366df1aeb2c552bdc32b35f9a04a16d1fff25dc49
   - ref: docs/pipelines/constitution/scope_catalog/manifest.yaml
     sha256: 3de972b8904b38698d92fb51a63ce0c7273d6a7ec668344c2297bcbaf24b9812
   - ref: docs/pipelines/constitution/pipeline.md
-    sha256: ba910cac9c56c1dd5059bf2dcee1ec89c286e0e5c1381f3e1a93cfd65a5c7001
+    sha256: 895c2bd63d4239cddefe7ba2eec5727637893977b06af405d2078311a17b8c80
   - ref: docs/pipelines/constitution/STAGE_00_SCOPE_PARTITION_REVIEW_AND_REGEN.md
-    sha256: cd0f3876f86901237586c3b4761c4e7f34a25f89c700bad713ea077f4ba34cc9
+    sha256: 93c8e4b66b1ec9836ad6e3ccfcc09123eba5915d36ea41b6d42c380b931335dc
   summary:
     policy_declared_scope_count: 5
     force_logical_neighbor_decision_count: 8
@@ -110,7 +110,7 @@ constitution_neighbor_declaration_inventory_report:
         - patch_lifecycle
         target_id_count: 1
         target_ids:
-        - REF_CORE_LEARNIT_REFERENTIEL_V4_0_IN_CONSTITUTION
+        - REF_CORE_LEARNIT_REFERENTIEL_V5_0_IN_CONSTITUTION
         neighbor_class: intercore_reference_forced
         read_mode: primary
         source_phase: null
