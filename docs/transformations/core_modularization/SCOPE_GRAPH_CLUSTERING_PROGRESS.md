@@ -915,6 +915,78 @@ phases:
         - GBC_PATCH_LIFECYCLE_ESCALATION_BOUNDARY_R01 remains open for STAGE_00 backlog review
         - GBC_PATCH_LIFECYCLE_REFERENTIEL_PARAMETER_R01 remains open for referentiel/link or cross-core follow-up
 
+  - phase_id: PHASE_22
+    label: bounded_run_preflight_pipeline_integration
+    status: done
+    objective: >-
+      Generalize the post-pilot run-candidate cadrage into the Constitution pipeline
+      as a STAGE_00 pre-run mode and connect it to OPEN_NEW_RUN entry resolution.
+    rationale: >-
+      PHASE_21A decided not to open a new bounded run immediately, but the reasoning
+      was reusable: when open governance backlog entries motivate a future run, the
+      pipeline needs a governed non-mutating preflight before OPEN_NEW_RUN authorizes
+      materialization.
+    completed_subtasks:
+      - subtask_id: PHASE_22A_STAGE00_PREFLIGHT_CONTRACT
+        status: done
+        evidence:
+          - docs/pipelines/constitution/STAGE_00_SCOPE_PARTITION_REVIEW_AND_REGEN.md
+          - docs/pipelines/constitution/stages/STAGE_00_SCOPE_PARTITION_REVIEW_AND_REGEN.skill.yaml
+        result:
+          stage00_mode_added: run_candidate_preflight
+          outputs_declared:
+            - docs/pipelines/constitution/reports/bounded_run_preflight_report.yaml
+            - docs/pipelines/constitution/reports/bounded_run_preflight.md
+          default_mutation_policy: non_mutating
+          opens_run_by_itself: false
+      - subtask_id: PHASE_22B_PREFLIGHT_TOOLING_AND_FIRST_REPORT
+        status: done
+        evidence:
+          - docs/patcher/shared/prepare_bounded_run_preflight.py
+          - docs/pipelines/constitution/reports/bounded_run_preflight_report.yaml
+          - docs/pipelines/constitution/reports/bounded_run_preflight.md
+        result:
+          requested_scope_key: patch_lifecycle
+          report_status: PREFLIGHT_DEFER_TO_STAGE00_REVIEW
+          active_run_count: 0
+          matching_open_entry_count: 4
+          recommendation: defer_to_stage00_backlog_review
+          new_bounded_run_recommended_now: false
+          future_run_if_human_overrides:
+            scope_key: patch_lifecycle
+            theme: patch_lifecycle_state_machine_and_priority_lanes
+            include_first:
+              - GBC_PATCH_LIFECYCLE_FULL_STATE_MACHINE_R01
+              - GBC_PATCH_LIFECYCLE_PRIORITY_QUEUE_R01
+            conditional:
+              - GBC_PATCH_LIFECYCLE_ESCALATION_BOUNDARY_R01
+            separate_follow_up:
+              - GBC_PATCH_LIFECYCLE_REFERENTIEL_PARAMETER_R01
+      - subtask_id: PHASE_22C_OPEN_NEW_RUN_PREFLIGHT_GATE
+        status: done
+        evidence:
+          - docs/pipelines/constitution/entry_actions/OPEN_NEW_RUN.action.yaml
+        result:
+          allowed_reads_added:
+            - docs/pipelines/constitution/reports/bounded_run_preflight_report.yaml
+            - docs/pipelines/constitution/reports/bounded_run_preflight.md
+          new_entry_decision_value: open_new_run_requires_preflight
+          blocks_missing_or_blocked_preflight: true
+          requires_human_override_for_defer_status: true
+          preserves_stop_after_decision: true
+    pending_subtasks: []
+    closure:
+      status: closed
+      closed_reason: >-
+        Bounded-run preflight is now a generic, non-mutating STAGE_00 mode with
+        deterministic tooling and an OPEN_NEW_RUN gate. The integration did not open
+        a new run and did not mutate policy.yaml, decisions.yaml, scope catalog,
+        governance_backlog.yaml, runs index, or cores.
+      residual_signals:
+        - four patch_lifecycle backlog entries remain open
+        - current preflight recommendation is defer_to_stage00_backlog_review
+        - future run opening requires explicit human override or a future preflight status PREFLIGHT_READY_TO_OPEN_RUN
+
 ```
 
 ## Implementation checklist
@@ -1039,6 +1111,12 @@ implementation_tracking:
   phase21b_handoff_or_run_prompt_done_not_required: true
   phase21_remaining_patch_lifecycle_backlog_decision_done: true
   scope_modularization_post_pilot_control_plane_paused: true
+  phase22_stage00_run_candidate_preflight_contract_done: true
+  phase22_prepare_bounded_run_preflight_tooling_done: true
+  phase22_open_new_run_preflight_gate_done: true
+  phase22_bounded_run_preflight_pipeline_integration_done: true
+  phase22_current_preflight_status: PREFLIGHT_DEFER_TO_STAGE00_REVIEW
+  phase22_new_bounded_run_recommended_now: false
 
 ```
 
@@ -1273,6 +1351,32 @@ decision_log:
       Close PHASE_21 and pause the scope modularization post-pilot control-plane
       chantier. PHASE_21B is done_not_required because no new run is opened and no
       zero-context run handoff prompt is needed.
+
+
+  - decision_id: DECISION_030
+    date: 2026-04-29
+    status: accepted
+    decision: >-
+      Add run_candidate_preflight as a STAGE_00 mode rather than creating a separate
+      stage. The mode is pre-run, non-mutating, and produces bounded_run_preflight
+      reports before OPEN_NEW_RUN when backlog entries impact the requested scope.
+
+  - decision_id: DECISION_031
+    date: 2026-04-29
+    status: accepted
+    decision: >-
+      Install prepare_bounded_run_preflight.py as the deterministic non-mutating
+      report generator for STAGE_00 run_candidate_preflight. The first generated
+      patch_lifecycle report recommends PREFLIGHT_DEFER_TO_STAGE00_REVIEW.
+
+  - decision_id: DECISION_032
+    date: 2026-04-29
+    status: accepted
+    decision: >-
+      Connect OPEN_NEW_RUN to bounded_run_preflight_report.yaml. A backlog-driven
+      run opening must preserve the preflight status/recommendation and must block,
+      require preflight, or require explicit human override when preflight does not
+      recommend immediate run opening.
 
 
 ```
