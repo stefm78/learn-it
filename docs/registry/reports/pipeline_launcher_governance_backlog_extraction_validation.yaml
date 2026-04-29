@@ -1,0 +1,53 @@
+pipeline_launcher_governance_backlog_extraction_validation:
+  schema_version: '0.1'
+  generated_at: '2026-04-29T13:42:58Z'
+  status: PASS
+  phase_id: PHASE_28D2
+  purpose: Extract governance backlog launcher helpers from engine.py into governance_backlog.py.
+  mutation_policy:
+    official_command: preserved
+    internal_engine: governance_backlog_helpers_extracted
+    tmp_pipeline_launcher: compatibility_wrapper_preserved
+    signals_yaml: not_modified
+    pipeline_md: not_modified
+    state_yaml: not_modified
+    run_materialization: not_performed
+  artifacts:
+    governance_backlog_module: docs/patcher/shared/pipeline_launcher/governance_backlog.py
+    engine: docs/patcher/shared/pipeline_launcher/engine.py
+    official_command: docs/patcher/shared/pipeline_launcher/cli.py
+    tmp_wrapper: tmp/pipeline_launcher.py
+  inputs:
+  - ref: docs/patcher/shared/pipeline_launcher/engine.py
+    sha256: 3c52ccc1306501af7fe454a35f9d4df983791862c8a9730f9ed02e1b6dab60ae
+  - ref: docs/patcher/shared/pipeline_launcher/governance_backlog.py
+    sha256: ff33f2b3ed9ca3fa5afc18075831e923163bd08e40b94b43f065d9dae7d7063b
+  - ref: docs/patcher/shared/pipeline_launcher/cli.py
+    sha256: aa4e6244ee1f7ad406a145121b57d34ae5e8d952801e4d42751e48f031a3f8db
+  - ref: tmp/pipeline_launcher.py
+    sha256: 96a7a1003f2b77e86b06ee2137b5bb9a65a6ca0968095bc5fe9f2f90be38556a
+  backlog_summary_sample:
+    patch_lifecycle:
+      warning: open_governance_backlog_entries
+      direct_open_count: 4
+      related_open_count: 0
+      open_entry_ids:
+      - GB_2026_04_27_PATCH_LIFECYCLE_R01_GBC_PATCH_LIFECYCLE_ESCALATION_BOUNDARY_R01
+      - GB_2026_04_27_PATCH_LIFECYCLE_R01_GBC_PATCH_LIFECYCLE_FULL_STATE_MACHINE_R01
+      - GB_2026_04_27_PATCH_LIFECYCLE_R01_GBC_PATCH_LIFECYCLE_PRIORITY_QUEUE_R01
+      - GB_2026_04_27_PATCH_LIFECYCLE_R01_GBC_PATCH_LIFECYCLE_REFERENTIEL_PARAMETER_R01
+      open_types:
+        scope_extension_needed: 1
+        scope_gap: 3
+  blocking_findings: []
+  result_summary:
+    governance_backlog_module_created: true
+    engine_imports_governance_backlog_module: true
+    engine_defines_governance_backlog_functions: false
+    patch_lifecycle_direct_open_count: 4
+    official_command_outputs_human_review: true
+    engine_outputs_raw_launcher_without_human_review: true
+    tmp_wrapper_outputs_human_review: true
+    raw_overlay_available_with_flag: true
+    recommended_next_phase: PHASE_28D3
+    blocking_finding_count: 0
