@@ -1,11 +1,11 @@
 launcher_new_run_semantics_validation:
   schema_version: '0.2'
-  generated_at: '2026-04-29T09:58:41Z'
+  generated_at: '2026-04-29T09:59:44Z'
   status: PASS
   phase_id: PHASE_25
   purpose: Clarify that next_best_actions.new_run is an entry-resolution prompt availability signal, not run authorization.
   mutation_policy:
-    launcher: updated
+    launcher: already_current
     policy_yaml: not_read
     decisions_yaml: not_read
     scope_catalog: not_read
@@ -16,9 +16,9 @@ launcher_new_run_semantics_validation:
   - ref: tmp/pipeline_launcher.py
     sha256: 7f12aba7144174daa638ad324c9070ff8e59577f1d75d1de41158be7b64e1328
   patch_info:
-    patch_status: updated
-    patched_dynamic_status_lines: 2
-    inserted_semantic_blocks: 2
+    patch_status: already_current
+    patched_dynamic_status_lines: 0
+    inserted_semantic_blocks: 0
   static_checks:
     python_compile: PASS
     dynamic_new_run_status_clarified: true
