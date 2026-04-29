@@ -38,8 +38,8 @@ scope_modularization_post_pilot:
   status: paused_cleanly
   active_pipeline_run: none
   new_bounded_run_opened_now: false
-  last_completed_phase: PHASE_26
-  last_completed_phase_label: minimal_pipeline_signals_contract
+  last_completed_phase: PHASE_27B
+  last_completed_phase_label: launcher_pipeline_signals_overlay_wrapper
 ```
 
 ## What is complete
@@ -88,6 +88,8 @@ completed:
       - PHASE_24 launcher_preflight_display
       - PHASE_25 launcher_new_run_semantics_clarification
       - PHASE_26 minimal_pipeline_signals_contract
+      - PHASE_27A launcher_modularization_bootstrap
+      - PHASE_27B launcher_pipeline_signals_overlay_wrapper
 ```
 
 ## Current pipeline position
@@ -124,6 +126,14 @@ open_new_run_gate:
     declared_pipeline_count: 4
     constitution_backlog_signal_status: attention
     constitution_backlog_signal_scope: patch_lifecycle
+  launcher_modular_runtime:
+    modularization_report: docs/registry/reports/learnit_launcher_modularization_validation.yaml
+    modularization_status: PASS
+    overlay_wrapper: docs/patcher/shared/pipeline_launcher_with_signals.py
+    overlay_report: docs/registry/reports/pipeline_launcher_with_signals_validation.yaml
+    overlay_status: PASS
+    recommended_default_hint_when_attention: review_pipeline_signals
+    tmp_pipeline_launcher_modified_by_phase_27: false
   open_new_run_authorized_by_default_when_defer: false
   recommended_entry_decision_when_defer: partition_refresh_preferred_or_open_new_run_blocked
 ```
@@ -161,6 +171,13 @@ docs/pipelines/constitution/reports/open_new_run_preflight_gate_validation.yaml
 docs/pipelines/constitution/reports/launcher_preflight_display_validation.yaml
 docs/pipelines/constitution/reports/launcher_new_run_semantics_validation.yaml
 docs/registry/reports/pipeline_signals_validation.yaml
+docs/registry/reports/learnit_launcher_modularization_validation.yaml
+docs/registry/reports/pipeline_launcher_with_signals_validation.yaml
+docs/patcher/shared/learnit_launcher/pipeline_signals.py
+docs/patcher/shared/learnit_launcher/overlay.py
+docs/patcher/shared/pipeline_launcher_with_signals.py
+docs/patcher/shared/validate_learnit_launcher.py
+docs/patcher/shared/validate_pipeline_launcher_with_signals.py
 docs/pipelines/constitution/signals.yaml
 docs/pipelines/release/signals.yaml
 docs/pipelines/migration/signals.yaml
@@ -246,6 +263,24 @@ option_F_minimal_pipeline_signals_contract:
     status: attention
     scope_key: patch_lifecycle
     run_opening_authorized_by_signal: false
+
+option_G_launcher_modular_runtime_and_signals_overlay:
+  status: done
+  completed_phase: PHASE_27B
+  artifacts:
+    - docs/patcher/shared/learnit_launcher/
+    - docs/patcher/shared/validate_learnit_launcher.py
+    - docs/patcher/shared/pipeline_launcher_with_signals.py
+    - docs/patcher/shared/validate_pipeline_launcher_with_signals.py
+  reports:
+    - docs/registry/reports/learnit_launcher_modularization_validation.yaml
+    - docs/registry/reports/pipeline_launcher_with_signals_validation.yaml
+  report_status: PASS
+  action: bootstrap modular launcher runtime and provide a non-invasive pipeline signals overlay wrapper
+  recommended_command: python docs/patcher/shared/pipeline_launcher_with_signals.py
+  tmp_pipeline_launcher_patch: none
+  launcher_authorizes_run_from_signals: false
+  recommended_default_hint_when_attention: review_pipeline_signals
 ```
 
 ## Guardrails
