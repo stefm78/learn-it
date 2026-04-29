@@ -1,6 +1,6 @@
 pipeline_launcher_launch_menu_extraction_validation:
   schema_version: '0.1'
-  generated_at: '2026-04-29T15:04:14Z'
+  generated_at: '2026-04-29T15:43:08Z'
   status: PASS
   phase_id: PHASE_28D9
   purpose: Extract launch menu and parallel slot builders from engine.py into launch_menu.py.
@@ -14,7 +14,7 @@ pipeline_launcher_launch_menu_extraction_validation:
     run_materialization: not_performed
   inputs:
   - ref: docs/patcher/shared/pipeline_launcher/engine.py
-    sha256: 22ca82878743abc6eaebeab43bdf270f1195e74bc6a1ce5605a93feaf8657682
+    sha256: e2ea8177909719150703ec4a009b52629007cf7606f8e2990cbd1f6363d5799f
   - ref: docs/patcher/shared/pipeline_launcher/launch_menu.py
     sha256: 14ab1f2dc73313f7266cc34ac24127a06fbc8369259b8a160d9d1936845ad74f
   - ref: docs/patcher/shared/pipeline_launcher/cli.py

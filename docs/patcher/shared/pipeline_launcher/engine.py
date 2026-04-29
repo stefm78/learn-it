@@ -1,20 +1,17 @@
 #!/usr/bin/env python3
-"""Registry-aware bootstrap launcher with runtime view + entry action contracts.
+"""Registry-aware promoted pipeline launcher runtime.
 
-Compact prompt candidate:
-- keeps --parallel-runs support
-- consumes run_context.task_view when available
-- avoids proposing continue on terminal closed runs
-- loads canonical entry action contracts from docs/pipelines/<id>/entry_actions/
-- renders compact entry prompts that reference the canonical contract + instance bindings
+Responsibilities kept in this engine:
+- parse CLI arguments;
+- print registry state;
+- route to parallel slot rendering or the selected pipeline launch menu;
+- delegate domain logic to docs.patcher.shared.pipeline_launcher modules.
 
-Scope of contract binding in this candidate:
-- constitution entry actions only
-- OPEN_NEW_RUN / CONTINUE_ACTIVE_RUN / RECONCILE_RUN / DISAMBIGUATE / INSPECT / PARTITION_REFRESH
+The human-facing command is:
+    python docs/patcher/shared/pipeline_launcher/cli.py
 
-Still experimental: kept in tmp/ until hardened and promoted.
+The legacy tmp/pipeline_launcher.py is only a compatibility wrapper.
 """
-
 from __future__ import annotations
 
 import argparse
@@ -30,50 +27,6 @@ REPO_ROOT = Path(__file__).resolve().parents[4]
 if str(REPO_ROOT) not in sys.path:
     sys.path.insert(0, str(REPO_ROOT))
 
-from docs.patcher.shared.pipeline_launcher.maturity import (
-    MATURITY_AXES_COUNT,
-    MATURITY_GATED_LEVELS,
-    MATURITY_LEVELS,
-    MATURITY_MAX_SCORE,
-    MATURITY_MINIMUM_LEVEL,
-    maturity_level_from_score,
-    maturity_pct,
-)
-
-from docs.patcher.shared.pipeline_launcher.governance_backlog import (
-    attach_governance_backlog_signal,
-    build_governance_backlog_scope_summary,
-    compact_governance_backlog_signal,
-    empty_governance_backlog_signal,
-)
-
-from docs.patcher.shared.pipeline_launcher.bounded_preflight import (
-    attach_bounded_run_preflight_signal,
-    build_bounded_run_preflight_summary,
-    compact_bounded_run_preflight_signal,
-    empty_bounded_run_preflight_signal,
-)
-
-from docs.patcher.shared.pipeline_launcher.entry_actions import (
-    load_entry_action_contract,
-    load_entry_actions_index,
-    render_entry_action_prompt,
-    resolve_entry_action_ref,
-)
-
-from docs.patcher.shared.pipeline_launcher.run_context import (
-    build_stage_prompt,
-    ensure_prompt_mentions_branch,
-    probe_run_context,
-)
-
-from docs.patcher.shared.pipeline_launcher.consolidation import (
-    build_bootstrap_command,
-    detect_abnormal_state,
-    detect_consolidation_ready,
-    probe_integration_gate,
-)
-
 from docs.patcher.shared.pipeline_launcher.registry import discover_pipelines_from_registry
 from docs.patcher.shared.pipeline_launcher.pipeline_state import (
     discover_constitution,
@@ -84,18 +37,6 @@ from docs.patcher.shared.pipeline_launcher.launch_menu import (
     build_menu,
     build_parallel_slots,
 )
-
-from docs.patcher.shared.pipeline_launcher.yaml_io import load_yaml
-
-CONSOLIDATION_PENDING_STAGES = {
-    "STAGE_06_CORE_VALIDATION",
-    "STAGE_06B_CONSOLIDATION",
-    "STAGE_07_RELEASE_MATERIALIZATION",
-}
-_IN_PROGRESS_STALE_THRESHOLD_S = 6 * 3600
-
-
-
 
 def main() -> int:
     parser = argparse.ArgumentParser()

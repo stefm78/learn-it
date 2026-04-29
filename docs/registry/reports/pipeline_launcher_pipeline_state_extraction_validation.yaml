@@ -1,6 +1,6 @@
 pipeline_launcher_pipeline_state_extraction_validation:
   schema_version: '0.1'
-  generated_at: '2026-04-29T15:04:15Z'
+  generated_at: '2026-04-29T15:43:09Z'
   status: PASS
   phase_id: PHASE_28D8
   purpose: Extract pipeline state discovery helpers from engine.py into pipeline_state.py without changing launch menu behavior.
@@ -14,7 +14,7 @@ pipeline_launcher_pipeline_state_extraction_validation:
     run_materialization: not_performed
   inputs:
   - ref: docs/patcher/shared/pipeline_launcher/engine.py
-    sha256: 22ca82878743abc6eaebeab43bdf270f1195e74bc6a1ce5605a93feaf8657682
+    sha256: e2ea8177909719150703ec4a009b52629007cf7606f8e2990cbd1f6363d5799f
   - ref: docs/patcher/shared/pipeline_launcher/pipeline_state.py
     sha256: 144b0fb0b52fbe37de08f1b5dd9bf8f07ef0032ea9aa5bcb1efb80053490b354
   - ref: docs/patcher/shared/pipeline_launcher/cli.py

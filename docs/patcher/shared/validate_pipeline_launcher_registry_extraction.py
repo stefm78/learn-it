@@ -56,8 +56,9 @@ def build_report() -> dict[str, Any]:
 
     if "from docs.patcher.shared.pipeline_launcher.registry import" not in engine_text:
         findings.append({"finding_id": "ENGINE_REGISTRY_IMPORT_MISSING", "severity": "blocking"})
-    if "from docs.patcher.shared.pipeline_launcher.yaml_io import load_yaml" not in engine_text:
-        findings.append({"finding_id": "ENGINE_YAML_IO_IMPORT_MISSING", "severity": "blocking"})
+    # After PHASE_28D10 engine cleanup, engine.py no longer needs to import
+    # yaml_io.load_yaml directly. D7 must only ensure that YAML helpers were
+    # extracted out of engine.py and remain available through yaml_io.py.
 
     for snippet in ["def load_text", "def discover_pipelines_from_registry", "def load_yaml"]:
         if snippet in engine_text:

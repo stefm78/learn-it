@@ -51,8 +51,9 @@ def build_report() -> dict[str, Any]:
     engine_text = (REPO_ROOT / ENGINE).read_text(encoding="utf-8") if (REPO_ROOT / ENGINE).exists() else ""
     maturity_text = (REPO_ROOT / MATURITY).read_text(encoding="utf-8") if (REPO_ROOT / MATURITY).exists() else ""
 
-    if "from docs.patcher.shared.pipeline_launcher.maturity import" not in engine_text:
-        findings.append({"finding_id": "ENGINE_DOES_NOT_IMPORT_MATURITY_MODULE", "severity": "blocking"})
+    # After PHASE_28D10 engine cleanup, engine.py no longer needs to import
+    # maturity.py directly. D1 must only ensure that maturity helpers/constants
+    # were extracted out of engine.py and remain available through maturity.py.
     if "def maturity_pct" in engine_text or "def maturity_level_from_score" in engine_text:
         findings.append({"finding_id": "ENGINE_STILL_DEFINES_MATURITY_FUNCTIONS", "severity": "blocking"})
     if "MATURITY_AXES_COUNT = 6" in engine_text or "MATURITY_MAX_SCORE = 24" in engine_text:

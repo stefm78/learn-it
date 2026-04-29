@@ -57,8 +57,9 @@ def build_report() -> dict[str, Any]:
     engine_text = (REPO_ROOT / ENGINE).read_text(encoding="utf-8") if (REPO_ROOT / ENGINE).exists() else ""
     module_text = (REPO_ROOT / MODULE).read_text(encoding="utf-8") if (REPO_ROOT / MODULE).exists() else ""
 
-    if "from docs.patcher.shared.pipeline_launcher.consolidation import" not in engine_text:
-        findings.append({"finding_id": "ENGINE_IMPORT_MISSING", "severity": "blocking"})
+    # After PHASE_28D10 engine cleanup, engine.py no longer needs to import
+    # consolidation.py directly. D6 must only ensure that consolidation helpers
+    # were extracted out of engine.py and remain available through consolidation.py.
 
     for snippet in [
         "def probe_integration_gate",

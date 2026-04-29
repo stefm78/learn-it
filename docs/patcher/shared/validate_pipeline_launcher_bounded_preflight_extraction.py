@@ -52,8 +52,9 @@ def build_report() -> dict[str, Any]:
     engine_text = (REPO_ROOT / ENGINE).read_text(encoding="utf-8") if (REPO_ROOT / ENGINE).exists() else ""
     module_text = (REPO_ROOT / MODULE).read_text(encoding="utf-8") if (REPO_ROOT / MODULE).exists() else ""
 
-    if "from docs.patcher.shared.pipeline_launcher.bounded_preflight import" not in engine_text:
-        findings.append({"finding_id": "ENGINE_IMPORT_MISSING", "severity": "blocking"})
+    # After PHASE_28D10 engine cleanup, engine.py no longer needs to import
+    # bounded_preflight.py directly. D3 must only ensure that bounded preflight
+    # helpers were extracted out of engine.py and remain available through bounded_preflight.py.
     if "def build_bounded_run_preflight_summary" in engine_text:
         findings.append({"finding_id": "ENGINE_STILL_DEFINES_PREFLIGHT_FUNCTION", "severity": "blocking"})
     if "def build_bounded_run_preflight_summary" not in module_text:

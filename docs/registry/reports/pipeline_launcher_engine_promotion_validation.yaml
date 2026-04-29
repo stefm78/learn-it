@@ -1,6 +1,6 @@
 pipeline_launcher_engine_promotion_validation:
   schema_version: '0.2'
-  generated_at: '2026-04-29T15:04:18Z'
+  generated_at: '2026-04-29T15:43:19Z'
   status: PASS
   phase_id: PHASE_28D_COMPAT
   purpose: Validate the promoted pipeline launcher state after incremental engine module extraction.
@@ -21,10 +21,10 @@ pipeline_launcher_engine_promotion_validation:
   - ref: tmp/pipeline_launcher.py
     sha256: 96a7a1003f2b77e86b06ee2137b5bb9a65a6ca0968095bc5fe9f2f90be38556a
   - ref: docs/patcher/shared/pipeline_launcher/engine.py
-    sha256: 22ca82878743abc6eaebeab43bdf270f1195e74bc6a1ce5605a93feaf8657682
+    sha256: e2ea8177909719150703ec4a009b52629007cf7606f8e2990cbd1f6363d5799f
   source_control:
     tmp_wrapper_line_count: 23
-    engine_line_count: 150
+    engine_line_count: 91
   blocking_findings: []
   result_summary:
     internal_engine_created: true
