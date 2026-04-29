@@ -38,8 +38,8 @@ scope_modularization_post_pilot:
   status: paused_cleanly
   active_pipeline_run: none
   new_bounded_run_opened_now: false
-  last_completed_phase: PHASE_28C
-  last_completed_phase_label: promote_pipeline_launcher_engine_out_of_tmp
+  last_completed_phase: PHASE_28D6
+  last_completed_phase_label: pipeline_launcher_engine_modular_extraction_batch_1
 ```
 
 ## What is complete
@@ -94,6 +94,12 @@ completed:
       - PHASE_28A pipeline_launcher_promotion_plan
       - PHASE_28B official_pipeline_launcher_command
       - PHASE_28C promote_pipeline_launcher_engine_out_of_tmp
+      - PHASE_28D1 extract_pipeline_launcher_maturity_helpers
+      - PHASE_28D2 extract_pipeline_launcher_governance_backlog_helpers
+      - PHASE_28D3 extract_pipeline_launcher_bounded_preflight_helpers
+      - PHASE_28D4 extract_pipeline_launcher_entry_action_helpers
+      - PHASE_28D5 extract_pipeline_launcher_run_context_helpers
+      - PHASE_28D6 extract_pipeline_launcher_consolidation_helpers
 ```
 
 ## Current pipeline position
@@ -144,6 +150,21 @@ open_new_run_gate:
     modularization_report: docs/registry/reports/pipeline_launcher_modularization_validation.yaml
     overlay_report: docs/registry/reports/pipeline_launcher_with_signals_validation.yaml
     status: PASS
+    latest_extraction_phase: PHASE_28D6
+    extracted_engine_modules:
+      - docs/patcher/shared/pipeline_launcher/maturity.py
+      - docs/patcher/shared/pipeline_launcher/governance_backlog.py
+      - docs/patcher/shared/pipeline_launcher/bounded_preflight.py
+      - docs/patcher/shared/pipeline_launcher/entry_actions.py
+      - docs/patcher/shared/pipeline_launcher/run_context.py
+      - docs/patcher/shared/pipeline_launcher/consolidation.py
+    extraction_reports:
+      - docs/registry/reports/pipeline_launcher_maturity_extraction_validation.yaml
+      - docs/registry/reports/pipeline_launcher_governance_backlog_extraction_validation.yaml
+      - docs/registry/reports/pipeline_launcher_bounded_preflight_extraction_validation.yaml
+      - docs/registry/reports/pipeline_launcher_entry_actions_extraction_validation.yaml
+      - docs/registry/reports/pipeline_launcher_run_context_extraction_validation.yaml
+      - docs/registry/reports/pipeline_launcher_consolidation_extraction_validation.yaml
     recommended_default_hint_when_attention: review_pipeline_signals
   open_new_run_authorized_by_default_when_defer: false
   recommended_entry_decision_when_defer: partition_refresh_preferred_or_open_new_run_blocked
@@ -186,15 +207,33 @@ docs/registry/reports/pipeline_launcher_modularization_validation.yaml
 docs/registry/reports/pipeline_launcher_promotion_plan.yaml
 docs/registry/reports/pipeline_launcher_official_command_validation.yaml
 docs/registry/reports/pipeline_launcher_engine_promotion_validation.yaml
+docs/registry/reports/pipeline_launcher_maturity_extraction_validation.yaml
+docs/registry/reports/pipeline_launcher_governance_backlog_extraction_validation.yaml
+docs/registry/reports/pipeline_launcher_bounded_preflight_extraction_validation.yaml
+docs/registry/reports/pipeline_launcher_entry_actions_extraction_validation.yaml
+docs/registry/reports/pipeline_launcher_run_context_extraction_validation.yaml
+docs/registry/reports/pipeline_launcher_consolidation_extraction_validation.yaml
 docs/registry/reports/pipeline_launcher_with_signals_validation.yaml
 docs/patcher/shared/pipeline_launcher/cli.py
 docs/patcher/shared/pipeline_launcher/engine.py
+docs/patcher/shared/pipeline_launcher/maturity.py
+docs/patcher/shared/pipeline_launcher/governance_backlog.py
+docs/patcher/shared/pipeline_launcher/bounded_preflight.py
+docs/patcher/shared/pipeline_launcher/entry_actions.py
+docs/patcher/shared/pipeline_launcher/run_context.py
+docs/patcher/shared/pipeline_launcher/consolidation.py
 docs/patcher/shared/pipeline_launcher/pipeline_signals.py
 docs/patcher/shared/pipeline_launcher/overlay.py
 docs/patcher/shared/pipeline_launcher_with_signals.py
 docs/patcher/shared/validate_pipeline_launcher.py
 docs/patcher/shared/validate_pipeline_launcher_official_command.py
 docs/patcher/shared/validate_pipeline_launcher_engine_promotion.py
+docs/patcher/shared/validate_pipeline_launcher_maturity_extraction.py
+docs/patcher/shared/validate_pipeline_launcher_governance_backlog_extraction.py
+docs/patcher/shared/validate_pipeline_launcher_bounded_preflight_extraction.py
+docs/patcher/shared/validate_pipeline_launcher_entry_actions_extraction.py
+docs/patcher/shared/validate_pipeline_launcher_run_context_extraction.py
+docs/patcher/shared/validate_pipeline_launcher_consolidation_extraction.py
 docs/patcher/shared/validate_pipeline_launcher_with_signals.py
 docs/pipelines/constitution/signals.yaml
 docs/pipelines/release/signals.yaml
@@ -340,6 +379,30 @@ option_I_pipeline_launcher_promotion_out_of_tmp:
   internal_engine: python docs/patcher/shared/pipeline_launcher/engine.py
   tmp_pipeline_launcher_role: compatibility_wrapper
   engine_matches_previous_tmp_source: true
+  launcher_authorizes_run_from_signals: false
+
+option_J_pipeline_launcher_engine_modular_extraction_batch_1:
+  status: done
+  completed_phase: PHASE_28D6
+  action: extract validated launcher engine helper modules from engine.py
+  artifacts:
+    - docs/patcher/shared/pipeline_launcher/maturity.py
+    - docs/patcher/shared/pipeline_launcher/governance_backlog.py
+    - docs/patcher/shared/pipeline_launcher/bounded_preflight.py
+    - docs/patcher/shared/pipeline_launcher/entry_actions.py
+    - docs/patcher/shared/pipeline_launcher/run_context.py
+    - docs/patcher/shared/pipeline_launcher/consolidation.py
+  reports:
+    - docs/registry/reports/pipeline_launcher_maturity_extraction_validation.yaml
+    - docs/registry/reports/pipeline_launcher_governance_backlog_extraction_validation.yaml
+    - docs/registry/reports/pipeline_launcher_bounded_preflight_extraction_validation.yaml
+    - docs/registry/reports/pipeline_launcher_entry_actions_extraction_validation.yaml
+    - docs/registry/reports/pipeline_launcher_run_context_extraction_validation.yaml
+    - docs/registry/reports/pipeline_launcher_consolidation_extraction_validation.yaml
+  report_status: PASS
+  blocking_finding_count: 0
+  official_command: python docs/patcher/shared/pipeline_launcher/cli.py
+  tmp_pipeline_launcher_role: compatibility_wrapper
   launcher_authorizes_run_from_signals: false
 ```
 

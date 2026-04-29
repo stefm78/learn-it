@@ -16,7 +16,7 @@ current_phase:
 
 This handover summarizes the current state of the `core_modularization` / `scope graph clustering`
 work after the bounded pilot run, post-pilot control-plane phases, bounded-run preflight
-integration, active-document compaction, OPEN_NEW_RUN preflight gate validation, launcher preflight display hardening, launcher new-run semantics clarification, minimal pipeline signals contracts, launcher signals overlay modularization, pipeline launcher naming correction, and pipeline launcher promotion out of tmp.
+integration, active-document compaction, OPEN_NEW_RUN preflight gate validation, launcher preflight display hardening, launcher new-run semantics clarification, minimal pipeline signals contracts, launcher signals overlay modularization, pipeline launcher naming correction, pipeline launcher promotion out of tmp, and pipeline launcher engine modular extraction batch 1.
 
 No Constitution pipeline run is currently open.
 
@@ -37,8 +37,9 @@ scope_modularization:
   last_completed_launcher_signals_overlay_phase: PHASE_27B
   last_completed_launcher_naming_phase: PHASE_27C
   last_completed_launcher_promotion_phase: PHASE_28C
-  last_completed_phase: PHASE_28C
-  last_completed_phase_label: promote_pipeline_launcher_engine_out_of_tmp
+  last_completed_launcher_engine_extraction_phase: PHASE_28D6
+  last_completed_phase: PHASE_28D6
+  last_completed_phase_label: pipeline_launcher_engine_modular_extraction_batch_1
   current_recommendation: do_not_open_new_bounded_run_now
 ```
 
@@ -113,8 +114,8 @@ governance_backlog_exported: true
 
 This was a real Constitution pipeline run.
 
-The later PHASE_14 through PHASE_28C work was control-plane, governance, tooling,
-validation, launcher hardening, launcher semantics clarification, minimal pipeline signals contracts, launcher modularization, launcher signals overlay, naming correction, launcher promotion, or documentation work. It was not another full stage 01 → 09 pipeline run.
+The later PHASE_14 through PHASE_28D6 work was control-plane, governance, tooling,
+validation, launcher hardening, launcher semantics clarification, minimal pipeline signals contracts, launcher modularization, launcher signals overlay, naming correction, launcher promotion, launcher engine extraction, or documentation work. It was not another full stage 01 → 09 pipeline run.
 
 ### 3. Governance backlog integration
 
@@ -485,6 +486,51 @@ python docs/patcher/shared/pipeline_launcher/cli.py
 The legacy runtime was copied into `docs/patcher/shared/pipeline_launcher/engine.py`.
 `tmp/pipeline_launcher.py` is now only a compatibility wrapper.
 
+### 16. Pipeline launcher engine modular extraction batch 1
+
+PHASE_28D1 through PHASE_28D6 extracted validated helper modules from the promoted
+launcher engine.
+
+```yaml
+PHASE_28D1:
+  status: done
+  module: docs/patcher/shared/pipeline_launcher/maturity.py
+  report: docs/registry/reports/pipeline_launcher_maturity_extraction_validation.yaml
+
+PHASE_28D2:
+  status: done
+  module: docs/patcher/shared/pipeline_launcher/governance_backlog.py
+  report: docs/registry/reports/pipeline_launcher_governance_backlog_extraction_validation.yaml
+
+PHASE_28D3:
+  status: done
+  module: docs/patcher/shared/pipeline_launcher/bounded_preflight.py
+  report: docs/registry/reports/pipeline_launcher_bounded_preflight_extraction_validation.yaml
+
+PHASE_28D4:
+  status: done
+  module: docs/patcher/shared/pipeline_launcher/entry_actions.py
+  report: docs/registry/reports/pipeline_launcher_entry_actions_extraction_validation.yaml
+
+PHASE_28D5:
+  status: done
+  module: docs/patcher/shared/pipeline_launcher/run_context.py
+  report: docs/registry/reports/pipeline_launcher_run_context_extraction_validation.yaml
+
+PHASE_28D6:
+  status: done
+  module: docs/patcher/shared/pipeline_launcher/consolidation.py
+  report: docs/registry/reports/pipeline_launcher_consolidation_extraction_validation.yaml
+```
+
+The human-facing launcher remains:
+
+```bash
+python docs/patcher/shared/pipeline_launcher/cli.py
+```
+
+`tmp/pipeline_launcher.py` remains only a compatibility wrapper.
+
 ## Remaining open backlog entries
 
 Four reviewed backlog entries remain open intentionally:
@@ -699,6 +745,21 @@ PHASE_28C:
   report: docs/registry/reports/pipeline_launcher_engine_promotion_validation.yaml
 ```
 
+### Option J — Pipeline launcher engine modular extraction batch 1
+
+Completed in PHASE_28D6.
+
+```yaml
+PHASE_28D1: maturity.py
+PHASE_28D2: governance_backlog.py
+PHASE_28D3: bounded_preflight.py
+PHASE_28D4: entry_actions.py
+PHASE_28D5: run_context.py
+PHASE_28D6: consolidation.py
+report_status: PASS
+blocking_finding_count: 0
+```
+
 Next default remains Option A — stop here / keep NO_ACTIVE_PHASE.
 
 ## Operational checks for resuming later
@@ -796,6 +857,7 @@ Important state:
 - PHASE_27A/27B added a modular pipeline launcher runtime and a non-invasive pipeline signals overlay wrapper.
 - PHASE_27C corrected the runtime name from learnit_launcher to pipeline_launcher.
 - PHASE_28A/28B/28C promoted the official command to docs/patcher/shared/pipeline_launcher/cli.py and made tmp/pipeline_launcher.py a compatibility wrapper.
+- PHASE_28D1 through PHASE_28D6 extracted maturity, governance backlog, bounded preflight, entry actions, run_context, and consolidation helpers from engine.py.
 - Current bounded-run preflight status for patch_lifecycle is PREFLIGHT_DEFER_TO_STAGE00_REVIEW.
 - Four patch_lifecycle backlog entries remain open intentionally.
 - Do not mutate policy.yaml, decisions.yaml, scope catalog, or governance_backlog.yaml unless a new explicit phase/run decision is made.
