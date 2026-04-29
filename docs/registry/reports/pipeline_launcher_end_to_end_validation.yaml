@@ -1,0 +1,205 @@
+pipeline_launcher_end_to_end_validation:
+  schema_version: '0.1'
+  generated_at: '2026-04-29T16:01:19Z'
+  status: PASS
+  phase_id: PHASE_28D11
+  purpose: Validate the promoted modular pipeline launcher end-to-end after PHASE_28D10 cleanup.
+  mutation_policy:
+    official_command: preserved
+    internal_engine: no_functional_change
+    tmp_pipeline_launcher: compatibility_wrapper_preserved
+    signals_yaml: not_modified
+    pipeline_md: not_modified
+    state_yaml: not_modified
+    run_materialization: not_performed
+  runtime_artifacts:
+  - ref: docs/patcher/shared/pipeline_launcher/__init__.py
+    sha256: 664a4c21c9f5c8a1ec747ed7ede305f22445387f500528e6d3336950eea5c4d4
+  - ref: docs/patcher/shared/pipeline_launcher/cli.py
+    sha256: aa4e6244ee1f7ad406a145121b57d34ae5e8d952801e4d42751e48f031a3f8db
+  - ref: docs/patcher/shared/pipeline_launcher/engine.py
+    sha256: e2ea8177909719150703ec4a009b52629007cf7606f8e2990cbd1f6363d5799f
+  - ref: docs/patcher/shared/pipeline_launcher/overlay.py
+    sha256: 005012e324a9c38b67dd092d7045d037d7809e6f92ad62b7557fe3da9f5f5c48
+  - ref: docs/patcher/shared/pipeline_launcher/pipeline_signals.py
+    sha256: 263b1de59f551d49e4582f1748d65bb02f3ca32315086fe8b9b23a583c136105
+  - ref: docs/patcher/shared/pipeline_launcher/maturity.py
+    sha256: fca7b597a4d38252d516069165dd19d3ac3f962f32dd9b224176474cfb655866
+  - ref: docs/patcher/shared/pipeline_launcher/governance_backlog.py
+    sha256: ff33f2b3ed9ca3fa5afc18075831e923163bd08e40b94b43f065d9dae7d7063b
+  - ref: docs/patcher/shared/pipeline_launcher/bounded_preflight.py
+    sha256: 2ea2c26497a115df646b82c21b5b9d8099af2da23a3d29312afe65f2482eec02
+  - ref: docs/patcher/shared/pipeline_launcher/entry_actions.py
+    sha256: 23e1d5ba864d7445f80c5594cf6131488a585e8b35f5f29e85a5059fd83c31bc
+  - ref: docs/patcher/shared/pipeline_launcher/run_context.py
+    sha256: 4733a2e147c7a7b416b13f7baba66518a56bd24437f9974d1170b234aacdb30e
+  - ref: docs/patcher/shared/pipeline_launcher/consolidation.py
+    sha256: be7b311d659c7636eb0d51ffbb8d723e7cb9e50161d2b16d8a0b1d56d789adb9
+  - ref: docs/patcher/shared/pipeline_launcher/registry.py
+    sha256: 55003c2921fb8d3bacb9b2d862b7ad63089716c9d2c2222d622f301e5ef422ab
+  - ref: docs/patcher/shared/pipeline_launcher/pipeline_state.py
+    sha256: 144b0fb0b52fbe37de08f1b5dd9bf8f07ef0032ea9aa5bcb1efb80053490b354
+  - ref: docs/patcher/shared/pipeline_launcher/launch_menu.py
+    sha256: 14ab1f2dc73313f7266cc34ac24127a06fbc8369259b8a160d9d1936845ad74f
+  - ref: docs/patcher/shared/pipeline_launcher/yaml_io.py
+    sha256: 39b177c4858ce70c0c17c979cc22f840c6d85545be39c0171691f8d66f69cae5
+  - ref: docs/patcher/shared/pipeline_launcher_with_signals.py
+    sha256: 4389f0f7646391891e20a9935648ca03346244a6fcb98860146949fe2b54c45e
+  - ref: tmp/pipeline_launcher.py
+    sha256: 96a7a1003f2b77e86b06ee2137b5bb9a65a6ca0968095bc5fe9f2f90be38556a
+  validated_reports:
+  - label: pipeline_signals
+    path: docs/registry/reports/pipeline_signals_validation.yaml
+    status: PASS
+    phase_id: null
+    blocking_finding_count: 0
+  - label: modularization
+    path: docs/registry/reports/pipeline_launcher_modularization_validation.yaml
+    status: PASS
+    phase_id: PHASE_27A
+    blocking_finding_count: 0
+  - label: with_signals
+    path: docs/registry/reports/pipeline_launcher_with_signals_validation.yaml
+    status: PASS
+    phase_id: PHASE_28C_COMPAT
+    blocking_finding_count: 0
+  - label: official_command
+    path: docs/registry/reports/pipeline_launcher_official_command_validation.yaml
+    status: PASS
+    phase_id: PHASE_28C_COMPAT
+    blocking_finding_count: 0
+  - label: engine_promotion
+    path: docs/registry/reports/pipeline_launcher_engine_promotion_validation.yaml
+    status: PASS
+    phase_id: PHASE_28D_COMPAT
+    blocking_finding_count: 0
+  - label: D1_maturity
+    path: docs/registry/reports/pipeline_launcher_maturity_extraction_validation.yaml
+    status: PASS
+    phase_id: PHASE_28D1
+    blocking_finding_count: 0
+  - label: D2_governance_backlog
+    path: docs/registry/reports/pipeline_launcher_governance_backlog_extraction_validation.yaml
+    status: PASS
+    phase_id: PHASE_28D2
+    blocking_finding_count: 0
+  - label: D3_bounded_preflight
+    path: docs/registry/reports/pipeline_launcher_bounded_preflight_extraction_validation.yaml
+    status: PASS
+    phase_id: PHASE_28D3
+    blocking_finding_count: 0
+  - label: D4_entry_actions
+    path: docs/registry/reports/pipeline_launcher_entry_actions_extraction_validation.yaml
+    status: PASS
+    phase_id: PHASE_28D4
+    blocking_finding_count: 0
+  - label: D5_run_context
+    path: docs/registry/reports/pipeline_launcher_run_context_extraction_validation.yaml
+    status: PASS
+    phase_id: PHASE_28D5
+    blocking_finding_count: 0
+  - label: D6_consolidation
+    path: docs/registry/reports/pipeline_launcher_consolidation_extraction_validation.yaml
+    status: PASS
+    phase_id: PHASE_28D6
+    blocking_finding_count: 0
+  - label: D7_registry
+    path: docs/registry/reports/pipeline_launcher_registry_extraction_validation.yaml
+    status: PASS
+    phase_id: PHASE_28D7
+    blocking_finding_count: 0
+  - label: D8_pipeline_state
+    path: docs/registry/reports/pipeline_launcher_pipeline_state_extraction_validation.yaml
+    status: PASS
+    phase_id: PHASE_28D8
+    blocking_finding_count: 0
+  - label: D9_launch_menu
+    path: docs/registry/reports/pipeline_launcher_launch_menu_extraction_validation.yaml
+    status: PASS
+    phase_id: PHASE_28D9
+    blocking_finding_count: 0
+  - label: D10_engine_cleanup
+    path: docs/registry/reports/pipeline_launcher_engine_cleanup_validation.yaml
+    status: PASS
+    phase_id: PHASE_28D10
+    blocking_finding_count: 0
+  smoke_results:
+    official_cli:
+      returncode: 0
+      markers:
+      - 'PIPELINE_REGISTRY_STATE:'
+      - 'PIPELINE_LAUNCHER_STATE:'
+      - 'PIPELINE_LAUNCH_MENU:'
+      - 'PIPELINE_SIGNALS_REVIEW:'
+      stderr_excerpt: ''
+    official_module:
+      returncode: 0
+      markers:
+      - 'PIPELINE_REGISTRY_STATE:'
+      - 'PIPELINE_LAUNCHER_STATE:'
+      - 'PIPELINE_LAUNCH_MENU:'
+      - 'PIPELINE_SIGNALS_REVIEW:'
+      stderr_excerpt: ''
+    engine_direct:
+      returncode: 0
+      markers:
+      - 'PIPELINE_REGISTRY_STATE:'
+      - 'PIPELINE_LAUNCHER_STATE:'
+      - 'PIPELINE_LAUNCH_MENU:'
+      stderr_excerpt: ''
+    engine_parallel:
+      returncode: 0
+      markers:
+      - 'PIPELINE_REGISTRY_STATE:'
+      - 'PIPELINE_PARALLEL_SLOTS:'
+      stderr_excerpt: ''
+    tmp_wrapper:
+      returncode: 0
+      markers:
+      - 'PIPELINE_REGISTRY_STATE:'
+      - 'PIPELINE_LAUNCHER_STATE:'
+      - 'PIPELINE_LAUNCH_MENU:'
+      - 'PIPELINE_SIGNALS_REVIEW:'
+      stderr_excerpt: ''
+    compat_wrapper:
+      returncode: 0
+      markers:
+      - 'PIPELINE_REGISTRY_STATE:'
+      - 'PIPELINE_LAUNCHER_STATE:'
+      - 'PIPELINE_LAUNCH_MENU:'
+      - 'PIPELINE_SIGNALS_REVIEW:'
+      stderr_excerpt: ''
+    raw_overlay:
+      returncode: 0
+      markers:
+      - 'PIPELINE_REGISTRY_STATE:'
+      - 'PIPELINE_LAUNCHER_STATE:'
+      - 'PIPELINE_LAUNCH_MENU:'
+      - 'PIPELINE_SIGNALS_REVIEW:'
+      - 'PIPELINE_SIGNALS_OVERLAY_RAW:'
+      stderr_excerpt: ''
+    unsupported_pipeline:
+      returncode: 0
+      markers:
+      - 'PIPELINE_REGISTRY_STATE:'
+      - 'PIPELINE_LAUNCH_MENU:'
+      stderr_excerpt: ''
+  blocking_findings: []
+  warnings: []
+  result_summary:
+    compiled_runtime_file_count: 17
+    compiled_validator_file_count: 15
+    validated_report_count: 15
+    all_historical_reports_pass: true
+    official_cli_outputs_human_review: true
+    official_module_outputs_human_review: true
+    engine_direct_outputs_raw_launcher: true
+    engine_parallel_slots_work: true
+    tmp_wrapper_outputs_human_review: true
+    compat_wrapper_outputs_human_review: true
+    raw_overlay_available_with_flag: true
+    unsupported_pipeline_fails_closed: true
+    engine_cleanup_preserved: true
+    recommended_next_phase: STOP_OR_TARGETED_FUNCTIONAL_TESTS
+    blocking_finding_count: 0
+    warning_count: 0
