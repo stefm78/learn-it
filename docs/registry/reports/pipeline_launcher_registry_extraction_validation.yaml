@@ -1,6 +1,6 @@
 pipeline_launcher_registry_extraction_validation:
   schema_version: '0.1'
-  generated_at: '2026-04-29T14:22:30Z'
+  generated_at: '2026-04-29T14:31:21Z'
   status: PASS
   phase_id: PHASE_28D7
   purpose: Extract registry discovery helpers from engine.py into registry.py and reuse yaml_io.load_yaml.

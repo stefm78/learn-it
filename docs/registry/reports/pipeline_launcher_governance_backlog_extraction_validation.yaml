@@ -1,6 +1,6 @@
 pipeline_launcher_governance_backlog_extraction_validation:
   schema_version: '0.1'
-  generated_at: '2026-04-29T14:03:23Z'
+  generated_at: '2026-04-29T14:31:27Z'
   status: PASS
   phase_id: PHASE_28D2
   purpose: Extract governance backlog launcher helpers from engine.py into governance_backlog.py.
@@ -19,7 +19,7 @@ pipeline_launcher_governance_backlog_extraction_validation:
     tmp_wrapper: tmp/pipeline_launcher.py
   inputs:
   - ref: docs/patcher/shared/pipeline_launcher/engine.py
-    sha256: d39734c96e3eca3e448a2ac0236b03c823ddcf067945c48c0b26a3d82f85397f
+    sha256: de9313478e11b372f70ebb9bb7bc1134084f6becf2fba4e8b62a78f342d81dd3
   - ref: docs/patcher/shared/pipeline_launcher/governance_backlog.py
     sha256: ff33f2b3ed9ca3fa5afc18075831e923163bd08e40b94b43f065d9dae7d7063b
   - ref: docs/patcher/shared/pipeline_launcher/cli.py

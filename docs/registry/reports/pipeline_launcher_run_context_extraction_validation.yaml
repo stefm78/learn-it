@@ -1,6 +1,6 @@
 pipeline_launcher_run_context_extraction_validation:
   schema_version: '0.1'
-  generated_at: '2026-04-29T14:22:25Z'
+  generated_at: '2026-04-29T14:31:25Z'
   status: PASS
   phase_id: PHASE_28D5
   purpose: Extract run_context probing and stage prompt helpers from engine.py into run_context.py.

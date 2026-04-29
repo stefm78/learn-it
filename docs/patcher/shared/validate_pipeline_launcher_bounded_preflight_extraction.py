@@ -61,11 +61,22 @@ def build_report() -> dict[str, Any]:
 
     summary = build_bounded_run_preflight_summary(REPO_ROOT)
     patch_lifecycle = summary.get("patch_lifecycle", {})
-    if patch_lifecycle.get("status") != "PREFLIGHT_DEFER_TO_STAGE00_REVIEW":
+    acceptable_non_authorizing_statuses = {
+        "PREFLIGHT_DEFER_TO_STAGE00_REVIEW",
+        "PREFLIGHT_KEEP_BACKLOG_OPEN",
+    }
+    if patch_lifecycle.get("status") not in acceptable_non_authorizing_statuses:
         findings.append({
             "finding_id": "UNEXPECTED_PATCH_LIFECYCLE_PREFLIGHT_STATUS",
             "severity": "blocking",
             "actual": patch_lifecycle.get("status"),
+            "expected_any_of": sorted(acceptable_non_authorizing_statuses),
+        })
+    if patch_lifecycle.get("new_bounded_run_recommended_now") is not False:
+        findings.append({
+            "finding_id": "PREFLIGHT_SHOULD_NOT_RECOMMEND_NEW_BOUNDED_RUN",
+            "severity": "blocking",
+            "actual": patch_lifecycle.get("new_bounded_run_recommended_now"),
         })
     if patch_lifecycle.get("matching_open_entry_count") != 4:
         findings.append({

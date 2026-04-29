@@ -1,6 +1,6 @@
 pipeline_launcher_maturity_extraction_validation:
   schema_version: '0.1'
-  generated_at: '2026-04-29T14:03:25Z'
+  generated_at: '2026-04-29T14:31:29Z'
   status: PASS
   phase_id: PHASE_28D1
   purpose: Extract maturity constants and helpers from the pipeline launcher engine into a dedicated module.
@@ -19,7 +19,7 @@ pipeline_launcher_maturity_extraction_validation:
     tmp_wrapper: tmp/pipeline_launcher.py
   inputs:
   - ref: docs/patcher/shared/pipeline_launcher/engine.py
-    sha256: d39734c96e3eca3e448a2ac0236b03c823ddcf067945c48c0b26a3d82f85397f
+    sha256: de9313478e11b372f70ebb9bb7bc1134084f6becf2fba4e8b62a78f342d81dd3
   - ref: docs/patcher/shared/pipeline_launcher/maturity.py
     sha256: fca7b597a4d38252d516069165dd19d3ac3f962f32dd9b224176474cfb655866
   - ref: docs/patcher/shared/pipeline_launcher/cli.py

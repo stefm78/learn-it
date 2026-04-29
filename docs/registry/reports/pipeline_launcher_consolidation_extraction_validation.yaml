@@ -1,6 +1,6 @@
 pipeline_launcher_consolidation_extraction_validation:
   schema_version: '0.1'
-  generated_at: '2026-04-29T14:22:24Z'
+  generated_at: '2026-04-29T14:31:23Z'
   status: PASS
   phase_id: PHASE_28D6
   purpose: Extract consolidation and anomaly helpers from engine.py into consolidation.py.

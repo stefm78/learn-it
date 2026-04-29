@@ -1,7 +1,7 @@
 pipeline_launcher_bounded_preflight_extraction_validation:
   schema_version: '0.1'
-  generated_at: '2026-04-29T14:22:28Z'
-  status: FAIL
+  generated_at: '2026-04-29T14:31:19Z'
+  status: PASS
   phase_id: PHASE_28D3
   purpose: Extract bounded-run preflight launcher helpers from engine.py into bounded_preflight.py.
   mutation_policy:
@@ -31,10 +31,7 @@ pipeline_launcher_bounded_preflight_extraction_validation:
       matching_open_entry_count: 4
       open_new_run_authorized_by_default: false
       recommended_entry_decision: open_new_run_blocked_or_requires_preflight
-  blocking_findings:
-  - finding_id: UNEXPECTED_PATCH_LIFECYCLE_PREFLIGHT_STATUS
-    severity: blocking
-    actual: PREFLIGHT_KEEP_BACKLOG_OPEN
+  blocking_findings: []
   result_summary:
     bounded_preflight_module_created: true
     engine_imports_bounded_preflight_module: true
@@ -47,4 +44,4 @@ pipeline_launcher_bounded_preflight_extraction_validation:
     tmp_wrapper_outputs_human_review: true
     raw_overlay_available_with_flag: true
     recommended_next_phase: PHASE_28D4
-    blocking_finding_count: 1
+    blocking_finding_count: 0
