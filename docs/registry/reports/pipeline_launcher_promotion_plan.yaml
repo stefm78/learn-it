@@ -1,0 +1,320 @@
+pipeline_launcher_promotion_plan:
+  schema_version: '0.1'
+  generated_at: '2026-04-29T12:30:19Z'
+  status: PASS
+  phase_id: PHASE_28A
+  purpose: Plan promotion away from tmp/pipeline_launcher.py toward an official pipeline launcher command.
+  mutation_policy:
+    tmp_pipeline_launcher: not_modified
+    official_launcher_command: not_created_yet
+    runtime_modules: not_moved_yet
+    signals_yaml: not_modified
+    pipeline_md: not_modified
+    state_yaml: not_modified
+    run_materialization: not_performed
+  inputs:
+  - ref: tmp/pipeline_launcher.py
+    sha256: 6e2369baffaa1a0a0c2ac8979045c05dc83a79cc3e89954b63444300b1426e25
+  - ref: docs/registry/reports/pipeline_launcher_modularization_validation.yaml
+    sha256: d04355ab0f81ebacf051633d571638e30334b05bc3ff58c553c11143e2451021
+  - ref: docs/registry/reports/pipeline_launcher_with_signals_validation.yaml
+    sha256: 97de450cb58b219f837ebe07199514e1187c757215b547c03b28097eb6688e13
+  input_validation:
+    findings: &id002 []
+    tmp_launcher_runtime:
+      status: PASS
+      stdout_excerpt: "PIPELINE_REGISTRY_STATE:\npipelines:\n- pipeline_id: constitution\n  path: docs/pipelines/constitution/pipeline.md\n\
+        \  goal: challenger les Core, synthétiser un patch, valider et préparer la promotion\n  canonical_state: docs/pipelines/constitution/state.yaml\n\
+        - pipeline_id: release\n  path: docs/pipelines/release/pipeline.md\n  goal: synchroniser versions internes, références\
+        \ inter-Core et notes de release\n  canonical_state: docs/pipelines/release/state.yaml\n- pipeline_id: migration\n\
+        \  path: docs/pipelines/migration/pipeline.md\n  goal: migrations structurelles ou de format sur les Core, prompts\
+        \ ou patchers\n  canonical_state: docs/pipelines/migration/state.yaml\n- pipeline_id: governance\n  path: docs/pipelines/governance/pipeline.md\n\
+        \  goal: maintenir la cohérence opératoire du repo, des registres, des pipelines, des\n    chemins canoniques et de\
+        \ la séparation operating / release / legacy\n  canonical_state: docs/pipelines/governance/state.yaml\n\nPIPELINE_LAUNCHER_STATE:\n\
+        pipeline_id: constitution\nai_protocol_present: true\nactive_runs_count: 0\nactive_runs: []\nclosed_runs_count: 5\n\
+        published_scopes: &id004\n- scope_key: knowledge_and_design\n  scope_id: CONSTITUTION_SCOPE_KNOWLEDGE_AND_DESIGN\n\
+        \  maturi"
+      stderr_excerpt: ''
+    input_report_status:
+      pipeline_launcher_modularization_validation: PASS
+      pipeline_launcher_with_signals_validation: PASS
+      pipeline_launcher_with_signals_phase: PHASE_27E
+  current_launcher_analysis:
+    path: tmp/pipeline_launcher.py
+    line_count: 1431
+    function_count: 39
+    constant_count: 8
+    imports:
+    - __future__
+    - argparse
+    - pathlib
+    - re
+    - typing
+    - yaml
+    constants:
+    - MATURITY_AXES_COUNT
+    - MATURITY_MAX_SCORE
+    - MATURITY_MINIMUM_LEVEL
+    - MATURITY_GATED_LEVELS
+    - CONSOLIDATION_PENDING_STAGES
+    - _IN_PROGRESS_STALE_THRESHOLD_S
+    - GOVERNANCE_BACKLOG_PATH
+    - BOUNDED_RUN_PREFLIGHT_REPORT_PATH
+    functions:
+    - name: maturity_pct
+      line: 46
+      target_module: maturity
+    - name: maturity_level_from_score
+      line: 50
+      target_module: maturity
+    - name: load_text
+      line: 57
+      target_module: yaml_io
+    - name: load_yaml
+      line: 63
+      target_module: yaml_io
+    - name: empty_governance_backlog_signal
+      line: 76
+      target_module: governance_backlog
+    - name: _as_string_list
+      line: 86
+      target_module: runtime_misc
+    - name: build_governance_backlog_scope_summary
+      line: 94
+      target_module: governance_backlog
+    - name: attach_governance_backlog_signal
+      line: 143
+      target_module: governance_backlog
+    - name: compact_governance_backlog_signal
+      line: 152
+      target_module: governance_backlog
+    - name: empty_bounded_run_preflight_signal
+      line: 169
+      target_module: bounded_preflight
+    - name: build_bounded_run_preflight_summary
+      line: 182
+      target_module: bounded_preflight
+    - name: attach_bounded_run_preflight_signal
+      line: 237
+      target_module: bounded_preflight
+    - name: compact_bounded_run_preflight_signal
+      line: 246
+      target_module: bounded_preflight
+    - name: discover_pipelines_from_registry
+      line: 259
+      target_module: registry
+    - name: load_entry_actions_index
+      line: 290
+      target_module: entry_actions
+    - name: load_entry_action_contract
+      line: 295
+      target_module: entry_actions
+    - name: resolve_entry_action_ref
+      line: 305
+      target_module: entry_actions
+    - name: render_entry_action_prompt
+      line: 313
+      target_module: entry_actions
+    - name: probe_run_context
+      line: 379
+      target_module: run_context
+    - name: ensure_prompt_mentions_branch
+      line: 446
+      target_module: prompts
+    - name: build_stage_prompt
+      line: 456
+      target_module: prompts
+    - name: probe_integration_gate
+      line: 510
+      target_module: consolidation
+    - name: detect_consolidation_ready
+      line: 519
+      target_module: consolidation
+    - name: _build_consolidation_stage_prompt
+      line: 593
+      target_module: consolidation
+    - name: detect_abnormal_state
+      line: 651
+      target_module: anomalies
+    - name: build_bootstrap_command
+      line: 687
+      target_module: runtime_misc
+    - name: enrich_scope_maturity
+      line: 711
+      target_module: maturity
+    - name: sort_scopes_by_maturity
+      line: 728
+      target_module: maturity
+    - name: build_maturity_summary
+      line: 732
+      target_module: maturity
+    - name: discover_constitution
+      line: 757
+      target_module: runtime_misc
+    - name: discover_generic_pipeline
+      line: 888
+      target_module: runtime_misc
+    - name: _scope_choice_entry
+      line: 926
+      target_module: runtime_misc
+    - name: build_continue_actions
+      line: 938
+      target_module: runtime_misc
+    - name: build_open_new_actions
+      line: 1067
+      target_module: runtime_misc
+    - name: build_disambiguation_actions
+      line: 1126
+      target_module: runtime_misc
+    - name: build_consolidate_actions
+      line: 1162
+      target_module: runtime_misc
+    - name: build_menu
+      line: 1201
+      target_module: menu
+    - name: build_parallel_slots
+      line: 1214
+      target_module: runtime_misc
+    - name: main
+      line: 1381
+      target_module: cli
+    functions_by_target_module: &id001
+      anomalies:
+      - detect_abnormal_state
+      bounded_preflight:
+      - empty_bounded_run_preflight_signal
+      - build_bounded_run_preflight_summary
+      - attach_bounded_run_preflight_signal
+      - compact_bounded_run_preflight_signal
+      cli:
+      - main
+      consolidation:
+      - probe_integration_gate
+      - detect_consolidation_ready
+      - _build_consolidation_stage_prompt
+      entry_actions:
+      - load_entry_actions_index
+      - load_entry_action_contract
+      - resolve_entry_action_ref
+      - render_entry_action_prompt
+      governance_backlog:
+      - empty_governance_backlog_signal
+      - build_governance_backlog_scope_summary
+      - attach_governance_backlog_signal
+      - compact_governance_backlog_signal
+      maturity:
+      - maturity_pct
+      - maturity_level_from_score
+      - enrich_scope_maturity
+      - sort_scopes_by_maturity
+      - build_maturity_summary
+      menu:
+      - build_menu
+      prompts:
+      - ensure_prompt_mentions_branch
+      - build_stage_prompt
+      registry:
+      - discover_pipelines_from_registry
+      run_context:
+      - probe_run_context
+      runtime_misc:
+      - _as_string_list
+      - build_bootstrap_command
+      - discover_constitution
+      - discover_generic_pipeline
+      - _scope_choice_entry
+      - build_continue_actions
+      - build_open_new_actions
+      - build_disambiguation_actions
+      - build_consolidate_actions
+      - build_parallel_slots
+      yaml_io:
+      - load_text
+      - load_yaml
+  promotion_plan:
+    target_architecture:
+      official_command: python docs/patcher/shared/pipeline_launcher.py
+      package: docs/patcher/shared/pipeline_launcher/
+      temporary_compatibility_wrapper: tmp/pipeline_launcher.py
+      principle: One human-facing launcher command; tmp launcher becomes compatibility only, then can be deprecated.
+    target_files:
+      cli: docs/patcher/shared/pipeline_launcher/cli.py
+      menu: docs/patcher/shared/pipeline_launcher/menu.py
+      prompts: docs/patcher/shared/pipeline_launcher/prompts.py
+      entry_actions: docs/patcher/shared/pipeline_launcher/entry_actions.py
+      run_context: docs/patcher/shared/pipeline_launcher/run_context.py
+      governance_backlog: docs/patcher/shared/pipeline_launcher/governance_backlog.py
+      bounded_preflight: docs/patcher/shared/pipeline_launcher/bounded_preflight.py
+      maturity: docs/patcher/shared/pipeline_launcher/maturity.py
+      consolidation: docs/patcher/shared/pipeline_launcher/consolidation.py
+      anomalies: docs/patcher/shared/pipeline_launcher/anomalies.py
+      registry: docs/patcher/shared/pipeline_launcher/registry.py
+      yaml_io: docs/patcher/shared/pipeline_launcher/yaml_io.py
+    migration_phases:
+    - phase_id: PHASE_28B
+      label: promote_launcher_command_without_behavior_change
+      goal: Create docs/patcher/shared/pipeline_launcher.py as the official command, initially delegating to the existing
+        runtime while appending the human-readable signals review.
+      allowed_mutations:
+      - add docs/patcher/shared/pipeline_launcher.py
+      - update validators and reports
+      - document official command
+      forbidden_mutations:
+      - do not move large runtime blocks yet
+      - do not alter OPEN_NEW_RUN semantics
+      - do not modify policy.yaml, decisions.yaml, scope catalog, or governance backlog
+      validation:
+      - python docs/patcher/shared/pipeline_launcher.py -h
+      - python docs/patcher/shared/pipeline_launcher.py
+      - python docs/patcher/shared/validate_pipeline_launcher.py
+    - phase_id: PHASE_28C
+      label: make_tmp_launcher_compatibility_wrapper
+      goal: Turn tmp/pipeline_launcher.py into a minimal compatibility wrapper around docs/patcher/shared/pipeline_launcher.py,
+        after the official command is validated.
+      allowed_mutations:
+      - replace tmp/pipeline_launcher.py with compatibility wrapper
+      - keep backward-compatible behavior for existing scripts
+      validation:
+      - python tmp/pipeline_launcher.py
+      - python docs/patcher/shared/pipeline_launcher.py
+      - compare key output markers
+    - phase_id: PHASE_28D
+      label: extract_runtime_modules_incrementally
+      goal: Move internal functions from the current monolith into package modules in small validated batches.
+      recommended_batches:
+      - yaml_io + maturity + registry
+      - governance_backlog + bounded_preflight
+      - entry_actions + prompts
+      - run_context + anomalies
+      - consolidation + menu + cli
+      validation:
+      - module py_compile
+      - official launcher output markers
+      - reports stay PASS
+    - phase_id: PHASE_28E
+      label: deprecate_tmp_launcher_when_no_longer_needed
+      goal: Remove or archive tmp/pipeline_launcher.py only after compatibility period and explicit human decision.
+      requires:
+      - no references still require tmp/pipeline_launcher.py
+      - official command documented in tracker and handover
+      - explicit human decision
+    initial_extraction_map: *id001
+    human_recommendation:
+      next_step: PHASE_28B
+      reason: Use a new official command first; do not attempt a risky monolithic move directly.
+      do_not_apply:
+      - PHASE_27F wrapper CLI help scripts
+  warnings:
+  - finding_id: TMP_LAUNCHER_IS_LARGE
+    severity: warning
+    line_count: 1431
+    meaning: Promotion should be phased; avoid direct monolithic patching.
+  blocking_findings: *id002
+  result_summary:
+    tmp_launcher_line_count: 1431
+    tmp_launcher_function_count: 39
+    recommended_next_phase: PHASE_28B
+    recommended_official_command: python docs/patcher/shared/pipeline_launcher.py
+    tmp_pipeline_launcher_behavior_changed: false
+    blocking_finding_count: 0
+    warning_count: 1
