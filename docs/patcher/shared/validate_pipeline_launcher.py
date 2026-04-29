@@ -10,21 +10,21 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
-# Allow execution as `python docs/patcher/shared/validate_learnit_launcher.py`
+# Allow execution as `python docs/patcher/shared/validate_pipeline_launcher.py`
 # while importing the local docs.* namespace from the repository root.
 REPO_ROOT = Path(__file__).resolve().parents[3]
 if str(REPO_ROOT) not in sys.path:
     sys.path.insert(0, str(REPO_ROOT))
 
-from docs.patcher.shared.learnit_launcher.pipeline_signals import (
+from docs.patcher.shared.pipeline_launcher.pipeline_signals import (
     build_launcher_signal_summary,
     build_next_best_action_slot,
     build_pipeline_signal_slots,
     build_review_action_slot,
     compact_prompt_binding,
 )
-from docs.patcher.shared.learnit_launcher.registry import discover_pipelines
-from docs.patcher.shared.learnit_launcher.yaml_io import write_yaml
+from docs.patcher.shared.pipeline_launcher.registry import discover_pipelines
+from docs.patcher.shared.pipeline_launcher.yaml_io import write_yaml
 
 
 def iso_now() -> str:
@@ -139,20 +139,20 @@ def build_report(repo_root: Path) -> dict[str, Any]:
             )
 
     module_files = [
-        repo_root / "docs" / "patcher" / "shared" / "learnit_launcher" / "__init__.py",
-        repo_root / "docs" / "patcher" / "shared" / "learnit_launcher" / "yaml_io.py",
-        repo_root / "docs" / "patcher" / "shared" / "learnit_launcher" / "registry.py",
-        repo_root / "docs" / "patcher" / "shared" / "learnit_launcher" / "pipeline_signals.py",
-        repo_root / "docs" / "patcher" / "shared" / "validate_learnit_launcher.py",
+        repo_root / "docs" / "patcher" / "shared" / "pipeline_launcher" / "__init__.py",
+        repo_root / "docs" / "patcher" / "shared" / "pipeline_launcher" / "yaml_io.py",
+        repo_root / "docs" / "patcher" / "shared" / "pipeline_launcher" / "registry.py",
+        repo_root / "docs" / "patcher" / "shared" / "pipeline_launcher" / "pipeline_signals.py",
+        repo_root / "docs" / "patcher" / "shared" / "validate_pipeline_launcher.py",
     ]
 
     return {
-        "learnit_launcher_modularization_validation": {
+        "pipeline_launcher_modularization_validation": {
             "schema_version": "0.2",
             "generated_at": iso_now(),
             "status": "PASS" if not findings else "FAIL",
             "phase_id": "PHASE_27A",
-            "purpose": "Bootstrap a modular launcher runtime without changing tmp/pipeline_launcher.py behavior.",
+            "purpose": "Bootstrap a modular pipeline launcher runtime without changing tmp/pipeline_launcher.py behavior.",
             "mutation_policy": {
                 "tmp_pipeline_launcher": "not_modified",
                 "signals_yaml": "not_modified",
@@ -189,7 +189,7 @@ def build_report(repo_root: Path) -> dict[str, Any]:
 
 def main() -> int:
     parser = argparse.ArgumentParser()
-    parser.add_argument("--report", default="docs/registry/reports/learnit_launcher_modularization_validation.yaml")
+    parser.add_argument("--report", default="docs/registry/reports/pipeline_launcher_modularization_validation.yaml")
     args = parser.parse_args()
 
     repo_root = Path(".")
@@ -198,7 +198,7 @@ def main() -> int:
     report = build_report(repo_root)
     write_yaml(report_path, report)
 
-    root = report["learnit_launcher_modularization_validation"]
+    root = report["pipeline_launcher_modularization_validation"]
     summary = root["result_summary"]
 
     print(f"Status: {root['status']}")

@@ -11,7 +11,7 @@ REPO_ROOT = Path(__file__).resolve().parents[3]
 if str(REPO_ROOT) not in sys.path:
     sys.path.insert(0, str(REPO_ROOT))
 
-from docs.patcher.shared.learnit_launcher.overlay import build_pipeline_signals_overlay
+from docs.patcher.shared.pipeline_launcher.overlay import build_pipeline_signals_overlay
 
 
 def main() -> int:

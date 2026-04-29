@@ -16,8 +16,8 @@ REPO_ROOT = Path(__file__).resolve().parents[3]
 if str(REPO_ROOT) not in sys.path:
     sys.path.insert(0, str(REPO_ROOT))
 
-from docs.patcher.shared.learnit_launcher.overlay import build_pipeline_signals_overlay
-from docs.patcher.shared.learnit_launcher.yaml_io import write_yaml
+from docs.patcher.shared.pipeline_launcher.overlay import build_pipeline_signals_overlay
+from docs.patcher.shared.pipeline_launcher.yaml_io import write_yaml
 
 
 def iso_now() -> str:
@@ -44,8 +44,8 @@ def build_report() -> dict[str, Any]:
     paths = {
         "tmp_launcher": REPO_ROOT / "tmp" / "pipeline_launcher.py",
         "wrapper": REPO_ROOT / "docs" / "patcher" / "shared" / "pipeline_launcher_with_signals.py",
-        "overlay": REPO_ROOT / "docs" / "patcher" / "shared" / "learnit_launcher" / "overlay.py",
-        "pipeline_signals": REPO_ROOT / "docs" / "patcher" / "shared" / "learnit_launcher" / "pipeline_signals.py",
+        "overlay": REPO_ROOT / "docs" / "patcher" / "shared" / "pipeline_launcher" / "overlay.py",
+        "pipeline_signals": REPO_ROOT / "docs" / "patcher" / "shared" / "pipeline_launcher" / "pipeline_signals.py",
     }
 
     findings: list[dict[str, Any]] = []

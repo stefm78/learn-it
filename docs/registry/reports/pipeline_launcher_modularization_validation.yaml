@@ -1,9 +1,9 @@
-learnit_launcher_modularization_validation:
+pipeline_launcher_modularization_validation:
   schema_version: '0.2'
-  generated_at: '2026-04-29T11:39:33Z'
+  generated_at: '2026-04-29T11:58:51Z'
   status: PASS
   phase_id: PHASE_27A
-  purpose: Bootstrap a modular launcher runtime without changing tmp/pipeline_launcher.py behavior.
+  purpose: Bootstrap a modular pipeline launcher runtime without changing tmp/pipeline_launcher.py behavior.
   mutation_policy:
     tmp_pipeline_launcher: not_modified
     signals_yaml: not_modified
@@ -11,16 +11,16 @@ learnit_launcher_modularization_validation:
     state_yaml: not_modified
     run_materialization: not_performed
   modules:
-  - ref: docs/patcher/shared/learnit_launcher/__init__.py
+  - ref: docs/patcher/shared/pipeline_launcher/__init__.py
     sha256: 664a4c21c9f5c8a1ec747ed7ede305f22445387f500528e6d3336950eea5c4d4
-  - ref: docs/patcher/shared/learnit_launcher/yaml_io.py
+  - ref: docs/patcher/shared/pipeline_launcher/yaml_io.py
     sha256: 39b177c4858ce70c0c17c979cc22f840c6d85545be39c0171691f8d66f69cae5
-  - ref: docs/patcher/shared/learnit_launcher/registry.py
+  - ref: docs/patcher/shared/pipeline_launcher/registry.py
     sha256: c03f8e0522c184e1cc27bc543b7a03c3a13ce918e9b36080af35375782a45527
-  - ref: docs/patcher/shared/learnit_launcher/pipeline_signals.py
+  - ref: docs/patcher/shared/pipeline_launcher/pipeline_signals.py
     sha256: 263b1de59f551d49e4582f1748d65bb02f3ca32315086fe8b9b23a583c136105
-  - ref: docs/patcher/shared/validate_learnit_launcher.py
-    sha256: c7845916c6b4bfc8e638595adf41597faedc5900e799dd3c8f0773f20331af79
+  - ref: docs/patcher/shared/validate_pipeline_launcher.py
+    sha256: 91af2893419491f92d059aa139355a4c88db70c7a49985eab8ba7bc445452e6f
   registry_pipeline_count: 4
   pipeline_ids:
   - constitution

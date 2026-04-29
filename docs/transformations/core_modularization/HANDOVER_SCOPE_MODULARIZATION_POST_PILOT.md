@@ -408,7 +408,7 @@ experimental `tmp/pipeline_launcher.py`.
 ```yaml
 PHASE_27A:
   status: done
-  report: docs/registry/reports/learnit_launcher_modularization_validation.yaml
+  report: docs/registry/reports/pipeline_launcher_modularization_validation.yaml
   report_status: PASS
   tmp_pipeline_launcher_behavior_changed: false
 
@@ -467,12 +467,12 @@ docs/pipelines/constitution/reports/open_new_run_preflight_gate_validation.yaml
 docs/pipelines/constitution/reports/launcher_preflight_display_validation.yaml
 docs/pipelines/constitution/reports/launcher_new_run_semantics_validation.yaml
 docs/registry/reports/pipeline_signals_validation.yaml
-docs/registry/reports/learnit_launcher_modularization_validation.yaml
+docs/registry/reports/pipeline_launcher_modularization_validation.yaml
 docs/registry/reports/pipeline_launcher_with_signals_validation.yaml
-docs/patcher/shared/learnit_launcher/pipeline_signals.py
-docs/patcher/shared/learnit_launcher/overlay.py
+docs/patcher/shared/pipeline_launcher/pipeline_signals.py
+docs/patcher/shared/pipeline_launcher/overlay.py
 docs/patcher/shared/pipeline_launcher_with_signals.py
-docs/patcher/shared/validate_learnit_launcher.py
+docs/patcher/shared/validate_pipeline_launcher.py
 docs/patcher/shared/validate_pipeline_launcher_with_signals.py
 docs/pipelines/constitution/signals.yaml
 docs/pipelines/release/signals.yaml
@@ -591,7 +591,7 @@ Completed in PHASE_27B.
 ```yaml
 PHASE_27A:
   status: done
-  report: docs/registry/reports/learnit_launcher_modularization_validation.yaml
+  report: docs/registry/reports/pipeline_launcher_modularization_validation.yaml
   report_status: PASS
 
 PHASE_27B:
@@ -635,8 +635,8 @@ python docs/patcher/shared/validate_pipeline_signals.py \
   --registry docs/registry/pipelines.md \
   --report docs/registry/reports/pipeline_signals_validation.yaml
 
-python docs/patcher/shared/validate_learnit_launcher.py \
-  --report docs/registry/reports/learnit_launcher_modularization_validation.yaml
+python docs/patcher/shared/validate_pipeline_launcher.py \
+  --report docs/registry/reports/pipeline_launcher_modularization_validation.yaml
 
 python docs/patcher/shared/validate_pipeline_launcher_with_signals.py \
   --report docs/registry/reports/pipeline_launcher_with_signals_validation.yaml

@@ -1,6 +1,6 @@
 pipeline_launcher_with_signals_validation:
   schema_version: '0.1'
-  generated_at: '2026-04-29T11:43:20Z'
+  generated_at: '2026-04-29T11:58:51Z'
   status: PASS
   phase_id: PHASE_27B
   purpose: Provide a non-invasive launcher wrapper that appends pipeline signal overlay to tmp/pipeline_launcher.py output.
@@ -16,10 +16,10 @@ pipeline_launcher_with_signals_validation:
   - ref: tmp/pipeline_launcher.py
     sha256: 6e2369baffaa1a0a0c2ac8979045c05dc83a79cc3e89954b63444300b1426e25
   - ref: docs/patcher/shared/pipeline_launcher_with_signals.py
-    sha256: c3026343d887d87da57065506eaa3ef841b19d8e788cb179063daa4d58dadb1f
-  - ref: docs/patcher/shared/learnit_launcher/overlay.py
+    sha256: 4231edbf0a39cc1a62f3146403a2a20f8719b6793e0991bfb58370aa6da1842c
+  - ref: docs/patcher/shared/pipeline_launcher/overlay.py
     sha256: 438c34eda496e89d31a719ace60bc08e63394b28f94a8609a6779d23a947467d
-  - ref: docs/patcher/shared/learnit_launcher/pipeline_signals.py
+  - ref: docs/patcher/shared/pipeline_launcher/pipeline_signals.py
     sha256: 263b1de59f551d49e4582f1748d65bb02f3ca32315086fe8b9b23a583c136105
   overlay:
     schema_version: '0.1'

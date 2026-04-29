@@ -127,7 +127,7 @@ open_new_run_gate:
     constitution_backlog_signal_status: attention
     constitution_backlog_signal_scope: patch_lifecycle
   launcher_modular_runtime:
-    modularization_report: docs/registry/reports/learnit_launcher_modularization_validation.yaml
+    modularization_report: docs/registry/reports/pipeline_launcher_modularization_validation.yaml
     modularization_status: PASS
     overlay_wrapper: docs/patcher/shared/pipeline_launcher_with_signals.py
     overlay_report: docs/registry/reports/pipeline_launcher_with_signals_validation.yaml
@@ -171,12 +171,12 @@ docs/pipelines/constitution/reports/open_new_run_preflight_gate_validation.yaml
 docs/pipelines/constitution/reports/launcher_preflight_display_validation.yaml
 docs/pipelines/constitution/reports/launcher_new_run_semantics_validation.yaml
 docs/registry/reports/pipeline_signals_validation.yaml
-docs/registry/reports/learnit_launcher_modularization_validation.yaml
+docs/registry/reports/pipeline_launcher_modularization_validation.yaml
 docs/registry/reports/pipeline_launcher_with_signals_validation.yaml
-docs/patcher/shared/learnit_launcher/pipeline_signals.py
-docs/patcher/shared/learnit_launcher/overlay.py
+docs/patcher/shared/pipeline_launcher/pipeline_signals.py
+docs/patcher/shared/pipeline_launcher/overlay.py
 docs/patcher/shared/pipeline_launcher_with_signals.py
-docs/patcher/shared/validate_learnit_launcher.py
+docs/patcher/shared/validate_pipeline_launcher.py
 docs/patcher/shared/validate_pipeline_launcher_with_signals.py
 docs/pipelines/constitution/signals.yaml
 docs/pipelines/release/signals.yaml
@@ -268,12 +268,12 @@ option_G_launcher_modular_runtime_and_signals_overlay:
   status: done
   completed_phase: PHASE_27B
   artifacts:
-    - docs/patcher/shared/learnit_launcher/
-    - docs/patcher/shared/validate_learnit_launcher.py
+    - docs/patcher/shared/pipeline_launcher/
+    - docs/patcher/shared/validate_pipeline_launcher.py
     - docs/patcher/shared/pipeline_launcher_with_signals.py
     - docs/patcher/shared/validate_pipeline_launcher_with_signals.py
   reports:
-    - docs/registry/reports/learnit_launcher_modularization_validation.yaml
+    - docs/registry/reports/pipeline_launcher_modularization_validation.yaml
     - docs/registry/reports/pipeline_launcher_with_signals_validation.yaml
   report_status: PASS
   action: bootstrap modular launcher runtime and provide a non-invasive pipeline signals overlay wrapper
