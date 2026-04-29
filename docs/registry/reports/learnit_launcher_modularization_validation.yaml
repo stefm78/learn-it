@@ -1,0 +1,104 @@
+learnit_launcher_modularization_validation:
+  schema_version: '0.2'
+  generated_at: '2026-04-29T11:39:33Z'
+  status: PASS
+  phase_id: PHASE_27A
+  purpose: Bootstrap a modular launcher runtime without changing tmp/pipeline_launcher.py behavior.
+  mutation_policy:
+    tmp_pipeline_launcher: not_modified
+    signals_yaml: not_modified
+    pipeline_md: not_modified
+    state_yaml: not_modified
+    run_materialization: not_performed
+  modules:
+  - ref: docs/patcher/shared/learnit_launcher/__init__.py
+    sha256: 664a4c21c9f5c8a1ec747ed7ede305f22445387f500528e6d3336950eea5c4d4
+  - ref: docs/patcher/shared/learnit_launcher/yaml_io.py
+    sha256: 39b177c4858ce70c0c17c979cc22f840c6d85545be39c0171691f8d66f69cae5
+  - ref: docs/patcher/shared/learnit_launcher/registry.py
+    sha256: c03f8e0522c184e1cc27bc543b7a03c3a13ce918e9b36080af35375782a45527
+  - ref: docs/patcher/shared/learnit_launcher/pipeline_signals.py
+    sha256: 263b1de59f551d49e4582f1748d65bb02f3ca32315086fe8b9b23a583c136105
+  - ref: docs/patcher/shared/validate_learnit_launcher.py
+    sha256: c7845916c6b4bfc8e638595adf41597faedc5900e799dd3c8f0773f20331af79
+  registry_pipeline_count: 4
+  pipeline_ids:
+  - constitution
+  - release
+  - migration
+  - governance
+  provider_by_pipeline:
+    constitution: implemented
+    release: not_implemented
+    migration: not_implemented
+    governance: not_implemented
+  signal_summary: &id001
+    has_attention_signals: true
+    attention_pipeline_count: 1
+    recommended_default_hint: review_pipeline_signals
+    run_opening_authorized_by_signals: false
+    attention_slots:
+    - pipeline_id: constitution
+      signals_path: docs/pipelines/constitution/signals.yaml
+      provider: implemented
+      status: attention
+      has_attention_signals: true
+      attention_count: 1
+      run_opening_authorized_by_signals: false
+      signals:
+      - id: backlog
+        status: attention
+        summary: 4 open entries requiring STAGE_00 review
+        scope_key: patch_lifecycle
+        recommended_action: STAGE_00_SCOPE_PARTITION_REVIEW_AND_REGEN
+        recommended_mode: run_candidate_preflight
+        run_opening_authorized_by_signal: false
+  review_action_slot:
+    key: review_pipeline_signals
+    label: Review pipeline attention signals before opening a new run
+    available: true
+    recommended: true
+    pipeline_signals: *id001
+  next_best_action_slot:
+    status: attention_review_available
+    meaning: A pipeline attention signal exists; review it before deciding whether to open a new run.
+    pipeline_signals: *id001
+    run_opening_authorized_by_signals: false
+    run_materialization_authorized_by_signals: false
+  prompt_binding:
+    pipeline_signals: status=attention signals=[pipeline=constitution provider=implemented id=backlog status=attention scope=patch_lifecycle
+      action=STAGE_00_SCOPE_PARTITION_REVIEW_AND_REGEN mode=run_candidate_preflight summary=4 open entries requiring STAGE_00
+      review run_opening_authorized_by_signal=false]
+    pipeline_signals_handling: attention_signal_must_be_acknowledged; if signal scope matches target_scope_key, preflight_or_explicit_human_override_required;
+      if signal scope differs from target_scope_key, warn_human_and_state_intentional_non_treatment
+  tmp_pipeline_launcher_compile_status: PASS
+  tmp_pipeline_launcher_runtime_status: PASS
+  tmp_pipeline_launcher_runtime_excerpt: "PIPELINE_REGISTRY_STATE:\npipelines:\n- pipeline_id: constitution\n  path: docs/pipelines/constitution/pipeline.md\n\
+    \  goal: challenger les Core, synthétiser un patch, valider et préparer la promotion\n  canonical_state: docs/pipelines/constitution/state.yaml\n\
+    - pipeline_id: release\n  path: docs/pipelines/release/pipeline.md\n  goal: synchroniser versions internes, références\
+    \ inter-Core et notes de release\n  canonical_state: docs/pipelines/release/state.yaml\n- pipeline_id: migration\n  path:\
+    \ docs/pipelines/migration/pipeline.md\n  goal: migrations structurelles ou de format sur les Core, prompts ou patchers\n\
+    \  canonical_state: docs/pipelines/migration/state.yaml\n- pipeline_id: governance\n  path: docs/pipelines/governance/pipeline.md\n\
+    \  goal: maintenir la cohérence opératoire du repo, des registres, des pipelines, des\n    chemins canoniques et de la\
+    \ séparation operating / release / legacy\n  canonical_state: docs/pipelines/governance/state.yaml\n\nPIPELINE_LAUNCHER_STATE:\n\
+    pipeline_id: constitution\nai_protocol_present: true\nactive_runs_count: 0\nactive_runs: []\nclosed_runs_count: 5\npublished_scopes:\
+    \ &id004\n- scope_key: knowledge_and_design\n  scope_id: CONSTITUTION_SCOPE_KNOWLEDGE_AND_DESIGN\n  maturity_score: 22\n\
+    \  maturity_score_max: 24\n  maturity_axes_count: 6\n  maturity_level: L4_strong\n  maturity_available_for_run: true\n\
+    \  maturity_gate_reason: ''\n  governance_backlog_signal:\n    warning: none\n    direct_open_count: 0\n    related_open_count:\
+    \ 0\n    open_entry_ids: []\n    open_types: {}\n  bounded_run_preflight_signal:\n    warning: none\n    requested_scope_key:\
+    \ ''\n    status: ''\n    recommendation: ''\n    new_bounded_run_recommended_now: false\n    matching_open_entry_count:\
+    \ 0\n    open_new_run_authorized_by_default: false\n    recommended_entry_decision: ''\n- scope_key: mastery_evaluation\n\
+    \  scope_id: CONSTITUTION_SCOPE_MASTERY_EVALUATION\n  maturity_score: 22\n  maturity_score_max: 24\n  maturity_axes_count:\
+    \ 6\n  maturity_level: L4_strong\n  maturity_available_for_run: true\n  maturity_gate_reason: ''\n  governance_backlog_signal:\n\
+    \    warning: none\n    direct_open_count: 0\n    related_open_count: 0\n    open_entry_ids: []\n    open_types: {}\n\
+    \  bounded_run_preflight_signal:\n    warning: none\n    requested_scope_key: ''\n    status: ''\n    recommendation:\
+    \ ''\n    new_bounded_run_recommended_now: false\n    matching_open_entry_count: 0\n    open_new_run_authorized_by_default:\
+    \ false\n    recommended_entry_decision: ''\n- scope_key: learner_state\n  scope_id: CONSTITUTION_SCOPE_LEARNER_STATE\n\
+    \  matu"
+  blocking_findings: []
+  result_summary:
+    has_attention_signals: true
+    recommended_default_hint: review_pipeline_signals
+    launcher_authorizes_run_from_signals: false
+    tmp_pipeline_launcher_behavior_changed: false
+    blocking_finding_count: 0
