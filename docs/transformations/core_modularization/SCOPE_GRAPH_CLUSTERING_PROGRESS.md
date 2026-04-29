@@ -103,6 +103,7 @@ completed:
       - PHASE_28D7 extract_pipeline_launcher_registry_helpers
       - PHASE_28D8 extract_pipeline_launcher_pipeline_state_helpers
       - PHASE_28D9 extract_pipeline_launcher_launch_menu_helpers
+      - PHASE_28D10 clean_pipeline_launcher_engine_imports
       - PHASE_29 stage00_signal_refresh_and_scope_catalog_v5_alignment
 ```
 
@@ -152,6 +153,7 @@ open_new_run_gate:
     run_opening_authorized_by_signal: false
   scope_catalog_refresh:
     status: PASS
+    engine_cleanup_report: docs/registry/reports/pipeline_launcher_engine_cleanup_validation.yaml
     report: tmp/constitution_scope_generation_report.yaml
     reason: align generated scope definitions with REF_CORE_LEARNIT_REFERENTIEL_V5_0_IN_CONSTITUTION
   launcher_modular_runtime:
@@ -168,7 +170,7 @@ open_new_run_gate:
     modularization_report: docs/registry/reports/pipeline_launcher_modularization_validation.yaml
     overlay_report: docs/registry/reports/pipeline_launcher_with_signals_validation.yaml
     status: PASS
-    latest_extraction_phase: PHASE_28D9
+    latest_extraction_phase: PHASE_28D10
     extracted_engine_modules:
       - docs/patcher/shared/pipeline_launcher/maturity.py
       - docs/patcher/shared/pipeline_launcher/governance_backlog.py
@@ -189,6 +191,7 @@ open_new_run_gate:
       - docs/registry/reports/pipeline_launcher_registry_extraction_validation.yaml
       - docs/registry/reports/pipeline_launcher_pipeline_state_extraction_validation.yaml
       - docs/registry/reports/pipeline_launcher_launch_menu_extraction_validation.yaml
+      - docs/registry/reports/pipeline_launcher_engine_cleanup_validation.yaml
     recommended_default_hint_when_attention: review_pipeline_signals
   open_new_run_authorized_by_default_when_defer: false
   recommended_entry_decision_when_defer: partition_refresh_preferred_or_open_new_run_blocked
@@ -262,6 +265,7 @@ docs/patcher/shared/validate_pipeline_launcher_consolidation_extraction.py
 docs/patcher/shared/validate_pipeline_launcher_registry_extraction.py
 docs/patcher/shared/validate_pipeline_launcher_pipeline_state_extraction.py
 docs/patcher/shared/validate_pipeline_launcher_launch_menu_extraction.py
+docs/patcher/shared/validate_pipeline_launcher_engine_cleanup.py
 docs/patcher/shared/validate_pipeline_launcher_with_signals.py
 docs/pipelines/constitution/signals.yaml
 docs/pipelines/release/signals.yaml
@@ -475,6 +479,22 @@ option_N_pipeline_launcher_launch_menu_extraction:
   report_status: PASS
   build_menu_keeps_new_run_non_authorizing: true
   build_parallel_slots_returns_slots: true
+  tmp_pipeline_launcher_role: compatibility_wrapper
+  launcher_authorizes_run_from_signals: false
+
+
+option_O_pipeline_launcher_engine_cleanup:
+  status: done
+  completed_phase: PHASE_28D10
+  action: clean promoted launcher engine imports, constants, and docstring after helper extraction
+  artifacts:
+    - docs/patcher/shared/pipeline_launcher/engine.py
+    - docs/patcher/shared/validate_pipeline_launcher_engine_cleanup.py
+  reports:
+    - docs/registry/reports/pipeline_launcher_engine_cleanup_validation.yaml
+  report_status: PASS
+  obsolete_import_snippet_count: 0
+  engine_parallel_slots_still_work: true
   tmp_pipeline_launcher_role: compatibility_wrapper
   launcher_authorizes_run_from_signals: false
 

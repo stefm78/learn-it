@@ -16,7 +16,7 @@ current_phase:
 
 This handover summarizes the current state of the `core_modularization` / `scope graph clustering`
 work after the bounded pilot run, post-pilot control-plane phases, bounded-run preflight
-integration, active-document compaction, OPEN_NEW_RUN preflight gate validation, launcher preflight display hardening, launcher new-run semantics clarification, minimal pipeline signals contracts, launcher signals overlay modularization, pipeline launcher naming correction, pipeline launcher promotion out of tmp, pipeline launcher engine modular extraction batch 1, registry extraction, pipeline state extraction, launch menu extraction, and stage00 signal refresh and scope catalog V5 alignment.
+integration, active-document compaction, OPEN_NEW_RUN preflight gate validation, launcher preflight display hardening, launcher new-run semantics clarification, minimal pipeline signals contracts, launcher signals overlay modularization, pipeline launcher naming correction, pipeline launcher promotion out of tmp, pipeline launcher engine modular extraction batch 1, registry extraction, pipeline state extraction, launch menu extraction, engine cleanup, and stage00 signal refresh and scope catalog V5 alignment.
 
 No Constitution pipeline run is currently open.
 
@@ -41,6 +41,7 @@ scope_modularization:
   last_completed_launcher_registry_extraction_phase: PHASE_28D7
   last_completed_launcher_pipeline_state_extraction_phase: PHASE_28D8
   last_completed_launcher_launch_menu_extraction_phase: PHASE_28D9
+  last_completed_launcher_engine_cleanup_phase: PHASE_28D10
   last_completed_stage00_signal_refresh_phase: PHASE_29
   last_completed_phase: PHASE_29
   last_completed_phase_label: stage00_signal_refresh_and_scope_catalog_v5_alignment
@@ -151,6 +152,13 @@ D9 launcher launch-menu extraction evidence:
 docs/patcher/shared/pipeline_launcher/launch_menu.py
 docs/patcher/shared/validate_pipeline_launcher_launch_menu_extraction.py
 docs/registry/reports/pipeline_launcher_launch_menu_extraction_validation.yaml
+```
+
+D10 launcher engine cleanup evidence:
+```text
+docs/patcher/shared/pipeline_launcher/engine.py
+docs/patcher/shared/validate_pipeline_launcher_engine_cleanup.py
+docs/registry/reports/pipeline_launcher_engine_cleanup_validation.yaml
 ```
 docs/pipelines/constitution/reports/governance_backlog_report.yaml
 docs/pipelines/constitution/reports/governance_backlog_lifecycle_validation.yaml
@@ -547,6 +555,12 @@ PHASE_28D9:
   status: done
   module: docs/patcher/shared/pipeline_launcher/launch_menu.py
   report: docs/registry/reports/pipeline_launcher_launch_menu_extraction_validation.yaml
+
+PHASE_28D10:
+  status: done
+  artifact: docs/patcher/shared/pipeline_launcher/engine.py
+  report: docs/registry/reports/pipeline_launcher_engine_cleanup_validation.yaml
+  summary: cleaned obsolete imports, constants, and promoted-out-of-tmp docstring
 ```
 
 The human-facing launcher remains:
@@ -850,6 +864,19 @@ report_status: PASS
 build_menu_keeps_new_run_non_authorizing: true
 build_parallel_slots_returns_slots: true
 ```
+
+### Option O — Pipeline launcher engine cleanup
+
+Completed in PHASE_28D10.
+
+```yaml
+PHASE_28D10: engine.py cleanup
+report: docs/registry/reports/pipeline_launcher_engine_cleanup_validation.yaml
+report_status: PASS
+obsolete_import_snippet_count: 0
+engine_parallel_slots_still_work: true
+recommended_next_phase: PHASE_28D11_OR_STOP
+```
 ## Operational checks for resuming later
 
 ```bash
@@ -945,7 +972,7 @@ Important state:
 - PHASE_27A/27B added a modular pipeline launcher runtime and a non-invasive pipeline signals overlay wrapper.
 - PHASE_27C corrected the runtime name from learnit_launcher to pipeline_launcher.
 - PHASE_28A/28B/28C promoted the official command to docs/patcher/shared/pipeline_launcher/cli.py and made tmp/pipeline_launcher.py a compatibility wrapper.
-- PHASE_28D1 through PHASE_28D9 extracted maturity, governance backlog, bounded preflight, entry actions, run_context, consolidation, registry, pipeline_state, and launch_menu helpers from engine.py.
+- PHASE_28D1 through PHASE_28D10 extracted maturity, governance backlog, bounded preflight, entry actions, run_context, consolidation, registry, pipeline_state, and launch_menu helpers from engine.py, then cleaned the reduced engine imports/docstring.
 - Current bounded-run preflight status for patch_lifecycle is PREFLIGHT_KEEP_BACKLOG_OPEN.
 - Four patch_lifecycle backlog entries remain open intentionally.
 - Do not mutate policy.yaml, decisions.yaml, scope catalog, or governance_backlog.yaml unless a new explicit phase/run decision is made.
