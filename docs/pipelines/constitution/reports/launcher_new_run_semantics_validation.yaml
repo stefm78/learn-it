@@ -1,11 +1,11 @@
 launcher_new_run_semantics_validation:
-  schema_version: '0.1'
-  generated_at: '2026-04-29T09:56:23Z'
-  status: FAIL
+  schema_version: '0.2'
+  generated_at: '2026-04-29T09:58:41Z'
+  status: PASS
   phase_id: PHASE_25
   purpose: Clarify that next_best_actions.new_run is an entry-resolution prompt availability signal, not run authorization.
   mutation_policy:
-    launcher: already_current
+    launcher: updated
     policy_yaml: not_read
     decisions_yaml: not_read
     scope_catalog: not_read
@@ -14,71 +14,46 @@ launcher_new_run_semantics_validation:
     run_materialization: not_performed
   inputs:
   - ref: tmp/pipeline_launcher.py
-    sha256: fd3758e5f29b906d817f3059e537fc43cc2550a142b5cfe1445a0fc15689923b
+    sha256: 7f12aba7144174daa638ad324c9070ff8e59577f1d75d1de41158be7b64e1328
+  patch_info:
+    patch_status: updated
+    patched_dynamic_status_lines: 2
+    inserted_semantic_blocks: 2
   static_checks:
     python_compile: PASS
-    status_entry_resolution_available_present: true
-    legacy_new_run_status_available_absent: false
+    dynamic_new_run_status_clarified: true
+    legacy_dynamic_available_unavailable_now_lines: []
+    entry_resolution_available_present: true
     run_opening_authorized_false_present: true
     run_materialization_authorized_false_present: true
     requires_open_new_run_decision_present: true
     requires_human_confirmation_before_materialization_present: true
   runtime_checks:
-    runtime_output_parse: SKIPPED_OR_FAILED
-    new_run_semantics_present: false
-    runtime_execution_ok: false
-    runtime_note: "launcher output was not parseable YAML: found duplicate anchor 'id001'; first occurrence\n  in \"<unicode\
-      \ string>\", line 107, column 30:\n      governance_backlog_signal: &id001\n                                 ^\nsecond\
-      \ occurrence\n  in \"<unicode string>\", line 212, column 5:\n      - &id001\n        ^\n*id002\n  patch_lifecycle:\
-      \ *id003\nrecommended_action: OPEN_NEW_RUN\nother_available_scopes: *id004\ncan_open_new_run_on_other_scope_now: true\n\
-      \nPIPELINE_LAUNCH_MENU:\ndecision_summary:\n  pipeline_id: constitution\n  recommended_default: new_run\n  active_run:\
-      \ ''\n  active_scope: ''\n  active_stage: ''\naction_menu:\n- key: new_run\n  label: Open new run on a published scope\n\
-      \  available: true\n  recommended: true\n  scope_choices:\n  - &id001\n    scope_key: knowledge_and_design\n    maturity_pct:\
-      \ 92%\n    maturity_level: L4_strong\n    available: true\n  - &id002\n    scope_key: mastery_evaluation\n    maturity_pct:\
-      \ 92%\n    maturity_level: L4_strong\n    available: true\n  - &id003\n    scope_key: learner_state\n    maturity_pct:\
-      \ 79%\n    maturity_level: L3_operational\n    available: true\n  - &id004\n    scope_key: deployment_governance\n \
-      \   maturity_pct: 75%\n    maturity_level: L3_operational\n    available: true\n  - &id005\n    scope_key: patch_lifecycle\n\
-      \    maturity_pct: 71%\n    maturity_level: L3_operational\n    available: true\n  recommended_scope: knowledge_and_design\n\
-      next_best_actions:\n  new_run:\n    status: available\n    scope_choices_available:\n    - *id001\n    - *id002\n  \
-      \  - *id003\n    - *id004\n    - *id005\n    scope_choices_gated: []\n    entry_prompt: 'Dans le repo learn-it, sur\
-      \ la branche feat/core-modularization-bootstrap,\n      résous l''action d''entrée OPEN_NEW_RUN du pipeline constitution\
-      \ en appliquant\n      strictement le contrat canonique docs/pipelines/constitution/entry_actions/OPEN_NEW_RUN.action.yaml.\n\
+    runtime_execution_ok: true
+    runtime_note: runtime text inspection PASS
+    next_best_actions_section_found: true
+    runtime_status_entry_resolution_available_present: true
+    runtime_status_available_absent_from_next_best_actions: true
+    runtime_run_opening_authorized_false_present: true
+    runtime_run_materialization_authorized_false_present: true
+    runtime_requires_open_new_run_decision_true_present: true
+    runtime_requires_human_confirmation_before_materialization_true_present: true
+    runtime_section_excerpt: "next_best_actions:\n  new_run:\n    status: entry_resolution_available\n    meaning: OPEN_NEW_RUN\
+      \ entry prompt is available; this launcher does not authorize,\n      materialize, or start a run.\n    run_opening_authorized:\
+      \ false\n    run_materialization_authorized: false\n    requires_open_new_run_decision: true\n    requires_human_confirmation_before_materialization:\
+      \ true\n    scope_choices_available:\n    - *id001\n    - *id002\n    - *id003\n    - *id004\n    - *id005\n    scope_choices_gated:\
+      \ []\n    entry_prompt: 'Dans le repo learn-it, sur la branche feat/core-modularization-bootstrap,\n      résous l''action\
+      \ d''entrée OPEN_NEW_RUN du pipeline constitution en appliquant\n      strictement le contrat canonique docs/pipelines/constitution/entry_actions/OPEN_NEW_RUN.action.yaml.\n\
       \      Ancre de protocole: docs/pipelines/constitution/AI_PROTOCOL.yaml. Bindings d''instance:\n      pipeline=docs/pipelines/constitution/pipeline.md\
       \ ; target_scope_key=knowledge_and_design\n      ; target_scope_maturity_pct=92% ; target_scope_maturity_level=L4_strong\
       \ ; governance_backlog_signal=none\n      ; bounded_run_preflight_signal=none. Ne déplie pas le contrat, ne l''étends\n\
       \      pas, ne lis rien hors de sa surface autorisée. Arrête-toi après la décision\n      d''entrée.'\n"
-  blocking_findings:
-  - finding_id: LAUNCHER_NEW_RUN_SEMANTICS_STATIC_CHECK_FAILED
-    severity: blocking
-    check: legacy_new_run_status_available_absent
-    actual: false
-  - finding_id: LAUNCHER_RUNTIME_EXECUTION_FAILED
-    severity: blocking
-    runtime_note: "launcher output was not parseable YAML: found duplicate anchor 'id001'; first occurrence\n  in \"<unicode\
-      \ string>\", line 107, column 30:\n      governance_backlog_signal: &id001\n                                 ^\nsecond\
-      \ occurrence\n  in \"<unicode string>\", line 212, column 5:\n      - &id001\n        ^\n*id002\n  patch_lifecycle:\
-      \ *id003\nrecommended_action: OPEN_NEW_RUN\nother_available_scopes: *id004\ncan_open_new_run_on_other_scope_now: true\n\
-      \nPIPELINE_LAUNCH_MENU:\ndecision_summary:\n  pipeline_id: constitution\n  recommended_default: new_run\n  active_run:\
-      \ ''\n  active_scope: ''\n  active_stage: ''\naction_menu:\n- key: new_run\n  label: Open new run on a published scope\n\
-      \  available: true\n  recommended: true\n  scope_choices:\n  - &id001\n    scope_key: knowledge_and_design\n    maturity_pct:\
-      \ 92%\n    maturity_level: L4_strong\n    available: true\n  - &id002\n    scope_key: mastery_evaluation\n    maturity_pct:\
-      \ 92%\n    maturity_level: L4_strong\n    available: true\n  - &id003\n    scope_key: learner_state\n    maturity_pct:\
-      \ 79%\n    maturity_level: L3_operational\n    available: true\n  - &id004\n    scope_key: deployment_governance\n \
-      \   maturity_pct: 75%\n    maturity_level: L3_operational\n    available: true\n  - &id005\n    scope_key: patch_lifecycle\n\
-      \    maturity_pct: 71%\n    maturity_level: L3_operational\n    available: true\n  recommended_scope: knowledge_and_design\n\
-      next_best_actions:\n  new_run:\n    status: available\n    scope_choices_available:\n    - *id001\n    - *id002\n  \
-      \  - *id003\n    - *id004\n    - *id005\n    scope_choices_gated: []\n    entry_prompt: 'Dans le repo learn-it, sur\
-      \ la branche feat/core-modularization-bootstrap,\n      résous l''action d''entrée OPEN_NEW_RUN du pipeline constitution\
-      \ en appliquant\n      strictement le contrat canonique docs/pipelines/constitution/entry_actions/OPEN_NEW_RUN.action.yaml.\n\
-      \      Ancre de protocole: docs/pipelines/constitution/AI_PROTOCOL.yaml. Bindings d''instance:\n      pipeline=docs/pipelines/constitution/pipeline.md\
-      \ ; target_scope_key=knowledge_and_design\n      ; target_scope_maturity_pct=92% ; target_scope_maturity_level=L4_strong\
-      \ ; governance_backlog_signal=none\n      ; bounded_run_preflight_signal=none. Ne déplie pas le contrat, ne l''étends\n\
-      \      pas, ne lis rien hors de sa surface autorisée. Arrête-toi après la décision\n      d''entrée.'\n"
+  blocking_findings: []
   result_summary:
     new_run_status: entry_resolution_available
-    legacy_new_run_status_available_removed: false
+    legacy_new_run_status_available_removed_from_next_best_actions: true
     run_opening_authorized: false
     run_materialization_authorized: false
     requires_open_new_run_decision: true
     requires_human_confirmation_before_materialization: true
-    blocking_finding_count: 2
+    blocking_finding_count: 0

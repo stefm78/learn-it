@@ -1042,7 +1042,12 @@ def build_continue_actions(
                 "reason": anomaly_detected,
             },
             "new_run": {
-                "status": "available" if other_scope_choices else "unavailable_now",
+                "status": "entry_resolution_available" if other_scope_choices else "unavailable_now",
+                "meaning": "OPEN_NEW_RUN entry prompt is available; this launcher does not authorize, materialize, or start a run.",
+                "run_opening_authorized": False,
+                "run_materialization_authorized": False,
+                "requires_open_new_run_decision": True,
+                "requires_human_confirmation_before_materialization": True,
                 "scope_choices": other_scope_choices,
             },
             "inspect": {
@@ -1104,7 +1109,12 @@ def build_open_new_actions(
         ],
         "next_best_actions": {
             "new_run": {
-                "status": "available" if available_choices else "unavailable_now",
+                "status": "entry_resolution_available" if available_choices else "unavailable_now",
+                "meaning": "OPEN_NEW_RUN entry prompt is available; this launcher does not authorize, materialize, or start a run.",
+                "run_opening_authorized": False,
+                "run_materialization_authorized": False,
+                "requires_open_new_run_decision": True,
+                "requires_human_confirmation_before_materialization": True,
                 "scope_choices_available": available_choices,
                 "scope_choices_gated": gated_choices,
                 "entry_prompt": entry_prompt,
