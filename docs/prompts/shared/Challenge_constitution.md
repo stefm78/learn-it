@@ -137,6 +137,27 @@ Classer les risques :
 - modéré
 - faible
 
+## Axe 8 — Maturité opérationnelle du périmètre
+
+En mode borné, évaluer si les faiblesses trouvées révèlent un problème de maturité du périmètre challengé.
+
+Cette analyse reste générique : elle ne publie pas de score, ne modifie pas le catalogue de scopes, et ne remplace pas un scoring déterministe séparé.
+
+Observer notamment :
+- clarté du périmètre : le sous-ensemble challengé a-t-il un rôle compréhensible et stable ?
+- cohérence interne : les éléments du périmètre forment-ils une grappe logique ou un assemblage hétérogène ?
+- frontières : les limites avec les éléments voisins sont-elles nettes ou ambiguës ?
+- dépendances : les lectures nécessaires sont-elles explicites, suffisantes et non implicites ?
+- exécutabilité bornée : peut-on produire un arbitrage ou un patch local sans absorber silencieusement un autre périmètre ?
+- stabilité : le périmètre semble-t-il robuste aux futures releases ou dépend-il d'un design encore ouvert ?
+
+Pour chaque signal significatif, qualifier l'effet :
+- `no_scope_maturity_impact`
+- `degrades_scope_confidence`
+- `improves_if_fixed`
+- `requires_scope_extension`
+- `requires_backlog_follow_up`
+
 # RÈGLES
 
 - Toute critique doit être ancrée dans un élément explicite du Core, un cadre théorique nommé, ou un scénario concret.
@@ -155,6 +176,7 @@ Classer les risques :
 - Être précis sur le risque moteur.
 - Si un mécanisme est solide, le dire brièvement sans sur-valider.
 - Ne pas proposer directement un patch YAML ici.
+- Ne pas modifier, recalculer ou publier un score de maturité depuis le challenge ; le rapport peut seulement produire des signaux argumentés.
 
 ## Règles supplémentaires en mode borné
 
@@ -186,6 +208,19 @@ Produire un rapport structuré avec les sections suivantes :
 ## Analyse détaillée par axe
 
 ## Risques prioritaires
+
+## Signaux de maturité du périmètre
+
+En mode borné, produire cette section même si elle est courte.
+Pour chaque signal pertinent :
+- Élément ou finding concerné
+- Signal observé
+- Axe de maturité opérationnelle concerné
+- Effet : `no_scope_maturity_impact` | `degrades_scope_confidence` | `improves_if_fixed` | `requires_scope_extension` | `requires_backlog_follow_up`
+- Justification
+- Suite recommandée : `keep_scope_as_is` | `arbitrate_boundary` | `open_backlog_follow_up` | `request_scope_extension` | `future_scoring_review`
+
+En mode global, cette section peut indiquer `non applicable` sauf si l'analyse révèle un problème manifeste de découpage ou de responsabilité entre périmètres.
 
 ## Corrections à arbitrer avant patch
 
