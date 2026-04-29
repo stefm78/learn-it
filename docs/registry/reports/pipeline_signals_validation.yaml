@@ -1,0 +1,42 @@
+pipeline_signals_validation:
+  schema_version: '0.1'
+  generated_at: '2026-04-29T10:57:00Z'
+  status: PASS
+  registry_path: docs/registry/pipelines.md
+  registry_pipeline_count: 4
+  checked_pipelines:
+  - pipeline_id: constitution
+    signals_path: docs/pipelines/constitution/signals.yaml
+    signals_file_present: true
+    provider_status: implemented
+    signals_count: 1
+    sha256: 73296416b9b63906bc63a0d7abdb042ca1f1f1a4cad485653b02d696796fa6e6
+  - pipeline_id: release
+    signals_path: docs/pipelines/release/signals.yaml
+    signals_file_present: true
+    provider_status: not_implemented
+    signals_count: 0
+    sha256: 933911aca0c10221d18a839693c1684cf8aaf5e13b3b9b9e64c908b929cc32cf
+  - pipeline_id: migration
+    signals_path: docs/pipelines/migration/signals.yaml
+    signals_file_present: true
+    provider_status: not_implemented
+    signals_count: 0
+    sha256: 5b47672d681eddc149f1bd8be4dffac04d4c5ddd683ec37dea89b065df0ca5bd
+  - pipeline_id: governance
+    signals_path: docs/pipelines/governance/signals.yaml
+    signals_file_present: true
+    provider_status: not_implemented
+    signals_count: 0
+    sha256: adc3bc1df964c00217e5e1eebb482ccadce1519de19ef2d56c72cfa83f672aa1
+  provider_status_by_pipeline:
+    constitution: implemented
+    release: not_implemented
+    migration: not_implemented
+    governance: not_implemented
+  blocking_findings: []
+  result_summary:
+    blocking_finding_count: 0
+    implemented_count: 1
+    not_implemented_count: 3
+    not_applicable_count: 0

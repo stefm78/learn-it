@@ -1,0 +1,6 @@
+pipeline_signals:
+  schema_version: '0.1'
+  pipeline_id: migration
+  signals_provider: not_implemented
+  notes: Minimal operational signal contract for this pipeline. Used by generic tools; authority remains in pipeline contracts.
+  signals: []

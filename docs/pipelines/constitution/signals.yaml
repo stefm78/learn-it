@@ -1,0 +1,14 @@
+pipeline_signals:
+  schema_version: '0.1'
+  pipeline_id: constitution
+  signals_provider: implemented
+  notes: Minimal operational signal contract for this pipeline. Used by generic tools; authority remains in pipeline contracts.
+  signals:
+  - id: backlog
+    status: attention
+    source: docs/pipelines/constitution/reports/governance_backlog_report.yaml
+    summary: 4 open entries requiring STAGE_00 review
+    scope_key: patch_lifecycle
+    recommended_action: STAGE_00_SCOPE_PARTITION_REVIEW_AND_REGEN
+    recommended_mode: run_candidate_preflight
+    run_opening_authorized_by_signal: false
