@@ -1,0 +1,150 @@
+pipeline_launcher_official_command_validation:
+  schema_version: '0.1'
+  generated_at: '2026-04-29T12:36:26Z'
+  status: PASS
+  phase_id: PHASE_28B
+  purpose: Create an official human-facing pipeline launcher command without moving the tmp runtime engine yet.
+  mutation_policy:
+    official_command: created
+    compatibility_wrapper: updated
+    tmp_pipeline_launcher: not_modified
+    runtime_modules: not_moved_yet
+    signals_yaml: not_modified
+    pipeline_md: not_modified
+    state_yaml: not_modified
+    run_materialization: not_performed
+  commands:
+    official_file_command: python docs/patcher/shared/pipeline_launcher/cli.py
+    official_module_command: python -m docs.patcher.shared.pipeline_launcher.cli
+    compatibility_command: python docs/patcher/shared/pipeline_launcher_with_signals.py
+    tmp_engine: python tmp/pipeline_launcher.py
+  inputs:
+  - ref: docs/patcher/shared/pipeline_launcher/cli.py
+    sha256: bbd04efa92973638626d7f8477eff6a5ca6541969a8484a9ab9bd65d0d3e5189
+  - ref: docs/patcher/shared/pipeline_launcher_with_signals.py
+    sha256: 26146d28ef391b22662aa9840abb8938194107650e453969b8ea43e002a807ab
+  - ref: tmp/pipeline_launcher.py
+    sha256: 6e2369baffaa1a0a0c2ac8979045c05dc83a79cc3e89954b63444300b1426e25
+  runtime:
+    official_help:
+      status: PASS
+      stdout: "usage: pipeline_launcher [-h] [--raw-signals-overlay] [--repo-root REPO_ROOT]\n                         [--pipeline\
+        \ PIPELINE] [--branch BRANCH]\n                         [--parallel-runs N]\n\nRun the pipeline launcher and append\
+        \ a human-readable pipeline signals review\nblock. This is the official human-facing launcher command.\n\noptions:\n\
+        \  -h, --help            show this help message and exit\n  --raw-signals-overlay\n                        also print\
+        \ the raw machine-readable\n                        PIPELINE_SIGNALS_OVERLAY_RAW block\n  --repo-root REPO_ROOT\n\
+        \                        repository root passed to the pipeline launcher\n  --pipeline PIPELINE   pipeline id to inspect,\
+        \ for example constitution\n  --branch BRANCH       branch name used when rendering prompts\n  --parallel-runs N \
+        \    parallel run display limit\n"
+      stderr: ''
+    official_run:
+      status: PASS
+      stdout_excerpt: "ize,\n      materialize, or start a run.\n    run_opening_authorized: false\n    run_materialization_authorized:\
+        \ false\n    requires_open_new_run_decision: true\n    requires_human_confirmation_before_materialization: true\n\
+        \    scope_choices_available:\n    - *id001\n    - *id002\n    - *id003\n    - *id004\n    - *id005\n    scope_choices_gated:\
+        \ []\n    entry_prompt: 'Dans le repo learn-it, sur la branche feat/core-modularization-bootstrap,\n      résous l''action\
+        \ d''entrée OPEN_NEW_RUN du pipeline constitution en appliquant\n      strictement le contrat canonique docs/pipelines/constitution/entry_actions/OPEN_NEW_RUN.action.yaml.\n\
+        \      Ancre de protocole: docs/pipelines/constitution/AI_PROTOCOL.yaml. Bindings d''instance:\n      pipeline=docs/pipelines/constitution/pipeline.md\
+        \ ; target_scope_key=knowledge_and_design\n      ; target_scope_maturity_pct=92% ; target_scope_maturity_level=L4_strong\
+        \ ; governance_backlog_signal=none\n      ; bounded_run_preflight_signal=none. Ne déplie pas le contrat, ne l''étends\n\
+        \      pas, ne lis rien hors de sa surface autorisée. Arrête-toi après la décision\n      d''entrée.'\n\nPIPELINE_SIGNALS_REVIEW:\n\
+        status: attention\nrecommended_default: review_pipeline_signals\nhuman_summary: Pipeline attention signal detected;\
+        \ review signals before opening a new run.\nattention_signal_count: 1\nattention_signals:\n  - constitution/backlog:\
+        \ 4 open entries requiring STAGE_00 review | scope=patch_lifecycle | recommended_action=STAGE_00_SCOPE_PARTITION_REVIEW_AND_REGEN\n\
+        affected_scope_keys:\n  - patch_lifecycle\nrecommended_actions:\n  - STAGE_00_SCOPE_PARTITION_REVIEW_AND_REGEN\nrun_opening_authorized_by_signals:\
+        \ false\nrun_materialization_authorized_by_signals: false\n\nrecommended_prompt:\n---\nDans le repo learn-it, sur\
+        \ la branche feat/core-modularization-bootstrap,\nanalyse les signaux pipeline avant toute ouverture de run.\n\nLis\
+        \ en priorité :\n- docs/pipelines/constitution/signals.yaml\n- docs/pipelines/constitution/reports/bounded_run_preflight_report.yaml\n\
+        - docs/pipelines/constitution/STAGE_00_SCOPE_PARTITION_REVIEW_AND_REGEN.md\n- docs/pipelines/constitution/entry_actions/OPEN_NEW_RUN.action.yaml\n\
+        \nSignal(s) à traiter :\n- constitution/backlog: 4 open entries requiring STAGE_00 review | scope=patch_lifecycle\
+        \ | recommended_action=STAGE_00_SCOPE_PARTITION_REVIEW_AND_REGEN\n\nInterprétation :\n- scope(s) concerné(s) : patch_lifecycle\n\
+        - action recommandée par le signal : STAGE_00_SCOPE_PARTITION_REVIEW_AND_REGEN\n- ce signal n'autorise pas l'ouverture\
+        \ d'un run\n- ce signal n'autorise pas la matérialisation d'un run\n\nObjectif :\nproposer la prochaine décision humaine\
+        \ entre :\n1. garder NO_ACTIVE_PHASE,\n2. lancer une revue STAGE_00 / backlog review,\n3. préparer un OPEN_NEW_RUN\
+        \ uniquement avec confirmation ou override humain explicite.\n\nContraintes :\n- n'ouvre pas de run ;\n- ne matérialise\
+        \ rien ;\n- ne modifie pas policy.yaml, decisions.yaml, scope_catalog ou governance_backlog.yaml ;\n- si un OPEN_NEW_RUN\
+        \ est envisagé, le preflight doit être explicitement pris en compte.\n---\n"
+      stderr: ''
+    official_raw:
+      status: PASS
+      stdout_excerpt: " garder NO_ACTIVE_PHASE,\n2. lancer une revue STAGE_00 / backlog review,\n3. préparer un OPEN_NEW_RUN\
+        \ uniquement avec confirmation ou override humain explicite.\n\nContraintes :\n- n'ouvre pas de run ;\n- ne matérialise\
+        \ rien ;\n- ne modifie pas policy.yaml, decisions.yaml, scope_catalog ou governance_backlog.yaml ;\n- si un OPEN_NEW_RUN\
+        \ est envisagé, le preflight doit être explicitement pris en compte.\n---\n\nPIPELINE_SIGNALS_OVERLAY_RAW:\nschema_version:\
+        \ '0.2'\nsource: docs/pipelines/<pipeline_id>/signals.yaml\nstatus: attention\nrecommended_default_hint: review_pipeline_signals\n\
+        signal_summary: &id001\n  has_attention_signals: true\n  attention_pipeline_count: 1\n  recommended_default_hint:\
+        \ review_pipeline_signals\n  run_opening_authorized_by_signals: false\n  attention_slots:\n  - pipeline_id: constitution\n\
+        \    signals_path: C:/Users/Stef/dev/learn-it/docs/pipelines/constitution/signals.yaml\n    provider: implemented\n\
+        \    status: attention\n    has_attention_signals: true\n    attention_count: 1\n    run_opening_authorized_by_signals:\
+        \ false\n    signals:\n    - id: backlog\n      status: attention\n      summary: 4 open entries requiring STAGE_00\
+        \ review\n      scope_key: patch_lifecycle\n      recommended_action: STAGE_00_SCOPE_PARTITION_REVIEW_AND_REGEN\n\
+        \      recommended_mode: run_candidate_preflight\n      run_opening_authorized_by_signal: false\naction_menu_addition:\n\
+        \  key: review_pipeline_signals\n  label: Review pipeline attention signals before opening a new run\n  available:\
+        \ true\n  recommended: true\n  pipeline_signals: *id001\nnext_best_actions_addition:\n  review_pipeline_signals:\n\
+        \    status: attention_review_available\n    meaning: A pipeline attention signal exists; review it before deciding\
+        \ whether to open a new run.\n    pipeline_signals: *id001\n    run_opening_authorized_by_signals: false\n    run_materialization_authorized_by_signals:\
+        \ false\nopen_new_run_prompt_binding_addition:\n  pipeline_signals: status=attention signals=[pipeline=constitution\
+        \ provider=implemented id=backlog status=attention scope=patch_lifecycle\n    action=STAGE_00_SCOPE_PARTITION_REVIEW_AND_REGEN\
+        \ mode=run_candidate_preflight summary=4 open entries requiring STAGE_00\n    review run_opening_authorized_by_signal=false]\n\
+        \  pipeline_signals_handling: attention_signal_must_be_acknowledged; if signal scope matches target_scope_key, preflight_or_explicit_human_override_required;\n\
+        \    if signal scope differs from target_scope_key, warn_human_and_state_intentional_non_treatment\nlauncher_authorizes_run_from_signals:\
+        \ false\n"
+      stderr: ''
+    official_module_help:
+      status: PASS
+      stdout: "usage: pipeline_launcher [-h] [--raw-signals-overlay] [--repo-root REPO_ROOT]\n                         [--pipeline\
+        \ PIPELINE] [--branch BRANCH]\n                         [--parallel-runs N]\n\nRun the pipeline launcher and append\
+        \ a human-readable pipeline signals review\nblock. This is the official human-facing launcher command.\n\noptions:\n\
+        \  -h, --help            show this help message and exit\n  --raw-signals-overlay\n                        also print\
+        \ the raw machine-readable\n                        PIPELINE_SIGNALS_OVERLAY_RAW block\n  --repo-root REPO_ROOT\n\
+        \                        repository root passed to the pipeline launcher\n  --pipeline PIPELINE   pipeline id to inspect,\
+        \ for example constitution\n  --branch BRANCH       branch name used when rendering prompts\n  --parallel-runs N \
+        \    parallel run display limit\n"
+      stderr: ''
+    compat_run:
+      status: PASS
+      stdout_excerpt: "étends\n      pas, ne lis rien hors de sa surface autorisée. Arrête-toi après la décision\n      d''entrée.'\n\
+        \nPIPELINE_SIGNALS_REVIEW:\nstatus: attention\nrecommended_default: review_pipeline_signals\nhuman_summary: Pipeline\
+        \ attention signal detected; review signals before opening a new run.\nattention_signal_count: 1\nattention_signals:\n\
+        \  - constitution/backlog: 4 open entries requiring STAGE_00 review | scope=patch_lifecycle | recommended_action=STAGE_00_SCOPE_PARTITION_REVIEW_AND_REGEN\n\
+        affected_scope_keys:\n  - patch_lifecycle\nrecommended_actions:\n  - STAGE_00_SCOPE_PARTITION_REVIEW_AND_REGEN\nrun_opening_authorized_by_signals:\
+        \ false\nrun_materialization_authorized_by_signals: false\n\nrecommended_prompt:\n---\nDans le repo learn-it, sur\
+        \ la branche feat/core-modularization-bootstrap,\nanalyse les signaux pipeline avant toute ouverture de run.\n\nLis\
+        \ en priorité :\n- docs/pipelines/constitution/signals.yaml\n- docs/pipelines/constitution/reports/bounded_run_preflight_report.yaml\n\
+        - docs/pipelines/constitution/STAGE_00_SCOPE_PARTITION_REVIEW_AND_REGEN.md\n- docs/pipelines/constitution/entry_actions/OPEN_NEW_RUN.action.yaml\n\
+        \nSignal(s) à traiter :\n- constitution/backlog: 4 open entries requiring STAGE_00 review | scope=patch_lifecycle\
+        \ | recommended_action=STAGE_00_SCOPE_PARTITION_REVIEW_AND_REGEN\n\nInterprétation :\n- scope(s) concerné(s) : patch_lifecycle\n\
+        - action recommandée par le signal : STAGE_00_SCOPE_PARTITION_REVIEW_AND_REGEN\n- ce signal n'autorise pas l'ouverture\
+        \ d'un run\n- ce signal n'autorise pas la matérialisation d'un run\n\nObjectif :\nproposer la prochaine décision humaine\
+        \ entre :\n1. garder NO_ACTIVE_PHASE,\n2. lancer une revue STAGE_00 / backlog review,\n3. préparer un OPEN_NEW_RUN\
+        \ uniquement avec confirmation ou override humain explicite.\n\nContraintes :\n- n'ouvre pas de run ;\n- ne matérialise\
+        \ rien ;\n- ne modifie pas policy.yaml, decisions.yaml, scope_catalog ou governance_backlog.yaml ;\n- si un OPEN_NEW_RUN\
+        \ est envisagé, le preflight doit être explicitement pris en compte.\n---\n"
+      stderr: ''
+    tmp_engine:
+      status: PASS
+      stdout_excerpt: "PIPELINE_REGISTRY_STATE:\npipelines:\n- pipeline_id: constitution\n  path: docs/pipelines/constitution/pipeline.md\n\
+        \  goal: challenger les Core, synthétiser un patch, valider et préparer la promotion\n  canonical_state: docs/pipelines/constitution/state.yaml\n\
+        - pipeline_id: release\n  path: docs/pipelines/release/pipeline.md\n  goal: synchroniser versions internes, références\
+        \ inter-Core et notes de release\n  canonical_state: docs/pipelines/release/state.yaml\n- pipeline_id: migration\n\
+        \  path: docs/pipelines/migration/pipeline.md\n  goal: migrations structurelles ou de format sur les Core, prompts\
+        \ ou patchers\n  canonical_state: docs/pipelines/migration/state.yaml\n- pipeline_id: governance\n  path: docs/pipelines/governance/pipeline.md\n\
+        \  goal: maintenir la cohérence opératoire du repo, des registres, des pipelines, des\n    chemins canoniques et de\
+        \ la séparation operating / release / legacy\n  canonical_state: docs/pipelines/governance/state.yaml\n\nPIPELINE_LAUNCHER_STATE:\n\
+        pipeline_id: constitution\nai_protocol_present: true\nactive_runs_count: 0\nactive_runs: []\nclosed_runs_count: 5\n\
+        published_scopes: &id004\n- scope_key: knowledge_and_design\n  scope_id: CONSTITUTION_SCOPE_KNOWLEDGE_AND_DESIGN\n\
+        \  maturity_score: 22\n  maturity_score_max: 24\n  maturity_axes_count: 6\n  maturity_level: L4_strong\n  maturity_available_for_run:\
+        \ true\n  maturity_gate_reason: ''\n  governance_backlog_signal:\n    warning: none\n    direct_open_count: 0\n  \
+        \  related_open_count: 0\n    open_entry_ids: []\n    open_types: {}\n  bound"
+      stderr: ''
+  blocking_findings: []
+  result_summary:
+    official_command_created: true
+    official_command_outputs_human_review: true
+    official_help_exposes_single_surface: true
+    raw_overlay_available_with_flag: true
+    compatibility_wrapper_delegates_to_official_command: true
+    tmp_pipeline_launcher_behavior_changed: false
+    tmp_pipeline_launcher_remains_internal_engine: true
+    recommended_next_phase: PHASE_28C
+    blocking_finding_count: 0
