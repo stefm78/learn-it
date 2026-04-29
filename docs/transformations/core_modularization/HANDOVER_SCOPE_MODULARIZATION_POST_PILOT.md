@@ -6,7 +6,7 @@
 repository: stefm78/learn-it
 branch: feat/core-modularization-bootstrap
 pipeline: constitution
-handover_date: 2026-04-28
+handover_date: 2026-04-29
 handover_status: ready_to_resume_later
 current_phase:
   phase_id: NO_ACTIVE_PHASE
@@ -14,47 +14,53 @@ current_phase:
   status: paused
 ```
 
-This handover summarizes the state of the `core_modularization` / `scope graph clustering`
-work after the bounded pilot run and the post-pilot control-plane phases.
+This handover summarizes the current state of the `core_modularization` / `scope graph clustering`
+work after the bounded pilot run, post-pilot control-plane phases, bounded-run preflight
+integration, and active-document compaction.
 
-The chantier is paused cleanly. No new bounded pipeline run is currently open.
+No Constitution pipeline run is currently open.
 
-## Final state
+## Current state
 
 ```yaml
-scope_modularization_post_pilot:
+scope_modularization:
   status: paused_cleanly
-  active_phase: none
-  new_pipeline_run_opened_now: false
-  last_decision:
-    phase_id: PHASE_21A
-    decision: do_not_open_new_bounded_run_now
-  remaining_open_governance_backlog_entries: 4
-  next_human_decision:
-    - stop here
-    - or later open a targeted patch_lifecycle run
+  active_pipeline_run: none
+  new_bounded_run_opened_now: false
+  last_completed_pipeline_integration_phase: PHASE_22
+  last_completed_cleanup_phase: PHASE_23A
+  current_recommendation: do_not_open_new_bounded_run_now
 ```
 
-Authoritative tracker:
+Compact active tracker:
 
 ```text
 docs/transformations/core_modularization/SCOPE_GRAPH_CLUSTERING_PROGRESS.md
 ```
 
-The tracker currently records:
+Full historical tracker snapshot:
 
-```yaml
-current_phase:
-  phase_id: NO_ACTIVE_PHASE
-  label: awaiting_next_human_decision
-  status: paused
+```text
+docs/transformations/core_modularization/archive/full_snapshots/SCOPE_GRAPH_CLUSTERING_PROGRESS_FULL_2026_04_29.md
+```
+
+Compact approach doctrine:
+
+```text
+docs/transformations/core_modularization/SCOPE_GRAPH_CLUSTERING_APPROACH.md
+```
+
+Full historical approach snapshot:
+
+```text
+docs/transformations/core_modularization/archive/full_snapshots/SCOPE_GRAPH_CLUSTERING_APPROACH_FULL_2026_04_29.md
 ```
 
 ## What was completed
 
-### Scope Lab and scoping redesign
+### 1. Scope Lab and graph-based scoping redesign
 
-The early Scope Lab work completed:
+Completed:
 
 - graph extraction;
 - cluster detection;
@@ -67,7 +73,7 @@ The early Scope Lab work completed:
 - bijection and reconstruction validation;
 - scope/neighbor extract validation.
 
-Key outputs include:
+Key outputs:
 
 ```text
 tmp/scope_lab/
@@ -77,7 +83,7 @@ docs/pipelines/constitution/scope_catalog/manifest.yaml
 docs/pipelines/constitution/scope_catalog/scope_definitions/*.yaml
 ```
 
-### Pilot bounded local run
+### 2. Pilot bounded local run
 
 The serious pilot bounded run completed:
 
@@ -95,19 +101,27 @@ active_constitution_version: V5_0_FINAL
 governance_backlog_exported: true
 ```
 
-This was a real pipeline run. The later PHASE_14 through PHASE_21 work was post-pilot
-control-plane governance, not another full `constitution` pipeline run.
+This was a real Constitution pipeline run.
 
-### Generic governance backlog integration
+The later PHASE_14 through PHASE_23A work was control-plane, governance, tooling,
+validation, or documentation work. It was not another full stage 01 → 09 pipeline run.
+
+### 3. Governance backlog integration
 
 PHASE_14 completed the generic governance backlog mechanism:
 
-- STAGE_02 can produce governance backlog candidates locally;
-- STAGE_09 exports candidates canonically;
-- `governance_backlog.yaml` is the inter-run source of truth;
-- STAGE_00 consumes open backlog entries;
-- launcher warnings surface impacted scopes;
-- lifecycle statuses are explicit: `open`, `addressed`, `wont_fix`.
+```yaml
+governance_backlog:
+  canonical_store: docs/pipelines/constitution/scope_catalog/governance_backlog.yaml
+  produced_by: STAGE_02 local candidates
+  exported_by: STAGE_09 closeout
+  consumed_by: STAGE_00
+  surfaced_by: launcher / entry resolution
+  lifecycle_statuses:
+    - open
+    - addressed
+    - wont_fix
+```
 
 Key files:
 
@@ -120,17 +134,16 @@ docs/pipelines/constitution/reports/governance_backlog_report.yaml
 docs/pipelines/constitution/reports/governance_backlog_lifecycle_validation.yaml
 ```
 
-### Maturity scoring and score publication
+### 4. Maturity scoring and score publication
 
 PHASE_15 introduced deterministic post-scoping maturity scoring.
 
-PHASE_16 resolved blocking Constitution neighbor-ID under-declaration through explicit
-approved `force_logical_neighbors` decisions.
+PHASE_16 resolved the Constitution neighbor-ID under-declaration signal.
 
-PHASE_17 migrated score publication authority so that computed scores can be applied to
-`policy.yaml` through a gated deterministic patcher.
+PHASE_17 migrated score publication authority so computed maturity scores can be applied
+to `policy.yaml` through a gated deterministic patcher.
 
-Final status:
+Final expected scoring state:
 
 ```yaml
 scope_maturity_scoring_report:
@@ -151,21 +164,21 @@ docs/pipelines/constitution/reports/scope_maturity_scoring_report.yaml
 docs/pipelines/constitution/reports/scope_maturity_policy_patch_report.yaml
 ```
 
-### Neighbor declaration model
+### 5. Neighbor declaration and multi-owner review
 
-PHASE_18 completed MACRO_005.
+PHASE_18 completed MACRO_005 neighbor declaration review.
 
-The accepted doctrine is:
+Accepted doctrine:
 
 ```yaml
 neighbor_declarations:
   role: read_authority_not_ownership_authority
   canonical_inputs:
-    - docs/pipelines/constitution/policies/scope_generation/policy.yaml
-    - docs/pipelines/constitution/policies/scope_generation/decisions.yaml
+    - policy.yaml
+    - decisions.yaml
   generated_outputs:
-    - docs/pipelines/constitution/scope_catalog/manifest.yaml
-    - docs/pipelines/constitution/scope_catalog/scope_definitions/*.yaml
+    - scope_catalog/manifest.yaml
+    - scope_catalog/scope_definitions/*.yaml
   run_materialized_views:
     - scope_manifest.yaml
     - impact_bundle.yaml
@@ -173,43 +186,19 @@ neighbor_declarations:
     - neighbor_extract.yaml
 ```
 
-Key files:
-
-```text
-docs/specs/constitution_neighbor_declaration_model.md
-docs/patcher/shared/report_constitution_neighbor_declaration_inventory.py
-docs/pipelines/constitution/reports/constitution_neighbor_declaration_inventory_report.yaml
-```
-
-### Multi-owner cluster review
-
-PHASE_19 completed MACRO_004.
+PHASE_19 completed MACRO_004 multi-owner cluster review.
 
 Result:
 
 ```yaml
 multi_owner_review:
-  status: closed
   validation_status: PASS_NO_PATCH_REQUIRED
   ownership_transfer: false
   policy_decisions_patch_required: false
   catalog_regeneration_required: false
 ```
 
-Three true-ownership-ambiguity candidates were human-arbitrated as no ownership change.
-
-Key files:
-
-```text
-docs/patcher/shared/report_constitution_multi_owner_cluster_inventory.py
-docs/patcher/shared/prepare_constitution_multi_owner_cluster_arbitration.py
-docs/patcher/shared/validate_constitution_multi_owner_cluster_arbitration.py
-docs/pipelines/constitution/reports/constitution_multi_owner_cluster_inventory_report.yaml
-docs/pipelines/constitution/reports/constitution_multi_owner_cluster_arbitration.yaml
-docs/pipelines/constitution/reports/constitution_multi_owner_cluster_arbitration_validation.yaml
-```
-
-### Post-macro closeout and remaining backlog decision
+### 6. Post-macro closeout and remaining backlog decision
 
 PHASE_20 reconciled the original six pilot backlog entries:
 
@@ -221,28 +210,84 @@ after:
   open: 4
 ```
 
-PHASE_21A decided not to open a new bounded run now:
+PHASE_21A decided not to open a new bounded run immediately:
 
 ```yaml
 recommended_decision: do_not_open_new_bounded_run_now
 new_pipeline_run_recommended_now: false
 ```
 
+### 7. Bounded-run preflight integration
+
+PHASE_22 generalized the PHASE_21A reasoning into the pipeline.
+
+Completed:
+
+```yaml
+PHASE_22:
+  label: bounded_run_preflight_pipeline_integration
+  status: done
+  subtasks:
+    PHASE_22A_STAGE00_PREFLIGHT_CONTRACT: done
+    PHASE_22B_PREFLIGHT_TOOLING_AND_FIRST_REPORT: done
+    PHASE_22C_OPEN_NEW_RUN_PREFLIGHT_GATE: done
+```
+
 Key files:
 
 ```text
-docs/patcher/shared/report_post_macro_closeout_review.py
-docs/pipelines/constitution/reports/post_macro_closeout_review_report.yaml
-docs/pipelines/constitution/reports/post_macro_closeout_review_report.md
-docs/pipelines/constitution/reports/governance_backlog_phase20b_patch_report.yaml
-docs/patcher/shared/report_remaining_patch_lifecycle_backlog_decision.py
-docs/pipelines/constitution/reports/remaining_patch_lifecycle_backlog_decision_report.yaml
-docs/pipelines/constitution/reports/remaining_patch_lifecycle_backlog_decision_report.md
+docs/pipelines/constitution/STAGE_00_SCOPE_PARTITION_REVIEW_AND_REGEN.md
+docs/pipelines/constitution/stages/STAGE_00_SCOPE_PARTITION_REVIEW_AND_REGEN.skill.yaml
+docs/patcher/shared/prepare_bounded_run_preflight.py
+docs/pipelines/constitution/reports/bounded_run_preflight_report.yaml
+docs/pipelines/constitution/reports/bounded_run_preflight.md
+docs/pipelines/constitution/entry_actions/OPEN_NEW_RUN.action.yaml
 ```
+
+Current preflight state:
+
+```yaml
+bounded_run_preflight:
+  mode: run_candidate_preflight
+  requested_scope_key: patch_lifecycle
+  status: PREFLIGHT_DEFER_TO_STAGE00_REVIEW
+  active_run_count: 0
+  matching_open_entry_count: 4
+  recommendation: defer_to_stage00_backlog_review
+  new_bounded_run_recommended_now: false
+```
+
+Meaning:
+
+```yaml
+open_new_run_default:
+  authorized: false
+  reason: >-
+    Open backlog entries exist, but they are reviewed design follow-ups, not urgent
+    pipeline blockers. A new run requires explicit human override or a future
+    PREFLIGHT_READY_TO_OPEN_RUN.
+```
+
+### 8. Active-document compaction
+
+PHASE_23A compacted the two large active documents:
+
+```yaml
+compacted_active_docs:
+  - docs/transformations/core_modularization/SCOPE_GRAPH_CLUSTERING_PROGRESS.md
+  - docs/transformations/core_modularization/SCOPE_GRAPH_CLUSTERING_APPROACH.md
+
+archived_full_snapshots:
+  - docs/transformations/core_modularization/archive/full_snapshots/SCOPE_GRAPH_CLUSTERING_PROGRESS_FULL_2026_04_29.md
+  - docs/transformations/core_modularization/archive/full_snapshots/SCOPE_GRAPH_CLUSTERING_APPROACH_FULL_2026_04_29.md
+```
+
+The active files should now remain short. Detailed execution history belongs in the
+archived snapshots unless a specific detail must be promoted back.
 
 ## Remaining open backlog entries
 
-Four reviewed backlog entries remain open intentionally.
+Four reviewed backlog entries remain open intentionally:
 
 ```yaml
 remaining_open_backlog_entries:
@@ -258,12 +303,12 @@ remaining_open_backlog_entries:
 
   - candidate_id: GBC_PATCH_LIFECYCLE_ESCALATION_BOUNDARY_R01
     topic: escalation boundary across patch_lifecycle, learner_state and deployment_governance
-    recommended_treatment: keep_open_for_stage00_backlog_review
+    recommended_treatment: include_conditionally_after_state_machine_design
     rank_if_future_run_opened: 3
 
   - candidate_id: GBC_PATCH_LIFECYCLE_REFERENTIEL_PARAMETER_R01
     topic: external-read-only referentiel parameter dependency for patch escalation threshold
-    recommended_treatment: keep_open_for_referentiel_link_follow_up
+    recommended_treatment: exclude_from_constitution_only_run / separate cross-core follow-up
     rank_if_future_run_opened: 4
 ```
 
@@ -271,69 +316,77 @@ These entries remain visible through:
 
 ```text
 docs/pipelines/constitution/reports/governance_backlog_report.yaml
-STAGE_00 scope partition review
-launcher governance_backlog warnings
+docs/pipelines/constitution/reports/bounded_run_preflight_report.yaml
+STAGE_00 run_candidate_preflight
+OPEN_NEW_RUN preflight gate
 ```
 
 ## Recommended next options
 
 ### Option A — Stop here
 
-Recommended default.
+Recommended if the goal is to pause safely.
 
 ```yaml
 decision: stop_here
 reason: >-
-  The post-pilot control-plane work is closed and paused cleanly. No run is open.
-  The remaining backlog entries are reviewed design follow-ups, not unresolved macro blockers.
+  The control plane is compact, documented, and no run is open.
 ```
 
-### Option B — Create an executive/readable synthesis
+### Option B — PHASE_23B validate OPEN_NEW_RUN preflight gate
 
-Useful before leaving the branch or presenting the work.
+Recommended next technical hardening step.
 
-Possible file:
+Create a deterministic validator:
 
 ```text
-docs/transformations/core_modularization/SCOPE_MODULARIZATION_EXECUTIVE_SUMMARY.md
+docs/patcher/shared/validate_open_new_run_preflight_gate.py
+```
+
+Expected report:
+
+```text
+docs/pipelines/constitution/reports/open_new_run_preflight_gate_validation.yaml
+```
+
+Expected result:
+
+```yaml
+open_new_run_preflight_gate_validation:
+  status: PASS
+  preflight_status: PREFLIGHT_DEFER_TO_STAGE00_REVIEW
+  open_new_run_authorized_by_default: false
+  recommended_entry_decision: partition_refresh_preferred_or_open_new_run_blocked
 ```
 
 ### Option C — Later open a targeted patch_lifecycle run
 
-Only if a human decides to turn the remaining design follow-ups into a concrete pipeline run.
-
-Recommended run if opened later:
+Only if a human explicitly decides to turn the remaining design follow-ups into a run.
 
 ```yaml
-scope_key: patch_lifecycle
-theme: patch_lifecycle_state_machine_and_priority_lanes
-include_first:
-  - GBC_PATCH_LIFECYCLE_FULL_STATE_MACHINE_R01
-  - GBC_PATCH_LIFECYCLE_PRIORITY_QUEUE_R01
-conditional:
-  - GBC_PATCH_LIFECYCLE_ESCALATION_BOUNDARY_R01
-separate_follow_up:
-  - GBC_PATCH_LIFECYCLE_REFERENTIEL_PARAMETER_R01
-guardrail: >-
-  Do not include the referentiel parameter dependency in a Constitution-only run
-  unless a cross-core read-neighbor or change-request contract is explicitly prepared.
+future_run:
+  requires:
+    - no active run
+    - bounded_run_preflight_report available
+    - explicit human override or future PREFLIGHT_READY_TO_OPEN_RUN
+    - OPEN_NEW_RUN action
+  recommended_scope_key: patch_lifecycle
+  recommended_theme: patch_lifecycle_state_machine_and_priority_lanes
+  include_first:
+    - GBC_PATCH_LIFECYCLE_FULL_STATE_MACHINE_R01
+    - GBC_PATCH_LIFECYCLE_PRIORITY_QUEUE_R01
+  conditional:
+    - GBC_PATCH_LIFECYCLE_ESCALATION_BOUNDARY_R01
+  separate_follow_up:
+    - GBC_PATCH_LIFECYCLE_REFERENTIEL_PARAMETER_R01
 ```
 
-### Option D — Cleanup / hardening
+### Option D — Update launcher behavior
 
-Possible cleanup topics:
+After PHASE_23B, optionally connect the launcher so it displays bounded-run preflight
+status and recommendation alongside backlog warnings.
 
-```yaml
-cleanup:
-  - remove local __pycache__ files
-  - ensure .gitignore excludes Python cache files
-  - decide whether tmp/ scripts should remain tmp/ or be archived/documented
-  - optionally produce a compact operational README for future run launchers
-```
-
-## Operational commands for resuming later
-
-Check current state:
+## Operational checks for resuming later
 
 ```bash
 git status --short
@@ -346,14 +399,11 @@ python docs/patcher/shared/report_governance_backlog.py \
   --backlog docs/pipelines/constitution/scope_catalog/governance_backlog.yaml \
   --report docs/pipelines/constitution/reports/governance_backlog_report.yaml \
   --status open
-```
 
-Check PHASE_21A decision evidence:
-
-```bash
-python docs/patcher/shared/report_remaining_patch_lifecycle_backlog_decision.py \
-  --report docs/pipelines/constitution/reports/remaining_patch_lifecycle_backlog_decision_report.yaml \
-  --markdown docs/pipelines/constitution/reports/remaining_patch_lifecycle_backlog_decision_report.md
+python docs/patcher/shared/prepare_bounded_run_preflight.py \
+  --scope-key patch_lifecycle \
+  --report docs/pipelines/constitution/reports/bounded_run_preflight_report.yaml \
+  --markdown docs/pipelines/constitution/reports/bounded_run_preflight.md
 ```
 
 ## Guardrails
@@ -369,6 +419,8 @@ forbidden_without_new_decision:
   - close the four remaining backlog entries
   - treat read-neighbor declarations as ownership transfers
   - fold referentiel parameter dependency into a Constitution-only run
+  - ignore PREFLIGHT_DEFER_TO_STAGE00_REVIEW when opening a backlog-driven run
+  - expand the compact progress/approach files back into large journals
 ```
 
 ## Handoff prompt for a future conversation
@@ -382,20 +434,22 @@ Current tracker state is NO_ACTIVE_PHASE / awaiting_next_human_decision.
 Read first:
 - docs/transformations/core_modularization/SCOPE_GRAPH_CLUSTERING_PROGRESS.md
 - docs/transformations/core_modularization/HANDOVER_SCOPE_MODULARIZATION_POST_PILOT.md
+- docs/transformations/core_modularization/SCOPE_GRAPH_CLUSTERING_APPROACH.md
 - docs/pipelines/constitution/reports/governance_backlog_report.yaml
-- docs/pipelines/constitution/reports/remaining_patch_lifecycle_backlog_decision_report.yaml
+- docs/pipelines/constitution/reports/bounded_run_preflight_report.yaml
+- docs/pipelines/constitution/entry_actions/OPEN_NEW_RUN.action.yaml
 
 Important state:
 - The serious bounded pilot run was CONSTITUTION_RUN_2026_04_27_PATCH_LIFECYCLE_R01.
 - It completed and promoted CORE_RELEASE_2026_04_28_R01.
-- PHASE_14 through PHASE_21 were post-pilot control-plane work, not new pipeline runs.
-- PHASE_21A decided: do_not_open_new_bounded_run_now.
+- PHASE_14 through PHASE_23A were post-pilot control-plane, governance, tooling, validation, or documentation work, not new full pipeline runs.
+- PHASE_22 integrated bounded-run preflight into STAGE_00 and OPEN_NEW_RUN.
+- Current bounded-run preflight status for patch_lifecycle is PREFLIGHT_DEFER_TO_STAGE00_REVIEW.
 - Four patch_lifecycle backlog entries remain open intentionally.
 - Do not mutate policy.yaml, decisions.yaml, scope catalog, or governance_backlog.yaml unless a new explicit phase/run decision is made.
+- Do not open a backlog-driven run without bounded-run preflight and explicit human confirmation/override.
 
-Help me decide whether to:
-1. stop here;
-2. create an executive synthesis;
-3. open a later targeted patch_lifecycle run on state_machine_and_priority_lanes;
-4. perform cleanup/hardening only.
+Recommended next step:
+PHASE_23B — create validate_open_new_run_preflight_gate.py and produce
+docs/pipelines/constitution/reports/open_new_run_preflight_gate_validation.yaml.
 ```
