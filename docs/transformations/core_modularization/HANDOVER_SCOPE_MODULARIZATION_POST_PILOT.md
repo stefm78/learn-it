@@ -16,7 +16,7 @@ current_phase:
 
 This handover summarizes the current state of the `core_modularization` / `scope graph clustering`
 work after the bounded pilot run, post-pilot control-plane phases, bounded-run preflight
-integration, active-document compaction, OPEN_NEW_RUN preflight gate validation, launcher preflight display hardening, launcher new-run semantics clarification, minimal pipeline signals contracts, launcher signals overlay modularization, pipeline launcher naming correction, pipeline launcher promotion out of tmp, and pipeline launcher engine modular extraction batch 1.
+integration, active-document compaction, OPEN_NEW_RUN preflight gate validation, launcher preflight display hardening, launcher new-run semantics clarification, minimal pipeline signals contracts, launcher signals overlay modularization, pipeline launcher naming correction, pipeline launcher promotion out of tmp, pipeline launcher engine modular extraction batch 1, registry extraction, and stage00 signal refresh and scope catalog V5 alignment.
 
 No Constitution pipeline run is currently open.
 
@@ -38,8 +38,10 @@ scope_modularization:
   last_completed_launcher_naming_phase: PHASE_27C
   last_completed_launcher_promotion_phase: PHASE_28C
   last_completed_launcher_engine_extraction_phase: PHASE_28D6
-  last_completed_phase: PHASE_28D6
-  last_completed_phase_label: pipeline_launcher_engine_modular_extraction_batch_1
+  last_completed_launcher_registry_extraction_phase: PHASE_28D7
+  last_completed_stage00_signal_refresh_phase: PHASE_29
+  last_completed_phase: PHASE_29
+  last_completed_phase_label: stage00_signal_refresh_and_scope_catalog_v5_alignment
   current_recommendation: do_not_open_new_bounded_run_now
 ```
 
@@ -114,8 +116,8 @@ governance_backlog_exported: true
 
 This was a real Constitution pipeline run.
 
-The later PHASE_14 through PHASE_28D6 work was control-plane, governance, tooling,
-validation, launcher hardening, launcher semantics clarification, minimal pipeline signals contracts, launcher modularization, launcher signals overlay, naming correction, launcher promotion, launcher engine extraction, or documentation work. It was not another full stage 01 → 09 pipeline run.
+The later PHASE_14 through PHASE_29 work was control-plane, governance, tooling,
+validation, launcher hardening, launcher semantics clarification, minimal pipeline signals contracts, launcher modularization, launcher signals overlay, naming correction, launcher promotion, launcher engine extraction, Stage 00 signal refresh, scope catalog alignment, or documentation work. It was not another full stage 01 → 09 pipeline run.
 
 ### 3. Governance backlog integration
 
@@ -261,10 +263,10 @@ Current preflight state:
 bounded_run_preflight:
   mode: run_candidate_preflight
   requested_scope_key: patch_lifecycle
-  status: PREFLIGHT_DEFER_TO_STAGE00_REVIEW
+  status: PREFLIGHT_KEEP_BACKLOG_OPEN
   active_run_count: 0
   matching_open_entry_count: 4
-  recommendation: defer_to_stage00_backlog_review
+  recommendation: keep_backlog_open
   new_bounded_run_recommended_now: false
 ```
 
@@ -308,14 +310,14 @@ PHASE_23B:
   report: docs/pipelines/constitution/reports/open_new_run_preflight_gate_validation.yaml
   report_status: PASS
   open_new_run_authorized_by_default_when_defer: false
-  recommended_entry_decision_when_defer: partition_refresh_preferred_or_open_new_run_blocked
+  recommended_entry_decision_when_defer: open_new_run_blocked_or_requires_preflight
 ```
 
 Meaning:
 
 ```yaml
 open_new_run_gate:
-  current_preflight_status: PREFLIGHT_DEFER_TO_STAGE00_REVIEW
+  current_preflight_status: PREFLIGHT_KEEP_BACKLOG_OPEN
   default_authorization: false
   human_override_required_to_authorize: true
 ```
@@ -521,6 +523,11 @@ PHASE_28D6:
   status: done
   module: docs/patcher/shared/pipeline_launcher/consolidation.py
   report: docs/registry/reports/pipeline_launcher_consolidation_extraction_validation.yaml
+
+PHASE_28D7:
+  status: done
+  module: docs/patcher/shared/pipeline_launcher/registry.py
+  report: docs/registry/reports/pipeline_launcher_registry_extraction_validation.yaml
 ```
 
 The human-facing launcher remains:
@@ -530,6 +537,27 @@ python docs/patcher/shared/pipeline_launcher/cli.py
 ```
 
 `tmp/pipeline_launcher.py` remains only a compatibility wrapper.
+
+### 17. Stage 00 signal refresh and scope catalog V5 alignment
+
+PHASE_29 refreshed Constitution pipeline signals and aligned the generated scope catalog with
+the V5 referentiel neighbor state.
+
+```yaml
+PHASE_29:
+  status: done
+  label: stage00_signal_refresh_and_scope_catalog_v5_alignment
+  pipeline_signals_refresh_report: docs/pipelines/constitution/reports/pipeline_signals_refresh_report.yaml
+  pipeline_signals_refresh_status: PASS_APPLIED
+  scope_generation_report: tmp/constitution_scope_generation_report.yaml
+  scope_generation_status: PASS
+  current_bounded_run_preflight_status: PREFLIGHT_KEEP_BACKLOG_OPEN
+  run_opening_authorized_by_signal: false
+```
+
+The default recommendation remains not to open a new bounded run unless a future
+`PREFLIGHT_READY_TO_OPEN_RUN` is produced or a human explicitly overrides the current
+non-authorizing signal.
 
 ## Remaining open backlog entries
 
@@ -613,9 +641,9 @@ PHASE_23B:
   artifact: docs/patcher/shared/validate_open_new_run_preflight_gate.py
   report: docs/pipelines/constitution/reports/open_new_run_preflight_gate_validation.yaml
   report_status: PASS
-  preflight_status: PREFLIGHT_DEFER_TO_STAGE00_REVIEW
+  preflight_status: PREFLIGHT_KEEP_BACKLOG_OPEN
   open_new_run_authorized_by_default: false
-  recommended_entry_decision: partition_refresh_preferred_or_open_new_run_blocked
+  recommended_entry_decision: open_new_run_blocked_or_requires_preflight
 ```
 
 ### Option C — Later open a targeted patch_lifecycle run
@@ -825,7 +853,7 @@ forbidden_without_new_decision:
   - close the four remaining backlog entries
   - treat read-neighbor declarations as ownership transfers
   - fold referentiel parameter dependency into a Constitution-only run
-  - ignore PREFLIGHT_DEFER_TO_STAGE00_REVIEW when opening a backlog-driven run
+  - ignore PREFLIGHT_KEEP_BACKLOG_OPEN when opening a backlog-driven run
   - expand the compact progress/approach files back into large journals
 ```
 
@@ -850,7 +878,7 @@ Important state:
 - It completed and promoted CORE_RELEASE_2026_04_28_R01.
 - PHASE_14 through PHASE_28C were post-pilot control-plane, governance, tooling, validation, launcher hardening, launcher semantics clarification, minimal pipeline signals contracts, launcher modularization, launcher signals overlay, naming correction, launcher promotion, or documentation work, not new full pipeline runs.
 - PHASE_22 integrated bounded-run preflight into STAGE_00 and OPEN_NEW_RUN.
-- PHASE_23B validated that OPEN_NEW_RUN does not authorize a backlog-driven run by default when preflight is PREFLIGHT_DEFER_TO_STAGE00_REVIEW.
+- PHASE_23B validated that OPEN_NEW_RUN does not authorize a backlog-driven run by default when preflight is PREFLIGHT_KEEP_BACKLOG_OPEN.
 - PHASE_24 surfaced the bounded-run preflight signal in tmp/pipeline_launcher.py.
 - PHASE_25 clarified that next_best_actions.new_run means entry-resolution availability, not run authorization or run materialization.
 - PHASE_26 added minimal signals.yaml contracts for all registry pipelines; Constitution exposes backlog as an attention signal.
@@ -858,12 +886,12 @@ Important state:
 - PHASE_27C corrected the runtime name from learnit_launcher to pipeline_launcher.
 - PHASE_28A/28B/28C promoted the official command to docs/patcher/shared/pipeline_launcher/cli.py and made tmp/pipeline_launcher.py a compatibility wrapper.
 - PHASE_28D1 through PHASE_28D6 extracted maturity, governance backlog, bounded preflight, entry actions, run_context, and consolidation helpers from engine.py.
-- Current bounded-run preflight status for patch_lifecycle is PREFLIGHT_DEFER_TO_STAGE00_REVIEW.
+- Current bounded-run preflight status for patch_lifecycle is PREFLIGHT_KEEP_BACKLOG_OPEN.
 - Four patch_lifecycle backlog entries remain open intentionally.
 - Do not mutate policy.yaml, decisions.yaml, scope catalog, or governance_backlog.yaml unless a new explicit phase/run decision is made.
 - Do not open a backlog-driven run without bounded-run preflight and explicit human confirmation/override.
 
 Recommended next step:
 Stop here by default. Open a future patch_lifecycle run only after a future PREFLIGHT_READY_TO_OPEN_RUN
-or after explicit human override of the current PREFLIGHT_DEFER_TO_STAGE00_REVIEW recommendation.
+or after explicit human override of the current PREFLIGHT_KEEP_BACKLOG_OPEN recommendation.
 ```
