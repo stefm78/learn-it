@@ -1,0 +1,43 @@
+launcher_preflight_display_validation:
+  schema_version: '0.1'
+  generated_at: '2026-04-29T09:27:27Z'
+  status: PASS
+  phase_id: PHASE_24
+  purpose: Validate that tmp/pipeline_launcher.py surfaces bounded-run preflight status and recommendation.
+  mutation_policy:
+    launcher: updated
+    bounded_run_preflight_report: read_only
+    open_new_run_preflight_gate_validation: read_only
+    policy_yaml: not_read
+    decisions_yaml: not_read
+    scope_catalog: not_read
+    governance_backlog_yaml: not_read
+    cores: not_read
+  inputs:
+  - ref: tmp/pipeline_launcher.py
+    sha256: d163ba7c6a95491c33f90635b080dde1a95312658aaf3fe3a10319d05ed7dd31
+  - ref: docs/pipelines/constitution/reports/bounded_run_preflight_report.yaml
+    sha256: 27f6fdb68fc8f78c863894cb394db9d6ae9a69008c8a0c5342fcb86b9978ef7e
+  - ref: docs/pipelines/constitution/reports/open_new_run_preflight_gate_validation.yaml
+    sha256: c4e807eb5c2107a883018b8d0d109d8af9e2f8c855253dfc067b67d98223fb4a
+  current_preflight:
+    requested_scope_key: patch_lifecycle
+    status: PREFLIGHT_DEFER_TO_STAGE00_REVIEW
+    recommendation: defer_to_stage00_backlog_review
+    new_bounded_run_recommended_now: false
+    matching_open_entry_count: 4
+  open_gate_validation:
+    status: PASS
+    open_new_run_authorized_by_default: false
+    recommended_entry_decision: partition_refresh_preferred_or_open_new_run_blocked
+    human_override_required_to_authorize: true
+  launcher_static_checks:
+    python_compile: PASS
+    required_snippets_present: true
+    missing_snippets: []
+  result_summary:
+    launcher_surfaces_preflight_signal: true
+    defer_status_displayed_as_non_authorizing: true
+    open_new_run_authorized_by_default_when_defer: false
+    recommended_entry_decision_when_defer: partition_refresh_preferred_or_open_new_run_blocked
+    blocking_finding_count: 0
