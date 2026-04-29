@@ -1,0 +1,47 @@
+pipeline_launcher_bounded_preflight_extraction_validation:
+  schema_version: '0.1'
+  generated_at: '2026-04-29T13:48:56Z'
+  status: PASS
+  phase_id: PHASE_28D3
+  purpose: Extract bounded-run preflight launcher helpers from engine.py into bounded_preflight.py.
+  mutation_policy:
+    official_command: preserved
+    internal_engine: bounded_preflight_helpers_extracted
+    tmp_pipeline_launcher: compatibility_wrapper_preserved
+    signals_yaml: not_modified
+    pipeline_md: not_modified
+    state_yaml: not_modified
+    run_materialization: not_performed
+  inputs:
+  - ref: docs/patcher/shared/pipeline_launcher/engine.py
+    sha256: 8d18609307e8985dc876f66ab5ab7f7bbba218829b63251f927198ca52d5cdf1
+  - ref: docs/patcher/shared/pipeline_launcher/bounded_preflight.py
+    sha256: 2ea2c26497a115df646b82c21b5b9d8099af2da23a3d29312afe65f2482eec02
+  - ref: docs/patcher/shared/pipeline_launcher/cli.py
+    sha256: aa4e6244ee1f7ad406a145121b57d34ae5e8d952801e4d42751e48f031a3f8db
+  - ref: tmp/pipeline_launcher.py
+    sha256: 96a7a1003f2b77e86b06ee2137b5bb9a65a6ca0968095bc5fe9f2f90be38556a
+  preflight_summary_sample:
+    patch_lifecycle:
+      warning: bounded_run_preflight_defer_to_stage00_review
+      requested_scope_key: patch_lifecycle
+      status: PREFLIGHT_DEFER_TO_STAGE00_REVIEW
+      recommendation: defer_to_stage00_backlog_review
+      new_bounded_run_recommended_now: false
+      matching_open_entry_count: 4
+      open_new_run_authorized_by_default: false
+      recommended_entry_decision: partition_refresh_preferred_or_open_new_run_blocked
+  blocking_findings: []
+  result_summary:
+    bounded_preflight_module_created: true
+    engine_imports_bounded_preflight_module: true
+    engine_defines_bounded_preflight_functions: false
+    patch_lifecycle_preflight_status: PREFLIGHT_DEFER_TO_STAGE00_REVIEW
+    patch_lifecycle_matching_open_entry_count: 4
+    patch_lifecycle_open_authorized_by_default: false
+    official_command_outputs_human_review: true
+    engine_outputs_raw_launcher_without_human_review: true
+    tmp_wrapper_outputs_human_review: true
+    raw_overlay_available_with_flag: true
+    recommended_next_phase: PHASE_28D4
+    blocking_finding_count: 0
