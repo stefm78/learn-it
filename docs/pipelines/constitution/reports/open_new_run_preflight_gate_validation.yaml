@@ -1,0 +1,73 @@
+open_new_run_preflight_gate_validation:
+  schema_version: '0.1'
+  generated_at: '2026-04-29T09:16:44Z'
+  status: PASS
+  purpose: Validate that OPEN_NEW_RUN respects bounded-run preflight and does not authorize a backlog-driven run by default
+    when preflight is PREFLIGHT_DEFER_TO_STAGE00_REVIEW.
+  mutation_policy:
+    entry_action: read_only
+    bounded_run_preflight_report: read_only
+    runs_index: read_only
+    policy_yaml: not_read
+    decisions_yaml: not_read
+    scope_catalog: not_read
+    governance_backlog_yaml: not_read
+    cores: not_read
+    report: write_only_output
+  inputs:
+  - ref: docs/pipelines/constitution/entry_actions/OPEN_NEW_RUN.action.yaml
+    sha256: 0b77aa6c5deb9e755ae0d33d48f9a097fd6e016dd36862e6f98f0a895529bad6
+  - ref: docs/pipelines/constitution/reports/bounded_run_preflight_report.yaml
+    sha256: 27f6fdb68fc8f78c863894cb394db9d6ae9a69008c8a0c5342fcb86b9978ef7e
+  - ref: docs/pipelines/constitution/runs/index.yaml
+    sha256: 62520152fd7757ff175af3d409152de1fcbef74e83de129bd0053488d103aae5
+  evaluated_contract:
+    action_id: OPEN_NEW_RUN
+    action_kind: entry_resolution
+    allowed_reads_contains_preflight_report: true
+    required_preconditions_present:
+    - bounded_run_preflight_must_be_non_mutating
+    - bounded_run_preflight_required_when_backlog_signal_impacts_target_scope
+    - no_active_run_required_for_recommended_default
+    - scope_key_must_be_published
+    - scope_maturity_must_be_available_for_run
+    allowed_entry_decision_values:
+    - open_new_run_authorized
+    - open_new_run_blocked
+    - open_new_run_requires_preflight
+    - partition_refresh_preferred
+    stop_after_decision: true
+    defer_rule_present: true
+    ready_rule_requires_human_confirmation: true
+    missing_or_blocked_rule_present: true
+    preflight_behavior_requires_human_override_on_defer: true
+    preflight_behavior_preserves_status_and_recommendation: true
+  current_preflight:
+    requested_scope_key: patch_lifecycle
+    status: PREFLIGHT_DEFER_TO_STAGE00_REVIEW
+    decision_status: PREFLIGHT_DEFER_TO_STAGE00_REVIEW
+    recommendation: defer_to_stage00_backlog_review
+    new_bounded_run_recommended_now: false
+    matching_open_entry_count: 4
+    open_entries_all_scopes: 4
+    active_run_count_from_preflight: 0
+    active_run_count_from_runs_index: 0
+    non_mutating_preflight_confirmed: true
+  evaluated_default_entry_decision:
+    preflight_status: PREFLIGHT_DEFER_TO_STAGE00_REVIEW
+    open_new_run_authorized_by_default: false
+    open_new_run_authorizable_after_human_confirmation: false
+    recommended_entry_decision: partition_refresh_preferred_or_open_new_run_blocked
+    next_best_action: PARTITION_REFRESH_OR_STOP
+    human_override_required_to_authorize: true
+    reason: DEFER status is not a run-opening authorization. It requires STAGE_00 review or explicit human override.
+  blocking_findings: []
+  warnings: []
+  result_summary:
+    open_new_run_authorized_by_default: false
+    preflight_status: PREFLIGHT_DEFER_TO_STAGE00_REVIEW
+    recommended_entry_decision: partition_refresh_preferred_or_open_new_run_blocked
+    human_override_required_to_authorize: true
+    no_active_run_confirmed: true
+    blocking_finding_count: 0
+    warning_count: 0
