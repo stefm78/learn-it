@@ -1,0 +1,121 @@
+pipeline_launcher_with_signals_validation:
+  schema_version: '0.1'
+  generated_at: '2026-04-29T11:43:20Z'
+  status: PASS
+  phase_id: PHASE_27B
+  purpose: Provide a non-invasive launcher wrapper that appends pipeline signal overlay to tmp/pipeline_launcher.py output.
+  mutation_policy:
+    tmp_pipeline_launcher: not_modified
+    wrapper: added
+    overlay_module: added
+    signals_yaml: not_modified
+    pipeline_md: not_modified
+    state_yaml: not_modified
+    run_materialization: not_performed
+  inputs:
+  - ref: tmp/pipeline_launcher.py
+    sha256: 6e2369baffaa1a0a0c2ac8979045c05dc83a79cc3e89954b63444300b1426e25
+  - ref: docs/patcher/shared/pipeline_launcher_with_signals.py
+    sha256: c3026343d887d87da57065506eaa3ef841b19d8e788cb179063daa4d58dadb1f
+  - ref: docs/patcher/shared/learnit_launcher/overlay.py
+    sha256: 438c34eda496e89d31a719ace60bc08e63394b28f94a8609a6779d23a947467d
+  - ref: docs/patcher/shared/learnit_launcher/pipeline_signals.py
+    sha256: 263b1de59f551d49e4582f1748d65bb02f3ca32315086fe8b9b23a583c136105
+  overlay:
+    schema_version: '0.1'
+    source: docs/pipelines/<pipeline_id>/signals.yaml
+    status: attention
+    recommended_default_hint: review_pipeline_signals
+    signal_summary: &id001
+      has_attention_signals: true
+      attention_pipeline_count: 1
+      recommended_default_hint: review_pipeline_signals
+      run_opening_authorized_by_signals: false
+      attention_slots:
+      - pipeline_id: constitution
+        signals_path: C:/Users/Stef/dev/learn-it/docs/pipelines/constitution/signals.yaml
+        provider: implemented
+        status: attention
+        has_attention_signals: true
+        attention_count: 1
+        run_opening_authorized_by_signals: false
+        signals:
+        - id: backlog
+          status: attention
+          summary: 4 open entries requiring STAGE_00 review
+          scope_key: patch_lifecycle
+          recommended_action: STAGE_00_SCOPE_PARTITION_REVIEW_AND_REGEN
+          recommended_mode: run_candidate_preflight
+          run_opening_authorized_by_signal: false
+    action_menu_addition:
+      key: review_pipeline_signals
+      label: Review pipeline attention signals before opening a new run
+      available: true
+      recommended: true
+      pipeline_signals: *id001
+    next_best_actions_addition:
+      review_pipeline_signals:
+        status: attention_review_available
+        meaning: A pipeline attention signal exists; review it before deciding whether to open a new run.
+        pipeline_signals: *id001
+        run_opening_authorized_by_signals: false
+        run_materialization_authorized_by_signals: false
+    open_new_run_prompt_binding_addition:
+      pipeline_signals: status=attention signals=[pipeline=constitution provider=implemented id=backlog status=attention scope=patch_lifecycle
+        action=STAGE_00_SCOPE_PARTITION_REVIEW_AND_REGEN mode=run_candidate_preflight summary=4 open entries requiring STAGE_00
+        review run_opening_authorized_by_signal=false]
+      pipeline_signals_handling: attention_signal_must_be_acknowledged; if signal scope matches target_scope_key, preflight_or_explicit_human_override_required;
+        if signal scope differs from target_scope_key, warn_human_and_state_intentional_non_treatment
+    launcher_authorizes_run_from_signals: false
+  tmp_launcher_runtime:
+    status: PASS
+    stdout_excerpt: "PIPELINE_REGISTRY_STATE:\npipelines:\n- pipeline_id: constitution\n  path: docs/pipelines/constitution/pipeline.md\n\
+      \  goal: challenger les Core, synthétiser un patch, valider et préparer la promotion\n  canonical_state: docs/pipelines/constitution/state.yaml\n\
+      - pipeline_id: release\n  path: docs/pipelines/release/pipeline.md\n  goal: synchroniser versions internes, références\
+      \ inter-Core et notes de release\n  canonical_state: docs/pipelines/release/state.yaml\n- pipeline_id: migration\n \
+      \ path: docs/pipelines/migration/pipeline.md\n  goal: migrations structurelles ou de format sur les Core, prompts ou\
+      \ patchers\n  canonical_state: docs/pipelines/migration/state.yaml\n- pipeline_id: governance\n  path: docs/pipelines/governance/pipeline.md\n\
+      \  goal: maintenir la cohérence opératoire du repo, des registres, des pipelines, des\n    chemins canoniques et de\
+      \ la séparation operating / release / legacy\n  canonical_state: docs/pipelines/governance/state.yaml\n\nPIPELINE_LAUNCHER_STATE:\n\
+      pipeline_id: constitution\nai_protocol_present: true\nactive_runs_count: 0\nactive_runs: []\nclosed_runs_count: 5\n\
+      published_scopes: &id004\n- scope_key: knowledge_and_design\n  scope_id: CONSTITUTION_SCOPE_KNOWLEDGE_AND_DESIGN\n \
+      \ maturity_score: 22\n  maturity_score_max: 24\n  maturity_axes_count: 6\n  maturity_level: L4_strong\n  maturity_available_for_run:\
+      \ true\n  maturity_gate_reason: ''\n  governance_backlog_signal:\n    warning: none\n    direct_open_count: 0\n    related_open_count:\
+      \ 0\n    open_entry_ids: []\n    open_types: {}\n  bound"
+    stderr_excerpt: ''
+  wrapper_runtime:
+    status: PASS
+    stdout_excerpt: "PIPELINE_REGISTRY_STATE:\npipelines:\n- pipeline_id: constitution\n  path: docs/pipelines/constitution/pipeline.md\n\
+      \  goal: challenger les Core, synthétiser un patch, valider et préparer la promotion\n  canonical_state: docs/pipelines/constitution/state.yaml\n\
+      - pipeline_id: release\n  path: docs/pipelines/release/pipeline.md\n  goal: synchroniser versions internes, références\
+      \ inter-Core et notes de release\n  canonical_state: docs/pipelines/release/state.yaml\n- pipeline_id: migration\n \
+      \ path: docs/pipelines/migration/pipeline.md\n  goal: migrations structurelles ou de format sur les Core, prompts ou\
+      \ patchers\n  canonical_state: docs/pipelines/migration/state.yaml\n- pipeline_id: governance\n  path: docs/pipelines/governance/pipeline.md\n\
+      \  goal: maintenir la cohérence opératoire du repo, des registres, des pipelines, des\n    chemins canoniques et de\
+      \ la séparation operating / release / legacy\n  canonical_state: docs/pipelines/governance/state.yaml\n\nPIPELINE_LAUNCHER_STATE:\n\
+      pipeline_id: constitution\nai_protocol_present: true\nactive_runs_count: 0\nactive_runs: []\nclosed_runs_count: 5\n\
+      published_scopes: &id004\n- scope_key: knowledge_and_design\n  scope_id: CONSTITUTION_SCOPE_KNOWLEDGE_AND_DESIGN\n \
+      \ maturity_score: 22\n  maturity_score_max: 24\n  maturity_axes_count: 6\n  maturity_level: L4_strong\n  maturity_available_for_run:\
+      \ true\n  maturity_gate_reason: ''\n  governance_backlog_signal:\n    warning: none\n    direct_open_count: 0\n    related_open_count:\
+      \ 0\n    open_entry_ids: []\n    open_types: {}\n  bounded_run_preflight_signal:\n    warning: none\n    requested_scope_key:\
+      \ ''\n    status: ''\n    recommendation: ''\n    new_bounded_run_recommended_now: false\n    matching_open_entry_count:\
+      \ 0\n    open_new_run_authorized_by_default: false\n    recommended_entry_decision: ''\n- scope_key: mastery_evaluation\n\
+      \  scope_id: CONSTITUTION_SCOPE_MASTERY_EVALUATION\n  maturity_score: 22\n  maturity_score_max: 24\n  maturity_axes_count:\
+      \ 6\n  maturity_level: L4_strong\n  maturity_available_for_run: true\n  maturity_gate_reason: ''\n  governance_backlog_signal:\n\
+      \    warning: none\n    direct_open_count: 0\n    related_open_count: 0\n    open_entry_ids: []\n    open_types: {}\n\
+      \  bounded_run_preflight_signal:\n    warning: none\n    requested_scope_key: ''\n    status: ''\n    recommendation:\
+      \ ''\n    new_bounded_run_recommended_now: false\n    matching_open_entry_count: 0\n    open_new_run_authorized_by_default:\
+      \ false\n    recommended_entry_decision: ''\n- scope_key: learner_state\n  scope_id: CONSTITUTION_SCOPE_LEARNER_STATE\n\
+      \  maturity_score: 19\n  maturity_score_max: 24\n  maturity_axes_count: 6\n  maturity_level: L3_operational\n  maturity_available_for_run:\
+      \ true\n  maturity_gate_reason: ''\n  governance_backlog_signal: &id002\n    warning: open_governance_backlog_entries\n\
+      \    direct_open_count: 0\n    related_open_count: 1\n    open_entry_ids:\n    - GB_2026_04_27_PATCH_LIFECYCLE_R01_GBC_PATCH_LIFECYCLE_ESCALATION_BOUNDARY_R01\n\
+      \    open_types:\n      scope_extension_needed: 1\n  bounded_run_preflight_signal:\n    warning: none\n    re"
+    stderr_excerpt: ''
+  blocking_findings: []
+  result_summary:
+    has_attention_signals: true
+    recommended_default_hint: review_pipeline_signals
+    wrapper_appends_pipeline_signals_overlay: true
+    launcher_authorizes_run_from_signals: false
+    tmp_pipeline_launcher_behavior_changed: false
+    blocking_finding_count: 0
