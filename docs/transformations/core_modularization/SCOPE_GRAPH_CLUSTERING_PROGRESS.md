@@ -38,8 +38,8 @@ scope_modularization_post_pilot:
   status: paused_cleanly
   active_pipeline_run: none
   new_bounded_run_opened_now: false
-  last_completed_phase: PHASE_27B
-  last_completed_phase_label: launcher_pipeline_signals_overlay_wrapper
+  last_completed_phase: PHASE_27C
+  last_completed_phase_label: rename_to_pipeline_launcher
 ```
 
 ## What is complete
@@ -90,6 +90,7 @@ completed:
       - PHASE_26 minimal_pipeline_signals_contract
       - PHASE_27A launcher_modularization_bootstrap
       - PHASE_27B launcher_pipeline_signals_overlay_wrapper
+      - PHASE_27C rename_to_pipeline_launcher
 ```
 
 ## Current pipeline position
@@ -127,6 +128,8 @@ open_new_run_gate:
     constitution_backlog_signal_status: attention
     constitution_backlog_signal_scope: patch_lifecycle
   launcher_modular_runtime:
+    package: docs/patcher/shared/pipeline_launcher/
+    naming_status: corrected_to_pipeline_launcher
     modularization_report: docs/registry/reports/pipeline_launcher_modularization_validation.yaml
     modularization_status: PASS
     overlay_wrapper: docs/patcher/shared/pipeline_launcher_with_signals.py
@@ -281,6 +284,24 @@ option_G_launcher_modular_runtime_and_signals_overlay:
   tmp_pipeline_launcher_patch: none
   launcher_authorizes_run_from_signals: false
   recommended_default_hint_when_attention: review_pipeline_signals
+
+option_H_pipeline_launcher_naming_closeout:
+  status: done
+  completed_phase: PHASE_27C
+  action: rename launcher runtime from learnit_launcher to pipeline_launcher
+  artifacts:
+    - docs/patcher/shared/pipeline_launcher/
+    - docs/patcher/shared/validate_pipeline_launcher.py
+  reports:
+    - docs/registry/reports/pipeline_launcher_modularization_validation.yaml
+    - docs/registry/reports/pipeline_launcher_with_signals_validation.yaml
+  removed_names:
+    - docs/patcher/shared/learnit_launcher/
+    - docs/patcher/shared/validate_learnit_launcher.py
+    - docs/registry/reports/learnit_launcher_modularization_validation.yaml
+  report_status: PASS
+  tmp_pipeline_launcher_patch: none
+  launcher_authorizes_run_from_signals: false
 ```
 
 ## Guardrails

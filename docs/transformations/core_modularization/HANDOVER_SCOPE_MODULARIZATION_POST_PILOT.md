@@ -16,7 +16,7 @@ current_phase:
 
 This handover summarizes the current state of the `core_modularization` / `scope graph clustering`
 work after the bounded pilot run, post-pilot control-plane phases, bounded-run preflight
-integration, active-document compaction, OPEN_NEW_RUN preflight gate validation, launcher preflight display hardening, launcher new-run semantics clarification, minimal pipeline signals contracts, and launcher signals overlay modularization.
+integration, active-document compaction, OPEN_NEW_RUN preflight gate validation, launcher preflight display hardening, launcher new-run semantics clarification, minimal pipeline signals contracts, launcher signals overlay modularization, and pipeline launcher naming correction.
 
 No Constitution pipeline run is currently open.
 
@@ -35,8 +35,9 @@ scope_modularization:
   last_completed_pipeline_signals_phase: PHASE_26
   last_completed_launcher_modularization_phase: PHASE_27A
   last_completed_launcher_signals_overlay_phase: PHASE_27B
-  last_completed_phase: PHASE_27B
-  last_completed_phase_label: launcher_pipeline_signals_overlay_wrapper
+  last_completed_launcher_naming_phase: PHASE_27C
+  last_completed_phase: PHASE_27C
+  last_completed_phase_label: rename_to_pipeline_launcher
   current_recommendation: do_not_open_new_bounded_run_now
 ```
 
@@ -111,8 +112,8 @@ governance_backlog_exported: true
 
 This was a real Constitution pipeline run.
 
-The later PHASE_14 through PHASE_27B work was control-plane, governance, tooling,
-validation, launcher hardening, launcher semantics clarification, minimal pipeline signals contracts, launcher modularization, launcher signals overlay, or documentation work. It was not another full stage 01 → 09 pipeline run.
+The later PHASE_14 through PHASE_27C work was control-plane, governance, tooling,
+validation, launcher hardening, launcher semantics clarification, minimal pipeline signals contracts, launcher modularization, launcher signals overlay, naming correction, or documentation work. It was not another full stage 01 → 09 pipeline run.
 
 ### 3. Governance backlog integration
 
@@ -431,6 +432,25 @@ python docs/patcher/shared/pipeline_launcher_with_signals.py
 The wrapper appends `PIPELINE_SIGNALS_OVERLAY` after the existing launcher output. It is
 non-invasive: the existing `tmp/pipeline_launcher.py` remains unchanged.
 
+### 14. Pipeline launcher naming correction
+
+PHASE_27C corrected the runtime naming from `learnit_launcher` to `pipeline_launcher`.
+
+```yaml
+PHASE_27C:
+  status: done
+  action: rename_to_pipeline_launcher
+  package: docs/patcher/shared/pipeline_launcher/
+  validator: docs/patcher/shared/validate_pipeline_launcher.py
+  modularization_report: docs/registry/reports/pipeline_launcher_modularization_validation.yaml
+  overlay_report: docs/registry/reports/pipeline_launcher_with_signals_validation.yaml
+  report_status: PASS
+  tmp_pipeline_launcher_patch: none
+```
+
+The corrected name reflects the actual scope: this is a pipeline launcher runtime, not a
+global Learn-it application launcher.
+
 ## Remaining open backlog entries
 
 Four reviewed backlog entries remain open intentionally:
@@ -603,6 +623,20 @@ PHASE_27B:
   recommended_command: python docs/patcher/shared/pipeline_launcher_with_signals.py
 ```
 
+### Option H — Pipeline launcher naming correction
+
+Completed in PHASE_27C.
+
+```yaml
+PHASE_27C:
+  status: done
+  action: rename_to_pipeline_launcher
+  package: docs/patcher/shared/pipeline_launcher/
+  validator: docs/patcher/shared/validate_pipeline_launcher.py
+  report: docs/registry/reports/pipeline_launcher_modularization_validation.yaml
+  tmp_pipeline_launcher_patch: none
+```
+
 Next default remains Option A — stop here / keep NO_ACTIVE_PHASE.
 
 ## Operational checks for resuming later
@@ -680,13 +714,14 @@ Read first:
 Important state:
 - The serious bounded pilot run was CONSTITUTION_RUN_2026_04_27_PATCH_LIFECYCLE_R01.
 - It completed and promoted CORE_RELEASE_2026_04_28_R01.
-- PHASE_14 through PHASE_27B were post-pilot control-plane, governance, tooling, validation, launcher hardening, launcher semantics clarification, minimal pipeline signals contracts, launcher modularization, launcher signals overlay, or documentation work, not new full pipeline runs.
+- PHASE_14 through PHASE_27C were post-pilot control-plane, governance, tooling, validation, launcher hardening, launcher semantics clarification, minimal pipeline signals contracts, launcher modularization, launcher signals overlay, naming correction, or documentation work, not new full pipeline runs.
 - PHASE_22 integrated bounded-run preflight into STAGE_00 and OPEN_NEW_RUN.
 - PHASE_23B validated that OPEN_NEW_RUN does not authorize a backlog-driven run by default when preflight is PREFLIGHT_DEFER_TO_STAGE00_REVIEW.
 - PHASE_24 surfaced the bounded-run preflight signal in tmp/pipeline_launcher.py.
 - PHASE_25 clarified that next_best_actions.new_run means entry-resolution availability, not run authorization or run materialization.
 - PHASE_26 added minimal signals.yaml contracts for all registry pipelines; Constitution exposes backlog as an attention signal.
-- PHASE_27A/27B added a modular launcher runtime and a non-invasive pipeline signals overlay wrapper.
+- PHASE_27A/27B added a modular pipeline launcher runtime and a non-invasive pipeline signals overlay wrapper.
+- PHASE_27C corrected the runtime name from learnit_launcher to pipeline_launcher.
 - Current bounded-run preflight status for patch_lifecycle is PREFLIGHT_DEFER_TO_STAGE00_REVIEW.
 - Four patch_lifecycle backlog entries remain open intentionally.
 - Do not mutate policy.yaml, decisions.yaml, scope catalog, or governance_backlog.yaml unless a new explicit phase/run decision is made.
