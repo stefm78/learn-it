@@ -1,0 +1,37 @@
+pipeline_launcher_consolidation_extraction_validation:
+  schema_version: '0.1'
+  generated_at: '2026-04-29T14:03:27Z'
+  status: PASS
+  phase_id: PHASE_28D6
+  purpose: Extract consolidation and anomaly helpers from engine.py into consolidation.py.
+  mutation_policy:
+    official_command: preserved
+    internal_engine: consolidation_helpers_extracted
+    tmp_pipeline_launcher: compatibility_wrapper_preserved
+    signals_yaml: not_modified
+    pipeline_md: not_modified
+    state_yaml: not_modified
+    run_materialization: not_performed
+  inputs:
+  - ref: docs/patcher/shared/pipeline_launcher/engine.py
+    sha256: d39734c96e3eca3e448a2ac0236b03c823ddcf067945c48c0b26a3d82f85397f
+  - ref: docs/patcher/shared/pipeline_launcher/consolidation.py
+    sha256: be7b311d659c7636eb0d51ffbb8d723e7cb9e50161d2b16d8a0b1d56d789adb9
+  - ref: docs/patcher/shared/pipeline_launcher/cli.py
+    sha256: aa4e6244ee1f7ad406a145121b57d34ae5e8d952801e4d42751e48f031a3f8db
+  - ref: tmp/pipeline_launcher.py
+    sha256: 96a7a1003f2b77e86b06ee2137b5bb9a65a6ca0968095bc5fe9f2f90be38556a
+  bootstrap_command_sample: python docs/patcher/shared/update_run_tracking.py --pipeline constitution --run-id CONSTITUTION_RUN_TEST
+    --stage-id STAGE_01_CHALLENGE --stage-status in_progress --run-status active --summary "manual recovery from run_status=blocked"
+  blocking_findings: []
+  result_summary:
+    consolidation_module_created: true
+    engine_imports_consolidation_module: true
+    engine_defines_consolidation_helpers: false
+    bootstrap_command_contains_update_run_tracking: true
+    official_command_outputs_human_review: true
+    engine_outputs_raw_launcher_without_human_review: true
+    tmp_wrapper_outputs_human_review: true
+    raw_overlay_available_with_flag: true
+    recommended_next_phase: PHASE_28D7
+    blocking_finding_count: 0
