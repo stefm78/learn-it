@@ -1,6 +1,6 @@
 pipeline_launcher_bounded_preflight_extraction_validation:
   schema_version: '0.1'
-  generated_at: '2026-04-29T13:48:56Z'
+  generated_at: '2026-04-29T13:51:40Z'
   status: PASS
   phase_id: PHASE_28D3
   purpose: Extract bounded-run preflight launcher helpers from engine.py into bounded_preflight.py.
@@ -14,7 +14,7 @@ pipeline_launcher_bounded_preflight_extraction_validation:
     run_materialization: not_performed
   inputs:
   - ref: docs/patcher/shared/pipeline_launcher/engine.py
-    sha256: 8d18609307e8985dc876f66ab5ab7f7bbba218829b63251f927198ca52d5cdf1
+    sha256: 18d0ca6fd7f59a8f49a66ba598192361c2d0c33bd473f6a2df5bdac90d8981cc
   - ref: docs/patcher/shared/pipeline_launcher/bounded_preflight.py
     sha256: 2ea2c26497a115df646b82c21b5b9d8099af2da23a3d29312afe65f2482eec02
   - ref: docs/patcher/shared/pipeline_launcher/cli.py
