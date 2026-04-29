@@ -24,11 +24,15 @@ open follow-ups, and historical design notes.
 
 For a human or AI resuming the transformation, read in this order:
 
-1. `SCOPE_GRAPH_CLUSTERING_PROGRESS.md`
-2. `SCOPE_GRAPH_CLUSTERING_APPROACH.md`
-3. `REFERENTIEL_LINK_EXTERNAL_READ_ONLY_TREATMENT.md`
-4. `POST_PILOT_PATCH_LIFECYCLE_BACKLOG_TRIAGE.md`
-5. Active J-files only if needed:
+1. `SCOPE_GRAPH_CLUSTERING_PROGRESS.md` — compact current state and resume options
+2. `HANDOVER_SCOPE_MODULARIZATION_POST_PILOT.md` — standalone handover
+3. `SCOPE_GRAPH_CLUSTERING_APPROACH.md` — compact implemented doctrine
+4. `REFERENTIEL_LINK_EXTERNAL_READ_ONLY_TREATMENT.md`
+5. `POST_PILOT_PATCH_LIFECYCLE_BACKLOG_TRIAGE.md`
+6. Full historical snapshots only if deep traceability is needed:
+   - `archive/full_snapshots/SCOPE_GRAPH_CLUSTERING_PROGRESS_FULL_2026_04_29.md`
+   - `archive/full_snapshots/SCOPE_GRAPH_CLUSTERING_APPROACH_FULL_2026_04_29.md`
+7. Active J-files only if needed:
    - `J1_SCOPED_RUN_CONTRACT.md`
    - `J1_CONSTITUTION_PIPELINE_MINIMAL_DELTA.md`
    - `J5_PARALLEL_SCOPED_RUNS_AND_CANONICAL_CONSOLIDATION.md`
