@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 from __future__ import annotations
 
+import argparse
 from pathlib import Path
 import subprocess
 import sys
@@ -17,13 +18,34 @@ from docs.patcher.shared.pipeline_launcher.overlay import (
 )
 
 
-def main() -> int:
-    raw_overlay = "--raw-signals-overlay" in sys.argv[1:]
-    launcher_args = [arg for arg in sys.argv[1:] if arg != "--raw-signals-overlay"]
+def parse_args(argv: list[str]) -> tuple[argparse.Namespace, list[str]]:
+    parser = argparse.ArgumentParser(
+        prog="pipeline_launcher_with_signals.py",
+        description=(
+            "Run the experimental pipeline launcher and append a human-readable "
+            "pipeline signals review block."
+        ),
+        epilog=(
+            "Unknown options are forwarded to tmp/pipeline_launcher.py. "
+            "Use --launcher-help to display the underlying launcher help."
+        ),
+    )
+    parser.add_argument(
+        "--raw-signals-overlay",
+        action="store_true",
+        help="also print the raw machine-readable PIPELINE_SIGNALS_OVERLAY_RAW block",
+    )
+    parser.add_argument(
+        "--launcher-help",
+        action="store_true",
+        help="show help for the underlying tmp/pipeline_launcher.py and exit",
+    )
+    return parser.parse_known_args(argv)
 
+
+def run_underlying_launcher(launcher_args: list[str]) -> subprocess.CompletedProcess[str]:
     launcher = REPO_ROOT / "tmp" / "pipeline_launcher.py"
-
-    completed = subprocess.run(
+    return subprocess.run(
         [sys.executable, str(launcher), *launcher_args],
         cwd=str(REPO_ROOT),
         check=False,
@@ -31,14 +53,15 @@ def main() -> int:
         capture_output=True,
     )
 
+
+def print_completed_output(completed: subprocess.CompletedProcess[str]) -> None:
     if completed.stdout:
         print(completed.stdout, end="")
     if completed.stderr:
         print(completed.stderr, end="", file=sys.stderr)
 
-    if completed.returncode != 0:
-        return completed.returncode
 
+def print_human_review() -> None:
     review = build_pipeline_signals_review(REPO_ROOT)["pipeline_signals_review"]
 
     print()
@@ -64,19 +87,40 @@ def main() -> int:
     print(review["recommended_prompt"])
     print("---")
 
-    if raw_overlay:
-        overlay = build_pipeline_signals_overlay(REPO_ROOT)
-        print()
-        print("PIPELINE_SIGNALS_OVERLAY_RAW:")
-        print(
-            yaml.safe_dump(
-                overlay["pipeline_signals_overlay"],
-                allow_unicode=True,
-                sort_keys=False,
-                width=120,
-            ),
-            end="",
-        )
+
+def print_raw_overlay() -> None:
+    overlay = build_pipeline_signals_overlay(REPO_ROOT)
+    print()
+    print("PIPELINE_SIGNALS_OVERLAY_RAW:")
+    print(
+        yaml.safe_dump(
+            overlay["pipeline_signals_overlay"],
+            allow_unicode=True,
+            sort_keys=False,
+            width=120,
+        ),
+        end="",
+    )
+
+
+def main(argv: list[str] | None = None) -> int:
+    args, launcher_args = parse_args(sys.argv[1:] if argv is None else argv)
+
+    if args.launcher_help:
+        completed = run_underlying_launcher(["-h"])
+        print_completed_output(completed)
+        return completed.returncode
+
+    completed = run_underlying_launcher(launcher_args)
+    print_completed_output(completed)
+
+    if completed.returncode != 0:
+        return completed.returncode
+
+    print_human_review()
+
+    if args.raw_signals_overlay:
+        print_raw_overlay()
 
     return 0
 

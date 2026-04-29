@@ -1,13 +1,13 @@
 pipeline_launcher_with_signals_validation:
-  schema_version: '0.2'
-  generated_at: '2026-04-29T12:16:34Z'
+  schema_version: '0.3'
+  generated_at: '2026-04-29T12:20:49Z'
   status: PASS
-  phase_id: PHASE_27D
-  purpose: Make the pipeline signals wrapper human-readable and provide a copyable review prompt by default.
+  phase_id: PHASE_27E
+  purpose: Expose wrapper-specific CLI help while preserving human-readable pipeline signal review output.
   mutation_policy:
     tmp_pipeline_launcher: not_modified
     wrapper: updated
-    overlay_module: updated
+    overlay_module: not_modified
     signals_yaml: not_modified
     pipeline_md: not_modified
     state_yaml: not_modified
@@ -16,7 +16,7 @@ pipeline_launcher_with_signals_validation:
   - ref: tmp/pipeline_launcher.py
     sha256: 6e2369baffaa1a0a0c2ac8979045c05dc83a79cc3e89954b63444300b1426e25
   - ref: docs/patcher/shared/pipeline_launcher_with_signals.py
-    sha256: 2a6c6fd0e74f53682d520b16fd3fc0db16149307991c8e8bfa9b0676b0637cf6
+    sha256: e0c9b7dfb6046905de250da89791b3abe9506e53b7f7b85f7efd933d04b9f033
   - ref: docs/patcher/shared/pipeline_launcher/overlay.py
     sha256: 005012e324a9c38b67dd092d7045d037d7809e6f92ad62b7557fe3da9f5f5c48
   - ref: docs/patcher/shared/pipeline_launcher/pipeline_signals.py
@@ -203,6 +203,21 @@ pipeline_launcher_with_signals_validation:
       \    if signal scope differs from target_scope_key, warn_human_and_state_intentional_non_treatment\nlauncher_authorizes_run_from_signals:\
       \ false\n"
     stderr_excerpt: ''
+  wrapper_help_runtime:
+    status: PASS
+    stdout: "usage: pipeline_launcher_with_signals.py [-h] [--raw-signals-overlay]\n                                     \
+      \    [--launcher-help]\n\nRun the experimental pipeline launcher and append a human-readable pipeline\nsignals review\
+      \ block.\n\noptions:\n  -h, --help            show this help message and exit\n  --raw-signals-overlay\n           \
+      \             also print the raw machine-readable\n                        PIPELINE_SIGNALS_OVERLAY_RAW block\n  --launcher-help\
+      \       show help for the underlying tmp/pipeline_launcher.py\n                        and exit\n\nUnknown options are\
+      \ forwarded to tmp/pipeline_launcher.py. Use --launcher-help\nto display the underlying launcher help.\n"
+    stderr: ''
+  underlying_launcher_help_runtime:
+    status: PASS
+    stdout_excerpt: "usage: pipeline_launcher.py [-h] [--repo-root REPO_ROOT] [--pipeline PIPELINE]\n                    \
+      \        [--branch BRANCH] [--parallel-runs N]\n\noptions:\n  -h, --help            show this help message and exit\n\
+      \  --repo-root REPO_ROOT\n  --pipeline PIPELINE\n  --branch BRANCH\n  --parallel-runs N\n"
+    stderr_excerpt: ''
   blocking_findings: []
   result_summary:
     has_attention_signals: true
@@ -210,6 +225,8 @@ pipeline_launcher_with_signals_validation:
     wrapper_outputs_human_review: true
     wrapper_outputs_copyable_prompt: true
     raw_overlay_available_with_flag: true
+    wrapper_help_exposes_raw_overlay_flag: true
+    wrapper_help_exposes_launcher_help_flag: true
     launcher_authorizes_run_from_signals: false
     tmp_pipeline_launcher_behavior_changed: false
     blocking_finding_count: 0

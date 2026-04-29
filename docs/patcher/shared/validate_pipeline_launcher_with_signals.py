@@ -65,6 +65,10 @@ def build_report() -> dict[str, Any]:
     tmp_rc, tmp_stdout, tmp_stderr = run_command([sys.executable, str(paths["tmp_launcher"])])
     wrapper_rc, wrapper_stdout, wrapper_stderr = run_command([sys.executable, str(paths["wrapper"])])
     raw_rc, raw_stdout, raw_stderr = run_command([sys.executable, str(paths["wrapper"]), "--raw-signals-overlay"])
+    help_rc, help_stdout, help_stderr = run_command([sys.executable, str(paths["wrapper"]), "-h"])
+    launcher_help_rc, launcher_help_stdout, launcher_help_stderr = run_command(
+        [sys.executable, str(paths["wrapper"]), "--launcher-help"]
+    )
 
     if tmp_rc != 0:
         findings.append({"finding_id": "TMP_LAUNCHER_RUNTIME_FAILED", "severity": "blocking", "returncode": tmp_rc})
@@ -75,6 +79,14 @@ def build_report() -> dict[str, Any]:
     if raw_rc != 0:
         findings.append(
             {"finding_id": "SIGNALS_WRAPPER_RAW_RUNTIME_FAILED", "severity": "blocking", "returncode": raw_rc}
+        )
+    if help_rc != 0:
+        findings.append(
+            {"finding_id": "SIGNALS_WRAPPER_HELP_FAILED", "severity": "blocking", "returncode": help_rc}
+        )
+    if launcher_help_rc != 0:
+        findings.append(
+            {"finding_id": "UNDERLYING_LAUNCHER_HELP_FAILED", "severity": "blocking", "returncode": launcher_help_rc}
         )
 
     overlay = build_pipeline_signals_overlay(REPO_ROOT)
@@ -151,17 +163,48 @@ def build_report() -> dict[str, Any]:
             }
         )
 
+    help_required = [
+        "--raw-signals-overlay",
+        "--launcher-help",
+        "Unknown options are forwarded to tmp/pipeline_launcher.py",
+    ]
+    missing_help = [snippet for snippet in help_required if snippet not in help_stdout]
+    if missing_help:
+        findings.append(
+            {
+                "finding_id": "WRAPPER_HELP_MISSING_EXPECTED_OPTIONS",
+                "severity": "blocking",
+                "missing": missing_help,
+            }
+        )
+
+    if "--raw-signals-overlay" in launcher_help_stdout:
+        findings.append(
+            {
+                "finding_id": "UNDERLYING_LAUNCHER_HELP_SHOULD_NOT_INCLUDE_WRAPPER_ONLY_OPTION",
+                "severity": "blocking",
+            }
+        )
+
+    if "--pipeline PIPELINE" not in launcher_help_stdout:
+        findings.append(
+            {
+                "finding_id": "UNDERLYING_LAUNCHER_HELP_NOT_FORWARDED",
+                "severity": "blocking",
+            }
+        )
+
     return {
         "pipeline_launcher_with_signals_validation": {
-            "schema_version": "0.2",
+            "schema_version": "0.3",
             "generated_at": iso_now(),
             "status": "PASS" if not findings else "FAIL",
-            "phase_id": "PHASE_27D",
-            "purpose": "Make the pipeline signals wrapper human-readable and provide a copyable review prompt by default.",
+            "phase_id": "PHASE_27E",
+            "purpose": "Expose wrapper-specific CLI help while preserving human-readable pipeline signal review output.",
             "mutation_policy": {
                 "tmp_pipeline_launcher": "not_modified",
                 "wrapper": "updated",
-                "overlay_module": "updated",
+                "overlay_module": "not_modified",
                 "signals_yaml": "not_modified",
                 "pipeline_md": "not_modified",
                 "state_yaml": "not_modified",
@@ -192,6 +235,16 @@ def build_report() -> dict[str, Any]:
                 "stdout_excerpt": raw_stdout[-2500:],
                 "stderr_excerpt": raw_stderr[:800],
             },
+            "wrapper_help_runtime": {
+                "status": "PASS" if help_rc == 0 else "FAIL",
+                "stdout": help_stdout,
+                "stderr": help_stderr,
+            },
+            "underlying_launcher_help_runtime": {
+                "status": "PASS" if launcher_help_rc == 0 else "FAIL",
+                "stdout_excerpt": launcher_help_stdout[:1800],
+                "stderr_excerpt": launcher_help_stderr[:800],
+            },
             "blocking_findings": findings,
             "result_summary": {
                 "has_attention_signals": summary.get("has_attention_signals"),
@@ -199,6 +252,8 @@ def build_report() -> dict[str, Any]:
                 "wrapper_outputs_human_review": "PIPELINE_SIGNALS_REVIEW:" in wrapper_stdout,
                 "wrapper_outputs_copyable_prompt": "recommended_prompt:" in wrapper_stdout and "n'ouvre pas de run" in wrapper_stdout,
                 "raw_overlay_available_with_flag": "PIPELINE_SIGNALS_OVERLAY_RAW:" in raw_stdout,
+                "wrapper_help_exposes_raw_overlay_flag": "--raw-signals-overlay" in help_stdout,
+                "wrapper_help_exposes_launcher_help_flag": "--launcher-help" in help_stdout,
                 "launcher_authorizes_run_from_signals": False,
                 "tmp_pipeline_launcher_behavior_changed": False,
                 "blocking_finding_count": len(findings),
@@ -224,6 +279,7 @@ def main() -> int:
     print(f"Recommended default hint: {summary['recommended_default_hint']}")
     print(f"Human review output: {summary['wrapper_outputs_human_review']}")
     print(f"Copyable prompt output: {summary['wrapper_outputs_copyable_prompt']}")
+    print(f"Wrapper help exposes raw flag: {summary['wrapper_help_exposes_raw_overlay_flag']}")
     print(f"Blocking findings: {summary['blocking_finding_count']}")
     return 0 if root["status"] == "PASS" else 1
 
