@@ -1,0 +1,123 @@
+bounded_run_preflight_report:
+  schema_version: '0.1'
+  stage_id: STAGE_00_SCOPE_PARTITION_REVIEW_AND_REGEN
+  mode: run_candidate_preflight
+  generated_at: '2026-04-29T08:40:00Z'
+  status: PREFLIGHT_DEFER_TO_STAGE00_REVIEW
+  mutation_policy:
+    runs_index: not_modified
+    governance_backlog_yaml: not_modified
+    policy_yaml: not_modified
+    decisions_yaml: not_modified
+    scope_catalog: not_modified
+    cores: not_modified
+  inputs:
+  - ref: docs/pipelines/constitution/runs/index.yaml
+    sha256: 62520152fd7757ff175af3d409152de1fcbef74e83de129bd0053488d103aae5
+  - ref: docs/pipelines/constitution/reports/governance_backlog_report.yaml
+    sha256: 7390724712424d998c3679429ec403e78e4d8e6318505d17191b745ff5a5ee94
+  - ref: docs/pipelines/constitution/reports/governance_backlog_lifecycle_validation.yaml
+    sha256: 28adee18e603f63bb3e248ee24e7017fbfdf08bc2c3a7fafb16bb7e773226520
+  requested_scope_key: patch_lifecycle
+  active_run_check:
+    active_run_count: 0
+    active_runs: []
+    no_active_run_confirmed: true
+  backlog_signal:
+    matching_open_entry_count: 4
+    matching_counts_by_type:
+      scope_extension_needed: 1
+      scope_gap: 3
+    matching_counts_by_recommended_inclusion:
+      exclude_from_constitution_only_run: 1
+      include_conditionally_after_state_machine_design: 1
+      include_first_if_run_opened: 2
+    lifecycle_validation_status: PASS
+    open_entries_all_scopes: 4
+  decision:
+    status: PREFLIGHT_DEFER_TO_STAGE00_REVIEW
+    recommendation: defer_to_stage00_backlog_review
+    new_bounded_run_recommended_now: false
+    reason: Open backlog entries exist for the requested scope, but they are reviewed design follow-ups rather than urgent
+      pipeline blockers. Do not open a new bounded run now unless a human explicitly overrides the preflight.
+    next_action: keep_backlog_open_with_review_metadata
+    proposed_scope_key_if_later_opened: patch_lifecycle
+    proposed_run_theme_if_later_opened: patch_lifecycle_state_machine_and_priority_lanes
+    included_first_if_later_opened:
+    - GBC_PATCH_LIFECYCLE_FULL_STATE_MACHINE_R01
+    - GBC_PATCH_LIFECYCLE_PRIORITY_QUEUE_R01
+    conditional_if_later_opened:
+    - GBC_PATCH_LIFECYCLE_ESCALATION_BOUNDARY_R01
+    excluded_or_separate_follow_up:
+    - GBC_PATCH_LIFECYCLE_REFERENTIEL_PARAMETER_R01
+  entries:
+  - entry_id: GB_2026_04_27_PATCH_LIFECYCLE_R01_GBC_PATCH_LIFECYCLE_FULL_STATE_MACHINE_R01
+    candidate_id: GBC_PATCH_LIFECYCLE_FULL_STATE_MACHINE_R01
+    title: Decide whether patch_lifecycle needs a canonical patch state machine
+    type: scope_gap
+    scope_key: patch_lifecycle
+    related_scope_keys:
+    - patch_lifecycle
+    stage00_relevant: true
+    recommended_action_from_backlog: Review whether a future patch_lifecycle scope iteration should introduce an explicit
+      patch state model.
+    classification:
+      preflight_class: primary_run_seed
+      recommended_inclusion: include_first_if_run_opened
+      rank: 1
+      rationale: Canonical patch lifecycle state machine is the coherent seed for a future patch_lifecycle design run.
+  - entry_id: GB_2026_04_27_PATCH_LIFECYCLE_R01_GBC_PATCH_LIFECYCLE_PRIORITY_QUEUE_R01
+    candidate_id: GBC_PATCH_LIFECYCLE_PRIORITY_QUEUE_R01
+    title: Decide whether patch serialization requires deterministic priority lanes
+    type: scope_gap
+    scope_key: patch_lifecycle
+    related_scope_keys:
+    - patch_lifecycle
+    stage00_relevant: true
+    recommended_action_from_backlog: Evaluate whether patch queue semantics require deterministic priority lanes, and if so
+      define them through a governed scope update rather than ad hoc patch synthesis.
+    classification:
+      preflight_class: dependent_design_extension
+      recommended_inclusion: include_first_if_run_opened
+      rank: 2
+      rationale: Priority lanes depend naturally on the patch lifecycle state model and fit the same targeted design run.
+  - entry_id: GB_2026_04_27_PATCH_LIFECYCLE_R01_GBC_PATCH_LIFECYCLE_ESCALATION_BOUNDARY_R01
+    candidate_id: GBC_PATCH_LIFECYCLE_ESCALATION_BOUNDARY_R01
+    title: Review broad escalation triggers crossing patch_lifecycle and learner_state/governance
+    type: scope_extension_needed
+    scope_key: patch_lifecycle
+    related_scope_keys:
+    - patch_lifecycle
+    - learner_state
+    - deployment_governance
+    stage00_relevant: true
+    recommended_action_from_backlog: Revisit escalation ownership during scope partition review, decide explicit owners and
+      neighbors, and regenerate scope catalog if boundaries change.
+    classification:
+      preflight_class: conditional_cross_scope_boundary
+      recommended_inclusion: include_conditionally_after_state_machine_design
+      rank: 3
+      rationale: Escalation semantics cross patch_lifecycle, learner_state and deployment_governance; include only if escalation
+        triggers are explicitly in scope.
+  - entry_id: GB_2026_04_27_PATCH_LIFECYCLE_R01_GBC_PATCH_LIFECYCLE_REFERENTIEL_PARAMETER_R01
+    candidate_id: GBC_PATCH_LIFECYCLE_REFERENTIEL_PARAMETER_R01
+    title: Track external_read_only referentiel parameter dependency for patch escalation threshold
+    type: scope_gap
+    scope_key: patch_lifecycle
+    related_scope_keys:
+    - patch_lifecycle
+    stage00_relevant: true
+    recommended_action_from_backlog: Coordinate with the external-read-only referentiel/link follow-up and decide whether
+      the specific parameter should become a concrete external read neighbor or a cross_core_change_request.
+    classification:
+      preflight_class: cross_core_follow_up
+      recommended_inclusion: exclude_from_constitution_only_run
+      rank: 4
+      rationale: Referentiel parameter dependency is cross-core/external-read-only and needs a separate referentiel/link or
+        cross-core contract.
+  guardrails:
+  - This report does not open a run.
+  - Do not mutate policy.yaml or decisions.yaml from preflight.
+  - Do not regenerate the scope catalog from preflight.
+  - Do not close backlog entries from preflight; use the lifecycle validator and an explicit lifecycle patch.
+  - Do not include cross-core referentiel dependencies in a Constitution-only run without a cross-core contract.
