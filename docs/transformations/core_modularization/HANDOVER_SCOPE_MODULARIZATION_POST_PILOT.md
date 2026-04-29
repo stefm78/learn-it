@@ -16,7 +16,7 @@ current_phase:
 
 This handover summarizes the current state of the `core_modularization` / `scope graph clustering`
 work after the bounded pilot run, post-pilot control-plane phases, bounded-run preflight
-integration, active-document compaction, OPEN_NEW_RUN preflight gate validation, launcher preflight display hardening, launcher new-run semantics clarification, minimal pipeline signals contracts, launcher signals overlay modularization, and pipeline launcher naming correction.
+integration, active-document compaction, OPEN_NEW_RUN preflight gate validation, launcher preflight display hardening, launcher new-run semantics clarification, minimal pipeline signals contracts, launcher signals overlay modularization, pipeline launcher naming correction, and pipeline launcher promotion out of tmp.
 
 No Constitution pipeline run is currently open.
 
@@ -36,8 +36,9 @@ scope_modularization:
   last_completed_launcher_modularization_phase: PHASE_27A
   last_completed_launcher_signals_overlay_phase: PHASE_27B
   last_completed_launcher_naming_phase: PHASE_27C
-  last_completed_phase: PHASE_27C
-  last_completed_phase_label: rename_to_pipeline_launcher
+  last_completed_launcher_promotion_phase: PHASE_28C
+  last_completed_phase: PHASE_28C
+  last_completed_phase_label: promote_pipeline_launcher_engine_out_of_tmp
   current_recommendation: do_not_open_new_bounded_run_now
 ```
 
@@ -112,8 +113,8 @@ governance_backlog_exported: true
 
 This was a real Constitution pipeline run.
 
-The later PHASE_14 through PHASE_27C work was control-plane, governance, tooling,
-validation, launcher hardening, launcher semantics clarification, minimal pipeline signals contracts, launcher modularization, launcher signals overlay, naming correction, or documentation work. It was not another full stage 01 → 09 pipeline run.
+The later PHASE_14 through PHASE_28C work was control-plane, governance, tooling,
+validation, launcher hardening, launcher semantics clarification, minimal pipeline signals contracts, launcher modularization, launcher signals overlay, naming correction, launcher promotion, or documentation work. It was not another full stage 01 → 09 pipeline run.
 
 ### 3. Governance backlog integration
 
@@ -451,6 +452,39 @@ PHASE_27C:
 The corrected name reflects the actual scope: this is a pipeline launcher runtime, not a
 global Learn-it application launcher.
 
+### 15. Pipeline launcher promotion out of tmp
+
+PHASE_28A through PHASE_28C promoted the pipeline launcher out of `tmp`.
+
+```yaml
+PHASE_28A:
+  status: done
+  report: docs/registry/reports/pipeline_launcher_promotion_plan.yaml
+  report_status: PASS
+
+PHASE_28B:
+  status: done
+  official_command: python docs/patcher/shared/pipeline_launcher/cli.py
+  report: docs/registry/reports/pipeline_launcher_official_command_validation.yaml
+  report_status: PASS
+
+PHASE_28C:
+  status: done
+  internal_engine: docs/patcher/shared/pipeline_launcher/engine.py
+  tmp_pipeline_launcher_role: compatibility_wrapper
+  report: docs/registry/reports/pipeline_launcher_engine_promotion_validation.yaml
+  report_status: PASS
+```
+
+Recommended human-facing launcher command:
+
+```bash
+python docs/patcher/shared/pipeline_launcher/cli.py
+```
+
+The legacy runtime was copied into `docs/patcher/shared/pipeline_launcher/engine.py`.
+`tmp/pipeline_launcher.py` is now only a compatibility wrapper.
+
 ## Remaining open backlog entries
 
 Four reviewed backlog entries remain open intentionally:
@@ -488,11 +522,18 @@ docs/pipelines/constitution/reports/launcher_preflight_display_validation.yaml
 docs/pipelines/constitution/reports/launcher_new_run_semantics_validation.yaml
 docs/registry/reports/pipeline_signals_validation.yaml
 docs/registry/reports/pipeline_launcher_modularization_validation.yaml
+docs/registry/reports/pipeline_launcher_promotion_plan.yaml
+docs/registry/reports/pipeline_launcher_official_command_validation.yaml
+docs/registry/reports/pipeline_launcher_engine_promotion_validation.yaml
 docs/registry/reports/pipeline_launcher_with_signals_validation.yaml
+docs/patcher/shared/pipeline_launcher/cli.py
+docs/patcher/shared/pipeline_launcher/engine.py
 docs/patcher/shared/pipeline_launcher/pipeline_signals.py
 docs/patcher/shared/pipeline_launcher/overlay.py
 docs/patcher/shared/pipeline_launcher_with_signals.py
 docs/patcher/shared/validate_pipeline_launcher.py
+docs/patcher/shared/validate_pipeline_launcher_official_command.py
+docs/patcher/shared/validate_pipeline_launcher_engine_promotion.py
 docs/patcher/shared/validate_pipeline_launcher_with_signals.py
 docs/pipelines/constitution/signals.yaml
 docs/pipelines/release/signals.yaml
@@ -637,6 +678,27 @@ PHASE_27C:
   tmp_pipeline_launcher_patch: none
 ```
 
+### Option I — Pipeline launcher promotion out of tmp
+
+Completed in PHASE_28C.
+
+```yaml
+PHASE_28A:
+  status: done
+  report: docs/registry/reports/pipeline_launcher_promotion_plan.yaml
+
+PHASE_28B:
+  status: done
+  official_command: python docs/patcher/shared/pipeline_launcher/cli.py
+  report: docs/registry/reports/pipeline_launcher_official_command_validation.yaml
+
+PHASE_28C:
+  status: done
+  internal_engine: docs/patcher/shared/pipeline_launcher/engine.py
+  tmp_pipeline_launcher_role: compatibility_wrapper
+  report: docs/registry/reports/pipeline_launcher_engine_promotion_validation.yaml
+```
+
 Next default remains Option A — stop here / keep NO_ACTIVE_PHASE.
 
 ## Operational checks for resuming later
@@ -661,9 +723,13 @@ python docs/patcher/shared/prepare_bounded_run_preflight.py \
 python docs/patcher/shared/validate_open_new_run_preflight_gate.py \
   --report docs/pipelines/constitution/reports/open_new_run_preflight_gate_validation.yaml
 
+python -m py_compile docs/patcher/shared/pipeline_launcher/cli.py
+python -m py_compile docs/patcher/shared/pipeline_launcher/engine.py
 python -m py_compile tmp/pipeline_launcher.py
 
+python docs/patcher/shared/pipeline_launcher/cli.py
 python tmp/pipeline_launcher.py
+python docs/patcher/shared/pipeline_launcher/engine.py
 
 python docs/patcher/shared/validate_pipeline_signals.py \
   --registry docs/registry/pipelines.md \
@@ -672,9 +738,16 @@ python docs/patcher/shared/validate_pipeline_signals.py \
 python docs/patcher/shared/validate_pipeline_launcher.py \
   --report docs/registry/reports/pipeline_launcher_modularization_validation.yaml
 
+python docs/patcher/shared/validate_pipeline_launcher_official_command.py \
+  --report docs/registry/reports/pipeline_launcher_official_command_validation.yaml
+
+python docs/patcher/shared/validate_pipeline_launcher_engine_promotion.py \
+  --report docs/registry/reports/pipeline_launcher_engine_promotion_validation.yaml
+
 python docs/patcher/shared/validate_pipeline_launcher_with_signals.py \
   --report docs/registry/reports/pipeline_launcher_with_signals_validation.yaml
 
+python docs/patcher/shared/pipeline_launcher/cli.py
 python docs/patcher/shared/pipeline_launcher_with_signals.py
 ```
 
@@ -714,7 +787,7 @@ Read first:
 Important state:
 - The serious bounded pilot run was CONSTITUTION_RUN_2026_04_27_PATCH_LIFECYCLE_R01.
 - It completed and promoted CORE_RELEASE_2026_04_28_R01.
-- PHASE_14 through PHASE_27C were post-pilot control-plane, governance, tooling, validation, launcher hardening, launcher semantics clarification, minimal pipeline signals contracts, launcher modularization, launcher signals overlay, naming correction, or documentation work, not new full pipeline runs.
+- PHASE_14 through PHASE_28C were post-pilot control-plane, governance, tooling, validation, launcher hardening, launcher semantics clarification, minimal pipeline signals contracts, launcher modularization, launcher signals overlay, naming correction, launcher promotion, or documentation work, not new full pipeline runs.
 - PHASE_22 integrated bounded-run preflight into STAGE_00 and OPEN_NEW_RUN.
 - PHASE_23B validated that OPEN_NEW_RUN does not authorize a backlog-driven run by default when preflight is PREFLIGHT_DEFER_TO_STAGE00_REVIEW.
 - PHASE_24 surfaced the bounded-run preflight signal in tmp/pipeline_launcher.py.
@@ -722,6 +795,7 @@ Important state:
 - PHASE_26 added minimal signals.yaml contracts for all registry pipelines; Constitution exposes backlog as an attention signal.
 - PHASE_27A/27B added a modular pipeline launcher runtime and a non-invasive pipeline signals overlay wrapper.
 - PHASE_27C corrected the runtime name from learnit_launcher to pipeline_launcher.
+- PHASE_28A/28B/28C promoted the official command to docs/patcher/shared/pipeline_launcher/cli.py and made tmp/pipeline_launcher.py a compatibility wrapper.
 - Current bounded-run preflight status for patch_lifecycle is PREFLIGHT_DEFER_TO_STAGE00_REVIEW.
 - Four patch_lifecycle backlog entries remain open intentionally.
 - Do not mutate policy.yaml, decisions.yaml, scope catalog, or governance_backlog.yaml unless a new explicit phase/run decision is made.

@@ -38,8 +38,8 @@ scope_modularization_post_pilot:
   status: paused_cleanly
   active_pipeline_run: none
   new_bounded_run_opened_now: false
-  last_completed_phase: PHASE_27C
-  last_completed_phase_label: rename_to_pipeline_launcher
+  last_completed_phase: PHASE_28C
+  last_completed_phase_label: promote_pipeline_launcher_engine_out_of_tmp
 ```
 
 ## What is complete
@@ -91,6 +91,9 @@ completed:
       - PHASE_27A launcher_modularization_bootstrap
       - PHASE_27B launcher_pipeline_signals_overlay_wrapper
       - PHASE_27C rename_to_pipeline_launcher
+      - PHASE_28A pipeline_launcher_promotion_plan
+      - PHASE_28B official_pipeline_launcher_command
+      - PHASE_28C promote_pipeline_launcher_engine_out_of_tmp
 ```
 
 ## Current pipeline position
@@ -130,13 +133,18 @@ open_new_run_gate:
   launcher_modular_runtime:
     package: docs/patcher/shared/pipeline_launcher/
     naming_status: corrected_to_pipeline_launcher
+    official_command: python docs/patcher/shared/pipeline_launcher/cli.py
+    official_module_command: python -m docs.patcher.shared.pipeline_launcher.cli
+    internal_engine: docs/patcher/shared/pipeline_launcher/engine.py
+    tmp_pipeline_launcher_role: compatibility_wrapper
+    compatibility_command: python docs/patcher/shared/pipeline_launcher_with_signals.py
+    promotion_plan_report: docs/registry/reports/pipeline_launcher_promotion_plan.yaml
+    official_command_report: docs/registry/reports/pipeline_launcher_official_command_validation.yaml
+    engine_promotion_report: docs/registry/reports/pipeline_launcher_engine_promotion_validation.yaml
     modularization_report: docs/registry/reports/pipeline_launcher_modularization_validation.yaml
-    modularization_status: PASS
-    overlay_wrapper: docs/patcher/shared/pipeline_launcher_with_signals.py
     overlay_report: docs/registry/reports/pipeline_launcher_with_signals_validation.yaml
-    overlay_status: PASS
+    status: PASS
     recommended_default_hint_when_attention: review_pipeline_signals
-    tmp_pipeline_launcher_modified_by_phase_27: false
   open_new_run_authorized_by_default_when_defer: false
   recommended_entry_decision_when_defer: partition_refresh_preferred_or_open_new_run_blocked
 ```
@@ -175,11 +183,18 @@ docs/pipelines/constitution/reports/launcher_preflight_display_validation.yaml
 docs/pipelines/constitution/reports/launcher_new_run_semantics_validation.yaml
 docs/registry/reports/pipeline_signals_validation.yaml
 docs/registry/reports/pipeline_launcher_modularization_validation.yaml
+docs/registry/reports/pipeline_launcher_promotion_plan.yaml
+docs/registry/reports/pipeline_launcher_official_command_validation.yaml
+docs/registry/reports/pipeline_launcher_engine_promotion_validation.yaml
 docs/registry/reports/pipeline_launcher_with_signals_validation.yaml
+docs/patcher/shared/pipeline_launcher/cli.py
+docs/patcher/shared/pipeline_launcher/engine.py
 docs/patcher/shared/pipeline_launcher/pipeline_signals.py
 docs/patcher/shared/pipeline_launcher/overlay.py
 docs/patcher/shared/pipeline_launcher_with_signals.py
 docs/patcher/shared/validate_pipeline_launcher.py
+docs/patcher/shared/validate_pipeline_launcher_official_command.py
+docs/patcher/shared/validate_pipeline_launcher_engine_promotion.py
 docs/patcher/shared/validate_pipeline_launcher_with_signals.py
 docs/pipelines/constitution/signals.yaml
 docs/pipelines/release/signals.yaml
@@ -301,6 +316,30 @@ option_H_pipeline_launcher_naming_closeout:
     - docs/registry/reports/learnit_launcher_modularization_validation.yaml
   report_status: PASS
   tmp_pipeline_launcher_patch: none
+  launcher_authorizes_run_from_signals: false
+
+option_I_pipeline_launcher_promotion_out_of_tmp:
+  status: done
+  completed_phase: PHASE_28C
+  action: promote pipeline launcher command and move legacy engine out of tmp
+  artifacts:
+    - docs/patcher/shared/pipeline_launcher/cli.py
+    - docs/patcher/shared/pipeline_launcher/engine.py
+    - tmp/pipeline_launcher.py
+    - docs/patcher/shared/pipeline_launcher_with_signals.py
+    - docs/patcher/shared/validate_pipeline_launcher_official_command.py
+    - docs/patcher/shared/validate_pipeline_launcher_engine_promotion.py
+  reports:
+    - docs/registry/reports/pipeline_launcher_promotion_plan.yaml
+    - docs/registry/reports/pipeline_launcher_official_command_validation.yaml
+    - docs/registry/reports/pipeline_launcher_engine_promotion_validation.yaml
+    - docs/registry/reports/pipeline_launcher_with_signals_validation.yaml
+  report_status: PASS
+  official_command: python docs/patcher/shared/pipeline_launcher/cli.py
+  official_module_command: python -m docs.patcher.shared.pipeline_launcher.cli
+  internal_engine: python docs/patcher/shared/pipeline_launcher/engine.py
+  tmp_pipeline_launcher_role: compatibility_wrapper
+  engine_matches_previous_tmp_source: true
   launcher_authorizes_run_from_signals: false
 ```
 
