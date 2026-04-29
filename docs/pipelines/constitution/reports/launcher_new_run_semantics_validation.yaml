@@ -1,11 +1,11 @@
 launcher_new_run_semantics_validation:
   schema_version: '0.1'
-  generated_at: '2026-04-29T09:52:20Z'
+  generated_at: '2026-04-29T09:56:23Z'
   status: FAIL
   phase_id: PHASE_25
   purpose: Clarify that next_best_actions.new_run is an entry-resolution prompt availability signal, not run authorization.
   mutation_policy:
-    launcher: updated
+    launcher: already_current
     policy_yaml: not_read
     decisions_yaml: not_read
     scope_catalog: not_read
