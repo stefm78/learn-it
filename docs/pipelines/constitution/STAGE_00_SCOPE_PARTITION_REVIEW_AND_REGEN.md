@@ -82,6 +82,85 @@ Interdiction : l'IA ne peut pas déclarer le STAGE_00 terminé si des entrées `
 soit rester `open` avec justification de report. `deferred` / `reporté` n'est pas un statut
 canonique : le report conserve `status: open` et ajoute les métadonnées de revue prévues.
 
+
+## Mode `run_candidate_preflight` — cadrage pré-run
+
+Le `STAGE_00_SCOPE_PARTITION_REVIEW_AND_REGEN` peut aussi être utilisé en mode
+`run_candidate_preflight` avant une action `OPEN_NEW_RUN`.
+
+Objectif :
+- décider si des entrées ouvertes du `governance_backlog.yaml` justifient l'ouverture
+  d'un nouveau `bounded_local_run` ;
+- cadrer le thème, le scope cible, les entrées backlog incluses, les entrées exclues
+  et les garde-fous avant toute ouverture de run ;
+- éviter d'ouvrir un run trop large ou de mélanger des sujets de design hétérogènes.
+
+Ce mode ne remplace pas `partition_refresh` :
+- `partition_refresh` sert à revoir et éventuellement régénérer la partition de scopes ;
+- `run_candidate_preflight` sert à décider si un run doit être ouvert à partir d'un signal
+  backlog déjà identifié.
+
+Déclenchement recommandé :
+- lorsqu'une action `OPEN_NEW_RUN` est envisagée pour un scope impacté par des entrées
+  `governance_backlog` encore `open` ;
+- lorsqu'un humain souhaite transformer un backlog de design en run exécutable ;
+- lorsqu'un launcher ou une entry action détecte un `governance_backlog_signal` sur le scope
+  demandé.
+
+Déclenchement non obligatoire :
+- pour les runs purement locaux qui ne sont pas motivés par une entrée backlog ouverte ;
+- pour une simple reprise de run déjà ouvert ;
+- lorsqu'un humain décide explicitement de laisser les entrées backlog au cycle normal
+  STAGE_00 sans ouvrir de run.
+
+Entrées minimales :
+- `docs/pipelines/constitution/runs/index.yaml`
+- `docs/pipelines/constitution/scope_catalog/governance_backlog.yaml`
+- `docs/pipelines/constitution/reports/governance_backlog_report.yaml`
+- `docs/pipelines/constitution/reports/governance_backlog_lifecycle_validation.yaml`
+- `docs/pipelines/constitution/scope_catalog/manifest.yaml`
+- `docs/pipelines/constitution/policies/scope_generation/policy.yaml`
+- `docs/pipelines/constitution/policies/scope_generation/decisions.yaml`
+
+Sorties attendues :
+- `docs/pipelines/constitution/reports/bounded_run_preflight_report.yaml`
+- `docs/pipelines/constitution/reports/bounded_run_preflight.md`
+
+Décisions possibles :
+- `open_new_bounded_run`
+- `defer_to_stage00_backlog_review`
+- `create_design_note_only`
+- `keep_backlog_open`
+- `wont_fix_or_address_backlog`
+
+Le rapport de preflight doit au minimum préciser :
+- le scope cible proposé ;
+- les entrées backlog incluses ;
+- les entrées backlog explicitement exclues ;
+- les dépendances cross-scope ou cross-core à ne pas embarquer par erreur ;
+- le thème de run proposé ;
+- les gates à vérifier avant `OPEN_NEW_RUN` ;
+- la recommandation finale : ouvrir, différer, documenter seulement, ou garder ouvert.
+
+Politique de mutation :
+- ce mode est non-mutating par défaut ;
+- il ne modifie pas `policy.yaml`, `decisions.yaml`, le catalogue de scopes, les cores ou
+  `governance_backlog.yaml` ;
+- il ne peut pas ouvrir un run par lui-même ;
+- l'ouverture réelle d'un run reste une décision d'entry action après validation humaine.
+
+Exemple de décision prudente :
+
+```yaml
+run_candidate_preflight:
+  status: PASS_RECOMMEND_DEFER_TO_NORMAL_STAGE00_REVIEW
+  new_pipeline_run_recommended_now: false
+  reason: >-
+    Les entrées backlog restantes sont des follow-ups de design revus, pas des
+    blockers de pipeline. Elles doivent rester visibles via STAGE_00 / launcher
+    warnings jusqu'à décision humaine explicite.
+```
+
 ## Format attendu en provenance des runs
 
 Les runs qui identifient des ajustements de scope à rejouer plus tard doivent produire dans leur
@@ -277,6 +356,10 @@ Sortie déterministe conditionnelle — publication des scores calculés :
 - `docs/pipelines/constitution/reports/scope_maturity_policy_patch_report.yaml`
   (produit par `apply_constitution_scope_maturity_scores.py`)
 
+Sorties déterministes conditionnelles — cadrage pré-run :
+- `docs/pipelines/constitution/reports/bounded_run_preflight_report.yaml`
+- `docs/pipelines/constitution/reports/bounded_run_preflight.md`
+
 Sorties déterministes conditionnelles — gouvernance neighbor IDs Constitution :
 - `docs/pipelines/constitution/reports/constitution_neighbor_ids_governance_report.yaml`
 - `docs/pipelines/constitution/reports/constitution_neighbor_ids_arbitration.yaml`
@@ -328,6 +411,13 @@ Mise à jour obligatoire en fin de STAGE_00 :
 17. Toute modification de `decisions.yaml` issue de cette gouvernance doit passer par
     `apply_constitution_neighbor_ids_arbitration.py --apply`, et seulement si le rapport
     de validation est `PASS_READY_TO_PATCH`.
+
+18. Le mode `run_candidate_preflight` doit être utilisé avant `OPEN_NEW_RUN` lorsqu'un run
+    est motivé par des entrées `governance_backlog` encore `open` sur le scope demandé.
+19. Le mode `run_candidate_preflight` est non-mutating par défaut : il ne modifie pas
+    `policy.yaml`, `decisions.yaml`, le catalogue, les cores ou `governance_backlog.yaml`.
+20. Le mode `run_candidate_preflight` ne peut pas ouvrir un run par lui-même ; il produit
+    seulement une recommandation gouvernée pour l'entry action.
 
 ## Critère de succès
 
