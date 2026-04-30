@@ -156,3 +156,16 @@ l4_active_now: false
 executable_as_l4_gate_now: false
 ```
 
+
+## Individual validator contract — link binding
+
+```yaml
+validator_id: validate_link_binding_consistency
+contract_yaml_ref: docs/pipelines/cross_core_contract/validators/validate_link_binding_consistency.contract.yaml
+contract_markdown_ref: docs/pipelines/cross_core_contract/validators/validate_link_binding_consistency.contract.md
+validation_report: docs/registry/reports/link_binding_consistency_validator_contract_validation.yaml
+contract_defined: true
+l4_active_now: false
+executable_as_l4_gate_now: false
+```
+

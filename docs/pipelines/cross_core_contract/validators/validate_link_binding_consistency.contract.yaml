@@ -1,0 +1,63 @@
+l4_validator_contract:
+  schema_version: '0.1'
+  generated_at: '2026-04-30T11:47:59Z'
+  validator_id: validate_link_binding_consistency
+  pipeline_id: cross_core_contract
+  status: contract_defined_inactive
+  current_level: L3_managed_execution_pipeline
+  target_level: L4_critical_canonical_pipeline
+  l4_active_now: false
+  executable_as_l4_gate_now: false
+
+  purpose: >-
+    Validate that Link explicitly and consistently binds cross-core references between
+    Constitution and Referentiel before any future L4 mutation, release, or promotion.
+
+  future_input:
+    expected_contract: docs/pipelines/cross_core_contract/work/03_contract_synthesis/cross_core_execution_contract.yaml
+    expected_link_candidate: docs/cores/current/link.yaml
+    expected_referentiel_candidate: docs/cores/current/referentiel.yaml
+    expected_constitution_candidate: docs/cores/current/constitution.yaml
+    expected_request: CCR_PATCH_LIFECYCLE_ESCALATION_THRESHOLD_N_R01
+
+  pass_requires:
+    - every_cross_core_reference_has_link_binding
+    - every_link_binding_has_source_core
+    - every_link_binding_has_target_core
+    - every_link_binding_has_source_id
+    - every_link_binding_has_target_id
+    - referentiel_parameter_ids_resolvable
+    - constitution_external_reference_ids_resolvable
+    - no_orphan_link_binding
+    - no_duplicate_link_binding
+    - link_binding_version_compatibility_declared
+    - link_binding_release_impact_declared
+    - rollback_or_reconciliation_path_declared
+
+  must_block_if:
+    - link_binding_missing
+    - source_or_target_core_missing
+    - source_or_target_id_unresolved
+    - orphan_link_binding
+    - duplicate_link_binding
+    - referentiel_parameter_unresolved
+    - constitution_external_reference_unresolved
+    - version_compatibility_missing
+    - release_impact_missing
+    - rollback_or_reconciliation_path_missing
+
+  threshold_N_expected_binding_shape:
+    request_id: CCR_PATCH_LIFECYCLE_ESCALATION_THRESHOLD_N_R01
+    status_now: proposed_pending_arbitration
+    expected_future_shape:
+      constitution_role: external_read_only_consumer
+      referentiel_role: parameter_owner
+      link_role: explicit_binding_between_constitution_reference_and_referentiel_parameter
+    materialized_now: false
+
+  current_phase_guardrails:
+    core_mutation_authorized: false
+    backlog_closure_authorized: false
+    release_or_promotion_authorized: false
+    constitution_run_authorized: false
+    threshold_N_materialized_now: false

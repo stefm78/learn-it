@@ -1,0 +1,50 @@
+link_binding_consistency_validator_contract_validation:
+  schema_version: '0.1'
+  generated_at: '2026-04-30T11:47:59Z'
+  status: PASS
+  validator_id: validate_link_binding_consistency
+  contract_defined: true
+  l4_active_now: false
+  executable_as_l4_gate_now: false
+  checked_files:
+    - path: docs/pipelines/cross_core_contract/validators/validate_link_binding_consistency.contract.yaml
+      exists: true
+      sha256: 2e335c83099951b1a11eee9d47ac435f4c5f1f36287260325e6f27bacb3441d1
+    - path: docs/pipelines/cross_core_contract/validators/validate_link_binding_consistency.contract.md
+      exists: true
+      sha256: 425c7e96450d3a0c130dfd037305b52315389b395dbef88117a18889aadfdd81
+    - path: docs/pipelines/cross_core_contract/validators/validate_constitution_referentiel_link_reconstruction.contract.yaml
+      exists: true
+      sha256: 32c8a2c0927935c021dbe0fe88c76719a71fc7047dd1f11f9a90dd9e49f0b6eb
+    - path: docs/pipelines/cross_core_contract/L4_VALIDATOR_FAMILY.md
+      exists: true
+      sha256: eaf0e89be4ea147426a51f76c7a844b8e343a612e38bc3f05d4758231fa1020f
+    - path: docs/pipelines/cross_core_contract/validators/l4_validator_family.yaml
+      exists: true
+      sha256: b51101b24e7f7de40a4faf420d875bc0d8ac9324536175674279c8b0f95e3c98
+    - path: docs/pipelines/cross_core_contract/l4_transition_checklist.yaml
+      exists: true
+      sha256: 25a1f420a452bbf4fbff9ca9c0938b494aae4d738079fcdf1a842e57094b8bc3
+    - path: docs/pipelines/cross_core_contract/AI_PROTOCOL.yaml
+      exists: true
+      sha256: bc84895bd9767695798ba66711899a230e8e68c7465879e167cb915169339bb8
+    - path: docs/pipelines/cross_core_contract/pipeline.md
+      exists: true
+      sha256: c722bf9b4b43ca455f6d830e843c5561a4975257fc65f1bfe864df2a4bf95112
+    - path: docs/pipelines/cross_core_contract/state.yaml
+      exists: true
+      sha256: ea674c73d18cf42b2f2a55bf32fc4734d52d27f97b70672e0005aa6a01ac22fc
+    - path: docs/pipelines/cross_core_contract/requests/CCR_PATCH_LIFECYCLE_ESCALATION_THRESHOLD_N_R01.yaml
+      exists: true
+      sha256: 135e6039ed61b82fe7baefbf5a37e2cd03ad20d0cad2babd091b6629bb1e8d85
+  blocking_findings:
+    []
+  result_summary:
+    blocking_finding_count: 0
+    link_binding_validator_contract_defined: true
+    l4_active_now: false
+    executable_as_l4_gate_now: false
+    core_mutation_authorized: false
+    backlog_closure_authorized: false
+    release_or_promotion_authorized: false
+    request_remains_proposed_pending_arbitration: true
