@@ -106,6 +106,37 @@ release_or_promotion_authorized: false
 
 This pipeline is hardened to L3 for intake, evidence review, arbitration and contract synthesis.
 It remains below L4: no Core write, backlog closure, release or promotion is authorized.
+## L4 executable validators batch 1
+
+```yaml
+phase: PHASE_47_CROSS_CORE_L4_EXECUTABLE_VALIDATORS_BATCH1
+executable_validators_batch1_defined: true
+l4_active_now: false
+executable_as_l4_gate_now: false
+l4_execution_ready_now: false
+validate_cross_core_l4_transition_review:
+  script: docs/patcher/shared/validate_cross_core_l4_transition_review.py
+  contract_check_report: docs/registry/reports/validate_cross_core_l4_transition_review_contract_check.yaml
+  default_mode: contract_check
+  l4_gate_mode_blocks_without_future_inputs: true
+validate_cross_core_write_surface:
+  script: docs/patcher/shared/validate_cross_core_write_surface.py
+  contract_check_report: docs/registry/reports/validate_cross_core_write_surface_contract_check.yaml
+  default_mode: contract_check
+  l4_gate_mode_blocks_without_future_inputs: true
+validate_constitution_referentiel_link_reconstruction:
+  script: docs/patcher/shared/validate_constitution_referentiel_link_reconstruction.py
+  contract_check_report: docs/registry/reports/validate_constitution_referentiel_link_reconstruction_contract_check.yaml
+  default_mode: contract_check
+  l4_gate_mode_blocks_without_future_inputs: true
+validate_link_binding_consistency:
+  script: docs/patcher/shared/validate_link_binding_consistency.py
+  contract_check_report: docs/registry/reports/validate_link_binding_consistency_contract_check.yaml
+  default_mode: contract_check
+  l4_gate_mode_blocks_without_future_inputs: true
+```
+
+These validators are executable in contract-check mode only. L4 gate mode is intentionally blocking until future L4 inputs exist.
 ## L4 readiness matrix
 
 ```yaml

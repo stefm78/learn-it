@@ -1,0 +1,23 @@
+validate_constitution_referentiel_link_reconstruction_validation:
+  schema_version: '0.1'
+  generated_at: '2026-04-30T12:32:46Z'
+  validator_id: validate_constitution_referentiel_link_reconstruction
+  mode: contract_check
+  status: PASS
+  l4_active_now: false
+  executable_as_l4_gate_now: false
+  contract: docs/pipelines/cross_core_contract/validators/validate_constitution_referentiel_link_reconstruction.contract.yaml
+  future_inputs:
+    - path: docs/pipelines/cross_core_contract/work/03_contract_synthesis/cross_core_execution_contract.yaml
+      exists: false
+      sha256: None
+    - path: docs/pipelines/cross_core_contract/work/07_multi_core_release_planning/multi_core_release_plan.yaml
+      exists: false
+      sha256: None
+  blocking_findings:
+    []
+  result_summary:
+    blocking_finding_count: 0
+    contract_defined: true
+    l4_active_now: false
+    executable_as_l4_gate_now: false

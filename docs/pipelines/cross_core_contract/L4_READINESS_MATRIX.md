@@ -56,3 +56,21 @@ non_goals_preserved:
   - no Constitution run
   - no threshold N resolution
 ```
+
+## Executable validators batch 1
+
+```yaml
+phase: PHASE_47_CROSS_CORE_L4_EXECUTABLE_VALIDATORS_BATCH1
+executable_validators_batch1_defined: true
+l4_active_now: false
+executable_as_l4_gate_now: false
+l4_execution_ready_now: false
+```
+
+| Validator | Script | Contract-check report | Runtime posture |
+| --- | --- | --- | --- |
+| `validate_cross_core_l4_transition_review` | `docs/patcher/shared/validate_cross_core_l4_transition_review.py` | `docs/registry/reports/validate_cross_core_l4_transition_review_contract_check.yaml` | contract-check PASS; L4 gate blocks without future inputs |
+| `validate_cross_core_write_surface` | `docs/patcher/shared/validate_cross_core_write_surface.py` | `docs/registry/reports/validate_cross_core_write_surface_contract_check.yaml` | contract-check PASS; L4 gate blocks without future inputs |
+| `validate_constitution_referentiel_link_reconstruction` | `docs/patcher/shared/validate_constitution_referentiel_link_reconstruction.py` | `docs/registry/reports/validate_constitution_referentiel_link_reconstruction_contract_check.yaml` | contract-check PASS; L4 gate blocks without future inputs |
+| `validate_link_binding_consistency` | `docs/patcher/shared/validate_link_binding_consistency.py` | `docs/registry/reports/validate_link_binding_consistency_contract_check.yaml` | contract-check PASS; L4 gate blocks without future inputs |
+

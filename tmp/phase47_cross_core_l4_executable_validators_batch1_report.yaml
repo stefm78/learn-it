@@ -1,0 +1,45 @@
+phase47_cross_core_l4_executable_validators_batch1_report:
+  generated_at: 2026-04-30T12:32:46Z
+  status: PASS
+  branch: feat/core-modularization-bootstrap
+  phase: PHASE_47_CROSS_CORE_L4_EXECUTABLE_VALIDATORS_BATCH1
+  validators:
+    - validate_cross_core_l4_transition_review
+    - validate_cross_core_write_surface
+    - validate_constitution_referentiel_link_reconstruction
+    - validate_link_binding_consistency
+  active_level: L3_managed_execution_pipeline
+  target_level: L4_critical_canonical_pipeline
+  executable_validators_batch1_defined: true
+  l4_execution_ready_now: false
+  l4_active_now: false
+  files_written:
+    - docs/patcher/shared/validate_cross_core_l4_transition_review.py
+    - docs/patcher/shared/validate_cross_core_write_surface.py
+    - docs/patcher/shared/validate_constitution_referentiel_link_reconstruction.py
+    - docs/patcher/shared/validate_link_binding_consistency.py
+    - docs/registry/reports/validate_cross_core_l4_transition_review_contract_check.yaml
+    - docs/registry/reports/validate_cross_core_write_surface_contract_check.yaml
+    - docs/registry/reports/validate_constitution_referentiel_link_reconstruction_contract_check.yaml
+    - docs/registry/reports/validate_link_binding_consistency_contract_check.yaml
+    - docs/patcher/shared/validate_cross_core_l4_executable_validators_batch1.py
+    - docs/registry/reports/cross_core_l4_executable_validators_batch1_validation.yaml
+    - docs/pipelines/cross_core_contract/AI_PROTOCOL.yaml
+    - docs/pipelines/cross_core_contract/pipeline.md
+    - docs/pipelines/cross_core_contract/state.yaml
+    - docs/pipelines/cross_core_contract/validators/l4_readiness_matrix.yaml
+    - docs/pipelines/cross_core_contract/L4_READINESS_MATRIX.md
+    - docs/pipelines/cross_core_contract/l4_transition_checklist.yaml
+    - docs/transformations/core_modularization/SCOPE_GRAPH_CLUSTERING_PROGRESS.md
+    - tmp/phase47_cross_core_l4_executable_validators_batch1_report.yaml
+  validations:
+    cross_core_l4_executable_validators_batch1_validation: PASS
+  guardrails:
+    no_constitution_run_opened: true
+    core_files_not_modified: true
+    governance_backlog_not_modified: true
+    release_or_promotion_authorized: false
+    request_remains_proposed_pending_arbitration: true
+  next_recommended_decision:
+    decision: stop_or_implement_remaining_executable_L4_validators_batch2
+    default: stop_at_NO_ACTIVE_PHASE

@@ -101,3 +101,31 @@ cross_core_l4_readiness_matrix:
     implementation_ready_to_start_l4_validator_scripts: true
     l4_execution_ready_now: false
     reason: individual validator executable implementations are not active L4 gates yet
+  executable_validator_batches:
+    batch1:
+      phase: PHASE_47_CROSS_CORE_L4_EXECUTABLE_VALIDATORS_BATCH1
+      executable_validators_batch1_defined: true
+      l4_active_now: false
+      executable_as_l4_gate_now: false
+      l4_execution_ready_now: false
+      validators:
+        - validator_id: validate_cross_core_l4_transition_review
+          script: docs/patcher/shared/validate_cross_core_l4_transition_review.py
+          contract_check_report: docs/registry/reports/validate_cross_core_l4_transition_review_contract_check.yaml
+          contract_check_status: PASS
+          l4_gate_mode_blocks_without_future_inputs: true
+        - validator_id: validate_cross_core_write_surface
+          script: docs/patcher/shared/validate_cross_core_write_surface.py
+          contract_check_report: docs/registry/reports/validate_cross_core_write_surface_contract_check.yaml
+          contract_check_status: PASS
+          l4_gate_mode_blocks_without_future_inputs: true
+        - validator_id: validate_constitution_referentiel_link_reconstruction
+          script: docs/patcher/shared/validate_constitution_referentiel_link_reconstruction.py
+          contract_check_report: docs/registry/reports/validate_constitution_referentiel_link_reconstruction_contract_check.yaml
+          contract_check_status: PASS
+          l4_gate_mode_blocks_without_future_inputs: true
+        - validator_id: validate_link_binding_consistency
+          script: docs/patcher/shared/validate_link_binding_consistency.py
+          contract_check_report: docs/registry/reports/validate_link_binding_consistency_contract_check.yaml
+          contract_check_status: PASS
+          l4_gate_mode_blocks_without_future_inputs: true
