@@ -11,6 +11,7 @@ l4_transition_checklist:
     - explicit_human_decision
     - l4_transition_review_report_PASS
     - validator_family_contract_PASS
+    - validate_cross_core_l4_transition_review_contract_PASS
     - individual_l4_validators_implemented_before_execution
     - declared_read_surface
     - declared_write_surface

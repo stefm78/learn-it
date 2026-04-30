@@ -1,0 +1,54 @@
+l4_validator_contract:
+  schema_version: '0.1'
+  generated_at: '2026-04-30T11:27:09Z'
+  validator_id: validate_cross_core_l4_transition_review
+  pipeline_id: cross_core_contract
+  status: contract_defined_inactive
+  current_level: L3_managed_execution_pipeline
+  target_level: L4_critical_canonical_pipeline
+  l4_active_now: false
+  executable_as_l4_gate_now: false
+
+  purpose: >-
+    Validate that a future L4 transition review has explicit human authorization,
+    declared read/write surfaces, required downstream validation plans, and rollback
+    or reconciliation evidence before any L4 execution is allowed.
+
+  future_input:
+    expected_report: docs/pipelines/cross_core_contract/reports/l4_transition_review.yaml
+    expected_stage: STAGE_06_L4_TRANSITION_REVIEW
+    expected_request: CCR_PATCH_LIFECYCLE_ESCALATION_THRESHOLD_N_R01
+
+  pass_requires:
+    - explicit_human_decision_recorded
+    - request_status_accepted_for_l4_transition
+    - declared_read_surface
+    - declared_write_surface
+    - impacted_cores_declared
+    - validator_family_contract_PASS
+    - individual_l4_validators_available
+    - release_and_promotion_impacts_declared
+    - rollback_or_reconciliation_path_declared
+    - backlog_resolution_policy_declared_if_closure_requested
+
+  must_block_if:
+    - l4_transition_review_missing
+    - explicit_human_decision_missing
+    - write_surface_undeclared
+    - core_mutation_requested_without_contract
+    - backlog_closure_requested_without_resolution_mapping
+    - release_or_promotion_requested_without_validated_plan
+    - rollback_or_reconciliation_path_missing
+
+  forbidden_now:
+    - docs/cores/current/**
+    - docs/pipelines/constitution/scope_catalog/governance_backlog.yaml
+    - docs/cores/releases/**
+    - docs/cores/current/manifest.yaml
+
+  current_phase_guardrails:
+    core_mutation_authorized: false
+    backlog_closure_authorized: false
+    release_or_promotion_authorized: false
+    constitution_run_authorized: false
+    threshold_N_materialized_now: false

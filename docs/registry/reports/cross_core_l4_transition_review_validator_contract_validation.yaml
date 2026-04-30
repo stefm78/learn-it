@@ -1,0 +1,47 @@
+cross_core_l4_transition_review_validator_contract_validation:
+  schema_version: '0.1'
+  generated_at: '2026-04-30T11:27:09Z'
+  status: PASS
+  validator_id: validate_cross_core_l4_transition_review
+  contract_defined: true
+  l4_active_now: false
+  executable_as_l4_gate_now: false
+  checked_files:
+    - path: docs/pipelines/cross_core_contract/validators/validate_cross_core_l4_transition_review.contract.yaml
+      exists: true
+      sha256: 5f97aa4669ea314b78cfd0fc240ba92746bde10f1393e79e4e7b32aac4b06fc8
+    - path: docs/pipelines/cross_core_contract/validators/validate_cross_core_l4_transition_review.contract.md
+      exists: true
+      sha256: f9dff7e042bbc00b3b73a9208f30e329468bd5ca470eec0ad83972c3b5afdc51
+    - path: docs/pipelines/cross_core_contract/L4_VALIDATOR_FAMILY.md
+      exists: true
+      sha256: de082b2c5556a22b109b8f270d3a5de44f684a1fb415b702a10b88905625da48
+    - path: docs/pipelines/cross_core_contract/validators/l4_validator_family.yaml
+      exists: true
+      sha256: 8f06adf2eb28327794e2a610ae9c12a7dcbfbb831e0f902726654930e5f1eadc
+    - path: docs/pipelines/cross_core_contract/l4_transition_checklist.yaml
+      exists: true
+      sha256: 2f2d019287e3b93fd310b7252f965e36c9fdbc6b68d31ada0c5f69c32fba4e6c
+    - path: docs/pipelines/cross_core_contract/AI_PROTOCOL.yaml
+      exists: true
+      sha256: 68aee01c2d5c034968fe6d61eca271e787d079ec41a272a0540d689d4bcefa3d
+    - path: docs/pipelines/cross_core_contract/pipeline.md
+      exists: true
+      sha256: cd81976ed6ed8e2918bf083bf52dc410f7bd720acad9b16292ec03901d8a03a7
+    - path: docs/pipelines/cross_core_contract/state.yaml
+      exists: true
+      sha256: e36ea1f860454324cbd6c9e9a8a0ec813bd255b3c1a95c335b936874070775e4
+    - path: docs/pipelines/cross_core_contract/requests/CCR_PATCH_LIFECYCLE_ESCALATION_THRESHOLD_N_R01.yaml
+      exists: true
+      sha256: 135e6039ed61b82fe7baefbf5a37e2cd03ad20d0cad2babd091b6629bb1e8d85
+  blocking_findings:
+    []
+  result_summary:
+    blocking_finding_count: 0
+    transition_review_validator_contract_defined: true
+    l4_active_now: false
+    executable_as_l4_gate_now: false
+    core_mutation_authorized: false
+    backlog_closure_authorized: false
+    release_or_promotion_authorized: false
+    request_remains_proposed_pending_arbitration: true

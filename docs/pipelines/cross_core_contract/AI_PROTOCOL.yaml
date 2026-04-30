@@ -86,6 +86,15 @@ ai_protocol:
     backlog_closure_authorized_now: false
     release_or_promotion_authorized_now: false
 
+  validate_cross_core_l4_transition_review_contract:
+    contract_yaml_ref: docs/pipelines/cross_core_contract/validators/validate_cross_core_l4_transition_review.contract.yaml
+    contract_markdown_ref: docs/pipelines/cross_core_contract/validators/validate_cross_core_l4_transition_review.contract.md
+    contract_validation_report: docs/registry/reports/cross_core_l4_transition_review_validator_contract_validation.yaml
+    contract_defined: true
+    l4_active_now: false
+    executable_as_l4_gate_now: false
+    future_validator_script_required_before_L4_execution: true
+
   anti_patterns:
     - chat_summary_as_pass
     - direct_write_to_owned_state

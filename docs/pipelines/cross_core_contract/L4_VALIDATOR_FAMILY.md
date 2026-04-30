@@ -116,3 +116,17 @@ non_goals:
   - create_release
   - promote_current
 ```
+
+
+## Individual validator contract — transition review
+
+```yaml
+validator_id: validate_cross_core_l4_transition_review
+contract_yaml_ref: docs/pipelines/cross_core_contract/validators/validate_cross_core_l4_transition_review.contract.yaml
+contract_markdown_ref: docs/pipelines/cross_core_contract/validators/validate_cross_core_l4_transition_review.contract.md
+validation_report: docs/registry/reports/cross_core_l4_transition_review_validator_contract_validation.yaml
+contract_defined: true
+l4_active_now: false
+executable_as_l4_gate_now: false
+```
+
