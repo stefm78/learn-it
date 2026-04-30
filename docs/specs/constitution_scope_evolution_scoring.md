@@ -61,3 +61,19 @@ The total score is `/100`.
 This report may inform future scoring publication, but it never publishes maturity itself.
 
 Any change to official scope maturity remains governed by the existing policy/decisions path and must be arbitrated explicitly.
+
+
+## Archive fallback
+
+STAGE_09 closeout may reset `runs/<RUN_ID>/work` after copying the operational snapshot to:
+
+```text
+docs/pipelines/constitution/archive/<release_id>/
+```
+
+The evolution scoring script must therefore resolve evidence in this order:
+
+1. live run directory, for example `runs/<RUN_ID>/work/...`;
+2. closeout archive directory from `CLOSEOUT_REPORT.archive_path`, for example `archive/<release_id>/work/...`.
+
+This makes the score usable both before and after final tracking closure.

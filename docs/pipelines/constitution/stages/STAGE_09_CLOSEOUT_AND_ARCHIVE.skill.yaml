@@ -128,6 +128,9 @@ required_scripts:
     --arbitrage-path, --backlog-path, --run-id, --scope-key et --current-stage.
     Après closeout, l'interface du score d'évolution est :
     score_constitution_scope_evolution.py --run-id <RUN_ID> --scope-key <scope_key>.
+    Le script doit supporter le cas où closeout_pipeline_run.py a réinitialisé
+    runs/<RUN_ID>/work en lisant les artefacts depuis CLOSEOUT_REPORT.archive_path
+    lorsque l'artefact live n'existe plus.
 
 script_execution_contract:
   required_before_pass_or_fail:

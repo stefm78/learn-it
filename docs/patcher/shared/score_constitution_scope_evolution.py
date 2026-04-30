@@ -76,6 +76,30 @@ def repo_rel(path: Path, repo_root: Path) -> str:
         return path.as_posix()
 
 
+def closeout_archive_path(run_dir: Path) -> Path | None:
+    # STAGE_09 may reset runs/<RUN_ID>/work after archiving the operational
+    # snapshot. Post-run scoring therefore must resolve evidence from either
+    # the live run directory or the archived snapshot.
+    closeout = load_yaml(run_dir / "reports/closeout_report.yaml")
+    root = closeout.get("CLOSEOUT_REPORT", {})
+    archive = root.get("archive_path") if isinstance(root, dict) else None
+    if isinstance(archive, str) and archive:
+        return Path(archive)
+    return None
+
+
+def resolve_run_artifact(run_dir: Path, archive_dir: Path | None, rel_path: str) -> Path:
+    # Resolve an artifact first from the live run dir, then from closeout archive.
+    live = run_dir / rel_path
+    if live.exists():
+        return live
+    if archive_dir is not None:
+        archived = archive_dir / rel_path
+        if archived.exists():
+            return archived
+    return live
+
+
 def slug(value: str) -> str:
     return re.sub(r"[^A-Za-z0-9_]+", "_", value).strip("_")
 
@@ -144,14 +168,14 @@ def run_maturity_scoring(repo_root: Path, output: Path, force: bool) -> Dict[str
     return load_yaml(output)
 
 
-def score_stage_chain(repo_root: Path, run_dir: Path, rel_required: bool) -> Dict[str, Any]:
+def score_stage_chain(repo_root: Path, run_dir: Path, archive_dir: Path | None, rel_required: bool) -> Dict[str, Any]:
     checks = []
     expected_count = 0
     pass_count = 0
 
     for name, rel_path, root_key, expected_rule in STAGE_CHECKS:
         expected = expected_rule is True or (expected_rule == "release_only" and rel_required)
-        path = run_dir / rel_path
+        path = resolve_run_artifact(run_dir, archive_dir, rel_path)
         status = status_of(path, root_key)
         if expected:
             expected_count += 1
@@ -288,13 +312,13 @@ def score_cross_scope(entries: List[Dict[str, Any]]) -> Dict[str, Any]:
     }
 
 
-def score_repeatability(repo_root: Path, run_dir: Path) -> Dict[str, Any]:
+def score_repeatability(repo_root: Path, run_dir: Path, archive_dir: Path | None) -> Dict[str, Any]:
     expected = [
-        run_dir / "reports/patch_execution_report.yaml",
-        run_dir / "work/07_release/release_plan.yaml",
-        run_dir / "reports/promotion_report.yaml",
-        run_dir / "reports/closeout_report.yaml",
-        run_dir / "outputs/final_run_summary.md",
+        resolve_run_artifact(run_dir, archive_dir, "reports/patch_execution_report.yaml"),
+        resolve_run_artifact(run_dir, archive_dir, "work/07_release/release_plan.yaml"),
+        resolve_run_artifact(run_dir, archive_dir, "reports/promotion_report.yaml"),
+        resolve_run_artifact(run_dir, archive_dir, "reports/closeout_report.yaml"),
+        resolve_run_artifact(run_dir, archive_dir, "outputs/final_run_summary.md"),
     ]
     present_count = sum(1 for p in expected if p.exists())
     score = round(10 * present_count / len(expected))
@@ -376,16 +400,19 @@ def main() -> int:
     backlog = load_yaml(repo_root / "docs/pipelines/constitution/scope_catalog/governance_backlog.yaml")
 
     rel_required = release_required(run_dir)
+    archive_dir = closeout_archive_path(run_dir)
+    if archive_dir is not None and not archive_dir.is_absolute():
+        archive_dir = repo_root / archive_dir
     tracking = tracking_state(runs_index, args.run_id)
     entries = open_backlog_for_scope(backlog, args.scope_key)
 
     dimensions = {
-        "stage_chain_integrity": score_stage_chain(repo_root, run_dir, rel_required),
+        "stage_chain_integrity": score_stage_chain(repo_root, run_dir, archive_dir, rel_required),
         "closeout_and_tracking_readiness": score_closeout(repo_root, run_dir, tracking),
         "structural_maturity_delta": score_maturity(scope_result),
         "backlog_pressure": score_backlog(entries),
         "cross_scope_alignment_pressure": score_cross_scope(entries),
-        "operational_repeatability": score_repeatability(repo_root, run_dir),
+        "operational_repeatability": score_repeatability(repo_root, run_dir, archive_dir),
     }
     total = sum(v["score"] for v in dimensions.values())
     classification = classify(total)
@@ -403,6 +430,11 @@ def main() -> int:
             "score_total": total,
             "max_score": 100,
             "classification": classification,
+            "evidence_resolution": {
+                "live_run_dir": repo_rel(run_dir, repo_root),
+                "archive_dir": repo_rel(archive_dir, repo_root) if archive_dir else None,
+                "archive_fallback_enabled": archive_dir is not None,
+            },
             "maturity_context": {
                 "published_score": maturity.get("published_score"),
                 "published_level": maturity.get("published_level"),
