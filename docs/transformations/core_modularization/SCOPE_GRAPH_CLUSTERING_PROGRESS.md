@@ -38,8 +38,8 @@ scope_modularization_post_pilot:
   status: paused_cleanly
   active_pipeline_run: none
   new_bounded_run_opened_now: false
-  last_completed_phase: PHASE_32
-  last_completed_phase_label: cross_core_contract_bootstrap
+  last_completed_phase: PHASE_33
+  last_completed_phase_label: scope_evolution_before_after_preview_integration
 ```
 
 ## What is complete
@@ -109,6 +109,7 @@ completed:
       - PHASE_30 stage00_review_bundle_integration
       - PHASE_31 stage00_post_run_backlog_and_referentiel_v6_review
       - PHASE_32 cross_core_contract_bootstrap
+      - PHASE_33 scope_evolution_before_after_preview_integration
 ```
 
 ## Current pipeline position
@@ -203,6 +204,25 @@ open_new_run_gate:
   open_new_run_authorized_by_default_when_defer: false
   recommended_entry_decision_when_defer: partition_refresh_preferred_or_open_new_run_blocked
 ```
+
+scope_evolution_diagnostics:
+  status: integrated
+  latest_phase: PHASE_33
+  baseline_capture:
+    stage: MATERIALIZE_NEW_RUN
+    output: docs/pipelines/constitution/runs/<run_id>/inputs/baseline_scope_state.yaml
+  pre_release_preview:
+    stage: STAGE_06_CORE_VALIDATION
+    output:
+      - docs/pipelines/constitution/runs/<run_id>/work/06_core_validation/scope_evolution_preview.yaml
+      - docs/pipelines/constitution/runs/<run_id>/work/06_core_validation/scope_evolution_preview.md
+  final_score:
+    stage: STAGE_09_CLOSEOUT_AND_ARCHIVE
+    output:
+      - docs/pipelines/constitution/runs/<run_id>/reports/scope_evolution_score.yaml
+      - docs/pipelines/constitution/runs/<run_id>/reports/scope_evolution_score.md
+  release_required_authority: docs/patcher/shared/build_release_plan.py
+
 
 ## Remaining open backlog entries
 
@@ -664,6 +684,38 @@ option_S_cross_core_contract_bootstrap:
     reason: fixed malformed generated validator newline literal
   recommended_next_decision: decide whether to materialize first request CCR_PATCH_LIFECYCLE_ESCALATION_THRESHOLD_N_R01
   launcher_authorizes_run_from_signals: false
+
+option_T_scope_evolution_before_after_preview_integration:
+  status: done
+  completed_phase: PHASE_33
+  action: add before/after scope evolution diagnostics to the Constitution pipeline
+  artifacts:
+    - docs/patcher/shared/capture_constitution_scope_baseline.py
+    - docs/patcher/shared/score_constitution_scope_evolution_preview.py
+    - docs/patcher/shared/score_constitution_scope_evolution.py
+    - docs/specs/constitution_scope_evolution_preview.md
+    - docs/specs/constitution_scope_evolution_scoring.md
+    - docs/pipelines/constitution/entry_actions/MATERIALIZE_NEW_RUN.action.yaml
+    - docs/pipelines/constitution/stages/STAGE_06_CORE_VALIDATION.skill.yaml
+    - docs/pipelines/constitution/stages/STAGE_09_CLOSEOUT_AND_ARCHIVE.skill.yaml
+  pipeline_position:
+    materialize_new_run: capture baseline_scope_state.yaml before STAGE_01
+    stage_06: produce scope_evolution_preview.yaml before release decision
+    stage_07: keep build_release_plan.py authoritative for material release_required
+    stage_09: produce final scope_evolution_score.yaml after closeout
+  validation:
+    smoke_test: PASS
+    commands:
+      - python -m py_compile docs/patcher/shared/capture_constitution_scope_baseline.py docs/patcher/shared/score_constitution_scope_evolution_preview.py docs/patcher/shared/score_constitution_scope_evolution.py
+      - python docs/patcher/shared/capture_constitution_scope_baseline.py --help
+      - python docs/patcher/shared/score_constitution_scope_evolution_preview.py --help
+  mutation_policy:
+    run_opened: false
+    release_created: false
+    policy_yaml_modified: false
+    governance_backlog_modified: false
+  next_functional_test: next real bounded run, because old runs do not have a true pre-STAGE_01 baseline_scope_state.yaml
+
 
 ## Guardrails
 

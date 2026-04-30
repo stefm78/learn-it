@@ -44,8 +44,9 @@ scope_modularization:
   last_completed_launcher_engine_cleanup_phase: PHASE_28D10
   last_completed_launcher_end_to_end_validation_phase: PHASE_28D11
   last_completed_stage00_signal_refresh_phase: PHASE_29
-  last_completed_phase: PHASE_29
-  last_completed_phase_label: stage00_signal_refresh_and_scope_catalog_v5_alignment
+  last_completed_scope_evolution_phase: PHASE_33
+  last_completed_phase: PHASE_33
+  last_completed_phase_label: scope_evolution_before_after_preview_integration
   current_recommendation: do_not_open_new_bounded_run_now
 ```
 
@@ -605,6 +606,38 @@ The default recommendation remains not to open a new bounded run unless a future
 `PREFLIGHT_READY_TO_OPEN_RUN` is produced or a human explicitly overrides the current
 non-authorizing signal.
 
+### Phase 33 — Scope evolution before/after preview integration
+
+PHASE_33 completed a pipeline contract update, not a Constitution run.
+
+```yaml
+PHASE_33:
+  status: done
+  type: pipeline_contract_update
+  run_opened: false
+  release_created: false
+  purpose: >-
+    Add a true before/after diagnostic path so future Constitution runs capture a
+    baseline at materialization, produce a pre-release preview at STAGE_06, and
+    keep the final evolution score at STAGE_09.
+  artifacts:
+    - docs/patcher/shared/capture_constitution_scope_baseline.py
+    - docs/patcher/shared/score_constitution_scope_evolution_preview.py
+    - docs/patcher/shared/score_constitution_scope_evolution.py
+    - docs/specs/constitution_scope_evolution_preview.md
+    - docs/specs/constitution_scope_evolution_scoring.md
+    - docs/pipelines/constitution/entry_actions/MATERIALIZE_NEW_RUN.action.yaml
+    - docs/pipelines/constitution/stages/STAGE_06_CORE_VALIDATION.skill.yaml
+    - docs/pipelines/constitution/stages/STAGE_09_CLOSEOUT_AND_ARCHIVE.skill.yaml
+  validation:
+    py_compile: PASS
+    help_interfaces: PASS
+  functional_test_note: >-
+    The complete before/after flow must be tested on the next real run, because
+    older closed runs did not capture baseline_scope_state.yaml before STAGE_01.
+```
+
+
 ## Remaining open backlog entries
 
 Four reviewed backlog entries remain open intentionally:
@@ -906,6 +939,40 @@ all_historical_reports_pass: true
 engine_parallel_slots_work: true
 recommended_next_phase: STOP_OR_TARGETED_FUNCTIONAL_TESTS
 ```
+## Interaction protocol used with the human operator
+
+The working mode for this repo is intentionally interactive and deterministic.
+
+```yaml
+interaction_protocol:
+  language: French preferred
+  default_shell: Git Bash on Windows from repository root
+  repo_branch: feat/core-modularization-bootstrap
+  assistant_role:
+    - inspect GitHub state when the user says sync
+    - propose bounded repo changes as downloadable Python scripts under /c/Users/Stef/Downloads
+    - provide exact Git Bash commands for execution, git add, commit and push
+    - never claim local execution unless the human reports command output or GitHub state proves it
+    - avoid opening Constitution runs unless explicitly requested and authorized by entry contracts
+  human_role:
+    - execute scripts and commands locally
+    - commit and push changes
+    - reply with sync, continue after push
+    - paste command output when a local command fails or when the assistant asks for smoke-test output
+  sync_semantics:
+    sync: user has committed/pushed or updated the repo; assistant must verify GitHub before continuing
+    continue: assistant may proceed to the next bounded step after verification
+  preferred_change_shape:
+    - small deterministic phases
+    - one downloadable patch script per phase when practical
+    - no manual editing of generated scope catalog or run tracking
+    - smoke tests after script/tooling changes
+  handover_requirement:
+    - include this protocol in future handovers
+    - explicitly state whether a proposed action is a pipeline run or only a documentation/tooling phase
+```
+
+
 ## Operational checks for resuming later
 
 ```bash
