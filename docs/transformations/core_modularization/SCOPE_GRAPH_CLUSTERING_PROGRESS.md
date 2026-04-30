@@ -38,8 +38,8 @@ scope_modularization_post_pilot:
   status: paused_cleanly
   active_pipeline_run: none
   new_bounded_run_opened_now: false
-  last_completed_phase: PHASE_53
-  last_completed_phase_label: cross_core_l4_dry_run_activation_orchestrator
+  last_completed_phase: PHASE_54
+  last_completed_phase_label: cross_core_l4_hardening_closeout
 ```
 
 ## What is complete
@@ -130,6 +130,7 @@ completed:
       - PHASE_51 cross_core_l4_activation_review_instance_validator
       - PHASE_52 cross_core_l4_activation_gate_orchestration
       - PHASE_53 cross_core_l4_dry_run_activation_orchestrator
+      - PHASE_54 cross_core_l4_hardening_closeout
 ```
 
 ## Current pipeline position
@@ -1340,6 +1341,39 @@ option_AN_cross_core_l4_dry_run_activation_orchestrator:
     - no release or promotion
     - CCR_PATCH_LIFECYCLE_ESCALATION_THRESHOLD_N_R01 remains proposed / pending_arbitration
   recommended_next_decision: stop at NO_ACTIVE_PHASE or consolidate cross_core_contract L4 hardening closeout
+  launcher_authorizes_run_from_signals: false
+
+option_AO_cross_core_l4_hardening_closeout:
+  status: done
+  completed_phase: PHASE_54
+  action: close out cross_core_contract L4 hardening as structurally complete but inactive
+  artifacts:
+    - docs/pipelines/cross_core_contract/L4_HARDENING_CLOSEOUT.md
+    - docs/pipelines/cross_core_contract/validators/l4_hardening_closeout.yaml
+    - docs/patcher/shared/validate_cross_core_l4_hardening_closeout.py
+    - docs/registry/reports/cross_core_l4_hardening_closeout_validation.yaml
+    - docs/pipelines/cross_core_contract/AI_PROTOCOL.yaml
+    - docs/pipelines/cross_core_contract/pipeline.md
+    - docs/pipelines/cross_core_contract/state.yaml
+    - docs/pipelines/cross_core_contract/l4_transition_checklist.yaml
+  validation:
+    cross_core_l4_hardening_closeout_validation: PASS
+  posture:
+    active_level: L3_managed_execution_pipeline
+    target_level: L4_critical_canonical_pipeline
+    l4_hardening_closeout_complete: true
+    recommended_next_action: stop_at_NO_ACTIVE_PHASE
+    l4_activation_ready_now: false
+    l4_active_now: false
+  non_goals_preserved:
+    - no real L4 activation review materialized
+    - no downstream mutating gate executed
+    - no Constitution run opened
+    - no Core file modified
+    - no governance_backlog.yaml modification
+    - no release or promotion
+    - CCR_PATCH_LIFECYCLE_ESCALATION_THRESHOLD_N_R01 remains proposed / pending_arbitration
+  recommended_next_decision: stop at NO_ACTIVE_PHASE unless a human explicitly starts a future activation-review workstream
   launcher_authorizes_run_from_signals: false
 
 ## Guardrails

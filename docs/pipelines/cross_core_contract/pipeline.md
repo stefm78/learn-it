@@ -106,6 +106,21 @@ release_or_promotion_authorized: false
 
 This pipeline is hardened to L3 for intake, evidence review, arbitration and contract synthesis.
 It remains below L4: no Core write, backlog closure, release or promotion is authorized.
+## L4 hardening closeout
+
+```yaml
+phase: PHASE_54_CROSS_CORE_L4_HARDENING_CLOSEOUT
+closeout_ref: docs/pipelines/cross_core_contract/L4_HARDENING_CLOSEOUT.md
+closeout_yaml: docs/pipelines/cross_core_contract/validators/l4_hardening_closeout.yaml
+validation_report: docs/registry/reports/cross_core_l4_hardening_closeout_validation.yaml
+l4_hardening_closeout_complete: true
+recommended_next_action: stop_at_NO_ACTIVE_PHASE
+l4_activation_ready_now: false
+l4_active_now: false
+```
+
+The L4 hardening sequence is structurally complete and validated, but inactive. Future activation requires a real approved L4 activation review instance and passing gates.
+
 ## L4 dry-run activation orchestrator
 
 ```yaml

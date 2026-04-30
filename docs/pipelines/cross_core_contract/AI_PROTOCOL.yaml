@@ -274,6 +274,16 @@ ai_protocol:
     l4_activation_ready_now: false
     l4_active_now: false
 
+  l4_hardening_closeout:
+    phase: PHASE_54_CROSS_CORE_L4_HARDENING_CLOSEOUT
+    closeout_ref: docs/pipelines/cross_core_contract/L4_HARDENING_CLOSEOUT.md
+    closeout_yaml: docs/pipelines/cross_core_contract/validators/l4_hardening_closeout.yaml
+    validation_report: docs/registry/reports/cross_core_l4_hardening_closeout_validation.yaml
+    l4_hardening_closeout_complete: true
+    recommended_next_action: stop_at_NO_ACTIVE_PHASE
+    l4_activation_ready_now: false
+    l4_active_now: false
+
   anti_patterns:
     - chat_summary_as_pass
     - direct_write_to_owned_state
