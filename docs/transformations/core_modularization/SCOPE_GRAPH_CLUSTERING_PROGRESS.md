@@ -30,9 +30,9 @@ archived_full_approach_sha256: 1a92e334eeb94768cbb3e4d05bd7cd9916e45f1cb4d78f380
 
 ```yaml
 current_phase:
-  phase_id: NO_ACTIVE_PHASE
-  label: awaiting_next_human_decision
-  status: paused
+  phase_id: PHASE_32_CROSS_CORE_CONTRACT_BOOTSTRAP
+  label: cross_core_contract_bootstrap
+  status: in_progress
 
 scope_modularization_post_pilot:
   status: paused_cleanly
@@ -232,6 +232,7 @@ Read these files to resume:
 
 ```text
 docs/transformations/core_modularization/HANDOVER_SCOPE_MODULARIZATION_POST_PILOT.md
+docs/transformations/core_modularization/CROSS_CORE_CONTRACT_BOOTSTRAP.md
 docs/pipelines/constitution/reports/governance_backlog_report.yaml
 docs/pipelines/constitution/reports/governance_backlog_lifecycle_validation.yaml
 docs/pipelines/constitution/reports/bounded_run_preflight_report.yaml
@@ -624,6 +625,29 @@ option_R_stage00_post_run_backlog_and_referentiel_v6_review:
     missing_review_metadata_count: 0
     signal_recommended_action: KEEP_BACKLOG_OPEN_WITH_REVIEW_METADATA
     preflight_status: PREFLIGHT_KEEP_BACKLOG_OPEN
+
+
+
+option_S_cross_core_contract_bootstrap:
+  status: in_progress
+  active_phase: PHASE_32
+  action: bootstrap the governed flow for cross-core Constitution, Referentiel and Link change requests
+  artifacts:
+    - docs/transformations/core_modularization/CROSS_CORE_CONTRACT_BOOTSTRAP.md
+  non_goals:
+    - do not open a Constitution run
+    - do not modify referentiel.yaml or link.yaml
+    - do not resolve patch_lifecycle threshold N in Constitution
+    - do not modify TYPE_SELF_REPORT_AR_N2 neighbor declaration without dedicated arbitration
+    - do not close reviewed patch_lifecycle backlog entries
+  proposed_contract:
+    object: cross_core_change_request
+    first_candidate_request: CCR_PATCH_LIFECYCLE_ESCALATION_THRESHOLD_N_R01
+    preferred_control_plane: docs/pipelines/cross_core_contract/
+    fallback_mode: cross_core_governed_run
+    fallback_mode_status: exceptional_not_default
+  recommended_next_decision: decide whether to instantiate a dedicated cross_core_contract pipeline skeleton
+  launcher_authorizes_run_from_signals: false
 
 ## Guardrails
 

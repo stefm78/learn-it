@@ -1,0 +1,29 @@
+phase32_cross_core_contract_bootstrap_report:
+  generated_at: 2026-04-30T10:15:12Z
+  status: PASS
+  branch: feat/core-modularization-bootstrap
+  phase: PHASE_32_CROSS_CORE_CONTRACT_BOOTSTRAP
+  checks:
+    resume_state: PASS
+    stage00_review_bundle: PASS
+    scope_partition_bijection: PASS
+    ids_not_covered: []
+    bounded_run_preflight: PREFLIGHT_KEEP_BACKLOG_OPEN
+    pipeline_signals: KEEP_BACKLOG_OPEN_WITH_REVIEW_METADATA
+    reviewed_patch_lifecycle_backlog_entries: 7
+    missing_review_metadata_count: 0
+    no_constitution_run_opened: true
+    forbidden_core_mutations_detected: false
+    backlog_mutation_detected: false
+  files_written:
+    - docs/transformations/core_modularization/CROSS_CORE_CONTRACT_BOOTSTRAP.md
+    - docs/transformations/core_modularization/SCOPE_GRAPH_CLUSTERING_PROGRESS.md
+    - tmp/phase32_cross_core_contract_bootstrap_report.yaml
+  files_not_modified:
+    - docs/cores/current/constitution.yaml
+    - docs/cores/current/referentiel.yaml
+    - docs/cores/current/link.yaml
+    - docs/pipelines/constitution/scope_catalog/governance_backlog.yaml
+  next_recommended_decision:
+    decision: instantiate_or_defer_cross_core_contract_pipeline_skeleton
+    default: instantiate_skeleton_after_human_decision
