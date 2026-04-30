@@ -43,7 +43,9 @@ runtime_binding:
     Il ne remplace pas la preuve d'exécution réelle du closeout.
   execution_evidence_role: >-
     closeout_pipeline_run.py doit être réellement exécuté. L'IA ne doit jamais
-    simuler la clôture matérielle du run ni l'export de backlog.
+    simuler la clôture matérielle du run ni l'export de backlog. Après closeout,
+    score_constitution_scope_evolution.py doit être exécuté pour matérialiser
+    un diagnostic post-run générique, non publiant, applicable à tout scope.
   artifact_ownership_rule: >-
     Les artefacts bruts produits par script (closeout_report.yaml,
     final_run_summary.md, archive de run et éventuelle mise à jour de
@@ -114,6 +116,8 @@ primary_reads:
 required_scripts:
   mandatory_closeout:
     - docs/patcher/shared/closeout_pipeline_run.py
+  mandatory_post_run_diagnostic:
+    - docs/patcher/shared/score_constitution_scope_evolution.py
   note: >-
     Si l'IA ne peut pas exécuter le script elle-même, elle doit émettre la
     commande exacte, déclarer le stage BLOCKED, et attendre les artefacts.
@@ -122,6 +126,8 @@ required_scripts:
     Le script ne supporte pas les flags --pipeline décrits dans les versions
     antérieures du skill. Pour l'export backlog, il supporte --export-backlog-entries,
     --arbitrage-path, --backlog-path, --run-id, --scope-key et --current-stage.
+    Après closeout, l'interface du score d'évolution est :
+    score_constitution_scope_evolution.py --run-id <RUN_ID> --scope-key <scope_key>.
 
 script_execution_contract:
   required_before_pass_or_fail:
@@ -129,12 +135,14 @@ script_execution_contract:
     - closeout_report_materialized
     - final_run_summary_materialized
     - backlog_candidates_exported_or_absence_declared
+    - scope_evolution_score_materialized
   blocked_if_missing_evidence: true
   blocked_status_value: BLOCKED
   pass_requires:
     - closeout_chain_passed
     - no_blocking_final_consistency_issue
     - governance_backlog_export_performed_or_no_candidates_found
+    - scope_evolution_score_status_pass_or_warn
   fail_requires:
     - closeout_script_failed
     - or_blocking_final_consistency_issue_after_real_execution
@@ -157,6 +165,10 @@ deterministic_command_templates:
       --run-id <RUN_ID>
       --scope-key <scope_key>
       --current-stage STAGE_09_CLOSEOUT_AND_ARCHIVE
+    score_scope_evolution: >-
+      python docs/patcher/shared/score_constitution_scope_evolution.py
+      --run-id <RUN_ID>
+      --scope-key <scope_key>
     close_tracking: >-
       python docs/patcher/shared/update_run_tracking.py
       --pipeline constitution
@@ -212,6 +224,8 @@ expected_outputs:
     primary_output_path_pattern: docs/pipelines/constitution/runs/<run_id>/reports/closeout_report.yaml
     required_raw_artifacts:
       - docs/pipelines/constitution/runs/<run_id>/outputs/final_run_summary.md
+      - docs/pipelines/constitution/runs/<run_id>/reports/scope_evolution_score.yaml
+      - docs/pipelines/constitution/runs/<run_id>/reports/scope_evolution_score.md
     conditional_raw_artifacts_if_backlog_candidates_exist:
       - docs/pipelines/constitution/scope_catalog/governance_backlog.yaml
   parallel_consolidation:
@@ -240,6 +254,7 @@ completion_evidence:
     - closeout_report_materialized
     - final_run_summary_materialized
     - governance_backlog_export_performed_or_absence_declared
+    - scope_evolution_score_materialized
     - final_status_is_pass_fail_or_blocked
     - human_actions_explicitly_stated_in_output
   not_sufficient:
@@ -247,6 +262,7 @@ completion_evidence:
     - closeout_reasoning_without_script_evidence
     - pass_without_materialized_closeout_artifacts
     - pass_without_backlog_export_status
+    - pass_without_scope_evolution_score
     - simulated_script_execution
 
 status_values:
