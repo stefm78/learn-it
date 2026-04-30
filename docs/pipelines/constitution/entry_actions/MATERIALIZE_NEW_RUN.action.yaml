@@ -69,7 +69,7 @@ entry_action:
     - after input materialization, execute capture_constitution_scope_baseline.py --run-id <RUN_ID> --scope-key <SCOPE_KEY>
     - after baseline capture, execute extract_scope_slice.py --run-id <RUN_ID>
     - after ids-first extract materialization, execute build_run_context.py for <RUN_ID>
-    - confirm that scope_manifest.yaml, impact_bundle.yaml, integration_gate.yaml, scope_extract.yaml, neighbor_extract.yaml and run_context.yaml are materially produced before declaring run readiness
+    - confirm that scope_manifest.yaml, impact_bundle.yaml, integration_gate.yaml, baseline_scope_state.yaml, scope_extract.yaml, neighbor_extract.yaml and run_context.yaml are materially produced before declaring run readiness
     - do not start STAGE_01_CHALLENGE
     - do not emit or apply stage transition commands beyond RUN_BOOTSTRAP materialization
     - if a required script cannot be executed, emit the exact command and stop non-final

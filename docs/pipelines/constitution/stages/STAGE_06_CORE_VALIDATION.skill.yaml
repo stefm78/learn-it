@@ -12,8 +12,8 @@ mission: >-
   structurellement valides, logiquement cohérents et prêts soit pour la
   matérialisation de release du run, soit pour une consolidation multi-runs
   lorsqu'elle est requise. Ce stage ne promeut rien, ne réécrit pas current,
-  et n'exécute aucun script déterministe obligatoire. Il produit une décision
-  explicite de validation et d'orientation aval.
+  et matérialise un diagnostic déterministe de preview avant release. Il produit
+  une décision explicite de validation et d'orientation aval.
 
 model_requirements:
   reasoning_level: advanced
@@ -117,6 +117,7 @@ validation_rules:
     - no_silent_consolidation_bypass_when_required
     - every_blocking_issue_must_be_explicit
     - pass_requires_no_blocking_logical_issue
+    - pass_requires_scope_evolution_preview_materialized
   statuses:
     - PASS
     - FAIL
@@ -131,6 +132,10 @@ validation_rules:
     - direct_release_materialization
     - requires_parallel_consolidation
     - return_upstream_for_correction
+  preview_command_template: >-
+    python docs/patcher/shared/score_constitution_scope_evolution_preview.py
+    --run-id <RUN_ID>
+    --scope-key <scope_key>
 
 consolidation_decision_rules:
   direct_release_materialization_when:
