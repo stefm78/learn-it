@@ -173,8 +173,9 @@ docs/pipelines/cross_core_contract/work/05_release_planning/cross_core_release_p
 ```yaml
 candidate:
   request_id: CCR_PATCH_LIFECYCLE_ESCALATION_THRESHOLD_N_R01
-  status: not_materialized
+  status: materialized_as_proposed_request
   source_scope_key: patch_lifecycle
+  request_file: docs/pipelines/cross_core_contract/requests/CCR_PATCH_LIFECYCLE_ESCALATION_THRESHOLD_N_R01.yaml
   linked_backlog_candidates:
     - GBC_PATCH_LIFECYCLE_REFERENTIEL_PARAMETER_R01
     - GBC_PATCH_LIFECYCLE_REFERENTIEL_PARAMETER_R02

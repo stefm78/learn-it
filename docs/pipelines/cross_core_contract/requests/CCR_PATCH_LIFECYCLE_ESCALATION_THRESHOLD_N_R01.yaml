@@ -1,0 +1,92 @@
+cross_core_change_request:
+  schema_version: '0.1'
+  request_id: CCR_PATCH_LIFECYCLE_ESCALATION_THRESHOLD_N_R01
+  status: proposed
+  generated_at: '2026-04-30T10:42:23Z'
+  materialized_by_phase: PHASE_34_CROSS_CORE_FIRST_REQUEST_MATERIALIZATION
+
+  source:
+    source_pipeline: constitution
+    source_scope_key: patch_lifecycle
+    source_run_id: null
+    source_stage: STAGE_00_SCOPE_PARTITION_REVIEW_AND_REGEN
+    source_evidence:
+      - docs/pipelines/constitution/scope_catalog/governance_backlog.yaml
+      - docs/pipelines/constitution/reports/bounded_run_preflight_report.yaml
+      - docs/pipelines/constitution/signals.yaml
+      - docs/transformations/core_modularization/CROSS_CORE_CONTRACT_BOOTSTRAP.md
+    source_backlog_entries:
+      - GBC_PATCH_LIFECYCLE_REFERENTIEL_PARAMETER_R01
+      - GBC_PATCH_LIFECYCLE_REFERENTIEL_PARAMETER_R02
+
+  summary:
+    title: Govern ineffective patch iteration threshold N across Constitution, Referentiel and Link
+    problem_statement: >-
+      The patch_lifecycle Constitution scope references an external parameter N controlling
+      the number of ineffective patch iterations before escalation. A Constitution-only
+      run cannot define, validate or modify this parameter in Referentiel or Link.
+    desired_outcome: >-
+      Decide whether N should be represented as a Referentiel parameter, a Link-bound
+      external read-only reference, or another cross-core construct, then define the
+      required write surface and release/promotion path.
+    non_goals:
+      - Do not mutate referentiel.yaml or link.yaml from a Constitution-only run.
+      - Do not add N as a local Constitution parameter just to complete patch_lifecycle.
+      - Do not close the linked backlog entries until a validated resolution exists.
+      - Do not modify TYPE_SELF_REPORT_AR_N2 neighbor declarations.
+
+  affected_cores:
+    - core: constitution
+      role: source_consumer_or_rule_owner
+      read_surface:
+        - docs/cores/current/constitution.yaml
+      proposed_write_surface: []
+    - core: referentiel
+      role: candidate_parameter_or_reference_owner
+      read_surface:
+        - docs/cores/current/referentiel.yaml
+      proposed_write_surface: pending_arbitration
+    - core: link
+      role: candidate_inter_core_binding_owner
+      read_surface:
+        - docs/cores/current/link.yaml
+      proposed_write_surface: pending_arbitration
+
+  target_ids:
+    constitution_ids:
+      - INV_PERSISTENT_DRIFT_REQUIRES_ESCALATION_IF_PATCH_BLOCKED
+    referentiel_ids: []
+    link_ids: []
+    external_read_only_ids:
+      - REF_CORE_LEARNIT_REFERENTIEL_V6_0_IN_CONSTITUTION
+    proposed_new_ids:
+      - PENDING_REFERENTIEL_OR_LINK_PATCH_INEFFECTIVE_ITERATION_THRESHOLD_N
+
+  mutation_policy:
+    request_creation: allowed
+    core_write_authorization: forbidden_until_arbitrated
+    generated_scope_catalog_update: forbidden_until_contract_decision
+    backlog_closure: forbidden_until_validated_resolution
+    constitution_run_opening: forbidden_by_this_request
+
+  validation_gates:
+    required_before_apply:
+      - validate_cross_core_change_request
+      - validate_cross_core_write_surface
+      - validate_constitution_referentiel_link_reconstruction
+      - validate_link_binding_consistency
+      - validate_multi_core_release_plan
+      - validate_multi_core_promotion_manifest
+
+  release_policy:
+    release_scope: multi_core_or_explicitly_single_core_with_link_compatibility
+    promotion_mode: atomic_preferred
+    constitution_only_release_may_close_request: false
+
+  decision:
+    decision_status: pending_arbitration
+    selected_execution_model: null
+    notes:
+      - This request is materialized as an intake artifact only.
+      - It does not authorize a patch or a run.
+      - It preserves the linked backlog entries as open.

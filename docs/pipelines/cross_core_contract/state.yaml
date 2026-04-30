@@ -1,12 +1,15 @@
 pipeline_id: cross_core_contract
 version: 0.1
 current_stage: null
-last_successful_stage: null
+last_successful_stage: STAGE_00_INTAKE_AND_SHAPE_VALIDATION
 current_run_id: null
 status: idle
-active_inputs: []
-active_outputs: []
+active_inputs:
+  - docs/pipelines/cross_core_contract/requests/CCR_PATCH_LIFECYCLE_ESCALATION_THRESHOLD_N_R01.yaml
+active_outputs:
+  - docs/pipelines/cross_core_contract/reports/cross_core_change_request_validation.yaml
 notes:
   - Bootstrap pipeline skeleton only.
+  - First request materialized as proposed intake artifact.
   - No cross-core run is active.
   - No Core mutation is authorized by this state file.

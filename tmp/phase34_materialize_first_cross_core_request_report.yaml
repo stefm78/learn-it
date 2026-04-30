@@ -1,0 +1,25 @@
+phase34_materialize_first_cross_core_request_report:
+  generated_at: 2026-04-30T10:42:23Z
+  status: PASS
+  branch: feat/core-modularization-bootstrap
+  phase: PHASE_34_CROSS_CORE_FIRST_REQUEST_MATERIALIZATION
+  request_id: CCR_PATCH_LIFECYCLE_ESCALATION_THRESHOLD_N_R01
+  files_written:
+    - docs/pipelines/cross_core_contract/requests/CCR_PATCH_LIFECYCLE_ESCALATION_THRESHOLD_N_R01.yaml
+    - docs/pipelines/cross_core_contract/reports/cross_core_change_request_validation.yaml
+    - docs/pipelines/cross_core_contract/pipeline.md
+    - docs/pipelines/cross_core_contract/state.yaml
+    - docs/transformations/core_modularization/SCOPE_GRAPH_CLUSTERING_PROGRESS.md
+    - tmp/phase34_materialize_first_cross_core_request_report.yaml
+  validations:
+    cross_core_change_request_validation: PASS
+  guardrails:
+    no_constitution_run_opened: true
+    core_files_not_modified: true
+    governance_backlog_not_modified: true
+    threshold_N_not_resolved: true
+    type_self_report_ar_n2_neighbor_not_modified: true
+    linked_backlog_entries_remain_open: true
+  next_recommended_decision:
+    decision: run_or_defer_cross_core_stage_01_source_evidence_review
+    default: defer_or_prepare_review_artifacts

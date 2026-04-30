@@ -38,8 +38,8 @@ scope_modularization_post_pilot:
   status: paused_cleanly
   active_pipeline_run: none
   new_bounded_run_opened_now: false
-  last_completed_phase: PHASE_33
-  last_completed_phase_label: scope_evolution_before_after_preview_integration
+  last_completed_phase: PHASE_34
+  last_completed_phase_label: cross_core_first_request_materialization
 ```
 
 ## What is complete
@@ -110,6 +110,7 @@ completed:
       - PHASE_31 stage00_post_run_backlog_and_referentiel_v6_review
       - PHASE_32 cross_core_contract_bootstrap
       - PHASE_33 scope_evolution_before_after_preview_integration
+      - PHASE_34 cross_core_first_request_materialization
 ```
 
 ## Current pipeline position
@@ -716,6 +717,27 @@ option_T_scope_evolution_before_after_preview_integration:
     governance_backlog_modified: false
   next_functional_test: next real bounded run, because old runs do not have a true pre-STAGE_01 baseline_scope_state.yaml
 
+
+option_U_cross_core_first_request_materialization:
+  status: done
+  completed_phase: PHASE_34
+  action: materialize the first proposed cross_core_change_request for patch_lifecycle threshold N
+  artifacts:
+    - docs/pipelines/cross_core_contract/requests/CCR_PATCH_LIFECYCLE_ESCALATION_THRESHOLD_N_R01.yaml
+    - docs/pipelines/cross_core_contract/reports/cross_core_change_request_validation.yaml
+    - docs/pipelines/cross_core_contract/pipeline.md
+    - docs/pipelines/cross_core_contract/state.yaml
+  validation:
+    cross_core_change_request_validation: PASS
+  non_goals_preserved:
+    - no Constitution run opened
+    - no Core file modified
+    - no governance_backlog.yaml modification
+    - no patch_lifecycle threshold N resolved
+    - no TYPE_SELF_REPORT_AR_N2 neighbor declaration modification
+    - linked backlog entries remain open
+  recommended_next_decision: run STAGE_01_SOURCE_EVIDENCE_REVIEW or stop at NO_ACTIVE_PHASE
+  launcher_authorizes_run_from_signals: false
 
 ## Guardrails
 

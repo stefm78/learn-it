@@ -1,0 +1,20 @@
+cross_core_change_request_validation:
+  schema_version: '0.1'
+  generated_at: '2026-04-30T10:42:23Z'
+  status: PASS
+  request:
+    path: docs/pipelines/cross_core_contract/requests/CCR_PATCH_LIFECYCLE_ESCALATION_THRESHOLD_N_R01.yaml
+    exists: true
+    sha256: 135e6039ed61b82fe7baefbf5a37e2cd03ad20d0cad2babd091b6629bb1e8d85
+  forbidden_mutation_targets:
+    - docs/cores/current/constitution.yaml
+    - docs/cores/current/referentiel.yaml
+    - docs/cores/current/link.yaml
+    - docs/pipelines/constitution/scope_catalog/governance_backlog.yaml
+  blocking_findings:
+    []
+  result_summary:
+    blocking_finding_count: 0
+    core_mutation_authorized: false
+    constitution_run_opened: false
+    backlog_closure_authorized: false
