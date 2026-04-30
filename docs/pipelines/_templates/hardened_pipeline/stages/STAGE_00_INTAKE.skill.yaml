@@ -1,0 +1,38 @@
+stage_skill:
+  schema_version: 0.1
+  pipeline_id: <pipeline_id>
+  stage_id: STAGE_00_INTAKE
+  stage_kind: deterministic_or_hybrid
+  closure_level: medium
+
+mission: >-
+  Validate input/request shape before any business execution or canonical mutation.
+
+primary_reads:
+  - docs/pipelines/<pipeline_id>/pipeline.md
+  - docs/pipelines/<pipeline_id>/inputs/
+
+required_scripts:
+  mandatory_validation:
+    - docs/patcher/shared/validate_<pipeline_id>_intake.py
+
+validation_rules:
+  statuses:
+    - PASS
+    - FAIL
+    - BLOCKED
+  constraints:
+    - no_core_write
+    - no_backlog_closure
+    - required_script_must_execute
+
+expected_outputs:
+  report_path_pattern: docs/pipelines/<pipeline_id>/reports/intake_validation.yaml
+
+completion_evidence:
+  required:
+    - validation_report_materialized
+    - status_emitted
+  not_sufficient:
+    - chat_summary_only
+    - simulated_script_execution

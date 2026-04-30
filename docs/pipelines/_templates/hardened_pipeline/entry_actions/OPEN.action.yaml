@@ -1,0 +1,22 @@
+entry_action:
+  schema_version: 0.1
+  action_id: OPEN
+  role: decide_whether_entry_is_authorized
+  stop_after_decision: true
+
+allowed_reads:
+  - docs/pipelines/<pipeline_id>/pipeline.md
+  - docs/pipelines/<pipeline_id>/state.yaml
+
+forbidden_before_decision:
+  - repo_wide_search
+  - canonical_core_writes
+  - business_stage_execution
+
+decision_outputs:
+  - open_authorized
+  - open_blocked
+  - needs_human_decision
+
+next_step_policy:
+  after_open_authorized: MATERIALIZE

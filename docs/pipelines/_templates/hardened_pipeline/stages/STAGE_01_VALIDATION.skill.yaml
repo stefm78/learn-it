@@ -1,0 +1,43 @@
+stage_skill:
+  schema_version: 0.1
+  pipeline_id: <pipeline_id>
+  stage_id: STAGE_01_VALIDATION
+  stage_kind: hybrid
+  closure_level: high
+
+mission: >-
+  Validate pipeline outputs and decide whether downstream release, promotion,
+  closeout, or human arbitration is required.
+
+primary_reads:
+  - docs/pipelines/<pipeline_id>/work/
+  - docs/pipelines/<pipeline_id>/reports/
+
+fallback_reads:
+  rule: fallback reads must be declared in the output
+
+required_scripts:
+  mandatory_validation:
+    - docs/patcher/shared/validate_<pipeline_id>.py
+
+validation_rules:
+  statuses:
+    - PASS
+    - FAIL
+    - BLOCKED
+  constraints:
+    - every_blocking_issue_explicit
+    - no_implicit_release_or_promotion
+    - required_script_must_execute
+
+expected_outputs:
+  report_path_pattern: docs/pipelines/<pipeline_id>/reports/final_validation.yaml
+
+completion_evidence:
+  required:
+    - required_report_materialized
+    - downstream_decision_emitted
+    - human_actions_explicit
+  not_sufficient:
+    - informal_chat_summary_only
+    - pass_without_validation_report

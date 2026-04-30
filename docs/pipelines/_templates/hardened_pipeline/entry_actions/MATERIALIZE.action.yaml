@@ -1,0 +1,15 @@
+entry_action:
+  schema_version: 0.1
+  action_id: MATERIALIZE
+  role: materialize_state_after_open_decision
+  stop_before_business_stage: true
+
+required_scripts:
+  - docs/patcher/shared/<pipeline_id>_materialize.py
+
+expected_outputs:
+  - docs/pipelines/<pipeline_id>/runs/<run_id>/run_manifest.yaml
+  - docs/pipelines/<pipeline_id>/runs/<run_id>/inputs/
+
+next_step_policy:
+  after_materialization_pass: CONTINUE

@@ -1,0 +1,14 @@
+entry_action:
+  schema_version: 0.1
+  action_id: CONTINUE
+  role: decide_next_stage_for_existing_run_or_request
+  stop_after_decision: true
+
+allowed_reads:
+  - docs/pipelines/<pipeline_id>/state.yaml
+  - docs/pipelines/<pipeline_id>/runs/<run_id>/run_manifest.yaml
+
+outputs:
+  - continue_authorized
+  - reconcile_required
+  - blocked

@@ -1,0 +1,33 @@
+ai_protocol:
+  schema_version: 0.1
+  protocol_id: <PIPELINE_ID>_AI_PROTOCOL
+  authoritative_for_ai: true
+
+  entry_actions:
+    decision_action_ref: docs/pipelines/<pipeline_id>/entry_actions/OPEN.action.yaml
+    materialization_action_ref: docs/pipelines/<pipeline_id>/entry_actions/MATERIALIZE.action.yaml
+    continuation_action_ref: docs/pipelines/<pipeline_id>/entry_actions/CONTINUE.action.yaml
+    reconciliation_action_ref: docs/pipelines/<pipeline_id>/entry_actions/RECONCILE.action.yaml
+    sequencing_rule: >-
+      Decision and materialization are separate. A positive entry decision does not
+      authorize business execution until materialization has produced required state.
+
+  forbidden_direct_writes:
+    description: Generated state files must be written only by owner scripts.
+    forbidden_files:
+      - pattern: docs/pipelines/<pipeline_id>/state.yaml
+        owner_script: docs/patcher/shared/<pipeline_id>_update_state.py
+      - pattern: docs/pipelines/<pipeline_id>/runs/<run_id>/run_manifest.yaml
+        owner_script: docs/patcher/shared/<pipeline_id>_update_run_tracking.py
+
+  deterministic_script_policy:
+    mandatory_behavior: true
+    rules:
+      - required scripts must be actually executed
+      - AI must not simulate required script execution
+      - stage status cannot be final without required evidence
+
+  anti_patterns:
+    - chat_summary_as_pass
+    - direct_write_to_owned_state
+    - implicit_release_or_promotion_claim

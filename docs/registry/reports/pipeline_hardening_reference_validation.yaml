@@ -1,0 +1,42 @@
+pipeline_hardening_reference_validation:
+  schema_version: 0.1
+  status: FAIL
+  validated_scope: reference_model_and_template
+  required_file_count: 10
+  present_file_count: 10
+  files:
+  - path: docs/specs/pipeline_hardening_model.md
+    exists: true
+    sha256: 4017e71e83c64e2b41e7315713b87a7bd41e5fa1e3cc750df6508dab6b571131
+  - path: docs/specs/pipeline_hardening_checklist.md
+    exists: true
+    sha256: 50c57d4e743d9d3674b267d72e6c0cc40d508585623063f2267293eaeeb1912b
+  - path: docs/pipelines/_templates/hardened_pipeline/pipeline.md
+    exists: true
+    sha256: 34671297bb72972c9139afa5f39b760903c5f23edec27a6809af5bf1eac5049f
+  - path: docs/pipelines/_templates/hardened_pipeline/AI_PROTOCOL.yaml
+    exists: true
+    sha256: 46e1dfe9a220809fe7e2555c9ff2503d61cc4177f18b41d0ccd87443e8bc2fb0
+  - path: docs/pipelines/_templates/hardened_pipeline/entry_actions/OPEN.action.yaml
+    exists: true
+    sha256: 03a3ccee8659015997fb23a10c2d4f10f2b97a9e61027c8ac5ae5607fb4a44b6
+  - path: docs/pipelines/_templates/hardened_pipeline/entry_actions/MATERIALIZE.action.yaml
+    exists: true
+    sha256: e184212ee42cc5f00885e58d960ad2cb7480b582eae5d600fae7d199f2060b75
+  - path: docs/pipelines/_templates/hardened_pipeline/entry_actions/CONTINUE.action.yaml
+    exists: true
+    sha256: d54fab10bd72b9a9e3b50f093c9471ef646a91f56c8279dfa28276602e30b0fd
+  - path: docs/pipelines/_templates/hardened_pipeline/entry_actions/RECONCILE.action.yaml
+    exists: true
+    sha256: 28c2bfa2c149977fbc027413f64a8ca3276c8cec05e59d9d0c1848477761fc0a
+  - path: docs/pipelines/_templates/hardened_pipeline/stages/STAGE_00_INTAKE.skill.yaml
+    exists: true
+    sha256: 4758b8a57be3e9e00d7af302b2f450795a103d7a7962ef89cd32ab26c515feae
+  - path: docs/pipelines/_templates/hardened_pipeline/stages/STAGE_01_VALIDATION.skill.yaml
+    exists: true
+    sha256: 71a46a80ae31a72b558a95ed8f2ede8997c4fc6580ed51a94df8aff9024b7a94
+  blocking_findings:
+  - severity: blocking
+    path: docs/specs/pipeline_hardening_model.md
+    message: 'required term missing: baseline_capture'
+  blocking_finding_count: 1

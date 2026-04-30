@@ -1,0 +1,13 @@
+entry_action:
+  schema_version: 0.1
+  action_id: RECONCILE
+  role: bring_state_back_in_line_without_replaying_business_stage
+
+rules:
+  - rebuild_derivable_artifacts_only
+  - truncate_unjustified_downstream_state
+  - do_not_execute_business_stage
+  - stop_before_continuation
+
+next_step_policy:
+  after_reconcile_pass: CONTINUE
