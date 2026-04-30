@@ -1,0 +1,35 @@
+phase44_cross_core_multi_core_release_plan_validator_contract_report:
+  generated_at: 2026-04-30T12:19:31Z
+  status: PASS
+  branch: feat/core-modularization-bootstrap
+  phase: PHASE_44_CROSS_CORE_MULTI_CORE_RELEASE_PLAN_VALIDATOR_CONTRACT
+  validator_id: validate_multi_core_release_plan
+  active_level: L3_managed_execution_pipeline
+  target_level: L4_critical_canonical_pipeline
+  l4_active_now: false
+  executable_as_l4_gate_now: false
+  files_written:
+    - docs/pipelines/cross_core_contract/validators/validate_multi_core_release_plan.contract.yaml
+    - docs/pipelines/cross_core_contract/validators/validate_multi_core_release_plan.contract.md
+    - docs/patcher/shared/validate_multi_core_release_plan_contract.py
+    - docs/registry/reports/multi_core_release_plan_validator_contract_validation.yaml
+    - docs/pipelines/cross_core_contract/AI_PROTOCOL.yaml
+    - docs/pipelines/cross_core_contract/pipeline.md
+    - docs/pipelines/cross_core_contract/state.yaml
+    - docs/pipelines/cross_core_contract/validators/l4_validator_family.yaml
+    - docs/pipelines/cross_core_contract/L4_VALIDATOR_FAMILY.md
+    - docs/pipelines/cross_core_contract/l4_transition_checklist.yaml
+    - docs/transformations/core_modularization/SCOPE_GRAPH_CLUSTERING_PROGRESS.md
+    - tmp/phase44_cross_core_multi_core_release_plan_validator_contract_report.yaml
+  validations:
+    multi_core_release_plan_validator_contract_validation: PASS
+  guardrails:
+    no_constitution_run_opened: true
+    core_files_not_modified: true
+    governance_backlog_not_modified: true
+    release_or_promotion_authorized: false
+    release_materialized_now: false
+    request_remains_proposed_pending_arbitration: true
+  next_recommended_decision:
+    decision: stop_or_define_next_individual_L4_validator_contract
+    default: stop_at_NO_ACTIVE_PHASE

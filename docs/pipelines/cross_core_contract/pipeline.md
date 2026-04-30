@@ -106,6 +106,20 @@ release_or_promotion_authorized: false
 
 This pipeline is hardened to L3 for intake, evidence review, arbitration and contract synthesis.
 It remains below L4: no Core write, backlog closure, release or promotion is authorized.
+## validate_multi_core_release_plan contract
+
+```yaml
+contract_yaml: docs/pipelines/cross_core_contract/validators/validate_multi_core_release_plan.contract.yaml
+contract_markdown: docs/pipelines/cross_core_contract/validators/validate_multi_core_release_plan.contract.md
+contract_validation_report: docs/registry/reports/multi_core_release_plan_validator_contract_validation.yaml
+contract_defined: true
+l4_active_now: false
+executable_as_l4_gate_now: false
+release_materialized_now: false
+```
+
+This is a future L4 validator contract. It does not activate L4 or create a release.
+
 ## validate_link_binding_consistency contract
 
 ```yaml

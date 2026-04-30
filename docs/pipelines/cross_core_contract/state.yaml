@@ -79,3 +79,11 @@ individual_l4_validator_contracts:
     validate_link_binding_consistency_contract_defined: true
     l4_active_now: false
     executable_as_l4_gate_now: false
+
+  validate_multi_core_release_plan:
+    contract_yaml_ref: docs/pipelines/cross_core_contract/validators/validate_multi_core_release_plan.contract.yaml
+    contract_markdown_ref: docs/pipelines/cross_core_contract/validators/validate_multi_core_release_plan.contract.md
+    validation_report: docs/registry/reports/multi_core_release_plan_validator_contract_validation.yaml
+    validate_multi_core_release_plan_contract_defined: true
+    l4_active_now: false
+    executable_as_l4_gate_now: false

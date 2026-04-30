@@ -1,0 +1,51 @@
+multi_core_release_plan_validator_contract_validation:
+  schema_version: '0.1'
+  generated_at: '2026-04-30T12:19:31Z'
+  status: PASS
+  validator_id: validate_multi_core_release_plan
+  contract_defined: true
+  l4_active_now: false
+  executable_as_l4_gate_now: false
+  checked_files:
+    - path: docs/pipelines/cross_core_contract/validators/validate_multi_core_release_plan.contract.yaml
+      exists: true
+      sha256: 8f1bd7c1dcfca9b0b446202d30c78761d939d40eeaa6d1204dfa3dfddde44fba
+    - path: docs/pipelines/cross_core_contract/validators/validate_multi_core_release_plan.contract.md
+      exists: true
+      sha256: 90c235eca67ca4764e420611c82bde790cd02ea4e060cbc666e60c4ed81ddc1c
+    - path: docs/pipelines/cross_core_contract/validators/validate_link_binding_consistency.contract.yaml
+      exists: true
+      sha256: 2e335c83099951b1a11eee9d47ac435f4c5f1f36287260325e6f27bacb3441d1
+    - path: docs/pipelines/cross_core_contract/L4_VALIDATOR_FAMILY.md
+      exists: true
+      sha256: fffd4cf589b1e58be23612a4a21949de7af4a02aea97fa8b482d4889a2cfe954
+    - path: docs/pipelines/cross_core_contract/validators/l4_validator_family.yaml
+      exists: true
+      sha256: 9142a02e9758663d6bc2496fc97dc726dd6d63128cce64cff35e3ae109d8de70
+    - path: docs/pipelines/cross_core_contract/l4_transition_checklist.yaml
+      exists: true
+      sha256: 65a167506b2eaa21fdcd1f8303c002a546881432378f7365ed8f966e7771bc71
+    - path: docs/pipelines/cross_core_contract/AI_PROTOCOL.yaml
+      exists: true
+      sha256: 7459f8773efaebd937d5b5be90cf3ee086bd886de8ba6e377f8012d2e464aec9
+    - path: docs/pipelines/cross_core_contract/pipeline.md
+      exists: true
+      sha256: cb53cefe98cbbdbb9b6441b489bd6886fb4d2b4c1cd8cc7600661f76a6e43450
+    - path: docs/pipelines/cross_core_contract/state.yaml
+      exists: true
+      sha256: 4ca42fea30f2a9e3b7fe6f129f75542fb443886f12c44a801de1f30a12a9d2d2
+    - path: docs/pipelines/cross_core_contract/requests/CCR_PATCH_LIFECYCLE_ESCALATION_THRESHOLD_N_R01.yaml
+      exists: true
+      sha256: 135e6039ed61b82fe7baefbf5a37e2cd03ad20d0cad2babd091b6629bb1e8d85
+  blocking_findings:
+    []
+  result_summary:
+    blocking_finding_count: 0
+    multi_core_release_plan_validator_contract_defined: true
+    l4_active_now: false
+    executable_as_l4_gate_now: false
+    core_mutation_authorized: false
+    backlog_closure_authorized: false
+    release_or_promotion_authorized: false
+    release_materialized_now: false
+    request_remains_proposed_pending_arbitration: true

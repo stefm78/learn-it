@@ -1,0 +1,63 @@
+l4_validator_contract:
+  schema_version: '0.1'
+  generated_at: '2026-04-30T12:19:31Z'
+  validator_id: validate_multi_core_release_plan
+  pipeline_id: cross_core_contract
+  status: contract_defined_inactive
+  current_level: L3_managed_execution_pipeline
+  target_level: L4_critical_canonical_pipeline
+  l4_active_now: false
+  executable_as_l4_gate_now: false
+
+  purpose: >-
+    Validate a future multi-Core release plan before any release materialization involving
+    Constitution, Referentiel, Link, or their compatibility manifest.
+
+  future_input:
+    expected_release_plan: docs/pipelines/cross_core_contract/work/07_multi_core_release_planning/multi_core_release_plan.yaml
+    expected_execution_contract: docs/pipelines/cross_core_contract/work/03_contract_synthesis/cross_core_execution_contract.yaml
+    expected_reconstruction_validation: docs/pipelines/cross_core_contract/reports/cross_core_contract_validation.yaml
+    expected_link_binding_validation: docs/pipelines/cross_core_contract/reports/link_binding_consistency.yaml
+    expected_request: CCR_PATCH_LIFECYCLE_ESCALATION_THRESHOLD_N_R01
+
+  pass_requires:
+    - release_plan_declares_release_id
+    - release_plan_declares_all_impacted_cores
+    - release_plan_declares_source_current_versions
+    - release_plan_declares_candidate_versions
+    - release_plan_declares_artifact_manifest
+    - release_plan_declares_validation_reports
+    - release_plan_declares_compatibility_matrix
+    - release_plan_declares_rollback_or_reconciliation_path
+    - release_plan_references_cross_core_execution_contract
+    - no_unplanned_core_artifact_in_release
+    - no_single_core_release_when_cross_core_impact_exists
+
+  must_block_if:
+    - release_plan_missing
+    - release_id_missing
+    - impacted_core_missing
+    - artifact_manifest_missing
+    - validation_report_missing
+    - compatibility_matrix_missing
+    - rollback_or_reconciliation_path_missing
+    - release_plan_references_unvalidated_core_mutation
+    - single_core_release_attempted_for_cross_core_change
+
+  future_release_surface:
+    releases:
+      path: docs/cores/releases/**
+      status_now: forbidden
+      future_status: allowed_only_after_multi_core_release_plan_PASS
+    current_manifest:
+      path: docs/cores/current/manifest.yaml
+      status_now: forbidden
+      future_status: promotion_control_only_after_release_plan_PASS
+
+  current_phase_guardrails:
+    core_mutation_authorized: false
+    backlog_closure_authorized: false
+    release_or_promotion_authorized: false
+    constitution_run_authorized: false
+    release_materialized_now: false
+    threshold_N_materialized_now: false

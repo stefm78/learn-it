@@ -122,6 +122,15 @@ ai_protocol:
     executable_as_l4_gate_now: false
     future_validator_script_required_before_L4_execution: true
 
+  validate_multi_core_release_plan_contract:
+    contract_yaml_ref: docs/pipelines/cross_core_contract/validators/validate_multi_core_release_plan.contract.yaml
+    contract_markdown_ref: docs/pipelines/cross_core_contract/validators/validate_multi_core_release_plan.contract.md
+    contract_validation_report: docs/registry/reports/multi_core_release_plan_validator_contract_validation.yaml
+    contract_defined: true
+    l4_active_now: false
+    executable_as_l4_gate_now: false
+    future_validator_script_required_before_L4_execution: true
+
   anti_patterns:
     - chat_summary_as_pass
     - direct_write_to_owned_state
