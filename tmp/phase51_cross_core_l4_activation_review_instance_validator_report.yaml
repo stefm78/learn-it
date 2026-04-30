@@ -1,0 +1,38 @@
+phase51_cross_core_l4_activation_review_instance_validator_report:
+  generated_at: 2026-04-30T12:49:33Z
+  status: PASS
+  branch: feat/core-modularization-bootstrap
+  phase: PHASE_51_CROSS_CORE_L4_ACTIVATION_REVIEW_INSTANCE_VALIDATOR
+  active_level: L3_managed_execution_pipeline
+  target_level: L4_critical_canonical_pipeline
+  activation_review_instance_validator_defined: true
+  template_instance_validation_status: BLOCKED_NOT_APPROVED
+  l4_activation_review_instance_validation_ready: true
+  l4_activation_ready_now: false
+  l4_active_now: false
+  files_written:
+    - docs/patcher/shared/validate_cross_core_l4_activation_review_instance.py
+    - docs/patcher/shared/validate_cross_core_l4_activation_review_instance_validator.py
+    - docs/pipelines/cross_core_contract/L4_ACTIVATION_REVIEW_INSTANCE_VALIDATION.md
+    - docs/pipelines/cross_core_contract/validators/l4_activation_review_instance_validation.yaml
+    - docs/registry/reports/l4_activation_review_template_instance_validation.yaml
+    - docs/registry/reports/cross_core_l4_activation_review_instance_validator_validation.yaml
+    - docs/pipelines/cross_core_contract/AI_PROTOCOL.yaml
+    - docs/pipelines/cross_core_contract/pipeline.md
+    - docs/pipelines/cross_core_contract/state.yaml
+    - docs/pipelines/cross_core_contract/l4_transition_checklist.yaml
+    - docs/transformations/core_modularization/SCOPE_GRAPH_CLUSTERING_PROGRESS.md
+    - tmp/phase51_cross_core_l4_activation_review_instance_validator_report.yaml
+  validations:
+    cross_core_l4_activation_review_instance_validator_validation: PASS
+    template_instance_validation_status: BLOCKED_NOT_APPROVED
+  guardrails:
+    no_real_l4_activation_review_materialized: true
+    no_constitution_run_opened: true
+    core_files_not_modified: true
+    governance_backlog_not_modified: true
+    release_or_promotion_authorized: false
+    request_remains_proposed_pending_arbitration: true
+  next_recommended_decision:
+    decision: stop_or_define_activation_gate_orchestration_order
+    default: stop_at_NO_ACTIVE_PHASE

@@ -1,0 +1,48 @@
+l4_activation_review_instance_validation:
+  schema_version: '0.1'
+  generated_at: '2026-04-30T12:49:33Z'
+  phase: PHASE_51_CROSS_CORE_L4_ACTIVATION_REVIEW_INSTANCE_VALIDATOR
+  status: validator_defined_inactive
+  validator: docs/patcher/shared/validate_cross_core_l4_activation_review_instance.py
+  template_smoke_report: docs/registry/reports/l4_activation_review_template_instance_validation.yaml
+  activation_review_instance_validator_defined: true
+  template_instance_validation_status: BLOCKED_NOT_APPROVED
+  l4_activation_review_instance_validation_ready: true
+  l4_activation_ready_now: false
+  l4_active_now: false
+  current_authorizations:
+    core_mutation_authorized: false
+    backlog_closure_authorized: false
+    release_or_promotion_authorized: false
+    constitution_run_authorized: false
+  required_top_level_fields:
+    - review_id
+    - request_id
+    - explicit_human_decision
+    - decision_timestamp
+    - requested_l4_scope
+    - declared_read_surface
+    - declared_write_surface
+    - impacted_cores
+    - required_validators
+    - validator_execution_plan
+    - release_and_promotion_plan
+    - backlog_resolution_plan
+    - rollback_or_reconciliation_path
+    - non_goals_and_forbidden_mutations
+    - activation_guardrails
+  required_validators:
+    - validate_cross_core_l4_transition_review
+    - validate_cross_core_write_surface
+    - validate_constitution_referentiel_link_reconstruction
+    - validate_link_binding_consistency
+    - validate_multi_core_release_plan
+    - validate_multi_core_promotion_manifest
+    - validate_cross_core_backlog_resolution
+    - validate_cross_core_rollback_or_reconciliation_path
+  non_goals_preserved:
+    no_real_activation_review_materialized: true
+    no_l4_activation: true
+    no_core_mutation: true
+    no_backlog_closure: true
+    no_release_or_promotion: true

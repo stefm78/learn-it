@@ -178,3 +178,15 @@ l4_activation_review_input_contract:
   l4_activation_review_materialized_now: false
   l4_activation_ready_now: false
   l4_active_now: false
+l4_activation_review_instance_validator:
+  phase: PHASE_51_CROSS_CORE_L4_ACTIVATION_REVIEW_INSTANCE_VALIDATOR
+  validator: docs/patcher/shared/validate_cross_core_l4_activation_review_instance.py
+  validation_surface: docs/pipelines/cross_core_contract/L4_ACTIVATION_REVIEW_INSTANCE_VALIDATION.md
+  validation_yaml: docs/pipelines/cross_core_contract/validators/l4_activation_review_instance_validation.yaml
+  validation_report: docs/registry/reports/cross_core_l4_activation_review_instance_validator_validation.yaml
+  template_smoke_report: docs/registry/reports/l4_activation_review_template_instance_validation.yaml
+  activation_review_instance_validator_defined: true
+  template_instance_validation_status: BLOCKED_NOT_APPROVED
+  l4_activation_review_instance_validation_ready: true
+  l4_activation_ready_now: false
+  l4_active_now: false

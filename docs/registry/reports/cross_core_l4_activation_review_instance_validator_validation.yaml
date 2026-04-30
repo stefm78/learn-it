@@ -1,0 +1,59 @@
+cross_core_l4_activation_review_instance_validator_validation:
+  schema_version: '0.1'
+  generated_at: '2026-04-30T12:49:34Z'
+  status: PASS
+  phase: PHASE_51_CROSS_CORE_L4_ACTIVATION_REVIEW_INSTANCE_VALIDATOR
+  activation_review_instance_validator_defined: true
+  template_instance_validation_status: BLOCKED_NOT_APPROVED
+  l4_activation_review_instance_validation_ready: true
+  l4_activation_ready_now: false
+  l4_active_now: false
+  checked_files:
+    - path: docs/patcher/shared/validate_cross_core_l4_activation_review_instance.py
+      exists: true
+      sha256: c4b1eb03a02e6f20fd5fbdc99814436671c4299daf432fd17565296d69586a3d
+    - path: docs/registry/reports/l4_activation_review_template_instance_validation.yaml
+      exists: true
+      sha256: 0dc081208b6948f4f90e90c66cc0c27d17946c162c607bf0f34a64d3416dc496
+    - path: docs/pipelines/cross_core_contract/L4_ACTIVATION_REVIEW_INSTANCE_VALIDATION.md
+      exists: true
+      sha256: 62be54521903b196ff31c6cf155c279189b3e6858ac08973e2f16891443a0c94
+    - path: docs/pipelines/cross_core_contract/validators/l4_activation_review_instance_validation.yaml
+      exists: true
+      sha256: bcd75bd932109c1333e069e8c5c3059e1dbda665902a12920a2d346d72b729cc
+    - path: docs/pipelines/cross_core_contract/L4_ACTIVATION_REVIEW_INPUT.md
+      exists: true
+      sha256: 85f77cc24fc4a98c95fb11e3567b58132846e3061aff65ce5ef3ff0c9ad836a8
+    - path: docs/pipelines/cross_core_contract/schemas/l4_activation_review.schema.yaml
+      exists: true
+      sha256: 8314f22b2eeb5da056d2066ebcd4d5937bb9e59cd2602aa0ffa74bf7a394fe7f
+    - path: docs/pipelines/cross_core_contract/templates/l4_activation_review.template.yaml
+      exists: true
+      sha256: f001978ba4ec27e0d08c3ce8313de29fff537a007d86fe5b82ab90adda98d96d
+    - path: docs/pipelines/cross_core_contract/AI_PROTOCOL.yaml
+      exists: true
+      sha256: e4e96e1f120bb48b1922a3e2ea3108547d217d0bba5da4e70f22d9d4191701d4
+    - path: docs/pipelines/cross_core_contract/pipeline.md
+      exists: true
+      sha256: b932ce962e155276e5642e93acef44c2aa891e5667db343dac89a6b34690c207
+    - path: docs/pipelines/cross_core_contract/state.yaml
+      exists: true
+      sha256: 06b05068cbaec7a6349d28b865466dcc17c37b8e88554b924e9578823c892d3d
+    - path: docs/pipelines/cross_core_contract/l4_transition_checklist.yaml
+      exists: true
+      sha256: d7e26a19e4bbe591d91aac69c49e3e7bf78810df404da5c6c00411df201eb934
+    - path: docs/pipelines/cross_core_contract/requests/CCR_PATCH_LIFECYCLE_ESCALATION_THRESHOLD_N_R01.yaml
+      exists: true
+      sha256: 135e6039ed61b82fe7baefbf5a37e2cd03ad20d0cad2babd091b6629bb1e8d85
+  blocking_findings:
+    []
+  result_summary:
+    blocking_finding_count: 0
+    activation_review_instance_validator_defined: true
+    template_blocks_activation: true
+    l4_activation_ready_now: false
+    l4_active_now: false
+    core_mutation_authorized: false
+    backlog_closure_authorized: false
+    release_or_promotion_authorized: false
+    request_remains_proposed_pending_arbitration: true

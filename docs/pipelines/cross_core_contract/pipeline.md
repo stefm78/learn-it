@@ -106,6 +106,23 @@ release_or_promotion_authorized: false
 
 This pipeline is hardened to L3 for intake, evidence review, arbitration and contract synthesis.
 It remains below L4: no Core write, backlog closure, release or promotion is authorized.
+## L4 activation review instance validator
+
+```yaml
+phase: PHASE_51_CROSS_CORE_L4_ACTIVATION_REVIEW_INSTANCE_VALIDATOR
+validator: docs/patcher/shared/validate_cross_core_l4_activation_review_instance.py
+validation_surface: docs/pipelines/cross_core_contract/L4_ACTIVATION_REVIEW_INSTANCE_VALIDATION.md
+validation_yaml: docs/pipelines/cross_core_contract/validators/l4_activation_review_instance_validation.yaml
+validation_report: docs/registry/reports/cross_core_l4_activation_review_instance_validator_validation.yaml
+template_smoke_report: docs/registry/reports/l4_activation_review_template_instance_validation.yaml
+activation_review_instance_validator_defined: true
+template_instance_validation_status: BLOCKED_NOT_APPROVED
+l4_activation_ready_now: false
+l4_active_now: false
+```
+
+The inactive template must be rejected as `BLOCKED_NOT_APPROVED`; real L4 activation remains unavailable without a future approved review and passing L4 gates.
+
 ## L4 activation review input contract
 
 ```yaml
