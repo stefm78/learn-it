@@ -1,0 +1,23 @@
+cross_core_generic_authorized_dry_run_gate_smoke:
+  schema_version: '0.1'
+  generated_at: '2026-04-30T15:31:35Z'
+  phase: PHASE_59_CROSS_CORE_GENERIC_AUTHORIZED_DRY_RUN_GATE_SMOKE
+  status: authorized_dry_run_smoke_defined_non_mutating
+  generic_authorized_dry_run_gate_smoke_defined: true
+  authorized_contract_validation_status: PASS_SHAPE_ONLY
+  gate_smoke_status: BLOCKED_DOWNSTREAM_GATE_INPUTS_NOT_MATERIALIZED
+  downstream_gates_executed_on_smoke: false
+  request_specific_logic_encoded: false
+  l4_control_plane_active_now: true
+  l4_mutating_execution_framework_ready: true
+  l4_mutating_gate_active_now: false
+  l4_core_mutation_authorized_now: false
+  current_authorizations:
+    dry_run_gate_smoke_authorized: true
+    core_mutation_authorized: false
+    backlog_closure_authorized: false
+    release_or_promotion_authorized: false
+  smoke:
+    contract: docs/pipelines/cross_core_contract/work/03_contract_synthesis/GENERIC_AUTHORIZED_DRY_RUN_EXECUTION_CONTRACT_R00.yaml
+    contract_validation_report: docs/registry/reports/generic_authorized_dry_run_contract_validation.yaml
+    gate_smoke_report: docs/registry/reports/generic_authorized_dry_run_gate_smoke.yaml

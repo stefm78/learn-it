@@ -1,0 +1,69 @@
+cross_core_generic_authorized_dry_run_gate_smoke_validation:
+  schema_version: '0.1'
+  generated_at: '2026-04-30T15:31:36Z'
+  status: PASS
+  phase: PHASE_59_CROSS_CORE_GENERIC_AUTHORIZED_DRY_RUN_GATE_SMOKE
+  generic_authorized_dry_run_gate_smoke_defined: true
+  authorized_contract_validation_status: PASS_SHAPE_ONLY
+  gate_smoke_status: BLOCKED_DOWNSTREAM_GATE_INPUTS_NOT_MATERIALIZED
+  downstream_gates_executed_on_smoke: false
+  request_specific_logic_encoded: false
+  checked_files:
+    - path: docs/pipelines/cross_core_contract/GENERIC_AUTHORIZED_DRY_RUN_GATE_SMOKE.md
+      kind: state
+      exists: true
+      sha256: 4598ca93d96ee1febba770638f2ff5c5c752a2b3c32e63600d2dc9d81ee0c4a2
+    - path: docs/pipelines/cross_core_contract/validators/generic_authorized_dry_run_gate_smoke.yaml
+      kind: state
+      exists: true
+      sha256: 7a31fda51c84881f7e9f8404d623fa4cf1adfd8b2bce54dbc8e7d9af395cf4b8
+    - path: docs/pipelines/cross_core_contract/work/03_contract_synthesis/GENERIC_AUTHORIZED_DRY_RUN_EXECUTION_CONTRACT_R00.yaml
+      kind: state
+      exists: true
+      sha256: 11a9792551e2312d2fc91c4b3264a92158c2861c389f0941e77d4d8270b248de
+    - path: docs/registry/reports/generic_authorized_dry_run_contract_validation.yaml
+      kind: state
+      exists: true
+      sha256: 6ff77135294bb4e663f58a6a1cc474a59030c997414529e7edfb3a430a1296db
+    - path: docs/registry/reports/generic_authorized_dry_run_gate_smoke.yaml
+      kind: state
+      exists: true
+      sha256: cd3a47e0f87c94749cea0db697fcf526ec6340cc13230abad657545ba4318426
+    - path: docs/pipelines/cross_core_contract/AI_PROTOCOL.yaml
+      kind: state
+      exists: true
+      sha256: 7b9ea2da1ac787721d6947cedfe018f9155cabd483a134e716844c47423f1574
+    - path: docs/pipelines/cross_core_contract/pipeline.md
+      kind: state
+      exists: true
+      sha256: 4cafb438447b4256f6677e88bc520247aedfb84be737d40bbe50bca0c3277a21
+    - path: docs/pipelines/cross_core_contract/state.yaml
+      kind: state
+      exists: true
+      sha256: 6bc4da4cc0b9331e430cec86b82a273551fae75b33c88673775428dc79713263
+    - path: docs/pipelines/cross_core_contract/l4_transition_checklist.yaml
+      kind: state
+      exists: true
+      sha256: 45e36752e99475e681a518cb697f93a2bd553ffe9b7074cab3fc39666a4da23d
+    - path: docs/registry/reports/cross_core_generic_gate_execution_runner_validation.yaml
+      kind: state
+      exists: true
+      sha256: 0898239c8d25e2d35df7e8e43baf2113e2467b54e24fe302a698db54d146e6f8
+    - path: docs/patcher/shared/run_cross_core_gate_execution.py
+      kind: script_compile_only
+      exists: true
+      sha256: e2ffc5584be1341b646f114e7b2777439e4f7018235d37ce9bf2249bed983e45
+    - path: docs/patcher/shared/validate_cross_core_execution_contract.py
+      kind: script_compile_only
+      exists: true
+      sha256: 27232c61680b5b10ff0a5c691c9968eb5e79791bf679b642fc3eee6b29949827
+  blocking_findings:
+    []
+  result_summary:
+    blocking_finding_count: 0
+    authorized_dry_run_contract_shape_passes: true
+    smoke_reaches_downstream_gate_input_boundary: true
+    downstream_gates_executed_on_smoke: false
+    core_mutation_authorized: false
+    backlog_closure_authorized: false
+    release_or_promotion_authorized: false

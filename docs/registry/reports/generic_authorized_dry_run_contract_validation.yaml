@@ -1,0 +1,21 @@
+cross_core_execution_contract_validation:
+  schema_version: '0.1'
+  generated_at: '2026-04-30T15:31:35Z'
+  status: PASS_SHAPE_ONLY
+  input: C:/Users/Stef/dev/learn-it/docs/pipelines/cross_core_contract/work/03_contract_synthesis/GENERIC_AUTHORIZED_DRY_RUN_EXECUTION_CONTRACT_R00.yaml
+  generic_contract_validator: validate_cross_core_execution_contract
+  template_validation_expected_to_block: true
+  core_mutation_authorized: false
+  backlog_closure_authorized: false
+  release_or_promotion_authorized: false
+  input_file:
+    exists: true
+    sha256: 11a9792551e2312d2fc91c4b3264a92158c2861c389f0941e77d4d8270b248de
+  blocking_findings:
+    []
+  result_summary:
+    blocking_finding_count: 0
+    generic_contract_shape_checked: true
+    core_mutation_authorized: false
+    backlog_closure_authorized: false
+    release_or_promotion_authorized: false

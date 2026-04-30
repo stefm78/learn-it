@@ -1,0 +1,79 @@
+cross_core_execution_contract:
+  schema_version: '0.1'
+  template_status: materialized_authorized_dry_run_fixture
+  generated_at: '2026-04-30T15:31:35Z'
+  contract_id: GENERIC_AUTHORIZED_DRY_RUN_EXECUTION_CONTRACT_R00
+  source_request:
+    request_id: CCR_GENERIC_AUTHORIZED_DRY_RUN_FIXTURE_R00
+    request_file: docs/pipelines/cross_core_contract/templates/cross_core_change_request.fixture.yaml
+    request_status_required: accepted_for_arbitrage
+  execution_model:
+    selected_model: coordinated_multi_core_update
+    model_selection_status: dry_run_fixture_selected
+    generic_pipeline_instance: true
+  affected_cores:
+    constitution:
+      affected: true
+      read_surface:
+        - docs/cores/current/constitution.yaml
+      write_surface:
+        - docs/pipelines/cross_core_contract/work/dry_run_sandbox/constitution.yaml
+    referentiel:
+      affected: true
+      read_surface:
+        - docs/cores/current/referentiel.yaml
+      write_surface:
+        - docs/pipelines/cross_core_contract/work/dry_run_sandbox/referentiel.yaml
+    link:
+      affected: true
+      read_surface:
+        - docs/cores/current/link.yaml
+      write_surface:
+        - docs/pipelines/cross_core_contract/work/dry_run_sandbox/link.yaml
+  declared_read_surface:
+    - docs/cores/current/constitution.yaml
+    - docs/cores/current/referentiel.yaml
+    - docs/cores/current/link.yaml
+  declared_write_surface:
+    - docs/pipelines/cross_core_contract/work/dry_run_sandbox/**
+  write_authorization:
+    requested_now: true
+    granted_now: true
+    dry_run_only: true
+    core_mutation_authorized: false
+    backlog_closure_authorized: false
+    release_or_promotion_authorized: false
+  validation_plan:
+    required_validators:
+      - validate_cross_core_execution_contract
+      - validate_cross_core_l4_transition_review
+      - validate_cross_core_write_surface
+      - validate_cross_core_rollback_or_reconciliation_path
+      - validate_link_binding_consistency
+      - validate_constitution_referentiel_link_reconstruction
+      - validate_multi_core_release_plan
+      - validate_multi_core_promotion_manifest
+      - validate_cross_core_backlog_resolution
+    all_required_validators_must_pass_before_apply: true
+    current_validation_status: not_executed_dry_run_fixture
+  rollback_or_reconciliation_path:
+    status: declared_for_dry_run_fixture
+    required_before_apply: true
+    rollback_action: discard dry_run_sandbox outputs
+  release_and_promotion_policy:
+    release_policy_declared: true
+    promotion_policy_declared: true
+    release_materialization_requested: false
+    promotion_requested: false
+  backlog_policy:
+    backlog_resolution_requested: false
+    backlog_closure_requested: false
+    backlog_entries_to_resolve: []
+  execution_guardrails:
+    template_only: false
+    concrete_request_bound: true
+    mutating_execution_ready_now: false
+    mutating_apply_ready_now: false
+    downstream_mutating_gates_executed_now: false
+    request_specific_logic_encoded: false
+    no_core_write_from_authorized_dry_run: true

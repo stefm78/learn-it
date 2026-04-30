@@ -106,6 +106,23 @@ release_or_promotion_authorized: false
 
 This pipeline is hardened to L3 for intake, evidence review, arbitration and contract synthesis.
 It remains below L4: no Core write, backlog closure, release or promotion is authorized.
+## Generic authorized dry-run gate smoke
+
+```yaml
+phase: PHASE_59_CROSS_CORE_GENERIC_AUTHORIZED_DRY_RUN_GATE_SMOKE
+smoke_ref: docs/pipelines/cross_core_contract/GENERIC_AUTHORIZED_DRY_RUN_GATE_SMOKE.md
+smoke_yaml: docs/pipelines/cross_core_contract/validators/generic_authorized_dry_run_gate_smoke.yaml
+validation_report: docs/registry/reports/cross_core_generic_authorized_dry_run_gate_smoke_validation.yaml
+generic_authorized_dry_run_gate_smoke_defined: true
+authorized_contract_validation_status: PASS_SHAPE_ONLY
+gate_smoke_status: BLOCKED_DOWNSTREAM_GATE_INPUTS_NOT_MATERIALIZED
+downstream_gates_executed_on_smoke: false
+l4_mutating_gate_active_now: false
+l4_core_mutation_authorized_now: false
+```
+
+This smoke proves that an authorized dry-run execution contract reaches the downstream gate input boundary without applying mutations.
+
 ## Generic gate execution runner
 
 ```yaml

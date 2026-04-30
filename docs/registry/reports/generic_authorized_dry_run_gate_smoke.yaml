@@ -1,0 +1,27 @@
+cross_core_gate_execution:
+  schema_version: '0.2'
+  generated_at: '2026-04-30T15:31:36Z'
+  status: BLOCKED_DOWNSTREAM_GATE_INPUTS_NOT_MATERIALIZED
+  contract: C:/Users/Stef/dev/learn-it/docs/pipelines/cross_core_contract/work/03_contract_synthesis/GENERIC_AUTHORIZED_DRY_RUN_EXECUTION_CONTRACT_R00.yaml
+  contract_exists: true
+  contract_sha256: 11a9792551e2312d2fc91c4b3264a92158c2861c389f0941e77d4d8270b248de
+  contract_validation_report: C:/Users/Stef/dev/learn-it/docs/registry/reports/generic_authorized_dry_run_contract_validation.yaml
+  contract_validation_return_code: 0
+  downstream_gates_executed: false
+  gate_order:
+    - validate_cross_core_execution_contract
+    - validate_cross_core_l4_transition_review
+    - validate_cross_core_write_surface
+    - validate_cross_core_rollback_or_reconciliation_path
+    - validate_link_binding_consistency
+    - validate_constitution_referentiel_link_reconstruction
+    - validate_multi_core_release_plan
+    - validate_multi_core_promotion_manifest
+    - validate_cross_core_backlog_resolution
+  current_authorizations:
+    dry_run_gate_smoke_authorized: true
+    core_mutation_authorized: false
+    backlog_closure_authorized: false
+    release_or_promotion_authorized: false
+  reason: >-
+    Execution contract shape passed; downstream gate input bundle is not materialized in this phase, so gates are not executed.

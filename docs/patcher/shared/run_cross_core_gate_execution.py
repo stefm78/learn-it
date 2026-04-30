@@ -33,7 +33,7 @@ def sha(path: Path) -> str:
 def write_report(report_path: Path, status: str, contract_path: Path, contract_validation_report: Path, rc: int, downstream_executed: bool, reason: str) -> None:
     lines = [
         "cross_core_gate_execution:",
-        "  schema_version: '0.1'",
+        "  schema_version: '0.2'",
         f"  generated_at: '{iso_now()}'",
         f"  status: {status}",
         f"  contract: {str(contract_path).replace(chr(92), chr(47))}",
@@ -47,6 +47,7 @@ def write_report(report_path: Path, status: str, contract_path: Path, contract_v
     lines.extend([f"    - {gate}" for gate in GATE_ORDER])
     lines.extend([
         "  current_authorizations:",
+        "    dry_run_gate_smoke_authorized: true",
         "    core_mutation_authorized: false",
         "    backlog_closure_authorized: false",
         "    release_or_promotion_authorized: false",
@@ -97,8 +98,8 @@ def main() -> int:
         return 2
 
     if result.returncode == 0 and "status: PASS_SHAPE_ONLY" in validation_text:
-        write_report(report_path, "BLOCKED_DOWNSTREAM_GATE_INPUTS_NOT_IMPLEMENTED_IN_PHASE_58", contract_path, contract_validation_report, result.returncode, False, "Contract shape passed, but Phase 58 only defines the generic runner and does not execute downstream mutating gates.")
-        print("BLOCKED_DOWNSTREAM_GATE_INPUTS_NOT_IMPLEMENTED_IN_PHASE_58")
+        write_report(report_path, "BLOCKED_DOWNSTREAM_GATE_INPUTS_NOT_MATERIALIZED", contract_path, contract_validation_report, result.returncode, False, "Execution contract shape passed; downstream gate input bundle is not materialized in this phase, so gates are not executed.")
+        print("BLOCKED_DOWNSTREAM_GATE_INPUTS_NOT_MATERIALIZED")
         return 2
 
     write_report(report_path, "FAIL", contract_path, contract_validation_report, result.returncode, False, "Execution contract validation failed unexpectedly.")
