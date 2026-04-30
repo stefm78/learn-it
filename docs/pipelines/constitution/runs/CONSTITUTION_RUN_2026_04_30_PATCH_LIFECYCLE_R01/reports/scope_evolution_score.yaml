@@ -24,8 +24,8 @@ scope_evolution_score:
       score: 20
       max: 20
       status: PASS
-      expected_pass_count: 6
-      actual_pass_count: 6
+      expected_pass_count: 10
+      actual_pass_count: 10
       checks:
       - name: patch_validation
         path: docs/pipelines/constitution/archive/CORE_RELEASE_2026_04_30_R01/work/04_patch_validation/patch_validation.yaml
@@ -49,20 +49,20 @@ scope_evolution_score:
         status: PASS
       - name: release_manifest_validation
         path: docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_30_PATCH_LIFECYCLE_R01/reports/release_manifest_validation.yaml
-        expected: false
-        status: NOT_EXPECTED
+        expected: true
+        status: PASS
       - name: promotion
         path: docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_30_PATCH_LIFECYCLE_R01/reports/promotion_report.yaml
-        expected: false
-        status: NOT_EXPECTED
+        expected: true
+        status: PASS
       - name: current_manifest_validation
         path: docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_30_PATCH_LIFECYCLE_R01/reports/current_manifest_validation.yaml
-        expected: false
-        status: NOT_EXPECTED
+        expected: true
+        status: PASS
       - name: promotion_report_validation
         path: docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_30_PATCH_LIFECYCLE_R01/reports/promotion_report_validation.yaml
-        expected: false
-        status: NOT_EXPECTED
+        expected: true
+        status: PASS
       - name: closeout
         path: docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_30_PATCH_LIFECYCLE_R01/reports/closeout_report.yaml
         expected: true
