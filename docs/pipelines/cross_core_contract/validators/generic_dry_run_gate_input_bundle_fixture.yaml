@@ -1,0 +1,19 @@
+cross_core_generic_dry_run_gate_input_bundle_fixture:
+  schema_version: '0.1'
+  generated_at: '2026-04-30T15:40:14Z'
+  phase: PHASE_61_CROSS_CORE_GENERIC_DRY_RUN_GATE_INPUT_BUNDLE_FIXTURE
+  status: fixture_materialized_non_mutating
+  generic_dry_run_gate_input_bundle_fixture_defined: true
+  gate_input_bundle_fixture_validation_status: PASS_SHAPE_ONLY
+  source_execution_contract: docs/pipelines/cross_core_contract/work/03_contract_synthesis/GENERIC_AUTHORIZED_DRY_RUN_EXECUTION_CONTRACT_R00.yaml
+  gate_input_bundle: docs/pipelines/cross_core_contract/work/04_gate_inputs/GENERIC_DRY_RUN_GATE_INPUT_BUNDLE_R00.yaml
+  downstream_gates_executed_now: false
+  request_specific_logic_encoded: false
+  l4_control_plane_active_now: true
+  l4_mutating_execution_framework_ready: true
+  l4_mutating_gate_active_now: false
+  l4_core_mutation_authorized_now: false
+  current_authorizations:
+    core_mutation_authorized: false
+    backlog_closure_authorized: false
+    release_or_promotion_authorized: false

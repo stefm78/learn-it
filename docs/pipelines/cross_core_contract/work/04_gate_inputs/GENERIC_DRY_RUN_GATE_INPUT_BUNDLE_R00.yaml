@@ -1,0 +1,92 @@
+cross_core_gate_input_bundle:
+  schema_version: '0.1'
+  template_status: materialized_dry_run_fixture
+  generated_at: '2026-04-30T15:40:14Z'
+  bundle_id: GENERIC_DRY_RUN_GATE_INPUT_BUNDLE_R00
+  source_execution_contract:
+    contract_id: GENERIC_AUTHORIZED_DRY_RUN_EXECUTION_CONTRACT_R00
+    contract_file: docs/pipelines/cross_core_contract/work/03_contract_synthesis/GENERIC_AUTHORIZED_DRY_RUN_EXECUTION_CONTRACT_R00.yaml
+    concrete_contract_bound: true
+    contract_sha256: 11a9792551e2312d2fc91c4b3264a92158c2861c389f0941e77d4d8270b248de
+  gate_input_model:
+    template_only: false
+    gate_input_bundle_ready: true
+    request_specific_logic_encoded: false
+    dry_run_only: true
+  gate_inputs:
+    validate_cross_core_l4_transition_review:
+      status: materialized_dry_run_input
+      input_files:
+        - docs/pipelines/cross_core_contract/work/03_contract_synthesis/GENERIC_AUTHORIZED_DRY_RUN_EXECUTION_CONTRACT_R00.yaml
+        - docs/pipelines/cross_core_contract/work/04_gate_inputs/GENERIC_DRY_RUN_GATE_INPUT_BUNDLE_R00.yaml
+      expected_execution_mode: dry_run_or_shape_only
+    validate_cross_core_write_surface:
+      status: materialized_dry_run_input
+      input_files:
+        - docs/pipelines/cross_core_contract/work/03_contract_synthesis/GENERIC_AUTHORIZED_DRY_RUN_EXECUTION_CONTRACT_R00.yaml
+        - docs/pipelines/cross_core_contract/work/04_gate_inputs/GENERIC_DRY_RUN_GATE_INPUT_BUNDLE_R00.yaml
+      expected_execution_mode: dry_run_or_shape_only
+    validate_cross_core_rollback_or_reconciliation_path:
+      status: materialized_dry_run_input
+      input_files:
+        - docs/pipelines/cross_core_contract/work/03_contract_synthesis/GENERIC_AUTHORIZED_DRY_RUN_EXECUTION_CONTRACT_R00.yaml
+        - docs/pipelines/cross_core_contract/work/04_gate_inputs/GENERIC_DRY_RUN_GATE_INPUT_BUNDLE_R00.yaml
+      expected_execution_mode: dry_run_or_shape_only
+    validate_link_binding_consistency:
+      status: materialized_dry_run_input
+      input_files:
+        - docs/pipelines/cross_core_contract/work/03_contract_synthesis/GENERIC_AUTHORIZED_DRY_RUN_EXECUTION_CONTRACT_R00.yaml
+        - docs/pipelines/cross_core_contract/work/04_gate_inputs/GENERIC_DRY_RUN_GATE_INPUT_BUNDLE_R00.yaml
+      expected_execution_mode: dry_run_or_shape_only
+    validate_constitution_referentiel_link_reconstruction:
+      status: materialized_dry_run_input
+      input_files:
+        - docs/pipelines/cross_core_contract/work/03_contract_synthesis/GENERIC_AUTHORIZED_DRY_RUN_EXECUTION_CONTRACT_R00.yaml
+        - docs/pipelines/cross_core_contract/work/04_gate_inputs/GENERIC_DRY_RUN_GATE_INPUT_BUNDLE_R00.yaml
+      expected_execution_mode: dry_run_or_shape_only
+    validate_multi_core_release_plan:
+      status: materialized_dry_run_input
+      input_files:
+        - docs/pipelines/cross_core_contract/work/03_contract_synthesis/GENERIC_AUTHORIZED_DRY_RUN_EXECUTION_CONTRACT_R00.yaml
+        - docs/pipelines/cross_core_contract/work/04_gate_inputs/GENERIC_DRY_RUN_GATE_INPUT_BUNDLE_R00.yaml
+      expected_execution_mode: dry_run_or_shape_only
+    validate_multi_core_promotion_manifest:
+      status: materialized_dry_run_input
+      input_files:
+        - docs/pipelines/cross_core_contract/work/03_contract_synthesis/GENERIC_AUTHORIZED_DRY_RUN_EXECUTION_CONTRACT_R00.yaml
+        - docs/pipelines/cross_core_contract/work/04_gate_inputs/GENERIC_DRY_RUN_GATE_INPUT_BUNDLE_R00.yaml
+      expected_execution_mode: dry_run_or_shape_only
+    validate_cross_core_backlog_resolution:
+      status: materialized_dry_run_input
+      input_files:
+        - docs/pipelines/cross_core_contract/work/03_contract_synthesis/GENERIC_AUTHORIZED_DRY_RUN_EXECUTION_CONTRACT_R00.yaml
+        - docs/pipelines/cross_core_contract/work/04_gate_inputs/GENERIC_DRY_RUN_GATE_INPUT_BUNDLE_R00.yaml
+      expected_execution_mode: dry_run_or_shape_only
+  write_surface:
+    declared: true
+    dry_run_sandbox_only: true
+    paths:
+      - docs/pipelines/cross_core_contract/work/dry_run_sandbox/**
+  rollback_or_reconciliation_inputs:
+    declared: true
+    files:
+      - docs/pipelines/cross_core_contract/work/dry_run_sandbox/rollback_plan.yaml
+    rollback_action: discard dry_run_sandbox outputs
+  release_and_promotion_inputs:
+    release_plan_declared: true
+    promotion_manifest_declared: true
+    release_materialization_requested: false
+    promotion_requested: false
+    files:
+      - docs/pipelines/cross_core_contract/work/dry_run_sandbox/release_plan.preview.yaml
+      - docs/pipelines/cross_core_contract/work/dry_run_sandbox/promotion_manifest.preview.yaml
+  backlog_inputs:
+    backlog_resolution_requested: false
+    backlog_closure_requested: false
+    backlog_entries: []
+  execution_guardrails:
+    downstream_gates_executed: false
+    apply_authorized: false
+    core_mutation_authorized: false
+    backlog_closure_authorized: false
+    release_or_promotion_authorized: false

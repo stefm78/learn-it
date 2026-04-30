@@ -318,3 +318,18 @@ generic_downstream_gate_input_bundle_contract:
   core_mutation_authorized: false
   backlog_closure_authorized: false
   release_or_promotion_authorized: false
+generic_dry_run_gate_input_bundle_fixture:
+  phase: PHASE_61_CROSS_CORE_GENERIC_DRY_RUN_GATE_INPUT_BUNDLE_FIXTURE
+  fixture_ref: docs/pipelines/cross_core_contract/GENERIC_DRY_RUN_GATE_INPUT_BUNDLE_FIXTURE.md
+  fixture_yaml: docs/pipelines/cross_core_contract/validators/generic_dry_run_gate_input_bundle_fixture.yaml
+  materializer: docs/patcher/shared/materialize_cross_core_gate_input_bundle.py
+  validation_report: docs/registry/reports/cross_core_generic_dry_run_gate_input_bundle_fixture_validation.yaml
+  generic_dry_run_gate_input_bundle_fixture_defined: true
+  gate_input_bundle_fixture_validation_status: PASS_SHAPE_ONLY
+  downstream_gates_executed_now: false
+  request_specific_logic_encoded: false
+  l4_mutating_gate_active_now: false
+  l4_core_mutation_authorized_now: false
+  core_mutation_authorized: false
+  backlog_closure_authorized: false
+  release_or_promotion_authorized: false

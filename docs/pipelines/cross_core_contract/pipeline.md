@@ -106,6 +106,23 @@ release_or_promotion_authorized: false
 
 This pipeline is hardened to L3 for intake, evidence review, arbitration and contract synthesis.
 It remains below L4: no Core write, backlog closure, release or promotion is authorized.
+## Generic dry-run gate input bundle fixture
+
+```yaml
+phase: PHASE_61_CROSS_CORE_GENERIC_DRY_RUN_GATE_INPUT_BUNDLE_FIXTURE
+fixture_ref: docs/pipelines/cross_core_contract/GENERIC_DRY_RUN_GATE_INPUT_BUNDLE_FIXTURE.md
+fixture_yaml: docs/pipelines/cross_core_contract/validators/generic_dry_run_gate_input_bundle_fixture.yaml
+materializer: docs/patcher/shared/materialize_cross_core_gate_input_bundle.py
+validation_report: docs/registry/reports/cross_core_generic_dry_run_gate_input_bundle_fixture_validation.yaml
+generic_dry_run_gate_input_bundle_fixture_defined: true
+gate_input_bundle_fixture_validation_status: PASS_SHAPE_ONLY
+downstream_gates_executed_now: false
+l4_mutating_gate_active_now: false
+l4_core_mutation_authorized_now: false
+```
+
+This fixture proves the generic gate-input bundle can be materialized and validated without executing gates.
+
 ## Generic downstream gate input bundle contract
 
 ```yaml

@@ -38,8 +38,8 @@ scope_modularization_post_pilot:
   status: paused_cleanly
   active_pipeline_run: none
   new_bounded_run_opened_now: false
-  last_completed_phase: PHASE_60
-  last_completed_phase_label: cross_core_generic_downstream_gate_input_bundle_contract
+  last_completed_phase: PHASE_61
+  last_completed_phase_label: cross_core_generic_dry_run_gate_input_bundle_fixture
 ```
 
 ## What is complete
@@ -137,6 +137,7 @@ completed:
       - PHASE_58 cross_core_generic_gate_execution_runner
       - PHASE_59 cross_core_generic_authorized_dry_run_gate_smoke
       - PHASE_60 cross_core_generic_downstream_gate_input_bundle_contract
+      - PHASE_61 cross_core_generic_dry_run_gate_input_bundle_fixture
 ```
 
 ## Current pipeline position
@@ -1595,6 +1596,42 @@ option_AU_cross_core_generic_downstream_gate_input_bundle_contract:
     - no governance_backlog.yaml modification
     - no release or promotion
   recommended_next_decision: stop at NO_ACTIVE_PHASE or materialize a generic dry-run gate input bundle fixture
+  launcher_authorizes_run_from_signals: false
+
+option_AV_cross_core_generic_dry_run_gate_input_bundle_fixture:
+  status: done
+  completed_phase: PHASE_61
+  action: materialize and validate a generic dry-run downstream gate input bundle fixture
+  artifacts:
+    - docs/pipelines/cross_core_contract/GENERIC_DRY_RUN_GATE_INPUT_BUNDLE_FIXTURE.md
+    - docs/pipelines/cross_core_contract/validators/generic_dry_run_gate_input_bundle_fixture.yaml
+    - docs/pipelines/cross_core_contract/work/04_gate_inputs/GENERIC_DRY_RUN_GATE_INPUT_BUNDLE_R00.yaml
+    - docs/patcher/shared/materialize_cross_core_gate_input_bundle.py
+    - docs/patcher/shared/validate_cross_core_generic_dry_run_gate_input_bundle_fixture.py
+    - docs/registry/reports/generic_dry_run_gate_input_bundle_fixture_validation.yaml
+    - docs/registry/reports/cross_core_generic_dry_run_gate_input_bundle_fixture_validation.yaml
+    - docs/pipelines/cross_core_contract/AI_PROTOCOL.yaml
+    - docs/pipelines/cross_core_contract/pipeline.md
+    - docs/pipelines/cross_core_contract/state.yaml
+    - docs/pipelines/cross_core_contract/l4_transition_checklist.yaml
+  validation:
+    cross_core_generic_dry_run_gate_input_bundle_fixture_validation: PASS
+    gate_input_bundle_fixture_validation_status: PASS_SHAPE_ONLY
+  posture:
+    active_level: L4_control_plane_active_non_mutating
+    generic_dry_run_gate_input_bundle_fixture_defined: true
+    downstream_gates_executed_now: false
+    request_specific_logic_encoded: false
+    l4_mutating_gate_active_now: false
+    l4_core_mutation_authorized_now: false
+  non_goals_preserved:
+    - no request-specific logic encoded
+    - no downstream mutating gate executed
+    - no Constitution run opened
+    - no Core file modified
+    - no governance_backlog.yaml modification
+    - no release or promotion
+  recommended_next_decision: stop at NO_ACTIVE_PHASE or execute generic downstream gate smoke in dry-run mode
   launcher_authorizes_run_from_signals: false
 
 ## Guardrails
