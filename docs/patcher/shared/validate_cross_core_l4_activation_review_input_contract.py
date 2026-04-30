@@ -1,0 +1,117 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+from __future__ import annotations
+from datetime import datetime, timezone
+from pathlib import Path
+import hashlib
+import sys
+
+REPO = Path.cwd()
+FILES = ['docs/pipelines/cross_core_contract/L4_ACTIVATION_REVIEW_INPUT.md', 'docs/pipelines/cross_core_contract/schemas/l4_activation_review.schema.yaml', 'docs/pipelines/cross_core_contract/templates/l4_activation_review.template.yaml', 'docs/pipelines/cross_core_contract/L4_EXECUTABLE_VALIDATOR_READINESS.md', 'docs/pipelines/cross_core_contract/validators/l4_executable_validator_readiness.yaml', 'docs/pipelines/cross_core_contract/AI_PROTOCOL.yaml', 'docs/pipelines/cross_core_contract/pipeline.md', 'docs/pipelines/cross_core_contract/state.yaml', 'docs/pipelines/cross_core_contract/l4_transition_checklist.yaml', 'docs/pipelines/cross_core_contract/requests/CCR_PATCH_LIFECYCLE_ESCALATION_THRESHOLD_N_R01.yaml']
+REQUIRED_VALIDATORS = ['validate_cross_core_l4_transition_review', 'validate_cross_core_write_surface', 'validate_constitution_referentiel_link_reconstruction', 'validate_link_binding_consistency', 'validate_multi_core_release_plan', 'validate_multi_core_promotion_manifest', 'validate_cross_core_backlog_resolution', 'validate_cross_core_rollback_or_reconciliation_path']
+REQUIRED_MARKERS = [
+    'l4_activation_input_contract_defined: true',
+    'l4_activation_review_materialized_now: false',
+    'l4_activation_ready_now: false',
+    'l4_active_now: false',
+    'core_mutation_authorized: false',
+    'backlog_closure_authorized: false',
+    'release_or_promotion_authorized: false',
+]
+FORBIDDEN_MARKERS = [
+    'l4_active_now: true',
+    'l4_activation_ready_now: true',
+    'core_mutation_authorized: true',
+    'backlog_closure_authorized: true',
+    'release_or_promotion_authorized: true',
+    'decision_status: approved',
+    'decision: approve_l4_activation_review',
+]
+
+def iso_now():
+    return datetime.now(timezone.utc).replace(microsecond=0).isoformat().replace("+00:00", "Z")
+
+def sha(path: Path) -> str:
+    return hashlib.sha256(path.read_bytes()).hexdigest()
+
+def main() -> int:
+    report_path = Path(sys.argv[1]) if len(sys.argv) > 1 else Path("docs/registry/reports/cross_core_l4_activation_review_input_contract_validation.yaml")
+    findings = []
+    checked = []
+    for rp in FILES:
+        p = REPO / rp
+        exists = p.exists()
+        checked.append({'path': rp, 'exists': exists, 'sha256': sha(p) if exists else None})
+        if not exists:
+            findings.append({'finding_id': 'missing_required_file', 'severity': 'blocking', 'path': rp})
+            continue
+        text = p.read_text(encoding='utf-8')
+        for marker in FORBIDDEN_MARKERS:
+            if marker in text:
+                # The schema may mention allowed value names, but the inactive template must not approve anything.
+                if marker == 'decision: approve_l4_activation_review' and not rp.endswith('l4_activation_review.template.yaml'):
+                    continue
+                findings.append({'finding_id': 'forbidden_marker', 'severity': 'blocking', 'path': rp, 'message': marker})
+
+    combined = '\n'.join((REPO / rp).read_text(encoding='utf-8') for rp in FILES if (REPO / rp).exists())
+    for marker in REQUIRED_MARKERS:
+        if marker not in combined:
+            findings.append({'finding_id': 'missing_required_marker', 'severity': 'blocking', 'path': 'combined_contract_surface', 'message': marker})
+    for validator_id in REQUIRED_VALIDATORS:
+        if validator_id not in combined:
+            findings.append({'finding_id': 'missing_required_validator', 'severity': 'blocking', 'path': 'combined_contract_surface', 'message': validator_id})
+
+    request_path = REPO / 'docs/pipelines/cross_core_contract/requests/CCR_PATCH_LIFECYCLE_ESCALATION_THRESHOLD_N_R01.yaml'
+    if request_path.exists():
+        request_text = request_path.read_text(encoding='utf-8')
+        for marker in ['status: proposed', 'decision_status: pending_arbitration']:
+            if marker not in request_text:
+                findings.append({'finding_id': 'request_status_changed', 'severity': 'blocking', 'path': str(request_path), 'message': marker})
+
+    status = 'PASS' if not findings else 'FAIL'
+    lines = [
+        'cross_core_l4_activation_review_input_contract_validation:',
+        "  schema_version: '0.1'",
+        f"  generated_at: '{iso_now()}'",
+        f'  status: {status}',
+        '  phase: PHASE_50_CROSS_CORE_L4_ACTIVATION_REVIEW_INPUT_CONTRACT',
+        '  l4_activation_input_contract_defined: true',
+        '  l4_activation_review_materialized_now: false',
+        '  l4_activation_ready_now: false',
+        '  l4_active_now: false',
+        '  checked_files:',
+    ]
+    for item in checked:
+        lines.append(f"    - path: {item['path']}")
+        lines.append(f"      exists: {str(item['exists']).lower()}")
+        lines.append(f"      sha256: {item['sha256']}")
+    lines.append('  blocking_findings:')
+    if findings:
+        for item in findings:
+            lines.append(f"    - finding_id: {item['finding_id']}")
+            lines.append(f"      severity: {item['severity']}")
+            lines.append(f"      path: {item['path']}")
+            if 'message' in item:
+                lines.append(f"      message: {item['message']}")
+    else:
+        lines.append('    []')
+    lines.extend([
+        '  result_summary:',
+        f'    blocking_finding_count: {len(findings)}',
+        '    l4_activation_input_contract_defined: true',
+        '    l4_activation_review_materialized_now: false',
+        '    l4_activation_ready_now: false',
+        '    l4_active_now: false',
+        '    core_mutation_authorized: false',
+        '    backlog_closure_authorized: false',
+        '    release_or_promotion_authorized: false',
+        '    request_remains_proposed_pending_arbitration: true',
+    ])
+    report_path.parent.mkdir(parents=True, exist_ok=True)
+    report_path.write_text('\n'.join(lines) + '\n', encoding='utf-8', newline='\n')
+    print(f'Status: {status}')
+    print(f'Wrote {report_path}')
+    return 0 if status == 'PASS' else 1
+
+if __name__ == '__main__':
+    raise SystemExit(main())

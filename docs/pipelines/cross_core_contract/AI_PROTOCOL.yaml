@@ -228,6 +228,17 @@ ai_protocol:
     l4_activation_ready_now: false
     l4_active_now: false
 
+  l4_activation_review_input_contract:
+    phase: PHASE_50_CROSS_CORE_L4_ACTIVATION_REVIEW_INPUT_CONTRACT
+    contract_ref: docs/pipelines/cross_core_contract/L4_ACTIVATION_REVIEW_INPUT.md
+    schema_ref: docs/pipelines/cross_core_contract/schemas/l4_activation_review.schema.yaml
+    template_ref: docs/pipelines/cross_core_contract/templates/l4_activation_review.template.yaml
+    validation_report: docs/registry/reports/cross_core_l4_activation_review_input_contract_validation.yaml
+    l4_activation_input_contract_defined: true
+    l4_activation_review_materialized_now: false
+    l4_activation_ready_now: false
+    l4_active_now: false
+
   anti_patterns:
     - chat_summary_as_pass
     - direct_write_to_owned_state

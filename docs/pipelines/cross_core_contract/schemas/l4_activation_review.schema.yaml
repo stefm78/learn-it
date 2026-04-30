@@ -1,0 +1,56 @@
+l4_activation_review_schema:
+  schema_version: '0.1'
+  generated_at: '2026-04-30T12:47:07Z'
+  status: contract_defined_inactive
+  object_type: l4_activation_review
+  pipeline_id: cross_core_contract
+  l4_activation_review_materialized_now: false
+  l4_activation_ready_now: false
+  l4_active_now: false
+  required_top_level_fields:
+    - review_id
+    - request_id
+    - explicit_human_decision
+    - decision_timestamp
+    - requested_l4_scope
+    - declared_read_surface
+    - declared_write_surface
+    - impacted_cores
+    - required_validators
+    - validator_execution_plan
+    - release_and_promotion_plan
+    - backlog_resolution_plan
+    - rollback_or_reconciliation_path
+    - non_goals_and_forbidden_mutations
+    - activation_guardrails
+  required_validators:
+    - validate_cross_core_l4_transition_review
+    - validate_cross_core_write_surface
+    - validate_constitution_referentiel_link_reconstruction
+    - validate_link_binding_consistency
+    - validate_multi_core_release_plan
+    - validate_multi_core_promotion_manifest
+    - validate_cross_core_backlog_resolution
+    - validate_cross_core_rollback_or_reconciliation_path
+  explicit_human_decision:
+    allowed_decisions:
+      - approve_l4_activation_review
+      - reject_l4_activation_review
+    required_fields:
+      - decision
+      - decision_maker
+      - rationale
+      - confirms_no_implicit_core_mutation
+      - confirms_no_implicit_backlog_closure
+      - confirms_no_implicit_release_or_promotion
+  activation_guardrails:
+    must_be_true_before_l4_activation:
+      - all_required_validators_declared
+      - all_validator_inputs_declared
+      - all_write_targets_declared
+      - rollback_or_reconciliation_path_declared
+      - explicit_human_decision_approved
+    must_remain_false_until_l4_gate_pass:
+      - core_mutation_authorized
+      - backlog_closure_authorized
+      - release_or_promotion_authorized

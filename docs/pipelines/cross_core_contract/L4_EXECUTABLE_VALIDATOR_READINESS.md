@@ -43,3 +43,19 @@ executable_layer_complete: true
 l4_activation_ready_now: false
 reason: l4_gate mode blocks as expected because future L4 execution inputs are absent
 ```
+
+## L4 activation review input contract
+
+```yaml
+phase: PHASE_50_CROSS_CORE_L4_ACTIVATION_REVIEW_INPUT_CONTRACT
+contract_ref: docs/pipelines/cross_core_contract/L4_ACTIVATION_REVIEW_INPUT.md
+schema_ref: docs/pipelines/cross_core_contract/schemas/l4_activation_review.schema.yaml
+template_ref: docs/pipelines/cross_core_contract/templates/l4_activation_review.template.yaml
+l4_activation_input_contract_defined: true
+l4_activation_review_materialized_now: false
+l4_activation_ready_now: false
+l4_active_now: false
+```
+
+This defines the required future review input for explicit human L4 activation. It does not activate L4.
+

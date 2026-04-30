@@ -106,6 +106,22 @@ release_or_promotion_authorized: false
 
 This pipeline is hardened to L3 for intake, evidence review, arbitration and contract synthesis.
 It remains below L4: no Core write, backlog closure, release or promotion is authorized.
+## L4 activation review input contract
+
+```yaml
+phase: PHASE_50_CROSS_CORE_L4_ACTIVATION_REVIEW_INPUT_CONTRACT
+contract_ref: docs/pipelines/cross_core_contract/L4_ACTIVATION_REVIEW_INPUT.md
+schema_ref: docs/pipelines/cross_core_contract/schemas/l4_activation_review.schema.yaml
+template_ref: docs/pipelines/cross_core_contract/templates/l4_activation_review.template.yaml
+validation_report: docs/registry/reports/cross_core_l4_activation_review_input_contract_validation.yaml
+l4_activation_input_contract_defined: true
+l4_activation_review_materialized_now: false
+l4_activation_ready_now: false
+l4_active_now: false
+```
+
+This contract defines the required shape of a future human-authorized L4 activation review. It does not activate L4.
+
 ## L4 executable validator readiness
 
 ```yaml

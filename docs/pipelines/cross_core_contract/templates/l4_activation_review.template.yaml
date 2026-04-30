@@ -1,0 +1,53 @@
+l4_activation_review:
+  schema_version: '0.1'
+  template_status: inactive_example
+  generated_at: '2026-04-30T12:47:07Z'
+  review_id: L4_ACTIVATION_REVIEW_<YYYY_MM_DD>_Rxx
+  request_id: CCR_PATCH_LIFECYCLE_ESCALATION_THRESHOLD_N_R01
+  explicit_human_decision:
+    decision: reject_l4_activation_review
+    decision_maker: TBD
+    rationale: Template only. No L4 activation is authorized by this file.
+    confirms_no_implicit_core_mutation: true
+    confirms_no_implicit_backlog_closure: true
+    confirms_no_implicit_release_or_promotion: true
+  decision_timestamp: TBD
+  requested_l4_scope:
+    scope_status: not_requested
+    impacted_request: CCR_PATCH_LIFECYCLE_ESCALATION_THRESHOLD_N_R01
+  declared_read_surface: []
+  declared_write_surface: []
+  impacted_cores:
+    - constitution
+    - referentiel
+    - link
+  required_validators:
+    - validate_cross_core_l4_transition_review
+    - validate_cross_core_write_surface
+    - validate_constitution_referentiel_link_reconstruction
+    - validate_link_binding_consistency
+    - validate_multi_core_release_plan
+    - validate_multi_core_promotion_manifest
+    - validate_cross_core_backlog_resolution
+    - validate_cross_core_rollback_or_reconciliation_path
+  validator_execution_plan:
+    status: not_executed
+    all_l4_gate_validations_required: true
+  release_and_promotion_plan:
+    release_materialization_requested: false
+    promotion_requested: false
+  backlog_resolution_plan:
+    backlog_closure_requested: false
+  rollback_or_reconciliation_path:
+    status: not_declared_in_template
+  non_goals_and_forbidden_mutations:
+    no_implicit_core_mutation: true
+    no_implicit_backlog_closure: true
+    no_implicit_release_or_promotion: true
+  activation_guardrails:
+    l4_activation_review_materialized_now: false
+    l4_activation_ready_now: false
+    l4_active_now: false
+    core_mutation_authorized: false
+    backlog_closure_authorized: false
+    release_or_promotion_authorized: false
