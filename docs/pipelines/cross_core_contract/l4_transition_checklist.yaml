@@ -36,6 +36,7 @@ l4_transition_checklist:
     - generic_downstream_gate_input_bundle_contract_PASS
     - generic_dry_run_gate_input_bundle_fixture_PASS
     - generic_downstream_gate_dry_run_smoke_PASS
+    - generic_mutating_readiness_lock_PASS
     - individual_l4_validators_implemented_before_execution
     - declared_read_surface
     - declared_write_surface

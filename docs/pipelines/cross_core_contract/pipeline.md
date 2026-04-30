@@ -106,6 +106,23 @@ release_or_promotion_authorized: false
 
 This pipeline is hardened to L3 for intake, evidence review, arbitration and contract synthesis.
 It remains below L4: no Core write, backlog closure, release or promotion is authorized.
+## Generic mutating readiness lock
+
+```yaml
+phase: PHASE_63_CROSS_CORE_GENERIC_MUTATING_READINESS_LOCK
+lock_ref: docs/pipelines/cross_core_contract/GENERIC_MUTATING_READINESS_LOCK.md
+lock_yaml: docs/pipelines/cross_core_contract/validators/generic_mutating_readiness_lock.yaml
+validation_report: docs/registry/reports/cross_core_generic_mutating_readiness_lock_validation.yaml
+generic_mutating_readiness_lock_defined: true
+generic_pipeline_ready_for_future_concrete_request: true
+real_mutation_authorized_now: false
+requires_future_explicit_human_decision: true
+requires_concrete_cross_core_change_request: true
+requires_all_downstream_gates_PASS_for_real_request: true
+```
+
+This lock closes the generic pipeline workstream. It makes the pipeline ready for future concrete requests while keeping all real mutations forbidden by default.
+
 ## Generic downstream gate dry-run smoke
 
 ```yaml

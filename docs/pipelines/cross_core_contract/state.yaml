@@ -349,3 +349,22 @@ generic_downstream_gate_dry_run_smoke:
   core_mutation_authorized: false
   backlog_closure_authorized: false
   release_or_promotion_authorized: false
+generic_mutating_readiness_lock:
+  phase: PHASE_63_CROSS_CORE_GENERIC_MUTATING_READINESS_LOCK
+  lock_ref: docs/pipelines/cross_core_contract/GENERIC_MUTATING_READINESS_LOCK.md
+  lock_yaml: docs/pipelines/cross_core_contract/validators/generic_mutating_readiness_lock.yaml
+  validation_report: docs/registry/reports/cross_core_generic_mutating_readiness_lock_validation.yaml
+  generic_mutating_readiness_lock_defined: true
+  generic_cross_core_execution_pipeline_complete: true
+  generic_pipeline_ready_for_future_concrete_request: true
+  real_mutation_authorized_now: false
+  requires_future_explicit_human_decision: true
+  requires_concrete_cross_core_change_request: true
+  requires_all_downstream_gates_PASS_for_real_request: true
+  l4_control_plane_active_now: true
+  l4_mutating_execution_framework_ready: true
+  dry_run_gate_smoke_executed: true
+  downstream_mutating_gates_executed: false
+  core_mutation_authorized: false
+  backlog_closure_authorized: false
+  release_or_promotion_authorized: false

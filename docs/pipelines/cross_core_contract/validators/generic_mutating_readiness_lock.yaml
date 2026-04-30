@@ -1,0 +1,41 @@
+cross_core_generic_mutating_readiness_lock:
+  schema_version: '0.1'
+  generated_at: '2026-04-30T15:59:23Z'
+  phase: PHASE_63_CROSS_CORE_GENERIC_MUTATING_READINESS_LOCK
+  status: locked_ready_for_future_request_non_mutating
+  generic_mutating_readiness_lock_defined: true
+  generic_cross_core_execution_pipeline_complete: true
+  generic_pipeline_ready_for_future_concrete_request: true
+  real_mutation_authorized_now: false
+  requires_future_explicit_human_decision: true
+  requires_concrete_cross_core_change_request: true
+  requires_concrete_execution_contract: true
+  requires_concrete_gate_input_bundle: true
+  requires_all_downstream_gates_PASS_for_real_request: true
+  l4_control_plane_active_now: true
+  l4_mutating_execution_framework_ready: true
+  dry_run_gate_smoke_executed: true
+  downstream_mutating_gates_executed: false
+  current_authorizations:
+    core_mutation_authorized: false
+    backlog_closure_authorized: false
+    release_or_promotion_authorized: false
+    constitution_run_authorized: false
+  completion_chain:
+    - PHASE_55 cross_core_l4_control_plane_activation
+    - PHASE_56 cross_core_generic_mutating_execution_framework
+    - PHASE_57 cross_core_generic_execution_contract_instantiator
+    - PHASE_58 cross_core_generic_gate_execution_runner
+    - PHASE_59 cross_core_generic_authorized_dry_run_gate_smoke
+    - PHASE_60 cross_core_generic_downstream_gate_input_bundle_contract
+    - PHASE_61 cross_core_generic_dry_run_gate_input_bundle_fixture
+    - PHASE_62 cross_core_generic_downstream_gate_dry_run_smoke
+  next_allowed_mode:
+    default: stop_at_NO_ACTIVE_PHASE
+    future_work: instantiate_specific_cross_core_request_only_after_explicit_human_decision
+  forbidden_by_default:
+    - direct Core mutation
+    - backlog closure
+    - release materialization
+    - promotion
+    - Constitution run opening

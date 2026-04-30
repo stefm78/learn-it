@@ -38,8 +38,8 @@ scope_modularization_post_pilot:
   status: paused_cleanly
   active_pipeline_run: none
   new_bounded_run_opened_now: false
-  last_completed_phase: PHASE_62
-  last_completed_phase_label: cross_core_generic_downstream_gate_dry_run_smoke
+  last_completed_phase: PHASE_63
+  last_completed_phase_label: cross_core_generic_mutating_readiness_lock
 ```
 
 ## What is complete
@@ -139,6 +139,7 @@ completed:
       - PHASE_60 cross_core_generic_downstream_gate_input_bundle_contract
       - PHASE_61 cross_core_generic_dry_run_gate_input_bundle_fixture
       - PHASE_62 cross_core_generic_downstream_gate_dry_run_smoke
+      - PHASE_63 cross_core_generic_mutating_readiness_lock
 ```
 
 ## Current pipeline position
@@ -1671,6 +1672,39 @@ option_AW_cross_core_generic_downstream_gate_dry_run_smoke:
     - no governance_backlog.yaml modification
     - no release or promotion
   recommended_next_decision: stop at NO_ACTIVE_PHASE or define final generic mutating-readiness lock
+  launcher_authorizes_run_from_signals: false
+
+option_AX_cross_core_generic_mutating_readiness_lock:
+  status: done
+  completed_phase: PHASE_63
+  action: define final generic mutating readiness lock for cross_core_contract
+  artifacts:
+    - docs/pipelines/cross_core_contract/GENERIC_MUTATING_READINESS_LOCK.md
+    - docs/pipelines/cross_core_contract/validators/generic_mutating_readiness_lock.yaml
+    - docs/patcher/shared/validate_cross_core_generic_mutating_readiness_lock.py
+    - docs/registry/reports/cross_core_generic_mutating_readiness_lock_validation.yaml
+    - docs/pipelines/cross_core_contract/AI_PROTOCOL.yaml
+    - docs/pipelines/cross_core_contract/pipeline.md
+    - docs/pipelines/cross_core_contract/state.yaml
+    - docs/pipelines/cross_core_contract/l4_transition_checklist.yaml
+  validation:
+    cross_core_generic_mutating_readiness_lock_validation: PASS
+  posture:
+    active_level: L4_control_plane_active_non_mutating
+    generic_cross_core_execution_pipeline_complete: true
+    generic_pipeline_ready_for_future_concrete_request: true
+    real_mutation_authorized_now: false
+    requires_future_explicit_human_decision: true
+    requires_concrete_cross_core_change_request: true
+    requires_all_downstream_gates_PASS_for_real_request: true
+  non_goals_preserved:
+    - no request-specific logic encoded
+    - no downstream mutating gate executed
+    - no Constitution run opened
+    - no Core file modified
+    - no governance_backlog.yaml modification
+    - no release or promotion
+  recommended_next_decision: stop at NO_ACTIVE_PHASE until a specific cross_core_change_request is selected
   launcher_authorizes_run_from_signals: false
 
 ## Guardrails
