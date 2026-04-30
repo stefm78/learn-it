@@ -23,6 +23,8 @@ entry_action:
     - docs/pipelines/constitution/scope_catalog/governance_backlog.yaml
     - docs/patcher/shared/update_run_tracking.py
     - docs/patcher/shared/materialize_run_inputs.py
+    - docs/patcher/shared/capture_constitution_scope_baseline.py
+    - docs/cores/current/manifest.yaml
     - docs/patcher/shared/extract_scope_slice.py
     - docs/patcher/shared/build_run_context.py
 
@@ -64,7 +66,8 @@ entry_action:
     - do not write runs/<run_id>/run_manifest.yaml directly
     - do not write runs/<run_id>/run_tracking.yaml directly
     - after tracking materialization, execute materialize_run_inputs.py --run-id <RUN_ID>
-    - after input materialization, execute extract_scope_slice.py --run-id <RUN_ID>
+    - after input materialization, execute capture_constitution_scope_baseline.py --run-id <RUN_ID> --scope-key <SCOPE_KEY>
+    - after baseline capture, execute extract_scope_slice.py --run-id <RUN_ID>
     - after ids-first extract materialization, execute build_run_context.py for <RUN_ID>
     - confirm that scope_manifest.yaml, impact_bundle.yaml, integration_gate.yaml, scope_extract.yaml, neighbor_extract.yaml and run_context.yaml are materially produced before declaring run readiness
     - do not start STAGE_01_CHALLENGE
@@ -89,6 +92,10 @@ entry_action:
     input_materialization_command_template: >-
       python docs/patcher/shared/materialize_run_inputs.py
       --run-id <RUN_ID>
+    baseline_scope_capture_command_template: >-
+      python docs/patcher/shared/capture_constitution_scope_baseline.py
+      --run-id <RUN_ID>
+      --scope-key <SCOPE_KEY>
     ids_first_extract_command_template: >-
       python docs/patcher/shared/extract_scope_slice.py
       --pipeline constitution
@@ -108,6 +115,7 @@ entry_action:
       - governance_backlog_signal
       - tracking_materialization_status
       - input_materialization_status
+      - baseline_scope_state_status
       - ids_first_extract_status
       - run_context_status
       - current_stage
@@ -119,13 +127,14 @@ entry_action:
       - run_materialization_pending_user_execution
 
   stop_condition:
-    - stop once tracking, input materialization, ids-first extract materialization and run_context build status are resolved
+    - stop once tracking, input materialization, baseline scope capture, ids-first extract materialization and run_context build status are resolved
     - stop before STAGE_01_CHALLENGE starts
 
   response_contract:
     must_state:
       - whether the run was materially opened
       - whether run inputs were materially generated
+      - whether baseline_scope_state.yaml was materially generated
       - whether ids-first extracts were materially generated
       - whether run_context.yaml was materially generated
       - the exact run_id if materially observed

@@ -75,6 +75,8 @@ Règle structurante :
 - Analyze scope partition: `docs/patcher/shared/analyze_constitution_scope_partition.py`
 - Generate constitution scopes: `docs/patcher/shared/generate_constitution_scopes.py`
 - Score constitution scope maturity: `docs/patcher/shared/score_constitution_scope_maturity.py`
+- Capture Constitution scope baseline at run materialization: `docs/patcher/shared/capture_constitution_scope_baseline.py`
+- Score Constitution scope evolution preview before release: `docs/patcher/shared/score_constitution_scope_evolution_preview.py`
 - Score constitution scope evolution after run closeout: `docs/patcher/shared/score_constitution_scope_evolution.py`
 - Apply computed maturity scores: `docs/patcher/shared/apply_constitution_scope_maturity_scores.py`
 - Report Constitution neighbor IDs governance: `docs/patcher/shared/report_constitution_neighbor_ids_governance.py`

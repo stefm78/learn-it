@@ -3,7 +3,7 @@ stage_skill:
   pipeline_id: constitution
   stage_id: STAGE_06_CORE_VALIDATION
   skill_id: bounded_core_logical_validator
-  stage_kind: cognitive
+  stage_kind: hybrid
   closure_level: high
   authoritative_role: stable_stage_contract
 
@@ -48,10 +48,15 @@ runtime_binding:
     patch_execution_report.yaml fait autorité sur ce qui a effectivement été
     appliqué dans la sandbox. La validation Core ne doit porter que sur l'état
     réellement matérialisé par STAGE_05_APPLY.
+  baseline_scope_state_role: >-
+    baseline_scope_state.yaml capture l'état avant STAGE_01. Il doit être lu ou
+    consommé par score_constitution_scope_evolution_preview.py pour produire un
+    comparatif avant/après sandbox avant toute décision de release.
 
 primary_reads:
   bounded_local_run:
     - docs/pipelines/constitution/runs/<run_id>/inputs/run_context.yaml
+    - docs/pipelines/constitution/runs/<run_id>/inputs/baseline_scope_state.yaml
     - docs/pipelines/constitution/runs/<run_id>/reports/patch_execution_report.yaml
     - docs/pipelines/constitution/runs/<run_id>/work/05_apply/sandbox/docs/cores/current/constitution.yaml
     - docs/pipelines/constitution/runs/<run_id>/work/05_apply/sandbox/docs/cores/current/referentiel.yaml
@@ -82,10 +87,13 @@ fallback_reads:
     - docs/cores/current/link.yaml
 
 required_scripts:
-  none: true
+  mandatory_pre_release_diagnostic:
+    - docs/patcher/shared/score_constitution_scope_evolution_preview.py
   note: >-
-    Ce stage est cognitif. Il ne simule aucun script déterministe. La release,
+    Ce stage reste principalement cognitif pour la validation Core, mais il doit
+    matérialiser un diagnostic déterministe de preview avant release. La release,
     la promotion et la consolidation éventuelle appartiennent aux stages aval.
+    Si le script ne peut pas être exécuté, le stage doit rester BLOCKED.
 
 analysis_axes:
   - duplicate_rules_and_id_collisions
@@ -112,6 +120,13 @@ validation_rules:
   statuses:
     - PASS
     - FAIL
+    - BLOCKED
+  pre_release_preview_rule: >-
+    Après émission de core_validation.yaml, score_constitution_scope_evolution_preview.py
+    doit produire scope_evolution_preview.yaml. Ce rapport compare le baseline
+    d'ouverture du run et l'état sandboxé validé. Il peut recommander d'aller
+    vers STAGE_07, mais build_release_plan.py reste seul autoritaire pour
+    release_required.
   downstream_decisions:
     - direct_release_materialization
     - requires_parallel_consolidation
@@ -139,6 +154,8 @@ required_output_sections:
 expected_outputs:
   bounded_local_run:
     report_path_pattern: docs/pipelines/constitution/runs/<run_id>/work/06_core_validation/core_validation.yaml
+    pre_release_preview_path_pattern: docs/pipelines/constitution/runs/<run_id>/work/06_core_validation/scope_evolution_preview.yaml
+    pre_release_preview_summary_path_pattern: docs/pipelines/constitution/runs/<run_id>/work/06_core_validation/scope_evolution_preview.md
   nominal_global:
     report_path_pattern: docs/pipelines/constitution/work/06_core_validation/core_validation.yaml
   bounded_transition:
@@ -150,17 +167,19 @@ completion_evidence:
     - validation_status_emitted
     - every_blocking_issue_explicitly_listed_if_any
     - downstream_decision_emitted
+    - scope_evolution_preview_materialized
     - fallback_reads_declared_if_any
     - human_actions_explicitly_stated_in_output
   not_sufficient:
     - informal_chat_summary_only
     - pass_without_reading_sandbox_cores
+    - pass_without_scope_evolution_preview
     - ambiguous_downstream_decision
     - implicit_release_or_promotion_claim
 
 human_actions_required:
   description: >-
-    L'IA produit core_validation.yaml et s'arrête. L'humain décide ensuite de
+    L'IA produit core_validation.yaml puis matérialise scope_evolution_preview.yaml avant de s'arrêter. L'humain décide ensuite de
     poursuivre soit vers STAGE_07_RELEASE_MATERIALIZATION, soit vers
     STAGE_06B_CONSOLIDATION si le contexte multi-runs l'exige, soit de revenir
     en amont pour correction si la validation échoue.
