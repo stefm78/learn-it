@@ -121,8 +121,8 @@ governance_backlog_exported: true
 
 This was a real Constitution pipeline run.
 
-The later PHASE_14 through PHASE_29 work was control-plane, governance, tooling,
-validation, launcher hardening, launcher semantics clarification, minimal pipeline signals contracts, launcher modularization, launcher signals overlay, naming correction, launcher promotion, launcher engine extraction, Stage 00 signal refresh, scope catalog alignment, or documentation work. It was not another full stage 01 → 09 pipeline run.
+The later PHASE_14 through PHASE_33 work was control-plane, governance, tooling,
+validation, launcher hardening, launcher semantics clarification, minimal pipeline signals contracts, launcher modularization, launcher signals overlay, naming correction, launcher promotion, launcher engine extraction, Stage 00 signal refresh, scope catalog alignment, cross-core contract bootstrap, scope-evolution diagnostics integration, or documentation work. It was not another full stage 01 → 09 pipeline run.
 
 ### 3. Governance backlog integration
 
@@ -640,67 +640,56 @@ PHASE_33:
 
 ## Remaining open backlog entries
 
-Four reviewed backlog entries remain open intentionally:
+Seven reviewed `patch_lifecycle` backlog entries remain open intentionally:
 
 ```yaml
 remaining_open_backlog_entries:
   - candidate_id: GBC_PATCH_LIFECYCLE_FULL_STATE_MACHINE_R01
+    source_run_id: CONSTITUTION_RUN_2026_04_27_PATCH_LIFECYCLE_R01
     topic: canonical patch lifecycle state machine
     recommended_treatment: keep_open_until_explicit_design_run
-    rank_if_future_run_opened: 1
 
   - candidate_id: GBC_PATCH_LIFECYCLE_PRIORITY_QUEUE_R01
+    source_run_id: CONSTITUTION_RUN_2026_04_27_PATCH_LIFECYCLE_R01
     topic: deterministic priority lanes for patch serialization
     recommended_treatment: keep_open_until_explicit_design_run
-    rank_if_future_run_opened: 2
 
   - candidate_id: GBC_PATCH_LIFECYCLE_ESCALATION_BOUNDARY_R01
+    source_run_id: CONSTITUTION_RUN_2026_04_27_PATCH_LIFECYCLE_R01
     topic: escalation boundary across patch_lifecycle, learner_state and deployment_governance
-    recommended_treatment: include_conditionally_after_state_machine_design
-    rank_if_future_run_opened: 3
+    recommended_treatment: keep_open_until_dedicated_escalation_boundary_review
 
   - candidate_id: GBC_PATCH_LIFECYCLE_REFERENTIEL_PARAMETER_R01
+    source_run_id: CONSTITUTION_RUN_2026_04_27_PATCH_LIFECYCLE_R01
     topic: external-read-only referentiel parameter dependency for patch escalation threshold
-    recommended_treatment: exclude_from_constitution_only_run / separate cross-core follow-up
-    rank_if_future_run_opened: 4
+    recommended_treatment: exclude_from_constitution_only_run_or_convert_to_cross_core_contract
+
+  - candidate_id: GBC_PATCH_LIFECYCLE_REFERENTIEL_PARAMETER_R02
+    source_run_id: CONSTITUTION_RUN_2026_04_30_PATCH_LIFECYCLE_R01
+    topic: external Référentiel parameter contract for ineffective patch iteration threshold N
+    recommended_treatment: feed_cross_core_contract_bootstrap_or_referentiel_link_follow_up
+
+  - candidate_id: GBC_PATCH_LIFECYCLE_ESCALATION_BOUNDARY_R02
+    source_run_id: CONSTITUTION_RUN_2026_04_30_PATCH_LIFECYCLE_R01
+    topic: global escalation ownership boundary across patch_lifecycle, learner_state and governance
+    recommended_treatment: keep_open_until_dedicated_escalation_boundary_review
+
+  - candidate_id: GBC_PATCH_LIFECYCLE_VALUE_COST_AR_N2_NEIGHBOR_R01
+    source_run_id: CONSTITUTION_RUN_2026_04_30_PATCH_LIFECYCLE_R01
+    topic: decide whether TYPE_SELF_REPORT_AR_N2 should be an explicit read neighbor
+    recommended_treatment: keep_open_until_neighbor_closure_arbitration
 ```
 
 These entries remain visible through:
 
 ```text
-
-D8 launcher pipeline-state extraction evidence:
-```text
-docs/patcher/shared/pipeline_launcher/pipeline_state.py
-docs/patcher/shared/validate_pipeline_launcher_pipeline_state_extraction.py
-docs/registry/reports/pipeline_launcher_pipeline_state_extraction_validation.yaml
-```
+docs/pipelines/constitution/scope_catalog/governance_backlog.yaml
 docs/pipelines/constitution/reports/governance_backlog_report.yaml
 docs/pipelines/constitution/reports/bounded_run_preflight_report.yaml
 docs/pipelines/constitution/reports/open_new_run_preflight_gate_validation.yaml
 docs/pipelines/constitution/reports/launcher_preflight_display_validation.yaml
 docs/pipelines/constitution/reports/launcher_new_run_semantics_validation.yaml
 docs/registry/reports/pipeline_signals_validation.yaml
-docs/registry/reports/pipeline_launcher_modularization_validation.yaml
-docs/registry/reports/pipeline_launcher_promotion_plan.yaml
-docs/registry/reports/pipeline_launcher_official_command_validation.yaml
-docs/registry/reports/pipeline_launcher_engine_promotion_validation.yaml
-docs/registry/reports/pipeline_launcher_with_signals_validation.yaml
-docs/patcher/shared/pipeline_launcher/cli.py
-docs/patcher/shared/pipeline_launcher/engine.py
-docs/patcher/shared/pipeline_launcher/pipeline_signals.py
-docs/patcher/shared/pipeline_launcher/overlay.py
-docs/patcher/shared/pipeline_launcher_with_signals.py
-docs/patcher/shared/validate_pipeline_launcher.py
-docs/patcher/shared/validate_pipeline_launcher_official_command.py
-docs/patcher/shared/validate_pipeline_launcher_engine_promotion.py
-docs/patcher/shared/validate_pipeline_launcher_with_signals.py
-docs/pipelines/constitution/signals.yaml
-docs/pipelines/release/signals.yaml
-docs/pipelines/migration/signals.yaml
-docs/pipelines/governance/signals.yaml
-docs/patcher/shared/validate_pipeline_signals.py
-tmp/pipeline_launcher.py
 STAGE_00 run_candidate_preflight
 OPEN_NEW_RUN preflight gate
 ```
