@@ -197,3 +197,30 @@ Archivés :
 - `archive/journals/J3_CANONICAL_RECONSTRUCTION_FROM_INTEGRATED_SCOPED_RESULTS.md`
 - `archive/journals/J4_DERIVED_RUNTIME_TASK_VIEW_AND_STAGE_SKILLS.md`
 - `archive/journals/J4_GENERATED_SCOPES_FROM_CANON_AND_POLICY.md`
+---
+
+## 2026-04-30 — passe globale et archivage post-PHASE_29
+
+- Mode : `human+ai`
+- Passe globale sur la transformation `core_modularization` après synchronisation de `PHASE_29`.
+- Le tracker compact indique `NO_ACTIVE_PHASE`, aucun run actif, preflight `PREFLIGHT_KEEP_BACKLOG_OPEN`.
+- Le README a été rafraîchi pour refléter l'état post-PHASE_29.
+- Les snapshots top-level `STATUS_*`, s'il en restait, ont été archivés sous `archive/status_snapshots/`.
+
+### Décisions prises
+
+1. Garder le premier niveau du répertoire comme surface active compacte.
+2. Conserver `POST_PILOT_PATCH_LIFECYCLE_BACKLOG_TRIAGE.md` tant que les entrées backlog associées restent ouvertes.
+3. Conserver les fichiers J1/J5 encore référencés ou non validés par un vrai cas multi-scope.
+4. Ne pas ouvrir de run automatiquement : tout challenge futur nécessite une décision humaine explicite via le flux canonique `OPEN_NEW_RUN`.
+
+### Artefacts concernés
+
+- `docs/transformations/core_modularization/README.md`
+- `docs/transformations/core_modularization/WORKLOG.md`
+- `docs/transformations/core_modularization/archive/status_snapshots/`
+
+### Archivage effectué
+
+- Aucun snapshot `STATUS_*` restant au premier niveau.
+

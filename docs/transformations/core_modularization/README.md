@@ -27,17 +27,19 @@ For a human or AI resuming the transformation, read in this order:
 1. `SCOPE_GRAPH_CLUSTERING_PROGRESS.md` — compact current state and resume options
 2. `HANDOVER_SCOPE_MODULARIZATION_POST_PILOT.md` — standalone handover
 3. `SCOPE_GRAPH_CLUSTERING_APPROACH.md` — compact implemented doctrine
-4. `REFERENTIEL_LINK_EXTERNAL_READ_ONLY_TREATMENT.md`
-5. `POST_PILOT_PATCH_LIFECYCLE_BACKLOG_TRIAGE.md`
-6. Full historical snapshots only if deep traceability is needed:
+4. `WORKLOG.md` — append-only factual execution log
+5. `REFERENTIEL_LINK_EXTERNAL_READ_ONLY_TREATMENT.md`
+6. `POST_PILOT_PATCH_LIFECYCLE_BACKLOG_TRIAGE.md`
+7. Full historical snapshots only if deep traceability is needed:
    - `archive/full_snapshots/SCOPE_GRAPH_CLUSTERING_PROGRESS_FULL_2026_04_29.md`
    - `archive/full_snapshots/SCOPE_GRAPH_CLUSTERING_APPROACH_FULL_2026_04_29.md`
-7. Active J-files only if needed:
+8. Active J-files only if needed:
    - `J1_SCOPED_RUN_CONTRACT.md`
    - `J1_CONSTITUTION_PIPELINE_MINIMAL_DELTA.md`
    - `J5_PARALLEL_SCOPED_RUNS_AND_CANONICAL_CONSOLIDATION.md`
 
-Archived journals under `archive/journals/` are historical and non-canonical.
+Archived journals under `archive/journals/` and archived status snapshots under
+`archive/status_snapshots/` are historical and non-canonical.
 
 ## Active transformation documents
 
@@ -45,8 +47,10 @@ Archived journals under `archive/journals/` are historical and non-canonical.
 |---|---|---|
 | `SCOPE_GRAPH_CLUSTERING_PROGRESS.md` | Main phase tracker and handoff state | active |
 | `SCOPE_GRAPH_CLUSTERING_APPROACH.md` | Implemented graph-based scoping doctrine | reference |
+| `HANDOVER_SCOPE_MODULARIZATION_POST_PILOT.md` | Standalone resume/handover document | active handover |
+| `WORKLOG.md` | Append-only factual execution log | active log |
 | `REFERENTIEL_LINK_EXTERNAL_READ_ONLY_TREATMENT.md` | Doctrine for treating `referentiel` and `link` as read-only external cores during Constitution runs | open doctrine |
-| `POST_PILOT_PATCH_LIFECYCLE_BACKLOG_TRIAGE.md` | Non-canonical triage of backlog entries exported by the patch_lifecycle pilot | historical analysis, still useful |
+| `POST_PILOT_PATCH_LIFECYCLE_BACKLOG_TRIAGE.md` | Non-canonical triage of backlog entries exported by the patch_lifecycle pilot | historical analysis, still useful while entries remain open |
 | `J1_SCOPED_RUN_CONTRACT.md` | Bounded run contract: `scope_manifest`, `impact_bundle`, `integration_gate` | active because still referenced |
 | `J1_CONSTITUTION_PIPELINE_MINIMAL_DELTA.md` | Minimal Constitution pipeline delta for bounded runs | active supporting note |
 | `J5_PARALLEL_SCOPED_RUNS_AND_CANONICAL_CONSOLIDATION.md` | Parallel scoped run consolidation model | active until first real multi-scope consolidation validation |
@@ -75,29 +79,30 @@ artifacts, and validation reports.
 The graph-based scope partitioning approach has been implemented, pilot-validated,
 and promoted through the `patch_lifecycle` bounded run.
 
-PHASE_17 is closed:
+PHASE_29 is closed:
 
-- deterministic maturity scoring exists;
-- computed maturity scores are publishable through a gated policy patcher;
-- `policy.yaml` has been synchronized;
-- scope catalog regeneration passes;
-- final maturity scoring passes;
-- the score patcher dry-run is idempotent.
+- the Stage 00 backlog review is complete;
+- the four remaining `patch_lifecycle` backlog entries are still `open` but reviewed;
+- operational pipeline signals are refreshed deterministically from the reviewed backlog state;
+- `bounded_run_preflight_report.yaml` is now `PREFLIGHT_KEEP_BACKLOG_OPEN`;
+- the generated scope catalog is aligned with `REF_CORE_LEARNIT_REFERENTIEL_V5_0_IN_CONSTITUTION`;
+- `Challenge_constitution.md` and `STAGE_01_CHALLENGE.skill.yaml` now carry generic bounded-scope maturity signals without publishing maturity scores.
 
-The next selected follow-up is:
+Current operational state:
 
-```text
-PHASE_18 — MACRO_005_NEIGHBOR_DECLARATION_REVIEW
+```yaml
+current_phase: NO_ACTIVE_PHASE
+active_pipeline_run: none
+new_bounded_run_opened_now: false
+default_next_action: keep_NO_ACTIVE_PHASE
+future_targeted_challenge_requires: explicit_human_override
 ```
 
-This should normally run before:
+The next possible action is a human decision, not an automatic run opening.
 
-```text
-MACRO_004_MULTI_OWNER_CLUSTER_REVIEW
-```
-
-because the repository has just stabilized the neighbor declaration and maturity
-score publication loop.
+A future targeted challenge can be prepared around a reviewed open backlog theme, but
+only through the canonical `OPEN_NEW_RUN` flow and with explicit human confirmation
+when preflight remains `PREFLIGHT_KEEP_BACKLOG_OPEN`.
 
 ## Governance rules
 
