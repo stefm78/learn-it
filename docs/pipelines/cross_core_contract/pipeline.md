@@ -106,6 +106,24 @@ release_or_promotion_authorized: false
 
 This pipeline is hardened to L3 for intake, evidence review, arbitration and contract synthesis.
 It remains below L4: no Core write, backlog closure, release or promotion is authorized.
+## Generic mutating execution framework
+
+```yaml
+phase: PHASE_56_CROSS_CORE_GENERIC_MUTATING_EXECUTION_FRAMEWORK
+framework_ref: docs/pipelines/cross_core_contract/GENERIC_MUTATING_EXECUTION_FRAMEWORK.md
+framework_yaml: docs/pipelines/cross_core_contract/validators/generic_mutating_execution_framework.yaml
+execution_contract_schema: docs/pipelines/cross_core_contract/schemas/cross_core_execution_contract.schema.yaml
+execution_contract_template: docs/pipelines/cross_core_contract/templates/cross_core_execution_contract.template.yaml
+execution_contract_validator: docs/patcher/shared/validate_cross_core_execution_contract.py
+validation_report: docs/registry/reports/cross_core_generic_mutating_execution_framework_validation.yaml
+generic_mutating_execution_framework_defined: true
+l4_mutating_execution_framework_ready: true
+l4_mutating_gate_active_now: false
+l4_core_mutation_authorized_now: false
+```
+
+This framework is generic. It applies to any future `cross_core_change_request`, not to a specific candidate request.
+
 ## L4 control-plane activation
 
 ```yaml

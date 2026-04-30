@@ -29,6 +29,7 @@ l4_transition_checklist:
     - l4_dry_run_activation_orchestrator_PASS
     - l4_hardening_closeout_PASS
     - l4_control_plane_activation_PASS
+    - generic_mutating_execution_framework_PASS
     - individual_l4_validators_implemented_before_execution
     - declared_read_surface
     - declared_write_surface

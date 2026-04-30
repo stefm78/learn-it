@@ -38,8 +38,8 @@ scope_modularization_post_pilot:
   status: paused_cleanly
   active_pipeline_run: none
   new_bounded_run_opened_now: false
-  last_completed_phase: PHASE_55
-  last_completed_phase_label: cross_core_l4_control_plane_activation
+  last_completed_phase: PHASE_56
+  last_completed_phase_label: cross_core_generic_mutating_execution_framework
 ```
 
 ## What is complete
@@ -132,6 +132,7 @@ completed:
       - PHASE_53 cross_core_l4_dry_run_activation_orchestrator
       - PHASE_54 cross_core_l4_hardening_closeout
       - PHASE_55 cross_core_l4_control_plane_activation
+      - PHASE_56 cross_core_generic_mutating_execution_framework
 ```
 
 ## Current pipeline position
@@ -1410,6 +1411,37 @@ option_AP_cross_core_l4_control_plane_activation:
     - no threshold N resolution
     - CCR_PATCH_LIFECYCLE_ESCALATION_THRESHOLD_N_R01 remains proposed / pending_arbitration
   recommended_next_decision: stop at NO_ACTIVE_PHASE or explicitly open a future mutating-gate activation workstream
+  launcher_authorizes_run_from_signals: false
+
+option_AQ_cross_core_generic_mutating_execution_framework:
+  status: done
+  completed_phase: PHASE_56
+  action: define generic request-independent mutating execution framework for cross_core_contract
+  artifacts:
+    - docs/pipelines/cross_core_contract/GENERIC_MUTATING_EXECUTION_FRAMEWORK.md
+    - docs/pipelines/cross_core_contract/validators/generic_mutating_execution_framework.yaml
+    - docs/pipelines/cross_core_contract/schemas/cross_core_execution_contract.schema.yaml
+    - docs/pipelines/cross_core_contract/templates/cross_core_execution_contract.template.yaml
+    - docs/patcher/shared/validate_cross_core_execution_contract.py
+    - docs/patcher/shared/validate_cross_core_generic_mutating_execution_framework.py
+    - docs/registry/reports/cross_core_execution_contract_template_validation.yaml
+    - docs/registry/reports/cross_core_generic_mutating_execution_framework_validation.yaml
+  validation:
+    cross_core_generic_mutating_execution_framework_validation: PASS
+    cross_core_execution_contract_template_validation: BLOCKED_TEMPLATE_ONLY
+  posture:
+    generic_mutating_execution_framework_defined: true
+    l4_mutating_execution_framework_ready: true
+    l4_mutating_gate_active_now: false
+    l4_core_mutation_authorized_now: false
+  non_goals_preserved:
+    - no request-specific logic encoded
+    - no downstream mutating gate executed
+    - no Constitution run opened
+    - no Core file modified
+    - no governance_backlog.yaml modification
+    - no release or promotion
+  recommended_next_decision: stop at NO_ACTIVE_PHASE or instantiate a concrete execution contract for a selected cross_core_change_request
   launcher_authorizes_run_from_signals: false
 
 ## Guardrails

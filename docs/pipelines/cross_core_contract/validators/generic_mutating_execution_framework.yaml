@@ -1,0 +1,46 @@
+cross_core_generic_mutating_execution_framework:
+  schema_version: '0.1'
+  generated_at: '2026-04-30T14:53:39Z'
+  phase: PHASE_56_CROSS_CORE_GENERIC_MUTATING_EXECUTION_FRAMEWORK
+  status: framework_defined_non_mutating
+  pipeline_id: cross_core_contract
+  generic_mutating_execution_framework_defined: true
+  cross_core_execution_contract_schema_defined: true
+  cross_core_execution_contract_validator_defined: true
+  template_validation_status: BLOCKED_TEMPLATE_ONLY
+  l4_control_plane_active_now: true
+  l4_mutating_execution_framework_ready: true
+  l4_mutating_gate_active_now: false
+  l4_core_mutation_authorized_now: false
+  current_authorizations:
+    core_mutation_authorized: false
+    backlog_closure_authorized: false
+    release_or_promotion_authorized: false
+    constitution_run_authorized: false
+  generic_inputs:
+    request_pattern: docs/pipelines/cross_core_contract/requests/*.yaml
+    execution_contract_pattern: docs/pipelines/cross_core_contract/work/03_contract_synthesis/*.yaml
+    template: docs/pipelines/cross_core_contract/templates/cross_core_execution_contract.template.yaml
+    schema: docs/pipelines/cross_core_contract/schemas/cross_core_execution_contract.schema.yaml
+  generic_outputs:
+    execution_contract: docs/pipelines/cross_core_contract/work/03_contract_synthesis/<contract_id>.yaml
+    validation_report: docs/pipelines/cross_core_contract/reports/<contract_id>_validation.yaml
+    release_plan: docs/pipelines/cross_core_contract/work/05_release_planning/<contract_id>_release_plan.yaml
+  required_validators:
+    - validate_cross_core_execution_contract
+    - validate_cross_core_l4_transition_review
+    - validate_cross_core_write_surface
+    - validate_cross_core_rollback_or_reconciliation_path
+    - validate_link_binding_consistency
+    - validate_constitution_referentiel_link_reconstruction
+    - validate_multi_core_release_plan
+    - validate_multi_core_promotion_manifest
+    - validate_cross_core_backlog_resolution
+  readiness_boundary:
+    concrete_request_required_before_mutation: true
+    concrete_execution_contract_required_before_mutation: true
+    all_gates_must_pass_before_apply: true
+    template_cannot_apply: true
+  next_step:
+    default: stop_at_NO_ACTIVE_PHASE
+    when_needed: instantiate_cross_core_execution_contract_for_a_specific_request

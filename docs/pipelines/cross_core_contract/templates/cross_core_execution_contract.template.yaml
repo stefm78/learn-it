@@ -1,0 +1,66 @@
+cross_core_execution_contract:
+  schema_version: '0.1'
+  template_status: inactive_template
+  generated_at: '2026-04-30T14:53:39Z'
+  contract_id: CROSS_CORE_EXECUTION_CONTRACT_TEMPLATE_R00
+  source_request:
+    request_id: TEMPLATE_REQUEST_ID
+    request_file: docs/pipelines/cross_core_contract/requests/<REQUEST_ID>.yaml
+    request_status_required: accepted_for_arbitrage
+  execution_model:
+    selected_model: pending_arbitration
+    model_selection_status: not_selected
+    generic_pipeline_instance: true
+  affected_cores:
+    constitution:
+      affected: false
+      read_surface: []
+      write_surface: []
+    referentiel:
+      affected: false
+      read_surface: []
+      write_surface: []
+    link:
+      affected: false
+      read_surface: []
+      write_surface: []
+  declared_read_surface: []
+  declared_write_surface: []
+  write_authorization:
+    requested_now: false
+    granted_now: false
+    core_mutation_authorized: false
+    backlog_closure_authorized: false
+    release_or_promotion_authorized: false
+  validation_plan:
+    required_validators:
+      - validate_cross_core_execution_contract
+      - validate_cross_core_l4_transition_review
+      - validate_cross_core_write_surface
+      - validate_cross_core_rollback_or_reconciliation_path
+      - validate_link_binding_consistency
+      - validate_constitution_referentiel_link_reconstruction
+      - validate_multi_core_release_plan
+      - validate_multi_core_promotion_manifest
+      - validate_cross_core_backlog_resolution
+    all_required_validators_must_pass_before_apply: true
+    current_validation_status: not_executed_template
+  rollback_or_reconciliation_path:
+    status: not_declared_template
+    required_before_apply: true
+  release_and_promotion_policy:
+    release_policy_declared: false
+    promotion_policy_declared: false
+    release_materialization_requested: false
+    promotion_requested: false
+  backlog_policy:
+    backlog_resolution_requested: false
+    backlog_closure_requested: false
+    backlog_entries_to_resolve: []
+  execution_guardrails:
+    template_only: true
+    concrete_request_bound: false
+    mutating_execution_ready_now: false
+    mutating_apply_ready_now: false
+    downstream_mutating_gates_executed_now: false
+    no_core_write_from_template: true

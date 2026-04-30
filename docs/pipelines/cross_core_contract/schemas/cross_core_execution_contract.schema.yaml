@@ -1,0 +1,42 @@
+cross_core_execution_contract_schema:
+  schema_version: '0.1'
+  generated_at: '2026-04-30T14:53:39Z'
+  status: generic_schema_defined
+  object_type: cross_core_execution_contract
+  pipeline_id: cross_core_contract
+  purpose: generic request-independent contract for future cross-core mutation attempts
+  required_top_level_fields:
+    - contract_id
+    - source_request
+    - execution_model
+    - affected_cores
+    - declared_read_surface
+    - declared_write_surface
+    - write_authorization
+    - validation_plan
+    - rollback_or_reconciliation_path
+    - release_and_promotion_policy
+    - backlog_policy
+    - execution_guardrails
+  allowed_execution_models:
+    - constitution_only_read_or_contract_review
+    - referentiel_parameter_update
+    - link_binding_update
+    - coordinated_multi_core_update
+    - non_mutating_resolution
+  required_validators:
+    - validate_cross_core_execution_contract
+    - validate_cross_core_l4_transition_review
+    - validate_cross_core_write_surface
+    - validate_cross_core_rollback_or_reconciliation_path
+    - validate_link_binding_consistency
+    - validate_constitution_referentiel_link_reconstruction
+    - validate_multi_core_release_plan
+    - validate_multi_core_promotion_manifest
+    - validate_cross_core_backlog_resolution
+  invariants:
+    concrete_contract_must_bind_to_one_request: true
+    declared_write_surface_required_before_apply: true
+    rollback_or_reconciliation_required_before_apply: true
+    all_required_validators_must_pass_before_apply: true
+    template_must_not_authorize_mutation: true

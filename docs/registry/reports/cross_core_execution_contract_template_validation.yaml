@@ -1,0 +1,23 @@
+cross_core_execution_contract_validation:
+  schema_version: '0.1'
+  generated_at: '2026-04-30T14:53:40Z'
+  status: BLOCKED_TEMPLATE_ONLY
+  input: C:/Users/Stef/dev/learn-it/docs/pipelines/cross_core_contract/templates/cross_core_execution_contract.template.yaml
+  generic_contract_validator: validate_cross_core_execution_contract
+  template_validation_expected_to_block: true
+  core_mutation_authorized: false
+  backlog_closure_authorized: false
+  release_or_promotion_authorized: false
+  input_file:
+    exists: true
+    sha256: aebd440b8f97d6b992c3c023b6743065ac0b6bbea61568e4967282216a03f2f3
+  blocking_findings:
+    - finding_id: template_contract_cannot_authorize_mutation
+      severity: blocking
+      path: C:\Users\Stef\dev\learn-it\docs\pipelines\cross_core_contract\templates\cross_core_execution_contract.template.yaml
+  result_summary:
+    blocking_finding_count: 1
+    generic_contract_shape_checked: true
+    core_mutation_authorized: false
+    backlog_closure_authorized: false
+    release_or_promotion_authorized: false

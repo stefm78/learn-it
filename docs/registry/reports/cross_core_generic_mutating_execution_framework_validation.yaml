@@ -1,0 +1,67 @@
+cross_core_generic_mutating_execution_framework_validation:
+  schema_version: '0.1'
+  generated_at: '2026-04-30T14:53:40Z'
+  status: PASS
+  phase: PHASE_56_CROSS_CORE_GENERIC_MUTATING_EXECUTION_FRAMEWORK
+  generic_mutating_execution_framework_defined: true
+  cross_core_execution_contract_schema_defined: true
+  cross_core_execution_contract_validator_defined: true
+  template_validation_status: BLOCKED_TEMPLATE_ONLY
+  l4_mutating_execution_framework_ready: true
+  l4_mutating_gate_active_now: false
+  l4_core_mutation_authorized_now: false
+  checked_files:
+    - path: docs/pipelines/cross_core_contract/GENERIC_MUTATING_EXECUTION_FRAMEWORK.md
+      kind: state
+      exists: true
+      sha256: 6cf0a74a5f226b98743ec08b93b10fa41dd003dae9bb489beb2c23fabdef13b4
+    - path: docs/pipelines/cross_core_contract/validators/generic_mutating_execution_framework.yaml
+      kind: state
+      exists: true
+      sha256: 52237753a15f5dad6eb7e39257b3e54b85cf7835eb39fb09950af52bc9d93cc6
+    - path: docs/pipelines/cross_core_contract/schemas/cross_core_execution_contract.schema.yaml
+      kind: state
+      exists: true
+      sha256: c101606c813098c5fc8ef6d7b40cebd6b8b490639f9ce0e1f62b2756db8ce4ab
+    - path: docs/pipelines/cross_core_contract/templates/cross_core_execution_contract.template.yaml
+      kind: state
+      exists: true
+      sha256: aebd440b8f97d6b992c3c023b6743065ac0b6bbea61568e4967282216a03f2f3
+    - path: docs/registry/reports/cross_core_execution_contract_template_validation.yaml
+      kind: state
+      exists: true
+      sha256: a677151d22e841718ed770857e428907b5e28431bddc4c2f0162804d776f41b2
+    - path: docs/pipelines/cross_core_contract/AI_PROTOCOL.yaml
+      kind: state
+      exists: true
+      sha256: 296992eebe984f1b1574cf5fa1a6bbc34708a086ec8149889d3ed51abd0662ef
+    - path: docs/pipelines/cross_core_contract/pipeline.md
+      kind: state
+      exists: true
+      sha256: f2ae963a7079b102bf843a2a69f3f8d6dbfbc727c3c2de319c03e53b10e58b09
+    - path: docs/pipelines/cross_core_contract/state.yaml
+      kind: state
+      exists: true
+      sha256: 510a3f4285e16b6f031b16b18bb309efce0ad970967c4edf0296c24c9e17fd36
+    - path: docs/pipelines/cross_core_contract/l4_transition_checklist.yaml
+      kind: state
+      exists: true
+      sha256: 90ed173ecc55ab95f49529a06cba33643150aa678739d3e53540fd05f99fc808
+    - path: docs/registry/reports/cross_core_l4_control_plane_activation_validation.yaml
+      kind: state
+      exists: true
+      sha256: 46ee181df201493f65e373631acc53b75efcffd38de12331345770ab6b579983
+    - path: docs/patcher/shared/validate_cross_core_execution_contract.py
+      kind: script_compile_only
+      exists: true
+      sha256: 27232c61680b5b10ff0a5c691c9968eb5e79791bf679b642fc3eee6b29949827
+  blocking_findings:
+    []
+  result_summary:
+    blocking_finding_count: 0
+    generic_mutating_execution_framework_defined: true
+    l4_mutating_execution_framework_ready: true
+    template_blocks_mutation: true
+    core_mutation_authorized: false
+    backlog_closure_authorized: false
+    release_or_promotion_authorized: false

@@ -233,3 +233,22 @@ l4_control_plane_activation:
   core_mutation_authorized: false
   backlog_closure_authorized: false
   release_or_promotion_authorized: false
+generic_mutating_execution_framework:
+  phase: PHASE_56_CROSS_CORE_GENERIC_MUTATING_EXECUTION_FRAMEWORK
+  framework_ref: docs/pipelines/cross_core_contract/GENERIC_MUTATING_EXECUTION_FRAMEWORK.md
+  framework_yaml: docs/pipelines/cross_core_contract/validators/generic_mutating_execution_framework.yaml
+  execution_contract_schema: docs/pipelines/cross_core_contract/schemas/cross_core_execution_contract.schema.yaml
+  execution_contract_template: docs/pipelines/cross_core_contract/templates/cross_core_execution_contract.template.yaml
+  execution_contract_validator: docs/patcher/shared/validate_cross_core_execution_contract.py
+  validation_report: docs/registry/reports/cross_core_generic_mutating_execution_framework_validation.yaml
+  generic_mutating_execution_framework_defined: true
+  cross_core_execution_contract_schema_defined: true
+  cross_core_execution_contract_validator_defined: true
+  template_validation_status: BLOCKED_TEMPLATE_ONLY
+  l4_control_plane_active_now: true
+  l4_mutating_execution_framework_ready: true
+  l4_mutating_gate_active_now: false
+  l4_core_mutation_authorized_now: false
+  core_mutation_authorized: false
+  backlog_closure_authorized: false
+  release_or_promotion_authorized: false
