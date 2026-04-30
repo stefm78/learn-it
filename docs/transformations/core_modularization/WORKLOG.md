@@ -282,4 +282,26 @@ Archivés :
 python docs/patcher/shared/generate_constitution_scopes.py --apply --report tmp/constitution_scope_generation_report.yaml
 python docs/patcher/shared/run_constitution_stage00_review_bundle.py
 ```
+---
+
+## 2026-04-30 — clôture PHASE_31
+
+- Mode : `human+ai`
+- `PHASE_31_STAGE00_POST_RUN_REVIEW` est clôturée.
+- Le forced inter-core reference a été aligné sur `REF_CORE_LEARNIT_REFERENTIEL_V6_0_IN_CONSTITUTION`.
+- Les trois entrées backlog exportées par `CONSTITUTION_RUN_2026_04_30_PATCH_LIFECYCLE_R01` ont été revues et maintenues `open` avec métadonnées complètes.
+- Le catalogue de scopes a été régénéré.
+- Le bundle STAGE_00 repasse en `PASS`.
+- La bijection repasse en `PASS` avec `ids_not_covered: []`.
+- Les signaux reviennent à `KEEP_BACKLOG_OPEN_WITH_REVIEW_METADATA`.
+- Le preflight revient à `PREFLIGHT_KEEP_BACKLOG_OPEN`.
+- Aucun run n'est ouvert automatiquement.
+
+### État final
+
+```yaml
+current_phase: NO_ACTIVE_PHASE
+last_completed_phase: PHASE_31
+recommended_next_action: keep_NO_ACTIVE_PHASE
+```
 

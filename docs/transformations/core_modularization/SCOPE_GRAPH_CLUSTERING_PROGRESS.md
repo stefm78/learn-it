@@ -30,16 +30,16 @@ archived_full_approach_sha256: 1a92e334eeb94768cbb3e4d05bd7cd9916e45f1cb4d78f380
 
 ```yaml
 current_phase:
-  phase_id: PHASE_31_STAGE00_POST_RUN_REVIEW
-  label: stage00_post_run_backlog_and_referentiel_v6_review
-  status: in_progress
+  phase_id: NO_ACTIVE_PHASE
+  label: awaiting_next_human_decision
+  status: paused
 
 scope_modularization_post_pilot:
   status: paused_cleanly
   active_pipeline_run: none
   new_bounded_run_opened_now: false
-  last_completed_phase: PHASE_30
-  last_completed_phase_label: stage00_review_bundle_integration
+  last_completed_phase: PHASE_31
+  last_completed_phase_label: stage00_post_run_backlog_and_referentiel_v6_review
 ```
 
 ## What is complete
@@ -120,7 +120,7 @@ bounded_run_preflight:
   report: docs/pipelines/constitution/reports/bounded_run_preflight_report.yaml
   current_report_status: PREFLIGHT_KEEP_BACKLOG_OPEN
   current_recommendation: keep_backlog_open
-  reviewed_open_entry_count: 4
+  reviewed_open_entry_count: 7
   missing_review_metadata_count: 0
   requested_scope_key: patch_lifecycle
   new_bounded_run_recommended_now: false
@@ -159,7 +159,7 @@ open_new_run_gate:
     engine_cleanup_report: docs/registry/reports/pipeline_launcher_engine_cleanup_validation.yaml
     end_to_end_validation_report: docs/registry/reports/pipeline_launcher_end_to_end_validation.yaml
     report: tmp/constitution_scope_generation_report.yaml
-    reason: align generated scope definitions with REF_CORE_LEARNIT_REFERENTIEL_V5_0_IN_CONSTITUTION
+    reason: align generated scope definitions with REF_CORE_LEARNIT_REFERENTIEL_V6_0_IN_CONSTITUTION
   launcher_modular_runtime:
     package: docs/patcher/shared/pipeline_launcher/
     naming_status: corrected_to_pipeline_launcher
@@ -211,6 +211,9 @@ remaining_open_patch_lifecycle_entries:
   - GBC_PATCH_LIFECYCLE_PRIORITY_QUEUE_R01
   - GBC_PATCH_LIFECYCLE_ESCALATION_BOUNDARY_R01
   - GBC_PATCH_LIFECYCLE_REFERENTIEL_PARAMETER_R01
+  - GBC_PATCH_LIFECYCLE_REFERENTIEL_PARAMETER_R02
+  - GBC_PATCH_LIFECYCLE_ESCALATION_BOUNDARY_R02
+  - GBC_PATCH_LIFECYCLE_VALUE_COST_AR_N2_NEIGHBOR_R01
 ```
 
 Current recommendation:
@@ -585,8 +588,8 @@ option_Q_stage00_review_bundle_integration:
 
 
 option_R_stage00_post_run_backlog_and_referentiel_v6_review:
-  status: in_progress
-  phase: PHASE_31
+  status: done
+  completed_phase: PHASE_31
   action: review post-run backlog entries and align scope generation decisions with Referentiel V6 inter-core reference
   artifacts:
     - docs/pipelines/constitution/policies/scope_generation/decisions.yaml
@@ -612,6 +615,15 @@ option_R_stage00_post_run_backlog_and_referentiel_v6_review:
     - python docs/patcher/shared/generate_constitution_scopes.py --apply --report tmp/constitution_scope_generation_report.yaml
     - python docs/patcher/shared/run_constitution_stage00_review_bundle.py
   completion_condition: scope partition bijection PASS, missing review metadata 0, signals no longer request immediate STAGE_00 review
+  completion_evidence:
+    stage00_review_bundle_report: docs/pipelines/constitution/reports/stage00_review_bundle_report.yaml
+    stage00_review_bundle_status: PASS
+    scope_partition_bijection: PASS
+    ids_not_covered: []
+    reviewed_open_entry_count: 7
+    missing_review_metadata_count: 0
+    signal_recommended_action: KEEP_BACKLOG_OPEN_WITH_REVIEW_METADATA
+    preflight_status: PREFLIGHT_KEEP_BACKLOG_OPEN
 
 ## Guardrails
 
