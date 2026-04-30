@@ -283,6 +283,16 @@ ai_protocol:
     recommended_next_action: stop_at_NO_ACTIVE_PHASE
     l4_activation_ready_now: false
     l4_active_now: false
+  l4_control_plane_activation:
+    phase: PHASE_55_CROSS_CORE_L4_CONTROL_PLANE_ACTIVATION
+    activation_ref: docs/pipelines/cross_core_contract/L4_CONTROL_PLANE_ACTIVATION.md
+    activation_yaml: docs/pipelines/cross_core_contract/validators/l4_control_plane_activation.yaml
+    activation_review: docs/pipelines/cross_core_contract/activation_reviews/L4_ACTIVATION_REVIEW_2026_04_30_R01.yaml
+    validation_report: docs/registry/reports/cross_core_l4_control_plane_activation_validation.yaml
+    l4_control_plane_active_now: true
+    l4_activation_review_materialized_now: true
+    l4_mutating_gate_active_now: false
+    l4_core_mutation_authorized_now: false
 
   anti_patterns:
     - chat_summary_as_pass

@@ -1,0 +1,20 @@
+cross_core_l4_activation_review_instance_validation:
+  schema_version: '0.1'
+  generated_at: '2026-04-30T13:21:11Z'
+  status: PASS_SHAPE_ONLY
+  input: C:/Users/Stef/dev/learn-it/docs/pipelines/cross_core_contract/activation_reviews/L4_ACTIVATION_REVIEW_2026_04_30_R01.yaml
+  l4_activation_review_instance_validated: true
+  l4_activation_ready_now: false
+  l4_active_now: false
+  input_file:
+    exists: true
+    sha256: 5ca1d11ce47333f4d4cd6e9768efa561ea35f475948b1f67846b5f7f472c8b9d
+  blocking_findings:
+    []
+  result_summary:
+    blocking_finding_count: 0
+    l4_activation_ready_now: false
+    l4_active_now: false
+    core_mutation_authorized: false
+    backlog_closure_authorized: false
+    release_or_promotion_authorized: false

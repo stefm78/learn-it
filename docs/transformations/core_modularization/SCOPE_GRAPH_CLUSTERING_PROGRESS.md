@@ -38,8 +38,8 @@ scope_modularization_post_pilot:
   status: paused_cleanly
   active_pipeline_run: none
   new_bounded_run_opened_now: false
-  last_completed_phase: PHASE_54
-  last_completed_phase_label: cross_core_l4_hardening_closeout
+  last_completed_phase: PHASE_55
+  last_completed_phase_label: cross_core_l4_control_plane_activation
 ```
 
 ## What is complete
@@ -131,6 +131,7 @@ completed:
       - PHASE_52 cross_core_l4_activation_gate_orchestration
       - PHASE_53 cross_core_l4_dry_run_activation_orchestrator
       - PHASE_54 cross_core_l4_hardening_closeout
+      - PHASE_55 cross_core_l4_control_plane_activation
 ```
 
 ## Current pipeline position
@@ -1374,6 +1375,41 @@ option_AO_cross_core_l4_hardening_closeout:
     - no release or promotion
     - CCR_PATCH_LIFECYCLE_ESCALATION_THRESHOLD_N_R01 remains proposed / pending_arbitration
   recommended_next_decision: stop at NO_ACTIVE_PHASE unless a human explicitly starts a future activation-review workstream
+  launcher_authorizes_run_from_signals: false
+
+option_AP_cross_core_l4_control_plane_activation:
+  status: done
+  completed_phase: PHASE_55
+  action: activate the cross_core_contract L4 control plane without authorizing mutating gates
+  artifacts:
+    - docs/pipelines/cross_core_contract/activation_reviews/L4_ACTIVATION_REVIEW_2026_04_30_R01.yaml
+    - docs/pipelines/cross_core_contract/L4_CONTROL_PLANE_ACTIVATION.md
+    - docs/pipelines/cross_core_contract/validators/l4_control_plane_activation.yaml
+    - docs/patcher/shared/validate_cross_core_l4_control_plane_activation.py
+    - docs/registry/reports/l4_control_plane_activation_review_instance_validation.yaml
+    - docs/registry/reports/cross_core_l4_control_plane_activation_validation.yaml
+    - docs/pipelines/cross_core_contract/AI_PROTOCOL.yaml
+    - docs/pipelines/cross_core_contract/pipeline.md
+    - docs/pipelines/cross_core_contract/state.yaml
+    - docs/pipelines/cross_core_contract/l4_transition_checklist.yaml
+  validation:
+    cross_core_l4_control_plane_activation_validation: PASS
+    activation_review_instance_validation: PASS_SHAPE_ONLY
+  posture:
+    active_level: L4_control_plane_active_non_mutating
+    l4_control_plane_active_now: true
+    l4_activation_review_materialized_now: true
+    l4_mutating_gate_active_now: false
+    l4_core_mutation_authorized_now: false
+  non_goals_preserved:
+    - no downstream mutating gate executed
+    - no Constitution run opened
+    - no Core file modified
+    - no governance_backlog.yaml modification
+    - no release or promotion
+    - no threshold N resolution
+    - CCR_PATCH_LIFECYCLE_ESCALATION_THRESHOLD_N_R01 remains proposed / pending_arbitration
+  recommended_next_decision: stop at NO_ACTIVE_PHASE or explicitly open a future mutating-gate activation workstream
   launcher_authorizes_run_from_signals: false
 
 ## Guardrails

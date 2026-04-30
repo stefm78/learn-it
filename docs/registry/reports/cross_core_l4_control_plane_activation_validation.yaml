@@ -1,0 +1,52 @@
+cross_core_l4_control_plane_activation_validation:
+  schema_version: '0.1'
+  generated_at: '2026-04-30T13:21:12Z'
+  status: PASS
+  phase: PHASE_55_CROSS_CORE_L4_CONTROL_PLANE_ACTIVATION
+  l4_control_plane_active_now: true
+  l4_activation_review_materialized_now: true
+  l4_mutating_gate_active_now: false
+  l4_core_mutation_authorized_now: false
+  checked_files:
+    - path: docs/pipelines/cross_core_contract/activation_reviews/L4_ACTIVATION_REVIEW_2026_04_30_R01.yaml
+      exists: true
+      sha256: 5ca1d11ce47333f4d4cd6e9768efa561ea35f475948b1f67846b5f7f472c8b9d
+    - path: docs/pipelines/cross_core_contract/L4_CONTROL_PLANE_ACTIVATION.md
+      exists: true
+      sha256: de33088634fda483791f100155e36fe3943d132b7a57d358abbd638c99bcf53b
+    - path: docs/pipelines/cross_core_contract/validators/l4_control_plane_activation.yaml
+      exists: true
+      sha256: f0856af603315abdc7aca3b41bc25be6f0196e480e95893c9225f2531d3ea967
+    - path: docs/registry/reports/l4_control_plane_activation_review_instance_validation.yaml
+      exists: true
+      sha256: ffbbbe513a64038a0d86564cd4f29facee45ff68c866e7b1cc8a5397b79caab2
+    - path: docs/pipelines/cross_core_contract/AI_PROTOCOL.yaml
+      exists: true
+      sha256: e875b594e672bdbb77579e14d453b281f0419d958430786507c9a8ae23252474
+    - path: docs/pipelines/cross_core_contract/pipeline.md
+      exists: true
+      sha256: cfe344370e079ec6b4cc30d734db09bae3727f5f567b1e309f89c4683134cb9b
+    - path: docs/pipelines/cross_core_contract/state.yaml
+      exists: true
+      sha256: d591534f159da95080a75e762ad574b0383abf8ef230330b8a0012451b2eb94b
+    - path: docs/pipelines/cross_core_contract/l4_transition_checklist.yaml
+      exists: true
+      sha256: 32e872560cfab29890269060aad452c44e634e99a2ba1091b2935d5883321391
+    - path: docs/registry/reports/cross_core_l4_hardening_closeout_validation.yaml
+      exists: true
+      sha256: 0a46b20beadc2b0cb5d9bd557432655b11a0be14cc15bb5c110d7798e8fa2106
+    - path: docs/pipelines/cross_core_contract/requests/CCR_PATCH_LIFECYCLE_ESCALATION_THRESHOLD_N_R01.yaml
+      exists: true
+      sha256: 135e6039ed61b82fe7baefbf5a37e2cd03ad20d0cad2babd091b6629bb1e8d85
+  blocking_findings:
+    []
+  result_summary:
+    blocking_finding_count: 0
+    control_plane_activation_complete: true
+    l4_control_plane_active_now: true
+    l4_mutating_gate_active_now: false
+    l4_core_mutation_authorized_now: false
+    core_mutation_authorized: false
+    backlog_closure_authorized: false
+    release_or_promotion_authorized: false
+    request_remains_proposed_pending_arbitration: true

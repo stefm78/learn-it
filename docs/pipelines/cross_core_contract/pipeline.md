@@ -106,6 +106,22 @@ release_or_promotion_authorized: false
 
 This pipeline is hardened to L3 for intake, evidence review, arbitration and contract synthesis.
 It remains below L4: no Core write, backlog closure, release or promotion is authorized.
+## L4 control-plane activation
+
+```yaml
+phase: PHASE_55_CROSS_CORE_L4_CONTROL_PLANE_ACTIVATION
+activation_ref: docs/pipelines/cross_core_contract/L4_CONTROL_PLANE_ACTIVATION.md
+activation_yaml: docs/pipelines/cross_core_contract/validators/l4_control_plane_activation.yaml
+activation_review: docs/pipelines/cross_core_contract/activation_reviews/L4_ACTIVATION_REVIEW_2026_04_30_R01.yaml
+validation_report: docs/registry/reports/cross_core_l4_control_plane_activation_validation.yaml
+l4_control_plane_active_now: true
+l4_activation_review_materialized_now: true
+l4_mutating_gate_active_now: false
+l4_core_mutation_authorized_now: false
+```
+
+The L4 control plane is active. This does not authorize Core mutation, backlog closure, release, promotion, or threshold N resolution.
+
 ## L4 hardening closeout
 
 ```yaml
