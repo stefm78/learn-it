@@ -19,6 +19,7 @@ l4_transition_checklist:
     - validate_multi_core_promotion_manifest_contract_PASS
     - validate_cross_core_backlog_resolution_contract_PASS
     - validate_cross_core_rollback_or_reconciliation_path_contract_PASS
+    - l4_readiness_matrix_PASS
     - individual_l4_validators_implemented_before_execution
     - declared_read_surface
     - declared_write_surface

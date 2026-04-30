@@ -104,3 +104,12 @@ remaining_l4_validator_contracts:
     contract_yaml_ref: docs/pipelines/cross_core_contract/validators/validate_cross_core_rollback_or_reconciliation_path.contract.yaml
     contract_markdown_ref: docs/pipelines/cross_core_contract/validators/validate_cross_core_rollback_or_reconciliation_path.contract.md
     contract_defined: true
+l4_readiness_matrix:
+  matrix_ref: docs/pipelines/cross_core_contract/L4_READINESS_MATRIX.md
+  yaml_ref: docs/pipelines/cross_core_contract/validators/l4_readiness_matrix.yaml
+  validation_report: docs/registry/reports/cross_core_l4_readiness_matrix_validation.yaml
+  l4_readiness_matrix_defined: true
+  target_model_complete: true
+  implementation_ready_to_start_l4_validator_scripts: true
+  l4_execution_ready_now: false
+  l4_active_now: false

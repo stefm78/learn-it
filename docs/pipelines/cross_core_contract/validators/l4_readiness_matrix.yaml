@@ -1,0 +1,103 @@
+cross_core_l4_readiness_matrix:
+  schema_version: '0.1'
+  generated_at: '2026-04-30T12:30:03Z'
+  pipeline_id: cross_core_contract
+  status: target_complete_inactive
+  active_level: L3_managed_execution_pipeline
+  target_level: L4_critical_canonical_pipeline
+  l4_target_defined: true
+  l4_active_now: false
+  executable_as_l4_gate_now: false
+  validator_contract_family_complete: true
+  current_authorizations:
+    core_mutation_authorized: false
+    backlog_closure_authorized: false
+    release_or_promotion_authorized: false
+    constitution_run_authorized: false
+  first_candidate_request:
+    request_id: CCR_PATCH_LIFECYCLE_ESCALATION_THRESHOLD_N_R01
+    status_required_now: proposed
+    decision_status_required_now: pending_arbitration
+    mutation_authorized_now: false
+  readiness_gates:
+    - validator_id: validate_cross_core_l4_transition_review
+      contract: docs/pipelines/cross_core_contract/validators/validate_cross_core_l4_transition_review.contract.yaml
+      validation_report: docs/registry/reports/cross_core_l4_transition_review_validator_contract_validation.yaml
+      blocks: all_l4_execution
+      contract_defined: true
+      contract_validation_status: PASS
+      executable_as_l4_gate_now: false
+      required_before_l4_activation: true
+    - validator_id: validate_cross_core_write_surface
+      contract: docs/pipelines/cross_core_contract/validators/validate_cross_core_write_surface.contract.yaml
+      validation_report: docs/registry/reports/cross_core_write_surface_validator_contract_validation.yaml
+      blocks: canonical_write_surface
+      contract_defined: true
+      contract_validation_status: PASS
+      executable_as_l4_gate_now: false
+      required_before_l4_activation: true
+    - validator_id: validate_constitution_referentiel_link_reconstruction
+      contract: docs/pipelines/cross_core_contract/validators/validate_constitution_referentiel_link_reconstruction.contract.yaml
+      validation_report: docs/registry/reports/constitution_referentiel_link_reconstruction_validator_contract_validation.yaml
+      blocks: multi_core_reconstruction_and_release
+      contract_defined: true
+      contract_validation_status: PASS
+      executable_as_l4_gate_now: false
+      required_before_l4_activation: true
+    - validator_id: validate_link_binding_consistency
+      contract: docs/pipelines/cross_core_contract/validators/validate_link_binding_consistency.contract.yaml
+      validation_report: docs/registry/reports/link_binding_consistency_validator_contract_validation.yaml
+      blocks: link_binding_mutation
+      contract_defined: true
+      contract_validation_status: PASS
+      executable_as_l4_gate_now: false
+      required_before_l4_activation: true
+    - validator_id: validate_multi_core_release_plan
+      contract: docs/pipelines/cross_core_contract/validators/validate_multi_core_release_plan.contract.yaml
+      validation_report: docs/registry/reports/multi_core_release_plan_validator_contract_validation.yaml
+      blocks: multi_core_release_materialization
+      contract_defined: true
+      contract_validation_status: PASS
+      executable_as_l4_gate_now: false
+      required_before_l4_activation: true
+    - validator_id: validate_multi_core_promotion_manifest
+      contract: docs/pipelines/cross_core_contract/validators/validate_multi_core_promotion_manifest.contract.yaml
+      validation_report: docs/registry/reports/cross_core_remaining_l4_validator_contracts_validation.yaml
+      blocks: multi_core_current_promotion
+      contract_defined: true
+      contract_validation_status: PASS
+      executable_as_l4_gate_now: false
+      required_before_l4_activation: true
+    - validator_id: validate_cross_core_backlog_resolution
+      contract: docs/pipelines/cross_core_contract/validators/validate_cross_core_backlog_resolution.contract.yaml
+      validation_report: docs/registry/reports/cross_core_remaining_l4_validator_contracts_validation.yaml
+      blocks: governance_backlog_closure
+      contract_defined: true
+      contract_validation_status: PASS
+      executable_as_l4_gate_now: false
+      required_before_l4_activation: true
+    - validator_id: validate_cross_core_rollback_or_reconciliation_path
+      contract: docs/pipelines/cross_core_contract/validators/validate_cross_core_rollback_or_reconciliation_path.contract.yaml
+      validation_report: docs/registry/reports/cross_core_remaining_l4_validator_contracts_validation.yaml
+      blocks: l4_recovery_and_reconciliation
+      contract_defined: true
+      contract_validation_status: PASS
+      executable_as_l4_gate_now: false
+      required_before_l4_activation: true
+  activation_preconditions:
+    - explicit_human_decision
+    - STAGE_06_L4_TRANSITION_REVIEW_PASS
+    - all_validator_contracts_defined
+    - all_individual_l4_validators_implemented
+    - all_l4_gate_validations_PASS
+    - declared_read_surface
+    - declared_write_surface
+    - validated_multi_core_release_plan
+    - validated_multi_core_promotion_manifest
+    - validated_backlog_resolution_if_closure_requested
+    - validated_rollback_or_reconciliation_path
+  readiness_conclusion:
+    target_model_complete: true
+    implementation_ready_to_start_l4_validator_scripts: true
+    l4_execution_ready_now: false
+    reason: individual validator executable implementations are not active L4 gates yet

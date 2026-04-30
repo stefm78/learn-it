@@ -106,6 +106,20 @@ release_or_promotion_authorized: false
 
 This pipeline is hardened to L3 for intake, evidence review, arbitration and contract synthesis.
 It remains below L4: no Core write, backlog closure, release or promotion is authorized.
+## L4 readiness matrix
+
+```yaml
+matrix_ref: docs/pipelines/cross_core_contract/L4_READINESS_MATRIX.md
+yaml_ref: docs/pipelines/cross_core_contract/validators/l4_readiness_matrix.yaml
+validation_report: docs/registry/reports/cross_core_l4_readiness_matrix_validation.yaml
+target_model_complete: true
+implementation_ready_to_start_l4_validator_scripts: true
+l4_execution_ready_now: false
+l4_active_now: false
+```
+
+The matrix consolidates all inactive L4 validator contracts. It does not activate L4.
+
 ## Remaining L4 validator contracts
 
 ```yaml
