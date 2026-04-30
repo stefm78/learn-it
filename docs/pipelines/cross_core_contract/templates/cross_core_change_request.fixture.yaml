@@ -1,0 +1,29 @@
+cross_core_change_request:
+  schema_version: '0.1'
+  fixture_status: inactive_generic_fixture
+  generated_at: '2026-04-30T15:18:25Z'
+  request_id: CCR_GENERIC_FIXTURE_R00
+  title: Generic cross-core execution contract fixture
+  request_type: generic_fixture
+  request_status: accepted_for_arbitrage
+  decision_status: pending_arbitration
+  source_context:
+    description: >-
+      Generic fixture used only to prove that the execution contract instantiator
+      can materialize a concrete, request-bound, non-authorized execution contract.
+  affected_cores:
+    constitution: maybe
+    referentiel: maybe
+    link: maybe
+  requested_outcome:
+    model_selection_required: true
+    write_surface_required: true
+    validation_plan_required: true
+    rollback_or_reconciliation_required: true
+  authorizations:
+    core_mutation_authorized: false
+    backlog_closure_authorized: false
+    release_or_promotion_authorized: false
+  non_goals:
+    no_specific_business_logic: true
+    no_core_write_from_fixture: true

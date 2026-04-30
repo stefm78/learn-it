@@ -1,0 +1,59 @@
+cross_core_execution_contract_validation:
+  schema_version: '0.1'
+  generated_at: '2026-04-30T15:18:25Z'
+  status: BLOCKED_NOT_AUTHORIZED
+  input: docs/pipelines/cross_core_contract/work/03_contract_synthesis/GENERIC_FIXTURE_EXECUTION_CONTRACT_R00.yaml
+  generic_contract_validator: validate_cross_core_execution_contract
+  template_validation_expected_to_block: true
+  core_mutation_authorized: false
+  backlog_closure_authorized: false
+  release_or_promotion_authorized: false
+  input_file:
+    exists: true
+    sha256: 5ce1882ef06c1720c244963ffbe73768f2a33872b821abe3a7f17019e3c0bd9b
+  blocking_findings:
+    - finding_id: missing_required_validator
+      severity: blocking
+      path: docs\pipelines\cross_core_contract\work\03_contract_synthesis\GENERIC_FIXTURE_EXECUTION_CONTRACT_R00.yaml
+      message: validate_cross_core_execution_contract
+    - finding_id: missing_required_validator
+      severity: blocking
+      path: docs\pipelines\cross_core_contract\work\03_contract_synthesis\GENERIC_FIXTURE_EXECUTION_CONTRACT_R00.yaml
+      message: validate_cross_core_l4_transition_review
+    - finding_id: missing_required_validator
+      severity: blocking
+      path: docs\pipelines\cross_core_contract\work\03_contract_synthesis\GENERIC_FIXTURE_EXECUTION_CONTRACT_R00.yaml
+      message: validate_cross_core_write_surface
+    - finding_id: missing_required_validator
+      severity: blocking
+      path: docs\pipelines\cross_core_contract\work\03_contract_synthesis\GENERIC_FIXTURE_EXECUTION_CONTRACT_R00.yaml
+      message: validate_cross_core_rollback_or_reconciliation_path
+    - finding_id: missing_required_validator
+      severity: blocking
+      path: docs\pipelines\cross_core_contract\work\03_contract_synthesis\GENERIC_FIXTURE_EXECUTION_CONTRACT_R00.yaml
+      message: validate_link_binding_consistency
+    - finding_id: missing_required_validator
+      severity: blocking
+      path: docs\pipelines\cross_core_contract\work\03_contract_synthesis\GENERIC_FIXTURE_EXECUTION_CONTRACT_R00.yaml
+      message: validate_constitution_referentiel_link_reconstruction
+    - finding_id: missing_required_validator
+      severity: blocking
+      path: docs\pipelines\cross_core_contract\work\03_contract_synthesis\GENERIC_FIXTURE_EXECUTION_CONTRACT_R00.yaml
+      message: validate_multi_core_release_plan
+    - finding_id: missing_required_validator
+      severity: blocking
+      path: docs\pipelines\cross_core_contract\work\03_contract_synthesis\GENERIC_FIXTURE_EXECUTION_CONTRACT_R00.yaml
+      message: validate_multi_core_promotion_manifest
+    - finding_id: missing_required_validator
+      severity: blocking
+      path: docs\pipelines\cross_core_contract\work\03_contract_synthesis\GENERIC_FIXTURE_EXECUTION_CONTRACT_R00.yaml
+      message: validate_cross_core_backlog_resolution
+    - finding_id: write_not_granted
+      severity: blocking
+      path: docs\pipelines\cross_core_contract\work\03_contract_synthesis\GENERIC_FIXTURE_EXECUTION_CONTRACT_R00.yaml
+  result_summary:
+    blocking_finding_count: 10
+    generic_contract_shape_checked: true
+    core_mutation_authorized: false
+    backlog_closure_authorized: false
+    release_or_promotion_authorized: false

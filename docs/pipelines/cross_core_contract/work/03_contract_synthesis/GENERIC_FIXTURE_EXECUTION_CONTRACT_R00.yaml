@@ -1,0 +1,68 @@
+cross_core_execution_contract:
+  schema_version: '0.1'
+  template_status: materialized_from_request_non_authorized
+  generated_at: '{generated_at}'
+  contract_id: {cid}
+  source_request:
+    request_id: {request_id}
+    request_file: {request_ref}
+    request_status_required: accepted_for_arbitrage
+  execution_model:
+    selected_model: pending_arbitration
+    model_selection_status: not_selected
+    generic_pipeline_instance: true
+  affected_cores:
+    constitution:
+      affected: maybe
+      read_surface: []
+      write_surface: []
+    referentiel:
+      affected: maybe
+      read_surface: []
+      write_surface: []
+    link:
+      affected: maybe
+      read_surface: []
+      write_surface: []
+  declared_read_surface:
+    - {request_ref}
+  declared_write_surface: []
+  write_authorization:
+    requested_now: false
+    granted_now: false
+    core_mutation_authorized: false
+    backlog_closure_authorized: false
+    release_or_promotion_authorized: false
+  validation_plan:
+    required_validators:
+      - {v}
+      - {v}
+      - {v}
+      - {v}
+      - {v}
+      - {v}
+      - {v}
+      - {v}
+      - {v}
+    all_required_validators_must_pass_before_apply: true
+    current_validation_status: not_executed_instantiated_contract
+  rollback_or_reconciliation_path:
+    status: not_declared_yet
+    required_before_apply: true
+  release_and_promotion_policy:
+    release_policy_declared: false
+    promotion_policy_declared: false
+    release_materialization_requested: false
+    promotion_requested: false
+  backlog_policy:
+    backlog_resolution_requested: false
+    backlog_closure_requested: false
+    backlog_entries_to_resolve: []
+  execution_guardrails:
+    template_only: false
+    concrete_request_bound: true
+    mutating_execution_ready_now: false
+    mutating_apply_ready_now: false
+    downstream_mutating_gates_executed_now: false
+    no_core_write_from_instantiation: true
+    source_request_sha256: {sha(request_path)}

@@ -1,0 +1,27 @@
+cross_core_generic_execution_contract_instantiator:
+  schema_version: '0.1'
+  generated_at: '2026-04-30T15:18:25Z'
+  phase: PHASE_57_CROSS_CORE_GENERIC_EXECUTION_CONTRACT_INSTANTIATOR
+  status: instantiator_defined_non_mutating
+  generic_execution_contract_instantiator_defined: true
+  instantiation_smoke_status: BLOCKED_NOT_AUTHORIZED
+  instantiated_contract_created: true
+  concrete_request_bound: true
+  request_specific_logic_encoded: false
+  l4_control_plane_active_now: true
+  l4_mutating_execution_framework_ready: true
+  l4_mutating_gate_active_now: false
+  l4_core_mutation_authorized_now: false
+  current_authorizations:
+    core_mutation_authorized: false
+    backlog_closure_authorized: false
+    release_or_promotion_authorized: false
+  instantiator:
+    script: docs/patcher/shared/materialize_cross_core_execution_contract.py
+    input_pattern: docs/pipelines/cross_core_contract/requests/*.yaml
+    output_pattern: docs/pipelines/cross_core_contract/work/03_contract_synthesis/<contract_id>.yaml
+  smoke_test:
+    fixture_request: docs/pipelines/cross_core_contract/templates/cross_core_change_request.fixture.yaml
+    instantiated_contract: docs/pipelines/cross_core_contract/work/03_contract_synthesis/GENERIC_FIXTURE_EXECUTION_CONTRACT_R00.yaml
+    validation_report: docs/registry/reports/generic_execution_contract_instantiation_smoke.yaml
+    expected_status: BLOCKED_NOT_AUTHORIZED

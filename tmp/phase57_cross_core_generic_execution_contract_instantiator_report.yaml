@@ -1,0 +1,40 @@
+phase57_cross_core_generic_execution_contract_instantiator_report:
+  generated_at: 2026-04-30T15:18:25Z
+  status: PASS
+  branch: feat/core-modularization-bootstrap
+  phase: PHASE_57_CROSS_CORE_GENERIC_EXECUTION_CONTRACT_INSTANTIATOR
+  generic_execution_contract_instantiator_defined: true
+  instantiation_smoke_status: BLOCKED_NOT_AUTHORIZED
+  instantiated_contract_created: true
+  concrete_request_bound: true
+  request_specific_logic_encoded: false
+  l4_mutating_gate_active_now: false
+  l4_core_mutation_authorized_now: false
+  files_written:
+    - docs/pipelines/cross_core_contract/templates/cross_core_change_request.fixture.yaml
+    - docs/pipelines/cross_core_contract/GENERIC_EXECUTION_CONTRACT_INSTANTIATOR.md
+    - docs/pipelines/cross_core_contract/validators/generic_execution_contract_instantiator.yaml
+    - docs/patcher/shared/materialize_cross_core_execution_contract.py
+    - docs/patcher/shared/validate_cross_core_execution_contract_instantiator.py
+    - docs/pipelines/cross_core_contract/work/03_contract_synthesis/GENERIC_FIXTURE_EXECUTION_CONTRACT_R00.yaml
+    - docs/registry/reports/generic_execution_contract_instantiation_smoke.yaml
+    - docs/registry/reports/cross_core_execution_contract_instantiator_validation.yaml
+    - docs/pipelines/cross_core_contract/AI_PROTOCOL.yaml
+    - docs/pipelines/cross_core_contract/pipeline.md
+    - docs/pipelines/cross_core_contract/state.yaml
+    - docs/pipelines/cross_core_contract/l4_transition_checklist.yaml
+    - docs/transformations/core_modularization/SCOPE_GRAPH_CLUSTERING_PROGRESS.md
+    - tmp/phase57_cross_core_generic_execution_contract_instantiator_report.yaml
+  validations:
+    cross_core_execution_contract_instantiator_validation: PASS
+    generic_execution_contract_instantiation_smoke: BLOCKED_NOT_AUTHORIZED
+  guardrails:
+    no_request_specific_logic_encoded: true
+    no_downstream_mutating_gate_executed: true
+    no_constitution_run_opened: true
+    core_files_not_modified: true
+    governance_backlog_not_modified: true
+    release_or_promotion_authorized: false
+  next_recommended_decision:
+    decision: stop_or_define_generic_gate_execution_runner_for_instantiated_contracts
+    default: stop_at_NO_ACTIVE_PHASE

@@ -106,6 +106,22 @@ release_or_promotion_authorized: false
 
 This pipeline is hardened to L3 for intake, evidence review, arbitration and contract synthesis.
 It remains below L4: no Core write, backlog closure, release or promotion is authorized.
+## Generic execution contract instantiator
+
+```yaml
+phase: PHASE_57_CROSS_CORE_GENERIC_EXECUTION_CONTRACT_INSTANTIATOR
+instantiator_ref: docs/pipelines/cross_core_contract/GENERIC_EXECUTION_CONTRACT_INSTANTIATOR.md
+instantiator_yaml: docs/pipelines/cross_core_contract/validators/generic_execution_contract_instantiator.yaml
+instantiator_script: docs/patcher/shared/materialize_cross_core_execution_contract.py
+validation_report: docs/registry/reports/cross_core_execution_contract_instantiator_validation.yaml
+generic_execution_contract_instantiator_defined: true
+instantiation_smoke_status: BLOCKED_NOT_AUTHORIZED
+l4_mutating_gate_active_now: false
+l4_core_mutation_authorized_now: false
+```
+
+The instantiator is request-independent. It can materialize a non-authorized execution contract from any `cross_core_change_request`.
+
 ## Generic mutating execution framework
 
 ```yaml

@@ -38,8 +38,8 @@ scope_modularization_post_pilot:
   status: paused_cleanly
   active_pipeline_run: none
   new_bounded_run_opened_now: false
-  last_completed_phase: PHASE_56
-  last_completed_phase_label: cross_core_generic_mutating_execution_framework
+  last_completed_phase: PHASE_57
+  last_completed_phase_label: cross_core_generic_execution_contract_instantiator
 ```
 
 ## What is complete
@@ -133,6 +133,7 @@ completed:
       - PHASE_54 cross_core_l4_hardening_closeout
       - PHASE_55 cross_core_l4_control_plane_activation
       - PHASE_56 cross_core_generic_mutating_execution_framework
+      - PHASE_57 cross_core_generic_execution_contract_instantiator
 ```
 
 ## Current pipeline position
@@ -1442,6 +1443,43 @@ option_AQ_cross_core_generic_mutating_execution_framework:
     - no governance_backlog.yaml modification
     - no release or promotion
   recommended_next_decision: stop at NO_ACTIVE_PHASE or instantiate a concrete execution contract for a selected cross_core_change_request
+  launcher_authorizes_run_from_signals: false
+
+option_AR_cross_core_generic_execution_contract_instantiator:
+  status: done
+  completed_phase: PHASE_57
+  action: add request-independent materializer for generic cross_core_execution_contract instances
+  artifacts:
+    - docs/pipelines/cross_core_contract/GENERIC_EXECUTION_CONTRACT_INSTANTIATOR.md
+    - docs/pipelines/cross_core_contract/validators/generic_execution_contract_instantiator.yaml
+    - docs/pipelines/cross_core_contract/templates/cross_core_change_request.fixture.yaml
+    - docs/pipelines/cross_core_contract/work/03_contract_synthesis/GENERIC_FIXTURE_EXECUTION_CONTRACT_R00.yaml
+    - docs/patcher/shared/materialize_cross_core_execution_contract.py
+    - docs/patcher/shared/validate_cross_core_execution_contract_instantiator.py
+    - docs/registry/reports/generic_execution_contract_instantiation_smoke.yaml
+    - docs/registry/reports/cross_core_execution_contract_instantiator_validation.yaml
+    - docs/pipelines/cross_core_contract/AI_PROTOCOL.yaml
+    - docs/pipelines/cross_core_contract/pipeline.md
+    - docs/pipelines/cross_core_contract/state.yaml
+    - docs/pipelines/cross_core_contract/l4_transition_checklist.yaml
+  validation:
+    cross_core_execution_contract_instantiator_validation: PASS
+    instantiation_smoke_status: BLOCKED_NOT_AUTHORIZED
+  posture:
+    active_level: L4_control_plane_active_non_mutating
+    generic_execution_contract_instantiator_defined: true
+    instantiated_contract_created: true
+    request_specific_logic_encoded: false
+    l4_mutating_gate_active_now: false
+    l4_core_mutation_authorized_now: false
+  non_goals_preserved:
+    - no request-specific logic encoded
+    - no downstream mutating gate executed
+    - no Constitution run opened
+    - no Core file modified
+    - no governance_backlog.yaml modification
+    - no release or promotion
+  recommended_next_decision: stop at NO_ACTIVE_PHASE or define generic gate execution runner for instantiated contracts
   launcher_authorizes_run_from_signals: false
 
 ## Guardrails

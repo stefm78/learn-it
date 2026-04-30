@@ -252,3 +252,19 @@ generic_mutating_execution_framework:
   core_mutation_authorized: false
   backlog_closure_authorized: false
   release_or_promotion_authorized: false
+generic_execution_contract_instantiator:
+  phase: PHASE_57_CROSS_CORE_GENERIC_EXECUTION_CONTRACT_INSTANTIATOR
+  instantiator_ref: docs/pipelines/cross_core_contract/GENERIC_EXECUTION_CONTRACT_INSTANTIATOR.md
+  instantiator_yaml: docs/pipelines/cross_core_contract/validators/generic_execution_contract_instantiator.yaml
+  instantiator_script: docs/patcher/shared/materialize_cross_core_execution_contract.py
+  validation_report: docs/registry/reports/cross_core_execution_contract_instantiator_validation.yaml
+  generic_execution_contract_instantiator_defined: true
+  instantiation_smoke_status: BLOCKED_NOT_AUTHORIZED
+  instantiated_contract_created: true
+  concrete_request_bound: true
+  request_specific_logic_encoded: false
+  l4_mutating_gate_active_now: false
+  l4_core_mutation_authorized_now: false
+  core_mutation_authorized: false
+  backlog_closure_authorized: false
+  release_or_promotion_authorized: false
