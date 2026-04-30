@@ -1,0 +1,44 @@
+cross_core_l4_executable_validators_batch2_validation:
+  schema_version: '0.1'
+  generated_at: '2026-04-30T12:34:54Z'
+  status: PASS
+  phase: PHASE_48_CROSS_CORE_L4_EXECUTABLE_VALIDATORS_BATCH2
+  l4_active_now: false
+  executable_as_l4_gate_now: false
+  batch2_executable_validator_count: 4
+  checked_files:
+    - path: docs/patcher/shared/validate_multi_core_release_plan.py
+      exists: true
+      sha256: 3247f8822c021c11280df63e90cab0e9d787ff51273aec33ed386f688a5671f6
+    - path: docs/registry/reports/validate_multi_core_release_plan_contract_check.yaml
+      exists: true
+      sha256: ed6a45d2c4cb31e4c284b3acc7f2f8960a4ea60416875304e9adbbb7e976d538
+    - path: docs/patcher/shared/validate_multi_core_promotion_manifest.py
+      exists: true
+      sha256: aa7112bc2d5efc24143b4353136cb22366ecaa3cd390e126d33edea8dc4951cb
+    - path: docs/registry/reports/validate_multi_core_promotion_manifest_contract_check.yaml
+      exists: true
+      sha256: 25cbc9c05fb947cb4a0618804b4d02053b9deaaf46999e1b37838c496e70ad2f
+    - path: docs/patcher/shared/validate_cross_core_backlog_resolution.py
+      exists: true
+      sha256: 342fee7754cc12e3b112461ac34ea5a3e53966b018ffa727a27e8a37516a7b6f
+    - path: docs/registry/reports/validate_cross_core_backlog_resolution_contract_check.yaml
+      exists: true
+      sha256: a5ce443e922335e46b601c60777770f854a020cfd072fd8a742b8359aaf7d929
+    - path: docs/patcher/shared/validate_cross_core_rollback_or_reconciliation_path.py
+      exists: true
+      sha256: 1359efe9ace0ee56ea911c13ba79b72c8495f6e3249a7a727d6f7f7c9c207d8a
+    - path: docs/registry/reports/validate_cross_core_rollback_or_reconciliation_path_contract_check.yaml
+      exists: true
+      sha256: 3bfc35fbbeec8da2506da26d4dd9fc195aa55a593e923cb9902f81d0c6517cd6
+  blocking_findings:
+    []
+  result_summary:
+    blocking_finding_count: 0
+    executable_validators_batch2_defined: true
+    l4_active_now: false
+    executable_as_l4_gate_now: false
+    l4_execution_ready_now: false
+    core_mutation_authorized: false
+    backlog_closure_authorized: false
+    release_or_promotion_authorized: false

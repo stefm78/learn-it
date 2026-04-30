@@ -106,6 +106,37 @@ release_or_promotion_authorized: false
 
 This pipeline is hardened to L3 for intake, evidence review, arbitration and contract synthesis.
 It remains below L4: no Core write, backlog closure, release or promotion is authorized.
+## L4 executable validators batch 2
+
+```yaml
+phase: PHASE_48_CROSS_CORE_L4_EXECUTABLE_VALIDATORS_BATCH2
+executable_validators_batch2_defined: true
+l4_active_now: false
+executable_as_l4_gate_now: false
+l4_execution_ready_now: false
+validate_multi_core_release_plan:
+  script: docs/patcher/shared/validate_multi_core_release_plan.py
+  contract_check_report: docs/registry/reports/validate_multi_core_release_plan_contract_check.yaml
+  default_mode: contract_check
+  l4_gate_mode_blocks_without_future_inputs: true
+validate_multi_core_promotion_manifest:
+  script: docs/patcher/shared/validate_multi_core_promotion_manifest.py
+  contract_check_report: docs/registry/reports/validate_multi_core_promotion_manifest_contract_check.yaml
+  default_mode: contract_check
+  l4_gate_mode_blocks_without_future_inputs: true
+validate_cross_core_backlog_resolution:
+  script: docs/patcher/shared/validate_cross_core_backlog_resolution.py
+  contract_check_report: docs/registry/reports/validate_cross_core_backlog_resolution_contract_check.yaml
+  default_mode: contract_check
+  l4_gate_mode_blocks_without_future_inputs: true
+validate_cross_core_rollback_or_reconciliation_path:
+  script: docs/patcher/shared/validate_cross_core_rollback_or_reconciliation_path.py
+  contract_check_report: docs/registry/reports/validate_cross_core_rollback_or_reconciliation_path_contract_check.yaml
+  default_mode: contract_check
+  l4_gate_mode_blocks_without_future_inputs: true
+```
+
+These validators are executable in contract-check mode only. L4 gate mode is intentionally blocking until future L4 inputs exist.
 ## L4 executable validators batch 1
 
 ```yaml

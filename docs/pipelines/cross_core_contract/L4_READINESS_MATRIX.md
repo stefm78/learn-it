@@ -74,3 +74,20 @@ l4_execution_ready_now: false
 | `validate_constitution_referentiel_link_reconstruction` | `docs/patcher/shared/validate_constitution_referentiel_link_reconstruction.py` | `docs/registry/reports/validate_constitution_referentiel_link_reconstruction_contract_check.yaml` | contract-check PASS; L4 gate blocks without future inputs |
 | `validate_link_binding_consistency` | `docs/patcher/shared/validate_link_binding_consistency.py` | `docs/registry/reports/validate_link_binding_consistency_contract_check.yaml` | contract-check PASS; L4 gate blocks without future inputs |
 
+## Executable validators batch 2
+
+```yaml
+phase: PHASE_48_CROSS_CORE_L4_EXECUTABLE_VALIDATORS_BATCH2
+executable_validators_batch2_defined: true
+l4_active_now: false
+executable_as_l4_gate_now: false
+l4_execution_ready_now: false
+```
+
+| Validator | Script | Contract-check report | Runtime posture |
+| --- | --- | --- | --- |
+| `validate_multi_core_release_plan` | `docs/patcher/shared/validate_multi_core_release_plan.py` | `docs/registry/reports/validate_multi_core_release_plan_contract_check.yaml` | contract-check PASS; L4 gate blocks without future inputs |
+| `validate_multi_core_promotion_manifest` | `docs/patcher/shared/validate_multi_core_promotion_manifest.py` | `docs/registry/reports/validate_multi_core_promotion_manifest_contract_check.yaml` | contract-check PASS; L4 gate blocks without future inputs |
+| `validate_cross_core_backlog_resolution` | `docs/patcher/shared/validate_cross_core_backlog_resolution.py` | `docs/registry/reports/validate_cross_core_backlog_resolution_contract_check.yaml` | contract-check PASS; L4 gate blocks without future inputs |
+| `validate_cross_core_rollback_or_reconciliation_path` | `docs/patcher/shared/validate_cross_core_rollback_or_reconciliation_path.py` | `docs/registry/reports/validate_cross_core_rollback_or_reconciliation_path_contract_check.yaml` | contract-check PASS; L4 gate blocks without future inputs |
+

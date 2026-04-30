@@ -1,0 +1,20 @@
+validate_cross_core_backlog_resolution_validation:
+  schema_version: '0.1'
+  generated_at: '2026-04-30T12:34:54Z'
+  validator_id: validate_cross_core_backlog_resolution
+  mode: contract_check
+  status: PASS
+  l4_active_now: false
+  executable_as_l4_gate_now: false
+  contract: docs/pipelines/cross_core_contract/validators/validate_cross_core_backlog_resolution.contract.yaml
+  future_inputs:
+    - path: docs/pipelines/cross_core_contract/reports/closeout_and_backlog_resolution.yaml
+      exists: false
+      sha256: None
+  blocking_findings:
+    []
+  result_summary:
+    blocking_finding_count: 0
+    contract_defined: true
+    l4_active_now: false
+    executable_as_l4_gate_now: false

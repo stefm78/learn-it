@@ -1,0 +1,46 @@
+phase48_cross_core_l4_executable_validators_batch2_report:
+  generated_at: 2026-04-30T12:34:54Z
+  status: PASS
+  branch: feat/core-modularization-bootstrap
+  phase: PHASE_48_CROSS_CORE_L4_EXECUTABLE_VALIDATORS_BATCH2
+  validators:
+    - validate_multi_core_release_plan
+    - validate_multi_core_promotion_manifest
+    - validate_cross_core_backlog_resolution
+    - validate_cross_core_rollback_or_reconciliation_path
+  active_level: L3_managed_execution_pipeline
+  target_level: L4_critical_canonical_pipeline
+  executable_validators_batch2_defined: true
+  all_l4_executable_validators_defined: true
+  l4_execution_ready_now: false
+  l4_active_now: false
+  files_written:
+    - docs/patcher/shared/validate_multi_core_release_plan.py
+    - docs/patcher/shared/validate_multi_core_promotion_manifest.py
+    - docs/patcher/shared/validate_cross_core_backlog_resolution.py
+    - docs/patcher/shared/validate_cross_core_rollback_or_reconciliation_path.py
+    - docs/registry/reports/validate_multi_core_release_plan_contract_check.yaml
+    - docs/registry/reports/validate_multi_core_promotion_manifest_contract_check.yaml
+    - docs/registry/reports/validate_cross_core_backlog_resolution_contract_check.yaml
+    - docs/registry/reports/validate_cross_core_rollback_or_reconciliation_path_contract_check.yaml
+    - docs/patcher/shared/validate_cross_core_l4_executable_validators_batch2.py
+    - docs/registry/reports/cross_core_l4_executable_validators_batch2_validation.yaml
+    - docs/pipelines/cross_core_contract/AI_PROTOCOL.yaml
+    - docs/pipelines/cross_core_contract/pipeline.md
+    - docs/pipelines/cross_core_contract/state.yaml
+    - docs/pipelines/cross_core_contract/validators/l4_readiness_matrix.yaml
+    - docs/pipelines/cross_core_contract/L4_READINESS_MATRIX.md
+    - docs/pipelines/cross_core_contract/l4_transition_checklist.yaml
+    - docs/transformations/core_modularization/SCOPE_GRAPH_CLUSTERING_PROGRESS.md
+    - tmp/phase48_cross_core_l4_executable_validators_batch2_report.yaml
+  validations:
+    cross_core_l4_executable_validators_batch2_validation: PASS
+  guardrails:
+    no_constitution_run_opened: true
+    core_files_not_modified: true
+    governance_backlog_not_modified: true
+    release_or_promotion_authorized: false
+    request_remains_proposed_pending_arbitration: true
+  next_recommended_decision:
+    decision: stop_or_consolidate_executable_L4_validator_readiness
+    default: stop_at_NO_ACTIVE_PHASE

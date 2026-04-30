@@ -129,3 +129,30 @@ cross_core_l4_readiness_matrix:
           contract_check_report: docs/registry/reports/validate_link_binding_consistency_contract_check.yaml
           contract_check_status: PASS
           l4_gate_mode_blocks_without_future_inputs: true
+    batch2:
+      phase: PHASE_48_CROSS_CORE_L4_EXECUTABLE_VALIDATORS_BATCH2
+      executable_validators_batch2_defined: true
+      l4_active_now: false
+      executable_as_l4_gate_now: false
+      l4_execution_ready_now: false
+      validators:
+        - validator_id: validate_multi_core_release_plan
+          script: docs/patcher/shared/validate_multi_core_release_plan.py
+          contract_check_report: docs/registry/reports/validate_multi_core_release_plan_contract_check.yaml
+          contract_check_status: PASS
+          l4_gate_mode_blocks_without_future_inputs: true
+        - validator_id: validate_multi_core_promotion_manifest
+          script: docs/patcher/shared/validate_multi_core_promotion_manifest.py
+          contract_check_report: docs/registry/reports/validate_multi_core_promotion_manifest_contract_check.yaml
+          contract_check_status: PASS
+          l4_gate_mode_blocks_without_future_inputs: true
+        - validator_id: validate_cross_core_backlog_resolution
+          script: docs/patcher/shared/validate_cross_core_backlog_resolution.py
+          contract_check_report: docs/registry/reports/validate_cross_core_backlog_resolution_contract_check.yaml
+          contract_check_status: PASS
+          l4_gate_mode_blocks_without_future_inputs: true
+        - validator_id: validate_cross_core_rollback_or_reconciliation_path
+          script: docs/patcher/shared/validate_cross_core_rollback_or_reconciliation_path.py
+          contract_check_report: docs/registry/reports/validate_cross_core_rollback_or_reconciliation_path_contract_check.yaml
+          contract_check_status: PASS
+          l4_gate_mode_blocks_without_future_inputs: true
