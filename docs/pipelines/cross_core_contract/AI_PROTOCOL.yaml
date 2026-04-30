@@ -251,6 +251,16 @@ ai_protocol:
     l4_activation_ready_now: false
     l4_active_now: false
 
+  l4_activation_gate_orchestration:
+    phase: PHASE_52_CROSS_CORE_L4_ACTIVATION_GATE_ORCHESTRATION
+    orchestration_ref: docs/pipelines/cross_core_contract/L4_ACTIVATION_GATE_ORCHESTRATION.md
+    orchestration_yaml: docs/pipelines/cross_core_contract/validators/l4_activation_gate_orchestration.yaml
+    validation_report: docs/registry/reports/cross_core_l4_activation_gate_orchestration_validation.yaml
+    l4_activation_gate_orchestration_defined: true
+    l4_gate_orchestration_executable_now: false
+    l4_activation_ready_now: false
+    l4_active_now: false
+
   anti_patterns:
     - chat_summary_as_pass
     - direct_write_to_owned_state

@@ -106,6 +106,21 @@ release_or_promotion_authorized: false
 
 This pipeline is hardened to L3 for intake, evidence review, arbitration and contract synthesis.
 It remains below L4: no Core write, backlog closure, release or promotion is authorized.
+## L4 activation gate orchestration
+
+```yaml
+phase: PHASE_52_CROSS_CORE_L4_ACTIVATION_GATE_ORCHESTRATION
+orchestration_ref: docs/pipelines/cross_core_contract/L4_ACTIVATION_GATE_ORCHESTRATION.md
+orchestration_yaml: docs/pipelines/cross_core_contract/validators/l4_activation_gate_orchestration.yaml
+validation_report: docs/registry/reports/cross_core_l4_activation_gate_orchestration_validation.yaml
+l4_activation_gate_orchestration_defined: true
+l4_gate_orchestration_executable_now: false
+l4_activation_ready_now: false
+l4_active_now: false
+```
+
+This defines the mandatory future order of L4 activation gates. It does not activate L4.
+
 ## L4 activation review instance validator
 
 ```yaml
