@@ -1,0 +1,20 @@
+cross_core_gate_input_bundle_validation:
+  schema_version: '0.1'
+  generated_at: '2026-04-30T15:44:16Z'
+  status: PASS_SHAPE_ONLY
+  input: C:/Users/Stef/dev/learn-it/docs/pipelines/cross_core_contract/work/04_gate_inputs/GENERIC_DRY_RUN_GATE_INPUT_BUNDLE_R00.yaml
+  validator: validate_cross_core_gate_input_bundle
+  core_mutation_authorized: false
+  backlog_closure_authorized: false
+  release_or_promotion_authorized: false
+  input_file:
+    exists: true
+    sha256: a0139ae126b410ea8a3f4ced90cbc4717a219136373d65a4b649428b00fde7fe
+  blocking_findings:
+    []
+  result_summary:
+    blocking_finding_count: 0
+    gate_input_bundle_shape_checked: true
+    core_mutation_authorized: false
+    backlog_closure_authorized: false
+    release_or_promotion_authorized: false

@@ -1,0 +1,81 @@
+cross_core_generic_downstream_gate_dry_run_smoke_validation:
+  schema_version: '0.1'
+  generated_at: '2026-04-30T15:44:17Z'
+  status: PASS
+  phase: PHASE_62_CROSS_CORE_GENERIC_DOWNSTREAM_GATE_DRY_RUN_SMOKE
+  generic_downstream_gate_dry_run_smoke_defined: true
+  downstream_gate_dry_run_smoke_status: PASS_DRY_RUN_ONLY
+  dry_run_gate_smoke_executed: true
+  downstream_mutating_gates_executed: false
+  request_specific_logic_encoded: false
+  checked_files:
+    - path: docs/pipelines/cross_core_contract/GENERIC_DOWNSTREAM_GATE_DRY_RUN_SMOKE.md
+      kind: state
+      exists: true
+      sha256: 46b244ab57ba9d7a966dc4c9646be605ce031eab332e89233a80d0351c914812
+    - path: docs/pipelines/cross_core_contract/validators/generic_downstream_gate_dry_run_smoke.yaml
+      kind: state
+      exists: true
+      sha256: 8dead797e62d765568e6b9302ae055741402f76889fee847e6248d2e67b9d36a
+    - path: docs/registry/reports/generic_downstream_gate_dry_run_smoke.yaml
+      kind: state
+      exists: true
+      sha256: 2176b4f3662c4fb35e2ff6c11c899297a5120476fa9703c73896fa0193a01443
+    - path: docs/registry/reports/generic_downstream_gate_dry_run_contract_validation.yaml
+      kind: state
+      exists: true
+      sha256: 42a9959457a30f237cd7388bb03abd852555f95123fcbbfeb554e1b553808044
+    - path: docs/registry/reports/generic_downstream_gate_dry_run_bundle_validation.yaml
+      kind: state
+      exists: true
+      sha256: 550e68f589ebcf83de961f7ce5f453cbc55f8b5f0d34398498ba02fd370a5045
+    - path: docs/pipelines/cross_core_contract/work/03_contract_synthesis/GENERIC_AUTHORIZED_DRY_RUN_EXECUTION_CONTRACT_R00.yaml
+      kind: state
+      exists: true
+      sha256: 11a9792551e2312d2fc91c4b3264a92158c2861c389f0941e77d4d8270b248de
+    - path: docs/pipelines/cross_core_contract/work/04_gate_inputs/GENERIC_DRY_RUN_GATE_INPUT_BUNDLE_R00.yaml
+      kind: state
+      exists: true
+      sha256: a0139ae126b410ea8a3f4ced90cbc4717a219136373d65a4b649428b00fde7fe
+    - path: docs/pipelines/cross_core_contract/AI_PROTOCOL.yaml
+      kind: state
+      exists: true
+      sha256: c365dda0e329038f06cfc891b8271d35c5ed306d2ee7de81433b2bffbf9c7a82
+    - path: docs/pipelines/cross_core_contract/pipeline.md
+      kind: state
+      exists: true
+      sha256: db0a93516eb4191c11670c8f8109e7cde4bc16de96553cd81783f018e0c47ade
+    - path: docs/pipelines/cross_core_contract/state.yaml
+      kind: state
+      exists: true
+      sha256: 5a70cd50793240a6be3bd72a62c01561dee961642bb19a4c379209a6bf0815cd
+    - path: docs/pipelines/cross_core_contract/l4_transition_checklist.yaml
+      kind: state
+      exists: true
+      sha256: 35eb9958e913d1ba23f01168c23384b1aa9771e5601e3c4219a93f446febf73a
+    - path: docs/registry/reports/cross_core_generic_dry_run_gate_input_bundle_fixture_validation.yaml
+      kind: state
+      exists: true
+      sha256: f68f596f4eb726a8858576652864e27c87358e5f4ebbd700190e103b145eae75
+    - path: docs/patcher/shared/run_cross_core_downstream_gate_dry_run_smoke.py
+      kind: script_compile_only
+      exists: true
+      sha256: 4e075efc7e6c2cd014cd5adda09b44e39f7da2f2f89e7bd3efc7a094f40505c5
+    - path: docs/patcher/shared/validate_cross_core_execution_contract.py
+      kind: script_compile_only
+      exists: true
+      sha256: 27232c61680b5b10ff0a5c691c9968eb5e79791bf679b642fc3eee6b29949827
+    - path: docs/patcher/shared/validate_cross_core_gate_input_bundle.py
+      kind: script_compile_only
+      exists: true
+      sha256: 20565cb58ddb952a3475382082ea83ed90e6ad008a69562532c5952beac1b042
+  blocking_findings:
+    []
+  result_summary:
+    blocking_finding_count: 0
+    generic_downstream_gate_dry_run_smoke_defined: true
+    dry_run_gate_smoke_executed: true
+    downstream_mutating_gates_executed: false
+    core_mutation_authorized: false
+    backlog_closure_authorized: false
+    release_or_promotion_authorized: false

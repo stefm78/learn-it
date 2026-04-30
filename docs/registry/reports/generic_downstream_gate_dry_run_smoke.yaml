@@ -1,0 +1,46 @@
+cross_core_downstream_gate_dry_run_smoke:
+  schema_version: '0.1'
+  generated_at: '2026-04-30T15:44:16Z'
+  status: PASS_DRY_RUN_ONLY
+  contract: C:/Users/Stef/dev/learn-it/docs/pipelines/cross_core_contract/work/03_contract_synthesis/GENERIC_AUTHORIZED_DRY_RUN_EXECUTION_CONTRACT_R00.yaml
+  contract_sha256: 11a9792551e2312d2fc91c4b3264a92158c2861c389f0941e77d4d8270b248de
+  gate_input_bundle: C:/Users/Stef/dev/learn-it/docs/pipelines/cross_core_contract/work/04_gate_inputs/GENERIC_DRY_RUN_GATE_INPUT_BUNDLE_R00.yaml
+  gate_input_bundle_sha256: a0139ae126b410ea8a3f4ced90cbc4717a219136373d65a4b649428b00fde7fe
+  contract_validation_report: C:/Users/Stef/dev/learn-it/docs/registry/reports/generic_downstream_gate_dry_run_contract_validation.yaml
+  contract_validation_return_code: 0
+  gate_input_bundle_validation_report: C:/Users/Stef/dev/learn-it/docs/registry/reports/generic_downstream_gate_dry_run_bundle_validation.yaml
+  gate_input_bundle_validation_return_code: 0
+  dry_run_gate_smoke_executed: true
+  downstream_mutating_gates_executed: false
+  downstream_gate_results:
+    - gate: validate_cross_core_l4_transition_review
+      status: PASS_DRY_RUN_ONLY
+      mutation_performed: false
+    - gate: validate_cross_core_write_surface
+      status: PASS_DRY_RUN_ONLY
+      mutation_performed: false
+    - gate: validate_cross_core_rollback_or_reconciliation_path
+      status: PASS_DRY_RUN_ONLY
+      mutation_performed: false
+    - gate: validate_link_binding_consistency
+      status: PASS_DRY_RUN_ONLY
+      mutation_performed: false
+    - gate: validate_constitution_referentiel_link_reconstruction
+      status: PASS_DRY_RUN_ONLY
+      mutation_performed: false
+    - gate: validate_multi_core_release_plan
+      status: PASS_DRY_RUN_ONLY
+      mutation_performed: false
+    - gate: validate_multi_core_promotion_manifest
+      status: PASS_DRY_RUN_ONLY
+      mutation_performed: false
+    - gate: validate_cross_core_backlog_resolution
+      status: PASS_DRY_RUN_ONLY
+      mutation_performed: false
+  current_authorizations:
+    dry_run_gate_smoke_authorized: true
+    core_mutation_authorized: false
+    backlog_closure_authorized: false
+    release_or_promotion_authorized: false
+  reason: >-
+    All downstream gates were exercised as dry-run-only smoke checks. No mutating gate executed.
