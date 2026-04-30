@@ -263,4 +263,23 @@ Archivés :
 - `docs/pipelines/constitution/stages/STAGE_00_SCOPE_PARTITION_REVIEW_AND_REGEN.skill.yaml`
 - `docs/pipelines/constitution/pipeline.md`
 - `docs/pipelines/constitution/reports/stage00_review_bundle_report.yaml`
+---
+
+## 2026-04-30 — PHASE_31 revue STAGE_00 post-run
+
+- Mode : `human+ai`
+- Début de `PHASE_31_STAGE00_POST_RUN_REVIEW`.
+- Source : le bundle STAGE_00 a passé (`PASS`) après la clôture de `CONSTITUTION_RUN_2026_04_30_PATCH_LIFECYCLE_R01`, mais a révélé :
+  - une bijection `FAIL` sur `REF_CORE_LEARNIT_REFERENTIEL_V6_0_IN_CONSTITUTION` ;
+  - trois nouvelles entrées backlog ouvertes sans métadonnées de revue.
+- Décision locale : aligner la décision de neighbor inter-core forcé vers `REF_CORE_LEARNIT_REFERENTIEL_V6_0_IN_CONSTITUTION`.
+- Décision backlog : maintenir les trois nouvelles entrées `open` avec métadonnées de revue ; ne pas les résoudre automatiquement.
+- Date de revue : `2026-04-30T09:56:22Z`.
+
+### Commandes attendues après patch
+
+```bash
+python docs/patcher/shared/generate_constitution_scopes.py --apply --report tmp/constitution_scope_generation_report.yaml
+python docs/patcher/shared/run_constitution_stage00_review_bundle.py
+```
 

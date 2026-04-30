@@ -10,7 +10,7 @@ scope_definition:
     - docs/cores/current/constitution.yaml
     - docs/cores/current/referentiel.yaml
     - docs/cores/current/link.yaml
-    source_fingerprint: 16cdaca1a6d296f466ec8ea176417c4e5036f1c4b823e1ac106b5fb9dbce6fb3
+    source_fingerprint: 9b9b7014ef675311636cceb4129dfe23d08dfc34896dad69aa933584c04bf3a5
   target:
     artifact_family: constitution
     files:
@@ -50,7 +50,7 @@ scope_definition:
     ids:
     - INV_NO_RUNTIME_CONTENT_GENERATION
     - INV_RUNTIME_FULLY_LOCAL
-    - REF_CORE_LEARNIT_REFERENTIEL_V5_0_IN_CONSTITUTION
+    - REF_CORE_LEARNIT_REFERENTIEL_V6_0_IN_CONSTITUTION
     - TYPE_SELF_REPORT_AR_N1
     - TYPE_STATE_AXIS_VALUE_COST
   governance:

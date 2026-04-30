@@ -30,16 +30,16 @@ archived_full_approach_sha256: 1a92e334eeb94768cbb3e4d05bd7cd9916e45f1cb4d78f380
 
 ```yaml
 current_phase:
-  phase_id: PHASE_30_STAGE00_REVIEW_BUNDLE
-  label: stage00_review_bundle_integration
+  phase_id: PHASE_31_STAGE00_POST_RUN_REVIEW
+  label: stage00_post_run_backlog_and_referentiel_v6_review
   status: in_progress
 
 scope_modularization_post_pilot:
   status: paused_cleanly
   active_pipeline_run: none
   new_bounded_run_opened_now: false
-  last_completed_phase: PHASE_29
-  last_completed_phase_label: stage00_signal_refresh_and_scope_catalog_v5_alignment
+  last_completed_phase: PHASE_30
+  last_completed_phase_label: stage00_review_bundle_integration
 ```
 
 ## What is complete
@@ -107,6 +107,7 @@ completed:
       - PHASE_28D11 validate_pipeline_launcher_end_to_end
       - PHASE_29 stage00_signal_refresh_and_scope_catalog_v5_alignment
       - PHASE_30 stage00_review_bundle_integration
+      - PHASE_31 stage00_post_run_backlog_and_referentiel_v6_review
 ```
 
 ## Current pipeline position
@@ -557,8 +558,8 @@ option_K_stage00_signal_refresh_and_scope_catalog_v5_alignment:
 
 
 option_Q_stage00_review_bundle_integration:
-  status: in_progress
-  phase: PHASE_30
+  status: done
+  completed_phase: PHASE_30
   action: add deterministic STAGE_00 review bundle wrapper for post-closeout and pre-semantic-review diagnostics
   artifacts:
     - docs/patcher/shared/run_constitution_stage00_review_bundle.py
@@ -580,6 +581,37 @@ option_Q_stage00_review_bundle_integration:
       - cores/current
   next_local_command: python docs/patcher/shared/run_constitution_stage00_review_bundle.py
   completion_condition: bundle report PASS and tracker updated to completed phase
+  report_status: PASS
+
+
+option_R_stage00_post_run_backlog_and_referentiel_v6_review:
+  status: in_progress
+  phase: PHASE_31
+  action: review post-run backlog entries and align scope generation decisions with Referentiel V6 inter-core reference
+  artifacts:
+    - docs/pipelines/constitution/policies/scope_generation/decisions.yaml
+    - docs/pipelines/constitution/scope_catalog/governance_backlog.yaml
+    - docs/pipelines/constitution/reports/stage00_review_bundle_report.yaml
+  intended_updates:
+    - replace REF_CORE_LEARNIT_REFERENTIEL_V5_0_IN_CONSTITUTION with REF_CORE_LEARNIT_REFERENTIEL_V6_0_IN_CONSTITUTION in forced inter-core reference decision
+    - add review metadata to the 3 backlog entries exported by CONSTITUTION_RUN_2026_04_30_PATCH_LIFECYCLE_R01
+    - regenerate scope catalog deterministically
+    - rerun STAGE_00 review bundle
+  mutation_policy:
+    allowed:
+      - decisions.yaml bounded inter-core reference alignment
+      - governance_backlog.yaml review metadata only
+      - deterministic generated reports
+      - regenerated scope catalog after approved decisions update
+    forbidden:
+      - referentiel.yaml
+      - link.yaml
+      - ad hoc closure of backlog entries
+      - neighbor declaration update for TYPE_SELF_REPORT_AR_N2 before explicit arbitration
+  next_local_commands:
+    - python docs/patcher/shared/generate_constitution_scopes.py --apply --report tmp/constitution_scope_generation_report.yaml
+    - python docs/patcher/shared/run_constitution_stage00_review_bundle.py
+  completion_condition: scope partition bijection PASS, missing review metadata 0, signals no longer request immediate STAGE_00 review
 
 ## Guardrails
 

@@ -1,6 +1,6 @@
 governance_backlog_lifecycle_validation:
   schema_version: '0.1'
-  generated_at: '2026-04-30T09:04:39Z'
+  generated_at: '2026-04-30T09:56:55Z'
   status: PASS
   source: docs/pipelines/constitution/scope_catalog/governance_backlog.yaml
   allowed_statuses:

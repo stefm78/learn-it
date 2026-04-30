@@ -2,8 +2,8 @@ bounded_run_preflight_report:
   schema_version: '0.1'
   stage_id: STAGE_00_SCOPE_PARTITION_REVIEW_AND_REGEN
   mode: run_candidate_preflight
-  generated_at: '2026-04-30T09:04:41Z'
-  status: PREFLIGHT_DEFER_TO_STAGE00_REVIEW
+  generated_at: '2026-04-30T09:56:58Z'
+  status: PREFLIGHT_KEEP_BACKLOG_OPEN
   mutation_policy:
     runs_index: not_modified
     governance_backlog_yaml: not_modified
@@ -15,11 +15,11 @@ bounded_run_preflight_report:
   - ref: docs/pipelines/constitution/runs/index.yaml
     sha256: dbd50d19ec37a3eebe668f4847be3eaacdab2a21893711d83360f2c79719a15f
   - ref: docs/pipelines/constitution/scope_catalog/governance_backlog.yaml
-    sha256: 27e49759c87dba928d8f6e292072338697094b7c733ca021d10614dff34045f2
+    sha256: d0b4c9a4aee1c9fca0b886b41ab55d7f2d3756c5c7aa7ed3ba872acd372d7b6f
   - ref: docs/pipelines/constitution/reports/governance_backlog_report.yaml
-    sha256: bd0075fbebaed19d7db5d54d12c105cb57db4ad9b13efe9a59854aea6b1fabf5
+    sha256: 5aecd21434b4825d6f7f9c69bdcc0fe3e2cae73a823296aa10a08e80b95f1908
   - ref: docs/pipelines/constitution/reports/governance_backlog_lifecycle_validation.yaml
-    sha256: 56ec4628a3101038314a5a54bf26ed88ab3a45007054ae69a520236903fc2f7b
+    sha256: 26c1fb9f38f3e7192c9d5b1bbd2c47550e874bdd7861485ba58e4c9246804edb
   requested_scope_key: patch_lifecycle
   active_run_check:
     active_run_count: 0
@@ -27,8 +27,8 @@ bounded_run_preflight_report:
     no_active_run_confirmed: true
   backlog_signal:
     matching_open_entry_count: 7
-    reviewed_open_entry_count: 4
-    missing_review_metadata_count: 3
+    reviewed_open_entry_count: 7
+    missing_review_metadata_count: 0
     matching_counts_by_type:
       scope_extension_needed: 2
       scope_gap: 5
@@ -37,11 +37,13 @@ bounded_run_preflight_report:
     lifecycle_validation_status: PASS
     open_entries_all_scopes: 7
   decision:
-    status: PREFLIGHT_DEFER_TO_STAGE00_REVIEW
-    recommendation: defer_to_stage00_backlog_review
+    status: PREFLIGHT_KEEP_BACKLOG_OPEN
+    recommendation: keep_backlog_open
     new_bounded_run_recommended_now: false
-    reason: Open governance backlog entries exist and at least one lacks complete STAGE_00 review metadata.
-    next_action: run_stage00_backlog_review
+    reason: STAGE_00 semantic backlog review has been completed. Open backlog entries remain active with
+      review metadata, but they are design follow-ups rather than immediate pipeline blockers. Do not
+      open a new bounded run from this signal without explicit human override.
+    next_action: keep_backlog_open_with_review_metadata
     proposed_scope_key_if_later_opened: patch_lifecycle
     proposed_run_theme_if_later_opened: patch_lifecycle_state_machine_and_priority_lanes
     included_first_if_later_opened:
@@ -126,10 +128,11 @@ bounded_run_preflight_report:
     related_scope_keys:
     - patch_lifecycle
     stage00_relevant: true
-    review_metadata_complete: false
-    last_reviewed_at: null
-    last_reviewed_by: null
-    next_review_trigger: null
+    review_metadata_complete: true
+    last_reviewed_at: '2026-04-30T09:56:22Z'
+    last_reviewed_by: STAGE_00_SCOPE_PARTITION_REVIEW_AND_REGEN
+    next_review_trigger: cross-core contract bootstrap, referentiel/link external-read-only follow-up,
+      or explicit patch escalation threshold design
     recommended_action_from_backlog: Keep as cross-core follow-up. Decide whether a concrete external-read-only
       parameter should be declared in scope generation or whether a cross-core change request is required.
     rank: 5
@@ -143,10 +146,11 @@ bounded_run_preflight_report:
     - learner_state
     - deployment_governance
     stage00_relevant: true
-    review_metadata_complete: false
-    last_reviewed_at: null
-    last_reviewed_by: null
-    next_review_trigger: null
+    review_metadata_complete: true
+    last_reviewed_at: '2026-04-30T09:56:22Z'
+    last_reviewed_by: STAGE_00_SCOPE_PARTITION_REVIEW_AND_REGEN
+    next_review_trigger: dedicated escalation-boundary design review, learner_state/governance escalation
+      work, or future patch_lifecycle run touching global escalation semantics
     recommended_action_from_backlog: Revisit escalation ownership during a dedicated partition/scope review
       if future runs touch learner_state or governance escalation semantics.
     rank: 6
@@ -159,10 +163,11 @@ bounded_run_preflight_report:
     - patch_lifecycle
     - learner_state
     stage00_relevant: true
-    review_metadata_complete: false
-    last_reviewed_at: null
-    last_reviewed_by: null
-    next_review_trigger: null
+    review_metadata_complete: true
+    last_reviewed_at: '2026-04-30T09:56:22Z'
+    last_reviewed_by: STAGE_00_SCOPE_PARTITION_REVIEW_AND_REGEN
+    next_review_trigger: neighbor-closure arbitration for patch_lifecycle learner_state reads, or future
+      scope_generation policy/decisions review
     recommended_action_from_backlog: Re-evaluate scope_generation policy/decisions for patch_lifecycle
       neighbor declarations and regenerate the scope catalog if explicit neighbor closure is approved.
     rank: 7

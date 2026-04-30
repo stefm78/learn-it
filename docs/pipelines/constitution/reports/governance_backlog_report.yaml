@@ -1,6 +1,6 @@
 governance_backlog_report:
   schema_version: '0.1'
-  generated_at: '2026-04-30T09:04:39Z'
+  generated_at: '2026-04-30T09:56:55Z'
   status: PASS
   source:
     backlog_path: docs/pipelines/constitution/scope_catalog/governance_backlog.yaml
@@ -98,7 +98,7 @@ governance_backlog_report:
     stage00_relevant: true
     source_arbitrage_path: docs/pipelines/constitution/archive/CORE_RELEASE_2026_04_28_R01/work/02_arbitrage/arbitrage.md
     recorded_at: '2026-04-28T09:43:30Z'
-    age_days: 1
+    age_days: 2
   - entry_id: GB_2026_04_30_PATCH_LIFECYCLE_R01_GBC_PATCH_LIFECYCLE_ESCALATION_BOUNDARY_R02
     candidate_id: GBC_PATCH_LIFECYCLE_ESCALATION_BOUNDARY_R02
     status: open
@@ -137,7 +137,7 @@ governance_backlog_report:
     stage00_relevant: true
     source_arbitrage_path: docs/pipelines/constitution/archive/CORE_RELEASE_2026_04_28_R01/work/02_arbitrage/arbitrage.md
     recorded_at: '2026-04-28T09:43:30Z'
-    age_days: 1
+    age_days: 2
   - entry_id: GB_2026_04_27_PATCH_LIFECYCLE_R01_GBC_PATCH_LIFECYCLE_PRIORITY_QUEUE_R01
     candidate_id: GBC_PATCH_LIFECYCLE_PRIORITY_QUEUE_R01
     status: open
@@ -156,7 +156,7 @@ governance_backlog_report:
     stage00_relevant: true
     source_arbitrage_path: docs/pipelines/constitution/archive/CORE_RELEASE_2026_04_28_R01/work/02_arbitrage/arbitrage.md
     recorded_at: '2026-04-28T09:43:30Z'
-    age_days: 1
+    age_days: 2
   - entry_id: GB_2026_04_27_PATCH_LIFECYCLE_R01_GBC_PATCH_LIFECYCLE_REFERENTIEL_PARAMETER_R01
     candidate_id: GBC_PATCH_LIFECYCLE_REFERENTIEL_PARAMETER_R01
     status: open
@@ -176,7 +176,7 @@ governance_backlog_report:
     stage00_relevant: true
     source_arbitrage_path: docs/pipelines/constitution/archive/CORE_RELEASE_2026_04_28_R01/work/02_arbitrage/arbitrage.md
     recorded_at: '2026-04-28T09:43:30Z'
-    age_days: 1
+    age_days: 2
   - entry_id: GB_2026_04_30_PATCH_LIFECYCLE_R01_GBC_PATCH_LIFECYCLE_REFERENTIEL_PARAMETER_R02
     candidate_id: GBC_PATCH_LIFECYCLE_REFERENTIEL_PARAMETER_R02
     status: open

@@ -484,7 +484,7 @@ scope_partition_review_report:
   bijection_check:
     canon_id_count: 117
     assigned_id_count: 116
-    forced_neighbor_id_count: 19
+    forced_neighbor_id_count: 20
     ids_covered_as_forced_neighbors:
     - ACTION_ESCALATE_PERSISTENT_DRIFT_OFFSESSION
     - ACTION_LOG_UNCOVERED_CONFLICT
@@ -494,6 +494,7 @@ scope_partition_review_report:
     - INV_MSC_AND_STRICT
     - INV_NO_RUNTIME_CONTENT_GENERATION
     - INV_RUNTIME_FULLY_LOCAL
+    - REF_CORE_LEARNIT_REFERENTIEL_V6_0_IN_CONSTITUTION
     - TYPE_AUTHENTIC_CONTEXT
     - TYPE_CORPUS_CONFIDENCE_ICC
     - TYPE_FEEDBACK_COVERAGE_MATRIX
@@ -627,13 +628,11 @@ scope_partition_review_report:
       - TYPE_PATCH_ARTIFACT
       - TYPE_PATCH_IMPACT_SCOPE
       - TYPE_PATCH_QUALITY_GATE
-    ids_not_covered:
-    - REF_CORE_LEARNIT_REFERENTIEL_V6_0_IN_CONSTITUTION
+    ids_not_covered: []
     ids_assigned_but_not_in_canon: []
     ids_assigned_to_multiple_scopes: {}
-    bijection_status: FAIL
-    bijection_failures:
-    - 1 canon ID(s) not covered by any scope decision
+    bijection_status: PASS
+    bijection_failures: []
   notes:
   - Le rapport déterministe n'édite pas la partition publiée.
   - Il sert de base à l'analyse sémantique assistée par IA et à l'arbitrage humain.

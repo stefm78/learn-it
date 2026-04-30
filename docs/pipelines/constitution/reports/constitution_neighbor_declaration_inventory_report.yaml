@@ -1,7 +1,7 @@
 constitution_neighbor_declaration_inventory_report:
   schema_version: '0.1'
   phase_id: PHASE_18A
-  generated_at: '2026-04-30T09:04:41Z'
+  generated_at: '2026-04-30T09:56:58Z'
   status: PASS
   mutation_policy:
     policy_yaml: not_modified
@@ -15,11 +15,11 @@ constitution_neighbor_declaration_inventory_report:
   - ref: docs/pipelines/constitution/policies/scope_generation/policy.yaml
     sha256: c70c0aabcdaa1acf096eb86d4ea95671d0b367840c99b44e6a2262e24ffc36da
   - ref: docs/pipelines/constitution/policies/scope_generation/decisions.yaml
-    sha256: 19fef58f137bcd5ddeccaa9366df1aeb2c552bdc32b35f9a04a16d1fff25dc49
+    sha256: 2f4b0f054ede916bbe54b1eb4ddfdbaea7309f49c25924540ec5df5b801880e4
   - ref: docs/pipelines/constitution/scope_catalog/manifest.yaml
-    sha256: 3de972b8904b38698d92fb51a63ce0c7273d6a7ec668344c2297bcbaf24b9812
+    sha256: 76af3c25b516874f61a64a16622db93e43f02433092cc70048dd3568cf77663b
   - ref: docs/pipelines/constitution/pipeline.md
-    sha256: b15c9cdea72a72c61bd44e8872df0bbfe73cb1b3335d8d0fc4f5209f6756640d
+    sha256: 248cefb42086129927aa2b678c59718df94199922730746357e5db5cd3c7a064
   - ref: docs/pipelines/constitution/STAGE_00_SCOPE_PARTITION_REVIEW_AND_REGEN.md
     sha256: 9324624f3ac64ca14d0834f9c4fd0eddb102615cf9602d8bae9dbc70d95fbeb9
   summary:
@@ -110,7 +110,7 @@ constitution_neighbor_declaration_inventory_report:
         - patch_lifecycle
         target_id_count: 1
         target_ids:
-        - REF_CORE_LEARNIT_REFERENTIEL_V5_0_IN_CONSTITUTION
+        - REF_CORE_LEARNIT_REFERENTIEL_V6_0_IN_CONSTITUTION
         neighbor_class: intercore_reference_forced
         read_mode: primary
         source_phase: null
@@ -257,7 +257,7 @@ constitution_neighbor_declaration_inventory_report:
         - ACTION_LOG_UNCOVERED_CONFLICT
         - INV_GRAPH_PROPAGATION_ONE_HOP
         - INV_MSC_AND_STRICT
-        - REF_CORE_LEARNIT_REFERENTIEL_V5_0_IN_CONSTITUTION
+        - REF_CORE_LEARNIT_REFERENTIEL_V6_0_IN_CONSTITUTION
         - TYPE_AUTHENTIC_CONTEXT
         - TYPE_CORPUS_CONFIDENCE_ICC
         - TYPE_FEEDBACK_COVERAGE_MATRIX
@@ -277,7 +277,7 @@ constitution_neighbor_declaration_inventory_report:
         default_neighbor_id_count: 3
         default_neighbor_ids:
         - INV_NO_RUNTIME_CONTENT_GENERATION
-        - REF_CORE_LEARNIT_REFERENTIEL_V5_0_IN_CONSTITUTION
+        - REF_CORE_LEARNIT_REFERENTIEL_V6_0_IN_CONSTITUTION
         - TYPE_HUMAN_CHECKPOINT
         neighbor_id_count: 0
         neighbor_ids: []
@@ -295,7 +295,7 @@ constitution_neighbor_declaration_inventory_report:
         default_neighbor_ids:
         - ACTION_ESCALATE_PERSISTENT_DRIFT_OFFSESSION
         - ACTION_PLAN_SHORT_DIAGNOSTIC_TASK
-        - REF_CORE_LEARNIT_REFERENTIEL_V5_0_IN_CONSTITUTION
+        - REF_CORE_LEARNIT_REFERENTIEL_V6_0_IN_CONSTITUTION
         neighbor_id_count: 0
         neighbor_ids: []
         default_neighbor_file_count: 2
@@ -312,7 +312,7 @@ constitution_neighbor_declaration_inventory_report:
         default_neighbor_ids:
         - ACTION_ESCALATE_PERSISTENT_DRIFT_OFFSESSION
         - INV_EXPLICIT_DEPENDENCY_EDGES_REQUIRED
-        - REF_CORE_LEARNIT_REFERENTIEL_V5_0_IN_CONSTITUTION
+        - REF_CORE_LEARNIT_REFERENTIEL_V6_0_IN_CONSTITUTION
         - TYPE_INTEGRITY_MODES
         - TYPE_KNOWLEDGE_GRAPH
         - TYPE_LEARNER_STATE_MODEL
@@ -334,7 +334,7 @@ constitution_neighbor_declaration_inventory_report:
         default_neighbor_ids:
         - INV_NO_RUNTIME_CONTENT_GENERATION
         - INV_RUNTIME_FULLY_LOCAL
-        - REF_CORE_LEARNIT_REFERENTIEL_V5_0_IN_CONSTITUTION
+        - REF_CORE_LEARNIT_REFERENTIEL_V6_0_IN_CONSTITUTION
         - TYPE_SELF_REPORT_AR_N1
         - TYPE_STATE_AXIS_VALUE_COST
         neighbor_id_count: 0

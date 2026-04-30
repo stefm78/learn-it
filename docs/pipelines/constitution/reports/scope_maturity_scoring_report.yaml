@@ -33,23 +33,23 @@ scope_maturity_scoring_report:
   - ref: docs/pipelines/constitution/policies/scope_generation/decisions.yaml
     required: true
     present: true
-    sha256: 19fef58f137bcd5ddeccaa9366df1aeb2c552bdc32b35f9a04a16d1fff25dc49
+    sha256: 2f4b0f054ede916bbe54b1eb4ddfdbaea7309f49c25924540ec5df5b801880e4
   - ref: docs/pipelines/constitution/scope_catalog/manifest.yaml
     required: true
     present: true
-    sha256: 3de972b8904b38698d92fb51a63ce0c7273d6a7ec668344c2297bcbaf24b9812
+    sha256: 76af3c25b516874f61a64a16622db93e43f02433092cc70048dd3568cf77663b
   - ref: docs/pipelines/constitution/reports/scope_partition_review_report.yaml
     required: true
     present: true
-    sha256: 4107d1880a53a8a05aae1300b3eab6598ca617b5c7fa69f2f0c963d802a92023
+    sha256: 0ffbf4da9eaf4a2ad8eaef02d572b291557c4222e4f0f9bb55169f4661c6a5c6
   - ref: tmp/constitution_scope_generation_report.yaml
     required: true
     present: true
-    sha256: 4f57ef2137b91603a762ef578cdde320e5a5d53a29dda961cf2cb9e26ce2163b
+    sha256: d14449529f06b9f24834c904f42c9c035ce9669678f07039b0131c10d66c6b50
   - ref: docs/pipelines/constitution/scope_catalog/governance_backlog.yaml
     required: false
     present: true
-    sha256: 27e49759c87dba928d8f6e292072338697094b7c733ca021d10614dff34045f2
+    sha256: d0b4c9a4aee1c9fca0b886b41ab55d7f2d3756c5c7aa7ed3ba872acd372d7b6f
   scoring_model:
     ref: docs/transformations/core_modularization/CONSTITUTION_SCOPE_MATURITY_MODEL.md
     max_score: 24
@@ -182,7 +182,7 @@ scope_maturity_scoring_report:
         - published_axis_used_as_bounded_prior: 2
           score_cap_without_history: 3
           related_severe_open_backlog_count: 2
-          generation_changed_files_count: 5
+          generation_changed_files_count: 6
           confidence: limited_with_backlog_pressure
           v1_1_position: missing_history_limits_confidence_not_score_by_itself
         calibration: v1_1
@@ -315,7 +315,7 @@ scope_maturity_scoring_report:
         - published_axis_used_as_bounded_prior: 3
           score_cap_without_history: 3
           related_severe_open_backlog_count: 0
-          generation_changed_files_count: 5
+          generation_changed_files_count: 6
           confidence: limited
           v1_1_position: missing_history_limits_confidence_not_score_by_itself
         calibration: v1_1
@@ -436,7 +436,7 @@ scope_maturity_scoring_report:
         - published_axis_used_as_bounded_prior: 2
           score_cap_without_history: 3
           related_severe_open_backlog_count: 3
-          generation_changed_files_count: 5
+          generation_changed_files_count: 6
           confidence: limited_with_backlog_pressure
           v1_1_position: missing_history_limits_confidence_not_score_by_itself
         calibration: v1_1
@@ -569,7 +569,7 @@ scope_maturity_scoring_report:
         - published_axis_used_as_bounded_prior: 3
           score_cap_without_history: 3
           related_severe_open_backlog_count: 0
-          generation_changed_files_count: 5
+          generation_changed_files_count: 6
           confidence: limited
           v1_1_position: missing_history_limits_confidence_not_score_by_itself
         calibration: v1_1
@@ -691,7 +691,7 @@ scope_maturity_scoring_report:
         - published_axis_used_as_bounded_prior: 2
           score_cap_without_history: 3
           related_severe_open_backlog_count: 7
-          generation_changed_files_count: 5
+          generation_changed_files_count: 6
           confidence: limited_with_backlog_pressure
           v1_1_position: missing_history_limits_confidence_not_score_by_itself
         calibration: v1_1

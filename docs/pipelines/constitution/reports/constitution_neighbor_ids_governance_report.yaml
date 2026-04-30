@@ -1,6 +1,6 @@
 constitution_neighbor_ids_governance_report:
   schema_version: '0.2'
-  generated_at: '2026-04-30T09:04:40Z'
+  generated_at: '2026-04-30T09:56:57Z'
   phase: PHASE_16
   status: READY_FOR_HUMAN_ARBITRATION
   authority: diagnostic_governance_report_only
