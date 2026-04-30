@@ -1,0 +1,149 @@
+scope_evolution_score:
+  schema_version: 0.1
+  status: PASS
+  authority: diagnostic_report_only
+  does_not_update_policy: true
+  run_id: CONSTITUTION_RUN_2026_04_30_PATCH_LIFECYCLE_R01
+  scope_key: patch_lifecycle
+  score_total: 70
+  max_score: 100
+  classification: positive_progress_with_open_debt
+  evidence_resolution:
+    live_run_dir: docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_30_PATCH_LIFECYCLE_R01
+    archive_dir: docs/pipelines/constitution/archive/CORE_RELEASE_2026_04_30_R01
+    archive_fallback_enabled: true
+  maturity_context:
+    published_score: 17
+    published_level: L3_operational
+    computed_score: 17
+    computed_level: L3_operational
+    score_delta: 0
+    maturity_report: docs/pipelines/constitution/reports/scope_maturity_scoring_report_post_CONSTITUTION_RUN_2026_04_30_PATCH_LIFECYCLE_R01.yaml
+  dimensions:
+    stage_chain_integrity:
+      score: 20
+      max: 20
+      status: PASS
+      expected_pass_count: 6
+      actual_pass_count: 6
+      checks:
+      - name: patch_validation
+        path: docs/pipelines/constitution/archive/CORE_RELEASE_2026_04_30_R01/work/04_patch_validation/patch_validation.yaml
+        expected: true
+        status: PASS
+      - name: patch_execution
+        path: docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_30_PATCH_LIFECYCLE_R01/reports/patch_execution_report.yaml
+        expected: true
+        status: PASS
+      - name: core_validation
+        path: docs/pipelines/constitution/archive/CORE_RELEASE_2026_04_30_R01/work/06_core_validation/core_validation.yaml
+        expected: true
+        status: PASS
+      - name: release_plan_validation
+        path: docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_30_PATCH_LIFECYCLE_R01/reports/release_plan_validation.yaml
+        expected: true
+        status: PASS
+      - name: release_materialization
+        path: docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_30_PATCH_LIFECYCLE_R01/reports/release_materialization_report.yaml
+        expected: true
+        status: PASS
+      - name: release_manifest_validation
+        path: docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_30_PATCH_LIFECYCLE_R01/reports/release_manifest_validation.yaml
+        expected: false
+        status: NOT_EXPECTED
+      - name: promotion
+        path: docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_30_PATCH_LIFECYCLE_R01/reports/promotion_report.yaml
+        expected: false
+        status: NOT_EXPECTED
+      - name: current_manifest_validation
+        path: docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_30_PATCH_LIFECYCLE_R01/reports/current_manifest_validation.yaml
+        expected: false
+        status: NOT_EXPECTED
+      - name: promotion_report_validation
+        path: docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_30_PATCH_LIFECYCLE_R01/reports/promotion_report_validation.yaml
+        expected: false
+        status: NOT_EXPECTED
+      - name: closeout
+        path: docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_30_PATCH_LIFECYCLE_R01/reports/closeout_report.yaml
+        expected: true
+        status: PASS
+    closeout_and_tracking_readiness:
+      score: 20
+      max: 20
+      status: PASS
+      closeout_status: PASS
+      final_summary_exists: true
+      governance_backlog_entries_exported: 3
+      tracking:
+        active_runs_count: 0
+        run_in_active_runs: false
+        run_in_closed_runs: true
+        current_stage: STAGE_09_CLOSEOUT_AND_ARCHIVE
+    structural_maturity_delta:
+      score: 10
+      max: 20
+      status: PASS
+      published_score: 17
+      published_level: L3_operational
+      computed_score: 17
+      computed_level: L3_operational
+      score_delta: 0
+    backlog_pressure:
+      score: 7
+      max: 20
+      status: WARN
+      related_open_backlog_count: 7
+      related_severe_open_backlog_count: 7
+      open_entries:
+      - entry_id: GB_2026_04_27_PATCH_LIFECYCLE_R01_GBC_PATCH_LIFECYCLE_ESCALATION_BOUNDARY_R01
+        type: scope_extension_needed
+        title: Review broad escalation triggers crossing patch_lifecycle and learner_state/governance
+        source_run_id: CONSTITUTION_RUN_2026_04_27_PATCH_LIFECYCLE_R01
+      - entry_id: GB_2026_04_27_PATCH_LIFECYCLE_R01_GBC_PATCH_LIFECYCLE_FULL_STATE_MACHINE_R01
+        type: scope_gap
+        title: Decide whether patch_lifecycle needs a canonical patch state machine
+        source_run_id: CONSTITUTION_RUN_2026_04_27_PATCH_LIFECYCLE_R01
+      - entry_id: GB_2026_04_27_PATCH_LIFECYCLE_R01_GBC_PATCH_LIFECYCLE_PRIORITY_QUEUE_R01
+        type: scope_gap
+        title: Decide whether patch serialization requires deterministic priority lanes
+        source_run_id: CONSTITUTION_RUN_2026_04_27_PATCH_LIFECYCLE_R01
+      - entry_id: GB_2026_04_27_PATCH_LIFECYCLE_R01_GBC_PATCH_LIFECYCLE_REFERENTIEL_PARAMETER_R01
+        type: scope_gap
+        title: Track external_read_only referentiel parameter dependency for patch escalation threshold
+        source_run_id: CONSTITUTION_RUN_2026_04_27_PATCH_LIFECYCLE_R01
+      - entry_id: GB_2026_04_30_PATCH_LIFECYCLE_R01_GBC_PATCH_LIFECYCLE_ESCALATION_BOUNDARY_R02
+        type: scope_extension_needed
+        title: Preserve global escalation ownership boundary across patch_lifecycle, learner_state and governance
+        source_run_id: CONSTITUTION_RUN_2026_04_30_PATCH_LIFECYCLE_R01
+      - entry_id: GB_2026_04_30_PATCH_LIFECYCLE_R01_GBC_PATCH_LIFECYCLE_REFERENTIEL_PARAMETER_R02
+        type: scope_gap
+        title: Confirm external Référentiel parameter contract for ineffective patch iteration threshold N
+        source_run_id: CONSTITUTION_RUN_2026_04_30_PATCH_LIFECYCLE_R01
+      - entry_id: GB_2026_04_30_PATCH_LIFECYCLE_R01_GBC_PATCH_LIFECYCLE_VALUE_COST_AR_N2_NEIGHBOR_R01
+        type: scope_gap
+        title: Decide whether TYPE_SELF_REPORT_AR_N2 should be an explicit read neighbor for patch_lifecycle
+        source_run_id: CONSTITUTION_RUN_2026_04_30_PATCH_LIFECYCLE_R01
+    cross_scope_alignment_pressure:
+      score: 3
+      max: 10
+      status: WARN
+      cross_scope_open_count: 5
+    operational_repeatability:
+      score: 10
+      max: 10
+      status: PASS
+      evidence:
+      - path: docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_30_PATCH_LIFECYCLE_R01/reports/patch_execution_report.yaml
+        present: true
+      - path: docs/pipelines/constitution/archive/CORE_RELEASE_2026_04_30_R01/work/07_release/release_plan.yaml
+        present: true
+      - path: docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_30_PATCH_LIFECYCLE_R01/reports/promotion_report.yaml
+        present: true
+      - path: docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_30_PATCH_LIFECYCLE_R01/reports/closeout_report.yaml
+        present: true
+      - path: docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_30_PATCH_LIFECYCLE_R01/outputs/final_run_summary.md
+        present: true
+  interpretation: Run CONSTITUTION_RUN_2026_04_30_PATCH_LIFECYCLE_R01 produced positive_progress_with_open_debt for scope
+    patch_lifecycle. This is diagnostic only. Published maturity is not changed. Related severe open backlog count is 7.
+  recommended_next_action: Keep this report as diagnostic evidence; use STAGE_00 / partition_refresh or a dedicated cross-scope
+    run before publishing a stronger maturity score.
