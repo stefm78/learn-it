@@ -25,3 +25,13 @@ notes:
   - Cross-core contract pipeline hardened to L3.
   - Request remains proposed / pending_arbitration.
   - Future L4 phase is required before any Core write.
+
+l4_target_contract:
+  target_contract_ref: docs/pipelines/cross_core_contract/L4_TARGET_CONTRACT.md
+  transition_checklist_ref: docs/pipelines/cross_core_contract/l4_transition_checklist.yaml
+  target_level: L4_critical_canonical_pipeline
+  l4_target_defined: true
+  l4_active_now: false
+  core_mutation_authorized: false
+  backlog_closure_authorized: false
+  release_or_promotion_authorized: false

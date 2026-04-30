@@ -64,6 +64,17 @@ ai_protocol:
     - promotion_manifest_policy
     - rollback_or_reconciliation_path
 
+  l4_target_contract:
+    target_contract_ref: docs/pipelines/cross_core_contract/L4_TARGET_CONTRACT.md
+    transition_checklist_ref: docs/pipelines/cross_core_contract/l4_transition_checklist.yaml
+    l4_active_now: false
+    future_l4_write_surfaces_declared: true
+    activation_requires_explicit_human_decision: true
+    activation_requires_validation_report: docs/registry/reports/cross_core_contract_l4_target_validation.yaml
+    core_mutation_authorized_now: false
+    backlog_closure_authorized_now: false
+    release_or_promotion_authorized_now: false
+
   anti_patterns:
     - chat_summary_as_pass
     - direct_write_to_owned_state

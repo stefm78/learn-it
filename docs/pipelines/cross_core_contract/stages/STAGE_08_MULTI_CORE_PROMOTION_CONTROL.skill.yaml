@@ -1,0 +1,47 @@
+stage_skill:
+  schema_version: '0.1'
+  pipeline_id: cross_core_contract
+  stage_id: STAGE_08_MULTI_CORE_PROMOTION_CONTROL
+  stage_kind: future_l4_target
+  active_now: false
+  current_hardening_level: L3_managed_execution_pipeline
+  target_hardening_level: L4_critical_canonical_pipeline
+
+mission: >-
+  Control future multi-Core promotion policy without promoting current files.
+
+activation_policy:
+  requires_explicit_human_decision: true
+  requires_l4_transition_checklist_PASS: true
+  current_phase_authorizes_execution: false
+
+primary_reads:
+  - docs/pipelines/cross_core_contract/L4_TARGET_CONTRACT.md
+  - docs/pipelines/cross_core_contract/l4_transition_checklist.yaml
+  - docs/pipelines/cross_core_contract/AI_PROTOCOL.yaml
+  - docs/pipelines/cross_core_contract/requests/
+  - docs/pipelines/cross_core_contract/reports/
+
+target_outputs:
+  - docs/pipelines/cross_core_contract/work/08_multi_core_promotion_control/multi_core_promotion_control.yaml
+
+forbidden_now:
+  - docs/cores/current/**
+  - docs/pipelines/constitution/scope_catalog/governance_backlog.yaml
+  - docs/cores/releases/**
+  - docs/cores/current/manifest.yaml
+
+future_l4_allowed_only_after_activation:
+  - declared_write_surface_only
+  - validated_release_or_promotion_plan_only
+  - backlog_resolution_only_with_validated_mapping
+
+completion_evidence:
+  required_when_active:
+    - materialized_target_output
+    - validator_PASS
+    - guardrails_or_authorizations_explicitly_recorded
+  not_sufficient:
+    - chat_summary_only
+    - request_creation_only
+    - arbitration_without_validated_write_surface

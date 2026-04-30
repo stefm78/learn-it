@@ -1,0 +1,47 @@
+cross_core_contract_l4_target_validation:
+  schema_version: '0.1'
+  generated_at: '2026-04-30T11:19:16Z'
+  status: PASS
+  target_level: L4_critical_canonical_pipeline
+  l4_active_now: false
+  checked_files:
+    - path: docs/pipelines/cross_core_contract/L4_TARGET_CONTRACT.md
+      exists: true
+      sha256: 3c390f41042b480e77a23034a4a78b5a4c19a4845a5f5f1e90e6524411a3dbc1
+    - path: docs/pipelines/cross_core_contract/l4_transition_checklist.yaml
+      exists: true
+      sha256: 2b60a93d35447cd7add1dff0843371fe683eacfda4c83efdf941d983d3c8ed37
+    - path: docs/pipelines/cross_core_contract/stages/STAGE_06_L4_TRANSITION_REVIEW.skill.yaml
+      exists: true
+      sha256: 85fa41f242d8779f68261886273b44b3bf7ef2468212ae5c07788ee048b6e42a
+    - path: docs/pipelines/cross_core_contract/stages/STAGE_07_MULTI_CORE_RELEASE_PLANNING.skill.yaml
+      exists: true
+      sha256: 091bad245ccf89f0dd6f12c5d66f8079db03d533e4857fe118e8a3c0b895cffd
+    - path: docs/pipelines/cross_core_contract/stages/STAGE_08_MULTI_CORE_PROMOTION_CONTROL.skill.yaml
+      exists: true
+      sha256: e8ae12f2f5e95acdfb61cd72bbdd888a267637efbe2d527c6d8ef5f3ca9ded74
+    - path: docs/pipelines/cross_core_contract/stages/STAGE_09_CLOSEOUT_AND_BACKLOG_RESOLUTION.skill.yaml
+      exists: true
+      sha256: d9e7a521e017bf151e6070de0eb6e091cb1c35d9b7a64372052f095a9fa2e17e
+    - path: docs/pipelines/cross_core_contract/AI_PROTOCOL.yaml
+      exists: true
+      sha256: 21a84afa1e590d69f4361bee3ddabfec4c99788cec0b122511be9d6dd8bf53d7
+    - path: docs/pipelines/cross_core_contract/pipeline.md
+      exists: true
+      sha256: 41d53f1f21b6a31e9944b23394eacff82aad797c597389e890bc261b3b5a4af2
+    - path: docs/pipelines/cross_core_contract/state.yaml
+      exists: true
+      sha256: c99d80fdac8e8b75719aa3a4548361702776ef6f0d851f3e8e3f0212bf2d5c7b
+    - path: docs/pipelines/cross_core_contract/requests/CCR_PATCH_LIFECYCLE_ESCALATION_THRESHOLD_N_R01.yaml
+      exists: true
+      sha256: 135e6039ed61b82fe7baefbf5a37e2cd03ad20d0cad2babd091b6629bb1e8d85
+  blocking_findings:
+    []
+  result_summary:
+    blocking_finding_count: 0
+    l4_target_defined: true
+    l4_active_now: false
+    core_mutation_authorized: false
+    backlog_closure_authorized: false
+    release_or_promotion_authorized: false
+    request_remains_proposed_pending_arbitration: true

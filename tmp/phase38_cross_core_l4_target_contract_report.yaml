@@ -1,0 +1,33 @@
+phase38_cross_core_l4_target_contract_report:
+  generated_at: 2026-04-30T11:19:15Z
+  status: PASS
+  branch: feat/core-modularization-bootstrap
+  phase: PHASE_38_CROSS_CORE_L4_TARGET_CONTRACT
+  active_level: L3_managed_execution_pipeline
+  target_level: L4_critical_canonical_pipeline
+  l4_active_now: false
+  files_written:
+    - docs/pipelines/cross_core_contract/L4_TARGET_CONTRACT.md
+    - docs/pipelines/cross_core_contract/l4_transition_checklist.yaml
+    - docs/pipelines/cross_core_contract/stages/STAGE_06_L4_TRANSITION_REVIEW.skill.yaml
+    - docs/pipelines/cross_core_contract/stages/STAGE_07_MULTI_CORE_RELEASE_PLANNING.skill.yaml
+    - docs/pipelines/cross_core_contract/stages/STAGE_08_MULTI_CORE_PROMOTION_CONTROL.skill.yaml
+    - docs/pipelines/cross_core_contract/stages/STAGE_09_CLOSEOUT_AND_BACKLOG_RESOLUTION.skill.yaml
+    - docs/patcher/shared/validate_cross_core_contract_l4_target.py
+    - docs/registry/reports/cross_core_contract_l4_target_validation.yaml
+    - docs/pipelines/cross_core_contract/AI_PROTOCOL.yaml
+    - docs/pipelines/cross_core_contract/pipeline.md
+    - docs/pipelines/cross_core_contract/state.yaml
+    - docs/transformations/core_modularization/SCOPE_GRAPH_CLUSTERING_PROGRESS.md
+    - tmp/phase38_cross_core_l4_target_contract_report.yaml
+  validations:
+    cross_core_contract_l4_target_validation: PASS
+  guardrails:
+    no_constitution_run_opened: true
+    core_files_not_modified: true
+    governance_backlog_not_modified: true
+    release_or_promotion_authorized: false
+    request_remains_proposed_pending_arbitration: true
+  next_recommended_decision:
+    decision: stop_or_define_future_l4_transition_validator_family
+    default: stop_at_NO_ACTIVE_PHASE

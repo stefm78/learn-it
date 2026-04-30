@@ -1,0 +1,45 @@
+l4_transition_checklist:
+  schema_version: '0.1'
+  generated_at: '2026-04-30T11:19:15Z'
+  status: target_defined_inactive
+  pipeline_id: cross_core_contract
+  current_level: L3_managed_execution_pipeline
+  target_level: L4_critical_canonical_pipeline
+  l4_active_now: false
+
+  activation_requires:
+    - explicit_human_decision
+    - l4_transition_review_report_PASS
+    - declared_read_surface
+    - declared_write_surface
+    - validated_cross_core_execution_contract
+    - validated_multi_core_release_plan
+    - validated_multi_core_promotion_manifest
+    - rollback_or_reconciliation_path
+    - backlog_resolution_mapping_if_closure_requested
+
+  forbidden_until_activation:
+    - docs/cores/current/constitution.yaml
+    - docs/cores/current/referentiel.yaml
+    - docs/cores/current/link.yaml
+    - docs/pipelines/constitution/scope_catalog/governance_backlog.yaml
+    - docs/cores/releases/**
+    - docs/cores/current/manifest.yaml
+
+  current_guardrails:
+    core_mutation_authorized: false
+    backlog_closure_authorized: false
+    release_or_promotion_authorized: false
+    constitution_run_authorized: false
+
+  first_candidate_request:
+    request_id: CCR_PATCH_LIFECYCLE_ESCALATION_THRESHOLD_N_R01
+    required_status_now: proposed
+    required_decision_status_now: pending_arbitration
+    mutation_authorized_now: false
+
+  future_stage_sequence:
+    - STAGE_06_L4_TRANSITION_REVIEW
+    - STAGE_07_MULTI_CORE_RELEASE_PLANNING
+    - STAGE_08_MULTI_CORE_PROMOTION_CONTROL
+    - STAGE_09_CLOSEOUT_AND_BACKLOG_RESOLUTION

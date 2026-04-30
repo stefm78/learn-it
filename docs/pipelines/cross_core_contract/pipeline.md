@@ -106,6 +106,21 @@ release_or_promotion_authorized: false
 
 This pipeline is hardened to L3 for intake, evidence review, arbitration and contract synthesis.
 It remains below L4: no Core write, backlog closure, release or promotion is authorized.
+## L4 target contract
+
+```yaml
+l4_target_contract: docs/pipelines/cross_core_contract/L4_TARGET_CONTRACT.md
+l4_transition_checklist: docs/pipelines/cross_core_contract/l4_transition_checklist.yaml
+l4_target_defined: true
+l4_active_now: false
+core_mutation_authorized: false
+backlog_closure_authorized: false
+release_or_promotion_authorized: false
+```
+
+The pipeline is intentionally L3 active / L4 targeted. Future L4 activation requires
+explicit human decision and validation of the transition checklist.
+
 ## Stages
 
 ### STAGE_00_INTAKE_AND_SHAPE_VALIDATION

@@ -38,8 +38,8 @@ scope_modularization_post_pilot:
   status: paused_cleanly
   active_pipeline_run: none
   new_bounded_run_opened_now: false
-  last_completed_phase: PHASE_37
-  last_completed_phase_label: cross_core_contract_hardening
+  last_completed_phase: PHASE_38
+  last_completed_phase_label: cross_core_l4_target_contract
 ```
 
 ## What is complete
@@ -114,6 +114,7 @@ completed:
       - PHASE_35 cross_core_source_evidence_review
       - PHASE_36 pipeline_hardening_reference_model
       - PHASE_37 cross_core_contract_hardening
+      - PHASE_38 cross_core_l4_target_contract
 ```
 
 ## Current pipeline position
@@ -818,6 +819,34 @@ option_X_cross_core_contract_hardening:
     - no release or promotion
     - CCR_PATCH_LIFECYCLE_ESCALATION_THRESHOLD_N_R01 remains proposed / pending_arbitration
   recommended_next_decision: stop or prepare future L4 transition criteria explicitly
+  launcher_authorizes_run_from_signals: false
+
+option_Y_cross_core_l4_target_contract:
+  status: done
+  completed_phase: PHASE_38
+  action: define the inactive L4 target contract for cross_core_contract
+  artifacts:
+    - docs/pipelines/cross_core_contract/L4_TARGET_CONTRACT.md
+    - docs/pipelines/cross_core_contract/l4_transition_checklist.yaml
+    - docs/pipelines/cross_core_contract/stages/STAGE_06_L4_TRANSITION_REVIEW.skill.yaml
+    - docs/pipelines/cross_core_contract/stages/STAGE_07_MULTI_CORE_RELEASE_PLANNING.skill.yaml
+    - docs/pipelines/cross_core_contract/stages/STAGE_08_MULTI_CORE_PROMOTION_CONTROL.skill.yaml
+    - docs/pipelines/cross_core_contract/stages/STAGE_09_CLOSEOUT_AND_BACKLOG_RESOLUTION.skill.yaml
+    - docs/patcher/shared/validate_cross_core_contract_l4_target.py
+    - docs/registry/reports/cross_core_contract_l4_target_validation.yaml
+  validation:
+    cross_core_contract_l4_target_validation: PASS
+  posture:
+    active_level: L3_managed_execution_pipeline
+    target_level: L4_critical_canonical_pipeline
+    l4_active_now: false
+  non_goals_preserved:
+    - no Constitution run opened
+    - no Core file modified
+    - no governance_backlog.yaml modification
+    - no release or promotion
+    - CCR_PATCH_LIFECYCLE_ESCALATION_THRESHOLD_N_R01 remains proposed / pending_arbitration
+  recommended_next_decision: stop at NO_ACTIVE_PHASE or define future L4 transition validator family
   launcher_authorizes_run_from_signals: false
 
 ## Guardrails
