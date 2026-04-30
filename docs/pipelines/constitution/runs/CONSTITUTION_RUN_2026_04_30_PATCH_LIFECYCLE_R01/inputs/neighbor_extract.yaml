@@ -1,0 +1,140 @@
+neighbor_extract:
+  schema_version: 0.1
+  extract_type: neighbor
+  run_id: CONSTITUTION_RUN_2026_04_30_PATCH_LIFECYCLE_R01
+  source:
+    scope_manifest_fingerprint: eedb2cb3ee6227d524326692411572e7517a4a7a9e3311b77fdcc90f8ed3d7be
+    impact_bundle_fingerprint: 9f8aa5c5124db6294221bffd9277297f34136e7624313376d12b631d5e62b0e9
+    core_fingerprints:
+      constitution: 05cff42e5ef534e3329edc745449ec88e18645d6a22894b12fd89d2e8b3aed76
+      referentiel: b129d4f049554a105f5a38c0366eb6bc69bf0df0dd20350bad67e466ca7e642b
+      link: 708de85a05c7d05691d257e948f53aa7b4627e1a221331283ca0c5ade6b6eb26
+  target_ids:
+  - INV_NO_RUNTIME_CONTENT_GENERATION
+  - INV_RUNTIME_FULLY_LOCAL
+  - REF_CORE_LEARNIT_REFERENTIEL_V5_0_IN_CONSTITUTION
+  - TYPE_SELF_REPORT_AR_N1
+  - TYPE_STATE_AXIS_VALUE_COST
+  found_ids:
+  - INV_NO_RUNTIME_CONTENT_GENERATION
+  - INV_RUNTIME_FULLY_LOCAL
+  - REF_CORE_LEARNIT_REFERENTIEL_V5_0_IN_CONSTITUTION
+  - TYPE_SELF_REPORT_AR_N1
+  - TYPE_STATE_AXIS_VALUE_COST
+  missing_ids: []
+  entries:
+  - _source_core: constitution
+    _source_section: TYPES
+    _matched_id: REF_CORE_LEARNIT_REFERENTIEL_V5_0_IN_CONSTITUTION
+    entry:
+      id: REF_CORE_LEARNIT_REFERENTIEL_V5_0_IN_CONSTITUTION
+      authority: reference
+      core_type: CONSTITUTION
+      source_anchor: '[INTERCORE]'
+      depends_on: []
+      relations: []
+      patchable: false
+      parameterizable: false
+      human_readable: Référence explicite vers le Core Référentiel Learn-it V5.0.
+      logic:
+        trigger: null
+        condition: null
+        effect: Référence externe explicite matérialisant une dépendance inter-Core.
+        scope: intercore_reference
+  - _source_core: constitution
+    _source_section: TYPES
+    _matched_id: TYPE_STATE_AXIS_VALUE_COST
+    entry:
+      id: TYPE_STATE_AXIS_VALUE_COST
+      authority: primary
+      core_type: CONSTITUTION
+      source_anchor: '[S7][S17d]'
+      depends_on:
+      - TYPE_SELF_REPORT_AR_N2
+      relations:
+      - type: requires
+        target:
+          id: TYPE_SELF_REPORT_AR_N2
+      patchable: false
+      parameterizable: true
+      human_readable: Axe optionnel Valeur-Coût perçue.
+      logic:
+        trigger: Clôture de session
+        condition: Item VC de AR-N2 renseigné.
+        effect: État VC mis à jour ; sinon axe inconnu.
+        scope: runtime_state
+  - _source_core: constitution
+    _source_section: TYPES
+    _matched_id: TYPE_SELF_REPORT_AR_N1
+    entry:
+      id: TYPE_SELF_REPORT_AR_N1
+      authority: primary
+      core_type: CONSTITUTION
+      source_anchor: '[S11]'
+      depends_on: []
+      relations:
+      - type: validates
+        target:
+          id: TYPE_STATE_AXIS_ACTIVATION
+      patchable: false
+      parameterizable: true
+      human_readable: Micro-sondage événementiel AR-N1.
+      logic:
+        trigger: Événement runtime
+        condition: Question concise et locale.
+        effect: Distinction temps réel confusion/frustration/anxiété.
+        scope: runtime_feedback
+  - _source_core: constitution
+    _source_section: INVARIANTS
+    _matched_id: INV_RUNTIME_FULLY_LOCAL
+    entry:
+      id: INV_RUNTIME_FULLY_LOCAL
+      authority: primary
+      core_type: CONSTITUTION
+      source_anchor: '[S4][S13]'
+      depends_on:
+      - TYPE_AUTONOMY_REGIME
+      relations:
+      - type: constrains
+        target:
+          id: TYPE_AUTONOMY_REGIME
+      patchable: false
+      parameterizable: false
+      human_readable: Le moteur en usage est 100% local.
+      logic:
+        trigger: Exécution runtime
+        condition: Usage apprenant actif.
+        effect: Aucun appel réseau temps réel n’est autorisé. Cette contrainte borne l’architecture d’exécution
+          locale uniquement et ne vaut jamais règle pédagogique autonome, ni base d’inférence adaptative
+          implicite.
+        scope: runtime_architecture
+  - _source_core: constitution
+    _source_section: INVARIANTS
+    _matched_id: INV_NO_RUNTIME_CONTENT_GENERATION
+    entry:
+      id: INV_NO_RUNTIME_CONTENT_GENERATION
+      authority: primary
+      core_type: CONSTITUTION
+      source_anchor: '[S13]'
+      depends_on: []
+      relations:
+      - type: constrains
+        target:
+          id: TYPE_FEEDBACK_COVERAGE_MATRIX
+      patchable: false
+      parameterizable: false
+      human_readable: Aucune génération de contenu en usage.
+      logic:
+        trigger: Sélection de contenu runtime
+        condition: Besoin pédagogique détecté.
+        effect: Le moteur sélectionne uniquement des artefacts préexistants. Cette contrainte borne le
+          runtime et n’autorise aucune logique pédagogique implicite par génération, réécriture ou interprétation
+          autonome du contenu.
+        scope: runtime_architecture
+  fallback_rule: If missing_ids is non-empty, the AI must explicitly signal each missing ID and fall back
+    to reading the full canonical Core file for that ID only. It must NOT silently ignore missing IDs.
+  notes:
+  - Généré déterministiquement par extract_scope_slice.py depuis les Core canoniques.
+  - Ce fichier est une vue dérivée. Les Core canoniques restent la source de vérité.
+  - En mode bounded_local_run, l'IA doit lire ce fichier en priorité sur les Core complets.
+  - Le champ _source_core indique l'origine canonique de chaque entrée.

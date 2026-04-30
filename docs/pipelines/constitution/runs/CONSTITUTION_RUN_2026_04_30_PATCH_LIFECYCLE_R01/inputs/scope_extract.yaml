@@ -1,0 +1,622 @@
+scope_extract:
+  schema_version: 0.1
+  extract_type: scope
+  run_id: CONSTITUTION_RUN_2026_04_30_PATCH_LIFECYCLE_R01
+  source:
+    scope_manifest_fingerprint: eedb2cb3ee6227d524326692411572e7517a4a7a9e3311b77fdcc90f8ed3d7be
+    impact_bundle_fingerprint: 9f8aa5c5124db6294221bffd9277297f34136e7624313376d12b631d5e62b0e9
+    core_fingerprints:
+      constitution: 05cff42e5ef534e3329edc745449ec88e18645d6a22894b12fd89d2e8b3aed76
+      referentiel: b129d4f049554a105f5a38c0366eb6bc69bf0df0dd20350bad67e466ca7e642b
+      link: 708de85a05c7d05691d257e948f53aa7b4627e1a221331283ca0c5ade6b6eb26
+  target_ids:
+  - ACTION_ESCALATE_PERSISTENT_DRIFT_OFFSESSION
+  - ACTION_LOG_UNCOVERED_CONFLICT
+  - ACTION_ROLLBACK_PATCH
+  - ACTION_TRIGGER_AR_SOLLICITATION_PATCH
+  - ACTION_TRIGGER_RELEVANCE_PATCH
+  - CONSTRAINT_NO_ADAPTIVE_PHILOSOPHY_CHANGE
+  - CONSTRAINT_NO_AUTONOMOUS_PSYCHOLOGICAL_INFERENCE
+  - EVENT_AR_REFRACTORY_PROFILE_DETECTED
+  - EVENT_PATCH_INVALID
+  - EVENT_PERSISTENT_LOW_VC
+  - INV_INVALID_PATCH_REJECTED
+  - INV_NO_PARTIAL_PATCH_STATE
+  - INV_PATCH_ARTIFACTS_MUST_BE_PRECOMPUTED_OFF_SESSION
+  - INV_PATCH_LOCAL_VALIDATION_MUST_BE_DETERMINISTIC
+  - INV_PERSISTENT_DRIFT_REQUIRES_ESCALATION_IF_PATCH_BLOCKED
+  - RULE_AR_REFRACTORY_PROFILE_TRIGGERS_SOLLICITATION_PATCH
+  - RULE_PATCH_SERIALIZATION
+  - RULE_PERSISTENT_DRIFT_BLOCKED_PATCH_ESCALATES_OFFSESSION
+  - RULE_PERSISTENT_LOW_VC_TRIGGERS_RELEVANCE_PATCH
+  - TYPE_PATCH_ARTIFACT
+  - TYPE_PATCH_IMPACT_SCOPE
+  - TYPE_PATCH_QUALITY_GATE
+  found_ids:
+  - ACTION_ESCALATE_PERSISTENT_DRIFT_OFFSESSION
+  - ACTION_LOG_UNCOVERED_CONFLICT
+  - ACTION_ROLLBACK_PATCH
+  - ACTION_TRIGGER_AR_SOLLICITATION_PATCH
+  - ACTION_TRIGGER_RELEVANCE_PATCH
+  - CONSTRAINT_NO_ADAPTIVE_PHILOSOPHY_CHANGE
+  - CONSTRAINT_NO_AUTONOMOUS_PSYCHOLOGICAL_INFERENCE
+  - EVENT_AR_REFRACTORY_PROFILE_DETECTED
+  - EVENT_PATCH_INVALID
+  - EVENT_PERSISTENT_LOW_VC
+  - INV_INVALID_PATCH_REJECTED
+  - INV_NO_PARTIAL_PATCH_STATE
+  - INV_PATCH_ARTIFACTS_MUST_BE_PRECOMPUTED_OFF_SESSION
+  - INV_PATCH_LOCAL_VALIDATION_MUST_BE_DETERMINISTIC
+  - INV_PERSISTENT_DRIFT_REQUIRES_ESCALATION_IF_PATCH_BLOCKED
+  - RULE_AR_REFRACTORY_PROFILE_TRIGGERS_SOLLICITATION_PATCH
+  - RULE_PATCH_SERIALIZATION
+  - RULE_PERSISTENT_DRIFT_BLOCKED_PATCH_ESCALATES_OFFSESSION
+  - RULE_PERSISTENT_LOW_VC_TRIGGERS_RELEVANCE_PATCH
+  - TYPE_PATCH_ARTIFACT
+  - TYPE_PATCH_IMPACT_SCOPE
+  - TYPE_PATCH_QUALITY_GATE
+  missing_ids: []
+  entries:
+  - _source_core: constitution
+    _source_section: TYPES
+    _matched_id: TYPE_PATCH_ARTIFACT
+    entry:
+      id: TYPE_PATCH_ARTIFACT
+      authority: primary
+      core_type: CONSTITUTION
+      source_anchor: '[S14][PATCH_V5_0]'
+      depends_on:
+      - TYPE_PATCH_IMPACT_SCOPE
+      - TYPE_PATCH_QUALITY_GATE
+      - REF_CORE_LEARNIT_REFERENTIEL_V5_0_IN_CONSTITUTION
+      relations:
+      - type: requires
+        target:
+          id: INV_NO_PARTIAL_PATCH_STATE
+      - type: requires
+        target:
+          id: INV_INVALID_PATCH_REJECTED
+      - type: requires
+        target:
+          id: INV_PATCH_LOCAL_VALIDATION_MUST_BE_DETERMINISTIC
+      patchable: true
+      parameterizable: true
+      human_readable: Patch paramétrique occasionnel et borné.
+      logic:
+        trigger: Événement de révision autorisé
+        condition: Bornes respectées, impact_scope calculable, attributs obligatoires présents, atomicité
+          garantie, empreintes de sources et métadonnées de validité/fraîcheur déclarées ; la QA pédagogique
+          est précomputée hors session et matérialisée par une preuve vérifiable localement sans jugement
+          sémantique.
+        effect: Patch applicable localement ou rejeté/rollbacké.
+        scope: patch_layer
+  - _source_core: constitution
+    _source_section: TYPES
+    _matched_id: TYPE_PATCH_IMPACT_SCOPE
+    entry:
+      id: TYPE_PATCH_IMPACT_SCOPE
+      authority: primary
+      core_type: CONSTITUTION
+      source_anchor: '[S14]'
+      depends_on: []
+      relations: []
+      patchable: false
+      parameterizable: false
+      human_readable: Attribut obligatoire de tout patch.
+      logic:
+        trigger: Validation d'un patch
+        condition: 'Impact_scope calculable déterministiquement : l''impact_scope est défini comme l''ensemble
+          structurel des IDs affectés par le patch, calculable par diff déterministe sur les fichiers
+          cibles (aucune évaluation sémantique ou pédagogique n''est autorisée dans ce calcul).
+
+          '
+        effect: 'Autorisation de poursuivre la validation locale si et seulement si l''ensemble des IDs
+          affectés est calculable structurellement. Toute évaluation sémantique ou interprétative nécessaire
+          est déplacée dans la chaîne hors session de QA pédagogique, conformément à INV_PATCH_LOCAL_VALIDATION_MUST_BE_DETERMINISTIC.
+
+          '
+        scope: patch_validation
+  - _source_core: constitution
+    _source_section: TYPES
+    _matched_id: TYPE_PATCH_QUALITY_GATE
+    entry:
+      id: TYPE_PATCH_QUALITY_GATE
+      authority: primary
+      core_type: CONSTITUTION
+      source_anchor: '[S14]'
+      depends_on: []
+      relations:
+      - type: validates
+        target:
+          id: TYPE_PATCH_ARTIFACT
+      patchable: false
+      parameterizable: false
+      human_readable: Vérificateur local déterministe de la qualité déclarée d’un patch, fondé sur une
+        preuve de QA pédagogique précomputée hors session.
+      logic:
+        trigger: Validation d’un patch
+        condition: Une preuve de QA pédagogique hors session est présente, intègre, liée au même impact_scope,
+          aux mêmes empreintes de sources et à la même version d’artefact que le patch soumis. Le runtime
+          local ne décide jamais sémantiquement de la qualité pédagogique ; il vérifie seulement des critères
+          déterministes de présence, intégrité, cohérence de portée, version, fraîcheur et statut déclaré.
+        effect: Validation locale du patch uniquement si la preuve précomputée est déterministiquement
+          vérifiable ; rejet local si la preuve manque, diverge de l’impact_scope, ne correspond pas aux
+          empreintes de sources déclarées, est expirée ou porte un statut de QA défavorable. Aucune évaluation
+          sémantique ou pédagogique n’est effectuée localement.
+        scope: patch_validation
+  - _source_core: constitution
+    _source_section: INVARIANTS
+    _matched_id: INV_NO_PARTIAL_PATCH_STATE
+    entry:
+      id: INV_NO_PARTIAL_PATCH_STATE
+      authority: primary
+      core_type: CONSTITUTION
+      source_anchor: '[S14]'
+      depends_on:
+      - TYPE_PATCH_ARTIFACT
+      relations:
+      - type: blocks
+        target:
+          id: EVENT_PATCH_INVALID
+      patchable: false
+      parameterizable: false
+      human_readable: Un patch partiellement appliqué constitue un état interdit.
+      logic:
+        trigger: Application d’un patch
+        condition: Atomicité non garantie ou échec intermédiaire.
+        effect: Patch annulé ou rollback obligatoire. Si le rollback ne peut pas être vérifié comme complet,
+          toute nouvelle application de patch est bloquée et une escalade hors session de réparation d’intégrité
+          devient obligatoire.
+        scope: patch_layer
+  - _source_core: constitution
+    _source_section: INVARIANTS
+    _matched_id: INV_INVALID_PATCH_REJECTED
+    entry:
+      id: INV_INVALID_PATCH_REJECTED
+      authority: primary
+      core_type: CONSTITUTION
+      source_anchor: '[S14][S20]'
+      depends_on:
+      - TYPE_PATCH_IMPACT_SCOPE
+      - REF_CORE_LEARNIT_REFERENTIEL_V5_0_IN_CONSTITUTION
+      relations: []
+      patchable: false
+      parameterizable: false
+      human_readable: Tout patch hors bornes ou sans impact_scope calculable est rejeté intégralement.
+      logic:
+        trigger: Validation locale de patch
+        condition: Paramètre hors fourchette ou impact_scope indéterminé.
+        effect: Rejet total.
+        scope: patch_validation
+  - _source_core: constitution
+    _source_section: INVARIANTS
+    _matched_id: INV_PATCH_LOCAL_VALIDATION_MUST_BE_DETERMINISTIC
+    entry:
+      id: INV_PATCH_LOCAL_VALIDATION_MUST_BE_DETERMINISTIC
+      authority: primary
+      core_type: CONSTITUTION
+      source_anchor: '[S14][PATCH_V5_0]'
+      depends_on:
+      - TYPE_PATCH_ARTIFACT
+      - TYPE_PATCH_IMPACT_SCOPE
+      - TYPE_PATCH_QUALITY_GATE
+      relations:
+      - type: constrains
+        target:
+          id: TYPE_PATCH_ARTIFACT
+      patchable: false
+      parameterizable: false
+      human_readable: La validation locale d’un patch ne peut reposer que sur des critères déterministes.
+      logic:
+        trigger: Validation locale de patch
+        condition: Un critère sémantique, pédagogique ou interprétatif est requis localement pour décider,
+          ou la preuve de QA hors session ne peut pas être vérifiée par des critères strictement déterministes
+          de présence, intégrité, portée, version, fraîcheur, empreintes de sources et statut déclaré.
+        effect: État interdit ; le critère doit être déplacé dans la chaîne hors session de QA pédagogique.
+          Le runtime local peut seulement vérifier déterministiquement la preuve précomputée et doit rejeter
+          le patch si cette vérification échoue ou exige une interprétation.
+        scope: patch_validation
+  - _source_core: constitution
+    _source_section: INVARIANTS
+    _matched_id: INV_PERSISTENT_DRIFT_REQUIRES_ESCALATION_IF_PATCH_BLOCKED
+    entry:
+      id: INV_PERSISTENT_DRIFT_REQUIRES_ESCALATION_IF_PATCH_BLOCKED
+      authority: primary
+      core_type: CONSTITUTION
+      source_anchor: '[S14][PATCH_V5_0]'
+      depends_on:
+      - TYPE_PATCH_ARTIFACT
+      - INV_INVALID_PATCH_REJECTED
+      relations: []
+      patchable: false
+      parameterizable: false
+      human_readable: Une dérive persistante non corrigeable par patch localement valide doit être escaladée.
+      logic:
+        trigger: Répétition d'un besoin de correction sur plusieurs cycles
+        condition: 'Condition primaire : le signal de dérive persiste alors que le patch requis reste
+          rejeté, impossible ou bloqué par les contraintes de validation locale. Condition complémentaire
+          : N patches successifs du même type ont été appliqués sans disparition du signal de dérive,
+          où N est un paramètre externe du Référentiel. La production du signal de dérive reste hors du
+          patch_lifecycle ; le patch_lifecycle traite uniquement l’échec, le blocage ou l’inefficacité
+          des corrections par patch.'
+        effect: Escalade obligatoire hors session vers la chaîne d’analyse/correction lorsque la dérive
+          ne peut pas être résolue par patch local valide ou persiste malgré N applications valides successives.
+          Cette escalade ne transfère pas au patch_lifecycle la propriété des signaux learner_state ou
+          des régimes de détresse/conservatisme.
+        scope: patch_governance
+  - _source_core: constitution
+    _source_section: INVARIANTS
+    _matched_id: INV_PATCH_ARTIFACTS_MUST_BE_PRECOMPUTED_OFF_SESSION
+    entry:
+      id: INV_PATCH_ARTIFACTS_MUST_BE_PRECOMPUTED_OFF_SESSION
+      authority: primary
+      core_type: CONSTITUTION
+      source_anchor: '[S13][S14][PATCH_V5_0]'
+      depends_on:
+      - TYPE_PATCH_ARTIFACT
+      - INV_RUNTIME_FULLY_LOCAL
+      - INV_NO_RUNTIME_CONTENT_GENERATION
+      relations:
+      - type: constrains
+        target:
+          id: TYPE_PATCH_ARTIFACT
+      patchable: false
+      parameterizable: false
+      human_readable: Les artefacts de patch doivent être générés, validés et empaquetés hors session
+        avant leur application locale.
+      logic:
+        trigger: Préparation d’un patch
+        condition: Le patch nécessite calcul, QA ou génération d’artefact.
+        effect: 'Préparation exclusivement hors session ; aucune génération, QA pédagogique ou validation
+          distante pendant l’usage apprenant. L’artefact livré au runtime local doit inclure les métadonnées
+          déterministes nécessaires à la vérification locale : impact_scope déclaré, empreintes de sources,
+          version, fraîcheur/validité, statut de QA précomputée et preuve d’intégrité.'
+        scope: patch_architecture
+  - _source_core: constitution
+    _source_section: RULES
+    _matched_id: RULE_PERSISTENT_LOW_VC_TRIGGERS_RELEVANCE_PATCH
+    entry:
+      id: RULE_PERSISTENT_LOW_VC_TRIGGERS_RELEVANCE_PATCH
+      authority: primary
+      core_type: CONSTITUTION
+      source_anchor: '[S17d]'
+      depends_on:
+      - TYPE_STATE_AXIS_VALUE_COST
+      - REF_CORE_LEARNIT_REFERENTIEL_V5_0_IN_CONSTITUTION
+      relations:
+      - type: triggers
+        target:
+          id: ACTION_TRIGGER_RELEVANCE_PATCH
+      patchable: false
+      parameterizable: true
+      human_readable: VC basse persistante déclenche un patch de relevance, pas une baisse de difficulté.
+      logic:
+        trigger: Persistance de VC basse
+        condition: Seuil de persistance atteint sur un signal VC explicite et déjà gouverné par le périmètre
+          learner_state. La règle consomme ce signal ; elle ne calcule pas la VC, n’infère pas la motivation
+          et ne produit aucune interprétation psychologique autonome.
+        effect: Révision de la contextualisation, des enjeux ou du lien au contexte authentique ; difficulté,
+          seuils de maîtrise, règles d’évaluation et philosophie adaptative inchangés.
+        scope: patch_governance
+  - _source_core: constitution
+    _source_section: RULES
+    _matched_id: RULE_AR_REFRACTORY_PROFILE_TRIGGERS_SOLLICITATION_PATCH
+    entry:
+      id: RULE_AR_REFRACTORY_PROFILE_TRIGGERS_SOLLICITATION_PATCH
+      authority: primary
+      core_type: CONSTITUTION
+      source_anchor: '[S7]'
+      depends_on:
+      - TYPE_SELF_REPORT_AR_N1
+      - REF_CORE_LEARNIT_REFERENTIEL_V5_0_IN_CONSTITUTION
+      relations:
+      - type: triggers
+        target:
+          id: ACTION_TRIGGER_AR_SOLLICITATION_PATCH
+      patchable: false
+      parameterizable: true
+      human_readable: Une fenêtre observable de non-réponse AR déclenche une adaptation non punitive du
+        mode de sollicitation.
+      logic:
+        trigger: Fenêtre observable de non-réponse AR, sans interprétation psychologique.
+        condition: Fenêtre de non-réponse atteinte sur un signal AR explicite et déjà gouverné. La règle
+          ne diagnostique pas un profil psychologique, n’infère pas l’intention du learner et n’autorise
+          aucune pénalisation.
+        effect: Patch non punitif du format, de la cadence ou du canal de sollicitation AR, sans pression
+          comportementale, sans baisse de difficulté et sans inférence psychologique autonome.
+        scope: patch_governance
+  - _source_core: constitution
+    _source_section: RULES
+    _matched_id: RULE_PERSISTENT_DRIFT_BLOCKED_PATCH_ESCALATES_OFFSESSION
+    entry:
+      id: RULE_PERSISTENT_DRIFT_BLOCKED_PATCH_ESCALATES_OFFSESSION
+      authority: primary
+      core_type: CONSTITUTION
+      source_anchor: '[ARBITRAGE_2026_04_01][DRIFT-ESC-02]'
+      depends_on:
+      - INV_PERSISTENT_DRIFT_REQUIRES_ESCALATION_IF_PATCH_BLOCKED
+      - ACTION_ESCALATE_PERSISTENT_DRIFT_OFFSESSION
+      relations:
+      - type: triggers
+        target:
+          id: ACTION_ESCALATE_PERSISTENT_DRIFT_OFFSESSION
+      patchable: false
+      parameterizable: false
+      human_readable: Une dérive persistante non patchable localement doit déboucher sur une action d’escalade
+        hors session explicitement matérialisée.
+      logic:
+        trigger: Persistance d’un besoin de correction non résoluble par patch local valide.
+        condition: Le patch requis reste rejeté, impossible, bloqué par validation locale, ou s’avère
+          inefficace après le nombre maximum autorisé d’itérations valides. Les causes learner_state ou
+          gouvernance plus larges sont consommées comme signaux externes et ne sont pas redéfinies par
+          cette règle.
+        effect: Ouverture d’une escalade hors session avec payload minimal ; aucun maintien implicite
+          dans un état de dérive non traité.
+        scope: patch_governance
+  - _source_core: constitution
+    _source_section: RULES
+    _matched_id: RULE_PATCH_SERIALIZATION
+    entry:
+      id: RULE_PATCH_SERIALIZATION
+      authority: primary
+      core_type: CONSTITUTION
+      source_anchor: '[PATCH_LIFECYCLE_R01][C01]'
+      depends_on:
+      - TYPE_PATCH_ARTIFACT
+      - ACTION_TRIGGER_RELEVANCE_PATCH
+      - ACTION_TRIGGER_AR_SOLLICITATION_PATCH
+      relations:
+      - type: constrains
+        target:
+          id: TYPE_PATCH_ARTIFACT
+      patchable: false
+      parameterizable: false
+      human_readable: 'Un seul patch actif par apprenant à un instant donné ; tout déclenchement concurrent
+        est sérialisé en file d''attente FIFO.
+
+        '
+      logic:
+        trigger: Déclenchement simultané de plusieurs actions de patch
+        condition: 'Plusieurs actions de patch (ACTION_TRIGGER_RELEVANCE_PATCH, ACTION_TRIGGER_AR_SOLLICITATION_PATCH
+          ou toute future action TYPE_PATCH_ARTIFACT) sont déclenchées pour le même apprenant avant qu''un
+          patch actif soit terminé (appliqué, rejeté ou rollbacké).
+
+          '
+        effect: 'Un seul patch est traité à la fois par apprenant. Les déclenchements concurrents sont
+          placés en file d’attente FIFO. Aucun patch concurrent ne peut démarrer tant que le patch actif
+          n’a pas atteint un état terminal déterministe : appliqué, rejeté, rollbacké, ou bloqué après
+          échec vérifié du rollback avec escalade hors session. Le rollback du patch actif relève du traitement
+          terminal immédiat de ce patch, et non d’un nouveau patch à placer en file FIFO.'
+        scope: patch_governance
+  - _source_core: constitution
+    _source_section: CONSTRAINTS
+    _matched_id: CONSTRAINT_NO_AUTONOMOUS_PSYCHOLOGICAL_INFERENCE
+    entry:
+      id: CONSTRAINT_NO_AUTONOMOUS_PSYCHOLOGICAL_INFERENCE
+      authority: primary
+      core_type: CONSTITUTION
+      source_anchor: '[S14]'
+      depends_on:
+      - TYPE_PATCH_ARTIFACT
+      relations:
+      - type: constrains
+        target:
+          id: TYPE_PATCH_QUALITY_GATE
+      patchable: false
+      parameterizable: false
+      human_readable: Aucune inférence psychologique autonome non probatoire.
+      logic:
+        trigger: Conception d’un patch ou d’un mécanisme
+        condition: Inférence psychologique autonome envisagée.
+        effect: Interdiction.
+        scope: patch_governance
+  - _source_core: constitution
+    _source_section: CONSTRAINTS
+    _matched_id: CONSTRAINT_NO_ADAPTIVE_PHILOSOPHY_CHANGE
+    entry:
+      id: CONSTRAINT_NO_ADAPTIVE_PHILOSOPHY_CHANGE
+      authority: primary
+      core_type: CONSTITUTION
+      source_anchor: '[S14]'
+      depends_on:
+      - TYPE_PATCH_ARTIFACT
+      relations:
+      - type: constrains
+        target:
+          id: TYPE_PATCH_IMPACT_SCOPE
+      patchable: false
+      parameterizable: false
+      human_readable: La philosophie adaptative ne peut pas être modifiée par patch.
+      logic:
+        trigger: Révision de patch
+        condition: Modification de philosophie adaptative demandée.
+        effect: Interdiction.
+        scope: patch_governance
+  - _source_core: constitution
+    _source_section: EVENTS
+    _matched_id: EVENT_PERSISTENT_LOW_VC
+    entry:
+      id: EVENT_PERSISTENT_LOW_VC
+      authority: primary
+      core_type: CONSTITUTION
+      source_anchor: '[S7][S17d]'
+      depends_on:
+      - TYPE_STATE_AXIS_VALUE_COST
+      - REF_CORE_LEARNIT_REFERENTIEL_V5_0_IN_CONSTITUTION
+      relations:
+      - type: triggers
+        target:
+          id: RULE_PERSISTENT_LOW_VC_TRIGGERS_RELEVANCE_PATCH
+      patchable: false
+      parameterizable: true
+      human_readable: VC basse persistante.
+      logic:
+        trigger: Accumulation de sessions VC basse
+        condition: Seuil référentiel atteint sur un signal VC observable, explicite et produit hors du
+          patch_lifecycle. L’événement ne constitue pas un proxy général de motivation et n’autorise aucune
+          pénalisation.
+        effect: Déclencheur de patch relevance.
+        scope: patch_governance
+  - _source_core: constitution
+    _source_section: EVENTS
+    _matched_id: EVENT_AR_REFRACTORY_PROFILE_DETECTED
+    entry:
+      id: EVENT_AR_REFRACTORY_PROFILE_DETECTED
+      authority: primary
+      core_type: CONSTITUTION
+      source_anchor: '[S7]'
+      depends_on:
+      - TYPE_SELF_REPORT_AR_N1
+      - REF_CORE_LEARNIT_REFERENTIEL_V5_0_IN_CONSTITUTION
+      relations:
+      - type: triggers
+        target:
+          id: RULE_AR_REFRACTORY_PROFILE_TRIGGERS_SOLLICITATION_PATCH
+      patchable: false
+      parameterizable: true
+      human_readable: Fenêtre observable de non-réponse AR détectée.
+      logic:
+        trigger: Fenêtre de non-réponse AR-N1 observable.
+        condition: Seuil référentiel atteint.
+        effect: Déclencheur de patch de sollicitation non punitif. L’événement ne qualifie aucun état
+          psychologique et ne produit aucune pénalisation.
+        scope: patch_governance
+  - _source_core: constitution
+    _source_section: EVENTS
+    _matched_id: EVENT_PATCH_INVALID
+    entry:
+      id: EVENT_PATCH_INVALID
+      authority: primary
+      core_type: CONSTITUTION
+      source_anchor: '[S14]'
+      depends_on:
+      - TYPE_PATCH_ARTIFACT
+      relations:
+      - type: triggers
+        target:
+          id: ACTION_ROLLBACK_PATCH
+      patchable: false
+      parameterizable: false
+      human_readable: Patch invalide.
+      logic:
+        trigger: Validation locale de patch
+        condition: Bornes invalides ou impact_scope absent.
+        effect: Rejet total ou rollback.
+        scope: patch_validation
+  - _source_core: constitution
+    _source_section: ACTIONS
+    _matched_id: ACTION_TRIGGER_RELEVANCE_PATCH
+    entry:
+      id: ACTION_TRIGGER_RELEVANCE_PATCH
+      authority: primary
+      core_type: CONSTITUTION
+      source_anchor: '[S17d]'
+      depends_on:
+      - TYPE_PATCH_ARTIFACT
+      relations: []
+      patchable: true
+      parameterizable: true
+      human_readable: Déclencher un patch de relevance.
+      logic:
+        trigger: VC basse persistante
+        condition: Seuil atteint.
+        effect: Déclenchement d’un patch borné de contextualisation, d’enjeux ou de lien au contexte authentique.
+          L’action ne baisse pas la difficulté, ne modifie pas les seuils de maîtrise, ne change pas la
+          propagation graphe et ne change pas la philosophie adaptative.
+        scope: patch_layer
+  - _source_core: constitution
+    _source_section: ACTIONS
+    _matched_id: ACTION_TRIGGER_AR_SOLLICITATION_PATCH
+    entry:
+      id: ACTION_TRIGGER_AR_SOLLICITATION_PATCH
+      authority: primary
+      core_type: CONSTITUTION
+      source_anchor: '[S7][S14]'
+      depends_on:
+      - TYPE_PATCH_ARTIFACT
+      relations: []
+      patchable: true
+      parameterizable: true
+      human_readable: Déclencher un patch du mode de sollicitation AR.
+      logic:
+        trigger: Profil AR-réfractaire
+        condition: Détection validée.
+        effect: Révision non punitive du format, de la cadence ou du canal de sollicitation AR. L’action
+          ne diagnostique pas le learner, ne force pas la réponse et ne modifie pas la difficulté ou l’évaluation.
+        scope: patch_layer
+  - _source_core: constitution
+    _source_section: ACTIONS
+    _matched_id: ACTION_ROLLBACK_PATCH
+    entry:
+      id: ACTION_ROLLBACK_PATCH
+      authority: primary
+      core_type: CONSTITUTION
+      source_anchor: '[S14]'
+      depends_on:
+      - TYPE_PATCH_ARTIFACT
+      relations: []
+      patchable: false
+      parameterizable: false
+      human_readable: Rollback automatique.
+      logic:
+        trigger: Échec ou invalidité d'un patch
+        condition: 'Application incomplète ou validation échouée. La partialité est détectée comme toute
+          interruption intervenant avant le commit atomique complet de l''ensemble des opérations du patch.
+
+          '
+        effect: 'Retour à l’état identique au snapshot pré-application. Méthode obligatoire : un snapshot
+          de l’état des fichiers cibles doit être capturé avant toute écriture ; en cas de détection de
+          partialité, le snapshot est restauré intégralement. Aucune écriture partielle ne doit subsister
+          après rollback. Si la restauration ne peut pas être achevée ou vérifiée déterministiquement,
+          le runtime entre dans un état local bloqué, interdit toute nouvelle application de patch et
+          émet une escalade hors session de réparation d’intégrité avec trace d’exécution minimale.'
+        scope: patch_layer
+  - _source_core: constitution
+    _source_section: ACTIONS
+    _matched_id: ACTION_LOG_UNCOVERED_CONFLICT
+    entry:
+      id: ACTION_LOG_UNCOVERED_CONFLICT
+      authority: primary
+      core_type: CONSTITUTION
+      source_anchor: '[S14][S20]'
+      depends_on: []
+      relations: []
+      patchable: false
+      parameterizable: false
+      human_readable: Journaliser un conflit GF-08 non couvert.
+      logic:
+        trigger: Conflit non couvert
+        condition: Réponse conservatrice appliquée.
+        effect: Trace pour finalisation ultérieure.
+        scope: runtime_governance
+  - _source_core: constitution
+    _source_section: ACTIONS
+    _matched_id: ACTION_ESCALATE_PERSISTENT_DRIFT_OFFSESSION
+    entry:
+      id: ACTION_ESCALATE_PERSISTENT_DRIFT_OFFSESSION
+      authority: primary
+      core_type: CONSTITUTION
+      source_anchor: '[ARBITRAGE_2026_04_01][DRIFT-ESC-01]'
+      depends_on: []
+      relations: []
+      patchable: false
+      parameterizable: false
+      human_readable: Ouvrir une escalade hors session avec payload minimal traçable en cas de dérive
+        persistante non résolue localement.
+      logic:
+        trigger: Dérive persistante, investigation systémique non close, détresse persistante ou conservatisme
+          sans sortie.
+        condition: Le runtime local a atteint une borne d’escalade liée à un patch rejeté, impossible,
+          bloqué, rollback non vérifiable ou inefficace après itérations autorisées. Les situations de
+          détresse, conservatisme sans sortie ou investigation systémique restent des signaux externes
+          si elles ne sont pas directement causées par le cycle de vie patch.
+        effect: Génération d’un payload minimal traçable hors session contenant identifiants concernés,
+          contexte local, historique utile et motif d’ouverture.
+        scope: governance
+  fallback_rule: If missing_ids is non-empty, the AI must explicitly signal each missing ID and fall back
+    to reading the full canonical Core file for that ID only. It must NOT silently ignore missing IDs.
+  notes:
+  - Généré déterministiquement par extract_scope_slice.py depuis les Core canoniques.
+  - Ce fichier est une vue dérivée. Les Core canoniques restent la source de vérité.
+  - En mode bounded_local_run, l'IA doit lire ce fichier en priorité sur les Core complets.
+  - Le champ _source_core indique l'origine canonique de chaque entrée.

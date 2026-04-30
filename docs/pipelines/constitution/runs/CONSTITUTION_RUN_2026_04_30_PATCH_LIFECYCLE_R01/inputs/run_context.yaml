@@ -1,0 +1,116 @@
+run_context:
+  schema_version: 0.2
+  generated_by: docs/patcher/shared/build_run_context.py
+  note: Fichier synthétique — pour un run déjà identifié, lire EN PREMIER. Remplace la lecture séquentielle
+    de run_manifest + scope_manifest + impact_bundle + integration_gate et expose une task view dérivée
+    pour le stage exécutable. Sources canoniques inchangées.
+  run_id: CONSTITUTION_RUN_2026_04_30_PATCH_LIFECYCLE_R01
+  pipeline_id: constitution
+  mode: bounded_local_run
+  status: bootstrap_open
+  scope_key: patch_lifecycle
+  current_stage: RUN_BOOTSTRAP
+  current_stage_canonical: RUN_BOOTSTRAP
+  last_stage_status: in_progress
+  next_stage: STAGE_01_CHALLENGE
+  next_stage_canonical: STAGE_01_CHALLENGE
+  next_executable_stage: STAGE_01_CHALLENGE
+  next_executable_stage_canonical: STAGE_01_CHALLENGE
+  terminal_closed: false
+  completed_stages: []
+  completed_stages_canonical: []
+  scope_ids:
+  - ACTION_ESCALATE_PERSISTENT_DRIFT_OFFSESSION
+  - ACTION_LOG_UNCOVERED_CONFLICT
+  - ACTION_ROLLBACK_PATCH
+  - ACTION_TRIGGER_AR_SOLLICITATION_PATCH
+  - ACTION_TRIGGER_RELEVANCE_PATCH
+  - CONSTRAINT_NO_ADAPTIVE_PHILOSOPHY_CHANGE
+  - CONSTRAINT_NO_AUTONOMOUS_PSYCHOLOGICAL_INFERENCE
+  - EVENT_AR_REFRACTORY_PROFILE_DETECTED
+  - EVENT_PATCH_INVALID
+  - EVENT_PERSISTENT_LOW_VC
+  - INV_INVALID_PATCH_REJECTED
+  - INV_NO_PARTIAL_PATCH_STATE
+  - INV_PATCH_ARTIFACTS_MUST_BE_PRECOMPUTED_OFF_SESSION
+  - INV_PATCH_LOCAL_VALIDATION_MUST_BE_DETERMINISTIC
+  - INV_PERSISTENT_DRIFT_REQUIRES_ESCALATION_IF_PATCH_BLOCKED
+  - RULE_AR_REFRACTORY_PROFILE_TRIGGERS_SOLLICITATION_PATCH
+  - RULE_PATCH_SERIALIZATION
+  - RULE_PERSISTENT_DRIFT_BLOCKED_PATCH_ESCALATES_OFFSESSION
+  - RULE_PERSISTENT_LOW_VC_TRIGGERS_RELEVANCE_PATCH
+  - TYPE_PATCH_ARTIFACT
+  - TYPE_PATCH_IMPACT_SCOPE
+  - TYPE_PATCH_QUALITY_GATE
+  scope_ids_count: 22
+  neighbor_ids:
+  - INV_NO_RUNTIME_CONTENT_GENERATION
+  - INV_RUNTIME_FULLY_LOCAL
+  - REF_CORE_LEARNIT_REFERENTIEL_V5_0_IN_CONSTITUTION
+  - TYPE_SELF_REPORT_AR_N1
+  - TYPE_STATE_AXIS_VALUE_COST
+  neighbor_ids_count: 5
+  scope_extract:
+    present: true
+    found_ids_count: 22
+    missing_ids_count: 0
+    missing_ids: []
+    ref: docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_30_PATCH_LIFECYCLE_R01/inputs/scope_extract.yaml
+  neighbor_extract:
+    present: true
+    found_ids_count: 5
+    missing_ids_count: 0
+    missing_ids: []
+    ref: docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_30_PATCH_LIFECYCLE_R01/inputs/neighbor_extract.yaml
+  integration_gate:
+    status: open
+    total_checks: 6
+    cleared_checks: 0
+    promotion_blocked: true
+  canonical_refs:
+    run_manifest: docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_30_PATCH_LIFECYCLE_R01/run_manifest.yaml
+    scope_manifest: docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_30_PATCH_LIFECYCLE_R01/inputs/scope_manifest.yaml
+    impact_bundle: docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_30_PATCH_LIFECYCLE_R01/inputs/impact_bundle.yaml
+    integration_gate: docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_30_PATCH_LIFECYCLE_R01/inputs/integration_gate.yaml
+  source_fingerprints:
+    run_manifest.yaml: 9eabcf262e8bc2f45081e6e36d69407b26dff61978925f6bfa94e28394553e49
+    scope_manifest.yaml: eedb2cb3ee6227d524326692411572e7517a4a7a9e3311b77fdcc90f8ed3d7be
+    impact_bundle.yaml: 9f8aa5c5124db6294221bffd9277297f34136e7624313376d12b631d5e62b0e9
+    integration_gate.yaml: dfacd03352c881e04f55e68b5f633e3e4acf38c09044e97094ec6375f0c17292
+    scope_extract.yaml: d3d1966b24a9831a2ea8e0b728118e7cd1004645cadfa06518ec514fb276b26d
+    neighbor_extract.yaml: 6ca53ba70996722f6289ffaca41fa244f48430df5264e97ea6515edcf0cd70c6
+  task_view:
+    status: executable
+    raw_stage_id: STAGE_01_CHALLENGE
+    stage_id: STAGE_01_CHALLENGE
+    skill_ref: docs/pipelines/constitution/stages/STAGE_01_CHALLENGE.skill.yaml
+    stage_kind: cognitive
+    closure_level: medium
+    resolved_inputs:
+    - docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_30_PATCH_LIFECYCLE_R01/inputs/run_context.yaml
+    - docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_30_PATCH_LIFECYCLE_R01/inputs/scope_extract.yaml
+    - docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_30_PATCH_LIFECYCLE_R01/inputs/neighbor_extract.yaml
+    - docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_30_PATCH_LIFECYCLE_R01/inputs/scope_manifest.yaml
+    - docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_30_PATCH_LIFECYCLE_R01/inputs/impact_bundle.yaml
+    - docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_30_PATCH_LIFECYCLE_R01/inputs/integration_gate.yaml
+    execution_paths:
+      work_dir: docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_30_PATCH_LIFECYCLE_R01/work/01_challenge/
+      primary_output: docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_30_PATCH_LIFECYCLE_R01/work/01_challenge/challenge_report_<id>.md
+      reports_dir: docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_30_PATCH_LIFECYCLE_R01/reports/
+    required_scripts_status:
+      scope_extract_present: true
+      neighbor_extract_present: true
+      ids_first_ready: true
+    forbidden_actions: []
+    completion_evidence: []
+    allowed_transitions: {}
+    compact_execution_prompt: Dans le repo learn-it, exécute STAGE_01_CHALLENGE du pipeline constitution
+      pour run_id=CONSTITUTION_RUN_2026_04_30_PATCH_LIFECYCLE_R01 en mode bounded_local_run. Lis d'abord
+      docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_30_PATCH_LIFECYCLE_R01/inputs/run_context.yaml,
+      docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_30_PATCH_LIFECYCLE_R01/inputs/scope_extract.yaml,
+      docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_30_PATCH_LIFECYCLE_R01/inputs/neighbor_extract.yaml,
+      docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_30_PATCH_LIFECYCLE_R01/inputs/scope_manifest.yaml,
+      docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_30_PATCH_LIFECYCLE_R01/inputs/impact_bundle.yaml,
+      docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_30_PATCH_LIFECYCLE_R01/inputs/integration_gate.yaml.
+      Applique le contrat stable défini dans docs/pipelines/constitution/stages/STAGE_01_CHALLENGE.skill.yaml.
+      Ne produis que les livrables du stage courant et ne simule aucun script requis.
