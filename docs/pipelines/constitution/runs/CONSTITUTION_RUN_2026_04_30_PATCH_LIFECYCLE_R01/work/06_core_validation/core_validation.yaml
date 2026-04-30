@@ -1,0 +1,110 @@
+CORE_VALIDATION:
+  schema_version: 0.1
+  pipeline_id: constitution
+  run_id: CONSTITUTION_RUN_2026_04_30_PATCH_LIFECYCLE_R01
+  stage_id: STAGE_06_CORE_VALIDATION
+  status: PASS
+  validation_scope:
+    mode: bounded_local_run
+    sandbox_state_validated: true
+    sandbox_root: docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_30_PATCH_LIFECYCLE_R01/work/05_apply/sandbox
+    core_files_read:
+    - docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_30_PATCH_LIFECYCLE_R01/work/05_apply/sandbox/docs/cores/current/constitution.yaml
+    - docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_30_PATCH_LIFECYCLE_R01/work/05_apply/sandbox/docs/cores/current/referentiel.yaml
+    - docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_30_PATCH_LIFECYCLE_R01/work/05_apply/sandbox/docs/cores/current/link.yaml
+    apply_evidence: docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_30_PATCH_LIFECYCLE_R01/reports/patch_execution_report.yaml
+    current_core_fallback_reads: []
+  logical_validation_summary:
+    validation_status: PASS
+    blocking_issues_count: 0
+    non_blocking_findings_count: 2
+    summary: The sandboxed Core set is acceptable for release materialization. The applied patch is confined to the Constitution
+      sandbox copy, has real PASS execution evidence, and preserves the Constitution/Référentiel/Link separation required
+      by the bounded run.
+    axes:
+      duplicate_rules_and_id_collisions:
+        status: PASS
+        finding: No duplicate-ID or collision issue was introduced by the patch execution report or observed in the patched
+          target surface.
+      orphan_dependencies:
+        status: PASS_WITH_NON_BLOCKING_FOLLOW_UP
+        finding: No blocking orphan dependency introduced by the patch. The previously surfaced TYPE_STATE_AXIS_VALUE_COST
+          -> TYPE_SELF_REPORT_AR_N2 neighbor-closure topic remains a governance follow-up, not a local validation failure.
+      implicit_relations:
+        status: PASS
+        finding: No implicit relation was introduced by the patch; patch changes are textual field replacements on existing
+          localized objects.
+      invariant_integrity:
+        status: PASS
+        finding: Patch strengthens deterministic validation, no-runtime semantic judgment, rollback terminal behavior, and
+          no partial patch state semantics.
+      logical_consistency:
+        status: PASS
+        finding: Patch aligns terminal outcomes, FIFO ordinary-trigger behavior, immediate terminal rollback/escalation behavior,
+          and AR non-response wording.
+      source_anchor_completeness:
+        status: PASS
+        finding: No new Core object was introduced, so no new source_anchor requirement was created.
+      relation_coherence:
+        status: PASS
+        finding: No relation list was rewritten; existing relations remain stable.
+      graph_connectivity:
+        status: PASS
+        finding: Patch modifies existing connected objects only and does not create isolated graph nodes.
+      reinflation_readiness:
+        status: PASS
+        finding: Sandbox includes constitution, referentiel and link Core files, and patch execution report identifies the
+          patched file and operations.
+      core_type_alignment:
+        status: PASS
+        finding: Patched file expected_core_id and actual_core_id both resolve to CORE_LEARNIT_CONSTITUTION_V5_0.
+      inter_core_reference_clarity:
+        status: PASS_WITH_NON_BLOCKING_FOLLOW_UP
+        finding: Patch deliberately did not modify Référentiel or Link. Existing human-readable version labels and AR vocabulary
+          in Référentiel/Link remain future cross-core cleanup candidates, not blockers for this Constitution-only patch.
+      bounded_run_release_readiness:
+        status: PASS
+        finding: No multi-run consolidation requirement was detected for this run; release materialization can proceed directly.
+  anomalies_and_corrections:
+    blocking_anomalies: []
+    warnings:
+    - id: CV-PL-W01
+      severity: non_blocking
+      description: Référentiel still contains legacy AR wording such as refractory/profile terminology. This was explicitly
+        out of scope for the Constitution-only patch and is already covered by backlog/cross-core follow-up.
+      correction_required_now: false
+      recommended_follow_up: Handle through a future Référentiel/Link alignment run if desired.
+    - id: CV-PL-W02
+      severity: non_blocking
+      description: Neighbor dependency closure around TYPE_STATE_AXIS_VALUE_COST and TYPE_SELF_REPORT_AR_N2 remains a scope-generation
+        governance topic.
+      correction_required_now: false
+      recommended_follow_up: Preserve as governance backlog candidate for STAGE_09 export/review.
+    corrections_required_before_release_materialization: []
+  fallback_reads_used_if_any:
+    fallback_reads_used: false
+    reads: []
+    note: No docs/cores/current fallback read was used for STAGE_06. Validation was based on run_context, patch_execution_report,
+      and the three sandbox Core files.
+  downstream_decision:
+    decision: direct_release_materialization
+    next_stage: STAGE_07_RELEASE_MATERIALIZATION
+    requires_parallel_consolidation: false
+    return_upstream_for_correction: false
+    rationale: Validation status is PASS, no blocking logical issue is present, and no multi-run consolidation need is detected
+      for this bounded run.
+  human_actions_to_execute:
+    on_pass_direct_release:
+      mandatory: true
+      command: python docs/patcher/shared/update_run_tracking.py --pipeline constitution --run-id CONSTITUTION_RUN_2026_04_30_PATCH_LIFECYCLE_R01
+        --stage-id STAGE_06_CORE_VALIDATION --stage-status done --run-status active --next-stage STAGE_07_RELEASE_MATERIALIZATION
+        --summary "Core validation passed; run ready for release materialization."
+  completion_evidence:
+    sandbox_cores_read: true
+    validation_status_emitted: true
+    every_blocking_issue_explicitly_listed_if_any: true
+    downstream_decision_emitted: true
+    fallback_reads_declared_if_any: true
+    human_actions_explicitly_stated_in_output: true
+    promotion_claim: false
+    current_rewrite: false
