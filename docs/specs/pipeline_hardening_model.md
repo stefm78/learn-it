@@ -124,6 +124,10 @@ hardening_dimensions:
   before_after_diagnostics:
     question: Does the pipeline capture baseline, preview and final score when useful?
     reference: baseline_scope_state, scope_evolution_preview, scope_evolution_score
+    canonical_controls:
+      - baseline_capture
+      - pre_release_preview
+      - final_closeout_score
 
   closeout:
     question: Does the pipeline close or archive with durable evidence?

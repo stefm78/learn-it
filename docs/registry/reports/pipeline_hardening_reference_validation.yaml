@@ -1,13 +1,13 @@
 pipeline_hardening_reference_validation:
   schema_version: 0.1
-  status: FAIL
+  status: PASS
   validated_scope: reference_model_and_template
   required_file_count: 10
   present_file_count: 10
   files:
   - path: docs/specs/pipeline_hardening_model.md
     exists: true
-    sha256: 4017e71e83c64e2b41e7315713b87a7bd41e5fa1e3cc750df6508dab6b571131
+    sha256: eae2ccb8fb9f7a9972993a52c4036f5c06d9aca2bd12d9baa2cc37fbe8a24035
   - path: docs/specs/pipeline_hardening_checklist.md
     exists: true
     sha256: 50c57d4e743d9d3674b267d72e6c0cc40d508585623063f2267293eaeeb1912b
@@ -35,8 +35,5 @@ pipeline_hardening_reference_validation:
   - path: docs/pipelines/_templates/hardened_pipeline/stages/STAGE_01_VALIDATION.skill.yaml
     exists: true
     sha256: 71a46a80ae31a72b558a95ed8f2ede8997c4fc6580ed51a94df8aff9024b7a94
-  blocking_findings:
-  - severity: blocking
-    path: docs/specs/pipeline_hardening_model.md
-    message: 'required term missing: baseline_capture'
-  blocking_finding_count: 1
+  blocking_findings: []
+  blocking_finding_count: 0

@@ -38,8 +38,8 @@ scope_modularization_post_pilot:
   status: paused_cleanly
   active_pipeline_run: none
   new_bounded_run_opened_now: false
-  last_completed_phase: PHASE_35
-  last_completed_phase_label: cross_core_source_evidence_review
+  last_completed_phase: PHASE_36
+  last_completed_phase_label: pipeline_hardening_reference_model
 ```
 
 ## What is complete
@@ -112,6 +112,7 @@ completed:
       - PHASE_33 scope_evolution_before_after_preview_integration
       - PHASE_34 cross_core_first_request_materialization
       - PHASE_35 cross_core_source_evidence_review
+      - PHASE_36 pipeline_hardening_reference_model
 ```
 
 ## Current pipeline position
@@ -759,6 +760,39 @@ option_V_cross_core_source_evidence_review:
     - linked backlog entries remain open
   recommended_next_decision: run STAGE_02_CROSS_CORE_ARBITRAGE or stop at NO_ACTIVE_PHASE
   launcher_authorizes_run_from_signals: false
+
+option_W_pipeline_hardening_reference_model:
+  status: done
+  completed_phase: PHASE_36
+  action: extract a reusable pipeline hardening model from the Constitution pipeline
+  purpose: >-
+    Provide a graduated hardening reference that other pipelines can use without
+    blindly copying the full Constitution L4 complexity.
+  artifacts:
+    - docs/specs/pipeline_hardening_model.md
+    - docs/specs/pipeline_hardening_checklist.md
+    - docs/pipelines/_templates/hardened_pipeline/pipeline.md
+    - docs/pipelines/_templates/hardened_pipeline/AI_PROTOCOL.yaml
+    - docs/pipelines/_templates/hardened_pipeline/entry_actions/OPEN.action.yaml
+    - docs/pipelines/_templates/hardened_pipeline/entry_actions/MATERIALIZE.action.yaml
+    - docs/pipelines/_templates/hardened_pipeline/entry_actions/CONTINUE.action.yaml
+    - docs/pipelines/_templates/hardened_pipeline/entry_actions/RECONCILE.action.yaml
+    - docs/pipelines/_templates/hardened_pipeline/stages/STAGE_00_INTAKE.skill.yaml
+    - docs/pipelines/_templates/hardened_pipeline/stages/STAGE_01_VALIDATION.skill.yaml
+    - docs/patcher/shared/validate_pipeline_hardening.py
+    - docs/registry/reports/pipeline_hardening_reference_validation.yaml
+  mutation_policy:
+    run_opened: false
+    core_files_modified: false
+    cross_core_contract_pipeline_modified: false
+    governance_backlog_modified: false
+  validation:
+    pipeline_hardening_reference_validation: PASS
+  usage_guidance:
+    constitution: L4 reference
+    cross_core_contract: L3 initially, L4 before any Core write
+    report_only_pipelines: L1_or_L2
+
 
 ## Guardrails
 
