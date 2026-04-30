@@ -38,8 +38,8 @@ scope_modularization_post_pilot:
   status: paused_cleanly
   active_pipeline_run: none
   new_bounded_run_opened_now: false
-  last_completed_phase: PHASE_34
-  last_completed_phase_label: cross_core_first_request_materialization
+  last_completed_phase: PHASE_35
+  last_completed_phase_label: cross_core_source_evidence_review
 ```
 
 ## What is complete
@@ -111,6 +111,7 @@ completed:
       - PHASE_32 cross_core_contract_bootstrap
       - PHASE_33 scope_evolution_before_after_preview_integration
       - PHASE_34 cross_core_first_request_materialization
+      - PHASE_35 cross_core_source_evidence_review
 ```
 
 ## Current pipeline position
@@ -737,6 +738,26 @@ option_U_cross_core_first_request_materialization:
     - no TYPE_SELF_REPORT_AR_N2 neighbor declaration modification
     - linked backlog entries remain open
   recommended_next_decision: run STAGE_01_SOURCE_EVIDENCE_REVIEW or stop at NO_ACTIVE_PHASE
+  launcher_authorizes_run_from_signals: false
+
+option_V_cross_core_source_evidence_review:
+  status: done
+  completed_phase: PHASE_35
+  action: complete STAGE_01_SOURCE_EVIDENCE_REVIEW for the first cross-core change request
+  artifacts:
+    - docs/pipelines/cross_core_contract/work/01_intake/source_evidence_review.md
+    - docs/pipelines/cross_core_contract/reports/source_evidence_review.yaml
+    - docs/pipelines/cross_core_contract/pipeline.md
+    - docs/pipelines/cross_core_contract/state.yaml
+  validation:
+    source_evidence_review: PASS
+  non_goals_preserved:
+    - no Constitution run opened
+    - no Core file modified
+    - no governance_backlog.yaml modification
+    - no patch_lifecycle threshold N resolved
+    - linked backlog entries remain open
+  recommended_next_decision: run STAGE_02_CROSS_CORE_ARBITRAGE or stop at NO_ACTIVE_PHASE
   launcher_authorizes_run_from_signals: false
 
 ## Guardrails

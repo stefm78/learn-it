@@ -121,6 +121,7 @@ Sorties :
 
 ```text
 docs/pipelines/cross_core_contract/work/01_intake/source_evidence_review.md
+docs/pipelines/cross_core_contract/reports/source_evidence_review.yaml
 ```
 
 ### STAGE_02_CROSS_CORE_ARBITRAGE

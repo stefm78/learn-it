@@ -1,0 +1,46 @@
+cross_core_source_evidence_review:
+  schema_version: '0.1'
+  generated_at: '2026-04-30T10:44:34Z'
+  status: PASS
+  phase: PHASE_35_CROSS_CORE_SOURCE_EVIDENCE_REVIEW
+  request_id: CCR_PATCH_LIFECYCLE_ESCALATION_THRESHOLD_N_R01
+  evidence:
+    - path: docs/pipelines/cross_core_contract/requests/CCR_PATCH_LIFECYCLE_ESCALATION_THRESHOLD_N_R01.yaml
+      sha256: 135e6039ed61b82fe7baefbf5a37e2cd03ad20d0cad2babd091b6629bb1e8d85
+      status: PASS
+      missing_markers: []
+    - path: docs/pipelines/cross_core_contract/reports/cross_core_change_request_validation.yaml
+      sha256: 0e23565ad072a3ed3b2e2c44b4b128b54d135f7d19f49878f76fd331373f9d98
+      status: PASS
+      missing_markers: []
+    - path: docs/pipelines/constitution/scope_catalog/governance_backlog.yaml
+      sha256: d0b4c9a4aee1c9fca0b886b41ab55d7f2d3756c5c7aa7ed3ba872acd372d7b6f
+      status: PASS
+      missing_markers: []
+    - path: docs/pipelines/constitution/reports/bounded_run_preflight_report.yaml
+      sha256: a7c2720b6100096709a4d411863ee1c32393e3a08f05557c20343b26658b1a9f
+      status: PASS
+      missing_markers: []
+    - path: docs/pipelines/constitution/signals.yaml
+      sha256: f9318fe31034314ac29f4f003398bd0ca57d7d4c278d5b27b6cf4ce2a3b998f8
+      status: PASS
+      missing_markers: []
+    - path: docs/transformations/core_modularization/CROSS_CORE_CONTRACT_BOOTSTRAP.md
+      sha256: eefca9af05dc9ba4d7f93cd279b18883374e9730fd762518e0b35ffe4501541d
+      status: PASS
+      missing_markers: []
+    - path: docs/transformations/core_modularization/REFERENTIEL_LINK_EXTERNAL_READ_ONLY_TREATMENT.md
+      sha256: 29156bcf74ea66787e5383b8e8db51e71a6845e4d0a210b4fcd4a57fc4ac2011
+      status: PASS
+      missing_markers: []
+  conclusion:
+    request_is_validated: true
+    source_evidence_complete: true
+    linked_backlog_entries_remain_open: true
+    constitution_run_authorized: false
+    core_mutation_authorized: false
+    backlog_closure_authorized: false
+    arbitration_ready: true
+  next_recommended_decision:
+    decision: run_or_defer_STAGE_02_CROSS_CORE_ARBITRAGE
+    default: defer_until_human_decision
