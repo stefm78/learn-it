@@ -38,8 +38,8 @@ scope_modularization_post_pilot:
   status: paused_cleanly
   active_pipeline_run: none
   new_bounded_run_opened_now: false
-  last_completed_phase: PHASE_57
-  last_completed_phase_label: cross_core_generic_execution_contract_instantiator
+  last_completed_phase: PHASE_58
+  last_completed_phase_label: cross_core_generic_gate_execution_runner
 ```
 
 ## What is complete
@@ -134,6 +134,7 @@ completed:
       - PHASE_55 cross_core_l4_control_plane_activation
       - PHASE_56 cross_core_generic_mutating_execution_framework
       - PHASE_57 cross_core_generic_execution_contract_instantiator
+      - PHASE_58 cross_core_generic_gate_execution_runner
 ```
 
 ## Current pipeline position
@@ -1480,6 +1481,42 @@ option_AR_cross_core_generic_execution_contract_instantiator:
     - no governance_backlog.yaml modification
     - no release or promotion
   recommended_next_decision: stop at NO_ACTIVE_PHASE or define generic gate execution runner for instantiated contracts
+  launcher_authorizes_run_from_signals: false
+
+option_AS_cross_core_generic_gate_execution_runner:
+  status: done
+  completed_phase: PHASE_58
+  action: add generic gate execution runner that blocks unauthorized contracts before downstream gates
+  artifacts:
+    - docs/pipelines/cross_core_contract/GENERIC_GATE_EXECUTION_RUNNER.md
+    - docs/pipelines/cross_core_contract/validators/generic_gate_execution_runner.yaml
+    - docs/patcher/shared/run_cross_core_gate_execution.py
+    - docs/patcher/shared/validate_cross_core_generic_gate_execution_runner.py
+    - docs/registry/reports/generic_gate_execution_fixture_contract_validation.yaml
+    - docs/registry/reports/generic_gate_execution_fixture_smoke.yaml
+    - docs/registry/reports/cross_core_generic_gate_execution_runner_validation.yaml
+    - docs/pipelines/cross_core_contract/AI_PROTOCOL.yaml
+    - docs/pipelines/cross_core_contract/pipeline.md
+    - docs/pipelines/cross_core_contract/state.yaml
+    - docs/pipelines/cross_core_contract/l4_transition_checklist.yaml
+  validation:
+    cross_core_generic_gate_execution_runner_validation: PASS
+    gate_execution_smoke_status: BLOCKED_NOT_AUTHORIZED
+  posture:
+    active_level: L4_control_plane_active_non_mutating
+    generic_gate_execution_runner_defined: true
+    downstream_gates_executed_on_smoke: false
+    request_specific_logic_encoded: false
+    l4_mutating_gate_active_now: false
+    l4_core_mutation_authorized_now: false
+  non_goals_preserved:
+    - no request-specific logic encoded
+    - no downstream mutating gate executed for unauthorized smoke contract
+    - no Constitution run opened
+    - no Core file modified
+    - no governance_backlog.yaml modification
+    - no release or promotion
+  recommended_next_decision: stop at NO_ACTIVE_PHASE or define generic authorized dry-run fixture for downstream gate smoke
   launcher_authorizes_run_from_signals: false
 
 ## Guardrails

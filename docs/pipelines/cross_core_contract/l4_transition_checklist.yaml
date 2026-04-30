@@ -31,6 +31,7 @@ l4_transition_checklist:
     - l4_control_plane_activation_PASS
     - generic_mutating_execution_framework_PASS
     - generic_execution_contract_instantiator_PASS
+    - generic_gate_execution_runner_PASS
     - individual_l4_validators_implemented_before_execution
     - declared_read_surface
     - declared_write_surface

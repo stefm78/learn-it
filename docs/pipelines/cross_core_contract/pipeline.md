@@ -106,6 +106,23 @@ release_or_promotion_authorized: false
 
 This pipeline is hardened to L3 for intake, evidence review, arbitration and contract synthesis.
 It remains below L4: no Core write, backlog closure, release or promotion is authorized.
+## Generic gate execution runner
+
+```yaml
+phase: PHASE_58_CROSS_CORE_GENERIC_GATE_EXECUTION_RUNNER
+runner_ref: docs/pipelines/cross_core_contract/GENERIC_GATE_EXECUTION_RUNNER.md
+runner_yaml: docs/pipelines/cross_core_contract/validators/generic_gate_execution_runner.yaml
+runner_script: docs/patcher/shared/run_cross_core_gate_execution.py
+validation_report: docs/registry/reports/cross_core_generic_gate_execution_runner_validation.yaml
+generic_gate_execution_runner_defined: true
+gate_execution_smoke_status: BLOCKED_NOT_AUTHORIZED
+downstream_gates_executed_on_smoke: false
+l4_mutating_gate_active_now: false
+l4_core_mutation_authorized_now: false
+```
+
+The generic runner starts from any instantiated execution contract and blocks before downstream gates unless the contract is authorized.
+
 ## Generic execution contract instantiator
 
 ```yaml

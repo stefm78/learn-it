@@ -1,0 +1,37 @@
+cross_core_generic_gate_execution_runner:
+  schema_version: '0.1'
+  generated_at: '2026-04-30T15:28:01Z'
+  phase: PHASE_58_CROSS_CORE_GENERIC_GATE_EXECUTION_RUNNER
+  status: runner_defined_non_mutating
+  generic_gate_execution_runner_defined: true
+  gate_execution_smoke_status: BLOCKED_NOT_AUTHORIZED
+  downstream_gates_executed_on_smoke: false
+  request_specific_logic_encoded: false
+  l4_control_plane_active_now: true
+  l4_mutating_execution_framework_ready: true
+  l4_mutating_gate_active_now: false
+  l4_core_mutation_authorized_now: false
+  current_authorizations:
+    core_mutation_authorized: false
+    backlog_closure_authorized: false
+    release_or_promotion_authorized: false
+  runner:
+    script: docs/patcher/shared/run_cross_core_gate_execution.py
+    input: cross_core_execution_contract
+    first_gate: validate_cross_core_execution_contract
+    smoke_contract: docs/pipelines/cross_core_contract/work/03_contract_synthesis/GENERIC_FIXTURE_EXECUTION_CONTRACT_R00.yaml
+    smoke_report: docs/registry/reports/generic_gate_execution_fixture_smoke.yaml
+  gate_order:
+    - validate_cross_core_execution_contract
+    - validate_cross_core_l4_transition_review
+    - validate_cross_core_write_surface
+    - validate_cross_core_rollback_or_reconciliation_path
+    - validate_link_binding_consistency
+    - validate_constitution_referentiel_link_reconstruction
+    - validate_multi_core_release_plan
+    - validate_multi_core_promotion_manifest
+    - validate_cross_core_backlog_resolution
+  blocking_policy:
+    blocked_contract_stops_before_downstream_gates: true
+    non_authorized_contract_stops_before_downstream_gates: true
+    template_contract_stops_before_downstream_gates: true

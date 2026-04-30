@@ -1,0 +1,69 @@
+cross_core_generic_gate_execution_runner_validation:
+  schema_version: '0.1'
+  generated_at: '2026-04-30T15:28:03Z'
+  status: PASS
+  phase: PHASE_58_CROSS_CORE_GENERIC_GATE_EXECUTION_RUNNER
+  generic_gate_execution_runner_defined: true
+  gate_execution_smoke_status: BLOCKED_NOT_AUTHORIZED
+  downstream_gates_executed_on_smoke: false
+  request_specific_logic_encoded: false
+  l4_mutating_gate_active_now: false
+  l4_core_mutation_authorized_now: false
+  checked_files:
+    - path: docs/pipelines/cross_core_contract/GENERIC_GATE_EXECUTION_RUNNER.md
+      kind: state
+      exists: true
+      sha256: 1a5bad783316b793c5ae1193b8093b94b7ad2f092518fb3c1fd15e0705d0f3bb
+    - path: docs/pipelines/cross_core_contract/validators/generic_gate_execution_runner.yaml
+      kind: state
+      exists: true
+      sha256: 142b3294bb1d1c96e9181adddae3e899b0306032cee28d7cd28c98c408dcfb78
+    - path: docs/registry/reports/generic_gate_execution_fixture_smoke.yaml
+      kind: state
+      exists: true
+      sha256: 3cd9aafa39ba482c0c11072e230dfd98e21daaf71df1ffca30206ba1d38845a3
+    - path: docs/registry/reports/generic_gate_execution_fixture_contract_validation.yaml
+      kind: state
+      exists: true
+      sha256: c6e87fc24998d622a28c983f2921c9eec7ca30143f6c0a9c067529594efa433b
+    - path: docs/pipelines/cross_core_contract/work/03_contract_synthesis/GENERIC_FIXTURE_EXECUTION_CONTRACT_R00.yaml
+      kind: state
+      exists: true
+      sha256: 5ce1882ef06c1720c244963ffbe73768f2a33872b821abe3a7f17019e3c0bd9b
+    - path: docs/pipelines/cross_core_contract/AI_PROTOCOL.yaml
+      kind: state
+      exists: true
+      sha256: 57a792819307e5d86d5b16e3f60e3ea5dc4a6088666ff318744f563a820c6732
+    - path: docs/pipelines/cross_core_contract/pipeline.md
+      kind: state
+      exists: true
+      sha256: 362aaa3e380fc313e2e38b8aef6745ab60234fea9847d0a0b8f8552e67dd3ee0
+    - path: docs/pipelines/cross_core_contract/state.yaml
+      kind: state
+      exists: true
+      sha256: 6987287c9f408e10dcba375d15bdbb0303a377171e2fb5f16139a238a49dc711
+    - path: docs/pipelines/cross_core_contract/l4_transition_checklist.yaml
+      kind: state
+      exists: true
+      sha256: c4a7db0972f5de344279bcdd2d633f645804d0b9e75992d03193f4b0597c58e3
+    - path: docs/registry/reports/cross_core_execution_contract_instantiator_validation.yaml
+      kind: state
+      exists: true
+      sha256: 3e3af38309dab0c927bbdad1318964975aab38124aa08e87de154faa8f6206fa
+    - path: docs/patcher/shared/run_cross_core_gate_execution.py
+      kind: script_compile_only
+      exists: true
+      sha256: b0f921da35e692a4d33455f2e14227f7bc75a7a72b3e2770d457638ffaa3f1cb
+    - path: docs/patcher/shared/validate_cross_core_execution_contract.py
+      kind: script_compile_only
+      exists: true
+      sha256: 27232c61680b5b10ff0a5c691c9968eb5e79791bf679b642fc3eee6b29949827
+  blocking_findings:
+    []
+  result_summary:
+    blocking_finding_count: 0
+    generic_gate_execution_runner_defined: true
+    smoke_blocks_before_downstream_gates: true
+    core_mutation_authorized: false
+    backlog_closure_authorized: false
+    release_or_promotion_authorized: false

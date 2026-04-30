@@ -1,0 +1,38 @@
+phase58_cross_core_generic_gate_execution_runner_report:
+  generated_at: 2026-04-30T15:28:01Z
+  status: PASS
+  branch: feat/core-modularization-bootstrap
+  phase: PHASE_58_CROSS_CORE_GENERIC_GATE_EXECUTION_RUNNER
+  generic_gate_execution_runner_defined: true
+  gate_execution_smoke_status: BLOCKED_NOT_AUTHORIZED
+  downstream_gates_executed_on_smoke: false
+  request_specific_logic_encoded: false
+  l4_mutating_gate_active_now: false
+  l4_core_mutation_authorized_now: false
+  files_written:
+    - docs/pipelines/cross_core_contract/GENERIC_GATE_EXECUTION_RUNNER.md
+    - docs/pipelines/cross_core_contract/validators/generic_gate_execution_runner.yaml
+    - docs/patcher/shared/run_cross_core_gate_execution.py
+    - docs/patcher/shared/validate_cross_core_generic_gate_execution_runner.py
+    - docs/registry/reports/generic_gate_execution_fixture_contract_validation.yaml
+    - docs/registry/reports/generic_gate_execution_fixture_smoke.yaml
+    - docs/registry/reports/cross_core_generic_gate_execution_runner_validation.yaml
+    - docs/pipelines/cross_core_contract/AI_PROTOCOL.yaml
+    - docs/pipelines/cross_core_contract/pipeline.md
+    - docs/pipelines/cross_core_contract/state.yaml
+    - docs/pipelines/cross_core_contract/l4_transition_checklist.yaml
+    - docs/transformations/core_modularization/SCOPE_GRAPH_CLUSTERING_PROGRESS.md
+    - tmp/phase58_cross_core_generic_gate_execution_runner_report.yaml
+  validations:
+    cross_core_generic_gate_execution_runner_validation: PASS
+    generic_gate_execution_fixture_smoke: BLOCKED_NOT_AUTHORIZED
+  guardrails:
+    no_request_specific_logic_encoded: true
+    no_downstream_mutating_gate_executed_for_unauthorized_smoke_contract: true
+    no_constitution_run_opened: true
+    core_files_not_modified: true
+    governance_backlog_not_modified: true
+    release_or_promotion_authorized: false
+  next_recommended_decision:
+    decision: stop_or_define_generic_authorized_dry_run_fixture_for_downstream_gate_smoke
+    default: stop_at_NO_ACTIVE_PHASE

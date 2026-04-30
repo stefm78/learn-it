@@ -1,0 +1,26 @@
+cross_core_gate_execution:
+  schema_version: '0.1'
+  generated_at: '2026-04-30T15:28:02Z'
+  status: BLOCKED_NOT_AUTHORIZED
+  contract: C:/Users/Stef/dev/learn-it/docs/pipelines/cross_core_contract/work/03_contract_synthesis/GENERIC_FIXTURE_EXECUTION_CONTRACT_R00.yaml
+  contract_exists: true
+  contract_sha256: 5ce1882ef06c1720c244963ffbe73768f2a33872b821abe3a7f17019e3c0bd9b
+  contract_validation_report: C:/Users/Stef/dev/learn-it/docs/registry/reports/generic_gate_execution_fixture_contract_validation.yaml
+  contract_validation_return_code: 2
+  downstream_gates_executed: false
+  gate_order:
+    - validate_cross_core_execution_contract
+    - validate_cross_core_l4_transition_review
+    - validate_cross_core_write_surface
+    - validate_cross_core_rollback_or_reconciliation_path
+    - validate_link_binding_consistency
+    - validate_constitution_referentiel_link_reconstruction
+    - validate_multi_core_release_plan
+    - validate_multi_core_promotion_manifest
+    - validate_cross_core_backlog_resolution
+  current_authorizations:
+    core_mutation_authorized: false
+    backlog_closure_authorized: false
+    release_or_promotion_authorized: false
+  reason: >-
+    Execution contract is request-bound but not write-authorized; downstream gates were not executed.

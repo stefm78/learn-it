@@ -315,6 +315,17 @@ ai_protocol:
     instantiation_smoke_status: BLOCKED_NOT_AUTHORIZED
     l4_mutating_gate_active_now: false
     l4_core_mutation_authorized_now: false
+  generic_gate_execution_runner:
+    phase: PHASE_58_CROSS_CORE_GENERIC_GATE_EXECUTION_RUNNER
+    runner_ref: docs/pipelines/cross_core_contract/GENERIC_GATE_EXECUTION_RUNNER.md
+    runner_yaml: docs/pipelines/cross_core_contract/validators/generic_gate_execution_runner.yaml
+    runner_script: docs/patcher/shared/run_cross_core_gate_execution.py
+    validation_report: docs/registry/reports/cross_core_generic_gate_execution_runner_validation.yaml
+    generic_gate_execution_runner_defined: true
+    gate_execution_smoke_status: BLOCKED_NOT_AUTHORIZED
+    downstream_gates_executed_on_smoke: false
+    l4_mutating_gate_active_now: false
+    l4_core_mutation_authorized_now: false
 
   anti_patterns:
     - chat_summary_as_pass
