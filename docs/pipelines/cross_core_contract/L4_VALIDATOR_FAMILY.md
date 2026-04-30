@@ -143,3 +143,16 @@ l4_active_now: false
 executable_as_l4_gate_now: false
 ```
 
+
+## Individual validator contract — reconstruction
+
+```yaml
+validator_id: validate_constitution_referentiel_link_reconstruction
+contract_yaml_ref: docs/pipelines/cross_core_contract/validators/validate_constitution_referentiel_link_reconstruction.contract.yaml
+contract_markdown_ref: docs/pipelines/cross_core_contract/validators/validate_constitution_referentiel_link_reconstruction.contract.md
+validation_report: docs/registry/reports/constitution_referentiel_link_reconstruction_validator_contract_validation.yaml
+contract_defined: true
+l4_active_now: false
+executable_as_l4_gate_now: false
+```
+

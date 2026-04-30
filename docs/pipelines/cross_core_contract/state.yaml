@@ -63,3 +63,11 @@ individual_l4_validator_contracts:
     validate_cross_core_write_surface_contract_defined: true
     l4_active_now: false
     executable_as_l4_gate_now: false
+
+  validate_constitution_referentiel_link_reconstruction:
+    contract_yaml_ref: docs/pipelines/cross_core_contract/validators/validate_constitution_referentiel_link_reconstruction.contract.yaml
+    contract_markdown_ref: docs/pipelines/cross_core_contract/validators/validate_constitution_referentiel_link_reconstruction.contract.md
+    validation_report: docs/registry/reports/constitution_referentiel_link_reconstruction_validator_contract_validation.yaml
+    validate_constitution_referentiel_link_reconstruction_contract_defined: true
+    l4_active_now: false
+    executable_as_l4_gate_now: false

@@ -1,0 +1,61 @@
+l4_validator_contract:
+  schema_version: '0.1'
+  generated_at: '2026-04-30T11:42:18Z'
+  validator_id: validate_constitution_referentiel_link_reconstruction
+  pipeline_id: cross_core_contract
+  status: contract_defined_inactive
+  current_level: L3_managed_execution_pipeline
+  target_level: L4_critical_canonical_pipeline
+  l4_active_now: false
+  executable_as_l4_gate_now: false
+
+  purpose: >-
+    Validate that Constitution, Referentiel and Link can be reconstructed and remain
+    coherent after a future cross-core contract, before any release or promotion.
+
+  future_input:
+    expected_contract: docs/pipelines/cross_core_contract/work/03_contract_synthesis/cross_core_execution_contract.yaml
+    expected_release_plan: docs/pipelines/cross_core_contract/work/07_multi_core_release_planning/multi_core_release_plan.yaml
+    expected_impacted_cores:
+      - constitution
+      - referentiel
+      - link
+    expected_request: CCR_PATCH_LIFECYCLE_ESCALATION_THRESHOLD_N_R01
+
+  pass_requires:
+    - constitution_reconstruction_PASS
+    - referentiel_reconstruction_PASS
+    - link_reconstruction_PASS
+    - cross_core_reference_ids_resolvable
+    - no_orphan_inter_core_reference
+    - no_duplicate_canonical_id_across_cores
+    - version_binding_declared
+    - impacted_core_versions_declared
+    - release_candidate_reconstructs_all_impacted_cores
+    - promotion_candidate_manifest_declares_all_impacted_cores
+    - rollback_or_reconciliation_path_declared
+
+  must_block_if:
+    - missing_impacted_core
+    - reconstruction_failure
+    - unresolved_cross_core_reference
+    - orphan_link_binding
+    - duplicate_canonical_id
+    - missing_version_binding
+    - release_plan_missing_impacted_core
+    - promotion_manifest_missing_impacted_core
+    - rollback_or_reconciliation_path_missing
+
+  future_read_surface:
+    - docs/cores/current/constitution.yaml
+    - docs/cores/current/referentiel.yaml
+    - docs/cores/current/link.yaml
+    - docs/cores/current/manifest.yaml
+    - docs/cores/releases/**
+
+  current_phase_guardrails:
+    core_mutation_authorized: false
+    backlog_closure_authorized: false
+    release_or_promotion_authorized: false
+    constitution_run_authorized: false
+    threshold_N_materialized_now: false

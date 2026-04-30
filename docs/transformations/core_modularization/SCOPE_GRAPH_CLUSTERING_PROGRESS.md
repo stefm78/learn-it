@@ -38,8 +38,8 @@ scope_modularization_post_pilot:
   status: paused_cleanly
   active_pipeline_run: none
   new_bounded_run_opened_now: false
-  last_completed_phase: PHASE_41
-  last_completed_phase_label: cross_core_write_surface_validator_contract
+  last_completed_phase: PHASE_42
+  last_completed_phase_label: cross_core_reconstruction_validator_contract
 ```
 
 ## What is complete
@@ -118,6 +118,7 @@ completed:
       - PHASE_39 cross_core_l4_validator_family_contract
       - PHASE_40 cross_core_l4_transition_review_validator_contract
       - PHASE_41 cross_core_write_surface_validator_contract
+      - PHASE_42 cross_core_reconstruction_validator_contract
 ```
 
 ## Current pipeline position
@@ -924,6 +925,35 @@ option_AB_cross_core_write_surface_validator_contract:
     - docs/pipelines/cross_core_contract/l4_transition_checklist.yaml
   validation:
     cross_core_write_surface_validator_contract_validation: PASS
+  posture:
+    active_level: L3_managed_execution_pipeline
+    target_level: L4_critical_canonical_pipeline
+    l4_active_now: false
+    executable_as_l4_gate_now: false
+  non_goals_preserved:
+    - no Constitution run opened
+    - no Core file modified
+    - no governance_backlog.yaml modification
+    - no release or promotion
+    - CCR_PATCH_LIFECYCLE_ESCALATION_THRESHOLD_N_R01 remains proposed / pending_arbitration
+  recommended_next_decision: stop at NO_ACTIVE_PHASE or define next individual L4 validator contract
+  launcher_authorizes_run_from_signals: false
+
+option_AC_cross_core_reconstruction_validator_contract:
+  status: done
+  completed_phase: PHASE_42
+  action: define the inactive contract for validate_constitution_referentiel_link_reconstruction
+  artifacts:
+    - docs/pipelines/cross_core_contract/validators/validate_constitution_referentiel_link_reconstruction.contract.yaml
+    - docs/pipelines/cross_core_contract/validators/validate_constitution_referentiel_link_reconstruction.contract.md
+    - docs/patcher/shared/validate_constitution_referentiel_link_reconstruction_contract.py
+    - docs/registry/reports/constitution_referentiel_link_reconstruction_validator_contract_validation.yaml
+    - docs/pipelines/cross_core_contract/AI_PROTOCOL.yaml
+    - docs/pipelines/cross_core_contract/L4_VALIDATOR_FAMILY.md
+    - docs/pipelines/cross_core_contract/validators/l4_validator_family.yaml
+    - docs/pipelines/cross_core_contract/l4_transition_checklist.yaml
+  validation:
+    constitution_referentiel_link_reconstruction_validator_contract_validation: PASS
   posture:
     active_level: L3_managed_execution_pipeline
     target_level: L4_critical_canonical_pipeline

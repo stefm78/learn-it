@@ -1,0 +1,50 @@
+constitution_referentiel_link_reconstruction_validator_contract_validation:
+  schema_version: '0.1'
+  generated_at: '2026-04-30T11:42:18Z'
+  status: PASS
+  validator_id: validate_constitution_referentiel_link_reconstruction
+  contract_defined: true
+  l4_active_now: false
+  executable_as_l4_gate_now: false
+  checked_files:
+    - path: docs/pipelines/cross_core_contract/validators/validate_constitution_referentiel_link_reconstruction.contract.yaml
+      exists: true
+      sha256: 32c8a2c0927935c021dbe0fe88c76719a71fc7047dd1f11f9a90dd9e49f0b6eb
+    - path: docs/pipelines/cross_core_contract/validators/validate_constitution_referentiel_link_reconstruction.contract.md
+      exists: true
+      sha256: ff740a070d182de687291713a04691d6db0645a41522ffdfc605cb6de680f17c
+    - path: docs/pipelines/cross_core_contract/validators/validate_cross_core_write_surface.contract.yaml
+      exists: true
+      sha256: 1030a3c6b33bccec0a5ac62d75487f067b5b8549c5811856828cc2341dd26f0c
+    - path: docs/pipelines/cross_core_contract/L4_VALIDATOR_FAMILY.md
+      exists: true
+      sha256: 3fa28f1ba184ed5617753251e13766f827601a3cf27100be21897f9fee9b0f5d
+    - path: docs/pipelines/cross_core_contract/validators/l4_validator_family.yaml
+      exists: true
+      sha256: d1ef616074c0dc4d9ea2afee0470b80485e043b09df109a03a6aac5e8c0d0b6b
+    - path: docs/pipelines/cross_core_contract/l4_transition_checklist.yaml
+      exists: true
+      sha256: 328e276f0e01feae161ce7646890b96ccb00c3c854469ec039f3d6d32700d340
+    - path: docs/pipelines/cross_core_contract/AI_PROTOCOL.yaml
+      exists: true
+      sha256: 009f89286687ebab25dc6d839418f4a0a2b964cd2fd7b7b8ff91094933ec229a
+    - path: docs/pipelines/cross_core_contract/pipeline.md
+      exists: true
+      sha256: 5fd72f4ff6274449121c2771a213aaec226e8207fbd4bb70e684500b5f9308cb
+    - path: docs/pipelines/cross_core_contract/state.yaml
+      exists: true
+      sha256: f5ca9cefc14d85d1d623f576cb649c26016964f8cd8db9b75de5bcc0fadac1d5
+    - path: docs/pipelines/cross_core_contract/requests/CCR_PATCH_LIFECYCLE_ESCALATION_THRESHOLD_N_R01.yaml
+      exists: true
+      sha256: 135e6039ed61b82fe7baefbf5a37e2cd03ad20d0cad2babd091b6629bb1e8d85
+  blocking_findings:
+    []
+  result_summary:
+    blocking_finding_count: 0
+    reconstruction_validator_contract_defined: true
+    l4_active_now: false
+    executable_as_l4_gate_now: false
+    core_mutation_authorized: false
+    backlog_closure_authorized: false
+    release_or_promotion_authorized: false
+    request_remains_proposed_pending_arbitration: true
