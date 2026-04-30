@@ -1,0 +1,18 @@
+cross_core_l4_activation_dry_run:
+  schema_version: '0.1'
+  generated_at: '2026-04-30T13:00:47Z'
+  status: BLOCKED_NOT_APPROVED
+  activation_review: C:/Users/Stef/dev/learn-it/docs/pipelines/cross_core_contract/templates/l4_activation_review.template.yaml
+  activation_review_exists: true
+  activation_review_sha256: f001978ba4ec27e0d08c3ce8313de29fff537a007d86fe5b82ab90adda98d96d
+  instance_validation_report: C:/Users/Stef/dev/learn-it/docs/registry/reports/l4_activation_dry_run_template_instance_validation.yaml
+  instance_validator_return_code: 2
+  downstream_gates_executed: false
+  l4_activation_ready_now: false
+  l4_active_now: false
+  current_authorizations:
+    core_mutation_authorized: false
+    backlog_closure_authorized: false
+    release_or_promotion_authorized: false
+  reason: >-
+    Activation review is not approved; downstream L4 gates were not executed.

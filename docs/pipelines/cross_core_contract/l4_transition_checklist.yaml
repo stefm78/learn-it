@@ -26,6 +26,7 @@ l4_transition_checklist:
     - l4_activation_review_input_contract_PASS
     - l4_activation_review_instance_validator_PASS
     - l4_activation_gate_orchestration_PASS
+    - l4_dry_run_activation_orchestrator_PASS
     - individual_l4_validators_implemented_before_execution
     - declared_read_surface
     - declared_write_surface

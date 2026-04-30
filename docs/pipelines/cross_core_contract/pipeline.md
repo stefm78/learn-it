@@ -106,6 +106,23 @@ release_or_promotion_authorized: false
 
 This pipeline is hardened to L3 for intake, evidence review, arbitration and contract synthesis.
 It remains below L4: no Core write, backlog closure, release or promotion is authorized.
+## L4 dry-run activation orchestrator
+
+```yaml
+phase: PHASE_53_CROSS_CORE_L4_DRY_RUN_ACTIVATION_ORCHESTRATOR
+orchestrator_ref: docs/pipelines/cross_core_contract/L4_DRY_RUN_ACTIVATION_ORCHESTRATOR.md
+orchestrator_yaml: docs/pipelines/cross_core_contract/validators/l4_dry_run_activation_orchestrator.yaml
+script: docs/patcher/shared/run_cross_core_l4_activation_dry_run.py
+validation_report: docs/registry/reports/cross_core_l4_dry_run_activation_orchestrator_validation.yaml
+template_dry_run_report: docs/registry/reports/l4_activation_dry_run_template_report.yaml
+template_dry_run_status: BLOCKED_NOT_APPROVED
+downstream_gates_executed_on_template: false
+l4_activation_ready_now: false
+l4_active_now: false
+```
+
+The dry-run orchestrator blocks before downstream gates when the activation review is not approved. It never authorizes mutation.
+
 ## L4 activation gate orchestration
 
 ```yaml

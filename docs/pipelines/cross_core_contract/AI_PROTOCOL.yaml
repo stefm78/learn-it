@@ -261,6 +261,19 @@ ai_protocol:
     l4_activation_ready_now: false
     l4_active_now: false
 
+  l4_dry_run_activation_orchestrator:
+    phase: PHASE_53_CROSS_CORE_L4_DRY_RUN_ACTIVATION_ORCHESTRATOR
+    orchestrator_ref: docs/pipelines/cross_core_contract/L4_DRY_RUN_ACTIVATION_ORCHESTRATOR.md
+    orchestrator_yaml: docs/pipelines/cross_core_contract/validators/l4_dry_run_activation_orchestrator.yaml
+    script: docs/patcher/shared/run_cross_core_l4_activation_dry_run.py
+    validation_report: docs/registry/reports/cross_core_l4_dry_run_activation_orchestrator_validation.yaml
+    template_dry_run_report: docs/registry/reports/l4_activation_dry_run_template_report.yaml
+    l4_dry_run_activation_orchestrator_defined: true
+    template_dry_run_status: BLOCKED_NOT_APPROVED
+    downstream_gates_executed_on_template: false
+    l4_activation_ready_now: false
+    l4_active_now: false
+
   anti_patterns:
     - chat_summary_as_pass
     - direct_write_to_owned_state

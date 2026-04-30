@@ -1,0 +1,23 @@
+cross_core_l4_activation_review_instance_validation:
+  schema_version: '0.1'
+  generated_at: '2026-04-30T13:00:47Z'
+  status: BLOCKED_NOT_APPROVED
+  input: C:/Users/Stef/dev/learn-it/docs/pipelines/cross_core_contract/templates/l4_activation_review.template.yaml
+  l4_activation_review_instance_validated: true
+  l4_activation_ready_now: false
+  l4_active_now: false
+  input_file:
+    exists: true
+    sha256: f001978ba4ec27e0d08c3ce8313de29fff537a007d86fe5b82ab90adda98d96d
+  blocking_findings:
+    - finding_id: activation_review_not_approved
+      severity: blocking
+      path: C:\Users\Stef\dev\learn-it\docs\pipelines\cross_core_contract\templates\l4_activation_review.template.yaml
+      message: template_or_rejected_review_cannot_activate_l4
+  result_summary:
+    blocking_finding_count: 1
+    l4_activation_ready_now: false
+    l4_active_now: false
+    core_mutation_authorized: false
+    backlog_closure_authorized: false
+    release_or_promotion_authorized: false
