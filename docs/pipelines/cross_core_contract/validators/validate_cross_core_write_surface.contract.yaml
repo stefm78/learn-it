@@ -1,0 +1,77 @@
+l4_validator_contract:
+  schema_version: '0.1'
+  generated_at: '2026-04-30T11:36:59Z'
+  validator_id: validate_cross_core_write_surface
+  pipeline_id: cross_core_contract
+  status: contract_defined_inactive
+  current_level: L3_managed_execution_pipeline
+  target_level: L4_critical_canonical_pipeline
+  l4_active_now: false
+  executable_as_l4_gate_now: false
+
+  purpose: >-
+    Validate the declared cross-core read/write surface before any future L4 execution.
+    Every proposed canonical write must be explicitly owned, scoped, authorized,
+    validated, and covered by rollback or reconciliation rules.
+
+  future_input:
+    expected_contract: docs/pipelines/cross_core_contract/work/03_contract_synthesis/cross_core_execution_contract.yaml
+    expected_stage: STAGE_03_CONTRACT_SYNTHESIS
+    expected_transition_review: docs/pipelines/cross_core_contract/reports/l4_transition_review.yaml
+    expected_request: CCR_PATCH_LIFECYCLE_ESCALATION_THRESHOLD_N_R01
+
+  pass_requires:
+    - declared_read_surface
+    - declared_write_surface
+    - every_write_target_has_owner
+    - every_write_target_has_reason
+    - every_write_target_has_source_request
+    - every_write_target_has_validation_gate
+    - every_write_target_has_rollback_or_reconciliation_path
+    - impacted_cores_declared
+    - no_implicit_core_write
+    - no_implicit_backlog_closure
+    - no_implicit_release_or_promotion
+    - human_l4_transition_decision_recorded
+
+  must_block_if:
+    - write_surface_missing
+    - write_target_outside_declared_surface
+    - docs_cores_current_write_without_l4_transition_PASS
+    - governance_backlog_write_without_resolution_mapping
+    - release_or_promotion_write_without_validated_plan
+    - referentiel_or_link_write_without_link_binding_consistency_plan
+    - rollback_or_reconciliation_path_missing
+
+  future_write_surface_categories:
+    constitution_current:
+      path: docs/cores/current/constitution.yaml
+      status_now: forbidden
+      future_status: allowed_only_after_L4_activation_and_contract_PASS
+    referentiel_current:
+      path: docs/cores/current/referentiel.yaml
+      status_now: forbidden
+      future_status: allowed_only_after_L4_activation_and_contract_PASS
+    link_current:
+      path: docs/cores/current/link.yaml
+      status_now: forbidden
+      future_status: allowed_only_after_L4_activation_and_contract_PASS
+    governance_backlog:
+      path: docs/pipelines/constitution/scope_catalog/governance_backlog.yaml
+      status_now: forbidden
+      future_status: allowed_only_after_validated_backlog_resolution_mapping
+    releases:
+      path: docs/cores/releases/**
+      status_now: forbidden
+      future_status: allowed_only_after_multi_core_release_plan_PASS
+    current_manifest:
+      path: docs/cores/current/manifest.yaml
+      status_now: forbidden
+      future_status: allowed_only_after_multi_core_promotion_manifest_PASS
+
+  current_phase_guardrails:
+    core_mutation_authorized: false
+    backlog_closure_authorized: false
+    release_or_promotion_authorized: false
+    constitution_run_authorized: false
+    threshold_N_materialized_now: false

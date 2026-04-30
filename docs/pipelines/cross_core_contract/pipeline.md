@@ -106,6 +106,19 @@ release_or_promotion_authorized: false
 
 This pipeline is hardened to L3 for intake, evidence review, arbitration and contract synthesis.
 It remains below L4: no Core write, backlog closure, release or promotion is authorized.
+## validate_cross_core_write_surface contract
+
+```yaml
+contract_yaml: docs/pipelines/cross_core_contract/validators/validate_cross_core_write_surface.contract.yaml
+contract_markdown: docs/pipelines/cross_core_contract/validators/validate_cross_core_write_surface.contract.md
+contract_validation_report: docs/registry/reports/cross_core_write_surface_validator_contract_validation.yaml
+contract_defined: true
+l4_active_now: false
+executable_as_l4_gate_now: false
+```
+
+This is a future L4 validator contract. It does not activate L4 or authorize canonical writes.
+
 ## validate_cross_core_l4_transition_review contract
 
 ```yaml

@@ -130,3 +130,16 @@ l4_active_now: false
 executable_as_l4_gate_now: false
 ```
 
+
+## Individual validator contract — write surface
+
+```yaml
+validator_id: validate_cross_core_write_surface
+contract_yaml_ref: docs/pipelines/cross_core_contract/validators/validate_cross_core_write_surface.contract.yaml
+contract_markdown_ref: docs/pipelines/cross_core_contract/validators/validate_cross_core_write_surface.contract.md
+validation_report: docs/registry/reports/cross_core_write_surface_validator_contract_validation.yaml
+contract_defined: true
+l4_active_now: false
+executable_as_l4_gate_now: false
+```
+

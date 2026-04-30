@@ -1,0 +1,50 @@
+cross_core_write_surface_validator_contract_validation:
+  schema_version: '0.1'
+  generated_at: '2026-04-30T11:36:59Z'
+  status: PASS
+  validator_id: validate_cross_core_write_surface
+  contract_defined: true
+  l4_active_now: false
+  executable_as_l4_gate_now: false
+  checked_files:
+    - path: docs/pipelines/cross_core_contract/validators/validate_cross_core_write_surface.contract.yaml
+      exists: true
+      sha256: 1030a3c6b33bccec0a5ac62d75487f067b5b8549c5811856828cc2341dd26f0c
+    - path: docs/pipelines/cross_core_contract/validators/validate_cross_core_write_surface.contract.md
+      exists: true
+      sha256: 39ef8d04a58faa17fc15113a56b7906f052d4e2574da9d57efb91e6815a71c39
+    - path: docs/pipelines/cross_core_contract/validators/validate_cross_core_l4_transition_review.contract.yaml
+      exists: true
+      sha256: 5f97aa4669ea314b78cfd0fc240ba92746bde10f1393e79e4e7b32aac4b06fc8
+    - path: docs/pipelines/cross_core_contract/L4_VALIDATOR_FAMILY.md
+      exists: true
+      sha256: 0a4708f9e8ccf6e82365d69403a4993d012d3a100b4fe4fe20bde1aec337bdbe
+    - path: docs/pipelines/cross_core_contract/validators/l4_validator_family.yaml
+      exists: true
+      sha256: 223737e5989ec883b61d10f700c8743bbba4506bb36467ee4d13c4d02fbca292
+    - path: docs/pipelines/cross_core_contract/l4_transition_checklist.yaml
+      exists: true
+      sha256: c03845e81a99d74faada047b00dc7f248b67d1a5bd61831a4be31f5173c1ff7b
+    - path: docs/pipelines/cross_core_contract/AI_PROTOCOL.yaml
+      exists: true
+      sha256: 4cb7bb6e0349f4d8a758c9790b03d7aa2b80428fedcf2c2d267c676bcde0d0bc
+    - path: docs/pipelines/cross_core_contract/pipeline.md
+      exists: true
+      sha256: a09b4e31389855dfcf3a90c649b3a2fccfef15de7ee3ba0e8f71bc0e6b16d031
+    - path: docs/pipelines/cross_core_contract/state.yaml
+      exists: true
+      sha256: c02eb1501b16f9bf78286cf5f65301869fd424094ce1f2ed6da88345e79a1519
+    - path: docs/pipelines/cross_core_contract/requests/CCR_PATCH_LIFECYCLE_ESCALATION_THRESHOLD_N_R01.yaml
+      exists: true
+      sha256: 135e6039ed61b82fe7baefbf5a37e2cd03ad20d0cad2babd091b6629bb1e8d85
+  blocking_findings:
+    []
+  result_summary:
+    blocking_finding_count: 0
+    write_surface_validator_contract_defined: true
+    l4_active_now: false
+    executable_as_l4_gate_now: false
+    core_mutation_authorized: false
+    backlog_closure_authorized: false
+    release_or_promotion_authorized: false
+    request_remains_proposed_pending_arbitration: true
