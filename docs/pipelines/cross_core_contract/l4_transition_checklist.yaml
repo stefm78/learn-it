@@ -22,6 +22,7 @@ l4_transition_checklist:
     - l4_readiness_matrix_PASS
     - l4_executable_validators_batch1_PASS
     - l4_executable_validators_batch2_PASS
+    - l4_executable_validator_readiness_PASS
     - individual_l4_validators_implemented_before_execution
     - declared_read_surface
     - declared_write_surface

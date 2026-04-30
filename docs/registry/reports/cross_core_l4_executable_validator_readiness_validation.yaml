@@ -1,0 +1,121 @@
+cross_core_l4_executable_validator_readiness_validation:
+  schema_version: '0.1'
+  generated_at: '2026-04-30T12:44:57Z'
+  status: PASS
+  phase: PHASE_49_CROSS_CORE_L4_EXECUTABLE_VALIDATOR_READINESS
+  l4_active_now: false
+  l4_execution_ready_now: false
+  all_l4_executable_validators_defined: true
+  all_contract_checks_PASS: true
+  all_l4_gate_smokes_BLOCKED: true
+  checked_files:
+    - path: docs/pipelines/cross_core_contract/L4_EXECUTABLE_VALIDATOR_READINESS.md
+      exists: true
+      sha256: 2033eb19f50687640b4f33aa2ba4e4324f79a5a2012b12c4fd5a1cac903cc796
+    - path: docs/pipelines/cross_core_contract/validators/l4_executable_validator_readiness.yaml
+      exists: true
+      sha256: c20f97c5d1e63e16a95675dbdf08d7d40720d8a03fc452c4bea597344d2b84e2
+    - path: docs/pipelines/cross_core_contract/L4_READINESS_MATRIX.md
+      exists: true
+      sha256: 8c36fd76a1ba58552a20d48f7393ea9a01e4a056c7aceb9498df00b47e4aa96c
+    - path: docs/pipelines/cross_core_contract/validators/l4_readiness_matrix.yaml
+      exists: true
+      sha256: e7787b58fdf15f828b2d8f1edfa4eca2ce00d85371feb5bbc5191c4c9c4eaaa5
+    - path: docs/pipelines/cross_core_contract/AI_PROTOCOL.yaml
+      exists: true
+      sha256: 370f71f734c0b80d12b8a1f5f1fa45d7029ade117341f22d9a0c5b8f740a7074
+    - path: docs/pipelines/cross_core_contract/pipeline.md
+      exists: true
+      sha256: 4a3bf94c6524cb3fad8293a4debaeda7216597e49d4b78d96cf31ee04389e6b6
+    - path: docs/pipelines/cross_core_contract/state.yaml
+      exists: true
+      sha256: 1a3e193c1e388c75d39f07425536867152e801f1260a0acaef00757986bdae74
+    - path: docs/pipelines/cross_core_contract/l4_transition_checklist.yaml
+      exists: true
+      sha256: f89246b8adb2c62b42a7f794c3edea833bd99cb51dee280afac4035722990616
+    - path: docs/pipelines/cross_core_contract/requests/CCR_PATCH_LIFECYCLE_ESCALATION_THRESHOLD_N_R01.yaml
+      exists: true
+      sha256: 135e6039ed61b82fe7baefbf5a37e2cd03ad20d0cad2babd091b6629bb1e8d85
+    - path: docs/patcher/shared/validate_cross_core_l4_transition_review.py
+      exists: true
+      sha256: 62d1f229edc60ec37fa55fe99371513ca2999a7964f2e39377ee3dfca4d3a074
+    - path: docs/registry/reports/validate_cross_core_l4_transition_review_contract_check.yaml
+      exists: true
+      sha256: e04226ebff06ce431218ebc18165ca6dd190beb6c6ab4bedd28e42af911226fe
+    - path: docs/registry/reports/validate_cross_core_l4_transition_review_l4_gate_smoke.yaml
+      exists: true
+      sha256: 5e9d2213f16e3b21e5a767fc06bb2ff1753e8c28bd62e7bfb3adc420bd31fd5d
+    - path: docs/patcher/shared/validate_cross_core_write_surface.py
+      exists: true
+      sha256: 039f39f266caa249ae087c38f642340aa16ae59ce59cb8bd87d53eb2abbf3f0b
+    - path: docs/registry/reports/validate_cross_core_write_surface_contract_check.yaml
+      exists: true
+      sha256: 485c91e06e622239334d615bedb70b456a45a13f6c7ba7f26d2adcec3f8b1e77
+    - path: docs/registry/reports/validate_cross_core_write_surface_l4_gate_smoke.yaml
+      exists: true
+      sha256: f59bd2308a47abc9fb9fae6b2531d540f5c944cb1be7cea24a470e86823054f6
+    - path: docs/patcher/shared/validate_constitution_referentiel_link_reconstruction.py
+      exists: true
+      sha256: cd538dd6495295354ef687c327b2389a5fbad0da7d3cf0753d4e7741a8d54f3c
+    - path: docs/registry/reports/validate_constitution_referentiel_link_reconstruction_contract_check.yaml
+      exists: true
+      sha256: f35345573736d261a5757951fc8e2ce6cd2dcf169dbcb0d30e6c245359298421
+    - path: docs/registry/reports/validate_constitution_referentiel_link_reconstruction_l4_gate_smoke.yaml
+      exists: true
+      sha256: 344a01f37d49c31290dd8a0051025e55e202c314c3adfb28b0442c9e6c9a7f31
+    - path: docs/patcher/shared/validate_link_binding_consistency.py
+      exists: true
+      sha256: 317b884a815f46d0bd95656b6b69b2fe003d1c3197feebdff40d80a5dd69e87a
+    - path: docs/registry/reports/validate_link_binding_consistency_contract_check.yaml
+      exists: true
+      sha256: 765c31534d212d14686110a5aa78f9a5293e55730947793554c870d7b92040d1
+    - path: docs/registry/reports/validate_link_binding_consistency_l4_gate_smoke.yaml
+      exists: true
+      sha256: 65d09f9c28e78cfb726039762935b4700cb8b5baea1c38d39231a8a717df6e36
+    - path: docs/patcher/shared/validate_multi_core_release_plan.py
+      exists: true
+      sha256: 3247f8822c021c11280df63e90cab0e9d787ff51273aec33ed386f688a5671f6
+    - path: docs/registry/reports/validate_multi_core_release_plan_contract_check.yaml
+      exists: true
+      sha256: 479f8c0908cec2289dcad0d1556f84523c42a06bc0d697b31ff94c81058c903f
+    - path: docs/registry/reports/validate_multi_core_release_plan_l4_gate_smoke.yaml
+      exists: true
+      sha256: f0763bde107662753a51346436376d8ea720d21e737193dc35071969edae1802
+    - path: docs/patcher/shared/validate_multi_core_promotion_manifest.py
+      exists: true
+      sha256: aa7112bc2d5efc24143b4353136cb22366ecaa3cd390e126d33edea8dc4951cb
+    - path: docs/registry/reports/validate_multi_core_promotion_manifest_contract_check.yaml
+      exists: true
+      sha256: 40a8644f6483543cc6b7763333256b19c5041395c0c5ca1f1829b3678ba35858
+    - path: docs/registry/reports/validate_multi_core_promotion_manifest_l4_gate_smoke.yaml
+      exists: true
+      sha256: 5ba9acdd549dca21dc4951cd3423e4f45e2e65881a91ac21dfc5603bebfea808
+    - path: docs/patcher/shared/validate_cross_core_backlog_resolution.py
+      exists: true
+      sha256: 342fee7754cc12e3b112461ac34ea5a3e53966b018ffa727a27e8a37516a7b6f
+    - path: docs/registry/reports/validate_cross_core_backlog_resolution_contract_check.yaml
+      exists: true
+      sha256: d619055ddc76fbdbf427753ec106ed7762d68c3f097515f46ef4b07f60b8bb66
+    - path: docs/registry/reports/validate_cross_core_backlog_resolution_l4_gate_smoke.yaml
+      exists: true
+      sha256: e23b1e1f4031261f14c3f150fe49aacb517806c941527f39b185cc86e933bcab
+    - path: docs/patcher/shared/validate_cross_core_rollback_or_reconciliation_path.py
+      exists: true
+      sha256: 1359efe9ace0ee56ea911c13ba79b72c8495f6e3249a7a727d6f7f7c9c207d8a
+    - path: docs/registry/reports/validate_cross_core_rollback_or_reconciliation_path_contract_check.yaml
+      exists: true
+      sha256: 4336353ea3e83a566d887e7a8b50dbef644fe46d5eec1bd0460893d72d7df427
+    - path: docs/registry/reports/validate_cross_core_rollback_or_reconciliation_path_l4_gate_smoke.yaml
+      exists: true
+      sha256: 8807305acbf311ba8fb69884242dd5cc040753b15dad1dd8e439c86728e18761
+  blocking_findings:
+    []
+  result_summary:
+    blocking_finding_count: 0
+    executable_layer_complete: true
+    l4_activation_ready_now: false
+    l4_active_now: false
+    core_mutation_authorized: false
+    backlog_closure_authorized: false
+    release_or_promotion_authorized: false
+    request_remains_proposed_pending_arbitration: true

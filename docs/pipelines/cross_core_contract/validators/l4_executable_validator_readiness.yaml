@@ -1,0 +1,88 @@
+cross_core_l4_executable_validator_readiness:
+  schema_version: '0.1'
+  generated_at: '2026-04-30T12:44:57Z'
+  pipeline_id: cross_core_contract
+  phase: PHASE_49_CROSS_CORE_L4_EXECUTABLE_VALIDATOR_READINESS
+  status: complete_inactive_blocking_runtime
+  active_level: L3_managed_execution_pipeline
+  target_level: L4_critical_canonical_pipeline
+  l4_active_now: false
+  l4_execution_ready_now: false
+  all_l4_executable_validators_defined: true
+  all_contract_checks_PASS: true
+  all_l4_gate_smokes_BLOCKED: true
+  current_authorizations:
+    core_mutation_authorized: false
+    backlog_closure_authorized: false
+    release_or_promotion_authorized: false
+    constitution_run_authorized: false
+  validators:
+    - validator_id: validate_cross_core_l4_transition_review
+      batch: batch1
+      script: docs/patcher/shared/validate_cross_core_l4_transition_review.py
+      contract_check_report: docs/registry/reports/validate_cross_core_l4_transition_review_contract_check.yaml
+      l4_gate_smoke_report: docs/registry/reports/validate_cross_core_l4_transition_review_l4_gate_smoke.yaml
+      contract_check_status: PASS
+      l4_gate_smoke_status: BLOCKED
+      executable_as_l4_gate_now: false
+    - validator_id: validate_cross_core_write_surface
+      batch: batch1
+      script: docs/patcher/shared/validate_cross_core_write_surface.py
+      contract_check_report: docs/registry/reports/validate_cross_core_write_surface_contract_check.yaml
+      l4_gate_smoke_report: docs/registry/reports/validate_cross_core_write_surface_l4_gate_smoke.yaml
+      contract_check_status: PASS
+      l4_gate_smoke_status: BLOCKED
+      executable_as_l4_gate_now: false
+    - validator_id: validate_constitution_referentiel_link_reconstruction
+      batch: batch1
+      script: docs/patcher/shared/validate_constitution_referentiel_link_reconstruction.py
+      contract_check_report: docs/registry/reports/validate_constitution_referentiel_link_reconstruction_contract_check.yaml
+      l4_gate_smoke_report: docs/registry/reports/validate_constitution_referentiel_link_reconstruction_l4_gate_smoke.yaml
+      contract_check_status: PASS
+      l4_gate_smoke_status: BLOCKED
+      executable_as_l4_gate_now: false
+    - validator_id: validate_link_binding_consistency
+      batch: batch1
+      script: docs/patcher/shared/validate_link_binding_consistency.py
+      contract_check_report: docs/registry/reports/validate_link_binding_consistency_contract_check.yaml
+      l4_gate_smoke_report: docs/registry/reports/validate_link_binding_consistency_l4_gate_smoke.yaml
+      contract_check_status: PASS
+      l4_gate_smoke_status: BLOCKED
+      executable_as_l4_gate_now: false
+    - validator_id: validate_multi_core_release_plan
+      batch: batch2
+      script: docs/patcher/shared/validate_multi_core_release_plan.py
+      contract_check_report: docs/registry/reports/validate_multi_core_release_plan_contract_check.yaml
+      l4_gate_smoke_report: docs/registry/reports/validate_multi_core_release_plan_l4_gate_smoke.yaml
+      contract_check_status: PASS
+      l4_gate_smoke_status: BLOCKED
+      executable_as_l4_gate_now: false
+    - validator_id: validate_multi_core_promotion_manifest
+      batch: batch2
+      script: docs/patcher/shared/validate_multi_core_promotion_manifest.py
+      contract_check_report: docs/registry/reports/validate_multi_core_promotion_manifest_contract_check.yaml
+      l4_gate_smoke_report: docs/registry/reports/validate_multi_core_promotion_manifest_l4_gate_smoke.yaml
+      contract_check_status: PASS
+      l4_gate_smoke_status: BLOCKED
+      executable_as_l4_gate_now: false
+    - validator_id: validate_cross_core_backlog_resolution
+      batch: batch2
+      script: docs/patcher/shared/validate_cross_core_backlog_resolution.py
+      contract_check_report: docs/registry/reports/validate_cross_core_backlog_resolution_contract_check.yaml
+      l4_gate_smoke_report: docs/registry/reports/validate_cross_core_backlog_resolution_l4_gate_smoke.yaml
+      contract_check_status: PASS
+      l4_gate_smoke_status: BLOCKED
+      executable_as_l4_gate_now: false
+    - validator_id: validate_cross_core_rollback_or_reconciliation_path
+      batch: batch2
+      script: docs/patcher/shared/validate_cross_core_rollback_or_reconciliation_path.py
+      contract_check_report: docs/registry/reports/validate_cross_core_rollback_or_reconciliation_path_contract_check.yaml
+      l4_gate_smoke_report: docs/registry/reports/validate_cross_core_rollback_or_reconciliation_path_l4_gate_smoke.yaml
+      contract_check_status: PASS
+      l4_gate_smoke_status: BLOCKED
+      executable_as_l4_gate_now: false
+  conclusion:
+    executable_layer_complete: true
+    l4_activation_ready_now: false
+    reason: l4_gate mode blocks as expected because future L4 execution inputs are absent
+    next_allowed_step: implement governed L4 activation review only after explicit human decision

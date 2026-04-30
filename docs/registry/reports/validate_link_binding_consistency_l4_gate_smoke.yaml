@@ -2,8 +2,8 @@ validate_link_binding_consistency_validation:
   schema_version: '0.1'
   generated_at: '2026-04-30T12:44:56Z'
   validator_id: validate_link_binding_consistency
-  mode: contract_check
-  status: PASS
+  mode: l4_gate
+  status: BLOCKED
   l4_active_now: false
   executable_as_l4_gate_now: false
   contract: docs/pipelines/cross_core_contract/validators/validate_link_binding_consistency.contract.yaml
@@ -12,9 +12,11 @@ validate_link_binding_consistency_validation:
       exists: false
       sha256: None
   blocking_findings:
-    []
+    - finding_id: future_l4_input_missing
+      severity: blocking
+      path: docs/pipelines/cross_core_contract/work/03_contract_synthesis/cross_core_execution_contract.yaml
   result_summary:
-    blocking_finding_count: 0
+    blocking_finding_count: 1
     contract_defined: true
     l4_active_now: false
     executable_as_l4_gate_now: false

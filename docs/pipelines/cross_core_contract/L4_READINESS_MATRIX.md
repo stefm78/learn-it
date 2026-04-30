@@ -91,3 +91,16 @@ l4_execution_ready_now: false
 | `validate_cross_core_backlog_resolution` | `docs/patcher/shared/validate_cross_core_backlog_resolution.py` | `docs/registry/reports/validate_cross_core_backlog_resolution_contract_check.yaml` | contract-check PASS; L4 gate blocks without future inputs |
 | `validate_cross_core_rollback_or_reconciliation_path` | `docs/patcher/shared/validate_cross_core_rollback_or_reconciliation_path.py` | `docs/registry/reports/validate_cross_core_rollback_or_reconciliation_path_contract_check.yaml` | contract-check PASS; L4 gate blocks without future inputs |
 
+## Executable validator readiness consolidation
+
+```yaml
+phase: PHASE_49_CROSS_CORE_L4_EXECUTABLE_VALIDATOR_READINESS
+executable_layer_complete: true
+all_contract_checks_PASS: true
+all_l4_gate_smokes_BLOCKED: true
+l4_activation_ready_now: false
+l4_active_now: false
+```
+
+All eight dormant executable validators are present. Their `contract_check` mode passes, while their `l4_gate` mode blocks because future L4 execution inputs are absent.
+

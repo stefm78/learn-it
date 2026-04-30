@@ -217,6 +217,17 @@ ai_protocol:
       default_mode: contract_check
       l4_gate_mode_blocks_without_future_inputs: true
 
+  l4_executable_validator_readiness:
+    phase: PHASE_49_CROSS_CORE_L4_EXECUTABLE_VALIDATOR_READINESS
+    readiness_ref: docs/pipelines/cross_core_contract/L4_EXECUTABLE_VALIDATOR_READINESS.md
+    readiness_yaml_ref: docs/pipelines/cross_core_contract/validators/l4_executable_validator_readiness.yaml
+    validation_report: docs/registry/reports/cross_core_l4_executable_validator_readiness_validation.yaml
+    executable_layer_complete: true
+    all_contract_checks_PASS: true
+    all_l4_gate_smokes_BLOCKED: true
+    l4_activation_ready_now: false
+    l4_active_now: false
+
   anti_patterns:
     - chat_summary_as_pass
     - direct_write_to_owned_state

@@ -106,6 +106,22 @@ release_or_promotion_authorized: false
 
 This pipeline is hardened to L3 for intake, evidence review, arbitration and contract synthesis.
 It remains below L4: no Core write, backlog closure, release or promotion is authorized.
+## L4 executable validator readiness
+
+```yaml
+phase: PHASE_49_CROSS_CORE_L4_EXECUTABLE_VALIDATOR_READINESS
+readiness_ref: docs/pipelines/cross_core_contract/L4_EXECUTABLE_VALIDATOR_READINESS.md
+readiness_yaml_ref: docs/pipelines/cross_core_contract/validators/l4_executable_validator_readiness.yaml
+validation_report: docs/registry/reports/cross_core_l4_executable_validator_readiness_validation.yaml
+executable_layer_complete: true
+all_contract_checks_PASS: true
+all_l4_gate_smokes_BLOCKED: true
+l4_activation_ready_now: false
+l4_active_now: false
+```
+
+All eight L4 validators are executable, but L4 gate mode remains intentionally blocking without future L4 execution inputs.
+
 ## L4 executable validators batch 2
 
 ```yaml

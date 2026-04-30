@@ -156,3 +156,12 @@ cross_core_l4_readiness_matrix:
           contract_check_report: docs/registry/reports/validate_cross_core_rollback_or_reconciliation_path_contract_check.yaml
           contract_check_status: PASS
           l4_gate_mode_blocks_without_future_inputs: true
+  executable_validator_readiness:
+    phase: PHASE_49_CROSS_CORE_L4_EXECUTABLE_VALIDATOR_READINESS
+    readiness_yaml_ref: docs/pipelines/cross_core_contract/validators/l4_executable_validator_readiness.yaml
+    validation_report: docs/registry/reports/cross_core_l4_executable_validator_readiness_validation.yaml
+    executable_layer_complete: true
+    all_contract_checks_PASS: true
+    all_l4_gate_smokes_BLOCKED: true
+    l4_activation_ready_now: false
+    l4_active_now: false
