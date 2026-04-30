@@ -8,9 +8,8 @@ pipeline_signals:
   - id: backlog
     status: attention
     source: docs/pipelines/constitution/reports/governance_backlog_report.yaml
-    summary: 4 reviewed open patch_lifecycle design follow-ups; keep backlog open until explicit design
-      trigger
+    summary: 7 open entries requiring STAGE_00 review
     scope_key: patch_lifecycle
-    recommended_action: KEEP_BACKLOG_OPEN_WITH_REVIEW_METADATA
-    recommended_mode: no_run_id_mode
+    recommended_action: STAGE_00_SCOPE_PARTITION_REVIEW_AND_REGEN
+    recommended_mode: partition_refresh
     run_opening_authorized_by_signal: false

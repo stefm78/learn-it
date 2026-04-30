@@ -2,7 +2,7 @@ scope_partition_review_report:
   schema_version: 0.1
   pipeline_id: constitution
   status: READY_FOR_SEMANTIC_REVIEW
-  source_fingerprint: 47c415bd20b2fcb61b075eb4cf523b785f443dc24b78a75dc65530f1956efbf3
+  source_fingerprint: ba76a6b55a3f757ade08d7fb13d148888bf493c3c8382853c576d412ae0bc04a
   current_published_scope_count: 5
   current_published_scope_keys:
   - deployment_governance
@@ -484,7 +484,7 @@ scope_partition_review_report:
   bijection_check:
     canon_id_count: 117
     assigned_id_count: 116
-    forced_neighbor_id_count: 20
+    forced_neighbor_id_count: 19
     ids_covered_as_forced_neighbors:
     - ACTION_ESCALATE_PERSISTENT_DRIFT_OFFSESSION
     - ACTION_LOG_UNCOVERED_CONFLICT
@@ -494,7 +494,6 @@ scope_partition_review_report:
     - INV_MSC_AND_STRICT
     - INV_NO_RUNTIME_CONTENT_GENERATION
     - INV_RUNTIME_FULLY_LOCAL
-    - REF_CORE_LEARNIT_REFERENTIEL_V5_0_IN_CONSTITUTION
     - TYPE_AUTHENTIC_CONTEXT
     - TYPE_CORPUS_CONFIDENCE_ICC
     - TYPE_FEEDBACK_COVERAGE_MATRIX
@@ -628,11 +627,13 @@ scope_partition_review_report:
       - TYPE_PATCH_ARTIFACT
       - TYPE_PATCH_IMPACT_SCOPE
       - TYPE_PATCH_QUALITY_GATE
-    ids_not_covered: []
+    ids_not_covered:
+    - REF_CORE_LEARNIT_REFERENTIEL_V6_0_IN_CONSTITUTION
     ids_assigned_but_not_in_canon: []
     ids_assigned_to_multiple_scopes: {}
-    bijection_status: PASS
-    bijection_failures: []
+    bijection_status: FAIL
+    bijection_failures:
+    - 1 canon ID(s) not covered by any scope decision
   notes:
   - Le rapport déterministe n'édite pas la partition publiée.
   - Il sert de base à l'analyse sémantique assistée par IA et à l'arbitrage humain.

@@ -48,6 +48,51 @@ Règle :
 - `docs/pipelines/constitution/scope_catalog/manifest.yaml`
 - `docs/pipelines/constitution/scope_catalog/scope_definitions/*.yaml`
 
+## Script déterministe — bundle de revue STAGE_00
+
+Script canonique :
+- `docs/patcher/shared/run_constitution_stage00_review_bundle.py`
+
+Commande de référence :
+
+```bash
+python docs/patcher/shared/run_constitution_stage00_review_bundle.py
+```
+
+Commande dry-run :
+
+```bash
+python docs/patcher/shared/run_constitution_stage00_review_bundle.py --dry-run
+```
+
+Rôle : matérialiser en une commande les rapports déterministes de diagnostic nécessaires avant revue sémantique STAGE_00.
+
+Le bundle exécute :
+1. `validate_governance_backlog_lifecycle.py` ;
+2. `report_governance_backlog.py` ;
+3. `analyze_constitution_scope_partition.py` ;
+4. `score_constitution_scope_maturity.py` ;
+5. `report_constitution_neighbor_ids_governance.py` ;
+6. `report_constitution_neighbor_declaration_inventory.py` ;
+7. `refresh_constitution_pipeline_signals.py --apply`.
+
+Il écrit :
+- `docs/pipelines/constitution/reports/stage00_review_bundle_report.yaml` ;
+- les rapports déterministes STAGE_00 listés dans les sorties attendues ;
+- `docs/pipelines/constitution/signals.yaml` ;
+- `docs/pipelines/constitution/reports/bounded_run_preflight_report.yaml` ;
+- `docs/pipelines/constitution/reports/pipeline_signals_refresh_report.yaml`.
+
+Il ne modifie jamais :
+- `policy.yaml` ;
+- `decisions.yaml` ;
+- `governance_backlog.yaml` ;
+- le catalogue de scopes généré ;
+- les Core courants.
+
+Le bundle ne remplace pas l'arbitrage humain et ne peut pas déclarer la revue sémantique terminée. Il fournit seulement la base déterministe commune de la revue.
+
+
 ## Script déterministe obligatoire — analyse
 
 Script canonique :
@@ -421,6 +466,7 @@ Mise à jour obligatoire en fin de STAGE_00 :
 2. Le Stage 00 est interdit s'il existe un run actif.
 3. Le script `analyze_constitution_scope_partition.py` est obligatoire et doit être réellement
    exécuté avant toute analyse sémantique ou conclusion de stage.
+3bis. Le bundle STAGE_00 peut être utilisé pour matérialiser cette base déterministe avec les rapports backlog, scoring, neighbor governance et refresh des signaux.
 4. Le Stage 00 ne peut pas être déclaré `done` sans que `scope_partition_review_report.yaml`
    ait été produit par exécution réelle de `analyze_constitution_scope_partition.py`.
 5. La régénération du catalogue ne peut pas être déclarée accomplie sans exécution réelle de

@@ -246,4 +246,21 @@ Archivés :
 - `moved docs\transformations\core_modularization\J1_SCOPED_RUN_CONTRACT.md -> docs\transformations\core_modularization\archive\journals\J1_SCOPED_RUN_CONTRACT.md ; reason=J1 scoped run contract absorbed by pipeline, entry actions, run inputs, and stage skills`
 - `moved docs\transformations\core_modularization\J1_CONSTITUTION_PIPELINE_MINIMAL_DELTA.md -> docs\transformations\core_modularization\archive\journals\J1_CONSTITUTION_PIPELINE_MINIMAL_DELTA.md ; reason=J1 minimal Constitution delta absorbed by pipeline.md and STAGE skills`
 - `moved docs\transformations\core_modularization\POST_PILOT_PATCH_LIFECYCLE_BACKLOG_TRIAGE.md -> docs\transformations\core_modularization\archive\analyses\POST_PILOT_PATCH_LIFECYCLE_BACKLOG_TRIAGE.md ; reason=post-pilot triage superseded by governance_backlog review metadata, Stage 00 reports, and pipeline signals`
+---
+
+## 2026-04-30 — PHASE_30 bundle déterministe STAGE_00
+
+- Mode : `human+ai`
+- Début de `PHASE_30_STAGE00_REVIEW_BUNDLE`.
+- Objectif : intégrer un wrapper déterministe unique pour matérialiser les diagnostics STAGE_00 après closeout et avant revue sémantique.
+- Le wrapper doit exécuter les validations/reports backlog, partition, scoring, neighbor governance et refresh des signaux.
+- La phase ne doit pas modifier `policy.yaml`, `decisions.yaml`, `governance_backlog.yaml`, le scope catalog généré ou les cores courants.
+
+### Artefacts prévus
+
+- `docs/patcher/shared/run_constitution_stage00_review_bundle.py`
+- `docs/pipelines/constitution/STAGE_00_SCOPE_PARTITION_REVIEW_AND_REGEN.md`
+- `docs/pipelines/constitution/stages/STAGE_00_SCOPE_PARTITION_REVIEW_AND_REGEN.skill.yaml`
+- `docs/pipelines/constitution/pipeline.md`
+- `docs/pipelines/constitution/reports/stage00_review_bundle_report.yaml`
 

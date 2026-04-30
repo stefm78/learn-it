@@ -1,7 +1,7 @@
 constitution_neighbor_declaration_inventory_report:
   schema_version: '0.1'
   phase_id: PHASE_18A
-  generated_at: '2026-04-29T14:14:40Z'
+  generated_at: '2026-04-30T09:04:41Z'
   status: PASS
   mutation_policy:
     policy_yaml: not_modified
@@ -19,15 +19,15 @@ constitution_neighbor_declaration_inventory_report:
   - ref: docs/pipelines/constitution/scope_catalog/manifest.yaml
     sha256: 3de972b8904b38698d92fb51a63ce0c7273d6a7ec668344c2297bcbaf24b9812
   - ref: docs/pipelines/constitution/pipeline.md
-    sha256: 895c2bd63d4239cddefe7ba2eec5727637893977b06af405d2078311a17b8c80
+    sha256: b15c9cdea72a72c61bd44e8872df0bbfe73cb1b3335d8d0fc4f5209f6756640d
   - ref: docs/pipelines/constitution/STAGE_00_SCOPE_PARTITION_REVIEW_AND_REGEN.md
-    sha256: 93c8e4b66b1ec9836ad6e3ccfcc09123eba5915d36ea41b6d42c380b931335dc
+    sha256: 9324624f3ac64ca14d0834f9c4fd0eddb102615cf9602d8bae9dbc70d95fbeb9
   summary:
     policy_declared_scope_count: 5
     force_logical_neighbor_decision_count: 8
     external_read_only_core_decision_count: 1
     scope_definition_count: 5
-    run_extract_file_count: 8
+    run_extract_file_count: 10
     finding_count: 0
     warning_count: 0
     error_count: 0
@@ -346,9 +346,9 @@ constitution_neighbor_declaration_inventory_report:
         neighbor_file_count: 0
         neighbor_files: []
     run_extracts:
-      run_extract_file_count: 8
-      scope_extract_count: 4
-      neighbor_extract_count: 4
+      run_extract_file_count: 10
+      scope_extract_count: 5
+      neighbor_extract_count: 5
       files:
       - path: docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_13_PATCH_LIFECYCLE_R01/inputs/neighbor_extract.yaml
         kind: neighbor_extract
@@ -386,6 +386,16 @@ constitution_neighbor_declaration_inventory_report:
         - neighbor_extract
         counts: {}
       - path: docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_27_PATCH_LIFECYCLE_R01/inputs/scope_extract.yaml
+        kind: scope_extract
+        top_level_keys:
+        - scope_extract
+        counts: {}
+      - path: docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_30_PATCH_LIFECYCLE_R01/inputs/neighbor_extract.yaml
+        kind: neighbor_extract
+        top_level_keys:
+        - neighbor_extract
+        counts: {}
+      - path: docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_30_PATCH_LIFECYCLE_R01/inputs/scope_extract.yaml
         kind: scope_extract
         top_level_keys:
         - scope_extract

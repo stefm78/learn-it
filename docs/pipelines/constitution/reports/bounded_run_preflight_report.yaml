@@ -2,8 +2,8 @@ bounded_run_preflight_report:
   schema_version: '0.1'
   stage_id: STAGE_00_SCOPE_PARTITION_REVIEW_AND_REGEN
   mode: run_candidate_preflight
-  generated_at: '2026-04-29T14:14:40Z'
-  status: PREFLIGHT_KEEP_BACKLOG_OPEN
+  generated_at: '2026-04-30T09:04:41Z'
+  status: PREFLIGHT_DEFER_TO_STAGE00_REVIEW
   mutation_policy:
     runs_index: not_modified
     governance_backlog_yaml: not_modified
@@ -13,37 +13,35 @@ bounded_run_preflight_report:
     cores: not_modified
   inputs:
   - ref: docs/pipelines/constitution/runs/index.yaml
-    sha256: 62520152fd7757ff175af3d409152de1fcbef74e83de129bd0053488d103aae5
+    sha256: dbd50d19ec37a3eebe668f4847be3eaacdab2a21893711d83360f2c79719a15f
   - ref: docs/pipelines/constitution/scope_catalog/governance_backlog.yaml
-    sha256: 2dbb5971b0af2a101912b95524a5f6d80b3ee553b6da7a7ef17a8bd755678361
+    sha256: 27e49759c87dba928d8f6e292072338697094b7c733ca021d10614dff34045f2
   - ref: docs/pipelines/constitution/reports/governance_backlog_report.yaml
-    sha256: 67cfe1707536ca88d1132f51e2ea2b4e853cb028f355453be5a09502f070d87a
+    sha256: bd0075fbebaed19d7db5d54d12c105cb57db4ad9b13efe9a59854aea6b1fabf5
   - ref: docs/pipelines/constitution/reports/governance_backlog_lifecycle_validation.yaml
-    sha256: a58d8e1ac1446281f99a73602d54a647cdea7e2abee2b538ffe1fed250bb0e7d
+    sha256: 56ec4628a3101038314a5a54bf26ed88ab3a45007054ae69a520236903fc2f7b
   requested_scope_key: patch_lifecycle
   active_run_check:
     active_run_count: 0
     active_runs: []
     no_active_run_confirmed: true
   backlog_signal:
-    matching_open_entry_count: 4
+    matching_open_entry_count: 7
     reviewed_open_entry_count: 4
-    missing_review_metadata_count: 0
+    missing_review_metadata_count: 3
     matching_counts_by_type:
-      scope_extension_needed: 1
-      scope_gap: 3
+      scope_extension_needed: 2
+      scope_gap: 5
     matching_counts_by_scope_key:
-      patch_lifecycle: 4
+      patch_lifecycle: 7
     lifecycle_validation_status: PASS
-    open_entries_all_scopes: 4
+    open_entries_all_scopes: 7
   decision:
-    status: PREFLIGHT_KEEP_BACKLOG_OPEN
-    recommendation: keep_backlog_open
+    status: PREFLIGHT_DEFER_TO_STAGE00_REVIEW
+    recommendation: defer_to_stage00_backlog_review
     new_bounded_run_recommended_now: false
-    reason: STAGE_00 semantic backlog review has been completed. Open backlog entries remain active with
-      review metadata, but they are design follow-ups rather than immediate pipeline blockers. Do not
-      open a new bounded run from this signal without explicit human override.
-    next_action: keep_backlog_open_with_review_metadata
+    reason: Open governance backlog entries exist and at least one lacks complete STAGE_00 review metadata.
+    next_action: run_stage00_backlog_review
     proposed_scope_key_if_later_opened: patch_lifecycle
     proposed_run_theme_if_later_opened: patch_lifecycle_state_machine_and_priority_lanes
     included_first_if_later_opened:
@@ -120,6 +118,54 @@ bounded_run_preflight_report:
     recommended_action_from_backlog: Review whether a future patch_lifecycle scope iteration should introduce
       an explicit patch state model.
     rank: 4
+  - entry_id: GB_2026_04_30_PATCH_LIFECYCLE_R01_GBC_PATCH_LIFECYCLE_REFERENTIEL_PARAMETER_R02
+    candidate_id: GBC_PATCH_LIFECYCLE_REFERENTIEL_PARAMETER_R02
+    title: Confirm external Référentiel parameter contract for ineffective patch iteration threshold N
+    type: scope_gap
+    scope_key: patch_lifecycle
+    related_scope_keys:
+    - patch_lifecycle
+    stage00_relevant: true
+    review_metadata_complete: false
+    last_reviewed_at: null
+    last_reviewed_by: null
+    next_review_trigger: null
+    recommended_action_from_backlog: Keep as cross-core follow-up. Decide whether a concrete external-read-only
+      parameter should be declared in scope generation or whether a cross-core change request is required.
+    rank: 5
+  - entry_id: GB_2026_04_30_PATCH_LIFECYCLE_R01_GBC_PATCH_LIFECYCLE_ESCALATION_BOUNDARY_R02
+    candidate_id: GBC_PATCH_LIFECYCLE_ESCALATION_BOUNDARY_R02
+    title: Preserve global escalation ownership boundary across patch_lifecycle, learner_state and governance
+    type: scope_extension_needed
+    scope_key: patch_lifecycle
+    related_scope_keys:
+    - patch_lifecycle
+    - learner_state
+    - deployment_governance
+    stage00_relevant: true
+    review_metadata_complete: false
+    last_reviewed_at: null
+    last_reviewed_by: null
+    next_review_trigger: null
+    recommended_action_from_backlog: Revisit escalation ownership during a dedicated partition/scope review
+      if future runs touch learner_state or governance escalation semantics.
+    rank: 6
+  - entry_id: GB_2026_04_30_PATCH_LIFECYCLE_R01_GBC_PATCH_LIFECYCLE_VALUE_COST_AR_N2_NEIGHBOR_R01
+    candidate_id: GBC_PATCH_LIFECYCLE_VALUE_COST_AR_N2_NEIGHBOR_R01
+    title: Decide whether TYPE_SELF_REPORT_AR_N2 should be an explicit read neighbor for patch_lifecycle
+    type: scope_gap
+    scope_key: patch_lifecycle
+    related_scope_keys:
+    - patch_lifecycle
+    - learner_state
+    stage00_relevant: true
+    review_metadata_complete: false
+    last_reviewed_at: null
+    last_reviewed_by: null
+    next_review_trigger: null
+    recommended_action_from_backlog: Re-evaluate scope_generation policy/decisions for patch_lifecycle
+      neighbor declarations and regenerate the scope catalog if explicit neighbor closure is approved.
+    rank: 7
   guardrails:
   - This report does not open a run.
   - Do not mutate policy.yaml or decisions.yaml from preflight.

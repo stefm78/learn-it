@@ -1,0 +1,223 @@
+stage00_review_bundle_report:
+  schema_version: '0.1'
+  pipeline_id: constitution
+  stage_id: STAGE_00_SCOPE_PARTITION_REVIEW_AND_REGEN
+  mode: partition_refresh_diagnostic_bundle
+  started_at: '2026-04-30T09:04:39Z'
+  finished_at: '2026-04-30T09:04:41Z'
+  status: PASS
+  dry_run: false
+  active_run_check:
+    active_run_count: 0
+    active_runs: []
+    no_active_run_confirmed: true
+  mutation_policy:
+    policy_yaml: not_modified
+    decisions_yaml: not_modified
+    governance_backlog_yaml: not_modified
+    scope_catalog: not_modified
+    cores: not_modified
+    reports: written
+    signals_yaml: derived_refresh_only
+    bounded_run_preflight_report: derived_refresh_only
+  commands:
+  - id: validate_governance_backlog_lifecycle
+    command: C:\Users\Stef\dev\learn-it\.venv\Scripts\python.exe docs/patcher/shared/validate_governance_backlog_lifecycle.py
+      --report docs/pipelines/constitution/reports/governance_backlog_lifecycle_validation.yaml
+    outputs:
+    - docs/pipelines/constitution/reports/governance_backlog_lifecycle_validation.yaml
+    executed: true
+    status: PASS
+    returncode: 0
+    stdout_tail: 'Wrote docs/pipelines/constitution/reports/governance_backlog_lifecycle_validation.yaml
+
+      Status: PASS
+
+      '
+    stderr_tail: ''
+  - id: report_governance_backlog
+    command: C:\Users\Stef\dev\learn-it\.venv\Scripts\python.exe docs/patcher/shared/report_governance_backlog.py --report
+      docs/pipelines/constitution/reports/governance_backlog_report.yaml
+    outputs:
+    - docs/pipelines/constitution/reports/governance_backlog_report.yaml
+    executed: true
+    status: PASS
+    returncode: 0
+    stdout_tail: 'Wrote docs/pipelines/constitution/reports/governance_backlog_report.yaml
+
+      Status: PASS
+
+      Selected entries: 7
+
+      Open entries: 7
+
+      '
+    stderr_tail: ''
+  - id: analyze_constitution_scope_partition
+    command: C:\Users\Stef\dev\learn-it\.venv\Scripts\python.exe docs/patcher/shared/analyze_constitution_scope_partition.py
+      --report docs/pipelines/constitution/reports/scope_partition_review_report.yaml
+    outputs:
+    - docs/pipelines/constitution/reports/scope_partition_review_report.yaml
+    executed: true
+    status: PASS
+    returncode: 0
+    stdout_tail: "   \"RULE_ACTIVATION_DISTRESS_PERSISTENCE_ESCALATION_OFFSESSION\",\n          \"RULE_AR_N1_OVERRIDES_PROXY\"\
+      ,\n          \"RULE_CONSERVATIVE_SCAFFOLDING_ESCALATION_REQUIRES_OFFSESSION_REVIEW\",\n          \"RULE_LEARNER_STATE_AXIS_UNKNOWN_ALLOWED\"\
+      ,\n          \"RULE_LONG_INTERRUPTION_REQUIRES_DIAGNOSTIC_RESUME\",\n          \"RULE_MULTI_AXIS_UNKNOWN_OR_UNOBSERVABLE_SAFE_ENTRY\"\
+      ,\n          \"RULE_SESSION_INTENTION_NON_BLOCKING\",\n          \"TYPE_LEARNER_STATE_MODEL\",\n          \"TYPE_SELF_REPORT_AR_N1\"\
+      ,\n          \"TYPE_SELF_REPORT_AR_N2\",\n          \"TYPE_SELF_REPORT_AR_N3\",\n          \"TYPE_STATE_AXIS_ACTIVATION\"\
+      ,\n          \"TYPE_STATE_AXIS_CALIBRATION\",\n          \"TYPE_STATE_AXIS_VALUE_COST\"\n        ],\n        \"mastery_evaluation\"\
+      : [\n          \"ACTION_PLAN_SHORT_DIAGNOSTIC_TASK\",\n          \"CONSTRAINT_NO_BIOMETRICS_OR_OFFSESSION_SURVEILLANCE\"\
+      ,\n          \"EVENT_LOW_SIS\",\n          \"EVENT_MSC_DOWNGRADE\",\n          \"EVENT_MSC_PERCEPTION_DIVERGENCE_DETECTED\"\
+      ,\n          \"EVENT_PROVISIONAL_MASTERY_WINDOW_EXPIRED\",\n          \"EVENT_SYSTEMIC_INVESTIGATION_AUTO_OPENED\",\n\
+      \          \"EVENT_SYSTEMIC_INVESTIGATION_CLOSED\",\n          \"EVENT_T_EVALUATION_OVERDUE\",\n          \"INV_GRAPH_PROPAGATION_ONE_HOP\"\
+      ,\n          \"INV_MSC_AND_STRICT\",\n          \"INV_REFERENTIEL_VALIDITY_REQUIRED_FOR_DELEGATED_THRESHOLD_EVALUATION\"\
+      ,\n          \"INV_SECONDARY_RETROGRADATION_IS_NEW_EVENT\",\n          \"INV_TRANSFER_SEPARATE_FROM_BASE_MASTERY\",\n\
+      \          \"PARAM_PROVISIONAL_MASTERY_VERIFICATION_WINDOW\",\n          \"RULE_LOW_SIS_NEVER_AUTO_PENALIZES\",\n  \
+      \        \"RULE_MSC_COMPONENT_NON_CALCULABLE_DEFERS_BASE_MASTERY\",\n          \"RULE_MSC_DOWNGRADE_MARKS_DEPENDENTS\"\
+      ,\n          \"RULE_MSC_PERCEPTION_DIVERGENCE_PROTOCOL\",\n          \"RULE_PROVISIONAL_MASTERY_WINDOW_EXPIRY_SAFE_FALLBACK\"\
+      ,\n          \"RULE_SYSTEMIC_INVESTIGATION_OPEN_CLOSE_WINDOW\",\n          \"RULE_T_EVALUATION_OVERDUE_REQUIRES_SIGNAL_OR_FOLLOWUP\"\
+      ,\n          \"TYPE_MASTERY_COMPONENT_A\",\n          \"TYPE_MASTERY_COMPONENT_P\",\n          \"TYPE_MASTERY_COMPONENT_R\"\
+      ,\n          \"TYPE_MASTERY_COMPONENT_T\",\n          \"TYPE_MASTERY_MODEL\",\n          \"TYPE_NC_MSC\",\n        \
+      \  \"TYPE_SESSION_INTEGRITY_SCORE\"\n        ],\n        \"patch_lifecycle\": [\n          \"ACTION_ESCALATE_PERSISTENT_DRIFT_OFFSESSION\"\
+      ,\n          \"ACTION_LOG_UNCOVERED_CONFLICT\",\n          \"ACTION_ROLLBACK_PATCH\",\n          \"ACTION_TRIGGER_AR_SOLLICITATION_PATCH\"\
+      ,\n          \"ACTION_TRIGGER_RELEVANCE_PATCH\",\n          \"CONSTRAINT_NO_ADAPTIVE_PHILOSOPHY_CHANGE\",\n        \
+      \  \"CONSTRAINT_NO_AUTONOMOUS_PSYCHOLOGICAL_INFERENCE\",\n          \"EVENT_AR_REFRACTORY_PROFILE_DETECTED\",\n    \
+      \      \"EVENT_PATCH_INVALID\",\n          \"EVENT_PERSISTENT_LOW_VC\",\n          \"INV_INVALID_PATCH_REJECTED\",\n\
+      \          \"INV_NO_PARTIAL_PATCH_STATE\",\n          \"INV_PATCH_ARTIFACTS_MUST_BE_PRECOMPUTED_OFF_SESSION\",\n   \
+      \       \"INV_PATCH_LOCAL_VALIDATION_MUST_BE_DETERMINISTIC\",\n          \"INV_PERSISTENT_DRIFT_REQUIRES_ESCALATION_IF_PATCH_BLOCKED\"\
+      ,\n          \"RULE_AR_REFRACTORY_PROFILE_TRIGGERS_SOLLICITATION_PATCH\",\n          \"RULE_PATCH_SERIALIZATION\",\n\
+      \          \"RULE_PERSISTENT_DRIFT_BLOCKED_PATCH_ESCALATES_OFFSESSION\",\n          \"RULE_PERSISTENT_LOW_VC_TRIGGERS_RELEVANCE_PATCH\"\
+      ,\n          \"TYPE_PATCH_ARTIFACT\",\n          \"TYPE_PATCH_IMPACT_SCOPE\",\n          \"TYPE_PATCH_QUALITY_GATE\"\
+      \n        ]\n      },\n      \"ids_not_covered\": [\n        \"REF_CORE_LEARNIT_REFERENTIEL_V6_0_IN_CONSTITUTION\"\n\
+      \      ],\n      \"ids_assigned_but_not_in_canon\": [],\n      \"ids_assigned_to_multiple_scopes\": {},\n      \"bijection_status\"\
+      : \"FAIL\",\n      \"bijection_failures\": [\n        \"1 canon ID(s) not covered by any scope decision\"\n      ]\n\
+      \    },\n    \"notes\": [\n      \"Le rapport déterministe n'édite pas la partition publiée.\",\n      \"Il sert de\
+      \ base à l'analyse sémantique assistée par IA et à l'arbitrage humain.\",\n      \"bijection_check.bijection_status\
+      \ PASS = tous les IDs canon sont couverts (assign ou forced_neighbor).\",\n      \"Les IDs en forced_neighbor sont partagés\
+      \ entre scopes et n'appartiennent délibérément à aucun scope.\"\n    ]\n  }\n}\n"
+    stderr_tail: ''
+  - id: score_constitution_scope_maturity
+    command: C:\Users\Stef\dev\learn-it\.venv\Scripts\python.exe docs/patcher/shared/score_constitution_scope_maturity.py
+      --report docs/pipelines/constitution/reports/scope_maturity_scoring_report.yaml
+    outputs:
+    - docs/pipelines/constitution/reports/scope_maturity_scoring_report.yaml
+    executed: true
+    status: PASS
+    returncode: 0
+    stdout_tail: "anged_files_count\": 5,\n                \"confidence\": \"limited_with_backlog_pressure\",\n          \
+      \      \"v1_1_position\": \"missing_history_limits_confidence_not_score_by_itself\"\n              }\n            ],\n\
+      \            \"calibration\": \"v1_1\"\n          }\n        },\n        \"diagnostic_metrics\": {\n          \"target_id_count\"\
+      : 22,\n          \"neighbor_id_count\": 5,\n          \"neighbor_file_count\": 2,\n          \"watchpoint_count\": 5,\n\
+      \          \"internal_edge_count\": 33,\n          \"outgoing_edge_count\": 6,\n          \"covered_outgoing_edge_count\"\
+      : 6,\n          \"uncovered_outgoing_edge_count\": 0,\n          \"missing_target_edge_count\": 0,\n          \"missing_target_ids\"\
+      : [],\n          \"duplicate_owned_ids\": {}\n        },\n        \"related_open_backlog_entries\": [\n          {\n\
+      \            \"entry_id\": \"GB_2026_04_27_PATCH_LIFECYCLE_R01_GBC_PATCH_LIFECYCLE_ESCALATION_BOUNDARY_R01\",\n    \
+      \        \"type\": \"scope_extension_needed\",\n            \"status\": \"open\",\n            \"title\": \"Review broad\
+      \ escalation triggers crossing patch_lifecycle and learner_state/governance\"\n          },\n          {\n         \
+      \   \"entry_id\": \"GB_2026_04_27_PATCH_LIFECYCLE_R01_GBC_PATCH_LIFECYCLE_FULL_STATE_MACHINE_R01\",\n            \"\
+      type\": \"scope_gap\",\n            \"status\": \"open\",\n            \"title\": \"Decide whether patch_lifecycle needs\
+      \ a canonical patch state machine\"\n          },\n          {\n            \"entry_id\": \"GB_2026_04_27_PATCH_LIFECYCLE_R01_GBC_PATCH_LIFECYCLE_PRIORITY_QUEUE_R01\"\
+      ,\n            \"type\": \"scope_gap\",\n            \"status\": \"open\",\n            \"title\": \"Decide whether\
+      \ patch serialization requires deterministic priority lanes\"\n          },\n          {\n            \"entry_id\":\
+      \ \"GB_2026_04_27_PATCH_LIFECYCLE_R01_GBC_PATCH_LIFECYCLE_REFERENTIEL_PARAMETER_R01\",\n            \"type\": \"scope_gap\"\
+      ,\n            \"status\": \"open\",\n            \"title\": \"Track external_read_only referentiel parameter dependency\
+      \ for patch escalation threshold\"\n          },\n          {\n            \"entry_id\": \"GB_2026_04_30_PATCH_LIFECYCLE_R01_GBC_PATCH_LIFECYCLE_ESCALATION_BOUNDARY_R02\"\
+      ,\n            \"type\": \"scope_extension_needed\",\n            \"status\": \"open\",\n            \"title\": \"Preserve\
+      \ global escalation ownership boundary across patch_lifecycle, learner_state and governance\"\n          },\n      \
+      \    {\n            \"entry_id\": \"GB_2026_04_30_PATCH_LIFECYCLE_R01_GBC_PATCH_LIFECYCLE_REFERENTIEL_PARAMETER_R02\"\
+      ,\n            \"type\": \"scope_gap\",\n            \"status\": \"open\",\n            \"title\": \"Confirm external\
+      \ Référentiel parameter contract for ineffective patch iteration threshold N\"\n          },\n          {\n        \
+      \    \"entry_id\": \"GB_2026_04_30_PATCH_LIFECYCLE_R01_GBC_PATCH_LIFECYCLE_VALUE_COST_AR_N2_NEIGHBOR_R01\",\n      \
+      \      \"type\": \"scope_gap\",\n            \"status\": \"open\",\n            \"title\": \"Decide whether TYPE_SELF_REPORT_AR_N2\
+      \ should be an explicit read neighbor for patch_lifecycle\"\n          }\n        ],\n        \"delta\": {\n       \
+      \   \"score_delta\": 0,\n          \"level_delta\": \"none\",\n          \"action_required\": false,\n          \"severity\"\
+      : \"none\"\n        },\n        \"recommendations\": [\n          \"keep_published_score\"\n        ]\n      }\n   \
+      \ ],\n    \"blocking_findings\": [],\n    \"warnings\": [\n      {\n        \"finding_id\": \"COMPUTED_MATURITY_DELTA_NON_BLOCKING\"\
+      ,\n        \"severity\": \"warning\",\n        \"message\": \"At least one computed score differs from the published\
+      \ score without lowering the level.\",\n        \"items\": [\n          {\n            \"scope_key\": \"learner_state\"\
+      ,\n            \"published_level\": \"L3_operational\",\n            \"computed_level\": \"L3_operational\",\n     \
+      \       \"score_delta\": -1\n          }\n        ]\n      }\n    ],\n    \"notes\": [\n      \"This report is deterministic\
+      \ and non-publishing.\",\n      \"policy.yaml remains authoritative for published maturity in V1.\",\n      \"Computed\
+      \ maturity is a post-scoping diagnostic signal and must be arbitrated before any authority migration.\",\n      \"The\
+      \ script writes only the report path passed with --report.\"\n    ]\n  }\n}\n"
+    stderr_tail: ''
+  - id: report_constitution_neighbor_ids_governance
+    command: C:\Users\Stef\dev\learn-it\.venv\Scripts\python.exe docs/patcher/shared/report_constitution_neighbor_ids_governance.py
+      --report docs/pipelines/constitution/reports/constitution_neighbor_ids_governance_report.yaml
+    outputs:
+    - docs/pipelines/constitution/reports/constitution_neighbor_ids_governance_report.yaml
+    executed: true
+    status: PASS
+    returncode: 0
+    stdout_tail: 'Wrote docs/pipelines/constitution/reports/constitution_neighbor_ids_governance_report.yaml
+
+      Status: READY_FOR_HUMAN_ARBITRATION
+
+      Candidate count: 0
+
+      Policy/scoring scope consistency: PASS
+
+      '
+    stderr_tail: ''
+  - id: report_constitution_neighbor_declaration_inventory
+    command: C:\Users\Stef\dev\learn-it\.venv\Scripts\python.exe docs/patcher/shared/report_constitution_neighbor_declaration_inventory.py
+      --report docs/pipelines/constitution/reports/constitution_neighbor_declaration_inventory_report.yaml
+    outputs:
+    - docs/pipelines/constitution/reports/constitution_neighbor_declaration_inventory_report.yaml
+    executed: true
+    status: PASS
+    returncode: 0
+    stdout_tail: 'Wrote docs/pipelines/constitution/reports/constitution_neighbor_declaration_inventory_report.yaml
+
+      Status: PASS
+
+      Findings: 0
+
+      '
+    stderr_tail: ''
+  - id: refresh_constitution_pipeline_signals
+    command: C:\Users\Stef\dev\learn-it\.venv\Scripts\python.exe docs/patcher/shared/refresh_constitution_pipeline_signals.py
+      --apply
+    outputs:
+    - docs/pipelines/constitution/signals.yaml
+    - docs/pipelines/constitution/reports/bounded_run_preflight_report.yaml
+    - docs/pipelines/constitution/reports/pipeline_signals_refresh_report.yaml
+    executed: true
+    status: PASS
+    returncode: 0
+    stdout_tail: 'Status: PASS_APPLIED
+
+      Derived state: open_entries_require_stage00_review
+
+      Open entries: 7
+
+      Reviewed open entries: 4
+
+      Missing review metadata: 3
+
+      Signals action: STAGE_00_SCOPE_PARTITION_REVIEW_AND_REGEN
+
+      Preflight status: PREFLIGHT_DEFER_TO_STAGE00_REVIEW
+
+      Wrote report: docs\pipelines\constitution\reports\pipeline_signals_refresh_report.yaml
+
+      Updated: docs\pipelines\constitution\signals.yaml
+
+      Updated: docs\pipelines\constitution\reports\bounded_run_preflight_report.yaml
+
+      '
+    stderr_tail: ''
+  outputs:
+  - docs/pipelines/constitution/reports/bounded_run_preflight_report.yaml
+  - docs/pipelines/constitution/reports/constitution_neighbor_declaration_inventory_report.yaml
+  - docs/pipelines/constitution/reports/constitution_neighbor_ids_governance_report.yaml
+  - docs/pipelines/constitution/reports/governance_backlog_lifecycle_validation.yaml
+  - docs/pipelines/constitution/reports/governance_backlog_report.yaml
+  - docs/pipelines/constitution/reports/pipeline_signals_refresh_report.yaml
+  - docs/pipelines/constitution/reports/scope_maturity_scoring_report.yaml
+  - docs/pipelines/constitution/reports/scope_partition_review_report.yaml
+  - docs/pipelines/constitution/signals.yaml
+  - docs\pipelines\constitution\reports\stage00_review_bundle_report.yaml
+  notes:
+  - All deterministic STAGE_00 diagnostic commands passed.

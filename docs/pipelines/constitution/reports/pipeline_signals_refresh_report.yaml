@@ -1,17 +1,17 @@
 pipeline_signals_refresh_report:
   schema_version: '0.1'
-  generated_at: '2026-04-29T14:14:40Z'
+  generated_at: '2026-04-30T09:04:41Z'
   status: PASS_APPLIED
   pipeline_id: constitution
-  derived_state: reviewed_open_backlog_keep_open
-  open_entry_count: 4
+  derived_state: open_entries_require_stage00_review
+  open_entry_count: 7
   reviewed_open_entry_count: 4
-  missing_review_metadata_count: 0
+  missing_review_metadata_count: 3
   active_run_count: 0
   lifecycle_validation_status: PASS
   signals_status: attention
-  signals_recommended_action: KEEP_BACKLOG_OPEN_WITH_REVIEW_METADATA
-  preflight_status: PREFLIGHT_KEEP_BACKLOG_OPEN
+  signals_recommended_action: STAGE_00_SCOPE_PARTITION_REVIEW_AND_REGEN
+  preflight_status: PREFLIGHT_DEFER_TO_STAGE00_REVIEW
   run_opening_authorized_by_signal: false
   new_bounded_run_recommended_now: false
   applied: true

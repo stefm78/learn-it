@@ -55,6 +55,8 @@ primary_reads:
     - docs/pipelines/constitution/scope_catalog/manifest.yaml
 
 required_scripts:
+  diagnostic_bundle:
+    - docs/patcher/shared/run_constitution_stage00_review_bundle.py
   mandatory_analysis:
     - docs/patcher/shared/analyze_constitution_scope_partition.py
   deterministic_publication_after_human_arbitration:
@@ -68,6 +70,7 @@ script_execution_contract:
   required_before_semantic_review:
     - analyze_constitution_scope_partition_executed_for_real
     - scope_partition_review_report_materialized
+    - stage00_review_bundle_report_materialized
   required_for_run_candidate_preflight:
     - no_active_run_confirmed
     - governance_backlog_read
@@ -92,6 +95,7 @@ required_output_sections:
 
 expected_outputs:
   partition_refresh:
+    stage00_review_bundle_report: docs/pipelines/constitution/reports/stage00_review_bundle_report.yaml
     report_path_pattern: docs/pipelines/constitution/reports/scope_partition_review_report.yaml
   run_candidate_preflight:
     report_path_pattern: docs/pipelines/constitution/reports/bounded_run_preflight_report.yaml
@@ -128,6 +132,8 @@ human_actions_required:
     label: Exécuter le script d'analyse puis relancer ce stage
     mandatory: true
     command: >-
+      python docs/patcher/shared/run_constitution_stage00_review_bundle.py
+    legacy_single_report_command: >-
       python docs/patcher/shared/analyze_constitution_scope_partition.py
       --runs-index docs/pipelines/constitution/runs/index.yaml
       --constitution docs/cores/current/constitution.yaml
@@ -177,3 +183,4 @@ migration_note: >-
   Premier skill STAGE_00 pour le pipeline constitution.
   Consolide en YAML machine-readable les règles de partition_refresh, de
   run_candidate_preflight, et de régénération gouvernée du catalogue de scopes.
+  Update: ajoute le bundle déterministe STAGE_00 pour matérialiser les rapports backlog, partition, scoring, neighbor governance et refresh des signaux avant revue sémantique.

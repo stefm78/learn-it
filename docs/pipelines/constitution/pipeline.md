@@ -54,6 +54,7 @@ Règle structurante :
 - ce mode sert uniquement à réviser le partitionnement sémantique des scopes avant ouverture de nouveaux runs ;
 - l'analyse de partition suit une chaîne mixte : script déterministe obligatoire, puis revue sémantique assistée par IA, puis arbitrage humain ;
 - après revue du backlog, les signaux pipeline dérivés doivent être rafraîchis déterministiquement pour distinguer les entrées à revoir des entrées déjà revues et maintenues ouvertes ;
+- le bundle déterministe STAGE_00 peut être exécuté après closeout ou avant revue sémantique pour matérialiser en une commande les rapports de diagnostic non-mutating et le refresh des signaux ;
 - la publication reste déterministe et passe par mise à jour des policy/decisions canonisés puis régénération du catalogue lorsque l'arbitrage l'exige.
 
 ## Canonical resources
@@ -81,6 +82,7 @@ Règle structurante :
 - Apply Constitution neighbor IDs arbitration: `docs/patcher/shared/apply_constitution_neighbor_ids_arbitration.py`
 - Report Constitution neighbor declaration inventory: `docs/patcher/shared/report_constitution_neighbor_declaration_inventory.py`
 - Refresh Constitution pipeline signals: `docs/patcher/shared/refresh_constitution_pipeline_signals.py`
+- Run Constitution STAGE_00 review bundle: `docs/patcher/shared/run_constitution_stage00_review_bundle.py`
 - Neighbor declaration model: `docs/specs/constitution_neighbor_declaration_model.md`
 - **Materialize run inputs: `docs/patcher/shared/materialize_run_inputs.py`** ← à exécuter pendant MATERIALIZE_NEW_RUN et avant STAGE_01_CHALLENGE
 - **Extract ids-first scope slices: `docs/patcher/shared/extract_scope_slice.py`** ← à exécuter pendant MATERIALIZE_NEW_RUN après `materialize_run_inputs.py` et avant `build_run_context.py`

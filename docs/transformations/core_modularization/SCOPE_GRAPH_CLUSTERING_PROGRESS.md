@@ -30,9 +30,9 @@ archived_full_approach_sha256: 1a92e334eeb94768cbb3e4d05bd7cd9916e45f1cb4d78f380
 
 ```yaml
 current_phase:
-  phase_id: NO_ACTIVE_PHASE
-  label: awaiting_next_human_decision
-  status: paused
+  phase_id: PHASE_30_STAGE00_REVIEW_BUNDLE
+  label: stage00_review_bundle_integration
+  status: in_progress
 
 scope_modularization_post_pilot:
   status: paused_cleanly
@@ -106,6 +106,7 @@ completed:
       - PHASE_28D10 clean_pipeline_launcher_engine_imports
       - PHASE_28D11 validate_pipeline_launcher_end_to_end
       - PHASE_29 stage00_signal_refresh_and_scope_catalog_v5_alignment
+      - PHASE_30 stage00_review_bundle_integration
 ```
 
 ## Current pipeline position
@@ -279,6 +280,8 @@ docs/pipelines/governance/signals.yaml
 docs/patcher/shared/validate_pipeline_signals.py
 tmp/pipeline_launcher.py
 docs/pipelines/constitution/STAGE_00_SCOPE_PARTITION_REVIEW_AND_REGEN.md
+docs/patcher/shared/run_constitution_stage00_review_bundle.py
+docs/pipelines/constitution/reports/stage00_review_bundle_report.yaml
 docs/pipelines/constitution/stages/STAGE_00_SCOPE_PARTITION_REVIEW_AND_REGEN.skill.yaml
 docs/pipelines/constitution/entry_actions/OPEN_NEW_RUN.action.yaml
 ```
@@ -551,6 +554,32 @@ option_K_stage00_signal_refresh_and_scope_catalog_v5_alignment:
   current_recommendation: keep NO_ACTIVE_PHASE unless explicit human override opens a future targeted patch_lifecycle design run
   launcher_authorizes_run_from_signals: false
 ```
+
+
+option_Q_stage00_review_bundle_integration:
+  status: in_progress
+  phase: PHASE_30
+  action: add deterministic STAGE_00 review bundle wrapper for post-closeout and pre-semantic-review diagnostics
+  artifacts:
+    - docs/patcher/shared/run_constitution_stage00_review_bundle.py
+    - docs/pipelines/constitution/STAGE_00_SCOPE_PARTITION_REVIEW_AND_REGEN.md
+    - docs/pipelines/constitution/stages/STAGE_00_SCOPE_PARTITION_REVIEW_AND_REGEN.skill.yaml
+    - docs/pipelines/constitution/pipeline.md
+  expected_report:
+    - docs/pipelines/constitution/reports/stage00_review_bundle_report.yaml
+  mutation_policy:
+    allowed:
+      - deterministic reports
+      - derived pipeline signals
+      - bounded_run_preflight_report.yaml
+    forbidden:
+      - policy.yaml
+      - decisions.yaml
+      - governance_backlog.yaml
+      - generated scope catalog
+      - cores/current
+  next_local_command: python docs/patcher/shared/run_constitution_stage00_review_bundle.py
+  completion_condition: bundle report PASS and tracker updated to completed phase
 
 ## Guardrails
 
