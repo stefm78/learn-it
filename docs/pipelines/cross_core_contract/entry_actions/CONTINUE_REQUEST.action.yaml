@@ -1,0 +1,38 @@
+entry_action:
+  schema_version: '0.1'
+  action_id: CONTINUE_REQUEST
+  pipeline_id: cross_core_contract
+  role: continue_existing_cross_core_request_after_evidence_check
+  stop_after_decision: true
+
+allowed_reads:
+  - docs/pipelines/cross_core_contract/pipeline.md
+  - docs/pipelines/cross_core_contract/state.yaml
+  - docs/pipelines/cross_core_contract/AI_PROTOCOL.yaml
+  - docs/pipelines/cross_core_contract/requests/
+  - docs/pipelines/cross_core_contract/reports/
+
+allowed_writes:
+  - docs/pipelines/cross_core_contract/reports/
+  - docs/pipelines/cross_core_contract/work/
+
+forbidden_before_decision:
+  - canonical_core_writes
+  - governance_backlog_closure
+  - release_or_promotion
+  - constitution_run_opening
+  - business_stage_execution_without_materialized_request
+
+decision_outputs:
+  - continue_authorized
+  - continue_blocked
+  - needs_reconciliation
+
+next_step_policy:
+  after_continue_authorized: next_pending_stage
+
+guardrails:
+  request_creation_is_not_patch_authorization: true
+  core_mutation_authorized: false
+  backlog_closure_authorized: false
+  release_or_promotion_authorized: false

@@ -1,0 +1,38 @@
+entry_action:
+  schema_version: '0.1'
+  action_id: RECONCILE_REQUEST
+  pipeline_id: cross_core_contract
+  role: reconcile_request_state_and_stage_evidence
+  stop_after_decision: true
+
+allowed_reads:
+  - docs/pipelines/cross_core_contract/pipeline.md
+  - docs/pipelines/cross_core_contract/state.yaml
+  - docs/pipelines/cross_core_contract/AI_PROTOCOL.yaml
+  - docs/pipelines/cross_core_contract/requests/
+  - docs/pipelines/cross_core_contract/reports/
+
+allowed_writes:
+  - docs/pipelines/cross_core_contract/reports/
+  - docs/pipelines/cross_core_contract/work/
+
+forbidden_before_decision:
+  - canonical_core_writes
+  - governance_backlog_closure
+  - release_or_promotion
+  - constitution_run_opening
+  - business_stage_execution_without_materialized_request
+
+decision_outputs:
+  - reconciled
+  - truncated_to_restart_stage
+  - blocked
+
+next_step_policy:
+  after_reconciled: human_decision_required_before_continue
+
+guardrails:
+  request_creation_is_not_patch_authorization: true
+  core_mutation_authorized: false
+  backlog_closure_authorized: false
+  release_or_promotion_authorized: false

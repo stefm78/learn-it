@@ -1,0 +1,60 @@
+stage_skill:
+  schema_version: '0.1'
+  pipeline_id: cross_core_contract
+  stage_id: STAGE_03_CONTRACT_SYNTHESIS
+  stage_kind: deterministic_or_hybrid
+  closure_level: medium
+  hardening_level: L3_managed_execution_pipeline
+
+mission: >-
+  Synthesize an execution contract with read/write surfaces and validation gates.
+
+primary_reads:
+  - docs/pipelines/cross_core_contract/pipeline.md
+  - docs/pipelines/cross_core_contract/AI_PROTOCOL.yaml
+  - docs/pipelines/cross_core_contract/state.yaml
+  - docs/pipelines/cross_core_contract/requests/
+  - docs/pipelines/cross_core_contract/reports/
+
+fallback_reads:
+  - docs/specs/pipeline_hardening_model.md
+  - docs/transformations/core_modularization/CROSS_CORE_CONTRACT_BOOTSTRAP.md
+
+allowed_writes:
+  - docs/pipelines/cross_core_contract/work/03_contract_synthesis/
+
+forbidden_writes:
+  - docs/cores/current/**
+  - docs/pipelines/constitution/scope_catalog/governance_backlog.yaml
+  - docs/cores/releases/**
+  - docs/cores/current/manifest.yaml
+
+validation_rules:
+  statuses:
+    - PASS
+    - FAIL
+    - BLOCKED
+  constraints:
+    - no_core_write
+    - no_backlog_closure
+    - no_release_or_promotion
+    - required_evidence_must_exist
+
+expected_outputs:
+  - docs/pipelines/cross_core_contract/work/03_contract_synthesis/cross_core_execution_contract.yaml
+
+completion_evidence:
+  required:
+    - expected_outputs_materialized
+    - status_emitted
+    - guardrails_preserved
+  not_sufficient:
+    - chat_summary_only
+    - simulated_script_execution
+    - request_file_without_validation_report
+
+l4_boundary:
+  core_write_allowed_in_this_stage: false
+  backlog_closure_allowed_in_this_stage: false
+  release_or_promotion_allowed_in_this_stage: false
+  future_l4_phase_required_before_core_write: true

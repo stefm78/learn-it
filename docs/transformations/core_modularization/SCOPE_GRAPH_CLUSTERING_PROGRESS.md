@@ -38,8 +38,8 @@ scope_modularization_post_pilot:
   status: paused_cleanly
   active_pipeline_run: none
   new_bounded_run_opened_now: false
-  last_completed_phase: PHASE_36
-  last_completed_phase_label: pipeline_hardening_reference_model
+  last_completed_phase: PHASE_37
+  last_completed_phase_label: cross_core_contract_hardening
 ```
 
 ## What is complete
@@ -113,6 +113,7 @@ completed:
       - PHASE_34 cross_core_first_request_materialization
       - PHASE_35 cross_core_source_evidence_review
       - PHASE_36 pipeline_hardening_reference_model
+      - PHASE_37 cross_core_contract_hardening
 ```
 
 ## Current pipeline position
@@ -793,6 +794,31 @@ option_W_pipeline_hardening_reference_model:
     cross_core_contract: L3 initially, L4 before any Core write
     report_only_pipelines: L1_or_L2
 
+
+option_X_cross_core_contract_hardening:
+  status: done
+  completed_phase: PHASE_37
+  action: harden docs/pipelines/cross_core_contract to L3 managed execution pipeline
+  artifacts:
+    - docs/pipelines/cross_core_contract/AI_PROTOCOL.yaml
+    - docs/pipelines/cross_core_contract/entry_actions/
+    - docs/pipelines/cross_core_contract/stages/
+    - docs/pipelines/cross_core_contract/pipeline.md
+    - docs/pipelines/cross_core_contract/state.yaml
+    - docs/patcher/shared/validate_cross_core_contract_hardening.py
+    - docs/registry/reports/cross_core_contract_hardening_validation.yaml
+  validation:
+    cross_core_contract_hardening_validation: PASS
+  hardening_level: L3_managed_execution_pipeline
+  l4_status: future_explicit_phase_required_before_any_core_write
+  non_goals_preserved:
+    - no Constitution run opened
+    - no Core file modified
+    - no governance_backlog.yaml modification
+    - no release or promotion
+    - CCR_PATCH_LIFECYCLE_ESCALATION_THRESHOLD_N_R01 remains proposed / pending_arbitration
+  recommended_next_decision: stop or prepare future L4 transition criteria explicitly
+  launcher_authorizes_run_from_signals: false
 
 ## Guardrails
 

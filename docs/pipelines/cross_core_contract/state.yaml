@@ -1,5 +1,7 @@
 pipeline_id: cross_core_contract
-version: 0.1
+version: 0.2
+hardening_level: L3_managed_execution_pipeline
+l4_status: future_explicit_phase_required_before_any_core_write
 current_stage: null
 last_successful_stage: STAGE_01_SOURCE_EVIDENCE_REVIEW
 current_run_id: null
@@ -8,10 +10,18 @@ active_inputs:
   - docs/pipelines/cross_core_contract/requests/CCR_PATCH_LIFECYCLE_ESCALATION_THRESHOLD_N_R01.yaml
 active_outputs:
   - docs/pipelines/cross_core_contract/reports/cross_core_change_request_validation.yaml
-  - docs/pipelines/cross_core_contract/work/01_intake/source_evidence_review.md
   - docs/pipelines/cross_core_contract/reports/source_evidence_review.yaml
+governance:
+  ai_protocol: docs/pipelines/cross_core_contract/AI_PROTOCOL.yaml
+  entry_actions_dir: docs/pipelines/cross_core_contract/entry_actions/
+  stage_skills_dir: docs/pipelines/cross_core_contract/stages/
+  hardening_validation_report: docs/registry/reports/cross_core_contract_hardening_validation.yaml
+guardrails:
+  core_mutation_authorized: false
+  backlog_closure_authorized: false
+  release_or_promotion_authorized: false
+  constitution_run_authorized: false
 notes:
-  - First request materialized as proposed intake artifact.
-  - Source evidence review completed.
-  - No cross-core run is active.
-  - No Core mutation is authorized by this state file.
+  - Cross-core contract pipeline hardened to L3.
+  - Request remains proposed / pending_arbitration.
+  - Future L4 phase is required before any Core write.

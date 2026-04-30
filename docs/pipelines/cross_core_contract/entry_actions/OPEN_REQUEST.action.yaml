@@ -1,0 +1,38 @@
+entry_action:
+  schema_version: '0.1'
+  action_id: OPEN_REQUEST
+  pipeline_id: cross_core_contract
+  role: decide_whether_cross_core_request_entry_is_authorized
+  stop_after_decision: true
+
+allowed_reads:
+  - docs/pipelines/cross_core_contract/pipeline.md
+  - docs/pipelines/cross_core_contract/state.yaml
+  - docs/pipelines/cross_core_contract/AI_PROTOCOL.yaml
+  - docs/pipelines/cross_core_contract/requests/
+  - docs/pipelines/cross_core_contract/reports/
+
+allowed_writes:
+  - docs/pipelines/cross_core_contract/reports/
+  - docs/pipelines/cross_core_contract/work/
+
+forbidden_before_decision:
+  - canonical_core_writes
+  - governance_backlog_closure
+  - release_or_promotion
+  - constitution_run_opening
+  - business_stage_execution_without_materialized_request
+
+decision_outputs:
+  - open_authorized
+  - open_blocked
+  - needs_human_decision
+
+next_step_policy:
+  after_open_authorized: MATERIALIZE_REQUEST
+
+guardrails:
+  request_creation_is_not_patch_authorization: true
+  core_mutation_authorized: false
+  backlog_closure_authorized: false
+  release_or_promotion_authorized: false

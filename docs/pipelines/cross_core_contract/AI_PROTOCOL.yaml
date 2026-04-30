@@ -1,0 +1,72 @@
+ai_protocol:
+  schema_version: '0.1'
+  protocol_id: CROSS_CORE_CONTRACT_AI_PROTOCOL
+  authoritative_for_ai: true
+  hardening_level: L3_managed_execution_pipeline
+  l4_status: future_explicit_phase_required_before_any_core_write
+
+  entry_actions:
+    decision_action_ref: docs/pipelines/cross_core_contract/entry_actions/OPEN_REQUEST.action.yaml
+    materialization_action_ref: docs/pipelines/cross_core_contract/entry_actions/MATERIALIZE_REQUEST.action.yaml
+    continuation_action_ref: docs/pipelines/cross_core_contract/entry_actions/CONTINUE_REQUEST.action.yaml
+    reconciliation_action_ref: docs/pipelines/cross_core_contract/entry_actions/RECONCILE_REQUEST.action.yaml
+    sequencing_rule: >-
+      Decision and materialization are separate. A positive entry decision does not
+      authorize arbitration, Core mutation, backlog closure, release or promotion.
+
+  allowed_ai_read_surface:
+    - docs/pipelines/cross_core_contract/**
+    - docs/specs/pipeline_hardening_model.md
+    - docs/registry/reports/pipeline_hardening_reference_validation.yaml
+    - docs/transformations/core_modularization/CROSS_CORE_CONTRACT_BOOTSTRAP.md
+    - docs/transformations/core_modularization/REFERENTIEL_LINK_EXTERNAL_READ_ONLY_TREATMENT.md
+    - docs/pipelines/constitution/reports/bounded_run_preflight_report.yaml
+    - docs/pipelines/constitution/signals.yaml
+    - docs/pipelines/constitution/scope_catalog/governance_backlog.yaml
+
+  allowed_ai_write_surface_l3:
+    - docs/pipelines/cross_core_contract/**
+    - docs/patcher/shared/validate_cross_core_contract_hardening.py
+    - docs/registry/reports/cross_core_contract_hardening_validation.yaml
+    - docs/transformations/core_modularization/SCOPE_GRAPH_CLUSTERING_PROGRESS.md
+
+  forbidden_direct_writes:
+    description: L3 hardening allows pipeline contract artifacts only. Core mutation and backlog closure require future L4 authorization.
+    forbidden_files:
+      - pattern: docs/cores/current/**
+        owner_script: future_l4_explicitly_arbitrated_only
+      - pattern: docs/pipelines/constitution/scope_catalog/governance_backlog.yaml
+        owner_script: future_validated_backlog_lifecycle_patch_only
+      - pattern: docs/pipelines/cross_core_contract/state.yaml
+        owner_script: docs/patcher/shared/validate_cross_core_contract_hardening.py_or_future_state_owner
+
+  deterministic_script_policy:
+    mandatory_behavior: true
+    rules:
+      - required validators must be actually executed
+      - AI must not simulate validator execution
+      - stage status cannot be final without materialized report evidence
+      - request creation is not patch authorization
+
+  l3_guardrails:
+    request_status_must_remain: proposed
+    request_decision_status_must_remain: pending_arbitration
+    core_mutation_authorized: false
+    backlog_closure_authorized: false
+    release_or_promotion_authorized: false
+    constitution_run_authorized: false
+
+  l4_preconditions_before_core_write:
+    - explicit_human_arbitration
+    - declared_write_surface
+    - validated_contract_synthesis
+    - multi_core_release_plan
+    - promotion_manifest_policy
+    - rollback_or_reconciliation_path
+
+  anti_patterns:
+    - chat_summary_as_pass
+    - direct_write_to_owned_state
+    - implicit_release_or_promotion_claim
+    - closing_backlog_without_validated_resolution
+    - core_write_authorized_by_request_creation

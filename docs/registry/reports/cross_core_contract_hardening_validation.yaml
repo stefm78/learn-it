@@ -1,0 +1,55 @@
+cross_core_contract_hardening_validation:
+  schema_version: '0.1'
+  generated_at: '2026-04-30T11:07:46Z'
+  status: PASS
+  hardening_level: L3_managed_execution_pipeline
+  l4_status: future_explicit_phase_required_before_any_core_write
+  checked_files:
+    - path: docs/pipelines/cross_core_contract/AI_PROTOCOL.yaml
+      exists: true
+      sha256: 8530f7ab1b0b36b313bf23de13c5021686cc782924349512ffefda0679e0c92f
+    - path: docs/pipelines/cross_core_contract/entry_actions/OPEN_REQUEST.action.yaml
+      exists: true
+      sha256: 6aada80d7fee0a7b1146ff803e9733e51960ca1b0bfce64296cbcd894b70d503
+    - path: docs/pipelines/cross_core_contract/entry_actions/MATERIALIZE_REQUEST.action.yaml
+      exists: true
+      sha256: 0a37054ae2e5b5b1566d3a61e1783e30defe6e8d2c55d4cb09d4fb20eeeab5ad
+    - path: docs/pipelines/cross_core_contract/entry_actions/CONTINUE_REQUEST.action.yaml
+      exists: true
+      sha256: eafe2a0b00fed6f4240e053b6eabaabde48e295954cd4b12dd32eddaeb0ae78a
+    - path: docs/pipelines/cross_core_contract/entry_actions/RECONCILE_REQUEST.action.yaml
+      exists: true
+      sha256: 304cd5ead41e3c7fdfe5d490a0c6a4e120dd9c7b924188799db3d41984dbb83a
+    - path: docs/pipelines/cross_core_contract/stages/STAGE_00_INTAKE_AND_SHAPE_VALIDATION.skill.yaml
+      exists: true
+      sha256: eca0b37bb04bdaac0498e626a94acf0d7fd1927e7f3e1ca7ec20511cab77f9f5
+    - path: docs/pipelines/cross_core_contract/stages/STAGE_01_SOURCE_EVIDENCE_REVIEW.skill.yaml
+      exists: true
+      sha256: 361d9b1cd84fca889eb7078c79b13d2947be4f588b03173946df48d6af0a5cfd
+    - path: docs/pipelines/cross_core_contract/stages/STAGE_02_CROSS_CORE_ARBITRAGE.skill.yaml
+      exists: true
+      sha256: cb6e557861d798d87a3d6e73e0f7cba45d49f18c360b5a1aa9768aafc499b220
+    - path: docs/pipelines/cross_core_contract/stages/STAGE_03_CONTRACT_SYNTHESIS.skill.yaml
+      exists: true
+      sha256: 6c22c3b2f5c585867a17db93da0bea369e5bf0ee4f767e4fea977f1bd063febb
+    - path: docs/pipelines/cross_core_contract/stages/STAGE_04_VALIDATION.skill.yaml
+      exists: true
+      sha256: 61e5c32980ee9ea27bf1cc9bb440dadd68cdd86e42ab211e1da246f66d4ae0cd
+    - path: docs/pipelines/cross_core_contract/stages/STAGE_05_RELEASE_AND_PROMOTION_PLANNING.skill.yaml
+      exists: true
+      sha256: 093d1653d8723597668f347b6b34c39ee1d0db2d2c9418942a6036bf402960de
+    - path: docs/pipelines/cross_core_contract/pipeline.md
+      exists: true
+      sha256: e9bc1162a2712e296c3e548e010e68311479955636a44f2aea64a61732d810eb
+    - path: docs/pipelines/cross_core_contract/state.yaml
+      exists: true
+      sha256: 7902edfead86e6d7222ea35ea60f3755134b84383893199c785faf99422aec3a
+  blocking_findings:
+    []
+  result_summary:
+    blocking_finding_count: 0
+    l3_managed_pipeline: true
+    l4_core_write_enabled: false
+    core_mutation_authorized: false
+    backlog_closure_authorized: false
+    release_or_promotion_authorized: false

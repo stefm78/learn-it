@@ -3,7 +3,7 @@
 id: cross_core_contract
 version: 0.1
 scope: cross-core-change-control
-status: bootstrap
+status: governed_l3
 
 ## Goal
 
@@ -89,6 +89,23 @@ reports: docs/pipelines/cross_core_contract/reports/
 outputs: docs/pipelines/cross_core_contract/outputs/
 ```
 
+## Hardening level
+
+```yaml
+hardening_level: L3_managed_execution_pipeline
+hardening_reference: docs/specs/pipeline_hardening_model.md
+ai_protocol: docs/pipelines/cross_core_contract/AI_PROTOCOL.yaml
+entry_actions: docs/pipelines/cross_core_contract/entry_actions/
+stage_skills: docs/pipelines/cross_core_contract/stages/
+validation_report: docs/registry/reports/cross_core_contract_hardening_validation.yaml
+l4_boundary: L4 before any Core write
+core_mutation_authorized: false
+backlog_closure_authorized: false
+release_or_promotion_authorized: false
+```
+
+This pipeline is hardened to L3 for intake, evidence review, arbitration and contract synthesis.
+It remains below L4: no Core write, backlog closure, release or promotion is authorized.
 ## Stages
 
 ### STAGE_00_INTAKE_AND_SHAPE_VALIDATION
