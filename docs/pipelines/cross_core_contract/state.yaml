@@ -35,3 +35,14 @@ l4_target_contract:
   core_mutation_authorized: false
   backlog_closure_authorized: false
   release_or_promotion_authorized: false
+
+l4_validator_family:
+  family_contract_ref: docs/pipelines/cross_core_contract/L4_VALIDATOR_FAMILY.md
+  family_yaml_ref: docs/pipelines/cross_core_contract/validators/l4_validator_family.yaml
+  family_validation_report: docs/registry/reports/cross_core_contract_l4_validator_family_validation.yaml
+  l4_validator_family_defined: true
+  validators_executable_as_l4_gate_now: false
+  individual_validator_scripts_required_before_L4_execution: true
+  core_mutation_authorized: false
+  backlog_closure_authorized: false
+  release_or_promotion_authorized: false

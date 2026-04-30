@@ -1,0 +1,45 @@
+cross_core_contract_l4_validator_family_validation:
+  schema_version: '0.1'
+  generated_at: '2026-04-30T11:22:13Z'
+  status: PASS
+  target_level: L4_critical_canonical_pipeline
+  l4_active_now: false
+  validator_family_defined: true
+  validators_executable_as_l4_gate_now: false
+  checked_files:
+    - path: docs/pipelines/cross_core_contract/L4_VALIDATOR_FAMILY.md
+      exists: true
+      sha256: bac56fda7643492b127bb1769ab12718f2d087d9415175359961eb689e68f77f
+    - path: docs/pipelines/cross_core_contract/validators/l4_validator_family.yaml
+      exists: true
+      sha256: 79873cd866d612dfd97a7c61ffebb057971db6eb06523438bd6053984cc2630c
+    - path: docs/pipelines/cross_core_contract/L4_TARGET_CONTRACT.md
+      exists: true
+      sha256: 475122d6bafdf5f7a66a6314ea2b71e17a49e7f335e3df50d197f6270c063b9d
+    - path: docs/pipelines/cross_core_contract/l4_transition_checklist.yaml
+      exists: true
+      sha256: 977958eaca607edb0dce19ff96b222831f889c693dcea69eca422019589cf449
+    - path: docs/pipelines/cross_core_contract/AI_PROTOCOL.yaml
+      exists: true
+      sha256: 22d7e442b7a4564a8cd6aa819498506f1c3944f048d0fc13e00d1191040e13a4
+    - path: docs/pipelines/cross_core_contract/pipeline.md
+      exists: true
+      sha256: 3abc7fc9d887b17ecf2450df1bf7004731e793937a44b1e6f52713b5212e064a
+    - path: docs/pipelines/cross_core_contract/state.yaml
+      exists: true
+      sha256: c13e72d119f260c11143b4f4408a50729c93df737cd3f3c3578c5aa8626ad5bf
+    - path: docs/pipelines/cross_core_contract/requests/CCR_PATCH_LIFECYCLE_ESCALATION_THRESHOLD_N_R01.yaml
+      exists: true
+      sha256: 135e6039ed61b82fe7baefbf5a37e2cd03ad20d0cad2babd091b6629bb1e8d85
+  blocking_findings:
+    []
+  result_summary:
+    blocking_finding_count: 0
+    l4_validator_family_defined: true
+    l4_active_now: false
+    validators_executable_as_l4_gate_now: false
+    individual_validator_scripts_required_before_L4_execution: true
+    core_mutation_authorized: false
+    backlog_closure_authorized: false
+    release_or_promotion_authorized: false
+    request_remains_proposed_pending_arbitration: true

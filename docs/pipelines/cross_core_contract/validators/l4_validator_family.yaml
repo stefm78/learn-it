@@ -1,0 +1,61 @@
+l4_validator_family:
+  schema_version: '0.1'
+  generated_at: '2026-04-30T11:22:13Z'
+  status: target_defined_inactive
+  pipeline_id: cross_core_contract
+  current_level: L3_managed_execution_pipeline
+  target_level: L4_critical_canonical_pipeline
+  l4_active_now: false
+  validator_family_defined: true
+  validators_executable_as_l4_gate_now: false
+
+  family_contract:
+    markdown: docs/pipelines/cross_core_contract/L4_VALIDATOR_FAMILY.md
+    yaml: docs/pipelines/cross_core_contract/validators/l4_validator_family.yaml
+    validation_report: docs/registry/reports/cross_core_contract_l4_validator_family_validation.yaml
+
+  required_validators:
+    - validator_id: validate_cross_core_l4_transition_review
+      implementation_status: future_required_before_L4_execution
+      active_now: false
+      pass_required_before_l4_activation: true
+    - validator_id: validate_cross_core_write_surface
+      implementation_status: future_required_before_L4_execution
+      active_now: false
+      pass_required_before_l4_activation: true
+    - validator_id: validate_constitution_referentiel_link_reconstruction
+      implementation_status: future_required_before_L4_execution
+      active_now: false
+      pass_required_before_l4_activation: true
+    - validator_id: validate_link_binding_consistency
+      implementation_status: future_required_before_L4_execution
+      active_now: false
+      pass_required_before_l4_activation: true
+    - validator_id: validate_multi_core_release_plan
+      implementation_status: future_required_before_L4_execution
+      active_now: false
+      pass_required_before_l4_activation: true
+    - validator_id: validate_multi_core_promotion_manifest
+      implementation_status: future_required_before_L4_execution
+      active_now: false
+      pass_required_before_l4_activation: true
+    - validator_id: validate_cross_core_backlog_resolution
+      implementation_status: future_required_before_L4_execution
+      active_now: false
+      pass_required_before_l4_activation: true
+    - validator_id: validate_cross_core_rollback_or_reconciliation_path
+      implementation_status: future_required_before_L4_execution
+      active_now: false
+      pass_required_before_l4_activation: true
+
+  current_guardrails:
+    core_mutation_authorized: false
+    backlog_closure_authorized: false
+    release_or_promotion_authorized: false
+    constitution_run_authorized: false
+
+  first_candidate_request:
+    request_id: CCR_PATCH_LIFECYCLE_ESCALATION_THRESHOLD_N_R01
+    required_status_now: proposed
+    required_decision_status_now: pending_arbitration
+    mutation_authorized_now: false

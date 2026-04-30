@@ -121,3 +121,17 @@ non_goals:
   - promote_current
   - open_Constitution_run
 ```
+
+
+## L4 validator family contract
+
+```yaml
+l4_validator_family: docs/pipelines/cross_core_contract/L4_VALIDATOR_FAMILY.md
+l4_validator_family_yaml: docs/pipelines/cross_core_contract/validators/l4_validator_family.yaml
+l4_validator_family_validation: docs/registry/reports/cross_core_contract_l4_validator_family_validation.yaml
+validators_executable_as_l4_gate_now: false
+individual_validator_scripts_required_before_L4_execution: true
+```
+
+The family contract is part of the L4 target. It defines the validators that must exist and pass before any future L4 execution.
+

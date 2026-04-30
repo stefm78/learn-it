@@ -106,6 +106,23 @@ release_or_promotion_authorized: false
 
 This pipeline is hardened to L3 for intake, evidence review, arbitration and contract synthesis.
 It remains below L4: no Core write, backlog closure, release or promotion is authorized.
+## L4 validator family
+
+```yaml
+l4_validator_family: docs/pipelines/cross_core_contract/L4_VALIDATOR_FAMILY.md
+l4_validator_family_yaml: docs/pipelines/cross_core_contract/validators/l4_validator_family.yaml
+l4_validator_family_validation: docs/registry/reports/cross_core_contract_l4_validator_family_validation.yaml
+validator_family_defined: true
+validators_executable_as_l4_gate_now: false
+individual_validator_scripts_required_before_L4_execution: true
+core_mutation_authorized: false
+backlog_closure_authorized: false
+release_or_promotion_authorized: false
+```
+
+This family defines the validators required before future L4 activation. It does not
+activate L4 or authorize any canonical write.
+
 ## L4 target contract
 
 ```yaml
