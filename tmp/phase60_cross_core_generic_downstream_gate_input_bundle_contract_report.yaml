@@ -1,0 +1,42 @@
+phase60_cross_core_generic_downstream_gate_input_bundle_contract_report:
+  generated_at: 2026-04-30T15:37:17Z
+  status: PASS
+  branch: feat/core-modularization-bootstrap
+  phase: PHASE_60_CROSS_CORE_GENERIC_DOWNSTREAM_GATE_INPUT_BUNDLE_CONTRACT
+  generic_downstream_gate_input_bundle_contract_defined: true
+  cross_core_gate_input_bundle_schema_defined: true
+  cross_core_gate_input_bundle_validator_defined: true
+  template_validation_status: BLOCKED_TEMPLATE_ONLY
+  downstream_gate_input_bundle_contract_ready: true
+  downstream_gates_executed_now: false
+  request_specific_logic_encoded: false
+  l4_mutating_gate_active_now: false
+  l4_core_mutation_authorized_now: false
+  files_written:
+    - docs/pipelines/cross_core_contract/GENERIC_DOWNSTREAM_GATE_INPUT_BUNDLE_CONTRACT.md
+    - docs/pipelines/cross_core_contract/validators/generic_downstream_gate_input_bundle_contract.yaml
+    - docs/pipelines/cross_core_contract/schemas/cross_core_gate_input_bundle.schema.yaml
+    - docs/pipelines/cross_core_contract/templates/cross_core_gate_input_bundle.template.yaml
+    - docs/patcher/shared/validate_cross_core_gate_input_bundle.py
+    - docs/patcher/shared/validate_cross_core_generic_downstream_gate_input_bundle_contract.py
+    - docs/registry/reports/cross_core_gate_input_bundle_template_validation.yaml
+    - docs/registry/reports/cross_core_generic_downstream_gate_input_bundle_contract_validation.yaml
+    - docs/pipelines/cross_core_contract/AI_PROTOCOL.yaml
+    - docs/pipelines/cross_core_contract/pipeline.md
+    - docs/pipelines/cross_core_contract/state.yaml
+    - docs/pipelines/cross_core_contract/l4_transition_checklist.yaml
+    - docs/transformations/core_modularization/SCOPE_GRAPH_CLUSTERING_PROGRESS.md
+    - tmp/phase60_cross_core_generic_downstream_gate_input_bundle_contract_report.yaml
+  validations:
+    cross_core_generic_downstream_gate_input_bundle_contract_validation: PASS
+    cross_core_gate_input_bundle_template_validation: BLOCKED_TEMPLATE_ONLY
+  guardrails:
+    no_request_specific_logic_encoded: true
+    no_downstream_mutating_gate_executed: true
+    no_constitution_run_opened: true
+    core_files_not_modified: true
+    governance_backlog_not_modified: true
+    release_or_promotion_authorized: false
+  next_recommended_decision:
+    decision: stop_or_materialize_generic_dry_run_gate_input_bundle_fixture
+    default: stop_at_NO_ACTIVE_PHASE

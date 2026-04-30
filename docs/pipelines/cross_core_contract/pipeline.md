@@ -106,6 +106,25 @@ release_or_promotion_authorized: false
 
 This pipeline is hardened to L3 for intake, evidence review, arbitration and contract synthesis.
 It remains below L4: no Core write, backlog closure, release or promotion is authorized.
+## Generic downstream gate input bundle contract
+
+```yaml
+phase: PHASE_60_CROSS_CORE_GENERIC_DOWNSTREAM_GATE_INPUT_BUNDLE_CONTRACT
+contract_ref: docs/pipelines/cross_core_contract/GENERIC_DOWNSTREAM_GATE_INPUT_BUNDLE_CONTRACT.md
+contract_yaml: docs/pipelines/cross_core_contract/validators/generic_downstream_gate_input_bundle_contract.yaml
+schema: docs/pipelines/cross_core_contract/schemas/cross_core_gate_input_bundle.schema.yaml
+template: docs/pipelines/cross_core_contract/templates/cross_core_gate_input_bundle.template.yaml
+validator: docs/patcher/shared/validate_cross_core_gate_input_bundle.py
+validation_report: docs/registry/reports/cross_core_generic_downstream_gate_input_bundle_contract_validation.yaml
+generic_downstream_gate_input_bundle_contract_defined: true
+template_validation_status: BLOCKED_TEMPLATE_ONLY
+downstream_gates_executed_now: false
+l4_mutating_gate_active_now: false
+l4_core_mutation_authorized_now: false
+```
+
+This contract defines the generic input bundle required before downstream L4 gates can run.
+
 ## Generic authorized dry-run gate smoke
 
 ```yaml

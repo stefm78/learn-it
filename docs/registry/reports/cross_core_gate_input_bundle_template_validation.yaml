@@ -1,0 +1,22 @@
+cross_core_gate_input_bundle_validation:
+  schema_version: '0.1'
+  generated_at: '2026-04-30T15:37:17Z'
+  status: BLOCKED_TEMPLATE_ONLY
+  input: docs/pipelines/cross_core_contract/templates/cross_core_gate_input_bundle.template.yaml
+  validator: validate_cross_core_gate_input_bundle
+  core_mutation_authorized: false
+  backlog_closure_authorized: false
+  release_or_promotion_authorized: false
+  input_file:
+    exists: true
+    sha256: f6933bd43c4ee626fdd9adaa7eed7143db9420b1c347dc0be056382be813f64b
+  blocking_findings:
+    - finding_id: template_bundle_cannot_execute_gates
+      severity: blocking
+      path: docs\pipelines\cross_core_contract\templates\cross_core_gate_input_bundle.template.yaml
+  result_summary:
+    blocking_finding_count: 1
+    gate_input_bundle_shape_checked: true
+    core_mutation_authorized: false
+    backlog_closure_authorized: false
+    release_or_promotion_authorized: false

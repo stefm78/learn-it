@@ -1,0 +1,34 @@
+cross_core_generic_downstream_gate_input_bundle_contract:
+  schema_version: '0.1'
+  generated_at: '2026-04-30T15:37:17Z'
+  phase: PHASE_60_CROSS_CORE_GENERIC_DOWNSTREAM_GATE_INPUT_BUNDLE_CONTRACT
+  status: contract_defined_non_mutating
+  generic_downstream_gate_input_bundle_contract_defined: true
+  cross_core_gate_input_bundle_schema_defined: true
+  cross_core_gate_input_bundle_validator_defined: true
+  template_validation_status: BLOCKED_TEMPLATE_ONLY
+  downstream_gate_input_bundle_contract_ready: true
+  downstream_gates_executed_now: false
+  request_specific_logic_encoded: false
+  l4_control_plane_active_now: true
+  l4_mutating_execution_framework_ready: true
+  l4_mutating_gate_active_now: false
+  l4_core_mutation_authorized_now: false
+  current_authorizations:
+    core_mutation_authorized: false
+    backlog_closure_authorized: false
+    release_or_promotion_authorized: false
+  artifacts:
+    schema: docs/pipelines/cross_core_contract/schemas/cross_core_gate_input_bundle.schema.yaml
+    template: docs/pipelines/cross_core_contract/templates/cross_core_gate_input_bundle.template.yaml
+    validator: docs/patcher/shared/validate_cross_core_gate_input_bundle.py
+    template_validation_report: docs/registry/reports/cross_core_gate_input_bundle_template_validation.yaml
+  downstream_gates:
+    - validate_cross_core_l4_transition_review
+    - validate_cross_core_write_surface
+    - validate_cross_core_rollback_or_reconciliation_path
+    - validate_link_binding_consistency
+    - validate_constitution_referentiel_link_reconstruction
+    - validate_multi_core_release_plan
+    - validate_multi_core_promotion_manifest
+    - validate_cross_core_backlog_resolution

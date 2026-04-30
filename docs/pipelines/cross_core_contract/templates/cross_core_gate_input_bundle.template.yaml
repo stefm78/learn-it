@@ -1,0 +1,60 @@
+cross_core_gate_input_bundle:
+  schema_version: '0.1'
+  template_status: inactive_template
+  generated_at: '2026-04-30T15:37:17Z'
+  bundle_id: CROSS_CORE_GATE_INPUT_BUNDLE_TEMPLATE_R00
+  source_execution_contract:
+    contract_id: TEMPLATE_CONTRACT_ID
+    contract_file: docs/pipelines/cross_core_contract/work/03_contract_synthesis/<CONTRACT_ID>.yaml
+    concrete_contract_bound: false
+  gate_input_model:
+    template_only: true
+    gate_input_bundle_ready: false
+    request_specific_logic_encoded: false
+  gate_inputs:
+    validate_cross_core_l4_transition_review:
+      status: not_materialized_template
+      input_files: []
+    validate_cross_core_write_surface:
+      status: not_materialized_template
+      input_files: []
+    validate_cross_core_rollback_or_reconciliation_path:
+      status: not_materialized_template
+      input_files: []
+    validate_link_binding_consistency:
+      status: not_materialized_template
+      input_files: []
+    validate_constitution_referentiel_link_reconstruction:
+      status: not_materialized_template
+      input_files: []
+    validate_multi_core_release_plan:
+      status: not_materialized_template
+      input_files: []
+    validate_multi_core_promotion_manifest:
+      status: not_materialized_template
+      input_files: []
+    validate_cross_core_backlog_resolution:
+      status: not_materialized_template
+      input_files: []
+  write_surface:
+    declared: false
+    dry_run_sandbox_only: true
+    paths: []
+  rollback_or_reconciliation_inputs:
+    declared: false
+    files: []
+  release_and_promotion_inputs:
+    release_plan_declared: false
+    promotion_manifest_declared: false
+    release_materialization_requested: false
+    promotion_requested: false
+  backlog_inputs:
+    backlog_resolution_requested: false
+    backlog_closure_requested: false
+    backlog_entries: []
+  execution_guardrails:
+    downstream_gates_executed: false
+    apply_authorized: false
+    core_mutation_authorized: false
+    backlog_closure_authorized: false
+    release_or_promotion_authorized: false

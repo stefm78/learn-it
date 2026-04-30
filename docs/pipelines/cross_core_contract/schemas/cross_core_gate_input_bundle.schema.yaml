@@ -1,0 +1,28 @@
+cross_core_gate_input_bundle_schema:
+  schema_version: '0.1'
+  generated_at: '2026-04-30T15:37:17Z'
+  status: generic_schema_defined
+  object_type: cross_core_gate_input_bundle
+  required_top_level_fields:
+    - bundle_id
+    - source_execution_contract
+    - gate_input_model
+    - gate_inputs
+    - write_surface
+    - rollback_or_reconciliation_inputs
+    - release_and_promotion_inputs
+    - backlog_inputs
+    - execution_guardrails
+  downstream_gates:
+    - validate_cross_core_l4_transition_review
+    - validate_cross_core_write_surface
+    - validate_cross_core_rollback_or_reconciliation_path
+    - validate_link_binding_consistency
+    - validate_constitution_referentiel_link_reconstruction
+    - validate_multi_core_release_plan
+    - validate_multi_core_promotion_manifest
+    - validate_cross_core_backlog_resolution
+  invariant:
+    template_must_not_execute_gates: true
+    concrete_bundle_must_bind_to_execution_contract: true
+    core_writes_forbidden_until_all_gates_pass: true
