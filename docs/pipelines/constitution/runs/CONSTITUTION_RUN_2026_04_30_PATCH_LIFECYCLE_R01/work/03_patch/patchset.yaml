@@ -1,0 +1,364 @@
+PATCH_SET:
+  id: PATCH_CONSTITUTION_2026_04_30_PATCH_LIFECYCLE_R01_STAGE03
+  patch_dsl_version: "4.0"
+  atomic: true
+  description: >-
+    Patch minimal issu de STAGE_02_ARBITRAGE pour le run
+    CONSTITUTION_RUN_2026_04_30_PATCH_LIFECYCLE_R01. Clarifie les états terminaux
+    du cycle de vie patch, la relation FIFO/traitements terminaux, la frontière
+    d'escalade patch_lifecycle, le vocabulaire AR observable et les métadonnées
+    déterministes de preuve QA précomputée. Ne modifie ni Référentiel ni Link.
+  federation: {}
+  files:
+    - file: docs/cores/current/constitution.yaml
+      expected_core_id: CORE_LEARNIT_CONSTITUTION_V5_0
+      operations:
+        - op: note
+          value:
+            id: STAGE03_PATCH_SCOPE
+            source_stage: STAGE_03_PATCH_SYNTHESIS
+            source_arbitrage: docs/pipelines/constitution/runs/CONSTITUTION_RUN_2026_04_30_PATCH_LIFECYCLE_R01/work/02_arbitrage/arbitrage.md
+            patch_scope:
+              - ARB-PL-01
+              - ARB-PL-02
+              - ARB-PL-03
+              - ARB-PL-04
+              - ARB-PL-05
+            fallback_reads_used:
+              - docs/cores/current/constitution.yaml
+            fallback_read_reason: >-
+              Required to lock expected_core_id for the patchset. No full-core semantic
+              expansion was used beyond target localization already available from bounded extracts.
+            excluded_from_patch:
+              - external_parameter_N
+              - referentiel_or_link_modification
+              - TYPE_SELF_REPORT_AR_N2_neighbor_closure
+              - full_priority_lane_model
+              - full_patch_state_machine
+              - ACTION_LOG_UNCOVERED_CONFLICT_reassignment
+
+        - op: replace_field
+          target:
+            section: TYPES
+            id: TYPE_PATCH_ARTIFACT
+            field: logic.condition
+          value: >-
+            Bornes respectées, impact_scope calculable, attributs obligatoires présents,
+            atomicité garantie, empreintes de sources et métadonnées de validité/fraîcheur
+            déclarées ; la QA pédagogique est précomputée hors session et matérialisée
+            par une preuve vérifiable localement sans jugement sémantique. La preuve
+            vérifiable localement doit porter au minimum sur la présence, l'intégrité,
+            la cohérence d'impact_scope, la version d'artefact, la fraîcheur ou fenêtre
+            de validité, les empreintes de sources et le statut de QA déclaré.
+        - op: replace_field
+          target:
+            section: TYPES
+            id: TYPE_PATCH_ARTIFACT
+            field: logic.effect
+          value: >-
+            Patch applicable localement, rejeté, rollbacké, bloqué après rollback non
+            vérifiable, ou escaladé hors session. Ces issues terminales sont déterministes
+            et ne créent pas de state machine complète ; elles bornent seulement les
+            résultats admissibles d'un patch actif dans le runtime local.
+
+        - op: replace_field
+          target:
+            section: TYPES
+            id: TYPE_PATCH_QUALITY_GATE
+            field: logic.condition
+          value: >-
+            Une preuve de QA pédagogique hors session est présente, intègre, liée au même
+            impact_scope, aux mêmes empreintes de sources et à la même version d’artefact
+            que le patch soumis. Le runtime local ne décide jamais sémantiquement de la
+            qualité pédagogique ; il vérifie seulement des critères déterministes de
+            présence, intégrité, cohérence de portée, version, fraîcheur ou fenêtre de
+            validité, empreintes de sources et statut déclaré.
+        - op: replace_field
+          target:
+            section: TYPES
+            id: TYPE_PATCH_QUALITY_GATE
+            field: logic.effect
+          value: >-
+            Validation locale du patch uniquement si la preuve précomputée est
+            déterministiquement vérifiable ; rejet local si la preuve manque, diverge de
+            l’impact_scope, ne correspond pas aux empreintes de sources déclarées, est
+            expirée ou porte un statut de QA défavorable. Si la vérification exige une
+            appréciation sémantique ou pédagogique runtime, le patch est rejeté localement
+            et doit être renvoyé vers la chaîne hors session.
+
+        - op: replace_field
+          target:
+            section: INVARIANTS
+            id: INV_PATCH_LOCAL_VALIDATION_MUST_BE_DETERMINISTIC
+            field: logic.condition
+          value: >-
+            Un critère sémantique, pédagogique ou interprétatif est requis localement
+            pour décider, ou la preuve de QA hors session ne peut pas être vérifiée par
+            des critères strictement déterministes de présence, intégrité, portée, version,
+            fraîcheur ou fenêtre de validité, empreintes de sources et statut déclaré.
+        - op: replace_field
+          target:
+            section: INVARIANTS
+            id: INV_PATCH_LOCAL_VALIDATION_MUST_BE_DETERMINISTIC
+            field: logic.effect
+          value: >-
+            État interdit ; le critère doit être déplacé dans la chaîne hors session de
+            QA pédagogique. Le runtime local peut seulement vérifier déterministiquement
+            la preuve précomputée et doit rejeter le patch si cette vérification échoue
+            ou exige une interprétation sémantique ou pédagogique.
+
+        - op: replace_field
+          target:
+            section: INVARIANTS
+            id: INV_PATCH_ARTIFACTS_MUST_BE_PRECOMPUTED_OFF_SESSION
+            field: logic.effect
+          value: >-
+            Préparation exclusivement hors session ; aucune génération, QA pédagogique
+            ou validation distante pendant l’usage apprenant. L’artefact livré au runtime
+            local doit inclure les métadonnées déterministes nécessaires à la vérification
+            locale : impact_scope déclaré, empreintes de sources, version, fraîcheur ou
+            fenêtre de validité, statut de QA précomputée et preuve d’intégrité. Toute
+            métadonnée absente, divergente ou nécessitant un jugement sémantique local
+            rend le patch localement non applicable.
+
+        - op: replace_field
+          target:
+            section: INVARIANTS
+            id: INV_NO_PARTIAL_PATCH_STATE
+            field: logic.effect
+          value: >-
+            Patch annulé ou rollback obligatoire. Si le rollback ne peut pas être vérifié
+            comme complet, toute nouvelle application de patch est bloquée et une escalade
+            hors session de réparation d’intégrité devient obligatoire. Le blocage après
+            rollback non vérifiable est une issue terminale immédiate du patch actif, et
+            non un nouveau patch concurrent à placer en file FIFO.
+
+        - op: replace_field
+          target:
+            section: RULES
+            id: RULE_PATCH_SERIALIZATION
+            field: logic.condition
+          value: >-
+            Plusieurs actions de patch ordinaires (ACTION_TRIGGER_RELEVANCE_PATCH,
+            ACTION_TRIGGER_AR_SOLLICITATION_PATCH ou toute future action TYPE_PATCH_ARTIFACT)
+            sont déclenchées pour le même apprenant avant qu'un patch actif soit terminé
+            par une issue terminale déterministe : appliqué, rejeté, rollbacké, bloqué
+            après rollback non vérifiable, ou escaladé hors session.
+        - op: replace_field
+          target:
+            section: RULES
+            id: RULE_PATCH_SERIALIZATION
+            field: logic.effect
+          value: >-
+            Un seul patch ordinaire est traité à la fois par apprenant. Les déclenchements
+            concurrents ordinaires sont placés en file d’attente FIFO. Aucun patch ordinaire
+            concurrent ne peut démarrer tant que le patch actif n’a pas atteint une issue
+            terminale déterministe : appliqué, rejeté, rollbacké, bloqué après rollback
+            non vérifiable, ou escaladé hors session. Le rollback, le blocage d’intégrité
+            après rollback non vérifiable et l’escalade hors session relèvent du traitement
+            terminal immédiat du patch actif ; ils ne constituent pas de nouveaux patches
+            à placer derrière la file FIFO. Les modèles de priorité plus larges restent
+            hors de ce patch.
+
+        - op: replace_field
+          target:
+            section: ACTIONS
+            id: ACTION_ROLLBACK_PATCH
+            field: logic.effect
+          value: >-
+            Retour à l’état identique au snapshot pré-application. Méthode obligatoire :
+            un snapshot de l’état des fichiers cibles doit être capturé avant toute écriture ;
+            en cas de détection de partialité, le snapshot est restauré intégralement.
+            Aucune écriture partielle ne doit subsister après rollback. Si la restauration
+            ne peut pas être achevée ou vérifiée déterministiquement, le runtime entre dans
+            un état local bloqué, interdit toute nouvelle application de patch et émet une
+            escalade hors session de réparation d’intégrité avec trace d’exécution minimale.
+            Ce blocage est le traitement terminal immédiat du patch actif, non un élément
+            FIFO.
+
+        - op: replace_field
+          target:
+            section: INVARIANTS
+            id: INV_PERSISTENT_DRIFT_REQUIRES_ESCALATION_IF_PATCH_BLOCKED
+            field: logic.condition
+          value: >-
+            Condition primaire : le signal de dérive persiste alors que le patch requis
+            reste rejeté, impossible ou bloqué par les contraintes de validation locale.
+            Condition complémentaire : N patches successifs du même type ont été appliqués
+            sans disparition du signal de dérive, où N est un paramètre externe du
+            Référentiel. La production du signal de dérive reste hors du patch_lifecycle ;
+            le patch_lifecycle traite uniquement l’échec, le blocage, le rollback non
+            vérifiable ou l’inefficacité des corrections par patch.
+        - op: replace_field
+          target:
+            section: INVARIANTS
+            id: INV_PERSISTENT_DRIFT_REQUIRES_ESCALATION_IF_PATCH_BLOCKED
+            field: logic.effect
+          value: >-
+            Escalade obligatoire hors session vers la chaîne d’analyse/correction lorsque
+            la dérive ne peut pas être résolue par patch local valide ou persiste malgré
+            N applications valides successives. Cette escalade ne transfère pas au
+            patch_lifecycle la propriété des signaux learner_state, des régimes de détresse,
+            du conservatisme sans sortie ou de l’investigation systémique ; ces causes
+            restent des signaux externes déjà gouvernés.
+
+        - op: replace_field
+          target:
+            section: RULES
+            id: RULE_PERSISTENT_DRIFT_BLOCKED_PATCH_ESCALATES_OFFSESSION
+            field: logic.condition
+          value: >-
+            Le patch requis reste rejeté, impossible, bloqué par validation locale,
+            bloqué après rollback non vérifiable, ou s’avère inefficace après le nombre
+            maximum autorisé d’itérations valides. Les causes learner_state ou gouvernance
+            plus larges sont consommées comme signaux externes et ne sont pas redéfinies
+            par cette règle.
+        - op: replace_field
+          target:
+            section: RULES
+            id: RULE_PERSISTENT_DRIFT_BLOCKED_PATCH_ESCALATES_OFFSESSION
+            field: logic.effect
+          value: >-
+            Ouverture d’une escalade hors session avec payload minimal ; aucun maintien
+            implicite dans un état de dérive non traité. Cette escalade appartient au
+            cycle terminal du patch actif lorsqu’elle résulte d’un patch rejeté, impossible,
+            bloqué, rollback non vérifiable ou inefficace ; elle ne constitue pas une
+            réallocation de propriété des signaux learner_state ou governance.
+
+        - op: replace_field
+          target:
+            section: ACTIONS
+            id: ACTION_ESCALATE_PERSISTENT_DRIFT_OFFSESSION
+            field: logic.trigger
+          value: >-
+            Échec, blocage, rollback non vérifiable ou inefficacité persistante d’un
+            patch local, ou signal externe déjà gouverné indiquant qu’une analyse hors
+            session est requise.
+        - op: replace_field
+          target:
+            section: ACTIONS
+            id: ACTION_ESCALATE_PERSISTENT_DRIFT_OFFSESSION
+            field: logic.condition
+          value: >-
+            Le runtime local a atteint une borne d’escalade liée à un patch rejeté,
+            impossible, bloqué, rollback non vérifiable ou inefficace après itérations
+            autorisées. Les situations de détresse, conservatisme sans sortie ou
+            investigation systémique restent des signaux externes si elles ne sont pas
+            directement causées par le cycle de vie patch.
+        - op: replace_field
+          target:
+            section: ACTIONS
+            id: ACTION_ESCALATE_PERSISTENT_DRIFT_OFFSESSION
+            field: logic.effect
+          value: >-
+            Génération d’un payload minimal traçable hors session contenant identifiants
+            concernés, contexte local, historique utile et motif d’ouverture. Pour
+            patch_lifecycle, cette action matérialise uniquement l’escalade issue d’un
+            échec, blocage, rollback non vérifiable ou inefficacité de patch ; les autres
+            causes restent sous l’autorité de leurs scopes propriétaires.
+
+        - op: replace_field
+          target:
+            section: EVENTS
+            id: EVENT_AR_REFRACTORY_PROFILE_DETECTED
+            field: human_readable
+          value: Fenêtre observable de non-réponse AR détectée.
+        - op: replace_field
+          target:
+            section: EVENTS
+            id: EVENT_AR_REFRACTORY_PROFILE_DETECTED
+            field: logic.trigger
+          value: Fenêtre de non-réponse AR-N1 observable.
+        - op: replace_field
+          target:
+            section: EVENTS
+            id: EVENT_AR_REFRACTORY_PROFILE_DETECTED
+            field: logic.condition
+          value: >-
+            Seuil référentiel atteint sur une fenêtre observable de non-réponse AR-N1.
+            L’événement ne diagnostique aucun profil psychologique, n’infère pas
+            l’intention du learner et n’autorise aucune pénalisation.
+        - op: replace_field
+          target:
+            section: EVENTS
+            id: EVENT_AR_REFRACTORY_PROFILE_DETECTED
+            field: logic.effect
+          value: >-
+            Déclencheur de patch de sollicitation non punitif. L’événement qualifie
+            uniquement une observation de non-réponse et ne produit aucune inférence
+            psychologique.
+
+        - op: replace_field
+          target:
+            section: RULES
+            id: RULE_AR_REFRACTORY_PROFILE_TRIGGERS_SOLLICITATION_PATCH
+            field: human_readable
+          value: >-
+            Une fenêtre observable de non-réponse AR déclenche une adaptation non punitive
+            du mode de sollicitation.
+        - op: replace_field
+          target:
+            section: RULES
+            id: RULE_AR_REFRACTORY_PROFILE_TRIGGERS_SOLLICITATION_PATCH
+            field: logic.trigger
+          value: Fenêtre observable de non-réponse AR, sans interprétation psychologique.
+        - op: replace_field
+          target:
+            section: RULES
+            id: RULE_AR_REFRACTORY_PROFILE_TRIGGERS_SOLLICITATION_PATCH
+            field: logic.condition
+          value: >-
+            Fenêtre de non-réponse atteinte sur un signal AR explicite et déjà gouverné.
+            La règle ne diagnostique pas un profil psychologique, n’infère pas l’intention
+            du learner et n’autorise aucune pénalisation.
+        - op: replace_field
+          target:
+            section: RULES
+            id: RULE_AR_REFRACTORY_PROFILE_TRIGGERS_SOLLICITATION_PATCH
+            field: logic.effect
+          value: >-
+            Patch non punitif du format, de la cadence ou du canal de sollicitation AR,
+            sans pression comportementale, sans baisse de difficulté, sans modification
+            de l’évaluation et sans inférence psychologique autonome.
+
+        - op: replace_field
+          target:
+            section: ACTIONS
+            id: ACTION_TRIGGER_AR_SOLLICITATION_PATCH
+            field: human_readable
+          value: Déclencher un patch non punitif du mode de sollicitation AR.
+        - op: replace_field
+          target:
+            section: ACTIONS
+            id: ACTION_TRIGGER_AR_SOLLICITATION_PATCH
+            field: logic.trigger
+          value: Fenêtre observable de non-réponse AR.
+        - op: replace_field
+          target:
+            section: ACTIONS
+            id: ACTION_TRIGGER_AR_SOLLICITATION_PATCH
+            field: logic.condition
+          value: Seuil référentiel atteint sur un signal AR explicite et déjà gouverné.
+        - op: replace_field
+          target:
+            section: ACTIONS
+            id: ACTION_TRIGGER_AR_SOLLICITATION_PATCH
+            field: logic.effect
+          value: >-
+            Révision non punitive du format, de la cadence ou du canal de sollicitation
+            AR. L’action ne diagnostique pas le learner, ne force pas la réponse, ne
+            modifie pas la difficulté ou l’évaluation et ne transforme pas une non-réponse
+            observable en inférence psychologique.
+
+        - op: no_change
+          reason: >-
+            CH-PL-03 / external parameter N is out of scope for this Constitution-only
+            patch. No Référentiel or Link modification is performed.
+        - op: no_change
+          reason: >-
+            CH-PL-07 / TYPE_SELF_REPORT_AR_N2 neighbor closure requires scope-generation
+            or neighbor-declaration governance. No implicit read or local patch is performed.
+        - op: no_change
+          reason: >-
+            CH-PL-08 / ACTION_LOG_UNCOVERED_CONFLICT reassignment is reported but not
+            retained for this patch. The ID is intentionally untouched.
