@@ -106,6 +106,27 @@ release_or_promotion_authorized: false
 
 This pipeline is hardened to L3 for intake, evidence review, arbitration and contract synthesis.
 It remains below L4: no Core write, backlog closure, release or promotion is authorized.
+## Remaining L4 validator contracts
+
+```yaml
+batch_phase: PHASE_45_CROSS_CORE_REMAINING_L4_VALIDATOR_CONTRACTS
+l4_active_now: false
+executable_as_l4_gate_now: false
+validate_multi_core_promotion_manifest:
+  contract_yaml: docs/pipelines/cross_core_contract/validators/validate_multi_core_promotion_manifest.contract.yaml
+  contract_markdown: docs/pipelines/cross_core_contract/validators/validate_multi_core_promotion_manifest.contract.md
+  contract_defined: true
+validate_cross_core_backlog_resolution:
+  contract_yaml: docs/pipelines/cross_core_contract/validators/validate_cross_core_backlog_resolution.contract.yaml
+  contract_markdown: docs/pipelines/cross_core_contract/validators/validate_cross_core_backlog_resolution.contract.md
+  contract_defined: true
+validate_cross_core_rollback_or_reconciliation_path:
+  contract_yaml: docs/pipelines/cross_core_contract/validators/validate_cross_core_rollback_or_reconciliation_path.contract.yaml
+  contract_markdown: docs/pipelines/cross_core_contract/validators/validate_cross_core_rollback_or_reconciliation_path.contract.md
+  contract_defined: true
+```
+
+These contracts complete the inactive L4 validator family. They do not activate L4 or authorize canonical writes.
 ## validate_multi_core_release_plan contract
 
 ```yaml

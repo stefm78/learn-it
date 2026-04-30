@@ -1,0 +1,45 @@
+l4_validator_contract:
+  schema_version: '0.1'
+  generated_at: '2026-04-30T12:26:02Z'
+  validator_id: validate_cross_core_rollback_or_reconciliation_path
+  pipeline_id: cross_core_contract
+  status: contract_defined_inactive
+  current_level: L3_managed_execution_pipeline
+  target_level: L4_critical_canonical_pipeline
+  l4_active_now: false
+  executable_as_l4_gate_now: false
+
+  purpose: >-
+    Validate a future rollback or reconciliation path before L4 cross-core execution.
+
+  future_input:
+    expected_request: CCR_PATCH_LIFECYCLE_ESCALATION_THRESHOLD_N_R01
+    expected_artifact: docs/pipelines/cross_core_contract/work/l4_recovery/rollback_or_reconciliation_path.yaml
+    expected_execution_contract: docs/pipelines/cross_core_contract/work/03_contract_synthesis/cross_core_execution_contract.yaml
+    expected_l4_transition_review: docs/pipelines/cross_core_contract/reports/l4_transition_review.yaml
+
+  pass_requires:
+    - rollback_or_reconciliation_path_declared
+    - impacted_core_reversal_strategy_declared
+    - release_reversal_or_followup_strategy_declared
+    - promotion_reversal_or_followup_strategy_declared
+    - backlog_reconciliation_strategy_declared
+    - failure_modes_declared
+    - operator_recovery_steps_declared
+    - no_irreversible_cross_core_mutation_without_explicit_acceptance
+
+  must_block_if:
+    - rollback_or_reconciliation_path_missing
+    - impacted_core_missing_recovery_strategy
+    - promotion_reversal_strategy_missing
+    - backlog_reconciliation_strategy_missing
+    - failure_modes_missing
+    - operator_recovery_steps_missing
+
+  current_phase_guardrails:
+    core_mutation_authorized: false
+    backlog_closure_authorized: false
+    release_or_promotion_authorized: false
+    constitution_run_authorized: false
+    threshold_N_materialized_now: false
+    rollback_execution_now: false

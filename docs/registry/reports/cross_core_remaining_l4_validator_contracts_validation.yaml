@@ -1,0 +1,58 @@
+cross_core_remaining_l4_validator_contracts_validation:
+  schema_version: '0.1'
+  generated_at: '2026-04-30T12:26:02Z'
+  status: PASS
+  phase: PHASE_45_CROSS_CORE_REMAINING_L4_VALIDATOR_CONTRACTS
+  l4_active_now: false
+  executable_as_l4_gate_now: false
+  checked_files:
+    - path: docs/pipelines/cross_core_contract/validators/validate_multi_core_promotion_manifest.contract.yaml
+      exists: true
+      sha256: 975b2474f498dc3372cf2fe5e939e9d8263626e22ccaf35b549f0c9049627241
+    - path: docs/pipelines/cross_core_contract/validators/validate_multi_core_promotion_manifest.contract.md
+      exists: true
+      sha256: 3686581a6c047e0637d14ba699375f3c8ac3f350dc5aeb59145f5eb645fb703c
+    - path: docs/pipelines/cross_core_contract/validators/validate_cross_core_backlog_resolution.contract.yaml
+      exists: true
+      sha256: 80c142eaeaf3c797074c226875a3f8b1f6d8dc95dda278c649edf8c1e0526b48
+    - path: docs/pipelines/cross_core_contract/validators/validate_cross_core_backlog_resolution.contract.md
+      exists: true
+      sha256: 8ad1151e0b351c8fc6e587fe71eb7d44fc3a9e642e984bc9e92eb32c0c024a60
+    - path: docs/pipelines/cross_core_contract/validators/validate_cross_core_rollback_or_reconciliation_path.contract.yaml
+      exists: true
+      sha256: 7171bae9052bd3a26e47e8ed9f73b8f5797f93d64dec1bdd8198845effe7556e
+    - path: docs/pipelines/cross_core_contract/validators/validate_cross_core_rollback_or_reconciliation_path.contract.md
+      exists: true
+      sha256: 2e0292f1135e16802d25ee80edb290cd06ed1053997f5e3ffae0877f1797e94b
+    - path: docs/pipelines/cross_core_contract/L4_VALIDATOR_FAMILY.md
+      exists: true
+      sha256: a5c53839d8945994583ef1db1b38b6eeaf961ad1621b53e243ddd5c22c4ba55c
+    - path: docs/pipelines/cross_core_contract/validators/l4_validator_family.yaml
+      exists: true
+      sha256: 08e8e4267fd9e8b43db43afe603031cc09f7ee75dfaed8290adb059bb0243d61
+    - path: docs/pipelines/cross_core_contract/l4_transition_checklist.yaml
+      exists: true
+      sha256: 60ce3e9c0ef830bbdcd4493e697fbc9dfc81d2870d13daca3e8044a947799b87
+    - path: docs/pipelines/cross_core_contract/AI_PROTOCOL.yaml
+      exists: true
+      sha256: 1d3a48e0cd2a69e52534c172bbf729d733642b3e0183dcb43c111b95f22f528b
+    - path: docs/pipelines/cross_core_contract/pipeline.md
+      exists: true
+      sha256: 89d3b24b324612b63dacd88889422e2f54fe2866cc06b84a0dd18c3bfae5ebfe
+    - path: docs/pipelines/cross_core_contract/state.yaml
+      exists: true
+      sha256: 6537a4b8a79b3a6d1279ba934cfd2807fe2a4c59109d5140f2c5a90cf49d89f9
+    - path: docs/pipelines/cross_core_contract/requests/CCR_PATCH_LIFECYCLE_ESCALATION_THRESHOLD_N_R01.yaml
+      exists: true
+      sha256: 135e6039ed61b82fe7baefbf5a37e2cd03ad20d0cad2babd091b6629bb1e8d85
+  blocking_findings:
+    []
+  result_summary:
+    blocking_finding_count: 0
+    remaining_l4_validator_contracts_defined: true
+    l4_active_now: false
+    executable_as_l4_gate_now: false
+    core_mutation_authorized: false
+    backlog_closure_authorized: false
+    release_or_promotion_authorized: false
+    request_remains_proposed_pending_arbitration: true

@@ -38,8 +38,8 @@ scope_modularization_post_pilot:
   status: paused_cleanly
   active_pipeline_run: none
   new_bounded_run_opened_now: false
-  last_completed_phase: PHASE_44
-  last_completed_phase_label: cross_core_multi_core_release_plan_validator_contract
+  last_completed_phase: PHASE_45
+  last_completed_phase_label: cross_core_remaining_l4_validator_contracts
 ```
 
 ## What is complete
@@ -121,6 +121,7 @@ completed:
       - PHASE_42 cross_core_reconstruction_validator_contract
       - PHASE_43 cross_core_link_binding_validator_contract
       - PHASE_44 cross_core_multi_core_release_plan_validator_contract
+      - PHASE_45 cross_core_remaining_l4_validator_contracts
 ```
 
 ## Current pipeline position
@@ -1026,6 +1027,39 @@ option_AE_cross_core_multi_core_release_plan_validator_contract:
     - no release or promotion
     - CCR_PATCH_LIFECYCLE_ESCALATION_THRESHOLD_N_R01 remains proposed / pending_arbitration
   recommended_next_decision: stop at NO_ACTIVE_PHASE or define next individual L4 validator contract
+  launcher_authorizes_run_from_signals: false
+
+option_AF_cross_core_remaining_l4_validator_contracts:
+  status: done
+  completed_phase: PHASE_45
+  action: define the remaining inactive L4 validator contracts in one guarded batch
+  artifacts:
+    - docs/pipelines/cross_core_contract/validators/validate_multi_core_promotion_manifest.contract.yaml
+    - docs/pipelines/cross_core_contract/validators/validate_multi_core_promotion_manifest.contract.md
+    - docs/pipelines/cross_core_contract/validators/validate_cross_core_backlog_resolution.contract.yaml
+    - docs/pipelines/cross_core_contract/validators/validate_cross_core_backlog_resolution.contract.md
+    - docs/pipelines/cross_core_contract/validators/validate_cross_core_rollback_or_reconciliation_path.contract.yaml
+    - docs/pipelines/cross_core_contract/validators/validate_cross_core_rollback_or_reconciliation_path.contract.md
+    - docs/patcher/shared/validate_cross_core_remaining_l4_validator_contracts.py
+    - docs/registry/reports/cross_core_remaining_l4_validator_contracts_validation.yaml
+    - docs/pipelines/cross_core_contract/AI_PROTOCOL.yaml
+    - docs/pipelines/cross_core_contract/L4_VALIDATOR_FAMILY.md
+    - docs/pipelines/cross_core_contract/validators/l4_validator_family.yaml
+    - docs/pipelines/cross_core_contract/l4_transition_checklist.yaml
+  validation:
+    cross_core_remaining_l4_validator_contracts_validation: PASS
+  posture:
+    active_level: L3_managed_execution_pipeline
+    target_level: L4_critical_canonical_pipeline
+    l4_active_now: false
+    executable_as_l4_gate_now: false
+  non_goals_preserved:
+    - no Constitution run opened
+    - no Core file modified
+    - no governance_backlog.yaml modification
+    - no release or promotion
+    - CCR_PATCH_LIFECYCLE_ESCALATION_THRESHOLD_N_R01 remains proposed / pending_arbitration
+  recommended_next_decision: stop at NO_ACTIVE_PHASE or consolidate L4 readiness matrix
   launcher_authorizes_run_from_signals: false
 
 ## Guardrails

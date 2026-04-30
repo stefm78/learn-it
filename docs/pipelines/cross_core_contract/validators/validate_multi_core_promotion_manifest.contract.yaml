@@ -1,0 +1,47 @@
+l4_validator_contract:
+  schema_version: '0.1'
+  generated_at: '2026-04-30T12:26:02Z'
+  validator_id: validate_multi_core_promotion_manifest
+  pipeline_id: cross_core_contract
+  status: contract_defined_inactive
+  current_level: L3_managed_execution_pipeline
+  target_level: L4_critical_canonical_pipeline
+  l4_active_now: false
+  executable_as_l4_gate_now: false
+
+  purpose: >-
+    Validate the future multi-Core promotion manifest before any current Core promotion.
+
+  future_input:
+    expected_request: CCR_PATCH_LIFECYCLE_ESCALATION_THRESHOLD_N_R01
+    expected_artifact: docs/cores/current/manifest.yaml
+    expected_execution_contract: docs/pipelines/cross_core_contract/work/03_contract_synthesis/cross_core_execution_contract.yaml
+    expected_l4_transition_review: docs/pipelines/cross_core_contract/reports/l4_transition_review.yaml
+
+  pass_requires:
+    - promotion_manifest_declares_all_impacted_cores
+    - promotion_manifest_references_validated_multi_core_release
+    - promotion_manifest_declares_current_versions
+    - promotion_manifest_declares_target_versions
+    - promotion_manifest_declares_compatibility_matrix
+    - promotion_manifest_declares_validation_reports
+    - promotion_manifest_declares_rollback_or_reconciliation_path
+    - no_promotion_without_release_plan_PASS
+    - no_partial_promotion_for_cross_core_change
+
+  must_block_if:
+    - promotion_manifest_missing
+    - impacted_core_missing
+    - release_plan_validation_missing
+    - compatibility_matrix_missing
+    - validation_report_missing
+    - rollback_or_reconciliation_path_missing
+    - partial_promotion_attempted_for_cross_core_change
+
+  current_phase_guardrails:
+    core_mutation_authorized: false
+    backlog_closure_authorized: false
+    release_or_promotion_authorized: false
+    constitution_run_authorized: false
+    threshold_N_materialized_now: false
+    promotion_materialized_now: false

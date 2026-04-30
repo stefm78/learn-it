@@ -1,0 +1,45 @@
+l4_validator_contract:
+  schema_version: '0.1'
+  generated_at: '2026-04-30T12:26:02Z'
+  validator_id: validate_cross_core_backlog_resolution
+  pipeline_id: cross_core_contract
+  status: contract_defined_inactive
+  current_level: L3_managed_execution_pipeline
+  target_level: L4_critical_canonical_pipeline
+  l4_active_now: false
+  executable_as_l4_gate_now: false
+
+  purpose: >-
+    Validate future backlog closure or deferral decisions after cross-core resolution evidence exists.
+
+  future_input:
+    expected_request: CCR_PATCH_LIFECYCLE_ESCALATION_THRESHOLD_N_R01
+    expected_artifact: docs/pipelines/constitution/scope_catalog/governance_backlog.yaml
+    expected_execution_contract: docs/pipelines/cross_core_contract/work/03_contract_synthesis/cross_core_execution_contract.yaml
+    expected_l4_transition_review: docs/pipelines/cross_core_contract/reports/l4_transition_review.yaml
+
+  pass_requires:
+    - backlog_resolution_mapping_declared
+    - each_backlog_entry_has_resolution_status
+    - each_closure_has_evidence
+    - each_defer_has_reason
+    - each_cross_core_request_has_backlog_traceability
+    - no_backlog_closure_without_validated_resolution
+    - no_backlog_closure_without_release_or_promotion_trace_when_required
+    - post_closeout_backlog_state_declared
+
+  must_block_if:
+    - backlog_resolution_mapping_missing
+    - closure_requested_without_evidence
+    - closure_requested_without_traceability
+    - defer_status_missing_reason
+    - request_completed_but_backlog_left_unmapped
+    - backlog_write_surface_not_declared
+
+  current_phase_guardrails:
+    core_mutation_authorized: false
+    backlog_closure_authorized: false
+    release_or_promotion_authorized: false
+    constitution_run_authorized: false
+    threshold_N_materialized_now: false
+    backlog_closure_now: false
