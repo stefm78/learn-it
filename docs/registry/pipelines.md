@@ -17,6 +17,11 @@
 - Goal: migrations structurelles ou de format sur les Core, prompts ou patchers
 - Canonical state: `docs/pipelines/migration/state.yaml`
 
+### cross_core_contract
+- Path: `docs/pipelines/cross_core_contract/pipeline.md`
+- Goal: gouverner les demandes de changement cross-Core entre Constitution, Référentiel et Link, sans mutation implicite des Core
+- Canonical state: `docs/pipelines/cross_core_contract/state.yaml`
+
 ## Global rules
 
 - Un pipeline ne lit jamais directement un fichier dans `archive/`

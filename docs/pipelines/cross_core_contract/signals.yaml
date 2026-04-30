@@ -1,0 +1,6 @@
+pipeline_signals:
+  schema_version: '0.1'
+  pipeline_id: cross_core_contract
+  signals_provider: not_implemented
+  notes: Minimal operational signal contract. The pipeline exists, but no request-level signal provider is implemented yet.
+  signals: []

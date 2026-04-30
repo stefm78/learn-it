@@ -1,6 +1,6 @@
 # Cross-core contract bootstrap
 
-Status: bootstrap draft  
+Status: bootstrap materialized  
 Transformation phase: `PHASE_32_CROSS_CORE_CONTRACT_BOOTSTRAP`  
 Created by: `phase32_cross_core_contract_bootstrap_v2.py`  
 Generated at: `2026-04-30T10:15:12Z`  
@@ -321,4 +321,20 @@ recommended_next_step:
   phase: PHASE_32_CROSS_CORE_CONTRACT_BOOTSTRAP
   action: decide whether to instantiate docs/pipelines/cross_core_contract/ skeleton
   default: prepare skeleton only, no core mutation, no run opening
+```
+
+
+## 13. Materialization evidence
+
+```yaml
+materialized_by_phase:
+  phase: PHASE_32_CROSS_CORE_CONTRACT_BOOTSTRAP
+  pipeline_skeleton: docs/pipelines/cross_core_contract/
+  registry_updated: docs/registry/pipelines.md
+  validator: docs/patcher/shared/validate_cross_core_contract_pipeline.py
+  validation_report: docs/registry/reports/cross_core_contract_pipeline_validation.yaml
+  pipeline_signals_validation: docs/registry/reports/pipeline_signals_validation.yaml
+  recovery_script: phase32_recover_cross_core_contract_validator.py
+  no_core_mutation: true
+  no_constitution_run_opened: true
 ```

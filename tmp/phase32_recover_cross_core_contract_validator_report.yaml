@@ -1,0 +1,23 @@
+phase32_recover_cross_core_contract_validator_report:
+  generated_at: 2026-04-30T10:30:06Z
+  status: PASS
+  branch: feat/core-modularization-bootstrap
+  phase: PHASE_32_CROSS_CORE_CONTRACT_BOOTSTRAP
+  action: recover_malformed_validator_and_close_phase
+  repaired_file: docs/patcher/shared/validate_cross_core_contract_pipeline.py
+  validations:
+    cross_core_contract_pipeline_validation: PASS
+    pipeline_signals_validation: PASS
+  files_written:
+    - docs/patcher/shared/validate_cross_core_contract_pipeline.py
+    - docs/registry/reports/cross_core_contract_pipeline_validation.yaml
+    - docs/registry/reports/pipeline_signals_validation.yaml
+    - docs/transformations/core_modularization/CROSS_CORE_CONTRACT_BOOTSTRAP.md
+    - docs/transformations/core_modularization/SCOPE_GRAPH_CLUSTERING_PROGRESS.md
+    - tmp/phase32_recover_cross_core_contract_validator_report.yaml
+  guardrails:
+    no_constitution_run_opened: true
+    core_files_not_modified: true
+    governance_backlog_not_modified: true
+    threshold_N_not_resolved: true
+    type_self_report_ar_n2_neighbor_not_modified: true

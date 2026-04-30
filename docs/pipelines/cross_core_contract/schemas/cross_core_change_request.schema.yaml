@@ -1,0 +1,47 @@
+cross_core_change_request_schema:
+  schema_version: '0.1'
+  object: cross_core_change_request
+  status: bootstrap_schema
+  required_top_level_fields:
+    - schema_version
+    - request_id
+    - status
+    - source
+    - summary
+    - affected_cores
+    - target_ids
+    - mutation_policy
+    - validation_gates
+    - release_policy
+    - decision
+  allowed_status_values:
+    - proposed
+    - accepted_for_arbitration
+    - rejected
+    - deferred
+    - materialized
+    - closed
+  source_required_fields:
+    - source_pipeline
+    - source_scope_key
+    - source_stage
+    - source_backlog_entries
+  affected_core_allowed_values:
+    - constitution
+    - referentiel
+    - link
+  mutation_policy_required_flags:
+    request_creation: allowed
+    core_write_authorization: forbidden_until_arbitrated
+    generated_scope_catalog_update: forbidden_until_contract_decision
+    backlog_closure: forbidden_until_validated_resolution
+  required_validation_gate_names:
+    - validate_cross_core_change_request
+    - validate_cross_core_write_surface
+    - validate_constitution_referentiel_link_reconstruction
+    - validate_link_binding_consistency
+    - validate_multi_core_release_plan
+    - validate_multi_core_promotion_manifest
+  notes:
+    - This schema is deliberately lightweight and deterministic.
+    - It is a contract checklist, not a full JSON Schema implementation.

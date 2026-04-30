@@ -1,0 +1,38 @@
+cross_core_contract_pipeline_validation:
+  schema_version: '0.1'
+  generated_at: '2026-04-30T10:30:06Z'
+  status: PASS
+  checked_files:
+  - path: docs/pipelines/cross_core_contract/pipeline.md
+    exists: true
+    sha256: 2969188f0b5d34ca90f1b211ff6db787a1aa01933b67d23068c4acd8ba24dbdd
+  - path: docs/pipelines/cross_core_contract/state.yaml
+    exists: true
+    sha256: 18c75981849d2c37978c643ade0b2de601ef5312544e6f45e85d861a69cff340
+  - path: docs/pipelines/cross_core_contract/signals.yaml
+    exists: true
+    sha256: 84a64af3072bdd4c1ed95fe607681d3923de6f471ba01163a691fa30d7788112
+  - path: docs/pipelines/cross_core_contract/README.md
+    exists: true
+    sha256: 49cfd9573f5492be0dd5da25ef41c59b4daf6482e8885cd68d7187bb03e3f5fa
+  - path: docs/pipelines/cross_core_contract/requests/README.md
+    exists: true
+    sha256: e7fba09ec5c3603362084ed8e062be88e33296a6416d091a13d8661715905ddf
+  - path: docs/pipelines/cross_core_contract/schemas/cross_core_change_request.schema.yaml
+    exists: true
+    sha256: 9cb535864dfce8d73e8257732bd1fc5e95871b591c84d07bfc56e5735b77c71a
+  - path: docs/pipelines/cross_core_contract/reports/README.md
+    exists: true
+    sha256: ba47ccb730d7e14479bd44be5ced6b3a47632695296a18e76377d16fd72545b8
+  forbidden_mutation_targets:
+  - docs/cores/current/constitution.yaml
+  - docs/cores/current/referentiel.yaml
+  - docs/cores/current/link.yaml
+  - docs/pipelines/constitution/scope_catalog/governance_backlog.yaml
+  blocking_findings: []
+  warning_findings: []
+  result_summary:
+    blocking_finding_count: 0
+    warning_finding_count: 0
+    core_mutation_authorized: false
+    constitution_run_opened: false

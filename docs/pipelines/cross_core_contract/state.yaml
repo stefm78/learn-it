@@ -1,0 +1,12 @@
+pipeline_id: cross_core_contract
+version: 0.1
+current_stage: null
+last_successful_stage: null
+current_run_id: null
+status: idle
+active_inputs: []
+active_outputs: []
+notes:
+  - Bootstrap pipeline skeleton only.
+  - No cross-core run is active.
+  - No Core mutation is authorized by this state file.
