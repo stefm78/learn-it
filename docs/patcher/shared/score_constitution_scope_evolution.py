@@ -141,8 +141,9 @@ def tracking_state(runs_index: Dict[str, Any], run_id: str) -> Dict[str, Any]:
     }
 
 
-def release_required(run_dir: Path) -> bool:
-    plan = load_yaml(run_dir / "work/07_release/release_plan.yaml")
+def release_required(run_dir: Path, archive_dir: Path | None) -> bool:
+    plan_path = resolve_run_artifact(run_dir, archive_dir, "work/07_release/release_plan.yaml")
+    plan = load_yaml(plan_path)
     root = plan.get("RELEASE_PLAN", {})
     return root.get("release_required") is True
 
@@ -399,10 +400,10 @@ def main() -> int:
     runs_index = load_yaml(repo_root / "docs/pipelines/constitution/runs/index.yaml")
     backlog = load_yaml(repo_root / "docs/pipelines/constitution/scope_catalog/governance_backlog.yaml")
 
-    rel_required = release_required(run_dir)
     archive_dir = closeout_archive_path(run_dir)
     if archive_dir is not None and not archive_dir.is_absolute():
         archive_dir = repo_root / archive_dir
+    rel_required = release_required(run_dir, archive_dir)
     tracking = tracking_state(runs_index, args.run_id)
     entries = open_backlog_for_scope(backlog, args.scope_key)
 

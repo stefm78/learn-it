@@ -77,3 +77,8 @@ The evolution scoring script must therefore resolve evidence in this order:
 2. closeout archive directory from `CLOSEOUT_REPORT.archive_path`, for example `archive/<release_id>/work/...`.
 
 This makes the score usable both before and after final tracking closure.
+
+The release-required decision itself must also use the same artifact resolution order. If
+`work/07_release/release_plan.yaml` has been archived and the live `work/` directory was
+reset, the script must read the archived release plan before deciding whether
+release-only artifacts are expected.
