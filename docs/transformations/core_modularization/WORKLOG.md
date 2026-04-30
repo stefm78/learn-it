@@ -223,4 +223,27 @@ Archivés :
 ### Archivage effectué
 
 - Aucun snapshot `STATUS_*` restant au premier niveau.
+---
+
+## 2026-04-30 — consolidation additionnelle du répertoire core_modularization
+
+- Mode : `human+ai`
+- Nouvelle réduction de la surface active du répertoire `docs/transformations/core_modularization/`.
+- Les anciens documents J1 ont été archivés car leurs décisions sont maintenant portées par `pipeline.md`, les entry actions, les scripts déterministes et les stage skills.
+- Le triage post-pilot `patch_lifecycle` a été archivé car ses décisions sont maintenant reflétées dans `governance_backlog.yaml`, STAGE_00, les rapports et les signaux pipeline.
+- `J5_PARALLEL_SCOPED_RUNS_AND_CANONICAL_CONSOLIDATION.md` reste actif jusqu'à validation par un vrai cas multi-scope.
+- `REFERENTIEL_LINK_EXTERNAL_READ_ONLY_TREATMENT.md` reste actif comme doctrine ouverte.
+
+### Décisions prises
+
+1. Réduire le premier niveau aux documents nécessaires à la reprise immédiate.
+2. Archiver les notes de design absorbées par les contrats canoniques.
+3. Garder `J5` actif tant que le mode consolidation parallèle n'a pas été éprouvé en conditions réelles.
+4. Ne pas supprimer les historiques : déplacer vers `archive/`.
+
+### Archivage effectué
+
+- `moved docs\transformations\core_modularization\J1_SCOPED_RUN_CONTRACT.md -> docs\transformations\core_modularization\archive\journals\J1_SCOPED_RUN_CONTRACT.md ; reason=J1 scoped run contract absorbed by pipeline, entry actions, run inputs, and stage skills`
+- `moved docs\transformations\core_modularization\J1_CONSTITUTION_PIPELINE_MINIMAL_DELTA.md -> docs\transformations\core_modularization\archive\journals\J1_CONSTITUTION_PIPELINE_MINIMAL_DELTA.md ; reason=J1 minimal Constitution delta absorbed by pipeline.md and STAGE skills`
+- `moved docs\transformations\core_modularization\POST_PILOT_PATCH_LIFECYCLE_BACKLOG_TRIAGE.md -> docs\transformations\core_modularization\archive\analyses\POST_PILOT_PATCH_LIFECYCLE_BACKLOG_TRIAGE.md ; reason=post-pilot triage superseded by governance_backlog review metadata, Stage 00 reports, and pipeline signals`
 

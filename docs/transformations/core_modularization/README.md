@@ -29,17 +29,16 @@ For a human or AI resuming the transformation, read in this order:
 3. `SCOPE_GRAPH_CLUSTERING_APPROACH.md` — compact implemented doctrine
 4. `WORKLOG.md` — append-only factual execution log
 5. `REFERENTIEL_LINK_EXTERNAL_READ_ONLY_TREATMENT.md`
-6. `POST_PILOT_PATCH_LIFECYCLE_BACKLOG_TRIAGE.md`
-7. Full historical snapshots only if deep traceability is needed:
-   - `archive/full_snapshots/SCOPE_GRAPH_CLUSTERING_PROGRESS_FULL_2026_04_29.md`
-   - `archive/full_snapshots/SCOPE_GRAPH_CLUSTERING_APPROACH_FULL_2026_04_29.md`
-8. Active J-files only if needed:
-   - `J1_SCOPED_RUN_CONTRACT.md`
-   - `J1_CONSTITUTION_PIPELINE_MINIMAL_DELTA.md`
-   - `J5_PARALLEL_SCOPED_RUNS_AND_CANONICAL_CONSOLIDATION.md`
+6. `J5_PARALLEL_SCOPED_RUNS_AND_CANONICAL_CONSOLIDATION.md` — only if multi-scope consolidation is in scope
 
-Archived journals under `archive/journals/` and archived status snapshots under
-`archive/status_snapshots/` are historical and non-canonical.
+Historical files are available only when deep traceability is needed:
+
+- `archive/full_snapshots/`
+- `archive/journals/`
+- `archive/analyses/`
+- `archive/status_snapshots/`
+
+Archived documents are historical and non-canonical.
 
 ## Active transformation documents
 
@@ -50,29 +49,44 @@ Archived journals under `archive/journals/` and archived status snapshots under
 | `HANDOVER_SCOPE_MODULARIZATION_POST_PILOT.md` | Standalone resume/handover document | active handover |
 | `WORKLOG.md` | Append-only factual execution log | active log |
 | `REFERENTIEL_LINK_EXTERNAL_READ_ONLY_TREATMENT.md` | Doctrine for treating `referentiel` and `link` as read-only external cores during Constitution runs | open doctrine |
-| `POST_PILOT_PATCH_LIFECYCLE_BACKLOG_TRIAGE.md` | Non-canonical triage of backlog entries exported by the patch_lifecycle pilot | historical analysis, still useful while entries remain open |
-| `J1_SCOPED_RUN_CONTRACT.md` | Bounded run contract: `scope_manifest`, `impact_bundle`, `integration_gate` | active because still referenced |
-| `J1_CONSTITUTION_PIPELINE_MINIMAL_DELTA.md` | Minimal Constitution pipeline delta for bounded runs | active supporting note |
 | `J5_PARALLEL_SCOPED_RUNS_AND_CANONICAL_CONSOLIDATION.md` | Parallel scoped run consolidation model | active until first real multi-scope consolidation validation |
 
-## Archived transformation journals
+## Archived transformation journals and analyses
 
-The following intermediate journals have been archived under:
+Archived intermediate journals live under:
 
 ```text
 docs/transformations/core_modularization/archive/journals/
 ```
 
-Archived files:
+Archived files include:
 
+- `J1_SCOPED_RUN_CONTRACT.md`
+- `J1_CONSTITUTION_PIPELINE_MINIMAL_DELTA.md`
 - `J2_EFFECTIVE_READ_SURFACE_REDUCTION.md`
 - `J3_CANONICAL_RECONSTRUCTION_FROM_INTEGRATED_SCOPED_RESULTS.md`
 - `J4_DERIVED_RUNTIME_TASK_VIEW_AND_STAGE_SKILLS.md`
 - `J4_GENERATED_SCOPES_FROM_CANON_AND_POLICY.md`
 
+Archived post-analysis documents live under:
+
+```text
+docs/transformations/core_modularization/archive/analyses/
+```
+
+Archived analysis files include:
+
+- `POST_PILOT_PATCH_LIFECYCLE_BACKLOG_TRIAGE.md`
+
+Historical `STATUS_*` snapshots, when present, are archived under:
+
+```text
+docs/transformations/core_modularization/archive/status_snapshots/
+```
+
 They are preserved for traceability only. Their stabilized decisions are now carried
 by pipeline specs, stage skills, deterministic scripts, generated scope catalog
-artifacts, and validation reports.
+artifacts, backlog metadata, and validation reports.
 
 ## Current macro state
 
@@ -123,13 +137,14 @@ Keep active:
 
 - current tracker;
 - current approach / doctrine documents;
-- active open follow-up documents;
-- still-referenced J-files.
+- active handover and worklog;
+- still-open doctrine documents;
+- J5 until the first real multi-scope consolidation validation.
 
 Archive:
 
 - intermediate design journals once their decisions are implemented elsewhere;
-- post-analysis documents once their backlog entries are resolved;
+- post-analysis documents once their decisions are reflected in canonical backlog, reports, or signals;
 - J-files once they have been absorbed into specs or stage contracts.
 
 Delete only when:
