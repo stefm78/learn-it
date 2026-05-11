@@ -29,7 +29,8 @@ For a human or AI resuming the transformation, read in this order:
 3. `SCOPE_GRAPH_CLUSTERING_APPROACH.md` — compact implemented doctrine
 4. `WORKLOG.md` — append-only factual execution log
 5. `REFERENTIEL_LINK_EXTERNAL_READ_ONLY_TREATMENT.md`
-6. `J5_PARALLEL_SCOPED_RUNS_AND_CANONICAL_CONSOLIDATION.md` — only if multi-scope consolidation is in scope
+6. `AI_SKILL_GOVERNANCE_PATTERNS.md` — non-canonical design note for future AI workflow hardening
+7. `J5_PARALLEL_SCOPED_RUNS_AND_CANONICAL_CONSOLIDATION.md` — only if multi-scope consolidation is in scope
 
 Historical files are available only when deep traceability is needed:
 
@@ -49,6 +50,7 @@ Archived documents are historical and non-canonical.
 | `HANDOVER_SCOPE_MODULARIZATION_POST_PILOT.md` | Standalone resume/handover document | active handover |
 | `WORKLOG.md` | Append-only factual execution log | active log |
 | `REFERENTIEL_LINK_EXTERNAL_READ_ONLY_TREATMENT.md` | Doctrine for treating `referentiel` and `link` as read-only external cores during Constitution runs | open doctrine |
+| `AI_SKILL_GOVERNANCE_PATTERNS.md` | Non-canonical design note translating external AI skill patterns into `learn-it` governance ideas | reference |
 | `J5_PARALLEL_SCOPED_RUNS_AND_CANONICAL_CONSOLIDATION.md` | Parallel scoped run consolidation model | active until first real multi-scope consolidation validation |
 
 ## Archived transformation journals and analyses
@@ -128,6 +130,8 @@ when preflight remains `PREFLIGHT_KEEP_BACKLOG_OPEN`.
 5. Use deterministic scripts for generation, validation, score publication, and run
    lifecycle transitions.
 6. Keep this README as the entry index, not as a replacement for the active tracker.
+7. Treat `AI_SKILL_GOVERNANCE_PATTERNS.md` as a non-canonical design note until a
+   later explicit decision promotes any idea into a spec or pipeline contract.
 
 ## Cleanup policy
 
@@ -139,12 +143,14 @@ Keep active:
 - current approach / doctrine documents;
 - active handover and worklog;
 - still-open doctrine documents;
+- AI skill governance note until accepted, promoted, or archived by explicit decision;
 - J5 until the first real multi-scope consolidation validation.
 
 Archive:
 
 - intermediate design journals once their decisions are implemented elsewhere;
 - post-analysis documents once their decisions are reflected in canonical backlog, reports, or signals;
+- design notes once accepted into specs or rejected;
 - J-files once they have been absorbed into specs or stage contracts.
 
 Delete only when:
