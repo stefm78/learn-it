@@ -305,3 +305,23 @@ last_completed_phase: PHASE_31
 recommended_next_action: keep_NO_ACTIVE_PHASE
 ```
 
+---
+
+## 2026-05-11 — note design gouvernance IA inspirée des skills
+
+- Mode : `human+ai`
+- Une note non canonique a été ajoutée pour conserver les idées de gouvernance IA inspirées du modèle de skills observé dans `garrytan/gstack`.
+- Le README de la transformation référence maintenant cette note dans l'ordre de lecture et dans les documents actifs.
+- La note formalise notamment : context-save/context-restore, routing, freeze scope, guard mode, multi-review autoplan, décisions humaines structurées, mémoire d'apprentissages, prudence sur les commits WIP automatiques, prompts générés depuis contrats canoniques, et séparation observed / verified_by_script / inferred / authorized.
+
+### Décisions prises
+
+1. Conserver ces idées comme note de design transformation-local, non canonique.
+2. Ne pas modifier `AI_PROTOCOL.yaml`, les pipelines, les cores, les releases, `referentiel` ou `link` dans cette étape.
+3. Ne pas autoriser de mutation réelle ni créer de nouveau run.
+
+### Artefacts ajoutés / mis à jour
+
+- `docs/transformations/core_modularization/AI_SKILL_GOVERNANCE_PATTERNS.md` ← nouveau
+- `docs/transformations/core_modularization/README.md` ← index mis à jour
+- `docs/transformations/core_modularization/WORKLOG.md` ← cette entrée
